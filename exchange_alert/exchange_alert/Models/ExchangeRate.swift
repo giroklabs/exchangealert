@@ -67,17 +67,64 @@ enum ExchangeTrend: String, CaseIterable {
 
 // MARK: - Alert Settings
 struct AlertSettings: Codable, Equatable {
-    var isEnabled: Bool = true
-    var upperThreshold: Double = 1400.0  // 상한선 (원)
-    var lowerThreshold: Double = 1200.0  // 하한선 (원)
-    var checkInterval: Int = 30          // 체크 간격 (분)
+    var isEnabled: Bool = false  // 알림 기본값: 꺼짐
+    var threshold: Double = 1300.0  // 알림 기준값 (원)
+    var thresholdType: ThresholdType = .both  // 알림 타입
     var lastNotificationDate: Date? = nil
     
     static let `default` = AlertSettings()
 }
 
+// MARK: - Currency Alert Settings
+struct CurrencyAlertSettings: Codable, Equatable {
+    var settings: [CurrencyType: AlertSettings] = [:]
+    
+    init() {
+        // 각 통화별로 기본 설정 초기화 (알림 기본값: 꺼짐)
+        for currency in CurrencyType.allCases {
+            switch currency {
+            case .USD:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 1300.0)
+            case .EUR:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 1500.0)
+            case .JPY:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 900.0)  // 100엔 기준
+            case .CNY:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 190.0)
+            case .GBP:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 1700.0)
+            }
+        }
+    }
+    
+    func getSettings(for currency: CurrencyType) -> AlertSettings {
+        return settings[currency] ?? AlertSettings.default
+    }
+    
+    mutating func updateSettings(for currency: CurrencyType, newSettings: AlertSettings) {
+        settings[currency] = newSettings
+    }
+}
+
+enum ThresholdType: String, CaseIterable, Codable {
+    case upper = "상한선"     // 기준값 이상일 때 알림
+    case lower = "하한선"     // 기준값 이하일 때 알림
+    case both = "상하한선"    // 기준값에서 일정 범위 벗어날 때 알림
+    
+    var description: String {
+        switch self {
+        case .upper:
+            return "기준값 이상일 때 알림"
+        case .lower:
+            return "기준값 이하일 때 알림"
+        case .both:
+            return "기준값에서 ±100원 벗어날 때 알림"
+        }
+    }
+}
+
 // MARK: - Currency Types
-enum CurrencyType: String, CaseIterable {
+enum CurrencyType: String, CaseIterable, Codable {
     case USD = "USD"
     case EUR = "EUR"
     case JPY = "JPY"
@@ -99,8 +146,15 @@ enum CurrencyType: String, CaseIterable {
         case .USD: return "$"
         case .EUR: return "€"
         case .JPY: return "¥"
-        case .CNY: return "¥"
+        case .CNY: return "元"
         case .GBP: return "£"
         }
     }
+}
+
+// MARK: - ExchangeRate-API Response Model
+struct ExchangeRateAPIResponse: Codable {
+    let base: String
+    let date: String
+    let rates: [String: Double]
 }

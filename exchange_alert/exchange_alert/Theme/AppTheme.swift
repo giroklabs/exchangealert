@@ -3,9 +3,9 @@ import SwiftUI
 // MARK: - App Theme (nainai 스타일 참조)
 struct AppTheme {
     // 메인 컬러
-    static let primary = Color.blue
-    static let primaryLight = Color.cyan
-    static let primaryDark = Color.blue.opacity(0.7)
+    static let primary = Color.yellow
+    static let primaryLight = Color.yellow.opacity(0.8)
+    static let primaryDark = Color.yellow.opacity(0.7)
     
     // 세컨더리 컬러
     static let secondary = Color.green
@@ -29,7 +29,7 @@ struct AppTheme {
     )
     
     static let exchangeGradient = LinearGradient(
-        gradient: Gradient(colors: [Color.blue, Color.cyan]),
+        gradient: Gradient(colors: [Color.yellow, Color.orange]),
         startPoint: .leading,
         endPoint: .trailing
     )
@@ -45,7 +45,7 @@ struct AppTheme {
     
     // 그림자
     static let cardShadow = Color.black.opacity(0.06)
-    static let buttonShadow = Color.blue.opacity(0.3)
+    static let buttonShadow = Color.yellow.opacity(0.3)
     
     // 코너 반경
     static let cornerRadius: CGFloat = 16
@@ -82,13 +82,22 @@ struct ExchangeColorHelper {
         }
     }
     
-    static func colorForRate(_ rate: Double, upperThreshold: Double, lowerThreshold: Double) -> Color {
-        if rate >= upperThreshold {
-            return AppTheme.rising
-        } else if rate <= lowerThreshold {
-            return AppTheme.falling
-        } else {
-            return AppTheme.stable
+    static func colorForRate(_ rate: Double, threshold: Double, thresholdType: ThresholdType) -> Color {
+        switch thresholdType {
+        case .upper:
+            return rate >= threshold ? AppTheme.rising : AppTheme.stable
+        case .lower:
+            return rate <= threshold ? AppTheme.falling : AppTheme.stable
+        case .both:
+            let upperThreshold = threshold + 100
+            let lowerThreshold = threshold - 100
+            if rate >= upperThreshold {
+                return AppTheme.rising
+            } else if rate <= lowerThreshold {
+                return AppTheme.falling
+            } else {
+                return AppTheme.stable
+            }
         }
     }
 }

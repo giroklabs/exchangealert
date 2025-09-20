@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
+    @State private var isKeyboardVisible = false
     
     var body: some View {
         NavigationView {
@@ -19,7 +20,7 @@ struct ContentView: View {
                         LazyVStack(spacing: 16) {
                             // 환율 정보 카드
                             if let rate = exchangeManager.currentRate {
-                                ExchangeRateCard(rate: rate, alertSettings: exchangeManager.alertSettings, selectedCurrency: $exchangeManager.selectedCurrency)
+                                ExchangeRateCard(rate: rate, alertSettings: exchangeManager.currentAlertSettings, selectedCurrency: $exchangeManager.selectedCurrency)
                                     .padding(.horizontal, 16)
                             } else if exchangeManager.isLoading {
                                 LoadingView()
@@ -31,29 +32,15 @@ struct ContentView: View {
                                 }
                                 .padding(.horizontal, 16)
                             } else {
-                                // 데이터가 없을 때의 상태
-                                EmptyStateView {
-                                    exchangeManager.refresh()
-                                }
-                                .padding(.horizontal, 16)
+                                // 환율 데이터가 없을 때 기본 카드 표시
+                                DefaultExchangeCard(selectedCurrency: $exchangeManager.selectedCurrency)
+                                    .padding(.horizontal, 16)
                             }
                             
                             // 알림 설정 카드
-                            AlertSettingsCard(settings: $exchangeManager.alertSettings)
+                            AlertSettingsCard(currency: exchangeManager.selectedCurrency)
                                 .padding(.horizontal, 16)
-                                .onChange(of: exchangeManager.alertSettings) { _, newSettings in
-                                    exchangeManager.updateAlertSettings(newSettings)
-                                }
                             
-                            // 새로고침 버튼
-                            GradientButton(
-                                title: "새로고침",
-                                icon: "arrow.clockwise",
-                                action: {
-                                    exchangeManager.refresh()
-                                }
-                            )
-                            .padding(.horizontal, 16)
                             
                             // 마지막 업데이트 시간
                             if exchangeManager.currentRate != nil {
@@ -76,17 +63,149 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            // ExchangeRateManager 초기화 시 자동으로 데이터를 가져오므로 여기서는 추가 호출 불필요
+            if exchangeManager.currentRate == nil {
+                exchangeManager.fetchExchangeRate()
+            }
         }
         .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 4) {
-                // 광고 배너 자리 (nainai 앱과 동일한 크기)
-                AdBannerPlaceholder()
-                    .frame(maxWidth: .infinity, maxHeight: 50)
+            // 키보드가 보이지 않을 때만 광고 배너 표시
+            if !isKeyboardVisible {
+                VStack(spacing: 4) {
+                    // 제조사 로고 (우측정렬)
+                    HStack {
+                        Spacer()
+                        SignatureView()
+                    }
                     .padding(.horizontal, 16)
-                    .padding(.bottom, 6)
+                    .padding(.bottom, 4)
+                    
+                    // 광고 배너 자리 (nainai 앱과 동일한 크기)
+                    AdBannerPlaceholder()
+                        .frame(maxWidth: .infinity, maxHeight: 50)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 6)
+                }
+            }
+        }
+        .onTapGesture {
+            // 배경 탭 시 키보드 내리기
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            isKeyboardVisible = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            isKeyboardVisible = false
+        }
+    }
+}
+
+// MARK: - Default Exchange Card
+struct DefaultExchangeCard: View {
+    @Binding var selectedCurrency: CurrencyType
+    @EnvironmentObject var exchangeManager: ExchangeRateManager
+    
+    var body: some View {
+        CardView(cornerRadius: 16, shadowRadius: 8) {
+            VStack(spacing: 16) {
+                // 헤더
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        // 통화 선택 드롭다운
+                        Menu {
+                            ForEach(CurrencyType.allCases, id: \.self) { currency in
+                                Button(action: {
+                                    exchangeManager.changeCurrency(to: currency)
+                                }) {
+                                    HStack {
+                                        Text(currency.symbol)
+                                        Text(currency.rawValue)
+                                        Text(currency.displayName)
+                                        if selectedCurrency == currency {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text(selectedCurrency.rawValue)
+                                    .font(AppTheme.titleFont)
+                                    .foregroundColor(.primary)
+                                
+                                Text("/KRW")
+                                    .font(AppTheme.titleFont)
+                                    .foregroundColor(.primary)
+                                
+                                Image(systemName: "chevron.down")
+                                    .font(AppTheme.captionFont)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        
+                        Text(selectedCurrency.displayName)
+                            .font(AppTheme.captionFont)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    // 환율 상태 아이콘
+                    ZStack {
+                        Circle()
+                            .fill(AppTheme.primary.opacity(0.1))
+                            .frame(width: 50, height: 50)
+                        
+                        Image(systemName: "dollarsign.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(AppTheme.primary)
+                    }
+                }
                 
-                SignatureView()
+                // 매매기준율 (메인) - 데이터 없음 표시
+                VStack(spacing: 8) {
+                    Text("매매기준율")
+                        .font(AppTheme.captionFont)
+                        .foregroundColor(.secondary)
+                    
+                    Text("데이터 로딩 중...")
+                        .font(AppTheme.largeTitleFont)
+                        .foregroundColor(.secondary)
+                    
+                    Text("원")
+                        .font(AppTheme.headlineFont)
+                        .foregroundColor(.secondary)
+                }
+                
+                // TTB/TTS 상세 정보 (서브)
+                VStack(spacing: 12) {
+                    Text("현찰 환율")
+                        .font(AppTheme.captionFont)
+                        .foregroundColor(.secondary)
+                    
+                    HStack(spacing: 20) {
+                        VStack(spacing: 4) {
+                            Text("TTB (살 때)")
+                                .font(AppTheme.captionFont)
+                                .foregroundColor(.secondary)
+                            Text("--원")
+                                .font(AppTheme.headlineFont)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Divider()
+                            .frame(height: 30)
+                        
+                        VStack(spacing: 4) {
+                            Text("TTS (팔 때)")
+                                .font(AppTheme.captionFont)
+                                .foregroundColor(.secondary)
+                            Text("--원")
+                                .font(AppTheme.headlineFont)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
             }
         }
     }
@@ -116,36 +235,6 @@ struct ErrorStateView: View {
             
             GradientButton(
                 title: "다시 시도",
-                icon: "arrow.clockwise",
-                action: action
-            )
-        }
-        .padding(.vertical, 40)
-    }
-}
-
-// MARK: - Empty State View
-struct EmptyStateView: View {
-    let action: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 50))
-                .foregroundColor(AppTheme.primary)
-            
-            Text("환율 정보를 불러오세요")
-                .font(AppTheme.titleFont)
-                .foregroundColor(.primary)
-            
-            Text("새로고침 버튼을 눌러 최신 환율 정보를 확인하세요")
-                .font(AppTheme.bodyFont)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 20)
-            
-            GradientButton(
-                title: "환율 정보 불러오기",
                 icon: "arrow.clockwise",
                 action: action
             )

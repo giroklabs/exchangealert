@@ -6,6 +6,7 @@ struct ExchangeRateCard: View {
     let rate: ExchangeRate
     let alertSettings: AlertSettings
     @Binding var selectedCurrency: CurrencyType
+    @EnvironmentObject var exchangeManager: ExchangeRateManager
     
     var body: some View {
         CardView(cornerRadius: 16, shadowRadius: 8) {
@@ -17,21 +18,25 @@ struct ExchangeRateCard: View {
                         Menu {
                             ForEach(CurrencyType.allCases, id: \.self) { currency in
                                 Button(action: {
-                                    selectedCurrency = currency
+                                    exchangeManager.changeCurrency(to: currency)
                                 }) {
                                     HStack {
                                         Text(currency.symbol)
-                                        Text(currency.rawValue)
+                                            .font(AppTheme.headlineFont)
                                         Text(currency.displayName)
+                                            .font(AppTheme.bodyFont)
+                                        Spacer()
                                         if selectedCurrency == currency {
                                             Image(systemName: "checkmark")
+                                                .foregroundColor(AppTheme.primary)
                                         }
                                     }
+                                    .padding(.vertical, 4)
                                 }
                             }
                         } label: {
                             HStack(spacing: 4) {
-                                Text(selectedCurrency.rawValue)
+                                Text(rate.curUnit ?? "USD")
                                     .font(AppTheme.titleFont)
                                     .foregroundColor(.primary)
                                 
@@ -45,7 +50,7 @@ struct ExchangeRateCard: View {
                             }
                         }
                         
-                        Text(selectedCurrency.displayName)
+                        Text(rate.curNm ?? "대한민국 원")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
                     }
@@ -56,43 +61,51 @@ struct ExchangeRateCard: View {
                     ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
                 }
                 
-                // 현재 환율
-                if let currentRate = rate.dealBasR, let rateValue = Double(currentRate) {
+                // 매매기준율 (메인)
+                if let dealBasR = rate.dealBasR, let rateValue = Double(dealBasR) {
                     VStack(spacing: 8) {
-                        Text("\(String(format: "%.2f", rateValue))")
-                            .font(AppTheme.largeTitleFont)
-                            .foregroundColor(ExchangeColorHelper.colorForRate(
-                                rateValue,
-                                upperThreshold: alertSettings.upperThreshold,
-                                lowerThreshold: alertSettings.lowerThreshold
-                            ))
-                        
-                        Text("원")
-                            .font(AppTheme.headlineFont)
+                        Text("매매기준율")
+                            .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
+                        
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text("\(String(format: "%.2f", rateValue))")
+                                .font(AppTheme.largeTitleFont)
+                                .foregroundColor(ExchangeColorHelper.colorForRate(
+                                    rateValue,
+                                    threshold: alertSettings.threshold,
+                                    thresholdType: alertSettings.thresholdType
+                                ))
+                            
+                            Text("원")
+                                .font(AppTheme.headlineFont)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
                 
-                // 상세 정보
+                // TTB/TTS 상세 정보 (서브)
                 if let ttb = rate.ttb, let tts = rate.tts {
                     HStack(spacing: 20) {
                         VStack(spacing: 4) {
-                            Text("송금 받을 때")
+                            Text("살때")
                                 .font(AppTheme.captionFont)
                                 .foregroundColor(.secondary)
                             Text("\(ttb)원")
                                 .font(AppTheme.headlineFont)
+                                .foregroundColor(AppTheme.primary)
                         }
                         
                         Divider()
                             .frame(height: 30)
                         
                         VStack(spacing: 4) {
-                            Text("송금 보낼 때")
+                            Text("팔때")
                                 .font(AppTheme.captionFont)
                                 .foregroundColor(.secondary)
                             Text("\(tts)원")
                                 .font(AppTheme.headlineFont)
+                                .foregroundColor(AppTheme.primary)
                         }
                     }
                 }
@@ -110,8 +123,8 @@ struct ExchangeStatusIcon: View {
         if let currentRate = rate.dealBasR, let rateValue = Double(currentRate) {
             let color = ExchangeColorHelper.colorForRate(
                 rateValue,
-                upperThreshold: alertSettings.upperThreshold,
-                lowerThreshold: alertSettings.lowerThreshold
+                threshold: alertSettings.threshold,
+                thresholdType: alertSettings.thresholdType
             )
             
             ZStack {
@@ -127,19 +140,33 @@ struct ExchangeStatusIcon: View {
     }
     
     private func iconForRate(_ rate: Double) -> String {
-        if rate >= alertSettings.upperThreshold {
-            return "arrow.up.right.circle.fill"
-        } else if rate <= alertSettings.lowerThreshold {
-            return "arrow.down.right.circle.fill"
-        } else {
-            return "minus.circle.fill"
+        switch alertSettings.thresholdType {
+        case .upper:
+            return rate >= alertSettings.threshold ? "arrow.up.right.circle.fill" : "minus.circle.fill"
+        case .lower:
+            return rate <= alertSettings.threshold ? "arrow.down.right.circle.fill" : "minus.circle.fill"
+        case .both:
+            let upperThreshold = alertSettings.threshold + 100
+            let lowerThreshold = alertSettings.threshold - 100
+            if rate >= upperThreshold {
+                return "arrow.up.right.circle.fill"
+            } else if rate <= lowerThreshold {
+                return "arrow.down.right.circle.fill"
+            } else {
+                return "minus.circle.fill"
+            }
         }
     }
 }
 
 // MARK: - Alert Settings Card
 struct AlertSettingsCard: View {
-    @Binding var settings: AlertSettings
+    let currency: CurrencyType
+    @EnvironmentObject var exchangeManager: ExchangeRateManager
+    
+    private var settings: AlertSettings {
+        exchangeManager.currencyAlertSettings.getSettings(for: currency)
+    }
     
     var body: some View {
         CardView(cornerRadius: 16, shadowRadius: 8) {
@@ -149,65 +176,87 @@ struct AlertSettingsCard: View {
                         .foregroundColor(AppTheme.primary)
                         .font(AppTheme.headlineFont)
                     
-                    Text("알림 설정")
-                        .font(AppTheme.headlineFont)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("알림 설정")
+                            .font(AppTheme.headlineFont)
+                        
+                        Text("\(currency.symbol) \(currency.displayName)")
+                            .font(AppTheme.captionFont)
+                            .foregroundColor(.secondary)
+                    }
                     
                     Spacer()
                     
-                    Toggle("", isOn: $settings.isEnabled)
-                        .toggleStyle(SwitchToggleStyle(tint: AppTheme.primary))
+                    Toggle("", isOn: Binding(
+                        get: { settings.isEnabled },
+                        set: { newValue in
+                            var updatedSettings = settings
+                            updatedSettings.isEnabled = newValue
+                            exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+                        }
+                    ))
+                    .toggleStyle(SwitchToggleStyle(tint: AppTheme.primary))
                 }
                 
                 if settings.isEnabled {
                     VStack(spacing: 12) {
-                        // 상한선 설정
+                        // 알림 타입 설정
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("상한선 (원)")
+                            Text("알림 타입")
                                 .font(AppTheme.subheadlineFont)
                             
-                            HStack {
-                                TextField("상한선", value: $settings.upperThreshold, format: .number)
-                                    .textFieldStyle(CustomTextFieldStyle())
-                                    .keyboardType(.decimalPad)
-                                    .font(AppTheme.bodyFont)
-                                
-                                Text("원 이상")
-                                    .font(AppTheme.captionFont)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        
-                        // 하한선 설정
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("하한선 (원)")
-                                .font(AppTheme.subheadlineFont)
-                            
-                            HStack {
-                                TextField("하한선", value: $settings.lowerThreshold, format: .number)
-                                    .textFieldStyle(CustomTextFieldStyle())
-                                    .keyboardType(.decimalPad)
-                                    .font(AppTheme.bodyFont)
-                                
-                                Text("원 이하")
-                                    .font(AppTheme.captionFont)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        
-                        // 체크 간격 설정
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("체크 간격")
-                                .font(AppTheme.subheadlineFont)
-                            
-                            Picker("체크 간격", selection: $settings.checkInterval) {
-                                Text("15분").tag(15)
-                                Text("30분").tag(30)
-                                Text("1시간").tag(60)
-                                Text("2시간").tag(120)
+                            Picker("알림 타입", selection: Binding(
+                                get: { settings.thresholdType },
+                                set: { newValue in
+                                    var updatedSettings = settings
+                                    updatedSettings.thresholdType = newValue
+                                    exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+                                }
+                            )) {
+                                ForEach(ThresholdType.allCases, id: \.self) { type in
+                                    Text(type.rawValue).tag(type)
+                                }
                             }
                             .pickerStyle(.segmented)
                             .font(AppTheme.bodyFont)
+                            
+                            Text(settings.thresholdType.description)
+                                .font(AppTheme.captionFont)
+                                .foregroundColor(.secondary)
                         }
+                        
+                        // 기준값 설정
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("기준값 (원)")
+                                .font(AppTheme.subheadlineFont)
+                            
+                            HStack {
+                                TextField("기준값", value: Binding(
+                                    get: { settings.threshold },
+                                    set: { newValue in
+                                        var updatedSettings = settings
+                                        updatedSettings.threshold = newValue
+                                        exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+                                    }
+                                ), format: .number)
+                                .textFieldStyle(CustomTextFieldStyle())
+                                .keyboardType(.decimalPad)
+                                .font(AppTheme.bodyFont)
+                                .toolbar {
+                                    ToolbarItemGroup(placement: .keyboard) {
+                                        Spacer()
+                                        Button("완료") {
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        }
+                                    }
+                                }
+                                
+                                Text("원")
+                                    .font(AppTheme.captionFont)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        
                         
                     }
                     .transition(.opacity.combined(with: .move(edge: .top)))
@@ -361,15 +410,10 @@ struct AppTitleView: View {
                 .accessibilityHidden(true)
             
             GradientText(
-                text: "환율알리미",
-                font: .system(size: baseSize, weight: .heavy),
+                text: "환율알라미",
+                font: .custom("MaruBuri-Bold", size: baseSize),
                 gradient: AppTheme.exchangeGradient
             )
-            
-            Text("Exchange Alert")
-                .font(.system(size: baseSize * 0.5, weight: .semibold))
-                .foregroundColor(.secondary)
-                .baselineOffset(-2)
         }
     }
 }
