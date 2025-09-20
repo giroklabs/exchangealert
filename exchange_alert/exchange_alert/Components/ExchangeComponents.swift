@@ -177,10 +177,6 @@ struct AlertSettingsCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("알림 설정")
                             .font(AppTheme.headlineFont)
-                        
-                        Text("\(currency.symbol) \(currency.displayName)")
-                            .font(AppTheme.captionFont)
-                            .foregroundColor(.secondary)
                     }
                     
                     Spacer()
