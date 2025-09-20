@@ -38,10 +38,13 @@ class ExchangeRateManager: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        // ExchangeRate-API 사용 (무료, 인증키 불필요)
+        // 한국수출입은행 API 사용
+        fetchFromKoreaEximAPI()
+        
+        // ExchangeRate-API (백업용, 주석 처리)
+        /*
         fetchFromExchangeRateAPI()
         
-        // 실제 API 호출 (주석 처리)
         /*
         let urlString = "\(baseURL)?authkey=\(apiKey)&data=AP01"
         print("🌐 API 호출: \(urlString)")
@@ -109,6 +112,7 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
         }.resume()
+        */
         */
     }
     
