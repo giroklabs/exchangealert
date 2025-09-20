@@ -21,6 +21,8 @@ class ExchangeRateManager: ObservableObject {
     init() {
         loadSettings()
         startPeriodicCheck()
+        // 초기화 시 즉시 환율 데이터 가져오기
+        fetchExchangeRate()
     }
     
     deinit {

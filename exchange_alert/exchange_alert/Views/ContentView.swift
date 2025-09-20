@@ -25,12 +25,23 @@ struct ContentView: View {
                                 LoadingView()
                                     .frame(maxWidth: .infinity, maxHeight: 200)
                                     .padding(.horizontal, 16)
+                            } else if let errorMessage = exchangeManager.errorMessage {
+                                ErrorStateView(message: errorMessage) {
+                                    exchangeManager.refresh()
+                                }
+                                .padding(.horizontal, 16)
+                            } else {
+                                // 데이터가 없을 때의 상태
+                                EmptyStateView {
+                                    exchangeManager.refresh()
+                                }
+                                .padding(.horizontal, 16)
                             }
                             
                             // 알림 설정 카드
                             AlertSettingsCard(settings: $exchangeManager.alertSettings)
                                 .padding(.horizontal, 16)
-                                .onChange(of: exchangeManager.alertSettings) { newSettings in
+                                .onChange(of: exchangeManager.alertSettings) { _, newSettings in
                                     exchangeManager.updateAlertSettings(newSettings)
                                 }
                             
@@ -45,7 +56,7 @@ struct ContentView: View {
                             .padding(.horizontal, 16)
                             
                             // 마지막 업데이트 시간
-                            if let rate = exchangeManager.currentRate {
+                            if exchangeManager.currentRate != nil {
                                 LastUpdateView()
                                     .padding(.horizontal, 16)
                             }
@@ -65,9 +76,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            if exchangeManager.currentRate == nil {
-                exchangeManager.fetchExchangeRate()
-            }
+            // ExchangeRateManager 초기화 시 자동으로 데이터를 가져오므로 여기서는 추가 호출 불필요
         }
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 4) {
@@ -107,6 +116,36 @@ struct ErrorStateView: View {
             
             GradientButton(
                 title: "다시 시도",
+                icon: "arrow.clockwise",
+                action: action
+            )
+        }
+        .padding(.vertical, 40)
+    }
+}
+
+// MARK: - Empty State View
+struct EmptyStateView: View {
+    let action: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "chart.line.uptrend.xyaxis")
+                .font(.system(size: 50))
+                .foregroundColor(AppTheme.primary)
+            
+            Text("환율 정보를 불러오세요")
+                .font(AppTheme.titleFont)
+                .foregroundColor(.primary)
+            
+            Text("새로고침 버튼을 눌러 최신 환율 정보를 확인하세요")
+                .font(AppTheme.bodyFont)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 20)
+            
+            GradientButton(
+                title: "환율 정보 불러오기",
                 icon: "arrow.clockwise",
                 action: action
             )
