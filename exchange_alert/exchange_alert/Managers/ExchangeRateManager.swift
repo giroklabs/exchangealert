@@ -68,9 +68,9 @@ class ExchangeRateManager: ObservableObject {
                     
                     self?.exchangeRates = newRates
                     
-                    // USD 환율이 있으면 알림 체크
-                    if let usdRate = newRates[.USD] {
-                        self?.checkAlertThresholds(rate: usdRate)
+                    // 선택된 통화의 환율이 있으면 알림 체크
+                    if let selectedRate = newRates[self?.selectedCurrency ?? .USD] {
+                        self?.checkAlertThresholds(rate: selectedRate)
                     }
                     
                     if newRates.isEmpty {
@@ -109,10 +109,10 @@ class ExchangeRateManager: ObservableObject {
         
         if currentRate >= alertSettings.upperThreshold {
             shouldNotify = true
-            message = "💰 달러-원 환율이 \(String(format: "%.1f", currentRate))원으로 상한선(\(String(format: "%.0f", alertSettings.upperThreshold))원)을 초과했습니다!"
+            message = "💰 \(selectedCurrency.displayName)-원 환율이 \(String(format: "%.1f", currentRate))원으로 상한선(\(String(format: "%.0f", alertSettings.upperThreshold))원)을 초과했습니다!"
         } else if currentRate <= alertSettings.lowerThreshold {
             shouldNotify = true
-            message = "💸 달러-원 환율이 \(String(format: "%.1f", currentRate))원으로 하한선(\(String(format: "%.0f", alertSettings.lowerThreshold))원) 이하로 떨어졌습니다!"
+            message = "💸 \(selectedCurrency.displayName)-원 환율이 \(String(format: "%.1f", currentRate))원으로 하한선(\(String(format: "%.0f", alertSettings.lowerThreshold))원) 이하로 떨어졌습니다!"
         }
         
         if shouldNotify {

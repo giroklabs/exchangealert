@@ -31,7 +31,7 @@ struct ExchangeRateCard: View {
                             }
                         } label: {
                             HStack(spacing: 4) {
-                                Text(rate.curUnit ?? "USD")
+                                Text(selectedCurrency.rawValue)
                                     .font(AppTheme.titleFont)
                                     .foregroundColor(.primary)
                                 
@@ -45,7 +45,7 @@ struct ExchangeRateCard: View {
                             }
                         }
                         
-                        Text(rate.curNm ?? "대한민국 원")
+                        Text(selectedCurrency.displayName)
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
                     }
