@@ -21,9 +21,7 @@ struct ExchangeRateCard: View {
                                     exchangeManager.changeCurrency(to: currency)
                                 }) {
                                     HStack {
-                                        Text(currency.symbol)
-                                            .font(AppTheme.headlineFont)
-                                        Text(currency.displayName)
+                                        Text("\(currency.symbol)(\(currency.displayName))")
                                             .font(AppTheme.bodyFont)
                                         Spacer()
                                         if selectedCurrency == currency {
