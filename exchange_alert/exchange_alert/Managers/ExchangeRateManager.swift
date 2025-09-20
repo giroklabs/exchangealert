@@ -158,8 +158,8 @@ class ExchangeRateManager: ObservableObject {
                             // 예: USD = 0.00074 → 1/0.00074 = 1351.35원
                             var krwRate = 1.0 / rate
                             
-                            // JPY의 경우 100배를 곱해서 표시 (100엔 = X원)
-                            if currency == .JPY {
+                            // JPY, IDR, VND, KHR의 경우 100배를 곱해서 표시 (100단위 = X원)
+                            if currency == .JPY || currency == .IDR || currency == .VND || currency == .KHR {
                                 krwRate = krwRate * 100
                             }
                             

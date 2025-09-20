@@ -106,6 +106,12 @@ struct CurrencyAlertSettings: Codable, Equatable {
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 35.0)
             case .INR:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 15.0)
+            case .IDR:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 0.08)  // 100루피아 기준
+            case .VND:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 0.05)  // 100동 기준
+            case .KHR:
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 0.025)  // 100리엘 기준
 
             // 유럽 지역
             case .CHF:
@@ -171,6 +177,9 @@ enum CurrencyType: String, CaseIterable, Codable {
     case HKD = "HKD"
     case THB = "THB"
     case INR = "INR"
+    case IDR = "IDR"
+    case VND = "VND"
+    case KHR = "KHR"
 
     // 유럽 지역
     case CHF = "CHF"
@@ -199,6 +208,9 @@ enum CurrencyType: String, CaseIterable, Codable {
         case .HKD: return "홍콩 달러"
         case .THB: return "태국 바트"
         case .INR: return "인도 루피"
+        case .IDR: return "인도네시아 루피아"
+        case .VND: return "베트남 동"
+        case .KHR: return "캄보디아 리엘"
 
         // 유럽 지역
         case .CHF: return "스위스 프랑"
@@ -229,6 +241,9 @@ enum CurrencyType: String, CaseIterable, Codable {
         case .HKD: return "HK$"
         case .THB: return "฿"
         case .INR: return "₹"
+        case .IDR: return "Rp"
+        case .VND: return "₫"
+        case .KHR: return "៛"
 
         // 유럽 지역
         case .CHF: return "CHF"
