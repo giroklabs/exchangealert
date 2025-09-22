@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 *.log
 npm-debug.log*
@@ -32,3 +33,47 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+=======
+# Xcode
+*.xcuserstate
+*.xcuserdatad/
+*.xcworkspace/xcuserdata/
+
+# Build
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.moved-aside
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pinned
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+>>>>>>> d6f027aa22206d6c0f5fec5fa75a22e84282ec0e
