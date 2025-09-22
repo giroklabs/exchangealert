@@ -128,12 +128,15 @@ class ExchangeRateManager: ObservableObject {
             return
         }
         
-        isLoading = true
-        errorMessage = nil
+        // 메인 큐에서 UI 업데이트 수행
+        DispatchQueue.main.async {
+            self.isLoading = true
+            self.errorMessage = nil
+            self.currentApiSource = "한국수출입은행"
+        }
 
         // 1순위: GitHub에서 저장된 한국수출입은행 데이터 사용
         print("🌐 GitHub에서 한국수출입은행 데이터 조회")
-        currentApiSource = "한국수출입은행"
         recordAPICall() // API 호출 기록
         fetchFromGitHubAPI()
         
@@ -214,8 +217,10 @@ class ExchangeRateManager: ObservableObject {
         print("🌐 ExchangeRate-API 호출: \(exchangeRateAPIURL)")
         
         guard let url = URL(string: exchangeRateAPIURL) else {
-            errorMessage = "잘못된 URL입니다."
-            isLoading = false
+            DispatchQueue.main.async {
+                self.errorMessage = "잘못된 URL입니다."
+                self.isLoading = false
+            }
             print("❌ 잘못된 URL: \(exchangeRateAPIURL)")
             return
         }
@@ -389,12 +394,16 @@ class ExchangeRateManager: ObservableObject {
         if let data = UserDefaults.standard.data(forKey: "LastExchangeRates"),
            let lastRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
             print("📁 마지막 저장된 데이터 로드: \(lastRates.count)개 통화")
-            self.exchangeRates = lastRates
-            self.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
             
-            // 현재 선택된 통화의 환율이 있으면 알림 체크
-            if let currentRate = lastRates[self.selectedCurrency] {
-                self.checkAlertThresholds(rate: currentRate)
+            // 메인 큐에서 UI 업데이트 수행
+            DispatchQueue.main.async {
+                self.exchangeRates = lastRates
+                self.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
+                
+                // 현재 선택된 통화의 환율이 있으면 알림 체크
+                if let currentRate = lastRates[self.selectedCurrency] {
+                    self.checkAlertThresholds(rate: currentRate)
+                }
             }
         } else {
             print("❌ 마지막 저장된 데이터 없음 - ExchangeRate-API로 백업")
@@ -434,14 +443,17 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
 
-            // 현재 데이터로 변동 계산
-            self.calculateDailyChanges(newRates: newRates)
-            
-            // 현재 데이터를 이전 데이터로 저장
-            self.previousDayData = self.exchangeRates
-            
-            self.exchangeRates = newRates
-            self.lastUpdateTime = Date()
+            // 메인 큐에서 UI 업데이트 수행 (SwiftUI 퍼블리싱 오류 방지)
+            DispatchQueue.main.async {
+                // 현재 데이터로 변동 계산
+                self.calculateDailyChanges(newRates: newRates)
+                
+                // 현재 데이터를 이전 데이터로 저장
+                self.previousDayData = self.exchangeRates
+                
+                self.exchangeRates = newRates
+                self.lastUpdateTime = Date()
+            }
             
             // 성공적으로 데이터를 가져왔을 때 UserDefaults에 저장 (오프라인 백업용)
             if !newRates.isEmpty {
@@ -477,9 +489,14 @@ class ExchangeRateManager: ObservableObject {
         if isWeekendOrHoliday() {
             if !weekdayLastData.isEmpty {
                 print("📅 주말 감지 - 캐시된 평일 데이터 사용")
-                self.exchangeRates = weekdayLastData
-                self.lastUpdateTime = lastWeekdayUpdate
-                self.currentApiSource = "한국수출입은행 (평일 캐시)"
+                
+                // 메인 큐에서 UI 업데이트 수행
+                DispatchQueue.main.async {
+                    self.exchangeRates = self.weekdayLastData
+                    self.lastUpdateTime = self.lastWeekdayUpdate
+                    self.currentApiSource = "한국수출입은행 (평일 캐시)"
+                }
+                
                 print("✅ 캐시된 평일 데이터 \(weekdayLastData.count)개 통화 로드 완료")
                 
                 // 현재 선택된 통화의 환율이 있으면 알림 체크
@@ -499,7 +516,9 @@ class ExchangeRateManager: ObservableObject {
         
         guard let url = URL(string: urlString) else {
             print("❌ 한국수출입은행 API 잘못된 URL: \(urlString) - ExchangeRate-API로 백업 시도")
-            currentApiSource = "ExchangeRate-API"
+            DispatchQueue.main.async {
+                self.currentApiSource = "ExchangeRate-API"
+            }
             fetchFromExchangeRateAPI()
             return
         }
@@ -697,8 +716,12 @@ class ExchangeRateManager: ObservableObject {
     // MARK: - 설정 관리
     func updateAlertSettings(_ newSettings: AlertSettings, for currency: CurrencyType? = nil) {
         let targetCurrency = currency ?? selectedCurrency
-        currencyAlertSettings.updateSettings(for: targetCurrency, newSettings: newSettings)
-        saveSettings()
+        
+        // 메인 큐에서 UI 업데이트 수행
+        DispatchQueue.main.async {
+            self.currencyAlertSettings.updateSettings(for: targetCurrency, newSettings: newSettings)
+            self.saveSettings()
+        }
     }
     
     private func saveSettings() {
@@ -721,7 +744,11 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - 통화 변경 시 새로고침
     func changeCurrency(to currency: CurrencyType) {
-        selectedCurrency = currency
+        // 메인 큐에서 UI 업데이트 수행
+        DispatchQueue.main.async {
+            self.selectedCurrency = currency
+        }
+        
         // 현재 선택된 통화의 데이터가 없으면 새로고침
         if exchangeRates[currency] == nil {
             fetchExchangeRate()
