@@ -69,6 +69,13 @@ struct AppTheme {
     static let footnoteFont = Font.custom("MaruBuri-Light", size: 10)
 }
 
+// MARK: - Exchange Trend Enum
+enum ExchangeTrend {
+    case rising
+    case falling
+    case stable
+}
+
 // MARK: - Exchange Rate Color Helper
 struct ExchangeColorHelper {
     static func colorForTrend(_ trend: ExchangeTrend) -> Color {

@@ -12,6 +12,12 @@ class ExchangeRateManager: ObservableObject {
     @Published var currentApiSource: String = "ExchangeRate-API"
     @Published var lastUpdateTime: Date?
     
+    // 일일 변동 데이터 저장
+    @Published var dailyChanges: [CurrencyType: DailyChange] = [:]
+    
+    // 전일 데이터 저장 (변동 계산용)
+    private var previousDayData: [CurrencyType: ExchangeRate] = [:]
+    
     // 평일 마지막 데이터 캐시
     private var weekdayLastData: [CurrencyType: ExchangeRate] = [:]
     private var lastWeekdayUpdate: Date?
@@ -423,6 +429,12 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
 
+            // 현재 데이터로 변동 계산
+            self.calculateDailyChanges(newRates: newRates)
+            
+            // 현재 데이터를 이전 데이터로 저장
+            self.previousDayData = self.exchangeRates
+            
             self.exchangeRates = newRates
             self.lastUpdateTime = Date()
             
@@ -597,7 +609,7 @@ class ExchangeRateManager: ObservableObject {
         let now = Date()
         
         // 마지막 알림 후 1시간이 지났는지 확인 (스팸 방지)
-        if let lastNotification = alertSettings.lastNotificationDate,
+        if let lastNotification = alertSettings.lastNotificationTime,
            now.timeIntervalSince(lastNotification) < 3600 {
             return
         }
@@ -648,7 +660,7 @@ class ExchangeRateManager: ObservableObject {
             sendNotification(message: message)
             // 해당 통화의 마지막 알림 시간 업데이트
             var updatedSettings = alertSettings
-            updatedSettings.lastNotificationDate = now
+            updatedSettings.lastNotificationTime = now
             currencyAlertSettings.updateSettings(for: currency, newSettings: updatedSettings)
             saveSettings()
         }
@@ -757,5 +769,35 @@ class ExchangeRateManager: ObservableObject {
         checkAlertThresholds(rate: testRate)
         
         print("🧪 알림 테스트 완료")
+    }
+    
+    // MARK: - 일일 변동 계산
+    private func calculateDailyChanges(newRates: [CurrencyType: ExchangeRate]) {
+        var changes: [CurrencyType: DailyChange] = [:]
+        
+        for (currency, newRate) in newRates {
+            if let currentValue = getDealBasRValue(from: newRate),
+               let previousRate = previousDayData[currency],
+               let previousValue = getDealBasRValue(from: previousRate) {
+                
+                let changeValue = currentValue - previousValue
+                let changePercent = (changeValue / previousValue) * 100
+                
+                changes[currency] = DailyChange(
+                    changeValue: changeValue,
+                    changePercent: changePercent,
+                    previousValue: previousValue,
+                    currentValue: currentValue
+                )
+            }
+        }
+        
+        self.dailyChanges = changes
+    }
+    
+    private func getDealBasRValue(from rate: ExchangeRate) -> Double? {
+        guard let dealBasR = rate.dealBasR else { return nil }
+        let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
+        return Double(cleanedRate)
     }
 }

@@ -70,7 +70,8 @@ struct ExchangeRateCard: View {
                                     .font(AppTheme.captionFont)
                                     .foregroundColor(.secondary)
                                 
-                                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                HStack(alignment: .bottom, spacing: 8) {
+                                    // 현재 환율
                                     Text("\(String(format: "%.2f", rateValue))")
                                         .font(AppTheme.largeTitleFont)
                                         .foregroundColor(ExchangeColorHelper.colorForRate(
@@ -82,6 +83,29 @@ struct ExchangeRateCard: View {
                                     Text("원")
                                         .font(AppTheme.headlineFont)
                                         .foregroundColor(.secondary)
+                                    
+                                    // 일일 변동 정보
+                                    if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
+                                        HStack(spacing: 4) {
+                                            // 변동 아이콘
+                                            Image(systemName: dailyChange.isPositive ? "arrow.up.right" : "arrow.down.right")
+                                                .font(.caption)
+                                                .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                            
+                                            // 변동값과 변동률
+                                            VStack(alignment: .trailing, spacing: 2) {
+                                                Text(dailyChange.changeValueString)
+                                                    .font(.caption)
+                                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                                
+                                                Text(dailyChange.changePercentString)
+                                                    .font(.caption2)
+                                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                            }
+                                        }
+                                    }
+                                    
+                                    Spacer()
                                 }
                             }
                         }
