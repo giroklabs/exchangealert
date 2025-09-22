@@ -38,7 +38,12 @@ class ExchangeRateManager: ObservableObject {
     }
     
     var currentAlertSettings: AlertSettings {
-        return currencyAlertSettings.getSettings(for: selectedCurrency)
+        // 무한 루프를 방지하기 위해 비변경 방식으로 접근
+        if let existingSettings = currencyAlertSettings.settings[selectedCurrency] {
+            return existingSettings
+        } else {
+            return AlertSettings.default
+        }
     }
     
     init() {
@@ -596,7 +601,7 @@ class ExchangeRateManager: ObservableObject {
             return
         }
         
-        let alertSettings = currencyAlertSettings.getSettings(for: currency)
+        let alertSettings = currencyAlertSettings.settings[currency] ?? AlertSettings.default
         guard alertSettings.isEnabled else { return }
         
         // 매매기준율(DEAL_BAS_R)을 기준으로 알림 체크
@@ -728,7 +733,7 @@ class ExchangeRateManager: ObservableObject {
         print("🧪 알림 테스트 시작")
         
         // 현재 선택된 통화의 알림 설정 가져오기
-        let alertSettings = currencyAlertSettings.getSettings(for: selectedCurrency)
+        let alertSettings = currencyAlertSettings.settings[selectedCurrency] ?? AlertSettings.default
         
         if !alertSettings.isEnabled {
             print("❌ 알림이 비활성화되어 있습니다. 먼저 알림을 활성화해주세요.")

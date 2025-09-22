@@ -46,7 +46,7 @@ struct AlertSettings: Codable {
 }
 
 struct CurrencyAlertSettings: Codable {
-    private var settings: [CurrencyType: AlertSettings] = [:]
+    var settings: [CurrencyType: AlertSettings] = [:]
     
     mutating func getSettings(for currency: CurrencyType) -> AlertSettings {
         if let existingSettings = settings[currency] {
