@@ -443,10 +443,13 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
 
+            // 현재 데이터로 변동 계산 (메인 큐 밖에서 수행)
+            let calculatedChanges = self.calculateDailyChangesSync(newRates: newRates)
+            
             // 메인 큐에서 UI 업데이트 수행 (SwiftUI 퍼블리싱 오류 방지)
             DispatchQueue.main.async {
-                // 현재 데이터로 변동 계산
-                self.calculateDailyChanges(newRates: newRates)
+                // 계산된 변동 데이터 업데이트
+                self.dailyChanges = calculatedChanges
                 
                 // 현재 데이터를 이전 데이터로 저장
                 self.previousDayData = self.exchangeRates
@@ -716,12 +719,8 @@ class ExchangeRateManager: ObservableObject {
     // MARK: - 설정 관리
     func updateAlertSettings(_ newSettings: AlertSettings, for currency: CurrencyType? = nil) {
         let targetCurrency = currency ?? selectedCurrency
-        
-        // 메인 큐에서 UI 업데이트 수행
-        DispatchQueue.main.async {
-            self.currencyAlertSettings.updateSettings(for: targetCurrency, newSettings: newSettings)
-            self.saveSettings()
-        }
+        currencyAlertSettings.updateSettings(for: targetCurrency, newSettings: newSettings)
+        saveSettings()
     }
     
     private func saveSettings() {
@@ -744,10 +743,7 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - 통화 변경 시 새로고침
     func changeCurrency(to currency: CurrencyType) {
-        // 메인 큐에서 UI 업데이트 수행
-        DispatchQueue.main.async {
-            self.selectedCurrency = currency
-        }
+        selectedCurrency = currency
         
         // 현재 선택된 통화의 데이터가 없으면 새로고침
         if exchangeRates[currency] == nil {
@@ -803,8 +799,8 @@ class ExchangeRateManager: ObservableObject {
         print("🧪 알림 테스트 완료")
     }
     
-    // MARK: - 일일 변동 계산
-    private func calculateDailyChanges(newRates: [CurrencyType: ExchangeRate]) {
+    // MARK: - 일일 변동 계산 (동기 버전)
+    private func calculateDailyChangesSync(newRates: [CurrencyType: ExchangeRate]) -> [CurrencyType: DailyChange] {
         var changes: [CurrencyType: DailyChange] = [:]
         
         for (currency, newRate) in newRates {
@@ -824,7 +820,7 @@ class ExchangeRateManager: ObservableObject {
             }
         }
         
-        self.dailyChanges = changes
+        return changes
     }
     
     private func getDealBasRValue(from rate: ExchangeRate) -> Double? {
