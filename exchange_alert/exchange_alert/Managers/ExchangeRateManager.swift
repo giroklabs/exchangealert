@@ -43,17 +43,11 @@ class ExchangeRateManager: ObservableObject {
     func fetchExchangeRate() {
         isLoading = true
         errorMessage = nil
-        
-        // 주말/공휴일 체크
-        if isWeekendOrHoliday() {
-            print("📅 주말/공휴일 감지 - ExchangeRate-API 사용")
-            currentApiSource = "ExchangeRate-API"
-            fetchFromExchangeRateAPI()
-        } else {
-            print("📅 평일 감지 - 한국수출입은행 API 사용")
-            currentApiSource = "한국수출입은행"
-            fetchFromKoreaEximAPI()
-        }
+
+        // GitHub API 우선 호출 (항상 사용)
+        print("🌐 GitHub API에서 환율 데이터 조회")
+        currentApiSource = "한국수출입은행 (GitHub)"
+        fetchFromGitHubAPI()
         
         // 실제 API 호출 (주석 처리)
         /*
@@ -260,6 +254,77 @@ class ExchangeRateManager: ObservableObject {
         return holidays.contains(todayString)
     }
     
+    // MARK: - GitHub API 호출
+    private func fetchFromGitHubAPI() {
+        // GitHub Raw URL 사용 (CDN 성능 향상)
+        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchange-rates-data/main/data/exchange-rates.json"
+        print("📥 GitHub API 호출: \(githubURL)")
+
+        guard let url = URL(string: githubURL) else {
+            print("❌ GitHub API 잘못된 URL: \(githubURL) - ExchangeRate-API로 백업")
+            currentApiSource = "ExchangeRate-API"
+            fetchFromExchangeRateAPI()
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+
+                if let error = error {
+                    print("❌ GitHub API 네트워크 오류: \(error.localizedDescription) - ExchangeRate-API로 백업")
+                    self?.currentApiSource = "ExchangeRate-API"
+                    self?.fetchFromExchangeRateAPI()
+                    return
+                }
+
+                guard let data = data else {
+                    print("❌ GitHub API 데이터 없음 - ExchangeRate-API로 백업")
+                    self?.currentApiSource = "ExchangeRate-API"
+                    self?.fetchFromExchangeRateAPI()
+                    return
+                }
+
+                // 응답 데이터 로깅
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("📦 GitHub API 응답: \(jsonString.prefix(500))")
+                }
+
+                do {
+                    let rates = try JSONDecoder().decode([ExchangeRate].self, from: data)
+                    print("✅ GitHub API 파싱 성공: \(rates.count)개 통화")
+
+                    var newRates: [CurrencyType: ExchangeRate] = [:]
+                    for rate in rates {
+                        if let curUnit = rate.curUnit, let currencyType = CurrencyType(rawValue: curUnit) {
+                            newRates[currencyType] = rate
+                        }
+                    }
+
+                    self?.exchangeRates = newRates
+                    self?.lastUpdateTime = Date() // GitHub에서 가져온 데이터이므로 현재 시간으로 설정
+
+                    // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
+                    if let currentRate = newRates[self?.selectedCurrency ?? .USD] {
+                        self?.checkAlertThresholds(rate: currentRate)
+                    }
+
+                    if newRates.isEmpty {
+                        print("❌ GitHub API에서 환율 정보 없음 - ExchangeRate-API로 백업")
+                        self?.currentApiSource = "ExchangeRate-API"
+                        self?.fetchFromExchangeRateAPI()
+                    } else {
+                        print("✅ GitHub에서 \(newRates.count)개 통화 환율 로드 완료")
+                    }
+                } catch {
+                    print("❌ GitHub API 파싱 오류: \(error.localizedDescription) - ExchangeRate-API로 백업")
+                    self?.currentApiSource = "ExchangeRate-API"
+                    self?.fetchFromExchangeRateAPI()
+                }
+            }
+        }.resume()
+    }
+
     // MARK: - 한국수출입은행 API 호출
     private func fetchFromKoreaEximAPI() {
         // 주말인 경우 캐시된 평일 데이터 사용
