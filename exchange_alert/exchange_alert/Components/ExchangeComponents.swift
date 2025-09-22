@@ -61,70 +61,63 @@ struct ExchangeRateCard: View {
                     // ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
                 }
                 
-                // 환율 데이터와 변동 정보를 좌우로 분리
-                HStack(alignment: .top, spacing: 16) {
-                    // 왼쪽: 환율 데이터
-                    VStack(alignment: .leading, spacing: 16) {
-                        // 매매기준율 (메인) - 중앙에 배치
-                        if let dealBasR = rate.dealBasR {
-                            let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
-                            if let rateValue = Double(cleanedRate) {
-                                VStack(alignment: .center, spacing: 8) {
-                                    Text("매매기준율")
-                                        .font(AppTheme.captionFont)
-                                        .foregroundColor(.secondary)
+                // 환율 데이터를 세로로 정렬하여 아름다운 레이아웃 구성
+                VStack(spacing: 20) {
+                    // 매매기준율 (메인) - 완전 중앙 배치
+                    if let dealBasR = rate.dealBasR {
+                        let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
+                        if let rateValue = Double(cleanedRate) {
+                            VStack(spacing: 12) {
+                                Text("매매기준율")
+                                    .font(AppTheme.captionFont)
+                                    .foregroundColor(.secondary)
+                                
+                                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                    // 현재 환율 - 폰트 크기 더 키움
+                                    Text("\(String(format: "%.2f", rateValue))")
+                                        .font(.custom("MaruBuri-Bold", size: 42)) // MaruBuri-Bold 폰트 사용
+                                        .foregroundColor(ExchangeColorHelper.colorForRate(
+                                            rateValue,
+                                            threshold: alertSettings.threshold,
+                                            thresholdType: alertSettings.thresholdType
+                                        ))
                                     
-                                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                                        // 현재 환율 - 폰트 크기 더 키움
-                                        Text("\(String(format: "%.2f", rateValue))")
-                                            .font(.system(size: 36, weight: .bold)) // 더 큰 폰트 크기
-                                            .foregroundColor(ExchangeColorHelper.colorForRate(
-                                                rateValue,
-                                                threshold: alertSettings.threshold,
-                                                thresholdType: alertSettings.thresholdType
-                                            ))
-                                        
-                                        Text("원")
-                                            .font(AppTheme.headlineFont)
-                                            .foregroundColor(.secondary)
-                                            .baselineOffset(8) // 텍스트 베이스라인을 위로 이동
-                                    }
+                                    Text("원")
+                                        .font(.custom("MaruBuri-Bold", size: 21)) // 42의 50% = 21
+                                        .foregroundColor(ExchangeColorHelper.colorForRate(
+                                            rateValue,
+                                            threshold: alertSettings.threshold,
+                                            thresholdType: alertSettings.thresholdType
+                                        ))
+                                        .baselineOffset(10) // 텍스트 베이스라인을 위로 이동
                                 }
-                                .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
                             }
+                            .frame(maxWidth: .infinity) // 전체 너비 사용
                         }
-                        
-                        // TTB/TTS 상세 정보 (서브) - 모든 통화에서 표시
-                        ExchangeBuySeelView(rate: rate)
                     }
                     
-                    // 오른쪽: 변동 정보
-                    VStack(alignment: .trailing, spacing: 8) {
+                    // TTB/TTS 상세 정보 (서브) - 중앙 정렬
+                    ExchangeBuySeelView(rate: rate)
+                    
+                    // 일일 변동 정보 - 하단에 배치
+                    VStack(spacing: 8) {
                         Text("일일 변동")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
                         
                         if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
-                            VStack(alignment: .trailing, spacing: 4) {
-                                // 변동 아이콘과 값
-                                HStack(spacing: 4) {
-                                    // Image(systemName: dailyChange.isPositive ? "arrow.up.right" : "arrow.down.right")
-                                    //     .font(.title3)
-                                    //     .foregroundColor(dailyChange.isPositive ? .red : .blue)
-                                    
-                                    Text(dailyChange.changeValueString)
-                                        .font(AppTheme.headlineFont)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(dailyChange.isPositive ? .red : .blue)
-                                }
+                            VStack(spacing: 4) {
+                                Text(dailyChange.changeValueString)
+                                    .font(AppTheme.headlineFont)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
                                 
-                                // 변동률
                                 Text(dailyChange.changePercentString)
                                     .font(AppTheme.subheadlineFont)
                                     .foregroundColor(dailyChange.isPositive ? .red : .blue)
                             }
                         } else {
-                            VStack(alignment: .trailing, spacing: 4) {
+                            VStack(spacing: 4) {
                                 Text("--")
                                     .font(AppTheme.headlineFont)
                                     .foregroundColor(.secondary)
@@ -135,7 +128,7 @@ struct ExchangeRateCard: View {
                             }
                         }
                     }
-                    .frame(minWidth: 80)
+                    .frame(maxWidth: .infinity)
                 }
             }
         }
@@ -505,28 +498,44 @@ struct ExchangeBuySeelView: View {
         if let dealBasR = rate.dealBasR {
             let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
             if let baseRate = Double(cleanedRate) {
-                HStack(spacing: 20) {
-                    VStack(spacing: 4) {
+                HStack(spacing: 30) {
+                    VStack(spacing: 6) {
                         Text("살때")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
-                        Text("\(getBuyRate(baseRate: baseRate))원")
-                            .font(AppTheme.headlineFont)
-                            .foregroundColor(.primary) // 검정색으로 변경
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Text(getBuyRate(baseRate: baseRate))
+                                .font(AppTheme.headlineFont)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary) // 검정색으로 변경
+                            Text("원")
+                                .font(.custom("MaruBuri-Light", size: 9)) // 18의 50% = 9
+                                .foregroundColor(.primary)
+                                .baselineOffset(4) // 텍스트 베이스라인을 위로 이동
+                        }
                     }
                     
                     Divider()
-                        .frame(height: 30)
+                        .frame(height: 40)
+                        .background(Color(.systemGray4))
                     
-                    VStack(spacing: 4) {
+                    VStack(spacing: 6) {
                         Text("팔때")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
-                        Text("\(getSellRate(baseRate: baseRate))원")
-                            .font(AppTheme.headlineFont)
-                            .foregroundColor(.primary) // 검정색으로 변경
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Text(getSellRate(baseRate: baseRate))
+                                .font(AppTheme.headlineFont)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary) // 검정색으로 변경
+                            Text("원")
+                                .font(.custom("MaruBuri-Light", size: 9)) // 18의 50% = 9
+                                .foregroundColor(.primary)
+                                .baselineOffset(4) // 텍스트 베이스라인을 위로 이동
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
             }
         }
     }
