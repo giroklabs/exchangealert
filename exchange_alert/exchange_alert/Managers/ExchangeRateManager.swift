@@ -49,6 +49,7 @@ class ExchangeRateManager: ObservableObject {
     init() {
         loadSettings()
         loadAPICallCount() // API 호출 횟수 로드
+        loadPreviousDayData() // 이전 일자 데이터 로드 (변동값 계산용)
         
         // 앱 시작 시 환율 가져오기 (Task 사용)
         Task { @MainActor in
@@ -121,6 +122,24 @@ class ExchangeRateManager: ObservableObject {
     private func saveAPICallCount() {
         UserDefaults.standard.set(dailyAPICallCount, forKey: "DailyAPICallCount")
         UserDefaults.standard.set(lastAPICallDate, forKey: "LastAPICallDate")
+    }
+    
+    // MARK: - 이전 일자 데이터 로드 (변동값 계산용)
+    private func loadPreviousDayData() {
+        if let data = UserDefaults.standard.data(forKey: "PreviousDayExchangeRates"),
+           let previousRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
+            previousDayData = previousRates
+            print("📊 이전 일자 데이터 로드: \(previousRates.count)개 통화")
+        } else {
+            print("📊 이전 일자 데이터 없음 - 첫 실행")
+        }
+    }
+    
+    private func savePreviousDayData() {
+        if let data = try? JSONEncoder().encode(previousDayData) {
+            UserDefaults.standard.set(data, forKey: "PreviousDayExchangeRates")
+            print("💾 이전 일자 데이터 저장: \(previousDayData.count)개 통화")
+        }
     }
     
     // MARK: - API 호출
@@ -400,8 +419,13 @@ class ExchangeRateManager: ObservableObject {
            let lastRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
             print("📁 마지막 저장된 데이터 로드: \(lastRates.count)개 통화")
             
+            // 현재 데이터로 변동 계산 (메인 큐 밖에서 수행)
+            let calculatedChanges = self.calculateDailyChangesSync(newRates: lastRates)
+            
             // 메인 큐에서 UI 업데이트 수행
             DispatchQueue.main.async {
+                self.dailyChanges = calculatedChanges
+                self.previousDayData = self.exchangeRates // 현재 데이터를 이전 데이터로 저장
                 self.exchangeRates = lastRates
                 self.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
                 
@@ -458,6 +482,7 @@ class ExchangeRateManager: ObservableObject {
                 
                 // 현재 데이터를 이전 데이터로 저장
                 self.previousDayData = self.exchangeRates
+                self.savePreviousDayData() // 이전 일자 데이터 저장
                 
                 self.exchangeRates = newRates
                 self.lastUpdateTime = Date()
