@@ -20,6 +20,7 @@ struct SettingsView: View {
                         headerSection
                         currencySelectionSection
                         alertSettingsSection
+                        testNotificationSection
                         saveButtonSection
                     }
                     .padding()
@@ -177,6 +178,37 @@ struct SettingsView: View {
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+    }
+    
+    private var testNotificationSection: some View {
+        VStack(spacing: 12) {
+            Text("알림 테스트")
+                .font(AppTheme.subheadlineFont)
+                .foregroundColor(.primary)
+            
+            Button(action: {
+                exchangeManager.testNotification()
+            }) {
+                HStack {
+                    Image(systemName: "bell.fill")
+                    Text("알림 테스트 실행")
+                }
+                .font(AppTheme.bodyFont)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.orange)
+                .cornerRadius(12)
+            }
+            
+            Text("현재 설정으로 알림이 제대로 작동하는지 테스트합니다.")
+                .font(AppTheme.captionFont)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
         }
         .padding()
         .background(Color(.secondarySystemBackground))

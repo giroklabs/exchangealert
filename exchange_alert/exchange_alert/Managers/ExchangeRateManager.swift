@@ -16,6 +16,12 @@ class ExchangeRateManager: ObservableObject {
     private var weekdayLastData: [CurrencyType: ExchangeRate] = [:]
     private var lastWeekdayUpdate: Date?
     
+    // API 호출 제한 관리
+    private let maxDailyAPICalls = 1000
+    private var dailyAPICallCount = 0
+    private var lastAPICallDate: Date?
+    private let apiCallInterval: TimeInterval = 60 // 1분마다 최대 1회 호출
+    
     private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"
     private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"
     private let exchangeRateAPIURL = "https://api.exchangerate-api.com/v4/latest/KRW"
@@ -31,22 +37,93 @@ class ExchangeRateManager: ObservableObject {
     
     init() {
         loadSettings()
+        loadAPICallCount() // API 호출 횟수 로드
         fetchExchangeRate() // 앱 시작 시 즉시 환율 가져오기
-        startPeriodicRefresh() // 5초마다 자동 새로고침
+        startPeriodicRefresh() // 5분마다 자동 새로고침 (API 호출 제한 고려)
     }
     
     deinit {
         timer?.invalidate()
     }
     
+    // MARK: - API 호출 제한 체크
+    private func canMakeAPICall() -> Bool {
+        let now = Date()
+        
+        // 날짜가 바뀌었으면 카운트 리셋
+        if let lastCallDate = lastAPICallDate {
+            let calendar = Calendar.current
+            if !calendar.isDate(lastCallDate, inSameDayAs: now) {
+                dailyAPICallCount = 0
+                lastAPICallDate = nil
+            }
+        }
+        
+        // 일일 호출 제한 체크
+        if dailyAPICallCount >= maxDailyAPICalls {
+            print("⚠️ 일일 API 호출 제한 도달: \(dailyAPICallCount)/\(maxDailyAPICalls)")
+            return false
+        }
+        
+        // 호출 간격 체크 (1분마다 최대 1회)
+        if let lastCall = lastAPICallDate {
+            let timeSinceLastCall = now.timeIntervalSince(lastCall)
+            if timeSinceLastCall < apiCallInterval {
+                print("⚠️ API 호출 간격 제한: \(Int(apiCallInterval - timeSinceLastCall))초 후 재시도 가능")
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    private func recordAPICall() {
+        dailyAPICallCount += 1
+        lastAPICallDate = Date()
+        saveAPICallCount() // API 호출 횟수 저장
+        print("📊 API 호출 기록: \(dailyAPICallCount)/\(maxDailyAPICalls)")
+    }
+    
+    // MARK: - API 호출 횟수 관리
+    private func loadAPICallCount() {
+        dailyAPICallCount = UserDefaults.standard.integer(forKey: "DailyAPICallCount")
+        lastAPICallDate = UserDefaults.standard.object(forKey: "LastAPICallDate") as? Date
+        
+        // 날짜가 바뀌었으면 카운트 리셋
+        if let lastCallDate = lastAPICallDate {
+            let calendar = Calendar.current
+            if !calendar.isDate(lastCallDate, inSameDayAs: Date()) {
+                dailyAPICallCount = 0
+                lastAPICallDate = nil
+                saveAPICallCount()
+            }
+        }
+        
+        print("📊 로드된 API 호출 횟수: \(dailyAPICallCount)/\(maxDailyAPICalls)")
+    }
+    
+    private func saveAPICallCount() {
+        UserDefaults.standard.set(dailyAPICallCount, forKey: "DailyAPICallCount")
+        UserDefaults.standard.set(lastAPICallDate, forKey: "LastAPICallDate")
+    }
+    
     // MARK: - API 호출
     func fetchExchangeRate() {
+        // API 호출 제한 체크
+        guard canMakeAPICall() else {
+            print("🔄 API 호출 제한으로 인해 마지막 저장된 데이터 사용")
+            currentApiSource = "한국수출입은행"
+            showLastSavedData()
+            return
+        }
+        
         isLoading = true
         errorMessage = nil
 
-        // GitHub API 우선 호출 (항상 사용)
-        print("🌐 GitHub API에서 환율 데이터 조회")
-        currentApiSource = "한국수출입은행 (GitHub)"
+        // 1순위: GitHub에서 저장된 한국수출입은행 데이터 사용
+        print("🌐 GitHub에서 한국수출입은행 데이터 조회")
+        currentApiSource = "한국수출입은행"
+        recordAPICall() // API 호출 기록
         fetchFromGitHubAPI()
         
         // 실제 API 호출 (주석 처리)
@@ -256,8 +333,8 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - GitHub API 호출
     private func fetchFromGitHubAPI() {
-        // GitHub Raw URL 사용 (CDN 성능 향상)
-        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchange-rates-data/main/data/exchange-rates.json"
+        // GitHub Raw URL 사용 (실제 데이터)
+        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json"
         print("📥 GitHub API 호출: \(githubURL)")
 
         guard let url = URL(string: githubURL) else {
@@ -267,21 +344,21 @@ class ExchangeRateManager: ObservableObject {
             return
         }
 
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: url) { [self] data, response, error in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                self.isLoading = false
 
                 if let error = error {
-                    print("❌ GitHub API 네트워크 오류: \(error.localizedDescription) - ExchangeRate-API로 백업")
-                    self?.currentApiSource = "ExchangeRate-API"
-                    self?.fetchFromExchangeRateAPI()
+                    print("❌ GitHub API 네트워크 오류: \(error.localizedDescription) - 마지막 저장된 데이터 사용")
+                    self.currentApiSource = "한국수출입은행"
+                    self.showLastSavedData()
                     return
                 }
 
                 guard let data = data else {
-                    print("❌ GitHub API 데이터 없음 - ExchangeRate-API로 백업")
-                    self?.currentApiSource = "ExchangeRate-API"
-                    self?.fetchFromExchangeRateAPI()
+                    print("❌ GitHub API 데이터 없음 - 마지막 저장된 데이터 사용")
+                    self.currentApiSource = "한국수출입은행"
+                    self.showLastSavedData()
                     return
                 }
 
@@ -290,39 +367,91 @@ class ExchangeRateManager: ObservableObject {
                     print("📦 GitHub API 응답: \(jsonString.prefix(500))")
                 }
 
-                do {
-                    let rates = try JSONDecoder().decode([ExchangeRate].self, from: data)
-                    print("✅ GitHub API 파싱 성공: \(rates.count)개 통화")
-
-                    var newRates: [CurrencyType: ExchangeRate] = [:]
-                    for rate in rates {
-                        if let curUnit = rate.curUnit, let currencyType = CurrencyType(rawValue: curUnit) {
-                            newRates[currencyType] = rate
-                        }
-                    }
-
-                    self?.exchangeRates = newRates
-                    self?.lastUpdateTime = Date() // GitHub에서 가져온 데이터이므로 현재 시간으로 설정
-
-                    // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
-                    if let currentRate = newRates[self?.selectedCurrency ?? .USD] {
-                        self?.checkAlertThresholds(rate: currentRate)
-                    }
-
-                    if newRates.isEmpty {
-                        print("❌ GitHub API에서 환율 정보 없음 - ExchangeRate-API로 백업")
-                        self?.currentApiSource = "ExchangeRate-API"
-                        self?.fetchFromExchangeRateAPI()
-                    } else {
-                        print("✅ GitHub에서 \(newRates.count)개 통화 환율 로드 완료")
-                    }
-                } catch {
-                    print("❌ GitHub API 파싱 오류: \(error.localizedDescription) - ExchangeRate-API로 백업")
-                    self?.currentApiSource = "ExchangeRate-API"
-                    self?.fetchFromExchangeRateAPI()
-                }
+                self.parseExchangeRates(data)
             }
         }.resume()
+    }
+
+    // MARK: - 마지막 저장된 데이터 표시
+    private func showLastSavedData() {
+        // UserDefaults에서 마지막 저장된 환율 데이터 로드
+        if let data = UserDefaults.standard.data(forKey: "LastExchangeRates"),
+           let lastRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
+            print("📁 마지막 저장된 데이터 로드: \(lastRates.count)개 통화")
+            self.exchangeRates = lastRates
+            self.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
+            
+            // 현재 선택된 통화의 환율이 있으면 알림 체크
+            if let currentRate = lastRates[self.selectedCurrency] {
+                self.checkAlertThresholds(rate: currentRate)
+            }
+        } else {
+            print("❌ 마지막 저장된 데이터 없음 - ExchangeRate-API로 백업")
+            self.currentApiSource = "ExchangeRate-API"
+            self.fetchFromExchangeRateAPI()
+        }
+    }
+    
+    // MARK: - 공통 데이터 파싱 함수
+    private func parseExchangeRates(_ data: Data) {
+        // 응답 데이터 로깅
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("📦 API 응답: \(jsonString.prefix(500))")
+        }
+
+        do {
+            let rates = try JSONDecoder().decode([ExchangeRate].self, from: data)
+            print("✅ 데이터 파싱 성공: \(rates.count)개 통화")
+
+            var newRates: [CurrencyType: ExchangeRate] = [:]
+            for rate in rates {
+                if let curUnit = rate.curUnit {
+                    // 100단위로 제공되는 통화들 처리 (JPY(100), IDR(100))
+                    let currencyCode: String
+                    if curUnit == "JPY(100)" {
+                        currencyCode = "JPY"
+                    } else if curUnit == "IDR(100)" {
+                        currencyCode = "IDR"
+                    } else {
+                        currencyCode = curUnit
+                    }
+                    
+                    if let currencyType = CurrencyType(rawValue: currencyCode) {
+                        newRates[currencyType] = rate
+                        print("💱 \(currencyCode) 매매기준율: \(rate.dealBasR ?? "N/A")원 (원본단위: \(curUnit))")
+                    }
+                }
+            }
+
+            self.exchangeRates = newRates
+            self.lastUpdateTime = Date()
+            
+            // 성공적으로 데이터를 가져왔을 때 UserDefaults에 저장 (오프라인 백업용)
+            if !newRates.isEmpty {
+                if let data = try? JSONEncoder().encode(newRates) {
+                    UserDefaults.standard.set(data, forKey: "LastExchangeRates")
+                    UserDefaults.standard.set(Date(), forKey: "LastUpdateTime")
+                    print("💾 환율 데이터를 로컬에 백업 저장")
+                }
+            }
+
+            // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
+            if let currentRate = newRates[self.selectedCurrency] {
+                self.checkAlertThresholds(rate: currentRate)
+            }
+
+            if newRates.isEmpty {
+                print("❌ 환율 정보 없음 - 마지막 저장된 데이터 사용")
+                self.currentApiSource = "한국수출입은행"
+                self.showLastSavedData()
+            } else {
+                print("✅ \(newRates.count)개 통화 환율 로드 완료")
+            }
+        } catch {
+            print("❌ 데이터 파싱 오류: \(error.localizedDescription) - ExchangeRate-API로 백업")
+            self.currentApiSource = "ExchangeRate-API"
+            self.fetchFromExchangeRateAPI()
+        }
     }
 
     // MARK: - 한국수출입은행 API 호출
@@ -440,8 +569,9 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - 자동 새로고침
     private func startPeriodicRefresh() {
-        // 5초마다 자동 새로고침
-        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+        // 5분마다 자동 새로고침 (API 호출 제한 고려)
+        // 1일 1000회 제한을 고려하면 5분 간격이 적절함 (288회/일)
+        timer = Timer.scheduledTimer(withTimeInterval: 300.0, repeats: true) { [weak self] _ in
             self?.fetchExchangeRate()
         }
     }
@@ -491,14 +621,15 @@ class ExchangeRateManager: ObservableObject {
                 message = "💸 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원) 이하로 떨어졌습니다!"
             }
         case .both:
-            let upperThreshold = alertSettings.threshold + 100
-            let lowerThreshold = alertSettings.threshold - 100
+            // 기준값에서 5% 벗어날 때 알림
+            let upperThreshold = alertSettings.threshold * 1.05  // 기준값의 105%
+            let lowerThreshold = alertSettings.threshold * 0.95  // 기준값의 95%
             if dealBasR >= upperThreshold {
                 shouldNotify = true
-                message = "💰 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 상한선(\(String(format: "%.0f", upperThreshold))원)을 초과했습니다!"
+                message = "💰 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 5% 상승했습니다!"
             } else if dealBasR <= lowerThreshold {
                 shouldNotify = true
-                message = "💸 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 하한선(\(String(format: "%.0f", lowerThreshold))원) 이하로 떨어졌습니다!"
+                message = "💸 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 5% 하락했습니다!"
             }
         }
         
@@ -567,5 +698,43 @@ class ExchangeRateManager: ObservableObject {
         if exchangeRates[currency] == nil {
             fetchExchangeRate()
         }
+    }
+    
+    // MARK: - 알림 테스트 함수
+    func testNotification() {
+        print("🧪 알림 테스트 시작")
+        
+        // 현재 선택된 통화의 알림 설정 가져오기
+        let alertSettings = currencyAlertSettings.getSettings(for: selectedCurrency)
+        
+        if !alertSettings.isEnabled {
+            print("❌ 알림이 비활성화되어 있습니다. 먼저 알림을 활성화해주세요.")
+            return
+        }
+        
+        // 테스트용 환율 데이터 생성 (기준값에서 5% 벗어난 값)
+        let testRate = ExchangeRate(
+            result: 1,
+            curUnit: selectedCurrency.rawValue,
+            curNm: selectedCurrency.displayName,
+            ttb: String(format: "%.2f", alertSettings.threshold * 1.06), // 6% 상승
+            tts: String(format: "%.2f", alertSettings.threshold * 1.04), // 4% 상승
+            dealBasR: String(format: "%.2f", alertSettings.threshold * 1.05), // 5% 상승
+            bkpr: String(format: "%.2f", alertSettings.threshold * 1.03),
+            yyEfeeR: "0.0",
+            tenDdEfeeR: "0.0",
+            kftcBkpr: String(format: "%.2f", alertSettings.threshold * 1.03),
+            kftcDealBasR: String(format: "%.2f", alertSettings.threshold * 1.05)
+        )
+        
+        print("🧪 테스트 데이터:")
+        print("   - 기준값: \(alertSettings.threshold)원")
+        print("   - 테스트 환율: \(testRate.dealBasR ?? "N/A")원")
+        print("   - 알림 타입: \(alertSettings.thresholdType.rawValue)")
+        
+        // 알림 체크 실행
+        checkAlertThresholds(rate: testRate)
+        
+        print("🧪 알림 테스트 완료")
     }
 }
