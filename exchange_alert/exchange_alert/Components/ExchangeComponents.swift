@@ -61,60 +61,79 @@ struct ExchangeRateCard: View {
                     ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
                 }
                 
-                // 모든 통화를 매매기준율, 살때, 팔때 형태로 표시
-                VStack(spacing: 12) {
-                    // 매매기준율 (메인)
-                    if let dealBasR = rate.dealBasR {
-                        let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
-                        if let rateValue = Double(cleanedRate) {
-                            VStack(spacing: 8) {
-                                Text("매매기준율")
-                                    .font(AppTheme.captionFont)
-                                    .foregroundColor(.secondary)
-                                
-                                HStack(alignment: .bottom, spacing: 8) {
-                                    // 현재 환율
-                                    Text("\(String(format: "%.2f", rateValue))")
-                                        .font(AppTheme.largeTitleFont)
-                                        .foregroundColor(ExchangeColorHelper.colorForRate(
-                                            rateValue,
-                                            threshold: alertSettings.threshold,
-                                            thresholdType: alertSettings.thresholdType
-                                        ))
-                                    
-                                    Text("원")
-                                        .font(AppTheme.headlineFont)
+                // 환율 데이터와 변동 정보를 좌우로 분리
+                HStack(alignment: .top, spacing: 16) {
+                    // 왼쪽: 환율 데이터
+                    VStack(alignment: .leading, spacing: 12) {
+                        // 매매기준율 (메인)
+                        if let dealBasR = rate.dealBasR {
+                            let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
+                            if let rateValue = Double(cleanedRate) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("매매기준율")
+                                        .font(AppTheme.captionFont)
                                         .foregroundColor(.secondary)
                                     
-                                    // 일일 변동 정보
-                                    if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
-                                        HStack(spacing: 4) {
-                                            // 변동 아이콘
-                                            Image(systemName: dailyChange.isPositive ? "arrow.up.right" : "arrow.down.right")
-                                                .font(.caption)
-                                                .foregroundColor(dailyChange.isPositive ? .red : .blue)
-                                            
-                                            // 변동값과 변동률
-                                            VStack(alignment: .trailing, spacing: 2) {
-                                                Text(dailyChange.changeValueString)
-                                                    .font(.caption)
-                                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
-                                                
-                                                Text(dailyChange.changePercentString)
-                                                    .font(.caption2)
-                                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
-                                            }
-                                        }
+                                    HStack(alignment: .bottom, spacing: 8) {
+                                        // 현재 환율
+                                        Text("\(String(format: "%.2f", rateValue))")
+                                            .font(AppTheme.largeTitleFont)
+                                            .foregroundColor(ExchangeColorHelper.colorForRate(
+                                                rateValue,
+                                                threshold: alertSettings.threshold,
+                                                thresholdType: alertSettings.thresholdType
+                                            ))
+                                        
+                                        Text("원")
+                                            .font(AppTheme.headlineFont)
+                                            .foregroundColor(.secondary)
                                     }
-                                    
-                                    Spacer()
                                 }
                             }
                         }
+                        
+                        // TTB/TTS 상세 정보 (서브) - 모든 통화에서 표시
+                        ExchangeBuySeelView(rate: rate)
                     }
                     
-                    // TTB/TTS 상세 정보 (서브) - 모든 통화에서 표시
-                    ExchangeBuySeelView(rate: rate)
+                    // 오른쪽: 변동 정보
+                    VStack(alignment: .trailing, spacing: 8) {
+                        Text("일일 변동")
+                            .font(AppTheme.captionFont)
+                            .foregroundColor(.secondary)
+                        
+                        if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
+                            VStack(alignment: .trailing, spacing: 4) {
+                                // 변동 아이콘과 값
+                                HStack(spacing: 4) {
+                                    Image(systemName: dailyChange.isPositive ? "arrow.up.right" : "arrow.down.right")
+                                        .font(.title3)
+                                        .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                    
+                                    Text(dailyChange.changeValueString)
+                                        .font(AppTheme.headlineFont)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                }
+                                
+                                // 변동률
+                                Text(dailyChange.changePercentString)
+                                    .font(AppTheme.subheadlineFont)
+                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                            }
+                        } else {
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text("--")
+                                    .font(AppTheme.headlineFont)
+                                    .foregroundColor(.secondary)
+                                
+                                Text("(--%)")
+                                    .font(AppTheme.subheadlineFont)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    .frame(minWidth: 80)
                 }
             }
         }
