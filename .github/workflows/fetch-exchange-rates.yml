@@ -1,0 +1,31 @@
+name: Fetch Exchange Rates
+
+on:
+  schedule:
+    # 매일 오전 9시, 오후 6시 (한국시간) 실행
+    - cron: '0 0,9 * * 1-5'  # 평일만
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  fetch-rates:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create data directory
+      run: mkdir -p data
+      
+    - name: Fetch exchange rates
+      run: |
+        # 한국수출입은행 API에서 환율 데이터 가져오기
+        curl -o data/exchange-rates.json "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${{ secrets.KOREA_EXIM_API_KEY }}&data=AP01"
+        
+    - name: Commit and push
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/exchange-rates.json
+        git diff --staged --quiet || git commit -m "Update exchange rates - $(date)"
+        git push
