@@ -59,53 +59,36 @@ struct ExchangeRateCard: View {
                     ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
                 }
                 
-                // 매매기준율 (메인)
-                if let dealBasR = rate.dealBasR, let rateValue = Double(dealBasR) {
-                    VStack(spacing: 8) {
-                        Text("매매기준율")
-                            .font(AppTheme.captionFont)
-                            .foregroundColor(.secondary)
-                        
-                        HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text("\(String(format: "%.2f", rateValue))")
-                                .font(AppTheme.largeTitleFont)
-                                .foregroundColor(ExchangeColorHelper.colorForRate(
-                                    rateValue,
-                                    threshold: alertSettings.threshold,
-                                    thresholdType: alertSettings.thresholdType
-                                ))
-                            
-                            Text("원")
-                                .font(AppTheme.headlineFont)
-                                .foregroundColor(.secondary)
+                // 모든 통화를 매매기준율, 살때, 팔때 형태로 표시
+                VStack(spacing: 12) {
+                    // 매매기준율 (메인)
+                    if let dealBasR = rate.dealBasR {
+                        let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
+                        if let rateValue = Double(cleanedRate) {
+                            VStack(spacing: 8) {
+                                Text("매매기준율")
+                                    .font(AppTheme.captionFont)
+                                    .foregroundColor(.secondary)
+                                
+                                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                    Text("\(String(format: "%.2f", rateValue))")
+                                        .font(AppTheme.largeTitleFont)
+                                        .foregroundColor(ExchangeColorHelper.colorForRate(
+                                            rateValue,
+                                            threshold: alertSettings.threshold,
+                                            thresholdType: alertSettings.thresholdType
+                                        ))
+                                    
+                                    Text("원")
+                                        .font(AppTheme.headlineFont)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
                         }
                     }
-                }
-                
-                // TTB/TTS 상세 정보 (서브)
-                if let ttb = rate.ttb, let tts = rate.tts {
-                    HStack(spacing: 20) {
-                        VStack(spacing: 4) {
-                            Text("살때")
-                                .font(AppTheme.captionFont)
-                                .foregroundColor(.secondary)
-                            Text("\(ttb)원")
-                                .font(AppTheme.headlineFont)
-                                .foregroundColor(AppTheme.primary)
-                        }
-                        
-                        Divider()
-                            .frame(height: 30)
-                        
-                        VStack(spacing: 4) {
-                            Text("팔때")
-                                .font(AppTheme.captionFont)
-                                .foregroundColor(.secondary)
-                            Text("\(tts)원")
-                                .font(AppTheme.headlineFont)
-                                .foregroundColor(AppTheme.primary)
-                        }
-                    }
+                    
+                    // TTB/TTS 상세 정보 (서브) - 모든 통화에서 표시
+                    ExchangeBuySeelView(rate: rate)
                 }
             }
         }
@@ -118,7 +101,7 @@ struct ExchangeStatusIcon: View {
     let alertSettings: AlertSettings
     
     var body: some View {
-        if let currentRate = rate.dealBasR, let rateValue = Double(currentRate) {
+        if let currentRate = rate.dealBasR, let rateValue = Double(currentRate.replacingOccurrences(of: ",", with: "")) {
             let color = ExchangeColorHelper.colorForRate(
                 rateValue,
                 threshold: alertSettings.threshold,
@@ -454,6 +437,61 @@ struct AdBannerPlaceholder: View {
                         .stroke(Color(UIColor.separator).opacity(colorScheme == .dark ? 0.6 : 0.3), lineWidth: 0.5)
                 )
         )
+    }
+}
+
+// MARK: - Exchange Buy/Sell View
+struct ExchangeBuySeelView: View {
+    let rate: ExchangeRate
+    
+    var body: some View {
+        if let dealBasR = rate.dealBasR {
+            let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
+            if let baseRate = Double(cleanedRate) {
+                HStack(spacing: 20) {
+                    VStack(spacing: 4) {
+                        Text("살때")
+                            .font(AppTheme.captionFont)
+                            .foregroundColor(.secondary)
+                        Text("\(getBuyRate(baseRate: baseRate))원")
+                            .font(AppTheme.headlineFont)
+                            .foregroundColor(AppTheme.primary)
+                    }
+                    
+                    Divider()
+                        .frame(height: 30)
+                    
+                    VStack(spacing: 4) {
+                        Text("팔때")
+                            .font(AppTheme.captionFont)
+                            .foregroundColor(.secondary)
+                        Text("\(getSellRate(baseRate: baseRate))원")
+                            .font(AppTheme.headlineFont)
+                            .foregroundColor(AppTheme.primary)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func getBuyRate(baseRate: Double) -> String {
+        if let ttb = rate.ttb {
+            // API에서 제공된 값 사용
+            return ttb
+        } else {
+            // 기준율에서 계산 (약 0.5% 낮게)
+            return String(format: "%.2f", baseRate * 0.995)
+        }
+    }
+    
+    private func getSellRate(baseRate: Double) -> String {
+        if let tts = rate.tts {
+            // API에서 제공된 값 사용
+            return tts
+        } else {
+            // 기준율에서 계산 (약 0.5% 높게)
+            return String(format: "%.2f", baseRate * 1.005)
+        }
     }
 }
 

@@ -245,17 +245,33 @@ struct ErrorStateView: View {
 
 // MARK: - Last Update View
 struct LastUpdateView: View {
+    @EnvironmentObject var exchangeManager: ExchangeRateManager
+    
     var body: some View {
-        HStack {
-            Image(systemName: "clock")
-                .font(AppTheme.captionFont)
-                .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Image(systemName: "clock")
+                    .font(AppTheme.captionFont)
+                    .foregroundColor(.secondary)
+                
+                Text("마지막 업데이트: \(Date().formatted(date: .omitted, time: .shortened))")
+                    .font(AppTheme.captionFont)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
             
-            Text("마지막 업데이트: \(Date().formatted(date: .omitted, time: .shortened))")
-                .font(AppTheme.captionFont)
-                .foregroundColor(.secondary)
-            
-            Spacer()
+            HStack {
+                Image(systemName: "server.rack")
+                    .font(AppTheme.captionFont)
+                    .foregroundColor(.secondary)
+                
+                Text("데이터 출처: \(exchangeManager.currentApiSource)")
+                    .font(AppTheme.captionFont)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
         }
     }
 }

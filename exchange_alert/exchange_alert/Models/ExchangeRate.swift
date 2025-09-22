@@ -83,19 +83,19 @@ struct CurrencyAlertSettings: Codable, Equatable {
         // 각 통화별로 기본 설정 초기화 (알림 기본값: 꺼짐)
         for currency in CurrencyType.allCases {
             switch currency {
-            // 기존 통화
+            // 기존 통화 (수출입은행 API 지원)
             case .USD:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 1300.0)
             case .EUR:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 1500.0)
             case .JPY:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 900.0)  // 100엔 기준
-            case .CNY:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 190.0)
+            // case .CNY:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 190.0)
             case .GBP:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 1700.0)
 
-            // 아시아 태평양 지역
+            // 아시아 태평양 지역 (수출입은행 API 지원)
             case .AUD:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 900.0)
             case .SGD:
@@ -104,16 +104,16 @@ struct CurrencyAlertSettings: Codable, Equatable {
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 150.0)
             case .THB:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 35.0)
-            case .INR:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 15.0)
+            // case .INR:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 15.0)
             case .IDR:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 0.08)  // 100루피아 기준
-            case .VND:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 0.05)  // 100동 기준
-            case .KHR:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 0.025)  // 100리엘 기준
+                settings[currency] = AlertSettings(isEnabled: false, threshold: 8.0)  // 100루피아 기준
+            // case .VND:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 0.05)  // 100동 기준
+            // case .KHR:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 0.025)  // 100리엘 기준
 
-            // 유럽 지역
+            // 유럽 지역 (수출입은행 API 지원)
             case .CHF:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 1200.0)
             case .SEK:
@@ -122,16 +122,16 @@ struct CurrencyAlertSettings: Codable, Equatable {
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 130.0)
             case .DKK:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 200.0)
-            case .PLN:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 320.0)
+            // case .PLN:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 320.0)
 
-            // 아메리카 지역
+            // 아메리카 지역 (수출입은행 API 지원)
             case .CAD:
                 settings[currency] = AlertSettings(isEnabled: false, threshold: 950.0)
-            case .MXN:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 75.0)
-            case .BRL:
-                settings[currency] = AlertSettings(isEnabled: false, threshold: 260.0)
+            // case .MXN:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 75.0)
+            // case .BRL:  // 수출입은행 API 미지원
+            //     settings[currency] = AlertSettings(isEnabled: false, threshold: 260.0)
             }
         }
     }
@@ -164,98 +164,98 @@ enum ThresholdType: String, CaseIterable, Codable {
 
 // MARK: - Currency Types
 enum CurrencyType: String, CaseIterable, Codable {
-    // 기존 통화
+    // 기존 통화 (수출입은행 API 지원)
     case USD = "USD"
     case EUR = "EUR"
     case JPY = "JPY"
-    case CNY = "CNY"
+    // case CNY = "CNY"  // 수출입은행 API 미지원 (CNH만 지원)
     case GBP = "GBP"
 
-    // 아시아 태평양 지역
+    // 아시아 태평양 지역 (수출입은행 API 지원)
     case AUD = "AUD"
     case SGD = "SGD"
     case HKD = "HKD"
     case THB = "THB"
-    case INR = "INR"
+    // case INR = "INR"  // 수출입은행 API 미지원
     case IDR = "IDR"
-    case VND = "VND"
-    case KHR = "KHR"
+    // case VND = "VND"  // 수출입은행 API 미지원
+    // case KHR = "KHR"  // 수출입은행 API 미지원
 
-    // 유럽 지역
+    // 유럽 지역 (수출입은행 API 지원)
     case CHF = "CHF"
     case SEK = "SEK"
     case NOK = "NOK"
     case DKK = "DKK"
-    case PLN = "PLN"
+    // case PLN = "PLN"  // 수출입은행 API 미지원
 
-    // 아메리카 지역
+    // 아메리카 지역 (수출입은행 API 지원)
     case CAD = "CAD"
-    case MXN = "MXN"
-    case BRL = "BRL"
+    // case MXN = "MXN"  // 수출입은행 API 미지원
+    // case BRL = "BRL"  // 수출입은행 API 미지원
 
     var displayName: String {
         switch self {
-        // 기존 통화
+        // 기존 통화 (수출입은행 API 지원)
         case .USD: return "미국 달러"
         case .EUR: return "유로"
         case .JPY: return "일본 엔"
-        case .CNY: return "중국 위안"
+        // case .CNY: return "중국 위안"  // 수출입은행 API 미지원
         case .GBP: return "영국 파운드"
 
-        // 아시아 태평양 지역
+        // 아시아 태평양 지역 (수출입은행 API 지원)
         case .AUD: return "호주 달러"
         case .SGD: return "싱가포르 달러"
         case .HKD: return "홍콩 달러"
         case .THB: return "태국 바트"
-        case .INR: return "인도 루피"
+        // case .INR: return "인도 루피"  // 수출입은행 API 미지원
         case .IDR: return "인도네시아 루피아"
-        case .VND: return "베트남 동"
-        case .KHR: return "캄보디아 리엘"
+        // case .VND: return "베트남 동"  // 수출입은행 API 미지원
+        // case .KHR: return "캄보디아 리엘"  // 수출입은행 API 미지원
 
-        // 유럽 지역
+        // 유럽 지역 (수출입은행 API 지원)
         case .CHF: return "스위스 프랑"
         case .SEK: return "스웨덴 크로나"
         case .NOK: return "노르웨이 크로네"
         case .DKK: return "덴마크 크로네"
-        case .PLN: return "폴란드 즐로티"
+        // case .PLN: return "폴란드 즐로티"  // 수출입은행 API 미지원
 
-        // 아메리카 지역
+        // 아메리카 지역 (수출입은행 API 지원)
         case .CAD: return "캐나다 달러"
-        case .MXN: return "멕시코 페소"
-        case .BRL: return "브라질 헤알"
+        // case .MXN: return "멕시코 페소"  // 수출입은행 API 미지원
+        // case .BRL: return "브라질 헤알"  // 수출입은행 API 미지원
         }
     }
 
     var symbol: String {
         switch self {
-        // 기존 통화
+        // 기존 통화 (수출입은행 API 지원)
         case .USD: return "$"
         case .EUR: return "€"
         case .JPY: return "¥"
-        case .CNY: return "元"
+        // case .CNY: return "元"  // 수출입은행 API 미지원
         case .GBP: return "£"
 
-        // 아시아 태평양 지역
+        // 아시아 태평양 지역 (수출입은행 API 지원)
         case .AUD: return "A$"
         case .SGD: return "S$"
         case .HKD: return "HK$"
         case .THB: return "฿"
-        case .INR: return "₹"
+        // case .INR: return "₹"  // 수출입은행 API 미지원
         case .IDR: return "Rp"
-        case .VND: return "₫"
-        case .KHR: return "៛"
+        // case .VND: return "₫"  // 수출입은행 API 미지원
+        // case .KHR: return "៛"  // 수출입은행 API 미지원
 
-        // 유럽 지역
+        // 유럽 지역 (수출입은행 API 지원)
         case .CHF: return "CHF"
         case .SEK: return "kr"
         case .NOK: return "kr"
         case .DKK: return "kr"
-        case .PLN: return "zł"
+        // case .PLN: return "zł"  // 수출입은행 API 미지원
 
-        // 아메리카 지역
+        // 아메리카 지역 (수출입은행 API 지원)
         case .CAD: return "C$"
-        case .MXN: return "$"
-        case .BRL: return "R$"
+        // case .MXN: return "$"  // 수출입은행 API 미지원
+        // case .BRL: return "R$"  // 수출입은행 API 미지원
         }
     }
 }

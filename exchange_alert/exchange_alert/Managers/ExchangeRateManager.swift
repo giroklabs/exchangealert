@@ -9,6 +9,12 @@ class ExchangeRateManager: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var currencyAlertSettings = CurrencyAlertSettings()
+    @Published var currentApiSource: String = "ExchangeRate-API"
+    @Published var lastUpdateTime: Date?
+    
+    // 평일 마지막 데이터 캐시
+    private var weekdayLastData: [CurrencyType: ExchangeRate] = [:]
+    private var lastWeekdayUpdate: Date?
     
     private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"
     private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"
@@ -38,13 +44,18 @@ class ExchangeRateManager: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        // 한국수출입은행 API 사용
-        fetchFromKoreaEximAPI()
+        // 주말/공휴일 체크
+        if isWeekendOrHoliday() {
+            print("📅 주말/공휴일 감지 - ExchangeRate-API 사용")
+            currentApiSource = "ExchangeRate-API"
+            fetchFromExchangeRateAPI()
+        } else {
+            print("📅 평일 감지 - 한국수출입은행 API 사용")
+            currentApiSource = "한국수출입은행"
+            fetchFromKoreaEximAPI()
+        }
         
-        // ExchangeRate-API (백업용, 주석 처리)
-        /*
-        fetchFromExchangeRateAPI()
-        
+        // 실제 API 호출 (주석 처리)
         /*
         let urlString = "\(baseURL)?authkey=\(apiKey)&data=AP01"
         print("🌐 API 호출: \(urlString)")
@@ -113,7 +124,6 @@ class ExchangeRateManager: ObservableObject {
             }
         }.resume()
         */
-        */
     }
     
     
@@ -162,8 +172,8 @@ class ExchangeRateManager: ObservableObject {
                             // 예: USD = 0.00074 → 1/0.00074 = 1351.35원
                             var krwRate = 1.0 / rate
                             
-                            // JPY, IDR, VND, KHR의 경우 100배를 곱해서 표시 (100단위 = X원)
-                            if currency == .JPY || currency == .IDR || currency == .VND || currency == .KHR {
+                            // JPY, IDR의 경우 100배를 곱해서 표시 (100단위 = X원) - 수출입은행 API 지원 통화만
+                            if currency == .JPY || currency == .IDR {
                                 krwRate = krwRate * 100
                             }
                             
@@ -215,15 +225,71 @@ class ExchangeRateManager: ObservableObject {
         }.resume()
     }
     
+    // MARK: - 주말/공휴일 체크
+    private func isWeekendOrHoliday() -> Bool {
+        let calendar = Calendar.current
+        let today = Date()
+        let weekday = calendar.component(.weekday, from: today)
+        
+        // 일요일(1) 또는 토요일(7)인 경우
+        if weekday == 1 || weekday == 7 {
+            return true
+        }
+        
+        // 한국 공휴일 체크 (간단한 버전)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM-dd"
+        let todayString = formatter.string(from: today)
+        
+        // 주요 공휴일 (2024년 기준)
+        let holidays = [
+            "01-01", // 신정
+            "02-09", "02-10", "02-11", "02-12", // 설날 연휴
+            "03-01", // 삼일절
+            "04-10", // 국회의원선거
+            "05-05", // 어린이날
+            "05-15", // 부처님오신날
+            "06-06", // 현충일
+            "08-15", // 광복절
+            "09-16", "09-17", "09-18", // 추석 연휴
+            "10-03", // 개천절
+            "10-09", // 한글날
+            "12-25"  // 성탄절
+        ]
+        
+        return holidays.contains(todayString)
+    }
+    
     // MARK: - 한국수출입은행 API 호출
     private func fetchFromKoreaEximAPI() {
+        // 주말인 경우 캐시된 평일 데이터 사용
+        if isWeekendOrHoliday() {
+            if !weekdayLastData.isEmpty {
+                print("📅 주말 감지 - 캐시된 평일 데이터 사용")
+                self.exchangeRates = weekdayLastData
+                self.lastUpdateTime = lastWeekdayUpdate
+                self.currentApiSource = "한국수출입은행 (평일 캐시)"
+                print("✅ 캐시된 평일 데이터 \(weekdayLastData.count)개 통화 로드 완료")
+                
+                // 현재 선택된 통화의 환율이 있으면 알림 체크
+                if let currentRate = weekdayLastData[self.selectedCurrency] {
+                    self.checkAlertThresholds(rate: currentRate)
+                }
+            } else {
+                print("📅 주말 감지 - 캐시된 데이터 없음, ExchangeRate-API로 백업")
+                self.currentApiSource = "ExchangeRate-API"
+                self.fetchFromExchangeRateAPI()
+            }
+            return
+        }
+        
         let urlString = "\(baseURL)?authkey=\(apiKey)&data=AP01"
         print("🌐 한국수출입은행 API 호출: \(urlString)")
         
         guard let url = URL(string: urlString) else {
-            errorMessage = "잘못된 URL입니다."
-            isLoading = false
-            print("❌ 잘못된 URL: \(urlString)")
+            print("❌ 한국수출입은행 API 잘못된 URL: \(urlString) - ExchangeRate-API로 백업 시도")
+            currentApiSource = "ExchangeRate-API"
+            fetchFromExchangeRateAPI()
             return
         }
         
@@ -232,14 +298,16 @@ class ExchangeRateManager: ObservableObject {
                 self?.isLoading = false
                 
                 if let error = error {
-                    self?.errorMessage = "네트워크 오류: \(error.localizedDescription)"
-                    print("❌ 네트워크 오류: \(error.localizedDescription)")
+                    print("❌ 한국수출입은행 API 네트워크 오류: \(error.localizedDescription) - ExchangeRate-API로 백업 시도")
+                    self?.currentApiSource = "ExchangeRate-API"
+                    self?.fetchFromExchangeRateAPI()
                     return
                 }
                 
                 guard let data = data else {
-                    self?.errorMessage = "데이터를 받을 수 없습니다."
-                    print("❌ 데이터 없음")
+                    print("❌ 한국수출입은행 API 데이터 없음 - ExchangeRate-API로 백업 시도")
+                    self?.currentApiSource = "ExchangeRate-API"
+                    self?.fetchFromExchangeRateAPI()
                     return
                 }
                 
@@ -256,32 +324,50 @@ class ExchangeRateManager: ObservableObject {
                     var newRates: [CurrencyType: ExchangeRate] = [:]
                     
                     for currency in CurrencyType.allCases {
-                        if let rate = rates.first(where: { $0.curUnit == currency.rawValue }) {
+                        // 100단위로 제공되는 통화들 처리 (수출입은행 API 지원)
+                        let searchUnit: String
+                        if currency == .JPY || currency == .IDR {
+                            searchUnit = "\(currency.rawValue)(100)"
+                        } else {
+                            searchUnit = currency.rawValue
+                        }
+                        
+                        if let rate = rates.first(where: { $0.curUnit == searchUnit }) {
                             newRates[currency] = rate
-                            print("💱 \(currency.rawValue) 매매기준율: \(rate.dealBasR ?? "N/A")원")
+                            print("💱 \(currency.rawValue) 매매기준율: \(rate.dealBasR ?? "N/A")원 (검색단위: \(searchUnit))")
                             print("   - TTB (살 때): \(rate.ttb ?? "N/A")원")
                             print("   - TTS (팔 때): \(rate.tts ?? "N/A")원")
                         } else {
-                            print("⚠️ \(currency.rawValue) 환율 데이터 없음")
+                            print("⚠️ \(currency.rawValue) 환율 데이터 없음 (검색단위: \(searchUnit))")
                         }
                     }
                     
-                    self?.exchangeRates = newRates
-                    
-                    // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
-                    if let currentRate = newRates[self?.selectedCurrency ?? .USD] {
-                        self?.checkAlertThresholds(rate: currentRate)
-                    }
-                    
-                    if newRates.isEmpty {
-                        self?.errorMessage = "환율 정보를 찾을 수 없습니다."
-                        print("❌ 환율 정보 없음")
-                    } else {
-                        print("✅ 총 \(newRates.count)개 통화 환율 로드 완료 (매매기준율 기준)")
-                    }
+                       self?.exchangeRates = newRates
+                       self?.lastUpdateTime = Date()
+                       
+                       // 평일 데이터를 캐시에 저장
+                       if !newRates.isEmpty {
+                           self?.weekdayLastData = newRates
+                           self?.lastWeekdayUpdate = Date()
+                           print("💾 평일 데이터 캐시에 저장 완료")
+                       }
+                       
+                       // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
+                       if let currentRate = newRates[self?.selectedCurrency ?? .USD] {
+                           self?.checkAlertThresholds(rate: currentRate)
+                       }
+                       
+                       if newRates.isEmpty {
+                           print("❌ 한국수출입은행 API에서 환율 정보 없음 - ExchangeRate-API로 백업 시도")
+                           self?.currentApiSource = "ExchangeRate-API"
+                           self?.fetchFromExchangeRateAPI()
+                       } else {
+                           print("✅ 총 \(newRates.count)개 통화 환율 로드 완료 (매매기준율 기준)")
+                       }
                 } catch {
-                    self?.errorMessage = "데이터 파싱 오류: \(error.localizedDescription)"
-                    print("❌ 파싱 오류: \(error.localizedDescription)")
+                    print("❌ 한국수출입은행 API 파싱 오류: \(error.localizedDescription) - ExchangeRate-API로 백업 시도")
+                    self?.currentApiSource = "ExchangeRate-API"
+                    self?.fetchFromExchangeRateAPI()
                 }
             }
         }.resume()
