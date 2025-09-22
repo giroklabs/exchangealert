@@ -620,6 +620,17 @@ class ExchangeRateManager: ObservableObject {
                 shouldNotify = true
                 message = "💸 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원) 이하로 떨어졌습니다!"
             }
+        case .both3:
+            // 기준값에서 3% 벗어날 때 알림
+            let upperThreshold = alertSettings.threshold * 1.03  // 기준값의 103%
+            let lowerThreshold = alertSettings.threshold * 0.97  // 기준값의 97%
+            if dealBasR >= upperThreshold {
+                shouldNotify = true
+                message = "💰 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 3% 상승했습니다!"
+            } else if dealBasR <= lowerThreshold {
+                shouldNotify = true
+                message = "💸 \(rate.curNm ?? "통화") 매매기준율이 \(dealBasRString)원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 3% 하락했습니다!"
+            }
         case .both:
             // 기준값에서 5% 벗어날 때 알림
             let upperThreshold = alertSettings.threshold * 1.05  // 기준값의 105%
@@ -712,19 +723,29 @@ class ExchangeRateManager: ObservableObject {
             return
         }
         
-        // 테스트용 환율 데이터 생성 (기준값에서 5% 벗어난 값)
+        // 테스트용 환율 데이터 생성 (알림 타입에 따라 다른 변동률 적용)
+        let testMultiplier: Double
+        switch alertSettings.thresholdType {
+        case .both3:
+            testMultiplier = 1.04 // 4% 상승 (3% 변동 테스트)
+        case .both:
+            testMultiplier = 1.06 // 6% 상승 (5% 변동 테스트)
+        default:
+            testMultiplier = 1.05 // 기본 5% 상승
+        }
+        
         let testRate = ExchangeRate(
             result: 1,
             curUnit: selectedCurrency.rawValue,
             curNm: selectedCurrency.displayName,
-            ttb: String(format: "%.2f", alertSettings.threshold * 1.06), // 6% 상승
-            tts: String(format: "%.2f", alertSettings.threshold * 1.04), // 4% 상승
-            dealBasR: String(format: "%.2f", alertSettings.threshold * 1.05), // 5% 상승
-            bkpr: String(format: "%.2f", alertSettings.threshold * 1.03),
+            ttb: String(format: "%.2f", alertSettings.threshold * (testMultiplier + 0.01)), // TTB는 조금 더 높게
+            tts: String(format: "%.2f", alertSettings.threshold * (testMultiplier - 0.01)), // TTS는 조금 더 낮게
+            dealBasR: String(format: "%.2f", alertSettings.threshold * testMultiplier), // 매매기준율
+            bkpr: String(format: "%.2f", alertSettings.threshold * (testMultiplier - 0.02)),
             yyEfeeR: "0.0",
             tenDdEfeeR: "0.0",
-            kftcBkpr: String(format: "%.2f", alertSettings.threshold * 1.03),
-            kftcDealBasR: String(format: "%.2f", alertSettings.threshold * 1.05)
+            kftcBkpr: String(format: "%.2f", alertSettings.threshold * (testMultiplier - 0.02)),
+            kftcDealBasR: String(format: "%.2f", alertSettings.threshold * testMultiplier)
         )
         
         print("🧪 테스트 데이터:")

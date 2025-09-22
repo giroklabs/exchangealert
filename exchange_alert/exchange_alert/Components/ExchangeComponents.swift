@@ -126,9 +126,19 @@ struct ExchangeStatusIcon: View {
             return rate >= alertSettings.threshold ? "arrow.up.right.circle.fill" : "minus.circle.fill"
         case .lower:
             return rate <= alertSettings.threshold ? "arrow.down.right.circle.fill" : "minus.circle.fill"
+        case .both3:
+            let upperThreshold = alertSettings.threshold * 1.03  // 기준값의 103%
+            let lowerThreshold = alertSettings.threshold * 0.97  // 기준값의 97%
+            if rate >= upperThreshold {
+                return "arrow.up.right.circle.fill"
+            } else if rate <= lowerThreshold {
+                return "arrow.down.right.circle.fill"
+            } else {
+                return "minus.circle.fill"
+            }
         case .both:
-            let upperThreshold = alertSettings.threshold + 100
-            let lowerThreshold = alertSettings.threshold - 100
+            let upperThreshold = alertSettings.threshold * 1.05  // 기준값의 105%
+            let lowerThreshold = alertSettings.threshold * 0.95  // 기준값의 95%
             if rate >= upperThreshold {
                 return "arrow.up.right.circle.fill"
             } else if rate <= lowerThreshold {

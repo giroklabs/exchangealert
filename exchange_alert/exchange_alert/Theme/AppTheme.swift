@@ -88,9 +88,19 @@ struct ExchangeColorHelper {
             return rate >= threshold ? AppTheme.rising : AppTheme.stable
         case .lower:
             return rate <= threshold ? AppTheme.falling : AppTheme.stable
+        case .both3:
+            let upperThreshold = threshold * 1.03  // 기준값의 103%
+            let lowerThreshold = threshold * 0.97  // 기준값의 97%
+            if rate >= upperThreshold {
+                return AppTheme.rising
+            } else if rate <= lowerThreshold {
+                return AppTheme.falling
+            } else {
+                return AppTheme.stable
+            }
         case .both:
-            let upperThreshold = threshold + 100
-            let lowerThreshold = threshold - 100
+            let upperThreshold = threshold * 1.05  // 기준값의 105%
+            let lowerThreshold = threshold * 0.95  // 기준값의 95%
             if rate >= upperThreshold {
                 return AppTheme.rising
             } else if rate <= lowerThreshold {

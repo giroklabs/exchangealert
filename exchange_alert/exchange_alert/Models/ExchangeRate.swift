@@ -148,6 +148,7 @@ struct CurrencyAlertSettings: Codable, Equatable {
 enum ThresholdType: String, CaseIterable, Codable {
     case upper = "상한선"     // 기준값 이상일 때 알림
     case lower = "하한선"     // 기준값 이하일 때 알림
+    case both3 = "3% 변동"    // 기준값에서 3% 벗어날 때 알림
     case both = "5% 변동"     // 기준값에서 5% 벗어날 때 알림
     
     var description: String {
@@ -156,6 +157,8 @@ enum ThresholdType: String, CaseIterable, Codable {
             return "기준값 이상일 때 알림"
         case .lower:
             return "기준값 이하일 때 알림"
+        case .both3:
+            return "기준값에서 3% 벗어날 때 알림"
         case .both:
             return "기준값에서 5% 벗어날 때 알림"
         }
