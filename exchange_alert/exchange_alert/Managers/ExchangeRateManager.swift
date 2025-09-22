@@ -49,7 +49,12 @@ class ExchangeRateManager: ObservableObject {
     init() {
         loadSettings()
         loadAPICallCount() // API 호출 횟수 로드
-        fetchExchangeRate() // 앱 시작 시 즉시 환율 가져오기
+        
+        // 앱 시작 시 환율 가져오기 (Task 사용)
+        Task { @MainActor in
+            self.fetchExchangeRate()
+        }
+        
         startPeriodicRefresh() // 5분마다 자동 새로고침 (API 호출 제한 고려)
     }
     

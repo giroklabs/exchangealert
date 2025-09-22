@@ -31,8 +31,10 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("완료") {
-                        exchangeManager.updateAlertSettings(tempSettings)
-                        dismiss()
+                        DispatchQueue.main.async {
+                            exchangeManager.updateAlertSettings(tempSettings)
+                            dismiss()
+                        }
                     }
                     .foregroundColor(AppTheme.primary)
                 }

@@ -92,10 +92,14 @@ struct ContentView: View {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-            isKeyboardVisible = true
+            DispatchQueue.main.async {
+                isKeyboardVisible = true
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            isKeyboardVisible = false
+            DispatchQueue.main.async {
+                isKeyboardVisible = false
+            }
         }
     }
 }
@@ -115,7 +119,9 @@ struct DefaultExchangeCard: View {
                         Menu {
                             ForEach(CurrencyType.allCases, id: \.self) { currency in
                                 Button(action: {
-                                    exchangeManager.changeCurrency(to: currency)
+                                    DispatchQueue.main.async {
+                                        exchangeManager.changeCurrency(to: currency)
+                                    }
                                 }) {
                                     HStack {
                                         Text(currency.symbol)

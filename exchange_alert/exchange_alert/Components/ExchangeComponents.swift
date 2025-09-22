@@ -18,7 +18,9 @@ struct ExchangeRateCard: View {
                         Menu {
                             ForEach(CurrencyType.allCases, id: \.self) { currency in
                                 Button(action: {
-                                    exchangeManager.changeCurrency(to: currency)
+                                    DispatchQueue.main.async {
+                                        exchangeManager.changeCurrency(to: currency)
+                                    }
                                 }) {
                                     HStack {
                                         Text("\(currency.symbol)(\(currency.displayName))")
@@ -180,7 +182,7 @@ struct AlertSettingsCard: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     
     private var settings: AlertSettings {
-        exchangeManager.currencyAlertSettings.getSettings(for: currency)
+        exchangeManager.currencyAlertSettings.settings[currency] ?? AlertSettings.default
     }
     
     var body: some View {
