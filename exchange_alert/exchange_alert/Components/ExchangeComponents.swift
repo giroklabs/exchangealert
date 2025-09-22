@@ -58,26 +58,26 @@ struct ExchangeRateCard: View {
                     Spacer()
                     
                     // 환율 상태 아이콘
-                    ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
+                    // ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
                 }
                 
                 // 환율 데이터와 변동 정보를 좌우로 분리
                 HStack(alignment: .top, spacing: 16) {
                     // 왼쪽: 환율 데이터
-                    VStack(alignment: .leading, spacing: 12) {
-                        // 매매기준율 (메인)
+                    VStack(alignment: .leading, spacing: 16) {
+                        // 매매기준율 (메인) - 중앙에 배치
                         if let dealBasR = rate.dealBasR {
                             let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
                             if let rateValue = Double(cleanedRate) {
-                                VStack(alignment: .leading, spacing: 8) {
+                                VStack(alignment: .center, spacing: 8) {
                                     Text("매매기준율")
                                         .font(AppTheme.captionFont)
                                         .foregroundColor(.secondary)
                                     
-                                    HStack(alignment: .bottom, spacing: 8) {
-                                        // 현재 환율
+                                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                        // 현재 환율 - 폰트 크기 더 키움
                                         Text("\(String(format: "%.2f", rateValue))")
-                                            .font(AppTheme.largeTitleFont)
+                                            .font(.system(size: 36, weight: .bold)) // 더 큰 폰트 크기
                                             .foregroundColor(ExchangeColorHelper.colorForRate(
                                                 rateValue,
                                                 threshold: alertSettings.threshold,
@@ -87,8 +87,10 @@ struct ExchangeRateCard: View {
                                         Text("원")
                                             .font(AppTheme.headlineFont)
                                             .foregroundColor(.secondary)
+                                            .baselineOffset(8) // 텍스트 베이스라인을 위로 이동
                                     }
                                 }
+                                .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
                             }
                         }
                         
@@ -106,9 +108,9 @@ struct ExchangeRateCard: View {
                             VStack(alignment: .trailing, spacing: 4) {
                                 // 변동 아이콘과 값
                                 HStack(spacing: 4) {
-                                    Image(systemName: dailyChange.isPositive ? "arrow.up.right" : "arrow.down.right")
-                                        .font(.title3)
-                                        .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                    // Image(systemName: dailyChange.isPositive ? "arrow.up.right" : "arrow.down.right")
+                                    //     .font(.title3)
+                                    //     .foregroundColor(dailyChange.isPositive ? .red : .blue)
                                     
                                     Text(dailyChange.changeValueString)
                                         .font(AppTheme.headlineFont)
@@ -510,7 +512,7 @@ struct ExchangeBuySeelView: View {
                             .foregroundColor(.secondary)
                         Text("\(getBuyRate(baseRate: baseRate))원")
                             .font(AppTheme.headlineFont)
-                            .foregroundColor(AppTheme.primary)
+                            .foregroundColor(.primary) // 검정색으로 변경
                     }
                     
                     Divider()
@@ -522,7 +524,7 @@ struct ExchangeBuySeelView: View {
                             .foregroundColor(.secondary)
                         Text("\(getSellRate(baseRate: baseRate))원")
                             .font(AppTheme.headlineFont)
-                            .foregroundColor(AppTheme.primary)
+                            .foregroundColor(.primary) // 검정색으로 변경
                     }
                 }
             }
