@@ -112,8 +112,8 @@ enum CurrencyType: String, CaseIterable, Codable {
     case SAR = "SAR"  // 사우디 리얄
     
     // 추가 요청된 통화들 (수출입은행 API 지원)
-    case INR = "INR"  // 인도 루피
-    case PLN = "PLN"  // 폴란드 즐로티
+    // case INR = "INR"  // 인도 루피 - 수출입은행 API 미지원
+    // case PLN = "PLN"  // 폴란드 즐로티 - 수출입은행 API 미지원
     
     var displayName: String {
         switch self {
@@ -139,8 +139,8 @@ enum CurrencyType: String, CaseIterable, Codable {
         case .BND: return "브루나이달러"
         case .KWD: return "쿠웨이트디나르"
         case .SAR: return "사우디리얄"
-        case .INR: return "인도루피"
-        case .PLN: return "폴란드즐로티"
+        // case .INR: return "인도루피"  // 수출입은행 API 미지원
+        // case .PLN: return "폴란드즐로티"  // 수출입은행 API 미지원
         }
     }
     
@@ -168,8 +168,8 @@ enum CurrencyType: String, CaseIterable, Codable {
         case .BND: return "B$"
         case .KWD: return "د.ك"
         case .SAR: return "﷼"
-        case .INR: return "₹"
-        case .PLN: return "zł"
+        // case .INR: return "₹"  // 수출입은행 API 미지원
+        // case .PLN: return "zł"  // 수출입은행 API 미지원
         }
     }
 }

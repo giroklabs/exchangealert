@@ -182,12 +182,12 @@ class ExchangeRateManager: ObservableObject {
         case .SGD: return 1000.0
         case .HKD: return 180.0
         case .THB: return 38.0
-        case .INR: return 16.5
+        // case .INR: return 16.5  // 수출입은행 API 미지원
         case .CHF: return 1550.0
         case .SEK: return 130.0
         case .NOK: return 130.0
         case .DKK: return 200.0
-        case .PLN: return 350.0
+        // case .PLN: return 350.0  // 수출입은행 API 미지원
         case .CAD: return 1000.0
         case .IDR: return 0.09
         case .MYR: return 300.0  // 말레이시아 링깃
