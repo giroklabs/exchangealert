@@ -131,7 +131,72 @@ class ExchangeRateManager: ObservableObject {
             previousDayData = previousRates
             print("📊 이전 일자 데이터 로드: \(previousRates.count)개 통화")
         } else {
-            print("📊 이전 일자 데이터 없음 - 첫 실행")
+            print("📊 이전 일자 데이터 없음 - 테스트 데이터 생성")
+            createTestPreviousDayData()
+        }
+    }
+    
+    // MARK: - 테스트용 이전 일자 데이터 생성
+    private func createTestPreviousDayData() {
+        var testRates: [CurrencyType: ExchangeRate] = [:]
+        
+        // 각 통화별로 어제 기준 임의의 환율 데이터 생성
+        for currency in CurrencyType.allCases {
+            let baseRate = getBaseRateForCurrency(currency)
+            let randomVariation = Double.random(in: -50...50) // ±50원 범위에서 랜덤 변동
+            let previousRate = baseRate + randomVariation
+            
+            let testExchangeRate = ExchangeRate(
+                result: 1,
+                curUnit: currency.rawValue,
+                curNm: currency.displayName,
+                ttb: String(format: "%.2f", previousRate - 15), // TTB (살때)
+                tts: String(format: "%.2f", previousRate + 15), // TTS (팔때)
+                dealBasR: String(format: "%.2f", previousRate), // 매매기준율
+                bkpr: String(format: "%.2f", previousRate),
+                yyEfeeR: "0.0",
+                tenDdEfeeR: "0.0",
+                kftcBkpr: String(format: "%.2f", previousRate),
+                kftcDealBasR: String(format: "%.2f", previousRate)
+            )
+            
+            testRates[currency] = testExchangeRate
+        }
+        
+        previousDayData = testRates
+        print("🧪 테스트 이전 일자 데이터 생성: \(testRates.count)개 통화")
+        
+        // 테스트 데이터를 UserDefaults에 저장
+        savePreviousDayData()
+    }
+    
+    // MARK: - 통화별 기준 환율 반환
+    private func getBaseRateForCurrency(_ currency: CurrencyType) -> Double {
+        switch currency {
+        case .USD: return 1390.0
+        case .EUR: return 1500.0
+        case .JPY: return 9.5
+        case .GBP: return 1750.0
+        case .CNH: return 190.0  // 중국 위안화 (홍콩)
+        case .AUD: return 900.0
+        case .SGD: return 1000.0
+        case .HKD: return 180.0
+        case .THB: return 38.0
+        case .INR: return 16.5
+        case .CHF: return 1550.0
+        case .SEK: return 130.0
+        case .NOK: return 130.0
+        case .DKK: return 200.0
+        case .PLN: return 350.0
+        case .CAD: return 1000.0
+        case .IDR: return 0.09
+        case .MYR: return 300.0  // 말레이시아 링깃
+        case .NZD: return 800.0  // 뉴질랜드 달러
+        case .AED: return 380.0  // 아랍에미리트 디르함
+        case .BHD: return 3700.0 // 바레인 디나르
+        case .BND: return 1000.0 // 브루나이 달러
+        case .KWD: return 4500.0 // 쿠웨이트 디나르
+        case .SAR: return 370.0  // 사우디 리얄
         }
     }
     
