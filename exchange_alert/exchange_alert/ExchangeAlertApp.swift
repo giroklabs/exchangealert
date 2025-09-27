@@ -1,6 +1,6 @@
 import SwiftUI
 import UserNotifications
-// import GoogleMobileAds  // TODO: Xcode에서 Swift Package Manager로 Google Mobile Ads SDK 추가 후 활성화
+import GoogleMobileAds
 
 @main
 struct ExchangeAlertApp: App {
@@ -11,9 +11,9 @@ struct ExchangeAlertApp: App {
             ContentView()
                 .environmentObject(exchangeManager)
                 .onAppear {
-                    // TODO: AdMob 초기화 (SDK 추가 후 활성화)
-                    // GADMobileAds.sharedInstance().start(completionHandler: nil)
-                    // print("✅ AdMob SDK 초기화 완료")
+                    // AdMob 초기화
+                    MobileAds.shared.start { _ in }
+                    print("✅ AdMob SDK 초기화 완료")
                     
                     // 알림 권한 요청
                     NotificationManager.requestPermission { granted in
