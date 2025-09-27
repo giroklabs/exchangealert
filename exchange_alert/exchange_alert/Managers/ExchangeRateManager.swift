@@ -11,6 +11,7 @@ class ExchangeRateManager: ObservableObject {
     @Published var currencyAlertSettings = CurrencyAlertSettings()
     @Published var currentApiSource: String = "ExchangeRate-API"
     @Published var lastUpdateTime: Date?
+    @Published var isWeekendMode: Bool = false  // 주말 모드 표시
     
     // 일일 변동 데이터 저장
     @Published var dailyChanges: [CurrencyType: DailyChange] = [:]

@@ -20,13 +20,31 @@ jobs:
       
     - name: Fetch exchange rates
       run: |
-        # 한국수출입은행 API에서 환율 데이터 가져오기
+        # 현재 요일 확인 (0=일요일, 1=월요일, ..., 6=토요일)
+        DAY_OF_WEEK=$(date +%w)
+        
+        # 주말(토요일=6, 일요일=0)인 경우 마지막 평일 데이터 유지
+        if [ $DAY_OF_WEEK -eq 6 ] || [ $DAY_OF_WEEK -eq 0 ]; then
+          echo "주말입니다. 마지막 평일 데이터를 유지합니다."
+          echo "현재 요일: $DAY_OF_WEEK (토요일=6, 일요일=0)"
+          exit 0
+        fi
+        
+        # 평일인 경우 한국수출입은행 API에서 환율 데이터 가져오기
+        echo "평일입니다. 수출입은행 API에서 최신 환율 데이터를 가져옵니다."
         curl -o data/exchange-rates.json "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${{ secrets.KOREA_EXIM_API_KEY }}&data=AP01"
         
     - name: Commit and push
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add data/exchange-rates.json
-        git diff --staged --quiet || git commit -m "Update exchange rates - $(date)"
-        git push
+        
+        # 주말이 아닌 경우에만 커밋
+        DAY_OF_WEEK=$(date +%w)
+        if [ $DAY_OF_WEEK -ne 6 ] && [ $DAY_OF_WEEK -ne 0 ]; then
+          git add data/exchange-rates.json
+          git diff --staged --quiet || git commit -m "Update exchange rates - $(date)"
+          git push
+        else
+          echo "주말이므로 데이터 업데이트를 건너뜁니다."
+        fi
