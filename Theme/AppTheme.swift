@@ -94,3 +94,4 @@ struct AnimationHelper {
     static let smooth = Animation.easeInOut(duration: 0.2)
     static let bouncy = Animation.spring(response: 0.3, dampingFraction: 0.6)
 }
+

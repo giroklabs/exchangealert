@@ -179,3 +179,4 @@ echo "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" > data/last-update.txt
 
 *이 앱은 한국수출입은행의 공식 API를 사용하여 정확한 환율 정보를 제공합니다.*
 >>>>>>> d6f027aa22206d6c0f5fec5fa75a22e84282ec0e
+
