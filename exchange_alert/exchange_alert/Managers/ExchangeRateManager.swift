@@ -22,6 +22,7 @@ class ExchangeRateManager: ObservableObject {
     // 평일 마지막 데이터 캐시
     private var weekdayLastData: [CurrencyType: ExchangeRate] = [:]
     private var lastWeekdayUpdate: Date?
+    private var lastWeekdayDate: Date? // 마지막 평일 날짜 저장
     
     // API 호출 제한 관리
     private let maxDailyAPICalls = 1000
@@ -602,7 +603,7 @@ class ExchangeRateManager: ObservableObject {
                 // 메인 큐에서 UI 업데이트 수행
                 DispatchQueue.main.async {
                     self.exchangeRates = self.weekdayLastData
-                    self.lastUpdateTime = self.lastWeekdayUpdate
+                    self.lastUpdateTime = self.lastWeekdayDate // 마지막 평일 날짜 사용
                     self.currentApiSource = "한국수출입은행 (평일 캐시)"
                 }
                 
@@ -688,6 +689,7 @@ class ExchangeRateManager: ObservableObject {
                        if !newRates.isEmpty {
                            self?.weekdayLastData = newRates
                            self?.lastWeekdayUpdate = Date()
+                           self?.lastWeekdayDate = Date() // 현재 날짜를 마지막 평일 날짜로 저장
                            print("💾 평일 데이터 캐시에 저장 완료")
                        }
                        

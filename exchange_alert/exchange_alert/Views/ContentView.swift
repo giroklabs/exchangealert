@@ -253,6 +253,34 @@ struct ErrorStateView: View {
 struct LastUpdateView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     
+    private func formatLastUpdateTime() -> String {
+        // 주말인 경우 마지막 평일 데이터 기준일 표시
+        if exchangeManager.isWeekendMode {
+            if let lastUpdate = exchangeManager.lastUpdateTime {
+                let calendar = Calendar.current
+                let today = Date()
+                let weekday = calendar.component(.weekday, from: today)
+                
+                // 토요일(7)인 경우 금요일 표시, 일요일(1)인 경우 금요일 표시
+                if weekday == 7 || weekday == 1 {
+                    let friday = calendar.date(byAdding: .day, value: weekday == 7 ? -1 : -2, to: today) ?? lastUpdate
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM월 dd일"
+                    return formatter.string(from: friday)
+                }
+            }
+        }
+        
+        // 평일이거나 주말 모드가 아닌 경우 현재 시간 표시
+        if let lastUpdate = exchangeManager.lastUpdateTime {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM월 dd일 HH:mm"
+            return formatter.string(from: lastUpdate)
+        }
+        
+        return Date().formatted(date: .omitted, time: .shortened)
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack {
@@ -260,7 +288,7 @@ struct LastUpdateView: View {
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
                 
-                Text("마지막 업데이트: \(Date().formatted(date: .omitted, time: .shortened))")
+                Text("마지막 업데이트: \(formatLastUpdateTime())")
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
                 
@@ -279,20 +307,6 @@ struct LastUpdateView: View {
                 Spacer()
             }
             
-            // 주말 모드 표시
-            if exchangeManager.isWeekendMode {
-                HStack {
-                    Image(systemName: "calendar.badge.clock")
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(.orange)
-                    
-                    Text("주말 모드: 마지막 평일 데이터 표시")
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(.orange)
-                    
-                    Spacer()
-                }
-            }
         }
     }
 }
