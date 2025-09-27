@@ -256,18 +256,18 @@ struct LastUpdateView: View {
     private func formatLastUpdateTime() -> String {
         // 주말인 경우 마지막 평일 데이터 기준일 표시
         if exchangeManager.isWeekendMode {
-            if let lastUpdate = exchangeManager.lastUpdateTime {
-                let calendar = Calendar.current
-                let today = Date()
-                let weekday = calendar.component(.weekday, from: today)
-                
-                // 토요일(7)인 경우 금요일 표시, 일요일(1)인 경우 금요일 표시
-                if weekday == 7 || weekday == 1 {
-                    let friday = calendar.date(byAdding: .day, value: weekday == 7 ? -1 : -2, to: today) ?? lastUpdate
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "MM월 dd일"
-                    return formatter.string(from: friday)
-                }
+            // 주말에는 항상 마지막 금요일 날짜 표시
+            let calendar = Calendar.current
+            let today = Date()
+            let weekday = calendar.component(.weekday, from: today)
+            
+            // 토요일(7)인 경우 금요일 표시, 일요일(1)인 경우 금요일 표시
+            if weekday == 7 || weekday == 1 {
+                let daysToSubtract = weekday == 7 ? 1 : 2 // 토요일은 1일, 일요일은 2일 빼기
+                let friday = calendar.date(byAdding: .day, value: -daysToSubtract, to: today) ?? today
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MM월 dd일"
+                return formatter.string(from: friday)
             }
         }
         
