@@ -278,6 +278,21 @@ struct LastUpdateView: View {
                 
                 Spacer()
             }
+            
+            // 주말 모드 표시
+            if exchangeManager.isWeekendMode {
+                HStack {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(AppTheme.captionFont)
+                        .foregroundColor(.orange)
+                    
+                    Text("주말 모드: 마지막 평일 데이터 표시")
+                        .font(AppTheme.captionFont)
+                        .foregroundColor(.orange)
+                    
+                    Spacer()
+                }
+            }
         }
     }
 }

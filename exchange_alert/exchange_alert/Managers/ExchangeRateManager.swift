@@ -439,9 +439,19 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - GitHub API 호출
     private func fetchFromGitHubAPI() {
+        // 주말 체크 및 주말 모드 설정
+        let isWeekend = isWeekendOrHoliday()
+        DispatchQueue.main.async {
+            self.isWeekendMode = isWeekend
+        }
+        
         // GitHub Raw URL 사용 (실제 데이터)
         let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json"
         print("📥 GitHub API 호출: \(githubURL)")
+        
+        if isWeekend {
+            print("📅 주말 감지 - 주말 모드 활성화")
+        }
 
         guard let url = URL(string: githubURL) else {
             print("❌ GitHub API 잘못된 URL: \(githubURL) - ExchangeRate-API로 백업")
