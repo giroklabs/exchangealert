@@ -79,8 +79,8 @@ struct ContentView: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 4)
                     
-                    // 광고 배너 자리 (nainai 앱과 동일한 크기)
-                    AdBannerPlaceholder()
+                    // AdMob 배너 광고
+                    AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/2141928354")
                         .frame(maxWidth: .infinity, maxHeight: 50)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 6)
