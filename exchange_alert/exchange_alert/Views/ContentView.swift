@@ -254,10 +254,13 @@ struct LastUpdateView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     
     private func formatLastUpdateTime() -> String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        
         // 주말인 경우 마지막 평일 데이터 기준일 표시
         if exchangeManager.isWeekendMode {
             // 주말에는 항상 마지막 금요일 날짜 표시
-            let calendar = Calendar.current
             let today = Date()
             let weekday = calendar.component(.weekday, from: today)
             
@@ -265,20 +268,20 @@ struct LastUpdateView: View {
             if weekday == 7 || weekday == 1 {
                 let daysToSubtract = weekday == 7 ? 1 : 2 // 토요일은 1일, 일요일은 2일 빼기
                 let friday = calendar.date(byAdding: .day, value: -daysToSubtract, to: today) ?? today
-                let formatter = DateFormatter()
-                formatter.dateFormat = "MM월 dd일"
+                formatter.dateFormat = "yyyy.M.d.(E)"
                 return formatter.string(from: friday)
             }
         }
         
         // 평일이거나 주말 모드가 아닌 경우 현재 시간 표시
         if let lastUpdate = exchangeManager.lastUpdateTime {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM월 dd일 HH:mm"
+            formatter.dateFormat = "yyyy.M.d.(E) HH:mm"
             return formatter.string(from: lastUpdate)
         }
         
-        return Date().formatted(date: .omitted, time: .shortened)
+        // 기본값
+        formatter.dateFormat = "yyyy.M.d.(E) HH:mm"
+        return formatter.string(from: Date())
     }
     
     var body: some View {
