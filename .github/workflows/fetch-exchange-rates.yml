@@ -96,19 +96,7 @@ jobs:
         
         # 메타데이터 추가 (저장 시간, API 소스 등)
         echo "📊 메타데이터 추가"
-        META_DATA=$(cat << EOF
-{
-  "date": "$SEARCH_DATE",
-  "fetch_time": "$(TZ='Asia/Seoul' date -Iseconds)",
-  "api_source": "korea_exim_bank",
-  "data_count": $(cat data/exchange-rates.json | jq 'length'),
-  "search_date": "$SEARCH_DATE"
-}
-EOF
-        )
-        
-        # 메타데이터를 별도 파일로 저장
-        echo "$META_DATA" > "data/history/meta-${SEARCH_DATE}.json"
+        echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$(TZ='Asia/Seoul' date -Iseconds)\",\"api_source\":\"korea_exim_bank\",\"data_count\":$(cat data/exchange-rates.json | jq 'length'),\"search_date\":\"$SEARCH_DATE\"}" > "data/history/meta-${SEARCH_DATE}.json"
         
     - name: Commit and push
       run: |
@@ -148,21 +136,21 @@ EOF
               
               git commit -m "Update exchange rates - $COMMIT_DATE
 
-- Current data: data/exchange-rates.json
-- Historical data: data/history/exchange-rates-$SEARCH_DATE.json
-- Daily archive: data/daily/exchange-rates-$SEARCH_DATE.json
-- Metadata: data/history/meta-$SEARCH_DATE.json
-- Data count: $DATA_LENGTH currencies"
+Current data: data/exchange-rates.json
+Historical data: data/history/exchange-rates-$SEARCH_DATE.json
+Daily archive: data/daily/exchange-rates-$SEARCH_DATE.json
+Metadata: data/history/meta-$SEARCH_DATE.json
+Data count: $DATA_LENGTH currencies"
               
               git push
-              echo "✅ 환율 데이터가 성공적으로 업데이트되었습니다."
-              echo "📁 누적 저장: $DATA_LENGTH개 통화 데이터"
+              echo "Exchange rate data updated successfully."
+              echo "Stored $DATA_LENGTH currencies"
             else
-              echo "📊 데이터 변경사항이 없습니다."
+              echo "No data changes."
             fi
           else
-            echo "❌ 유효한 데이터가 없어서 커밋을 건너뜁니다."
+            echo "No valid data to commit."
           fi
         else
-          echo "❌ 데이터 파일이 없거나 비어있어서 커밋을 건너뜁니다."
+          echo "No data file or empty file."
         fi
