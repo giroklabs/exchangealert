@@ -15,8 +15,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       
-    - name: Create data directory
-      run: mkdir -p data
+    - name: Create data directories
+      run: |
+        mkdir -p data
+        mkdir -p data/history
+        mkdir -p data/daily
       
     - name: Fetch exchange rates
       run: |
@@ -60,6 +63,10 @@ jobs:
         echo "API 호출: searchdate=$SEARCH_DATE"
         curl -o data/exchange-rates.json "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${{ secrets.KOREA_EXIM_API_KEY }}&searchdate=$SEARCH_DATE&data=AP01"
         
+        # 날짜별 파일명 생성
+        HISTORY_FILENAME="data/history/exchange-rates-${SEARCH_DATE}.json"
+        DAILY_FILENAME="data/daily/exchange-rates-${SEARCH_DATE}.json"
+        
         # API 응답 확인
         if [ ! -s data/exchange-rates.json ]; then
           echo "❌ API 응답이 비어있습니다. 마지막 데이터를 유지합니다."
@@ -82,6 +89,27 @@ jobs:
         echo "✅ API에서 유효한 데이터를 받았습니다."
         cat data/exchange-rates.json | jq '.[0] | {cur_nm: .cur_nm, deal_bas_r: .deal_bas_r}'
         
+        # 유효한 데이터를 날짜별 파일로 저장
+        echo "📁 날짜별 데이터 저장: $HISTORY_FILENAME"
+        cp data/exchange-rates.json "$HISTORY_FILENAME"
+        cp data/exchange-rates.json "$DAILY_FILENAME"
+        
+        # 메타데이터 추가 (저장 시간, API 소스 등)
+        echo "📊 메타데이터 추가"
+        META_DATA=$(cat << EOF
+{
+  "date": "$SEARCH_DATE",
+  "fetch_time": "$(TZ='Asia/Seoul' date -Iseconds)",
+  "api_source": "korea_exim_bank",
+  "data_count": $(cat data/exchange-rates.json | jq 'length'),
+  "search_date": "$SEARCH_DATE"
+}
+EOF
+        )
+        
+        # 메타데이터를 별도 파일로 저장
+        echo "$META_DATA" > "data/history/meta-${SEARCH_DATE}.json"
+        
     - name: Commit and push
       run: |
         git config --local user.email "action@github.com"
@@ -101,11 +129,26 @@ jobs:
         if [ -f data/exchange-rates.json ] && [ -s data/exchange-rates.json ]; then
           DATA_LENGTH=$(cat data/exchange-rates.json | jq 'length')
           if [ "$DATA_LENGTH" -gt 0 ]; then
+            # 모든 데이터 파일 추가 (현재 + 누적)
             git add data/exchange-rates.json
+            git add data/history/*.json 2>/dev/null || true
+            git add data/daily/*.json 2>/dev/null || true
+            
             if ! git diff --staged --quiet; then
-              git commit -m "Update exchange rates - $(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')"
+              COMMIT_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
+              SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y%m%d')
+              
+              git commit -m "Update exchange rates - $COMMIT_DATE
+
+- Current data: data/exchange-rates.json
+- Historical data: data/history/exchange-rates-$SEARCH_DATE.json
+- Daily archive: data/daily/exchange-rates-$SEARCH_DATE.json
+- Metadata: data/history/meta-$SEARCH_DATE.json
+- Data count: $DATA_LENGTH currencies"
+              
               git push
               echo "✅ 환율 데이터가 성공적으로 업데이트되었습니다."
+              echo "📁 누적 저장: $DATA_LENGTH개 통화 데이터"
             else
               echo "📊 데이터 변경사항이 없습니다."
             fi
