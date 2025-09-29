@@ -22,29 +22,82 @@ jobs:
       run: |
         # 현재 요일 확인 (0=일요일, 1=월요일, ..., 6=토요일)
         DAY_OF_WEEK=$(date +%w)
+        KST_HOUR=$(TZ='Asia/Seoul' date +%H)
+        
+        echo "현재 요일: $DAY_OF_WEEK (토요일=6, 일요일=0)"
+        echo "한국 시간: $(TZ='Asia/Seoul' date)"
+        echo "한국 시간대: $KST_HOUR시"
         
         # 주말(토요일=6, 일요일=0)인 경우 마지막 평일 데이터 유지
         if [ $DAY_OF_WEEK -eq 6 ] || [ $DAY_OF_WEEK -eq 0 ]; then
           echo "주말입니다. 마지막 평일 데이터를 유지합니다."
-          echo "현재 요일: $DAY_OF_WEEK (토요일=6, 일요일=0)"
           exit 0
         fi
         
-        # 평일인 경우 한국수출입은행 API에서 환율 데이터 가져오기
-        echo "평일입니다. 수출입은행 API에서 최신 환율 데이터를 가져옵니다."
+        # 영업일 11시 이전인 경우 마지막 데이터 유지
+        if [ $KST_HOUR -lt 11 ]; then
+          echo "영업일 11시 이전입니다. 마지막 데이터를 유지합니다."
+          exit 0
+        fi
+        
+        # 평일 11시 이후인 경우 한국수출입은행 API에서 환율 데이터 가져오기
+        echo "평일 11시 이후입니다. 수출입은행 API에서 최신 환율 데이터를 가져옵니다."
+        
+        # API 호출 및 응답 확인
         curl -o data/exchange-rates.json "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${{ secrets.KOREA_EXIM_API_KEY }}&data=AP01"
+        
+        # API 응답 확인
+        if [ ! -s data/exchange-rates.json ]; then
+          echo "❌ API 응답이 비어있습니다. 마지막 데이터를 유지합니다."
+          exit 0
+        fi
+        
+        # JSON 배열이 비어있는지 확인
+        if [ "$(cat data/exchange-rates.json | jq 'length')" -eq 0 ]; then
+          echo "❌ API에서 빈 배열을 반환했습니다. 마지막 데이터를 유지합니다."
+          exit 0
+        fi
+        
+        # 첫 번째 항목이 null인지 확인
+        FIRST_ITEM=$(cat data/exchange-rates.json | jq '.[0] // empty')
+        if [ -z "$FIRST_ITEM" ] || [ "$FIRST_ITEM" = "null" ]; then
+          echo "❌ API에서 null 데이터를 반환했습니다. 마지막 데이터를 유지합니다."
+          exit 0
+        fi
+        
+        echo "✅ API에서 유효한 데이터를 받았습니다."
+        cat data/exchange-rates.json | jq '.[0] | {cur_nm: .cur_nm, deal_bas_r: .deal_bas_r}'
         
     - name: Commit and push
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 주말이 아닌 경우에만 커밋
+        # 한국 시간 기준으로 조건 확인
         DAY_OF_WEEK=$(date +%w)
-        if [ $DAY_OF_WEEK -ne 6 ] && [ $DAY_OF_WEEK -ne 0 ]; then
-          git add data/exchange-rates.json
-          git diff --staged --quiet || git commit -m "Update exchange rates - $(date)"
-          git push
+        KST_HOUR=$(TZ='Asia/Seoul' date +%H)
+        
+        # 주말이거나 11시 이전인 경우 커밋 건너뛰기
+        if [ $DAY_OF_WEEK -eq 6 ] || [ $DAY_OF_WEEK -eq 0 ] || [ $KST_HOUR -lt 11 ]; then
+          echo "주말이거나 영업일 11시 이전이므로 데이터 업데이트를 건너뜁니다."
+          exit 0
+        fi
+        
+        # 유효한 데이터가 있는 경우에만 커밋
+        if [ -f data/exchange-rates.json ] && [ -s data/exchange-rates.json ]; then
+          DATA_LENGTH=$(cat data/exchange-rates.json | jq 'length')
+          if [ "$DATA_LENGTH" -gt 0 ]; then
+            git add data/exchange-rates.json
+            if ! git diff --staged --quiet; then
+              git commit -m "Update exchange rates - $(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')"
+              git push
+              echo "✅ 환율 데이터가 성공적으로 업데이트되었습니다."
+            else
+              echo "📊 데이터 변경사항이 없습니다."
+            fi
+          else
+            echo "❌ 유효한 데이터가 없어서 커밋을 건너뜁니다."
+          fi
         else
-          echo "주말이므로 데이터 업데이트를 건너뜁니다."
+          echo "❌ 데이터 파일이 없거나 비어있어서 커밋을 건너뜁니다."
         fi
