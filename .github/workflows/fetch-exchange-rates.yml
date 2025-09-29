@@ -28,11 +28,8 @@ jobs:
         echo "한국 시간: $(TZ='Asia/Seoul' date)"
         echo "한국 시간대: $KST_HOUR시"
         
-        # 주말(토요일=6, 일요일=0)인 경우 마지막 평일 데이터 유지
-        if [ $DAY_OF_WEEK -eq 6 ] || [ $DAY_OF_WEEK -eq 0 ]; then
-          echo "주말입니다. 마지막 평일 데이터를 유지합니다."
-          exit 0
-        fi
+        # 주말에도 searchdate 파라미터로 마지막 평일 데이터 요청 가능
+        # (이전에는 주말에 아예 API 호출을 하지 않았지만, 이제는 금요일 데이터를 요청)
         
         # 영업일 11시 이전인 경우 마지막 데이터 유지
         if [ $KST_HOUR -lt 11 ]; then
@@ -43,8 +40,25 @@ jobs:
         # 평일 11시 이후인 경우 한국수출입은행 API에서 환율 데이터 가져오기
         echo "평일 11시 이후입니다. 수출입은행 API에서 최신 환율 데이터를 가져옵니다."
         
-        # API 호출 및 응답 확인
-        curl -o data/exchange-rates.json "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${{ secrets.KOREA_EXIM_API_KEY }}&data=AP01"
+        # searchdate 파라미터 설정 (주말에는 마지막 평일 데이터 요청)
+        SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y%m%d')
+        
+        # 주말인 경우 마지막 평일(금요일) 날짜로 설정
+        if [ $DAY_OF_WEEK -eq 6 ]; then
+          # 토요일인 경우 전날(금요일) 날짜
+          SEARCH_DATE=$(TZ='Asia/Seoul' date -d 'yesterday' '+%Y%m%d')
+          echo "토요일 감지: 금요일 데이터 요청 ($SEARCH_DATE)"
+        elif [ $DAY_OF_WEEK -eq 0 ]; then
+          # 일요일인 경우 이틀 전(금요일) 날짜  
+          SEARCH_DATE=$(TZ='Asia/Seoul' date -d '2 days ago' '+%Y%m%d')
+          echo "일요일 감지: 금요일 데이터 요청 ($SEARCH_DATE)"
+        else
+          echo "평일: 당일 데이터 요청 ($SEARCH_DATE)"
+        fi
+        
+        # API 호출 (searchdate 파라미터 포함)
+        echo "API 호출: searchdate=$SEARCH_DATE"
+        curl -o data/exchange-rates.json "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=${{ secrets.KOREA_EXIM_API_KEY }}&searchdate=$SEARCH_DATE&data=AP01"
         
         # API 응답 확인
         if [ ! -s data/exchange-rates.json ]; then
@@ -77,9 +91,9 @@ jobs:
         DAY_OF_WEEK=$(date +%w)
         KST_HOUR=$(TZ='Asia/Seoul' date +%H)
         
-        # 주말이거나 11시 이전인 경우 커밋 건너뛰기
-        if [ $DAY_OF_WEEK -eq 6 ] || [ $DAY_OF_WEEK -eq 0 ] || [ $KST_HOUR -lt 11 ]; then
-          echo "주말이거나 영업일 11시 이전이므로 데이터 업데이트를 건너뜁니다."
+        # 11시 이전인 경우 커밋 건너뛰기 (주말은 이제 API 호출함)
+        if [ $KST_HOUR -lt 11 ]; then
+          echo "영업일 11시 이전이므로 데이터 업데이트를 건너뜁니다."
           exit 0
         fi
         
