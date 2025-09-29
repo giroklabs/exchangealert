@@ -136,7 +136,15 @@ EOF
             
             if ! git diff --staged --quiet; then
               COMMIT_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
+              # SEARCH_DATE 재계산 (워크플로우 첫 번째 단계와 동일한 로직)
               SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y%m%d')
+              
+              # 주말인 경우 마지막 평일 날짜로 설정
+              if [ $DAY_OF_WEEK -eq 6 ]; then
+                SEARCH_DATE=$(TZ='Asia/Seoul' date -d 'yesterday' '+%Y%m%d')
+              elif [ $DAY_OF_WEEK -eq 0 ]; then
+                SEARCH_DATE=$(TZ='Asia/Seoul' date -d '2 days ago' '+%Y%m%d')
+              fi
               
               git commit -m "Update exchange rates - $COMMIT_DATE
 
