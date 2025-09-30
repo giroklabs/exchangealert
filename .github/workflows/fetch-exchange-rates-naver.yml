@@ -2,8 +2,8 @@ name: Fetch Exchange Rates from Naver
 
 on:
   schedule:
-    # 2분마다 실행 (네이버 API는 실시간이므로 자주 업데이트)
-    - cron: '*/2 * * * *'  # 2분마다 24시간 실행
+    # 5분마다 실행 (네이버 API 안정적 사용)
+    - cron: '*/5 * * * *'  # 5분마다 24시간 실행
   workflow_dispatch:  # 수동 실행 가능
 
 jobs:

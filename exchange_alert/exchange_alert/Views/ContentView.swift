@@ -48,6 +48,10 @@ struct ContentView: View {
                                     .padding(.horizontal, 16)
                             }
                         }
+                        .refreshable {
+                            // Pull-to-Refresh: 최신 데이터 갱신
+                            await refreshData()
+                        }
                         .padding(.top, 8)
                         .padding(.bottom, 20)
                     }
@@ -101,6 +105,21 @@ struct ContentView: View {
                 isKeyboardVisible = false
             }
         }
+    }
+    
+    // MARK: - Pull-to-Refresh 함수
+    private func refreshData() async {
+        print("🔄 Pull-to-Refresh: 최신 데이터 갱신 시작")
+        await withCheckedContinuation { continuation in
+            DispatchQueue.main.async {
+                exchangeManager.refresh()
+                // 짧은 딜레이 후 완료 (사용자 피드백)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    continuation.resume()
+                }
+            }
+        }
+        print("✅ Pull-to-Refresh: 데이터 갱신 완료")
     }
 }
 
