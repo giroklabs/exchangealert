@@ -2,9 +2,12 @@ name: Fetch Exchange Rates
 
 on:
   schedule:
-    # 한국 시간 기준 11시 이후부터 2분마다 실행 (한국 시간 기준)
-    # UTC 시간으로는 2시부터 시작 (한국 시간 11시 = UTC 2시)
-    - cron: '*/2 2-23 * * *'  # UTC 2시-23시 (한국 시간 11시-다음날 8시) 2분마다
+    # 한국 시간(KST) 기준 11시 이후부터 2분마다 실행
+    # KST = UTC + 9시간
+    # 한국시간 11시-23시 = UTC 2시-14시
+    - cron: '*/2 2-14 * * *'  # UTC 2시-14시 (한국시간 11시-23시) 2분마다
+    # 한국시간 새벽 0시-8시 = UTC 15시-23시 (전날)
+    - cron: '*/2 15-23 * * *'  # UTC 15시-23시 (한국시간 0시-8시 다음날) 2분마다
   workflow_dispatch:  # 수동 실행 가능
 
 jobs:
@@ -23,12 +26,14 @@ jobs:
       
     - name: Fetch exchange rates
       run: |
-        # 현재 요일 확인 (0=일요일, 1=월요일, ..., 6=토요일)
-        DAY_OF_WEEK=$(date +%w)
+        # 한국 시간(KST) 기준으로 요일 및 시간 확인
+        DAY_OF_WEEK=$(TZ='Asia/Seoul' date +%w)
         KST_HOUR=$(TZ='Asia/Seoul' date +%H)
+        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
         
-        echo "현재 요일: $DAY_OF_WEEK (토요일=6, 일요일=0)"
-        echo "한국 시간: $(TZ='Asia/Seoul' date)"
+        echo "=== 한국 시간(KST) 기준 정보 ==="
+        echo "현재 한국 시간: $KST_DATE"
+        echo "요일: $DAY_OF_WEEK (일요일=0, 월요일=1, ..., 토요일=6)"
         echo "한국 시간대: $KST_HOUR시"
         
         # 주말에도 searchdate 파라미터로 마지막 평일 데이터 요청 가능
@@ -103,13 +108,18 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # 한국 시간 기준으로 조건 확인
-        DAY_OF_WEEK=$(date +%w)
+        # 한국 시간(KST) 기준으로 조건 확인
+        DAY_OF_WEEK=$(TZ='Asia/Seoul' date +%w)
         KST_HOUR=$(TZ='Asia/Seoul' date +%H)
+        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
+        
+        echo "=== 커밋 단계 - 한국 시간 기준 ==="
+        echo "현재 한국 시간: $KST_DATE"
+        echo "요일: $DAY_OF_WEEK, 시간: $KST_HOUR시"
         
         # 11시 이전인 경우 커밋 건너뛰기 (주말은 이제 API 호출함)
         if [ $KST_HOUR -lt 11 ]; then
-          echo "영업일 11시 이전이므로 데이터 업데이트를 건너뜁니다."
+          echo "한국시간 11시 이전이므로 데이터 업데이트를 건너뜁니다."
           exit 0
         fi
         
