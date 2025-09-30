@@ -134,13 +134,7 @@ jobs:
                 SEARCH_DATE=$(TZ='Asia/Seoul' date -d '2 days ago' '+%Y%m%d')
               fi
               
-              git commit -m "Update exchange rates - $COMMIT_DATE
-
-Current data: data/exchange-rates.json
-Historical data: data/history/exchange-rates-$SEARCH_DATE.json
-Daily archive: data/daily/exchange-rates-$SEARCH_DATE.json
-Metadata: data/history/meta-$SEARCH_DATE.json
-Data count: $DATA_LENGTH currencies"
+              git commit -m "Update exchange rates - $COMMIT_DATE - Current: data/exchange-rates.json - Historical: data/history/exchange-rates-$SEARCH_DATE.json - Daily: data/daily/exchange-rates-$SEARCH_DATE.json - Metadata: data/history/meta-$SEARCH_DATE.json - Count: $DATA_LENGTH currencies"
               
               git push
               echo "Exchange rate data updated successfully."
