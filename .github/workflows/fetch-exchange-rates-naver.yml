@@ -1,0 +1,160 @@
+name: Fetch Exchange Rates from Naver
+
+on:
+  schedule:
+    # 2분마다 실행 (네이버 API는 실시간이므로 자주 업데이트)
+    - cron: '*/2 * * * *'  # 2분마다 24시간 실행
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  fetch-rates:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create data directories
+      run: |
+        mkdir -p data
+        mkdir -p data/history
+        mkdir -p data/daily
+      
+    - name: Fetch exchange rates from Naver API
+      run: |
+        echo "=== Naver API Exchange Rate Fetch ==="
+        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
+        SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y%m%d')
+        
+        echo "Current KST time: $KST_DATE"
+        echo "Fetching from Naver API (KEB Hana Bank)..."
+        
+        # 통화 목록 (네이버 API 지원 통화)
+        CURRENCIES=(
+          "USD:미국 달러:1"
+          "JPY:일본 엔:100"
+          "EUR:유로:1"
+          "GBP:영국 파운드:1"
+          "CNY:중국 위안:1"
+          "AUD:호주 달러:1"
+          "CAD:캐나다 달러:1"
+          "CHF:스위스 프랑:1"
+          "HKD:홍콩 달러:1"
+          "THB:태국 바트:1"
+          "SGD:싱가포르 달러:1"
+          "NZD:뉴질랜드 달러:1"
+          "SEK:스웨덴 크로나:1"
+          "NOK:노르웨이 크로네:1"
+          "DKK:덴마크 크로네:1"
+          "MYR:말레이시아 링깃:1"
+          "SAR:사우디 리얄:1"
+          "AED:아랍에미리트 디르함:1"
+          "KWD:쿠웨이트 디나르:1"
+          "BHD:바레인 디나르:1"
+          "IDR:인도네시아 루피아:100"
+          "BND:브루나이 달러:1"
+          "KRW:한국 원:1"
+        )
+        
+        # JSON 배열 시작
+        echo "[" > data/exchange-rates.json
+        
+        FIRST=true
+        for currency_info in "${CURRENCIES[@]}"; do
+          IFS=':' read -r cur_unit cur_nm multiplier <<< "$currency_info"
+          
+          echo "Fetching $cur_unit ($cur_nm)..."
+          
+          # 네이버 API 호출
+          response=$(curl -s "https://m.search.naver.com/p/csearch/content/qapirender.nhn?key=calculator&pkid=141&q=환율&where=m&u1=keb&u6=standardUnit&u7=0&u3=$cur_unit&u4=KRW&u8=down&u2=$multiplier")
+          
+          # 환율 추출
+          rate=$(echo "$response" | jq -r '.country[1].value // "0"')
+          
+          if [ "$rate" != "0" ] && [ "$rate" != "null" ]; then
+            # 쉼표 제거 후 계산
+            rate_clean=$(echo "$rate" | tr -d ',')
+            
+            # TTB/TTS 계산 (매매기준율 기준 ±1%)
+            ttb=$(echo "scale=2; $rate_clean * 0.99" | bc)
+            tts=$(echo "scale=2; $rate_clean * 1.01" | bc)
+            
+            # 쉼표 추가
+            rate_formatted="$rate"
+            ttb_formatted=$(printf "%.2f" $ttb)
+            tts_formatted=$(printf "%.2f" $tts)
+            
+            # JSON 항목 생성
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              echo "," >> data/exchange-rates.json
+            fi
+            
+            echo "{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$ttb_formatted\",\"tts\":\"$tts_formatted\",\"deal_bas_r\":\"$rate_formatted\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate_formatted\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
+            
+            echo "  Success: $cur_nm = $rate_formatted KRW"
+          else
+            echo "  Skipped: $cur_unit (no data)"
+          fi
+          
+          # API 호출 간격 (Rate limit 방지)
+          sleep 0.2
+        done
+        
+        # JSON 배열 종료
+        echo "]" >> data/exchange-rates.json
+        
+        # 데이터 검증
+        DATA_COUNT=$(cat data/exchange-rates.json | jq 'length')
+        echo "Total currencies fetched: $DATA_COUNT"
+        
+        if [ "$DATA_COUNT" -eq 0 ]; then
+          echo "Error: No data fetched"
+          exit 1
+        fi
+        
+        # 히스토리 저장
+        HISTORY_FILENAME="data/history/exchange-rates-${SEARCH_DATE}.json"
+        DAILY_FILENAME="data/daily/exchange-rates-${SEARCH_DATE}.json"
+        
+        cp data/exchange-rates.json "$HISTORY_FILENAME"
+        cp data/exchange-rates.json "$DAILY_FILENAME"
+        
+        # 메타데이터 생성
+        echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$(TZ='Asia/Seoul' date -Iseconds)\",\"api_source\":\"naver_keb\",\"data_count\":$DATA_COUNT,\"search_date\":\"$SEARCH_DATE\"}" > "data/history/meta-${SEARCH_DATE}.json"
+        
+        echo "Data saved successfully"
+        
+    - name: Commit and push
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
+        SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y%m%d')
+        
+        if [ -f data/exchange-rates.json ] && [ -s data/exchange-rates.json ]; then
+          DATA_LENGTH=$(cat data/exchange-rates.json | jq 'length')
+          if [ "$DATA_LENGTH" -gt 0 ]; then
+            git add data/exchange-rates.json
+            git add data/history/*.json 2>/dev/null || true
+            git add data/daily/*.json 2>/dev/null || true
+            
+            if ! git diff --staged --quiet; then
+              COMMIT_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
+              
+              git commit -m "Update exchange rates from Naver API - $COMMIT_DATE - Current: data/exchange-rates.json - Historical: data/history/exchange-rates-$SEARCH_DATE.json - Daily: data/daily/exchange-rates-$SEARCH_DATE.json - Metadata: data/history/meta-$SEARCH_DATE.json - Count: $DATA_LENGTH currencies - Source: Naver KEB API"
+              
+              git push
+              echo "Exchange rate data updated successfully from Naver API."
+              echo "Stored $DATA_LENGTH currencies"
+            else
+              echo "No data changes."
+            fi
+          else
+            echo "No valid data to commit."
+          fi
+        else
+          echo "No data file or empty file."
+        fi
