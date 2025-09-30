@@ -9,7 +9,7 @@ class ExchangeRateManager: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var currencyAlertSettings = CurrencyAlertSettings()
-    @Published var currentApiSource: String = "ExchangeRate-API"
+    @Published var currentApiSource: String = "은행 고시 환율 (실시간)"
     @Published var lastUpdateTime: Date?
     @Published var isWeekendMode: Bool = false  // 주말 모드 표시
     
@@ -152,7 +152,7 @@ class ExchangeRateManager: ObservableObject {
         // API 호출 제한 체크
         guard canMakeAPICall() else {
             print("🔄 API 호출 제한으로 인해 마지막 저장된 데이터 사용")
-            currentApiSource = "한국수출입은행"
+            currentApiSource = "은행 고시 환율 (실시간)"
             showLastSavedData()
             return
         }
@@ -161,11 +161,11 @@ class ExchangeRateManager: ObservableObject {
         DispatchQueue.main.async {
             self.isLoading = true
             self.errorMessage = nil
-            self.currentApiSource = "한국수출입은행"
+            self.currentApiSource = "은행 고시 환율 (실시간)"
         }
 
-        // 1순위: GitHub에서 저장된 한국수출입은행 데이터 사용
-        print("🌐 GitHub에서 한국수출입은행 데이터 조회")
+        // 1순위: GitHub에서 저장된 네이버(하나은행) 실시간 데이터 사용
+        print("🌐 GitHub에서 네이버 은행 고시 환율 데이터 조회")
         recordAPICall() // API 호출 기록
         fetchFromGitHubAPI()
         
@@ -405,14 +405,14 @@ class ExchangeRateManager: ObservableObject {
 
                 if let error = error {
                     print("❌ GitHub API 네트워크 오류: \(error.localizedDescription) - 마지막 저장된 데이터 사용")
-                    self.currentApiSource = "한국수출입은행"
+                    self.currentApiSource = "은행 고시 환율 (실시간)"
                     self.showLastSavedData()
                     return
                 }
 
                 guard let data = data else {
                     print("❌ GitHub API 데이터 없음 - 마지막 저장된 데이터 사용")
-                    self.currentApiSource = "한국수출입은행"
+                    self.currentApiSource = "은행 고시 환율 (실시간)"
                     self.showLastSavedData()
                     return
                 }
@@ -519,7 +519,7 @@ class ExchangeRateManager: ObservableObject {
 
             if newRates.isEmpty {
                 print("❌ 환율 정보 없음 - 마지막 저장된 데이터 사용")
-                self.currentApiSource = "한국수출입은행"
+                self.currentApiSource = "은행 고시 환율 (실시간)"
                 self.showLastSavedData()
             } else {
                 print("✅ \(newRates.count)개 통화 환율 로드 완료")
@@ -531,7 +531,7 @@ class ExchangeRateManager: ObservableObject {
         }
     }
 
-    // MARK: - 한국수출입은행 API 호출
+    // MARK: - Korea Exim Bank API 호출 (현재 미사용)
     private func fetchFromKoreaEximAPI() {
         // 주말인 경우 캐시된 평일 데이터 사용
         if isWeekendOrHoliday() {
@@ -542,7 +542,7 @@ class ExchangeRateManager: ObservableObject {
                 DispatchQueue.main.async {
                     self.exchangeRates = self.weekdayLastData
                     self.lastUpdateTime = self.lastWeekdayDate // 마지막 평일 날짜 사용
-                    self.currentApiSource = "한국수출입은행 (평일 캐시)"
+                    self.currentApiSource = "은행 고시 환율 (캐시)"
                 }
                 
                 print("✅ 캐시된 평일 데이터 \(weekdayLastData.count)개 통화 로드 완료")
@@ -560,7 +560,7 @@ class ExchangeRateManager: ObservableObject {
         }
         
         let urlString = "\(baseURL)?authkey=\(apiKey)&data=AP01"
-        print("🌐 한국수출입은행 API 호출: \(urlString)")
+        print("🌐 Korea Exim Bank API 호출 (현재 미사용): \(urlString)")
         
         guard let url = URL(string: urlString) else {
             print("❌ 한국수출입은행 API 잘못된 URL: \(urlString) - ExchangeRate-API로 백업 시도")
