@@ -5,7 +5,7 @@
 ```
 data/
 ├── exchange-rates.json          # 현재 환율 데이터 (최신)
-├── last-update.txt             # 마지막 업데이트 시간
+├── last-update.txt             # 마지막 업데이트 시간 (KST)
 ├── history/                     # 누적 히스토리 데이터
 │   ├── exchange-rates-YYYYMMDD.json  # 날짜별 환율 데이터
 │   └── meta-YYYYMMDD.json           # 날짜별 메타데이터
@@ -29,7 +29,7 @@ data/
 - **용도**: 날짜별 메타데이터
 - **포함 정보**:
   - `date`: 날짜 (YYYYMMDD 형식)
-  - `fetch_time`: 데이터 수집 시간
+  - `fetch_time`: 데이터 수집 시간 (KST)
   - `api_source`: API 소스
   - `data_count`: 통화 개수
   - `search_date`: API 요청 날짜
