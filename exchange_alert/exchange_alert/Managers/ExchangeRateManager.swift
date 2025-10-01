@@ -24,11 +24,11 @@ class ExchangeRateManager: ObservableObject {
     private var lastWeekdayUpdate: Date?
     private var lastWeekdayDate: Date? // 마지막 평일 날짜 저장
     
-    // API 호출 제한 관리
-    private let maxDailyAPICalls = 1000
+    // API 호출 제한 관리 (GitHub API 사용으로 제한 완화)
+    private let maxDailyAPICalls = 1000  // GitHub API는 제한이 관대함
     private var dailyAPICallCount = 0
     private var lastAPICallDate: Date?
-    private let apiCallInterval: TimeInterval = 60 // 1분마다 최대 1회 호출
+    private let apiCallInterval: TimeInterval = 30 // 30초마다 최대 1회 호출 (GitHub API)
     
     private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"
     private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"
@@ -421,7 +421,7 @@ class ExchangeRateManager: ObservableObject {
             return
         }
 
-        URLSession.shared.dataTask(with: url) { [self] data, response, error in
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             DispatchQueue.main.async {
                 self.isLoading = false
 
@@ -496,6 +496,11 @@ class ExchangeRateManager: ObservableObject {
                     }
                 } else {
                     print("❌ GitHub last-update.txt 시간 형식 파싱 실패: \(timeString)")
+                    // 파싱 실패 시 현재 시간 사용
+                    DispatchQueue.main.async {
+                        self?.lastUpdateTime = Date()
+                        print("⚠️ 현재 시간을 fallback으로 사용: \(Date())")
+                    }
                 }
             }
         }.resume()
@@ -738,9 +743,9 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - 자동 새로고침
     private func startPeriodicRefresh() {
-        // 5분마다 자동 새로고침 (API 호출 제한 고려)
-        // 1일 1000회 제한을 고려하면 5분 간격이 적절함 (288회/일)
-        timer = Timer.scheduledTimer(withTimeInterval: 300.0, repeats: true) { [weak self] _ in
+        // 2분마다 자동 새로고침 (GitHub API 사용으로 제한 완화)
+        // GitHub API는 제한이 관대하므로 더 자주 업데이트 가능 (720회/일)
+        timer = Timer.scheduledTimer(withTimeInterval: 120.0, repeats: true) { [weak self] _ in
             self?.fetchExchangeRate()
         }
     }

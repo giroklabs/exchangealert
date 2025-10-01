@@ -225,7 +225,7 @@ struct DefaultExchangeCard: View {
                             Text("TTS (팔 때)")
                                 .font(AppTheme.captionFont)
                                 .foregroundColor(.secondary)
-                            Text("--원")
+                            Text(exchangeManager.currentRate?.tts ?? "--")
                                 .font(AppTheme.headlineFont)
                                 .foregroundColor(.secondary)
                         }
