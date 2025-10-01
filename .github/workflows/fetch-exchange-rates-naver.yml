@@ -56,6 +56,11 @@ jobs:
           "KRW:한국 원:1"
         )
         
+        # 현재 시간을 KST로 저장 (ISO 8601 형식)
+        CURRENT_TIME=$(TZ='Asia/Seoul' date '+%Y-%m-%dT%H:%M:%S%z')
+        echo "$CURRENT_TIME" > data/last-update.txt
+        echo "📅 데이터 기준 시간 저장: $CURRENT_TIME"
+        
         # JSON 배열 시작
         echo "[" > data/exchange-rates.json
         
@@ -138,6 +143,7 @@ jobs:
           DATA_LENGTH=$(cat data/exchange-rates.json | jq 'length')
           if [ "$DATA_LENGTH" -gt 0 ]; then
             git add data/exchange-rates.json
+            git add data/last-update.txt
             git add data/history/*.json 2>/dev/null || true
             git add data/daily/*.json 2>/dev/null || true
             

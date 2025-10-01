@@ -445,6 +445,58 @@ class ExchangeRateManager: ObservableObject {
                 }
 
                 self.parseExchangeRates(data)
+                
+                // GitHub에서 실제 데이터 기준 시간 로드
+                self.fetchGitHubLastUpdateTime()
+            }
+        }.resume()
+    }
+    
+    // MARK: - GitHub 마지막 업데이트 시간 로드
+    private func fetchGitHubLastUpdateTime() {
+        let lastUpdateURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/last-update.txt"
+        print("📥 GitHub 마지막 업데이트 시간 로드: \(lastUpdateURL)")
+        
+        guard let url = URL(string: lastUpdateURL) else {
+            print("❌ GitHub last-update.txt URL 오류")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            if let error = error {
+                print("❌ GitHub last-update.txt 네트워크 오류: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let data = data,
+                  let timeString = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                print("❌ GitHub last-update.txt 데이터 파싱 실패")
+                return
+            }
+            
+            // ISO 8601 형식 파싱 (예: 2025-09-29T08:30:00+09:00)
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            
+            if let githubUpdateTime = formatter.date(from: timeString) {
+                DispatchQueue.main.async {
+                    self?.lastUpdateTime = githubUpdateTime
+                    print("✅ GitHub 데이터 기준 시간 설정: \(timeString) -> \(githubUpdateTime)")
+                }
+            } else {
+                // ISO 8601 파싱 실패 시 다른 형식 시도
+                let fallbackFormatter = DateFormatter()
+                fallbackFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                fallbackFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+                
+                if let fallbackTime = fallbackFormatter.date(from: timeString) {
+                    DispatchQueue.main.async {
+                        self?.lastUpdateTime = fallbackTime
+                        print("✅ GitHub 데이터 기준 시간 설정 (fallback): \(timeString) -> \(fallbackTime)")
+                    }
+                } else {
+                    print("❌ GitHub last-update.txt 시간 형식 파싱 실패: \(timeString)")
+                }
             }
         }.resume()
     }
@@ -532,7 +584,7 @@ class ExchangeRateManager: ObservableObject {
                 }
                 
                 self.exchangeRates = newRates
-                self.lastUpdateTime = Date()
+                // lastUpdateTime은 GitHub에서 별도로 로드됨
             }
             
             // 성공적으로 데이터를 가져왔을 때 UserDefaults에 저장 (오프라인 백업용)
@@ -653,7 +705,7 @@ class ExchangeRateManager: ObservableObject {
                     }
                     
                        self?.exchangeRates = newRates
-                       self?.lastUpdateTime = Date()
+                       // lastUpdateTime은 GitHub에서 별도로 로드됨
                        
                        // 평일 데이터를 캐시에 저장
                        if !newRates.isEmpty {
