@@ -1,0 +1,74 @@
+name: Fetch ExchangeRate-API Data
+
+on:
+  schedule:
+    # 30분마다 실행 (UTC 시간 기준) - 월 1,440회로 제한 내 유지
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # 수동 실행 가능
+  push:
+    branches: [ main ]
+
+jobs:
+  fetch-exchange-rate-api:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Fetch ExchangeRate-API data (30분 간격)
+      run: |
+        echo "🌐 Fetching ExchangeRate-API data (30분 간격)..."
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        
+        # ExchangeRate-API 호출 (무료 버전)
+        RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" "https://api.exchangerate-api.com/v4/latest/KRW")
+        
+        # HTTP 상태코드 확인
+        HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS:" | cut -d: -f2)
+        DATA=$(echo "$RESPONSE" | sed '/HTTP_STATUS:/d')
+        
+        if [ "$HTTP_STATUS" != "200" ]; then
+          echo "❌ ExchangeRate-API request failed with status: $HTTP_STATUS"
+          echo "Response: $DATA"
+          exit 1
+        fi
+        
+        # JSON 유효성 검사
+        if ! echo "$DATA" | jq empty 2>/dev/null; then
+          echo "❌ Invalid JSON response from ExchangeRate-API"
+          echo "Response: $DATA"
+          exit 1
+        fi
+        
+        # 데이터 저장
+        echo "$DATA" > data/exchangerate-api.json
+        echo "$TIMESTAMP" > data/exchangerate-api-last-update.txt
+        
+        echo "✅ Successfully fetched and saved ExchangeRate-API data"
+        echo "📊 Data contains $(echo "$DATA" | jq '.rates | length') currencies"
+        
+        # 주요 통화 환율 정보 출력
+        echo "💱 주요 통화 환율 (KRW 기준):"
+        echo "USD: $(echo "$DATA" | jq -r '.rates.USD') → $(echo "scale=2; 1/$(echo "$DATA" | jq -r '.rates.USD')" | bc)원"
+        echo "EUR: $(echo "$DATA" | jq -r '.rates.EUR') → $(echo "scale=2; 1/$(echo "$DATA" | jq -r '.rates.EUR')" | bc)원"
+        echo "JPY: $(echo "$DATA" | jq -r '.rates.JPY') → $(echo "scale=2; 1/$(echo "$DATA" | jq -r '.rates.JPY')" | bc)원"
+
+    - name: Create backup with timestamp
+      run: |
+        TIMESTAMP=$(date -u +"%Y%m%d_%H%M")
+        cp data/exchangerate-api.json "data/backup/exchangerate-api-backup-$TIMESTAMP.json"
+        echo "📁 Backup created: exchangerate-api-backup-$TIMESTAMP.json"
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/exchangerate-api.json data/exchangerate-api-last-update.txt
+        git diff --staged --quiet || git commit -m "Update ExchangeRate-API data - $(date -u +"%Y-%m-%d %H:%M UTC")"
+        git push

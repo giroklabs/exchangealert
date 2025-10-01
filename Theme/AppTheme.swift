@@ -95,3 +95,4 @@ struct AnimationHelper {
     static let bouncy = Animation.spring(response: 0.3, dampingFraction: 0.6)
 }
 
+

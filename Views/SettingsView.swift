@@ -193,3 +193,4 @@ struct SettingsView: View {
         .environmentObject(ExchangeRateManager())
 }
 
+
