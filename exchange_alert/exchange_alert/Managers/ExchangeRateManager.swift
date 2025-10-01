@@ -423,6 +423,8 @@ class ExchangeRateManager: ObservableObject {
 
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             DispatchQueue.main.async {
+                guard let self = self else { return }
+                
                 self.isLoading = false
 
                 if let error = error {
