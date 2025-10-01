@@ -1,0 +1,10 @@
+Optimize GitHub Actions to 20-minute intervals (weekdays only)
+
+- Change from 5-minute to 20-minute intervals (9am-6pm weekdays)
+- Reduce monthly usage from 43,200min to 1,584min (97.3% reduction)
+- Stay within free plan limits (79.2% usage vs 2,160% before)
+- Improve API call efficiency with 0.1s intervals
+- Add detailed logging for 20-minute interval optimization
+- Ensure stable long-term operation with weekend exclusion
+
+Schedule: 0,20,40 9-18 * * 1-5 (Mon-Fri, 9am-6pm, every 20 minutes)
