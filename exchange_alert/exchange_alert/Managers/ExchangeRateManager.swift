@@ -136,6 +136,28 @@ class ExchangeRateManager: ObservableObject {
             print("📊 이전 일자 데이터 없음")
             previousDayData = [:]
         }
+        
+        // 날짜가 바뀌었는지 확인하고 필요시 초기화
+        checkAndResetDailyData()
+    }
+    
+    // MARK: - 일일 데이터 초기화 체크
+    private func checkAndResetDailyData() {
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // 마지막 업데이트 날짜 확인
+        if let lastUpdate = lastUpdateTime {
+            if !calendar.isDate(lastUpdate, inSameDayAs: today) {
+                print("📅 날짜 변경 감지 - 일일 변동 데이터 초기화")
+                // 새로운 날이 시작되면 이전 데이터를 기준으로 설정
+                if !exchangeRates.isEmpty {
+                    previousDayData = exchangeRates
+                    savePreviousDayData()
+                    dailyChanges = [:] // 일일 변동 초기화
+                }
+            }
+        }
     }
     
     
@@ -495,9 +517,19 @@ class ExchangeRateManager: ObservableObject {
                 // 계산된 변동 데이터 업데이트
                 self.dailyChanges = calculatedChanges
                 
-                // 현재 데이터를 이전 데이터로 저장
-                self.previousDayData = self.exchangeRates
-                self.savePreviousDayData() // 이전 일자 데이터 저장
+                // 날짜 변경 체크 후 이전 데이터 저장
+                self.checkAndResetDailyData()
+                
+                // 현재 데이터를 이전 데이터로 저장 (같은 날짜 내에서만)
+                let calendar = Calendar.current
+                let today = Date()
+                if let lastUpdate = self.lastUpdateTime {
+                    if calendar.isDate(lastUpdate, inSameDayAs: today) {
+                        // 같은 날짜면 이전 데이터 업데이트
+                        self.previousDayData = self.exchangeRates
+                        self.savePreviousDayData()
+                    }
+                }
                 
                 self.exchangeRates = newRates
                 self.lastUpdateTime = Date()
@@ -849,6 +881,11 @@ class ExchangeRateManager: ObservableObject {
     private func calculateDailyChangesSync(newRates: [CurrencyType: ExchangeRate]) -> [CurrencyType: DailyChange] {
         var changes: [CurrencyType: DailyChange] = [:]
         
+        // GitHub 일일 데이터에서 전일 데이터 로드 시도
+        if previousDayData.isEmpty {
+            loadPreviousDayFromGitHub()
+        }
+        
         for (currency, newRate) in newRates {
             if let currentValue = getDealBasRValue(from: newRate),
                let previousRate = previousDayData[currency],
@@ -863,10 +900,50 @@ class ExchangeRateManager: ObservableObject {
                     previousValue: previousValue,
                     currentValue: currentValue
                 )
+                
+                print("📊 \(currency.rawValue) 일일변동: \(changeValue >= 0 ? "+" : "")\(String(format: "%.2f", changeValue))원 (\(changePercent >= 0 ? "+" : "")\(String(format: "%.2f", changePercent))%)")
+            } else {
+                print("⚠️ \(currency.rawValue) 전일 데이터 없음 - 변동 계산 불가")
             }
         }
         
         return changes
+    }
+    
+    // MARK: - GitHub에서 전일 데이터 로드
+    private func loadPreviousDayFromGitHub() {
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        let yesterdayString = dateFormatter.string(from: yesterday)
+        
+        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/daily/exchange-rates-\(yesterdayString).json"
+        
+        print("📥 GitHub에서 전일 데이터 로드 시도: \(githubURL)")
+        
+        guard let url = URL(string: githubURL) else { return }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let data = data,
+                  let rates = try? JSONDecoder().decode([ExchangeRate].self, from: data) else {
+                print("❌ GitHub 전일 데이터 로드 실패")
+                return
+            }
+            
+            var previousRates: [CurrencyType: ExchangeRate] = [:]
+            for rate in rates {
+                if let currencyType = CurrencyType(rawValue: rate.curUnit ?? "") {
+                    previousRates[currencyType] = rate
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self?.previousDayData = previousRates
+                self?.savePreviousDayData()
+                print("✅ GitHub 전일 데이터 로드 완료: \(previousRates.count)개 통화")
+            }
+        }.resume()
     }
     
     private func getDealBasRValue(from rate: ExchangeRate) -> Double? {
