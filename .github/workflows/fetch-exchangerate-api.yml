@@ -1,12 +1,12 @@
-name: Fetch ExchangeRate-API Data
+name: Fetch ExchangeRate-API Data (DISABLED)
 
 on:
-  schedule:
-    # 30분마다 실행 (UTC 시간 기준) - 월 1,440회로 제한 내 유지
-    - cron: '*/30 * * * *'
-  workflow_dispatch: # 수동 실행 가능
-  push:
-    branches: [ main ]
+  # schedule:
+    # # 30분마다 실행 (UTC 시간 기준) - 월 1,440회로 제한 내 유지
+    # - cron: '*/30 * * * *'
+  workflow_dispatch: # 수동 실행 가능 (필요시에만)
+  # push:
+  #   branches: [ main ]
 
 jobs:
   fetch-exchange-rate-api:
