@@ -194,6 +194,7 @@ struct ExchangeStatusIcon: View {
 struct AlertSettingsCard: View {
     let currency: CurrencyType
     @EnvironmentObject var exchangeManager: ExchangeRateManager
+    @State private var showingNotificationPopup = false
     
     private var settings: AlertSettings {
         exchangeManager.currencyAlertSettings.settings[currency] ?? AlertSettings.default
@@ -213,6 +214,15 @@ struct AlertSettingsCard: View {
                     }
                     
                     Spacer()
+                    
+                    // 알림 관리 버튼
+                    Button(action: {
+                        showingNotificationPopup = true
+                    }) {
+                        Image(systemName: "list.bullet.rectangle")
+                            .font(AppTheme.headlineFont)
+                            .foregroundColor(AppTheme.primary)
+                    }
                     
                     Toggle("", isOn: Binding(
                         get: { settings.isEnabled },
@@ -289,6 +299,10 @@ struct AlertSettingsCard: View {
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
+        }
+        .sheet(isPresented: $showingNotificationPopup) {
+            NotificationManagementPopup(isPresented: $showingNotificationPopup)
+                .environmentObject(exchangeManager)
         }
     }
 }
