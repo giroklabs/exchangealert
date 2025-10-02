@@ -942,17 +942,10 @@ class ExchangeRateManager: ObservableObject {
         
         // GitHub 일일 데이터에서 전일 데이터 로드 시도 (비동기이지만 즉시 체크)
         if previousDayData.isEmpty {
-            // 먼저 로컬 백업 데이터 시도
-            if let backupData = UserDefaults.standard.data(forKey: "LastExchangeRates"),
-               let backupRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: backupData) {
-                previousDayData = backupRates
-                print("📁 로컬 백업 데이터로 전일 데이터 설정")
-            } else {
-                // 로컬 백업도 없으면 GitHub에서 로드 시도 (비동기)
-                loadPreviousDayFromGitHub()
-                print("⚠️ 전일 데이터 없음 - GitHub에서 로드 중...")
-                return changes  // 전일 데이터 로드 완료 후 재계산 필요
-            }
+            // GitHub에서 정확한 전일 데이터 로드 (로컬 백업 우선 사용하지 않음)
+            loadPreviousDayFromGitHub()
+            print("⚠️ 전일 데이터 없음 - GitHub에서 정확한 전일 데이터 로드 중...")
+            return changes  // 전일 데이터 로드 완료 후 재계산 필요
         }
         
         for (currency, newRate) in newRates {
@@ -998,18 +991,19 @@ class ExchangeRateManager: ObservableObject {
                   let rates = try? JSONDecoder().decode([ExchangeRate].self, from: data) else {
                 print("❌ GitHub 전일 데이터 로드 실패: \(yesterdayString)")
                 
-                // 로드 실패 시 로컬 백업 데이터 시도
+                // GitHub 로드 실패 시에만 로컬 백업 데이터 시도
                 DispatchQueue.main.async {
+                    print("❌ GitHub 전일 데이터 로드 실패 - 로컬 백업 데이터 사용")
                     if let backupData = UserDefaults.standard.data(forKey: "LastExchangeRates"),
                        let backupRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: backupData) {
                         self?.previousDayData = backupRates
-                        print("📁 GitHub 실패 - 로컬 백업 데이터로 전일 데이터 설정")
+                        print("📁 로컬 백업 데이터로 전일 데이터 설정 (부정확할 수 있음)")
                         
                         // 백업 데이터로 일일변동 재계산
                         if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
                             let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
                             self?.dailyChanges = recalculatedChanges
-                            print("🔄 백업 데이터로 일일변동 재계산 완료")
+                            print("🔄 백업 데이터로 일일변동 재계산 완료 (부정확할 수 있음)")
                         }
                     } else {
                         print("❌ GitHub 및 로컬 백업 데이터 모두 실패 - 일일변동 계산 불가")
@@ -1029,6 +1023,11 @@ class ExchangeRateManager: ObservableObject {
                 self?.previousDayData = previousRates
                 self?.savePreviousDayData()
                 print("✅ GitHub 전일 데이터 로드 완료: \(previousRates.count)개 통화")
+                
+                // USD 데이터 디버깅
+                if let usdRate = previousRates[.USD] {
+                    print("📊 GitHub USD 전일 데이터: \(usdRate.dealBasR ?? "N/A")원")
+                }
                 
                 // 전일 데이터 로드 완료 후 일일변동 재계산
                 if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
