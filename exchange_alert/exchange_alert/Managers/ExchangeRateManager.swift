@@ -51,7 +51,10 @@ class ExchangeRateManager: ObservableObject {
     init() {
         loadSettings()
         loadAPICallCount() // API 호출 횟수 로드
-        loadPreviousDayData() // 이전 일자 데이터 로드 (변동값 계산용)
+        
+        // 앱 시작 시 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드하기 위해)
+        previousDayData = [:]
+        print("🔄 앱 시작 - 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드 예정)")
         
         // 앱 시작 시 환율 가져오기 (Task 사용)
         Task { @MainActor in
@@ -576,6 +579,12 @@ class ExchangeRateManager: ObservableObject {
                 // 계산된 변동 데이터 업데이트
                 self.dailyChanges = calculatedChanges
                 
+                // 전일 데이터가 없으면 GitHub에서 로드 강제 실행
+                if self.previousDayData.isEmpty {
+                    print("⚠️ 전일 데이터 없음 - GitHub에서 로드 강제 실행")
+                    self.loadPreviousDayFromGitHub()
+                }
+                
                 // 날짜 변경 체크 후 이전 데이터 저장
                 self.checkAndResetDailyData()
                 
@@ -1034,6 +1043,11 @@ class ExchangeRateManager: ObservableObject {
                     let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
                     self?.dailyChanges = recalculatedChanges
                     print("🔄 전일 데이터 로드 후 일일변동 재계산 완료")
+                    
+                    // USD 일일변동 디버깅
+                    if let usdChange = recalculatedChanges[.USD] {
+                        print("📊 USD 일일변동 계산 결과: \(usdChange.changeValue >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changeValue))원 (\(usdChange.changePercent >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changePercent))%)")
+                    }
                 }
             }
         }.resume()
