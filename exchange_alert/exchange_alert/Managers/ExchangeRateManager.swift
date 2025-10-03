@@ -790,6 +790,8 @@ class ExchangeRateManager: ObservableObject {
         print("🔔 알림 체크 [\(currency.rawValue)] - 매매기준율: \(dealBasR)원")
         print("   - 기준값: \(alertSettings.threshold)원")
         print("   - 알림 타입: \(alertSettings.thresholdType.rawValue)")
+        print("   - 알림 활성화: \(alertSettings.isEnabled)")
+        print("   - 마지막 알림 시간: \(alertSettings.lastNotificationTime?.description ?? "없음")")
         
         var shouldNotify = false
         var message = ""
@@ -841,23 +843,39 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - 알림 전송
     private func sendNotification(message: String) {
-        let content = UNMutableNotificationContent()
-        content.title = "💱 환율 알림"
-        content.body = message
-        content.sound = .default
-        content.badge = 1
-        
-        let request = UNNotificationRequest(
-            identifier: "exchange_alert_\(Date().timeIntervalSince1970)",
-            content: content,
-            trigger: nil
-        )
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("❌ 알림 전송 실패: \(error.localizedDescription)")
-            } else {
-                print("✅ 환율 알림이 전송되었습니다.")
+        // 알림 권한 상태 확인
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else {
+                    print("❌ 알림 권한이 없어서 환율 알림을 발송할 수 없습니다.")
+                    return
+                }
+                
+                let content = UNMutableNotificationContent()
+                content.title = "💱 환율 알림"
+                content.body = message
+                content.sound = .default
+                content.badge = 1
+                
+                let request = UNNotificationRequest(
+                    identifier: "exchange_alert_\(Date().timeIntervalSince1970)",
+                    content: content,
+                    trigger: nil
+                )
+                
+                UNUserNotificationCenter.current().add(request) { error in
+                    if let error = error {
+                        print("❌ 환율 알림 전송 실패: \(error.localizedDescription)")
+                    } else {
+                        print("✅ 환율 알림이 전송되었습니다.")
+                        // 히스토리에 성공 메시지 추가
+                        NotificationManager.addNotificationToHistory(
+                            currency: "EXCHANGE",
+                            message: message,
+                            type: .alert
+                        )
+                    }
+                }
             }
         }
     }

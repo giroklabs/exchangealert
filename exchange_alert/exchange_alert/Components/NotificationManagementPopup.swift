@@ -27,11 +27,14 @@ struct NotificationManagementPopup: View {
                 } else if notifications.isEmpty {
                     NotificationEmptyView(isPresented: $isPresented)
                 } else {
-                    NotificationListView(notifications: notifications)
+                    NotificationListView(notifications: $notifications)
                 }
                 
                 // 푸터
-                NotificationPopupFooter(isPresented: $isPresented)
+                NotificationPopupFooter(
+                    isPresented: $isPresented,
+                    onRefreshNotifications: loadNotificationHistory
+                )
             }
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -50,35 +53,7 @@ struct NotificationManagementPopup: View {
         isLoading = true
         // 실제 알림 히스토리 로드 (UserDefaults에서)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            var loadedNotifications = NotificationHistory.loadFromUserDefaults()
-            
-            // 테스트용 샘플 데이터 추가 (알림이 없을 때만)
-            if loadedNotifications.isEmpty {
-                let sampleNotifications = [
-                    NotificationHistory(
-                        date: Calendar.current.date(byAdding: .minute, value: -5, to: Date()) ?? Date(),
-                        currency: "USD",
-                        message: "USD/KRW 환율이 1,400원을 상회했습니다!",
-                        type: .alert
-                    ),
-                    NotificationHistory(
-                        date: Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date(),
-                        currency: "EUR",
-                        message: "EUR/KRW 환율 변동 알림이 설정되었습니다.",
-                        type: .update
-                    ),
-                    NotificationHistory(
-                        date: Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date(),
-                        currency: "JPY",
-                        message: "JPY/KRW 기준값이 950원으로 설정되었습니다.",
-                        type: .reminder
-                    )
-                ]
-                
-                NotificationHistory.saveToUserDefaults(sampleNotifications)
-                loadedNotifications = sampleNotifications
-            }
-            
+            let loadedNotifications = NotificationHistory.loadFromUserDefaults()
             notifications = loadedNotifications
             isLoading = false
         }
@@ -225,7 +200,7 @@ struct NotificationEmptyView: View {
 
 // MARK: - Notification List View
 struct NotificationListView: View {
-    let notifications: [NotificationHistory]
+    @Binding var notifications: [NotificationHistory]
     @State private var selectedNotifications: Set<UUID> = []
     @State private var showingClearAlert = false
     
@@ -282,14 +257,18 @@ struct NotificationListView: View {
     }
     
     private func clearSelectedNotifications() {
-        var updatedNotifications = notifications
-        updatedNotifications.removeAll { selectedNotifications.contains($0.id) }
-        NotificationHistory.saveToUserDefaults(updatedNotifications)
+        withAnimation(.easeInOut(duration: 0.3)) {
+            notifications.removeAll { selectedNotifications.contains($0.id) }
+        }
+        NotificationHistory.saveToUserDefaults(notifications)
         selectedNotifications.removeAll()
     }
     
     private func clearAllNotifications() {
-        NotificationHistory.saveToUserDefaults([])
+        withAnimation(.easeInOut(duration: 0.3)) {
+            notifications.removeAll()
+        }
+        NotificationHistory.saveToUserDefaults(notifications)
         selectedNotifications.removeAll()
     }
 }
@@ -427,6 +406,7 @@ struct NotificationItemView: View {
 // MARK: - Popup Footer
 struct NotificationPopupFooter: View {
     @Binding var isPresented: Bool
+    let onRefreshNotifications: () -> Void
     
     var body: some View {
         VStack(spacing: 12) {
@@ -453,6 +433,10 @@ struct NotificationPopupFooter: View {
                 
                 Button(action: {
                     NotificationManager.sendTestNotification()
+                    // 테스트 알림 발송 후 히스토리 새로고침
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        onRefreshNotifications()
+                    }
                 }) {
                     HStack(spacing: 8) {
                         Image(systemName: "bell.badge.fill")
