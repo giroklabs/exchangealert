@@ -126,6 +126,16 @@ jobs:
         cp data/exchange-rates.json "$HISTORY_FILENAME"
         cp data/exchange-rates.json "$DAILY_FILENAME"
         
+        # 어제 종가 데이터 저장 (일일변동 계산용)
+        YESTERDAY_DATE=$(TZ='Asia/Seoul' date -d 'yesterday' '+%Y%m%d')
+        echo "📅 어제 종가 데이터 저장: data/daily/exchange-rates-$YESTERDAY_DATE.json"
+        
+        # 어제 데이터가 없으면 현재 데이터를 어제 종가로 저장 (첫 실행 시)
+        if [ ! -f "data/daily/exchange-rates-$YESTERDAY_DATE.json" ]; then
+          echo "⚠️ 어제 데이터 없음 - 현재 데이터를 어제 종가로 저장"
+          cp data/exchange-rates.json "data/daily/exchange-rates-$YESTERDAY_DATE.json"
+        fi
+        
         # 메타데이터 생성
         echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$(TZ='Asia/Seoul' date -Iseconds)\",\"api_source\":\"naver_keb\",\"data_count\":$DATA_COUNT,\"search_date\":\"$SEARCH_DATE\"}" > "data/history/meta-${SEARCH_DATE}.json"
         
