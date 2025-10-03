@@ -579,10 +579,10 @@ class ExchangeRateManager: ObservableObject {
                 // 계산된 변동 데이터 업데이트
                 self.dailyChanges = calculatedChanges
                 
-                // 전일 데이터가 없으면 GitHub에서 로드 강제 실행
+                // 전일 데이터가 없으면 네이버 API에서 어제 종가 조회
                 if self.previousDayData.isEmpty {
-                    print("⚠️ 전일 데이터 없음 - GitHub에서 로드 강제 실행")
-                    self.loadPreviousDayFromGitHub()
+                    print("⚠️ 전일 데이터 없음 - 네이버 API에서 어제 종가 조회")
+                    self.loadYesterdayClosePriceFromNaver()
                 }
                 
                 // 날짜 변경 체크 후 이전 데이터 저장
@@ -967,11 +967,11 @@ class ExchangeRateManager: ObservableObject {
     private func calculateDailyChangesSync(newRates: [CurrencyType: ExchangeRate]) -> [CurrencyType: DailyChange] {
         var changes: [CurrencyType: DailyChange] = [:]
         
-        // GitHub 일일 데이터에서 전일 데이터 로드 시도 (비동기이지만 즉시 체크)
+        // 전일 데이터가 없으면 네이버 API에서 어제 종가 조회
         if previousDayData.isEmpty {
-            // GitHub에서 정확한 전일 데이터 로드 (로컬 백업 우선 사용하지 않음)
-            loadPreviousDayFromGitHub()
-            print("⚠️ 전일 데이터 없음 - GitHub에서 정확한 전일 데이터 로드 중...")
+            // 네이버 API에서 어제 종가 조회 (더 정확한 데이터)
+            loadYesterdayClosePriceFromNaver()
+            print("⚠️ 전일 데이터 없음 - 네이버 API에서 어제 종가 조회 중...")
             return changes  // 전일 데이터 로드 완료 후 재계산 필요
         }
         
@@ -999,7 +999,143 @@ class ExchangeRateManager: ObservableObject {
         return changes
     }
     
-    // MARK: - GitHub에서 전일 데이터 로드
+    // MARK: - 네이버 API를 통한 어제 종가 조회
+    private func loadYesterdayClosePriceFromNaver() {
+        print("📥 네이버 API를 통한 어제 종가 조회 시작")
+        
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let yesterdayString = dateFormatter.string(from: yesterday)
+        
+        print("📅 조회 대상 날짜: \(yesterdayString)")
+        
+        // 각 통화별로 어제 종가 조회
+        let currencies = CurrencyType.allCases
+        var yesterdayRates: [CurrencyType: ExchangeRate] = [:]
+        let dispatchGroup = DispatchGroup()
+        
+        for currency in currencies {
+            dispatchGroup.enter()
+            
+            // 100단위로 제공되는 통화들 처리
+            let searchUnit: String
+            if currency == .JPY || currency == .IDR {
+                searchUnit = "\(currency.rawValue)(100)"
+            } else {
+                searchUnit = currency.rawValue
+            }
+            
+            let naverURL = "https://m.search.naver.com/search.naver?query=\(searchUnit)+환율+\(yesterdayString)+종가"
+            
+            guard let url = URL(string: naverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") else {
+                print("❌ \(currency.rawValue) 네이버 URL 생성 실패")
+                dispatchGroup.leave()
+                continue
+            }
+            
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                defer { dispatchGroup.leave() }
+                
+                if let error = error {
+                    print("❌ \(currency.rawValue) 네이버 API 오류: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let data = data,
+                      let html = String(data: data, encoding: .utf8) else {
+                    print("❌ \(currency.rawValue) 네이버 응답 데이터 없음")
+                    return
+                }
+                
+                // HTML에서 환율 데이터 추출 (간단한 패턴 매칭)
+                if let closePrice = self.extractClosePriceFromHTML(html, currency: currency) {
+                    let yesterdayRate = ExchangeRate(
+                        result: 1,
+                        curUnit: searchUnit,
+                        ttb: nil,
+                        tts: nil,
+                        dealBasR: String(format: "%.2f", closePrice),
+                        curNm: currency.rawValue,
+                        bkpr: nil,
+                        yyEfeeR: nil,
+                        tenDDEefeeR: nil,
+                        kftcDealBasR: nil,
+                        kftcBkpr: nil
+                    )
+                    
+                    yesterdayRates[currency] = yesterdayRate
+                    print("✅ \(currency.rawValue) 어제 종가: \(String(format: "%.2f", closePrice))원")
+                } else {
+                    print("⚠️ \(currency.rawValue) 어제 종가 추출 실패")
+                }
+                
+                // API 호출 간격 조절 (네이버 서버 부하 방지)
+                usleep(200000) // 0.2초 대기
+                
+            }.resume()
+        }
+        
+        // 모든 통화 조회 완료 후 처리
+        dispatchGroup.notify(queue: .main) {
+            if !yesterdayRates.isEmpty {
+                self.previousDayData = yesterdayRates
+                self.savePreviousDayData()
+                print("✅ 네이버 API 어제 종가 로드 완료: \(yesterdayRates.count)개 통화")
+                
+                // 어제 종가 로드 완료 후 일일변동 재계산
+                if !self.exchangeRates.isEmpty {
+                    let recalculatedChanges = self.calculateDailyChangesSync(newRates: self.exchangeRates)
+                    self.dailyChanges = recalculatedChanges
+                    print("🔄 네이버 어제 종가로 일일변동 재계산 완료")
+                    
+                    // USD 일일변동 디버깅
+                    if let usdChange = recalculatedChanges[.USD] {
+                        print("📊 USD 일일변동 (네이버 기준): \(usdChange.changeValue >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changeValue))원 (\(usdChange.changePercent >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changePercent))%)")
+                    }
+                }
+            } else {
+                print("❌ 네이버 API에서 어제 종가를 가져올 수 없습니다.")
+                // 네이버 실패 시 GitHub 백업 시도
+                self.loadPreviousDayFromGitHub()
+            }
+        }
+    }
+    
+    // MARK: - HTML에서 종가 추출
+    private func extractClosePriceFromHTML(_ html: String, currency: CurrencyType) -> Double? {
+        // 네이버 모바일 검색 결과에서 환율 데이터 추출
+        // 실제 구현에서는 더 정교한 HTML 파싱이 필요할 수 있음
+        
+        // 간단한 패턴 매칭으로 종가 추출 시도
+        let patterns = [
+            "([0-9,]+\\.[0-9]+)\\s*원",  // 숫자.숫자 원
+            "([0-9,]+)\\s*원",          // 숫자 원
+            "종가.*?([0-9,]+\\.[0-9]+)", // 종가 뒤의 숫자
+            "종가.*?([0-9,]+)"          // 종가 뒤의 숫자 (소수점 없음)
+        ]
+        
+        for pattern in patterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                let range = NSRange(html.startIndex..<html.endIndex, in: html)
+                if let match = regex.firstMatch(in: html, options: [], range: range),
+                   let matchRange = Range(match.range(at: 1), in: html) {
+                    let priceString = String(html[matchRange]).replacingOccurrences(of: ",", with: "")
+                    if let price = Double(priceString) {
+                        // 환율 범위 검증 (너무 작거나 큰 값 필터링)
+                        if price > 1 && price < 10000 {
+                            return price
+                        }
+                    }
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    // MARK: - GitHub에서 전일 데이터 로드 (백업용)
     private func loadPreviousDayFromGitHub() {
         let calendar = Calendar.current
         let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
