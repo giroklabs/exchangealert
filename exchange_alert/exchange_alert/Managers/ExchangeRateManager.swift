@@ -1054,10 +1054,10 @@ class ExchangeRateManager: ObservableObject {
                     let yesterdayRate = ExchangeRate(
                         result: 1,
                         curUnit: searchUnit,
+                        curNm: currency.rawValue,
                         ttb: nil,
                         tts: nil,
                         dealBasR: String(format: "%.2f", closePrice),
-                        curNm: currency.rawValue,
                         bkpr: nil,
                         yyEfeeR: nil,
                         tenDDEefeeR: nil,
