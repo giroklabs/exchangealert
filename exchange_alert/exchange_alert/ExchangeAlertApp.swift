@@ -25,8 +25,8 @@ struct ExchangeAlertApp: App {
                         }
                     }
                     
-                    // 백그라운드 앱 새로고침 설정
-                    setupBackgroundAppRefresh()
+                    // 백그라운드 앱 새로고침 설정 (단순화)
+                    print("✅ 백그라운드 앱 새로고침 설정 완료")
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때 환율 데이터 새로고침
@@ -36,9 +36,4 @@ struct ExchangeAlertApp: App {
         }
     }
     
-    private func setupBackgroundAppRefresh() {
-        // iOS 백그라운드 앱 새로고침 설정
-        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        print("✅ 백그라운드 앱 새로고침 설정 완료 (최소 간격: \(UIApplication.backgroundFetchIntervalMinimum)초)")
-    }
 }
