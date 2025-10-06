@@ -30,11 +30,19 @@ struct NotificationManagementPopup: View {
                     NotificationListView(notifications: $notifications)
                 }
                 
-                // 푸터
-                NotificationPopupFooter(
-                    isPresented: $isPresented,
-                    onRefreshNotifications: loadNotificationHistory
-                )
+                    // 푸터
+                    NotificationPopupFooter(
+                        isPresented: $isPresented,
+                        onRefreshNotifications: loadNotificationHistory
+                    )
+                    
+                    // 진단 버튼 (디버그용)
+                    Button("🔍 알림 진단") {
+                        NotificationManager.diagnoseNotificationIssues()
+                    }
+                    .font(AppTheme.captionFont)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 8)
             }
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -62,7 +70,7 @@ struct NotificationManagementPopup: View {
 
 // MARK: - Notification History Model
 struct NotificationHistory: Codable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let date: Date
     let currency: String
     let message: String

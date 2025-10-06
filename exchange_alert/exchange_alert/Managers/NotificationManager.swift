@@ -25,6 +25,85 @@ struct NotificationManager {
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
     
+    // MARK: - 알림 진단 도구
+    static func diagnoseNotificationIssues() {
+        print("🔍 알림 진단 시작...")
+        
+        // 1. 알림 권한 상태 확인
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                print("📱 알림 권한 진단:")
+                print("   - 권한 상태: \(settings.authorizationStatus.rawValue)")
+                print("   - 알림 스타일: \(settings.alertSetting.rawValue)")
+                print("   - 소리 설정: \(settings.soundSetting.rawValue)")
+                print("   - 배지 설정: \(settings.badgeSetting.rawValue)")
+                print("   - 알림센터 설정: \(settings.notificationCenterSetting.rawValue)")
+                print("   - 잠금화면 설정: \(settings.lockScreenSetting.rawValue)")
+                
+                // 2. 앱 상태 확인
+                let appState = UIApplication.shared.applicationState
+                print("📱 앱 상태 진단:")
+                print("   - 현재 상태: \(appState == .active ? "포그라운드" : appState == .background ? "백그라운드" : "비활성")")
+                
+                // 3. 백그라운드 앱 새로고침 상태 확인
+                print("🔄 백그라운드 앱 새로고침 진단:")
+                print("   - 백그라운드 새로고침: \(UIApplication.shared.backgroundRefreshStatus.rawValue)")
+                switch UIApplication.shared.backgroundRefreshStatus {
+                case .available:
+                    print("   ✅ 백그라운드 새로고침 사용 가능")
+                case .denied:
+                    print("   ❌ 백그라운드 새로고침 거부됨 - 설정에서 활성화 필요")
+                case .restricted:
+                    print("   ⚠️ 백그라운드 새로고침 제한됨 (부모 제어 등)")
+                @unknown default:
+                    print("   ❓ 알 수 없는 백그라운드 새로고침 상태")
+                }
+                
+                // 4. 알림 센터에 있는 알림 개수 확인
+                UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
+                    print("📬 알림 센터 진단:")
+                    print("   - 현재 알림 개수: \(notifications.count)개")
+                    
+                    if notifications.count > 0 {
+                        print("   - 최근 알림:")
+                        for (index, notification) in notifications.prefix(3).enumerated() {
+                            print("     \(index + 1). \(notification.request.content.title): \(notification.request.content.body)")
+                        }
+                    }
+                }
+                
+                // 5. 대기 중인 알림 요청 확인
+                UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+                    print("⏳ 대기 중인 알림 진단:")
+                    print("   - 대기 중인 알림: \(requests.count)개")
+                    
+                    if requests.count > 0 {
+                        print("   - 대기 중인 알림:")
+                        for (index, request) in requests.prefix(3).enumerated() {
+                            print("     \(index + 1). \(request.identifier): \(request.content.title)")
+                        }
+                    }
+                }
+                
+                // 6. 진단 결과 요약
+                print("🎯 진단 결과 요약:")
+                if settings.authorizationStatus == .authorized {
+                    print("   ✅ 알림 권한: 허용됨")
+                } else {
+                    print("   ❌ 알림 권한: 문제 있음 (\(settings.authorizationStatus.rawValue))")
+                }
+                
+                if appState == .background {
+                    print("   ⚠️ 앱이 백그라운드 상태 - 백그라운드 앱 새로고침 필요")
+                } else {
+                    print("   ✅ 앱이 활성 상태")
+                }
+                
+                print("🔍 알림 진단 완료")
+            }
+        }
+    }
+    
     // MARK: - 알림 권한 상태 확인
     static func getNotificationPermissionStatus(completion: @escaping (UNAuthorizationStatus) -> Void) {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
@@ -74,6 +153,12 @@ struct NotificationManager {
                 print("   - 알림 스타일: \(settings.alertSetting.rawValue)")
                 print("   - 소리 설정: \(settings.soundSetting.rawValue)")
                 print("   - 배지 설정: \(settings.badgeSetting.rawValue)")
+                print("   - 앱 알림 설정: \(settings.notificationCenterSetting.rawValue)")
+                print("   - 잠금화면 알림 설정: \(settings.lockScreenSetting.rawValue)")
+                
+                // 앱 상태 확인
+                let appState = UIApplication.shared.applicationState
+                print("   - 앱 상태: \(appState == .active ? "포그라운드" : appState == .background ? "백그라운드" : "비활성")")
                 
                 switch settings.authorizationStatus {
                 case .authorized, .provisional:
