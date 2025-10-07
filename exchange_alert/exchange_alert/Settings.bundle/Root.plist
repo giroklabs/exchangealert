@@ -38,36 +38,6 @@
             <key>DefaultValue</key>
             <true/>
         </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSGroupSpecifier</string>
-            <key>Title</key>
-            <string>알림 임계값</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSTextFieldSpecifier</string>
-            <key>Title</key>
-            <string>USD 상한선</string>
-            <key>Key</key>
-            <string>usdUpperThreshold</string>
-            <key>DefaultValue</key>
-            <string>1400</string>
-            <key>KeyboardType</key>
-            <string>NumbersAndPunctuation</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSTextFieldSpecifier</string>
-            <key>Title</key>
-            <string>USD 하한선</string>
-            <key>Key</key>
-            <string>usdLowerThreshold</string>
-            <key>DefaultValue</key>
-            <string>1350</string>
-            <key>KeyboardType</key>
-            <string>NumbersAndPunctuation</string>
-        </dict>
     </array>
 </dict>
 </plist>
