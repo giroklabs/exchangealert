@@ -126,25 +126,33 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     // 백그라운드 알림 발송
     private func sendBackgroundNotification(message: String) {
-        let content = UNMutableNotificationContent()
-        content.title = "💱 환율 알림"
-        content.body = message
-        content.sound = .default
-        content.badge = 1
-        
-        let request = UNNotificationRequest(
-            identifier: "background_alert_\(Date().timeIntervalSince1970)",
-            content: content,
-            trigger: nil
-        )
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("❌ 백그라운드 알림 발송 실패: \(error.localizedDescription)")
-            } else {
-                print("✅ 백그라운드 알림 발송 성공: \(message)")
-                // 알림 발송 기록
-                self.recordNotification()
+        // 알림 권한 확인
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else {
+                print("❌ 백그라운드 알림 권한 없음: \(settings.authorizationStatus.rawValue)")
+                return
+            }
+            
+            let content = UNMutableNotificationContent()
+            content.title = "💱 환율 알림"
+            content.body = message
+            content.sound = .default
+            content.badge = 1
+            
+            let request = UNNotificationRequest(
+                identifier: "background_alert_\(Date().timeIntervalSince1970)",
+                content: content,
+                trigger: nil
+            )
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("❌ 백그라운드 알림 발송 실패: \(error.localizedDescription)")
+                } else {
+                    print("✅ 백그라운드 알림 발송 성공: \(message)")
+                    // 알림 발송 기록
+                    self.recordNotification()
+                }
             }
         }
     }
@@ -181,12 +189,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     private func scheduleBackgroundRefresh() {
         guard #available(iOS 13.0, *) else { return }
         
+        // 기존 요청 취소
+        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
+        
         let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 30 * 60) // 30분 후
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // 15분 후 (더 빈번하게)
         
         do {
             try BGTaskScheduler.shared.submit(request)
-            print("✅ 백그라운드 새로고침 작업 스케줄링 성공")
+            print("✅ 백그라운드 새로고침 작업 스케줄링 성공 (15분 후)")
         } catch {
             print("❌ 백그라운드 새로고침 작업 스케줄링 실패: \(error)")
         }
@@ -197,14 +208,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     private func handleBackgroundRefresh(task: BGAppRefreshTask) {
         print("🔄 백그라운드 새로고침 작업 시작 (iOS 13+)")
         
-        // 다음 백그라운드 작업 스케줄링
-        scheduleBackgroundRefresh()
-        
         // 백그라운드 fetch 실행 기록
         recordBackgroundFetch()
         
         // 환율 데이터 새로고침
-        refreshExchangeData { success in
+        refreshExchangeData { [weak self] success in
+            // 다음 백그라운드 작업 스케줄링 (성공/실패 관계없이)
+            self?.scheduleBackgroundRefresh()
+            
             task.setTaskCompleted(success: success)
             if success {
                 print("✅ 백그라운드 새로고침 작업 완료 (iOS 13+)")

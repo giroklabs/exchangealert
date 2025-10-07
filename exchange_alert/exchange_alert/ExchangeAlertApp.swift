@@ -23,6 +23,11 @@ struct ExchangeAlertApp: App {
                     
                     // 백그라운드 앱 새로고침 설정 (더 적극적으로)
                     setupBackgroundRefresh()
+                    
+                    // iOS 13+ 백그라운드 작업 스케줄링
+                    if #available(iOS 13.0, *) {
+                        scheduleBackgroundTask()
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때만 필요시 데이터 새로고침 (최적화)
@@ -32,6 +37,11 @@ struct ExchangeAlertApp: App {
                     
                     // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
                     setupBackgroundRefresh()
+                    
+                    // iOS 13+ 백그라운드 작업 재스케줄링
+                    if #available(iOS 13.0, *) {
+                        scheduleBackgroundTask()
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                     // 백그라운드 fetch 간격 재설정 (더 적극적으로)
@@ -80,6 +90,20 @@ struct ExchangeAlertApp: App {
             print("⚠️ 백그라운드 새로고침 제한됨")
         @unknown default:
             print("❓ 알 수 없는 백그라운드 새로고침 상태")
+        }
+    }
+    
+    // iOS 13+ 백그라운드 작업 스케줄링
+    @available(iOS 13.0, *)
+    private func scheduleBackgroundTask() {
+        let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 10 * 60) // 10분 후
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("✅ ExchangeAlertApp 백그라운드 작업 스케줄링 성공 (10분 후)")
+        } catch {
+            print("❌ ExchangeAlertApp 백그라운드 작업 스케줄링 실패: \(error)")
         }
     }
 }

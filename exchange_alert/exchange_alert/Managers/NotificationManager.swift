@@ -5,10 +5,12 @@ import UIKit
 // MARK: - Notification Manager
 struct NotificationManager {
     static func requestPermission(completion: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound, .provisional]) { granted, error in
             DispatchQueue.main.async {
                 if let error = error {
                     print("❌ 알림 권한 요청 실패: \(error.localizedDescription)")
+                } else {
+                    print("✅ 알림 권한 요청 성공: \(granted)")
                 }
                 completion(granted)
             }
