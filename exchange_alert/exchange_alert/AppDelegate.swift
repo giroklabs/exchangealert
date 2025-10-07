@@ -39,8 +39,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     @objc private func appDidEnterBackground() {
         print("📱 앱이 백그라운드로 이동 - 백그라운드 fetch 활성화 요청")
         
-        // 백그라운드 fetch 요청을 더 적극적으로 수행
-        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        // 백그라운드 fetch 요청을 더 적극적으로 수행 (iOS 버전별)
+        if #available(iOS 13.0, *) {
+            // iOS 13+에서는 BackgroundTasks 프레임워크만 사용
+            print("📱 iOS 13+ BackgroundTasks 프레임워크 사용")
+        } else {
+            // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
+            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        }
         
         // 백그라운드 앱 새로고침 상태 확인
         let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
