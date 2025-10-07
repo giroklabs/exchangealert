@@ -6,11 +6,13 @@ import GoogleMobileAds
 struct ExchangeAlertApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var exchangeManager = ExchangeRateManager()
+    @StateObject private var settingsManager = SettingsManager.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(exchangeManager)
+                .environmentObject(settingsManager)
                 .onAppear {
                     // AdMob 초기화
                     MobileAds.shared.start { _ in }

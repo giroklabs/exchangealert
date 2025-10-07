@@ -43,6 +43,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("🔄 백그라운드 fetch 시작")
         
+        // 백그라운드 fetch 실행 기록
+        SettingsManager.shared.recordBackgroundFetch()
+        
         // 환율 데이터 새로고침을 위한 URL 요청
         guard let url = URL(string: "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json") else {
             print("❌ 백그라운드 fetch URL 오류")
@@ -128,6 +131,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 print("❌ 백그라운드 알림 발송 실패: \(error.localizedDescription)")
             } else {
                 print("✅ 백그라운드 알림 발송 성공: \(message)")
+                // 알림 발송 기록
+                SettingsManager.shared.recordNotification()
             }
         }
     }

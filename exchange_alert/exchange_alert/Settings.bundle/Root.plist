@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Title</key>
+	<string>환율알라미</string>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>백그라운드 새로고침</string>
+			<key>FooterText</key>
+			<string>백그라운드 앱 새로고침을 활성화하면 앱이 백그라운드에 있을 때도 환율 데이터를 업데이트하고 알림을 보낼 수 있습니다.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>백그라운드 새로고침 설정</string>
+			<key>File</key>
+			<string>BackgroundRefresh</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>알림 설정</string>
+			<key>FooterText</key>
+			<string>환율 변동 시 알림을 받으려면 알림 권한이 필요합니다.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>알림 권한 설정</string>
+			<key>File</key>
+			<string>Notifications</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>앱 정보</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>버전</string>
+			<key>DefaultValue</key>
+			<string>1.0.0</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>데이터 소스</string>
+			<key>DefaultValue</key>
+			<string>네이버 KEB API</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<string>업데이트 주기</string>
+			<key>DefaultValue</key>
+			<string>30분 간격</string>
+		</dict>
+	</array>
+</dict>
+</plist>
