@@ -44,7 +44,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         print("🔄 백그라운드 fetch 시작")
         
         // 백그라운드 fetch 실행 기록
-        SettingsManager.shared.recordBackgroundFetch()
+        recordBackgroundFetch()
         
         // 환율 데이터 새로고침을 위한 URL 요청
         guard let url = URL(string: "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json") else {
@@ -132,8 +132,36 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             } else {
                 print("✅ 백그라운드 알림 발송 성공: \(message)")
                 // 알림 발송 기록
-                SettingsManager.shared.recordNotification()
+                recordNotification()
             }
         }
+    }
+    
+    // 백그라운드 fetch 실행 기록
+    private func recordBackgroundFetch() {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        let timestamp = formatter.string(from: Date())
+        UserDefaults.standard.set(timestamp, forKey: "last_background_fetch")
+        print("📱 백그라운드 fetch 실행 기록: \(timestamp)")
+    }
+    
+    // 알림 발송 기록
+    private func recordNotification() {
+        let currentCount = UserDefaults.standard.integer(forKey: "total_notifications")
+        UserDefaults.standard.set(currentCount + 1, forKey: "total_notifications")
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        let timestamp = formatter.string(from: Date())
+        UserDefaults.standard.set(timestamp, forKey: "last_notification")
+        
+        print("📱 알림 발송 기록: \(currentCount + 1)번째 알림, \(timestamp)")
     }
 }
