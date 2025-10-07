@@ -85,7 +85,21 @@ struct NotificationManager {
                     }
                 }
                 
-                // 6. 진단 결과 요약
+                // 6. 백그라운드 fetch 상태 확인
+                print("🔄 백그라운드 fetch 상태:")
+                let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
+                switch backgroundRefreshStatus {
+                case .available:
+                    print("   ✅ 백그라운드 앱 새로고침 사용 가능")
+                case .denied:
+                    print("   ❌ 백그라운드 앱 새로고침 거부됨 - 설정에서 활성화 필요")
+                case .restricted:
+                    print("   ⚠️ 백그라운드 앱 새로고침 제한됨 (부모 제어 등)")
+                @unknown default:
+                    print("   ❓ 알 수 없는 백그라운드 새로고침 상태")
+                }
+                
+                // 7. 진단 결과 요약
                 print("🎯 진단 결과 요약:")
                 if settings.authorizationStatus == .authorized {
                     print("   ✅ 알림 권한: 허용됨")
@@ -93,8 +107,14 @@ struct NotificationManager {
                     print("   ❌ 알림 권한: 문제 있음 (\(settings.authorizationStatus.rawValue))")
                 }
                 
+                if backgroundRefreshStatus == .available {
+                    print("   ✅ 백그라운드 앱 새로고침: 사용 가능")
+                } else {
+                    print("   ❌ 백그라운드 앱 새로고침: 문제 있음 (\(backgroundRefreshStatus.rawValue))")
+                }
+                
                 if appState == .background {
-                    print("   ⚠️ 앱이 백그라운드 상태 - 백그라운드 앱 새로고침 필요")
+                    print("   ⚠️ 앱이 백그라운드 상태 - 백그라운드 fetch 실행 중")
                 } else {
                     print("   ✅ 앱이 활성 상태")
                 }

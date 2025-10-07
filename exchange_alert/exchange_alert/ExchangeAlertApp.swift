@@ -33,6 +33,10 @@ struct ExchangeAlertApp: App {
                     print("📱 앱이 포그라운드로 활성화됨 - 환율 데이터 새로고침")
                     exchangeManager.fetchExchangeRate()
                 }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                    // 앱이 백그라운드로 갈 때
+                    print("📱 앱이 백그라운드로 이동됨 - 백그라운드 fetch 활성화")
+                }
         }
     }
     
