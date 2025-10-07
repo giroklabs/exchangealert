@@ -105,18 +105,27 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     // 임계점 확인 및 알림 발송 (백그라운드용)
     private func checkAndSendAlert(rate: Double) {
-        let upperThreshold = UserDefaults.standard.double(forKey: "upper_threshold")
-        let lowerThreshold = UserDefaults.standard.double(forKey: "lower_threshold")
+        // Settings.bundle에서 설정값 가져오기
+        let settingsManager = SettingsBundleManager.shared
+        
+        // 알림이 활성화되어 있는지 확인
+        guard settingsManager.notificationsEnabled else {
+            print("🔕 백그라운드 알림이 비활성화됨")
+            return
+        }
+        
+        let upperThreshold = settingsManager.usdUpperThreshold
+        let lowerThreshold = settingsManager.usdLowerThreshold
         
         var shouldNotify = false
         var message = ""
         
-        if upperThreshold > 0 && rate >= upperThreshold {
+        if rate >= upperThreshold {
             shouldNotify = true
-            message = "💰 USD 환율이 상한선(\(Int(upperThreshold)))원에 도달했습니다! 현재: \(Int(rate))원"
-        } else if lowerThreshold > 0 && rate <= lowerThreshold {
+            message = "💰 USD 환율이 \(String(format: "%.2f", rate))원에 도달했습니다!"
+        } else if rate <= lowerThreshold {
             shouldNotify = true
-            message = "📉 USD 환율이 하한선(\(Int(lowerThreshold)))원에 도달했습니다! 현재: \(Int(rate))원"
+            message = "📉 USD 환율이 \(String(format: "%.2f", rate))원까지 하락했습니다!"
         }
         
         if shouldNotify {

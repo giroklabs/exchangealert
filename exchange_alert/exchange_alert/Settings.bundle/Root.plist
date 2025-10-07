@@ -2,77 +2,136 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Title</key>
-	<string>환율알라미</string>
-	<key>StringsTable</key>
-	<string>Root</string>
-	<key>CFBundleName</key>
-	<string>환율알라미</string>
-	<key>PreferenceSpecifiers</key>
-	<array>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>백그라운드 새로고침</string>
-			<key>FooterText</key>
-			<string>백그라운드 앱 새로고침을 활성화하면 앱이 백그라운드에 있을 때도 환율 데이터를 업데이트하고 알림을 보낼 수 있습니다.</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-			<key>Title</key>
-			<string>백그라운드 새로고침 설정</string>
-			<key>File</key>
-			<string>BackgroundRefresh</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>알림 설정</string>
-			<key>FooterText</key>
-			<string>환율 변동 시 알림을 받으려면 알림 권한이 필요합니다.</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-			<key>Title</key>
-			<string>알림 권한 설정</string>
-			<key>File</key>
-			<string>Notifications</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>앱 정보</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>버전</string>
-			<key>DefaultValue</key>
-			<string>1.0.0</string>
-			<key>Key</key>
-			<string>app_version</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>데이터 소스</string>
-			<key>DefaultValue</key>
-			<string>네이버 KEB API</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<string>업데이트 주기</string>
-			<key>DefaultValue</key>
-			<string>30분 간격</string>
-		</dict>
-	</array>
+    <key>Title</key>
+    <string>환율알라미</string>
+    <key>PreferenceSpecifiers</key>
+    <array>
+        <dict>
+            <key>Type</key>
+            <string>PSGroupSpecifier</string>
+            <key>Title</key>
+            <string>알림 설정</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSToggleSwitchSpecifier</string>
+            <key>Title</key>
+            <string>백그라운드 새로고침</string>
+            <key>Key</key>
+            <string>backgroundRefreshEnabled</string>
+            <key>DefaultValue</key>
+            <true/>
+            <key>TrueValue</key>
+            <string>YES</string>
+            <key>FalseValue</key>
+            <string>NO</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSToggleSwitchSpecifier</string>
+            <key>Title</key>
+            <string>알림 허용</string>
+            <key>Key</key>
+            <string>notificationsEnabled</string>
+            <key>DefaultValue</key>
+            <true/>
+            <key>TrueValue</key>
+            <string>YES</string>
+            <key>FalseValue</key>
+            <string>NO</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSGroupSpecifier</string>
+            <key>Title</key>
+            <string>업데이트 간격</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSMultiValueSpecifier</string>
+            <key>Title</key>
+            <string>새로고침 주기</string>
+            <key>Key</key>
+            <string>refreshInterval</string>
+            <key>DefaultValue</key>
+            <integer>15</integer>
+            <key>Values</key>
+            <array>
+                <integer>5</integer>
+                <integer>10</integer>
+                <integer>15</integer>
+                <integer>30</integer>
+                <integer>60</integer>
+            </array>
+            <key>Titles</key>
+            <array>
+                <string>5분</string>
+                <string>10분</string>
+                <string>15분</string>
+                <string>30분</string>
+                <string>1시간</string>
+            </array>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSGroupSpecifier</key>
+            <key>Title</key>
+            <string>알림 임계값</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSTextFieldSpecifier</string>
+            <key>Title</key>
+            <string>USD 상한선</string>
+            <key>Key</key>
+            <string>usdUpperThreshold</string>
+            <key>DefaultValue</key>
+            <string>1400</string>
+            <key>KeyboardType</key>
+            <string>NumbersAndPunctuation</string>
+            <key>AutocapitalizationType</key>
+            <string>None</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSTextFieldSpecifier</string>
+            <key>Title</key>
+            <string>USD 하한선</string>
+            <key>Key</key>
+            <string>usdLowerThreshold</string>
+            <key>DefaultValue</key>
+            <string>1350</string>
+            <key>KeyboardType</key>
+            <string>NumbersAndPunctuation</string>
+            <key>AutocapitalizationType</key>
+            <string>None</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSGroupSpecifier</key>
+            <key>Title</key>
+            <string>앱 정보</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSTitleValueSpecifier</string>
+            <key>Title</key>
+            <string>버전</string>
+            <key>Key</key>
+            <string>CFBundleShortVersionString</string>
+            <key>DefaultValue</key>
+            <string>1.0.0</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSTitleValueSpecifier</string>
+            <key>Title</key>
+            <string>마지막 업데이트</key>
+            <key>Key</key>
+            <string>lastUpdateTime</string>
+            <key>DefaultValue</key>
+            <string>알 수 없음</string>
+        </dict>
+    </array>
 </dict>
 </plist>

@@ -7,6 +7,7 @@ import BackgroundTasks
 struct ExchangeAlertApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var exchangeManager = ExchangeRateManager()
+    @StateObject private var settingsBundleManager = SettingsBundleManager.shared
     
     var body: some Scene {
         WindowGroup {
@@ -21,13 +22,11 @@ struct ExchangeAlertApp: App {
                         // 권한 요청만 하고 로깅 최소화
                     }
                     
-                    // 백그라운드 앱 새로고침 설정 (더 적극적으로)
+                    // 백그라운드 앱 새로고침 설정 (Settings.bundle 설정 반영)
                     setupBackgroundRefresh()
                     
-                    // iOS 13+ 백그라운드 작업 스케줄링
-                    if #available(iOS 13.0, *) {
-                        scheduleBackgroundTask()
-                    }
+                    // 마지막 업데이트 시간 기록
+                    settingsBundleManager.updateLastUpdateTime()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때만 필요시 데이터 새로고침 (최적화)
