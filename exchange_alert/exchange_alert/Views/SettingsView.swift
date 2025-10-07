@@ -4,9 +4,21 @@ struct SettingsView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     @Environment(\.dismiss) private var dismiss
     @State private var tempSettings: AlertSettings
+    @State private var thresholdText = ""
     
     init() {
         _tempSettings = State(initialValue: AlertSettings.default)
+    }
+    
+    // thresholdText 초기화
+    private func updateThresholdText() {
+        if tempSettings.threshold == 0 {
+            thresholdText = ""
+        } else if tempSettings.threshold.truncatingRemainder(dividingBy: 1) == 0 {
+            thresholdText = String(format: "%.0f", tempSettings.threshold)
+        } else {
+            thresholdText = String(tempSettings.threshold)
+        }
     }
     
     var body: some View {
@@ -167,12 +179,8 @@ struct SettingsView: View {
                             .font(AppTheme.subheadlineFont)
                         
                         HStack {
-                            TextField("예: 1350.50", text: Binding(
-                                get: { 
-                                    // 0이면 빈 문자열, 아니면 소수점 포함 표시
-                                    tempSettings.threshold == 0 ? "" : String(format: "%.2f", tempSettings.threshold)
-                                },
-                                set: { newValue in
+                            TextField("예: 1350.50", text: $thresholdText)
+                                .onChange(of: thresholdText) { newValue in
                                     // 빈 문자열이면 0, 아니면 Double 변환
                                     if newValue.isEmpty {
                                         tempSettings.threshold = 0
@@ -180,7 +188,12 @@ struct SettingsView: View {
                                         tempSettings.threshold = doubleValue
                                     }
                                 }
-                            ))
+                                .onAppear {
+                                    updateThresholdText()
+                                }
+                                .onChange(of: tempSettings.threshold) { _ in
+                                    updateThresholdText()
+                                }
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .keyboardType(.decimalPad)
                                 .font(AppTheme.bodyFont)

@@ -195,9 +195,21 @@ struct AlertSettingsCard: View {
     let currency: CurrencyType
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     @State private var showingNotificationPopup = false
+    @State private var thresholdText = ""
     
     private var settings: AlertSettings {
         exchangeManager.currencyAlertSettings.settings[currency] ?? AlertSettings.default
+    }
+    
+    // thresholdText 초기화
+    private func updateThresholdText() {
+        if settings.threshold == 0 {
+            thresholdText = ""
+        } else if settings.threshold.truncatingRemainder(dividingBy: 1) == 0 {
+            thresholdText = String(format: "%.0f", settings.threshold)
+        } else {
+            thresholdText = String(settings.threshold)
+        }
     }
     
     var body: some View {
@@ -268,12 +280,8 @@ struct AlertSettingsCard: View {
                                 .font(AppTheme.subheadlineFont)
                             
                             HStack {
-                                TextField("예: 1350.50", text: Binding(
-                                    get: { 
-                                        // 0이면 빈 문자열, 아니면 소수점 포함 표시
-                                        settings.threshold == 0 ? "" : String(format: "%.2f", settings.threshold)
-                                    },
-                                    set: { newValue in
+                                TextField("예: 1350.50", text: $thresholdText)
+                                    .onChange(of: thresholdText) { newValue in
                                         // 빈 문자열이면 0, 아니면 Double 변환
                                         if newValue.isEmpty {
                                             var updatedSettings = settings
@@ -285,7 +293,12 @@ struct AlertSettingsCard: View {
                                             exchangeManager.updateAlertSettings(updatedSettings, for: currency)
                                         }
                                     }
-                                ))
+                                    .onAppear {
+                                        updateThresholdText()
+                                    }
+                                    .onChange(of: settings.threshold) { _ in
+                                        updateThresholdText()
+                                    }
                                 .textFieldStyle(CustomTextFieldStyle())
                                 .keyboardType(.decimalPad)
                                 .font(AppTheme.bodyFont)
