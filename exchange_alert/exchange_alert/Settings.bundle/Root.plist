@@ -22,22 +22,6 @@
             <key>DefaultValue</key>
             <true/>
         </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSGroupSpecifier</string>
-            <key>Title</key>
-            <string>알림 설정</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSToggleSwitchSpecifier</string>
-            <key>Title</key>
-            <string>알림 허용</string>
-            <key>Key</key>
-            <string>notificationsEnabled</string>
-            <key>DefaultValue</key>
-            <true/>
-        </dict>
     </array>
 </dict>
 </plist>
