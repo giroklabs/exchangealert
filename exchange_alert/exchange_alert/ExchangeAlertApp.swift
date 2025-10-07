@@ -27,6 +27,15 @@ struct ExchangeAlertApp: App {
                     
                     // 마지막 업데이트 시간 기록
                     settingsBundleManager.updateLastUpdateTime()
+                    
+                    // iOS 설정에서 백그라운드 새로고침을 인식하도록 더 적극적으로 요청
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        self.setupBackgroundRefresh()
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                        self.setupBackgroundRefresh()
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때만 필요시 데이터 새로고침 (최적화)
@@ -86,6 +95,12 @@ struct ExchangeAlertApp: App {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
                     print("🔄 백그라운드 새로고침 최종 설정 (iOS 12)")
+                }
+                
+                // 5초 후 한 번 더 설정 (iOS 설정에서 인식하도록)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+                    print("🔄 백그라운드 새로고침 추가 설정 (iOS 12)")
                 }
             }
         } else {
