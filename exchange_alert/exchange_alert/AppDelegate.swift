@@ -1,16 +1,25 @@
 import UIKit
 import UserNotifications
+import BackgroundTasks
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // 백그라운드 앱 새로고침 설정 (매우 적극적으로)
-        application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        print("✅ AppDelegate - 백그라운드 앱 새로고침 설정 완료 (간격: \(UIApplication.backgroundFetchIntervalMinimum)초)")
+        // iOS 13+ BackgroundTasks 프레임워크 사용
+        if #available(iOS 13.0, *) {
+            // BGAppRefreshTask 등록
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.exchangealert.refresh", using: nil) { task in
+                self.handleBackgroundRefresh(task: task as! BGAppRefreshTask)
+            }
+            print("✅ iOS 13+ BackgroundTasks 등록 완료")
+        } else {
+            // iOS 12 이하에서는 기존 방식 사용
+            application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+            print("✅ iOS 12 이하 백그라운드 앱 새로고침 설정 완료")
+        }
         
         // 백그라운드 새로고침을 강제로 요청 (iOS가 인식하도록)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-            print("🔄 백그라운드 새로고침 재요청")
+            self.scheduleBackgroundRefresh()
         }
         
         // 백그라운드 앱 새로고침 상태 확인
@@ -169,5 +178,83 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UserDefaults.standard.set(timestamp, forKey: "last_notification")
         
         print("📱 알림 발송 기록: \(currentCount + 1)번째 알림, \(timestamp)")
+    }
+    
+    // iOS 13+ 백그라운드 새로고침 작업 스케줄링
+    private func scheduleBackgroundRefresh() {
+        guard #available(iOS 13.0, *) else { return }
+        
+        let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 30 * 60) // 30분 후
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("✅ 백그라운드 새로고침 작업 스케줄링 성공")
+        } catch {
+            print("❌ 백그라운드 새로고침 작업 스케줄링 실패: \(error)")
+        }
+    }
+    
+    // iOS 13+ 백그라운드 새로고침 작업 처리
+    @available(iOS 13.0, *)
+    private func handleBackgroundRefresh(task: BGAppRefreshTask) {
+        print("🔄 백그라운드 새로고침 작업 시작 (iOS 13+)")
+        
+        // 다음 백그라운드 작업 스케줄링
+        scheduleBackgroundRefresh()
+        
+        // 백그라운드 fetch 실행 기록
+        recordBackgroundFetch()
+        
+        // 환율 데이터 새로고침
+        refreshExchangeData { success in
+            task.setTaskCompleted(success: success)
+            if success {
+                print("✅ 백그라운드 새로고침 작업 완료 (iOS 13+)")
+            } else {
+                print("❌ 백그라운드 새로고침 작업 실패 (iOS 13+)")
+            }
+        }
+    }
+    
+    // 환율 데이터 새로고침 (공통 함수)
+    private func refreshExchangeData(completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json") else {
+            print("❌ 백그라운드 fetch URL 오류")
+            completion(false)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("❌ 백그라운드 데이터 새로고침 실패: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+            
+            guard let data = data else {
+                print("❌ 백그라운드 데이터 없음")
+                completion(false)
+                return
+            }
+            
+            // 데이터 파싱 시도
+            do {
+                let exchangeData = try JSONDecoder().decode([String: ExchangeRate].self, from: data)
+                print("✅ 백그라운드 데이터 새로고침 성공: \(exchangeData.count)개 통화")
+                
+                // USD 환율 확인 및 알림 발송
+                if let usdRate = exchangeData["USD"],
+                   let ttbString = usdRate.ttb,
+                   let currentRate = Double(ttbString.replacingOccurrences(of: ",", with: "")) {
+                    self.checkAndSendAlert(currentRate: currentRate)
+                }
+                
+                completion(true)
+            } catch {
+                print("❌ 백그라운드 데이터 파싱 실패: \(error.localizedDescription)")
+                completion(false)
+            }
+        }.resume()
     }
 }

@@ -1,6 +1,7 @@
 import SwiftUI
 import UserNotifications
 import GoogleMobileAds
+import BackgroundTasks
 
 @main
 struct ExchangeAlertApp: App {
@@ -46,21 +47,26 @@ struct ExchangeAlertApp: App {
         return Date().timeIntervalSince(lastUpdate) > 300 // 5분
     }
     
-    // 백그라운드 새로고침 설정 (매우 적극적으로)
+    // 백그라운드 새로고침 설정 (iOS 버전별)
     private func setupBackgroundRefresh() {
-        // 백그라운드 fetch 간격을 최소로 설정 (여러 번 호출)
-        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        
-        // 1초 후 다시 한 번 설정 (iOS가 인식하도록)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        if #available(iOS 13.0, *) {
+            // iOS 13+ BackgroundTasks 프레임워크 사용
+            print("📱 iOS 13+ BackgroundTasks 프레임워크 사용")
+        } else {
+            // iOS 12 이하에서는 기존 방식 사용
             UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-            print("🔄 백그라운드 새로고침 재설정")
-        }
-        
-        // 3초 후 한 번 더 설정
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-            print("🔄 백그라운드 새로고침 최종 설정")
+            
+            // 1초 후 다시 한 번 설정 (iOS가 인식하도록)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+                print("🔄 백그라운드 새로고침 재설정 (iOS 12)")
+            }
+            
+            // 3초 후 한 번 더 설정
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+                print("🔄 백그라운드 새로고침 최종 설정 (iOS 12)")
+            }
         }
         
         // 백그라운드 앱 새로고침 상태 확인 및 로깅

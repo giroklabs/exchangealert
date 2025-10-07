@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4.2</string>
+	<string>1.4.3</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>8</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-4376736198197573~5381501062</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -28,7 +28,11 @@
 	<string>환율이 설정한 임계점에 도달했을 때 알림을 보내기 위해 알림 권한이 필요합니다.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>background-fetch</string>
+		<string>background-processing</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.exchangealert.refresh</string>
 	</array>
 	<key>NSBackgroundModesUsageDescription</key>
 	<string>환율 변동 시 백그라운드에서 알림을 보내기 위해 백그라운드 앱 새로고침이 필요합니다.</string>
