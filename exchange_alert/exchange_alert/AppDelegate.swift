@@ -3,9 +3,15 @@ import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // 백그라운드 앱 새로고침 설정 (더 적극적으로)
+        // 백그라운드 앱 새로고침 설정 (매우 적극적으로)
         application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         print("✅ AppDelegate - 백그라운드 앱 새로고침 설정 완료 (간격: \(UIApplication.backgroundFetchIntervalMinimum)초)")
+        
+        // 백그라운드 새로고침을 강제로 요청 (iOS가 인식하도록)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+            print("🔄 백그라운드 새로고침 재요청")
+        }
         
         // 백그라운드 앱 새로고침 상태 확인
         print("📱 백그라운드 앱 새로고침 상태: \(application.backgroundRefreshStatus.rawValue)")

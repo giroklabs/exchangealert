@@ -28,6 +28,9 @@ struct ExchangeAlertApp: App {
                     if shouldRefreshData() {
                         exchangeManager.fetchExchangeRate()
                     }
+                    
+                    // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
+                    setupBackgroundRefresh()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                     // 백그라운드 fetch 간격 재설정 (더 적극적으로)
@@ -43,10 +46,22 @@ struct ExchangeAlertApp: App {
         return Date().timeIntervalSince(lastUpdate) > 300 // 5분
     }
     
-    // 백그라운드 새로고침 설정 (더 적극적으로)
+    // 백그라운드 새로고침 설정 (매우 적극적으로)
     private func setupBackgroundRefresh() {
-        // 백그라운드 fetch 간격을 최소로 설정
+        // 백그라운드 fetch 간격을 최소로 설정 (여러 번 호출)
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        
+        // 1초 후 다시 한 번 설정 (iOS가 인식하도록)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+            print("🔄 백그라운드 새로고침 재설정")
+        }
+        
+        // 3초 후 한 번 더 설정
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+            print("🔄 백그라운드 새로고침 최종 설정")
+        }
         
         // 백그라운드 앱 새로고침 상태 확인 및 로깅
         let status = UIApplication.shared.backgroundRefreshStatus
