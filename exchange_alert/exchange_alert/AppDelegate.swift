@@ -202,13 +202,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
         
         let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 15 * 60) // 15분 후 (더 빈번하게)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 5 * 60) // 5분 후로 단축
         
         do {
             try BGTaskScheduler.shared.submit(request)
-            print("✅ 백그라운드 새로고침 작업 스케줄링 성공 (15분 후)")
+            print("✅ AppDelegate 백그라운드 작업 스케줄링 성공 (5분 후)")
+            
+            // 추가로 더 짧은 간격으로도 요청
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                let shortRequest = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
+                shortRequest.earliestBeginDate = Date(timeIntervalSinceNow: 1 * 60) // 1분 후
+                
+                do {
+                    try BGTaskScheduler.shared.submit(shortRequest)
+                    print("✅ AppDelegate 짧은 간격 백그라운드 작업 스케줄링 성공 (1분 후)")
+                } catch {
+                    print("❌ AppDelegate 짧은 간격 백그라운드 작업 스케줄링 실패: \(error)")
+                }
+            }
         } catch {
-            print("❌ 백그라운드 새로고침 작업 스케줄링 실패: \(error)")
+            print("❌ AppDelegate 백그라운드 작업 스케줄링 실패: \(error)")
         }
     }
     

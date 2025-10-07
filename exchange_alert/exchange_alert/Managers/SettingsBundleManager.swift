@@ -129,12 +129,28 @@ class SettingsBundleManager: ObservableObject {
     
     @available(iOS 13.0, *)
     private func scheduleBackgroundTask() {
+        // 기존 요청 취소
+        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
+        
         let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
         request.earliestBeginDate = Date(timeIntervalSinceNow: TimeInterval(refreshInterval * 60))
         
         do {
             try BGTaskScheduler.shared.submit(request)
             print("✅ Settings.bundle에서 백그라운드 작업 스케줄링 성공 (\(refreshInterval)분 후)")
+            
+            // 추가로 더 짧은 간격으로도 요청
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                let shortRequest = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
+                shortRequest.earliestBeginDate = Date(timeIntervalSinceNow: 2 * 60) // 2분 후
+                
+                do {
+                    try BGTaskScheduler.shared.submit(shortRequest)
+                    print("✅ Settings.bundle에서 짧은 간격 백그라운드 작업 스케줄링 성공 (2분 후)")
+                } catch {
+                    print("❌ Settings.bundle에서 짧은 간격 백그라운드 작업 스케줄링 실패: \(error)")
+                }
+            }
         } catch {
             print("❌ Settings.bundle에서 백그라운드 작업 스케줄링 실패: \(error)")
         }

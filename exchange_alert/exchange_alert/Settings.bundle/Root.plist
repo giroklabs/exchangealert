@@ -10,21 +10,23 @@
             <key>Type</key>
             <string>PSGroupSpecifier</string>
             <key>Title</key>
-            <string>알림 설정</string>
+            <string>백그라운드 새로고침</string>
         </dict>
         <dict>
             <key>Type</key>
             <string>PSToggleSwitchSpecifier</string>
             <key>Title</key>
-            <string>백그라운드 새로고침</string>
+            <string>백그라운드 새로고침 허용</string>
             <key>Key</key>
             <string>backgroundRefreshEnabled</string>
             <key>DefaultValue</key>
             <true/>
-            <key>TrueValue</key>
-            <string>YES</string>
-            <key>FalseValue</key>
-            <string>NO</string>
+        </dict>
+        <dict>
+            <key>Type</key>
+            <string>PSGroupSpecifier</string>
+            <key>Title</key>
+            <string>알림 설정</string>
         </dict>
         <dict>
             <key>Type</key>
@@ -35,46 +37,10 @@
             <string>notificationsEnabled</string>
             <key>DefaultValue</key>
             <true/>
-            <key>TrueValue</key>
-            <string>YES</string>
-            <key>FalseValue</key>
-            <string>NO</string>
         </dict>
         <dict>
             <key>Type</key>
             <string>PSGroupSpecifier</string>
-            <key>Title</key>
-            <string>업데이트 간격</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSMultiValueSpecifier</string>
-            <key>Title</key>
-            <string>새로고침 주기</string>
-            <key>Key</key>
-            <string>refreshInterval</string>
-            <key>DefaultValue</key>
-            <integer>15</integer>
-            <key>Values</key>
-            <array>
-                <integer>5</integer>
-                <integer>10</integer>
-                <integer>15</integer>
-                <integer>30</integer>
-                <integer>60</integer>
-            </array>
-            <key>Titles</key>
-            <array>
-                <string>5분</string>
-                <string>10분</string>
-                <string>15분</string>
-                <string>30분</string>
-                <string>1시간</string>
-            </array>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSGroupSpecifier</key>
             <key>Title</key>
             <string>알림 임계값</string>
         </dict>
@@ -89,8 +55,6 @@
             <string>1400</string>
             <key>KeyboardType</key>
             <string>NumbersAndPunctuation</string>
-            <key>AutocapitalizationType</key>
-            <string>None</string>
         </dict>
         <dict>
             <key>Type</key>
@@ -103,34 +67,6 @@
             <string>1350</string>
             <key>KeyboardType</key>
             <string>NumbersAndPunctuation</string>
-            <key>AutocapitalizationType</key>
-            <string>None</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSGroupSpecifier</key>
-            <key>Title</key>
-            <string>앱 정보</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSTitleValueSpecifier</string>
-            <key>Title</key>
-            <string>버전</string>
-            <key>Key</key>
-            <string>CFBundleShortVersionString</string>
-            <key>DefaultValue</key>
-            <string>1.0.0</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSTitleValueSpecifier</string>
-            <key>Title</key>
-            <string>마지막 업데이트</key>
-            <key>Key</key>
-            <string>lastUpdateTime</string>
-            <key>DefaultValue</key>
-            <string>알 수 없음</string>
         </dict>
     </array>
 </dict>
