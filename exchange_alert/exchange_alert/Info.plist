@@ -30,6 +30,8 @@
 	<array>
 		<string>background-fetch</string>
 	</array>
+	<key>NSBackgroundModesUsageDescription</key>
+	<string>환율 변동 시 백그라운드에서 알림을 보내기 위해 백그라운드 앱 새로고침이 필요합니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaruBuri-Bold.otf</string>

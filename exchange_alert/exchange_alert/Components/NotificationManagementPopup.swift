@@ -418,8 +418,24 @@ struct NotificationPopupFooter: View {
             
             HStack(spacing: 16) {
                 Button(action: {
-                    isPresented = false
-                    // 알림 설정으로 이동 (현재는 팝업 닫기)
+                    // 백그라운드 앱 새로고침 상태 확인 및 안내
+                    let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
+                    
+                    switch backgroundRefreshStatus {
+                    case .available:
+                        print("✅ 백그라운드 앱 새로고침 사용 가능")
+                        isPresented = false
+                    case .denied:
+                        print("❌ 백그라운드 앱 새로고침 거부됨")
+                        // 사용자에게 설정 안내
+                        showBackgroundRefreshAlert()
+                    case .restricted:
+                        print("⚠️ 백그라운드 앱 새로고침 제한됨")
+                        showBackgroundRefreshAlert()
+                    @unknown default:
+                        print("❓ 알 수 없는 상태")
+                        showBackgroundRefreshAlert()
+                    }
                 }) {
                     HStack(spacing: 8) {
                         Image(systemName: "gearshape.fill")
@@ -456,6 +472,27 @@ struct NotificationPopupFooter: View {
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
+        }
+    }
+    
+    private func showBackgroundRefreshAlert() {
+        let alert = UIAlertController(
+            title: "백그라운드 앱 새로고침 설정",
+            message: "환율 알림을 받으려면 백그라운드 앱 새로고침을 활성화해야 합니다.\n\n설정 > 일반 > 백그라운드 앱 새로고침 > 환율알라미를 켜주세요.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        })
+        
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.rootViewController?.present(alert, animated: true)
         }
     }
 }

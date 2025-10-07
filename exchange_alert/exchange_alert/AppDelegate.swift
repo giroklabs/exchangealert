@@ -3,11 +3,28 @@ import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // 백그라운드 앱 새로고침 설정
+        // 백그라운드 앱 새로고침 설정 (더 적극적으로)
         application.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         print("✅ AppDelegate - 백그라운드 앱 새로고침 설정 완료 (간격: \(UIApplication.backgroundFetchIntervalMinimum)초)")
         
+        // 백그라운드 앱 새로고침 상태 확인
+        print("📱 백그라운드 앱 새로고침 상태: \(application.backgroundRefreshStatus.rawValue)")
+        
+        // 앱이 포그라운드에서 백그라운드로 갈 때 fetch 요청
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        
         return true
+    }
+    
+    @objc private func appDidEnterBackground() {
+        print("📱 앱이 백그라운드로 이동 - 백그라운드 fetch 활성화 요청")
+        // 백그라운드 fetch 요청을 더 적극적으로 수행
+        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
     }
     
     // 백그라운드에서 앱 새로고침이 실행될 때 호출
