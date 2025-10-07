@@ -87,8 +87,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 print("✅ 백그라운드 fetch 성공: \(rates.count)개 통화 데이터 로드")
                 
                 // 간단한 알림 체크 로직
-                if let usdRate = rates.first(where: { $0.curUnit == "USD" }) {
-                    self.checkAndSendAlert(rate: usdRate)
+                if let usdRate = rates.first(where: { $0.curUnit == "USD" }),
+                   let dealBasRString = usdRate.dealBasR,
+                   let currentRate = Double(dealBasRString.replacingOccurrences(of: ",", with: "")) {
+                    self.checkAndSendAlert(rate: currentRate)
                 }
                 
                 completionHandler(.newData)
@@ -101,25 +103,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         task.resume()
     }
     
-    // 간단한 알림 체크 및 발송 (백그라운드용)
-    private func checkAndSendAlert(rate: ExchangeRate) {
-        guard let dealBasRString = rate.dealBasR,
-              let dealBasR = Double(dealBasRString.replacingOccurrences(of: ",", with: "")) else {
-            return
-        }
+    // 임계점 확인 및 알림 발송 (백그라운드용)
+    private func checkAndSendAlert(rate: Double) {
+        let upperThreshold = UserDefaults.standard.double(forKey: "upper_threshold")
+        let lowerThreshold = UserDefaults.standard.double(forKey: "lower_threshold")
         
-        // 기본 알림 체크 (USD 기준 1400원 이상/이하)
-        let upperThreshold = 1400.0
-        let lowerThreshold = 1350.0
         var shouldNotify = false
         var message = ""
         
-        if dealBasR >= upperThreshold {
+        if upperThreshold > 0 && rate >= upperThreshold {
             shouldNotify = true
-            message = "💰 USD 매매기준율이 \(dealBasRString)원으로 기준값(\(Int(upperThreshold))원) 이상이 되었습니다!"
-        } else if dealBasR <= lowerThreshold {
+            message = "💰 USD 환율이 상한선(\(Int(upperThreshold)))원에 도달했습니다! 현재: \(Int(rate))원"
+        } else if lowerThreshold > 0 && rate <= lowerThreshold {
             shouldNotify = true
-            message = "💸 USD 매매기준율이 \(dealBasRString)원으로 기준값(\(Int(lowerThreshold))원) 이하로 떨어졌습니다!"
+            message = "📉 USD 환율이 하한선(\(Int(lowerThreshold)))원에 도달했습니다! 현재: \(Int(rate))원"
         }
         
         if shouldNotify {
@@ -247,7 +244,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 if let usdRate = exchangeData["USD"],
                    let ttbString = usdRate.ttb,
                    let currentRate = Double(ttbString.replacingOccurrences(of: ",", with: "")) {
-                    self.checkAndSendAlert(currentRate: currentRate)
+                    self.checkAndSendAlert(rate: currentRate)
                 }
                 
                 completion(true)
