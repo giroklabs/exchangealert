@@ -218,7 +218,7 @@ struct NotificationListView: View {
             
             // 알림 리스트
             ScrollView {
-                LazyVStack(spacing: 12) {
+                LazyVStack(spacing: 16) {
                     ForEach(notifications) { notification in
                         NotificationItemView(
                             notification: notification,
@@ -360,7 +360,7 @@ struct NotificationItemView: View {
             }
             
             // 알림 내용
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Text(notification.type.displayName)
                         .font(.caption)
@@ -384,15 +384,18 @@ struct NotificationItemView: View {
                 }
                 
                 Text(notification.message)
-                    .font(.body)
+                    .font(.system(size: 14, weight: .regular))
                     .foregroundColor(.primary)
-                    .lineLimit(2)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             
             Spacer()
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.vertical, 16)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(isSelected ? AppTheme.primary.opacity(0.05) : Color(.systemBackground))
