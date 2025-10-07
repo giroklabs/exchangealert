@@ -452,6 +452,9 @@ struct NotificationPopupFooter: View {
                 }
                 
                 Button(action: {
+                    // 백그라운드 fetch 강제 실행 (메뉴 활성화를 위해)
+                    triggerBackgroundFetch()
+                    
                     NotificationManager.sendTestNotification()
                     // 테스트 알림 발송 후 히스토리 새로고침
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -472,6 +475,27 @@ struct NotificationPopupFooter: View {
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
+        }
+    }
+    
+    private func triggerBackgroundFetch() {
+        // 백그라운드 fetch 간격을 최소로 설정하여 iOS가 백그라운드에서 실행할 가능성을 높임
+        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        print("🔄 백그라운드 fetch 간격을 최소로 설정하여 iOS가 백그라운드에서 실행할 가능성을 높임")
+        
+        // 백그라운드 앱 새로고침 상태 확인
+        let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
+        print("📱 현재 백그라운드 앱 새로고침 상태: \(backgroundRefreshStatus.rawValue)")
+        
+        switch backgroundRefreshStatus {
+        case .available:
+            print("✅ 백그라운드 앱 새로고침 사용 가능 - iOS가 자동으로 백그라운드에서 실행할 예정")
+        case .denied:
+            print("❌ 백그라운드 앱 새로고침 거부됨 - 설정에서 활성화 필요")
+        case .restricted:
+            print("⚠️ 백그라운드 앱 새로고침 제한됨")
+        @unknown default:
+            print("❓ 알 수 없는 백그라운드 새로고침 상태")
         }
     }
     

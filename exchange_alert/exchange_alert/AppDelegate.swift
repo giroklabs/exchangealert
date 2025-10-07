@@ -23,8 +23,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     @objc private func appDidEnterBackground() {
         print("📱 앱이 백그라운드로 이동 - 백그라운드 fetch 활성화 요청")
+        
         // 백그라운드 fetch 요청을 더 적극적으로 수행
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        
+        // 백그라운드 앱 새로고침 상태 확인
+        let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
+        print("📱 백그라운드 진입 시 상태: \(backgroundRefreshStatus.rawValue)")
+        
+        // 백그라운드 fetch가 가능한 상태라면 간격을 최소로 설정
+        if backgroundRefreshStatus == .available {
+            print("✅ 백그라운드 fetch 간격을 최소로 설정하여 iOS가 백그라운드에서 실행할 가능성을 높임")
+        } else {
+            print("⚠️ 백그라운드 fetch가 현재 사용 불가능한 상태입니다.")
+        }
     }
     
     // 백그라운드에서 앱 새로고침이 실행될 때 호출

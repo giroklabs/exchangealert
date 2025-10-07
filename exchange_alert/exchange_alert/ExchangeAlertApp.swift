@@ -25,8 +25,24 @@ struct ExchangeAlertApp: App {
                         }
                     }
                     
-                    // 백그라운드 앱 새로고침 설정
-                    print("✅ 백그라운드 앱 새로고침 설정 완료")
+                    // 백그라운드 앱 새로고침 설정 (더 적극적으로)
+                    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+                    print("✅ 백그라운드 앱 새로고침 설정 완료 (간격: \(UIApplication.backgroundFetchIntervalMinimum)초)")
+                    
+                    // 백그라운드 앱 새로고침 상태 확인
+                    let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
+                    print("📱 앱 시작 시 백그라운드 앱 새로고침 상태: \(backgroundRefreshStatus.rawValue)")
+                    
+                    switch backgroundRefreshStatus {
+                    case .available:
+                        print("✅ 백그라운드 앱 새로고침 사용 가능")
+                    case .denied:
+                        print("❌ 백그라운드 앱 새로고침 거부됨 - 설정에서 활성화 필요")
+                    case .restricted:
+                        print("⚠️ 백그라운드 앱 새로고침 제한됨")
+                    @unknown default:
+                        print("❓ 알 수 없는 백그라운드 새로고침 상태")
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때 환율 데이터 새로고침
