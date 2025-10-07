@@ -28,7 +28,7 @@ class ExchangeRateManager: ObservableObject {
     private let maxDailyAPICalls = 1000  // GitHub API는 제한이 관대함
     private var dailyAPICallCount = 0
     private var lastAPICallDate: Date?
-    private let apiCallInterval: TimeInterval = 30 // 30초마다 최대 1회 호출 (GitHub API)
+    private let apiCallInterval: TimeInterval = 60 // 60초마다 최대 1회 호출 (성능 최적화)
     
     private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"
     private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"
