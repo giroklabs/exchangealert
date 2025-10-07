@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import BackgroundTasks
 
 class SettingsBundleManager: ObservableObject {
     static let shared = SettingsBundleManager()
@@ -124,8 +125,6 @@ class SettingsBundleManager: ObservableObject {
     
     @available(iOS 13.0, *)
     private func scheduleBackgroundTask() {
-        import BackgroundTasks
-        
         let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
         request.earliestBeginDate = Date(timeIntervalSinceNow: TimeInterval(refreshInterval * 60))
         
@@ -139,8 +138,6 @@ class SettingsBundleManager: ObservableObject {
     
     @available(iOS 13.0, *)
     private func cancelBackgroundTask() {
-        import BackgroundTasks
-        
         BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
         print("🚫 Settings.bundle에서 백그라운드 작업 취소")
     }
@@ -159,7 +156,7 @@ class SettingsBundleManager: ObservableObject {
     
     /// 설정값 초기화
     func resetToDefaults() {
-        let defaults = [
+        let defaults: [String: Any] = [
             "backgroundRefreshEnabled": true,
             "notificationsEnabled": true,
             "refreshInterval": 15,
