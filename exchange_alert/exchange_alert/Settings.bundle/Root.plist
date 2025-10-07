@@ -6,22 +6,6 @@
     <string>환율알라미</string>
     <key>PreferenceSpecifiers</key>
     <array>
-        <dict>
-            <key>Type</key>
-            <string>PSGroupSpecifier</string>
-            <key>Title</key>
-            <string>백그라운드 새로고침</string>
-        </dict>
-        <dict>
-            <key>Type</key>
-            <string>PSToggleSwitchSpecifier</string>
-            <key>Title</key>
-            <string>백그라운드 새로고침 허용</string>
-            <key>Key</key>
-            <string>backgroundRefreshEnabled</string>
-            <key>DefaultValue</key>
-            <true/>
-        </dict>
     </array>
 </dict>
 </plist>
