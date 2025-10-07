@@ -180,7 +180,7 @@ struct SettingsView: View {
                         
                         HStack {
                             TextField("예: 1350.50", text: $thresholdText)
-                                .onChange(of: thresholdText) { newValue in
+                                .onChange(of: thresholdText) { _, newValue in
                                     // 빈 문자열이면 0, 아니면 Double 변환
                                     if newValue.isEmpty {
                                         tempSettings.threshold = 0
@@ -191,7 +191,7 @@ struct SettingsView: View {
                                 .onAppear {
                                     updateThresholdText()
                                 }
-                                .onChange(of: tempSettings.threshold) { _ in
+                                .onChange(of: tempSettings.threshold) { _, _ in
                                     updateThresholdText()
                                 }
                                 .textFieldStyle(RoundedBorderTextFieldStyle())

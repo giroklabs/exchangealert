@@ -463,9 +463,15 @@ struct NotificationPopupFooter: View {
     }
     
     private func triggerBackgroundFetch() {
-        // 백그라운드 fetch 간격을 최소로 설정하여 iOS가 백그라운드에서 실행할 가능성을 높임
-        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        print("🔄 백그라운드 fetch 간격을 최소로 설정하여 iOS가 백그라운드에서 실행할 가능성을 높임")
+        // iOS 버전별 백그라운드 fetch 설정
+        if #available(iOS 13.0, *) {
+            // iOS 13+에서는 BackgroundTasks 프레임워크 사용
+            print("🔄 iOS 13+ BackgroundTasks 프레임워크 사용")
+        } else {
+            // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
+            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+            print("🔄 iOS 12 이하 백그라운드 fetch 간격을 최소로 설정")
+        }
         
         // 백그라운드 앱 새로고침 상태 확인
         let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus

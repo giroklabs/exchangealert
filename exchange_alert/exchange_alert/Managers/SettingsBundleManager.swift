@@ -103,19 +103,23 @@ class SettingsBundleManager: ObservableObject {
         DispatchQueue.main.async {
             if enabled {
                 print("✅ 백그라운드 새로고침 활성화됨")
-                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
                 
-                // iOS 13+ 백그라운드 작업 스케줄링
+                // iOS 13+에서는 BackgroundTasks 프레임워크만 사용
                 if #available(iOS 13.0, *) {
                     self.scheduleBackgroundTask()
+                } else {
+                    // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
+                    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
                 }
             } else {
                 print("❌ 백그라운드 새로고침 비활성화됨")
-                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalNever)
                 
-                // iOS 13+ 백그라운드 작업 취소
+                // iOS 13+에서는 BackgroundTasks 프레임워크만 사용
                 if #available(iOS 13.0, *) {
                     self.cancelBackgroundTask()
+                } else {
+                    // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
+                    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalNever)
                 }
             }
         }

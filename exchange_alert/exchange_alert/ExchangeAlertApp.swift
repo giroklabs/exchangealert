@@ -59,10 +59,11 @@ struct ExchangeAlertApp: App {
     // 백그라운드 새로고침 설정 (iOS 버전별)
     private func setupBackgroundRefresh() {
         if #available(iOS 13.0, *) {
-            // iOS 13+ BackgroundTasks 프레임워크 사용
+            // iOS 13+ BackgroundTasks 프레임워크만 사용
             print("📱 iOS 13+ BackgroundTasks 프레임워크 사용")
+            // setMinimumBackgroundFetchInterval은 사용하지 않음
         } else {
-            // iOS 12 이하에서는 기존 방식 사용
+            // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
             UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
             
             // 1초 후 다시 한 번 설정 (iOS가 인식하도록)
