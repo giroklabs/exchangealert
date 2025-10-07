@@ -132,7 +132,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             } else {
                 print("✅ 백그라운드 알림 발송 성공: \(message)")
                 // 알림 발송 기록
-                recordNotification()
+                self.recordNotification()
             }
         }
     }
