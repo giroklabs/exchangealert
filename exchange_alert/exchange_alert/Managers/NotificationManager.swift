@@ -28,8 +28,10 @@ struct NotificationManager {
     // MARK: - 알림 진단 도구
     static func diagnoseNotificationIssues() {
         print("🔍 알림 진단 시작...")
+        print("🔍 진단 함수 호출됨 - NotificationManager.diagnoseNotificationIssues()")
         
         // 1. 알림 권한 상태 확인
+        print("🔍 알림 권한 상태 확인 중...")
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
                 print("📱 알림 권한 진단:")

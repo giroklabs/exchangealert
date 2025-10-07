@@ -38,7 +38,17 @@ struct NotificationManagementPopup: View {
                     
                     // 진단 버튼 (디버그용)
                     Button("🔍 알림 진단") {
+                        print("🔍 진단 버튼 클릭됨!")
+                        print("🔍 NotificationManager.diagnoseNotificationIssues() 호출 중...")
+                        
+                        // 즉시 보이는 테스트
+                        print("=== 알림 진단 시작 ===")
+                        print("현재 시간: \(Date())")
+                        print("앱 상태: \(UIApplication.shared.applicationState.rawValue)")
+                        
                         NotificationManager.diagnoseNotificationIssues()
+                        print("🔍 진단 함수 호출 완료")
+                        print("=== 알림 진단 끝 ===")
                     }
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
@@ -440,7 +450,10 @@ struct NotificationPopupFooter: View {
                 }
                 
                 Button(action: {
+                    print("🔔 테스트 알림 버튼 클릭됨!")
+                    print("🔔 NotificationManager.sendTestNotification() 호출 중...")
                     NotificationManager.sendTestNotification()
+                    print("🔔 테스트 알림 함수 호출 완료")
                     // 테스트 알림 발송 후 히스토리 새로고침
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         onRefreshNotifications()
