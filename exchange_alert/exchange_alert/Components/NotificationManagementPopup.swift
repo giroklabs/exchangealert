@@ -418,24 +418,8 @@ struct NotificationPopupFooter: View {
             
             HStack(spacing: 16) {
                 Button(action: {
-                    // 백그라운드 앱 새로고침 상태 확인 및 안내
-                    let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
-                    
-                    switch backgroundRefreshStatus {
-                    case .available:
-                        print("✅ 백그라운드 앱 새로고침 사용 가능")
-                        isPresented = false
-                    case .denied:
-                        print("❌ 백그라운드 앱 새로고침 거부됨")
-                        // 사용자에게 설정 안내
-                        showBackgroundRefreshAlert()
-                    case .restricted:
-                        print("⚠️ 백그라운드 앱 새로고침 제한됨")
-                        showBackgroundRefreshAlert()
-                    @unknown default:
-                        print("❓ 알 수 없는 상태")
-                        showBackgroundRefreshAlert()
-                    }
+                    // iOS 설정 앱으로 바로 이동
+                    openAppSettings()
                 }) {
                     HStack(spacing: 8) {
                         Image(systemName: "gearshape.fill")
@@ -496,6 +480,13 @@ struct NotificationPopupFooter: View {
             print("⚠️ 백그라운드 앱 새로고침 제한됨")
         @unknown default:
             print("❓ 알 수 없는 백그라운드 새로고침 상태")
+        }
+    }
+    
+    private func openAppSettings() {
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsURL)
+            print("📱 iOS 설정 앱으로 이동")
         }
     }
     

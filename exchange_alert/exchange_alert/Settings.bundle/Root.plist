@@ -6,6 +6,8 @@
 	<string>환율알라미</string>
 	<key>StringsTable</key>
 	<string>Root</string>
+	<key>CFBundleName</key>
+	<string>환율알라미</string>
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
@@ -53,6 +55,8 @@
 			<string>버전</string>
 			<key>DefaultValue</key>
 			<string>1.0.0</string>
+			<key>Key</key>
+			<string>app_version</string>
 		</dict>
 		<dict>
 			<key>Type</key>

@@ -18,49 +18,19 @@
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
+			<string>PSChildPaneSpecifier</string>
 			<key>Title</key>
-			<string>알림 허용</string>
-			<key>Key</key>
-			<string>notifications_enabled</string>
-			<key>DefaultValue</key>
-			<true/>
+			<string>알림 설정</string>
+			<key>File</key>
+			<string>Notifications</string>
 		</dict>
 		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>알림 설정</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>소리</string>
-			<key>Key</key>
-			<string>notification_sound</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>배지</string>
-			<key>Key</key>
-			<string>notification_badge</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>화면에 표시</string>
-			<key>Key</key>
-			<string>notification_alert</string>
-			<key>DefaultValue</key>
-			<true/>
+			<string>알림 상태</string>
+			<key>FooterText</key>
+			<string>알림 설정은 iOS 설정 > 알림 > 환율알라미에서 변경할 수 있습니다.</string>
 		</dict>
 		<dict>
 			<key>Type</key>
