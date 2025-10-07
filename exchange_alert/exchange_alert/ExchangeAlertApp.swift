@@ -34,12 +34,18 @@ struct ExchangeAlertApp: App {
                         exchangeManager.fetchExchangeRate()
                     }
                     
-                    // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
-                    setupBackgroundRefresh()
+                    // Settings.bundle 설정값 확인 및 백그라운드 새로고침 상태 동기화
+                    let bgRefreshEnabled = settingsBundleManager.backgroundRefreshEnabled
+                    print("📱 앱 활성화 시 백그라운드 새로고침 설정 확인: \(bgRefreshEnabled)")
                     
-                    // iOS 13+ 백그라운드 작업 재스케줄링
-                    if #available(iOS 13.0, *) {
-                        scheduleBackgroundTask()
+                    if bgRefreshEnabled {
+                        // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
+                        setupBackgroundRefresh()
+                        
+                        // iOS 13+ 백그라운드 작업 재스케줄링
+                        if #available(iOS 13.0, *) {
+                            scheduleBackgroundTask()
+                        }
                     }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
@@ -58,24 +64,38 @@ struct ExchangeAlertApp: App {
     
     // 백그라운드 새로고침 설정 (iOS 버전별)
     private func setupBackgroundRefresh() {
-        if #available(iOS 13.0, *) {
-            // iOS 13+ BackgroundTasks 프레임워크만 사용
-            print("📱 iOS 13+ BackgroundTasks 프레임워크 사용")
-            // setMinimumBackgroundFetchInterval은 사용하지 않음
-        } else {
-            // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
-            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-            
-            // 1초 후 다시 한 번 설정 (iOS가 인식하도록)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        // Settings.bundle 설정값 확인
+        let bgRefreshEnabled = settingsBundleManager.backgroundRefreshEnabled
+        
+        if bgRefreshEnabled {
+            if #available(iOS 13.0, *) {
+                // iOS 13+ BackgroundTasks 프레임워크만 사용
+                print("📱 iOS 13+ BackgroundTasks 프레임워크 사용 (활성화됨)")
+                // setMinimumBackgroundFetchInterval은 사용하지 않음
+            } else {
+                // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
                 UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-                print("🔄 백그라운드 새로고침 재설정 (iOS 12)")
+                
+                // 1초 후 다시 한 번 설정 (iOS가 인식하도록)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+                    print("🔄 백그라운드 새로고침 재설정 (iOS 12)")
+                }
+                
+                // 3초 후 한 번 더 설정
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+                    print("🔄 백그라운드 새로고침 최종 설정 (iOS 12)")
+                }
             }
-            
-            // 3초 후 한 번 더 설정
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-                print("🔄 백그라운드 새로고침 최종 설정 (iOS 12)")
+        } else {
+            print("📱 백그라운드 새로고침 비활성화됨 - 설정에서 꺼짐")
+            if #available(iOS 13.0, *) {
+                // iOS 13+에서는 BackgroundTasks 작업 취소
+                BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
+            } else {
+                // iOS 12 이하에서는 setMinimumBackgroundFetchInterval을 Never로 설정
+                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalNever)
             }
         }
         
@@ -96,6 +116,14 @@ struct ExchangeAlertApp: App {
     // iOS 13+ 백그라운드 작업 스케줄링
     @available(iOS 13.0, *)
     private func scheduleBackgroundTask() {
+        // Settings.bundle 설정값 확인
+        let bgRefreshEnabled = settingsBundleManager.backgroundRefreshEnabled
+        
+        guard bgRefreshEnabled else {
+            print("📱 백그라운드 새로고침이 비활성화되어 있어 백그라운드 작업 스케줄링 중단")
+            return
+        }
+        
         // 기존 요청 취소
         BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
         
