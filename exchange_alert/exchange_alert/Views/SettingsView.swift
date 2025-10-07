@@ -167,7 +167,20 @@ struct SettingsView: View {
                             .font(AppTheme.subheadlineFont)
                         
                         HStack {
-                            TextField("기준값", value: $tempSettings.threshold, format: .number)
+                            TextField("예: 1350.50", text: Binding(
+                                get: { 
+                                    // 0이면 빈 문자열, 아니면 소수점 포함 표시
+                                    tempSettings.threshold == 0 ? "" : String(format: "%.2f", tempSettings.threshold)
+                                },
+                                set: { newValue in
+                                    // 빈 문자열이면 0, 아니면 Double 변환
+                                    if newValue.isEmpty {
+                                        tempSettings.threshold = 0
+                                    } else if let doubleValue = Double(newValue) {
+                                        tempSettings.threshold = doubleValue
+                                    }
+                                }
+                            ))
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .keyboardType(.decimalPad)
                                 .font(AppTheme.bodyFont)

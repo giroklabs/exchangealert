@@ -268,14 +268,24 @@ struct AlertSettingsCard: View {
                                 .font(AppTheme.subheadlineFont)
                             
                             HStack {
-                                TextField("기준값", value: Binding(
-                                    get: { settings.threshold },
+                                TextField("예: 1350.50", text: Binding(
+                                    get: { 
+                                        // 0이면 빈 문자열, 아니면 소수점 포함 표시
+                                        settings.threshold == 0 ? "" : String(format: "%.2f", settings.threshold)
+                                    },
                                     set: { newValue in
-                                        var updatedSettings = settings
-                                        updatedSettings.threshold = newValue
-                                        exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+                                        // 빈 문자열이면 0, 아니면 Double 변환
+                                        if newValue.isEmpty {
+                                            var updatedSettings = settings
+                                            updatedSettings.threshold = 0
+                                            exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+                                        } else if let doubleValue = Double(newValue) {
+                                            var updatedSettings = settings
+                                            updatedSettings.threshold = doubleValue
+                                            exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+                                        }
                                     }
-                                ), format: .number)
+                                ))
                                 .textFieldStyle(CustomTextFieldStyle())
                                 .keyboardType(.decimalPad)
                                 .font(AppTheme.bodyFont)
