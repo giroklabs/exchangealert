@@ -12,9 +12,6 @@ struct ExchangeAlertApp: App {
             ContentView()
                 .environmentObject(exchangeManager)
                 .onAppear {
-                    print("🚀🚀🚀 앱 시작됨! 🚀🚀🚀")
-                    print("🚀🚀🚀 ExchangeAlertApp.onAppear 실행 🚀🚀🚀")
-                    
                     // AdMob 초기화
                     MobileAds.shared.start { _ in }
                     print("✅ AdMob SDK 초기화 완료")
@@ -28,9 +25,8 @@ struct ExchangeAlertApp: App {
                         }
                     }
                     
-                    // 백그라운드 앱 새로고침 설정 (단순화)
+                    // 백그라운드 앱 새로고침 설정
                     print("✅ 백그라운드 앱 새로고침 설정 완료")
-                    print("🚀🚀🚀 앱 초기화 완료! 🚀🚀🚀")
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때 환율 데이터 새로고침

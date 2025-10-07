@@ -6,7 +6,6 @@ struct NotificationManagementPopup: View {
     @Binding var isPresented: Bool
     @State private var notifications: [NotificationHistory] = []
     @State private var isLoading = true
-    @State private var diagnosticMessage = "" // 진단 메시지 표시용
     
     var body: some View {
         ZStack {
@@ -37,51 +36,6 @@ struct NotificationManagementPopup: View {
                         onRefreshNotifications: loadNotificationHistory
                     )
                     
-                    // 진단 버튼 (디버그용)
-                    Button("🔍 알림 진단") {
-                        // 콘솔 로그 테스트
-                        print("🔍🔍🔍 진단 버튼 클릭됨! 🔍🔍🔍")
-                        print("🔍🔍🔍 현재 시간: \(Date()) 🔍🔍🔍")
-                        
-                        // UI 피드백 업데이트
-                        diagnosticMessage = "진단 중..."
-                        
-                        // UI 피드백 테스트
-                        DispatchQueue.main.async {
-                            print("🔍🔍🔍 메인 큐에서 실행됨 🔍🔍🔍")
-                            
-                            // 간단한 알림 권한 확인
-                            UNUserNotificationCenter.current().getNotificationSettings { settings in
-                                DispatchQueue.main.async {
-                                    print("🔍🔍🔍 알림 권한 상태: \(settings.authorizationStatus.rawValue) 🔍🔍🔍")
-                                    print("🔍🔍🔍 진단 완료! 🔍🔍🔍")
-                                    
-                                    // UI에 결과 표시
-                                    diagnosticMessage = "알림 권한: \(settings.authorizationStatus.rawValue)"
-                                }
-                            }
-                        }
-                    }
-                    .font(AppTheme.captionFont)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 8)
-                    
-                    // 진단 결과 표시
-                    if !diagnosticMessage.isEmpty {
-                        Text(diagnosticMessage)
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                            .padding(.bottom, 4)
-                    }
-                    
-                    // 간단한 테스트 버튼
-                    Button("🧪 간단 테스트") {
-                        print("🧪🧪🧪 간단 테스트 버튼 클릭! 🧪🧪🧪")
-                        diagnosticMessage = "테스트 성공! \(Date())"
-                    }
-                    .font(.caption)
-                    .foregroundColor(.orange)
-                    .padding(.bottom, 8)
             }
             .background(
                 RoundedRectangle(cornerRadius: 20)
@@ -479,10 +433,7 @@ struct NotificationPopupFooter: View {
                 }
                 
                 Button(action: {
-                    print("🔔 테스트 알림 버튼 클릭됨!")
-                    print("🔔 NotificationManager.sendTestNotification() 호출 중...")
                     NotificationManager.sendTestNotification()
-                    print("🔔 테스트 알림 함수 호출 완료")
                     // 테스트 알림 발송 후 히스토리 새로고침
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         onRefreshNotifications()
