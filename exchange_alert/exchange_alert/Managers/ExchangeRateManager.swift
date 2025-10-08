@@ -15,6 +15,7 @@ class ExchangeRateManager: ObservableObject {
     
     // 일일 변동 데이터 저장
     @Published var dailyChanges: [CurrencyType: DailyChange] = [:]
+    @Published var isDailyChangeLoading: Bool = true  // 일일 변동 로딩 상태
     
     // 전일 데이터 저장 (변동 계산용)
     private var previousDayData: [CurrencyType: ExchangeRate] = [:]
@@ -56,9 +57,9 @@ class ExchangeRateManager: ObservableObject {
         previousDayData = [:]
         print("🔄 앱 시작 - 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드 예정)")
         
-        // 앱 시작 시 환율 가져오기 (Task 사용)
+        // 앱 시작 시 강제 즉시 환율 가져오기 (Task 사용)
         Task { @MainActor in
-            self.fetchExchangeRate()
+            self.forceRefreshOnStartup()
         }
         
         startPeriodicRefresh() // 5분마다 자동 새로고침 (API 호출 제한 고려)
@@ -129,15 +130,36 @@ class ExchangeRateManager: ObservableObject {
         UserDefaults.standard.set(lastAPICallDate, forKey: "LastAPICallDate")
     }
     
-    // MARK: - 이전 일자 데이터 로드 (변동값 계산용)
+    // MARK: - 로컬 데이터 저장 및 로드 시스템
     private func loadPreviousDayData() {
+        // 1. 먼저 로컬에 저장된 전일 데이터 확인
         if let data = UserDefaults.standard.data(forKey: "PreviousDayExchangeRates"),
            let previousRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
             previousDayData = previousRates
-            print("📊 이전 일자 데이터 로드: \(previousRates.count)개 통화")
+            print("📊 로컬 전일 데이터 로드: \(previousRates.count)개 통화")
+            
+            // 날짜 확인 - 저장된 데이터가 실제 전일 데이터인지 검증
+            if let savedDate = UserDefaults.standard.object(forKey: "PreviousDayDataDate") as? Date {
+                let calendar = Calendar.current
+                let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+                
+                if calendar.isDate(savedDate, inSameDayAs: yesterday) {
+                    print("✅ 로컬 전일 데이터 유효: \(savedDate)")
+                    return
+                } else {
+                    print("⚠️ 로컬 전일 데이터 만료: \(savedDate) (어제: \(yesterday))")
+                    previousDayData = [:]
+                }
+            }
         } else {
-            print("📊 이전 일자 데이터 없음")
+            print("📊 로컬 전일 데이터 없음")
             previousDayData = [:]
+        }
+        
+        // 2. 로컬 데이터가 없거나 만료된 경우 GitHub에서 로드
+        if previousDayData.isEmpty {
+            print("📥 GitHub에서 전일 데이터 로드 시도...")
+            loadPreviousDayFromGitHub()
         }
         
         // 날짜가 바뀌었는지 확인하고 필요시 초기화
@@ -168,18 +190,69 @@ class ExchangeRateManager: ObservableObject {
     private func savePreviousDayData() {
         if let data = try? JSONEncoder().encode(previousDayData) {
             UserDefaults.standard.set(data, forKey: "PreviousDayExchangeRates")
-            print("💾 이전 일자 데이터 저장: \(previousDayData.count)개 통화")
+            
+            // 전일 데이터 저장 날짜도 함께 저장 (데이터 유효성 검증용)
+            let calendar = Calendar.current
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+            UserDefaults.standard.set(yesterday, forKey: "PreviousDayDataDate")
+            
+            print("💾 전일 데이터 저장 완료: \(previousDayData.count)개 통화 (날짜: \(yesterday))")
         }
     }
     
+    // MARK: - 개선된 로컬 데이터 저장 시스템
+    private func saveExchangeRatesToLocal(_ rates: [CurrencyType: ExchangeRate]) {
+        // 1. 현재 데이터를 메인 저장소에 저장
+        if let data = try? JSONEncoder().encode(rates) {
+            UserDefaults.standard.set(data, forKey: "LastExchangeRates")
+            UserDefaults.standard.set(Date(), forKey: "LastUpdateTime")
+            print("💾 현재 환율 데이터 로컬 저장: \(rates.count)개 통화")
+        }
+        
+        // 2. 날짜별 백업 저장 (히스토리 관리)
+        let calendar = Calendar.current
+        let today = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        let todayString = dateFormatter.string(from: today)
+        
+        if let backupData = try? JSONEncoder().encode(rates) {
+            UserDefaults.standard.set(backupData, forKey: "ExchangeRates_\(todayString)")
+            print("📅 날짜별 백업 저장: \(todayString)")
+        }
+        
+        // 3. 주간 백업 (7일치 유지)
+        self.manageWeeklyBackup(rates)
+    }
+    
+    private func manageWeeklyBackup(_ rates: [CurrencyType: ExchangeRate]) {
+        let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        
+        // 7일 전 데이터 삭제 (용량 관리)
+        for i in 7...14 {
+            if let oldDate = calendar.date(byAdding: .day, value: -i, to: Date()) {
+                let oldDateString = dateFormatter.string(from: oldDate)
+                UserDefaults.standard.removeObject(forKey: "ExchangeRates_\(oldDateString)")
+            }
+        }
+        
+        print("🗑️ 오래된 백업 데이터 정리 완료 (7일 이상)")
+    }
+    
     // MARK: - API 호출
-    func fetchExchangeRate() {
-        // API 호출 제한 체크
-        guard canMakeAPICall() else {
-            print("🔄 API 호출 제한으로 인해 마지막 저장된 데이터 사용")
-            currentApiSource = "은행 고시 환율 (실시간)"
-            showLastSavedData()
-            return
+    func fetchExchangeRate(forceRefresh: Bool = false) {
+        // 강제 새로고침이 아닌 경우에만 API 호출 제한 체크
+        if !forceRefresh {
+            guard canMakeAPICall() else {
+                print("🔄 API 호출 제한으로 인해 마지막 저장된 데이터 사용")
+                currentApiSource = "은행 고시 환율 (실시간)"
+                showLastSavedData()
+                return
+            }
+        } else {
+            print("🚀 강제 즉시 업데이트 모드 - API 호출 제한 무시")
         }
         
         // 메인 큐에서 UI 업데이트 수행
@@ -511,12 +584,24 @@ class ExchangeRateManager: ObservableObject {
         }.resume()
     }
 
-    // MARK: - 마지막 저장된 데이터 표시
+    // MARK: - 로컬 데이터 기반 오프라인 모드
     private func showLastSavedData() {
-        // UserDefaults에서 마지막 저장된 환율 데이터 로드
+        print("📱 오프라인 모드: 로컬 저장된 데이터 로드 시도...")
+        
+        // 1. 최신 로컬 데이터 로드
         if let data = UserDefaults.standard.data(forKey: "LastExchangeRates"),
            let lastRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
-            print("📁 마지막 저장된 데이터 로드: \(lastRates.count)개 통화")
+            print("📁 로컬 저장된 데이터 로드: \(lastRates.count)개 통화")
+            
+            // 데이터 유효성 확인
+            if let lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date {
+                let timeDiff = Date().timeIntervalSince(lastUpdateTime)
+                if timeDiff > 3600 { // 1시간 이상 오래된 데이터
+                    print("⚠️ 로컬 데이터 오래됨: \(Int(timeDiff/3600))시간 전")
+                } else {
+                    print("✅ 로컬 데이터 최신: \(Int(timeDiff/60))분 전")
+                }
+            }
             
             // 현재 데이터로 변동 계산 (메인 큐 밖에서 수행)
             let calculatedChanges = self.calculateDailyChangesSync(newRates: lastRates)
@@ -524,18 +609,22 @@ class ExchangeRateManager: ObservableObject {
             // 메인 큐에서 UI 업데이트 수행
             DispatchQueue.main.async {
                 self.dailyChanges = calculatedChanges
-                self.previousDayData = self.exchangeRates // 현재 데이터를 이전 데이터로 저장
+                self.isDailyChangeLoading = false  // 로딩 완료
                 self.exchangeRates = lastRates
                 self.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
+                self.currentApiSource = "로컬 저장된 데이터 (오프라인)"
                 
                 // 현재 선택된 통화의 환율이 있으면 알림 체크
                 if let currentRate = lastRates[self.selectedCurrency] {
                     self.checkAlertThresholds(rate: currentRate)
                 }
+                
+                print("✅ 오프라인 모드 활성화 완료")
             }
         } else {
-            print("❌ 마지막 저장된 데이터 없음 - ExchangeRate-API로 백업")
+            print("❌ 로컬 저장된 데이터 없음 - ExchangeRate-API로 백업")
             self.currentApiSource = "ExchangeRate-API"
+            self.isDailyChangeLoading = false  // 데이터 없음 - 로딩 중단
             self.fetchFromExchangeRateAPI()
         }
     }
@@ -578,6 +667,7 @@ class ExchangeRateManager: ObservableObject {
             DispatchQueue.main.async {
                 // 계산된 변동 데이터 업데이트
                 self.dailyChanges = calculatedChanges
+                self.isDailyChangeLoading = false  // 로딩 완료
                 
                 // 전일 데이터가 없으면 GitHub에서 전일 데이터 로드
                 if self.previousDayData.isEmpty {
@@ -603,13 +693,9 @@ class ExchangeRateManager: ObservableObject {
                 // lastUpdateTime은 GitHub에서 별도로 로드됨
             }
             
-            // 성공적으로 데이터를 가져왔을 때 UserDefaults에 저장 (오프라인 백업용)
+            // 성공적으로 데이터를 가져왔을 때 로컬에 저장 (오프라인 백업용)
             if !newRates.isEmpty {
-                if let data = try? JSONEncoder().encode(newRates) {
-                    UserDefaults.standard.set(data, forKey: "LastExchangeRates")
-                    UserDefaults.standard.set(Date(), forKey: "LastUpdateTime")
-                    print("💾 환율 데이터를 로컬에 백업 저장")
-                }
+                self.saveExchangeRatesToLocal(newRates)
             }
 
             // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
@@ -783,9 +869,10 @@ class ExchangeRateManager: ObservableObject {
         
         let now = Date()
         
-        // 마지막 알림 후 1시간이 지났는지 확인 (스팸 방지)
+        // 마지막 알림 후 5분이 지났는지 확인 (스팸 방지)
         if let lastNotification = alertSettings.lastNotificationTime,
-           now.timeIntervalSince(lastNotification) < 3600 {
+           now.timeIntervalSince(lastNotification) < 300 {
+            print("⚠️ 스팸 방지: 마지막 알림 후 5분이 지나지 않음 (남은 시간: \(Int(300 - now.timeIntervalSince(lastNotification)))초)")
             return
         }
         
@@ -907,6 +994,18 @@ class ExchangeRateManager: ObservableObject {
         fetchExchangeRate()
     }
     
+    // MARK: - 강제 즉시 새로고침 (앱 시작/포그라운드 복귀 시)
+    func forceRefreshOnStartup() {
+        print("🚀 앱 시작/포그라운드 복귀 - 강제 즉시 업데이트")
+        fetchExchangeRate(forceRefresh: true)
+    }
+    
+    // MARK: - Pull-to-Refresh 전용 새로고침
+    func pullToRefresh() {
+        print("🔄 Pull-to-Refresh: 사용자가 직접 요청한 데이터 새로고침")
+        fetchExchangeRate(forceRefresh: true)
+    }
+    
     // MARK: - 통화 변경 시 새로고침
     func changeCurrency(to currency: CurrencyType) {
         selectedCurrency = currency
@@ -965,16 +1064,20 @@ class ExchangeRateManager: ObservableObject {
         print("🧪 알림 테스트 완료")
     }
     
-    // MARK: - 일일 변동 계산 (동기 버전)
+    // MARK: - 일일 변동 계산 (동기 버전) - 개선된 로컬 데이터 기반
     private func calculateDailyChangesSync(newRates: [CurrencyType: ExchangeRate]) -> [CurrencyType: DailyChange] {
         var changes: [CurrencyType: DailyChange] = [:]
         
-        // 전일 데이터가 없으면 GitHub에서 전일 데이터 로드
+        // 1. 전일 데이터가 없으면 로컬 저장소에서 로드 시도
         if previousDayData.isEmpty {
-            // GitHub에서 전일 데이터 로드
-            loadPreviousDayFromGitHub()
-            print("⚠️ 전일 데이터 없음 - GitHub에서 전일 데이터 로드 중...")
-            return changes  // 전일 데이터 로드 완료 후 재계산 필요
+            print("⚠️ 전일 데이터 없음 - 로컬 저장소에서 로드 시도...")
+            loadPreviousDayData()
+            
+            // 로컬 로드 후에도 없으면 빈 결과 반환 (비동기 로드 완료 후 재계산)
+            if previousDayData.isEmpty {
+                print("⚠️ 전일 데이터 로드 실패 - 재계산 필요")
+                return changes
+            }
         }
         
         for (currency, newRate) in newRates {
@@ -1038,10 +1141,14 @@ class ExchangeRateManager: ObservableObject {
                         if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
                             let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
                             self?.dailyChanges = recalculatedChanges
+                            self?.isDailyChangeLoading = false  // 로딩 완료 (부정확할 수 있음)
                             print("🔄 백업 데이터로 일일변동 재계산 완료 (부정확할 수 있음)")
+                        } else {
+                            self?.isDailyChangeLoading = false  // 계산 실패해도 로딩 중단
                         }
                     } else {
                         print("❌ GitHub 및 로컬 백업 데이터 모두 실패 - 일일변동 계산 불가")
+                        self?.isDailyChangeLoading = false  // 로딩 중단
                     }
                 }
                 return
@@ -1068,6 +1175,7 @@ class ExchangeRateManager: ObservableObject {
                 if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
                     let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
                     self?.dailyChanges = recalculatedChanges
+                    self?.isDailyChangeLoading = false  // 로딩 완료
                     print("🔄 전일 데이터 로드 후 일일변동 재계산 완료")
                     
                     // USD 일일변동 디버깅

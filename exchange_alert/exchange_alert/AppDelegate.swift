@@ -111,22 +111,104 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     // 임계점 확인 및 알림 발송 (백그라운드용)
     private func checkAndSendAlert(rate: Double) {
-        // 기본 임계값 사용 (1400/1350)
+        // 사용자 설정에서 USD 알림 설정 로드
+        guard let alertData = UserDefaults.standard.data(forKey: "CurrencyAlertSettings"),
+              var currencyAlertSettings = try? JSONDecoder().decode(CurrencyAlertSettings.self, from: alertData) else {
+            print("⚠️ 백그라운드: 사용자 알림 설정 없음 - 하드코딩된 기본값 사용")
+            checkWithHardcodedThresholds(rate: rate)
+            return
+        }
+        
+        let usdSettings = currencyAlertSettings.getSettings(for: .USD)
+        
+        // 알림이 비활성화된 경우
+        guard usdSettings.isEnabled else {
+            print("⚠️ 백그라운드: USD 알림이 비활성화됨")
+            return
+        }
+        
+        // 백그라운드 알림 스팸 방지 (5분 간격)
+        let now = Date()
+        let lastNotificationKey = "LastBackgroundNotification"
+        if let lastNotification = UserDefaults.standard.object(forKey: lastNotificationKey) as? Date,
+           now.timeIntervalSince(lastNotification) < 300 {
+            print("⚠️ 백그라운드 스팸 방지: 마지막 알림 후 5분이 지나지 않음")
+            return
+        }
+        
+        // 사용자 설정에 따른 알림 체크
+        var shouldNotify = false
+        var message = ""
+        
+        switch usdSettings.thresholdType {
+        case .upper:
+            if rate >= usdSettings.threshold {
+                shouldNotify = true
+                message = "💰 USD 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", usdSettings.threshold))원) 이상이 되었습니다!"
+            }
+        case .lower:
+            if rate <= usdSettings.threshold {
+                shouldNotify = true
+                message = "📉 USD 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", usdSettings.threshold))원) 이하가 되었습니다!"
+            }
+        case .both3:
+            let upperThreshold = usdSettings.threshold * 1.03
+            let lowerThreshold = usdSettings.threshold * 0.97
+            if rate >= upperThreshold {
+                shouldNotify = true
+                message = "💰 USD 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", usdSettings.threshold))원)에서 3% 상승했습니다!"
+            } else if rate <= lowerThreshold {
+                shouldNotify = true
+                message = "📉 USD 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", usdSettings.threshold))원)에서 3% 하락했습니다!"
+            }
+        case .both:
+            let upperThreshold = usdSettings.threshold * 1.05
+            let lowerThreshold = usdSettings.threshold * 0.95
+            if rate >= upperThreshold {
+                shouldNotify = true
+                message = "💰 USD 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", usdSettings.threshold))원)에서 5% 상승했습니다!"
+            } else if rate <= lowerThreshold {
+                shouldNotify = true
+                message = "📉 USD 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", usdSettings.threshold))원)에서 5% 하락했습니다!"
+            }
+        }
+        
+        if shouldNotify {
+            // 마지막 알림 시간 저장
+            UserDefaults.standard.set(now, forKey: lastNotificationKey)
+            sendBackgroundNotification(message: message)
+        }
+    }
+    
+    // 하드코딩된 임계값 사용 (사용자 설정이 없을 때)
+    private func checkWithHardcodedThresholds(rate: Double) {
+        // 기본 임계값 사용 (1400/1350) - 하위 호환성
         let upperThreshold = 1400.0
         let lowerThreshold = 1350.0
+        
+        // 백그라운드 알림 스팸 방지 (5분 간격)
+        let now = Date()
+        let lastNotificationKey = "LastBackgroundNotification"
+        if let lastNotification = UserDefaults.standard.object(forKey: lastNotificationKey) as? Date,
+           now.timeIntervalSince(lastNotification) < 300 {
+            print("⚠️ 백그라운드 스팸 방지: 마지막 알림 후 5분이 지나지 않음")
+            return
+        }
         
         var shouldNotify = false
         var message = ""
         
         if rate >= upperThreshold {
             shouldNotify = true
-            message = "💰 USD 환율이 \(String(format: "%.2f", rate))원에 도달했습니다!"
+            message = "💰 USD 환율이 \(String(format: "%.2f", rate))원에 도달했습니다! (기본 설정)"
         } else if rate <= lowerThreshold {
             shouldNotify = true
-            message = "📉 USD 환율이 \(String(format: "%.2f", rate))원까지 하락했습니다!"
+            message = "📉 USD 환율이 \(String(format: "%.2f", rate))원까지 하락했습니다! (기본 설정)"
         }
         
         if shouldNotify {
+            // 마지막 알림 시간 저장
+            UserDefaults.standard.set(now, forKey: lastNotificationKey)
             sendBackgroundNotification(message: message)
         }
     }

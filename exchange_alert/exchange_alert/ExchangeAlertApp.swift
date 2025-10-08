@@ -36,10 +36,9 @@ struct ExchangeAlertApp: App {
                     }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                    // 앱이 포그라운드로 돌아올 때만 필요시 데이터 새로고침 (최적화)
-                    if shouldRefreshData() {
-                        exchangeManager.fetchExchangeRate()
-                    }
+                    // 앱이 포그라운드로 돌아올 때 강제 즉시 데이터 새로고침
+                    print("🔄 앱 포그라운드 복귀 - 즉시 데이터 새로고침")
+                    exchangeManager.forceRefreshOnStartup()
                     
                     // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
                     setupBackgroundRefresh()

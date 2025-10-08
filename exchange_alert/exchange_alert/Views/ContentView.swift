@@ -49,7 +49,7 @@ struct ContentView: View {
                             }
                         }
                         .refreshable {
-                            // Pull-to-Refresh: 최신 데이터 갱신
+                            // Pull-to-Refresh: 최신 데이터 갱신 (강제 즉시 업데이트)
                             await refreshData()
                         }
                         .padding(.top, 8)
@@ -112,8 +112,10 @@ struct ContentView: View {
         print("🔄 Pull-to-Refresh: 최신 데이터 갱신 시작")
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async {
-                exchangeManager.refresh()
-                // 짧은 딜레이 후 완료 (사용자 피드백)
+                // Pull-to-Refresh 전용 함수 사용 (강제 즉시 업데이트)
+                exchangeManager.pullToRefresh()
+                
+                // 사용자 피드백을 위한 최소 딜레이 (0.5초)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     continuation.resume()
                 }

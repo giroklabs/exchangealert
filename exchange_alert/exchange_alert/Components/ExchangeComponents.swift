@@ -105,7 +105,13 @@ struct ExchangeRateCard: View {
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
                         
-                        if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
+                        if exchangeManager.isDailyChangeLoading {
+                            // 로딩 중
+                            Text("데이터 로드중")
+                                .font(AppTheme.subheadlineFont)
+                                .foregroundColor(.secondary)
+                        } else if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
+                            // 데이터 로드 완료
                             VStack(spacing: 4) {
                                 Text(dailyChange.changeValueString)
                                     .font(AppTheme.headlineFont)
@@ -117,15 +123,10 @@ struct ExchangeRateCard: View {
                                     .foregroundColor(dailyChange.isPositive ? .red : .blue)
                             }
                         } else {
-                            VStack(spacing: 4) {
-                                Text("--")
-                                    .font(AppTheme.headlineFont)
-                                    .foregroundColor(.secondary)
-                                
-                                Text("(--%)")
-                                    .font(AppTheme.subheadlineFont)
-                                    .foregroundColor(.secondary)
-                            }
+                            // 데이터 로드 실패
+                            Text("데이터 없음")
+                                .font(AppTheme.subheadlineFont)
+                                .foregroundColor(.secondary)
                         }
                     }
                     .frame(maxWidth: .infinity)
