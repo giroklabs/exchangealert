@@ -769,12 +769,7 @@ class ExchangeRateManager: ObservableObject {
             return
         }
         
-        // Settings.bundle에서 알림 활성화 상태 확인
-        let settingsManager = SettingsBundleManager.shared
-        guard settingsManager.notificationsEnabled else {
-            print("🔕 Settings.bundle에서 알림이 비활성화됨")
-            return
-        }
+        // 알림 활성화 상태는 기본적으로 허용
         
         let alertSettings = currencyAlertSettings.settings[currency] ?? AlertSettings.default
         guard alertSettings.isEnabled else { return }

@@ -111,17 +111,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     // 임계점 확인 및 알림 발송 (백그라운드용)
     private func checkAndSendAlert(rate: Double) {
-        // Settings.bundle에서 설정값 가져오기
-        let settingsManager = SettingsBundleManager.shared
-        
-        // 알림이 활성화되어 있는지 확인
-        guard settingsManager.notificationsEnabled else {
-            print("🔕 백그라운드 알림이 비활성화됨")
-            return
-        }
-        
-        let upperThreshold = settingsManager.usdUpperThreshold
-        let lowerThreshold = settingsManager.usdLowerThreshold
+        // 기본 임계값 사용 (1400/1350)
+        let upperThreshold = 1400.0
+        let lowerThreshold = 1350.0
         
         var shouldNotify = false
         var message = ""
