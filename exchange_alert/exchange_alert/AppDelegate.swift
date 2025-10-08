@@ -109,7 +109,78 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         task.resume()
     }
     
-    // 임계점 확인 및 알림 발송 (백그라운드용)
+    // 통화별 임계점 확인 및 알림 발송 (백그라운드용)
+    private func checkAndSendAlertForCurrency(currency: CurrencyType, rate: Double) {
+        // 사용자 설정에서 해당 통화 알림 설정 로드
+        guard let alertData = UserDefaults.standard.data(forKey: "CurrencyAlertSettings"),
+              var currencyAlertSettings = try? JSONDecoder().decode(CurrencyAlertSettings.self, from: alertData) else {
+            print("⚠️ 백그라운드: \(currency.rawValue) 사용자 알림 설정 없음 - 기본값 사용")
+            checkWithHardcodedThresholds(currency: currency, rate: rate)
+            return
+        }
+        
+        let alertSettings = currencyAlertSettings.getSettings(for: currency)
+        
+        // 알림이 비활성화된 경우
+        guard alertSettings.isEnabled else {
+            print("⚠️ 백그라운드: \(currency.rawValue) 알림이 비활성화됨")
+            return
+        }
+        
+        // 백그라운드 알림 스팸 방지 (5분 간격)
+        let now = Date()
+        let lastNotificationKey = "LastBackgroundNotification_\(currency.rawValue)"
+        if let lastNotification = UserDefaults.standard.object(forKey: lastNotificationKey) as? Date,
+           now.timeIntervalSince(lastNotification) < 300 {
+            print("⚠️ 백그라운드 스팸 방지: \(currency.rawValue) 마지막 알림 후 5분이 지나지 않음")
+            return
+        }
+        
+        // 사용자 설정에 따른 알림 체크
+        var shouldNotify = false
+        var message = ""
+        
+        switch alertSettings.thresholdType {
+        case .upper:
+            if rate >= alertSettings.threshold {
+                shouldNotify = true
+                message = "💰 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원) 이상이 되었습니다!"
+            }
+        case .lower:
+            if rate <= alertSettings.threshold {
+                shouldNotify = true
+                message = "📉 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원) 이하가 되었습니다!"
+            }
+        case .both3:
+            let upperThreshold = alertSettings.threshold * 1.03
+            let lowerThreshold = alertSettings.threshold * 0.97
+            if rate >= upperThreshold {
+                shouldNotify = true
+                message = "💰 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 3% 상승했습니다!"
+            } else if rate <= lowerThreshold {
+                shouldNotify = true
+                message = "📉 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 3% 하락했습니다!"
+            }
+        case .both:
+            let upperThreshold = alertSettings.threshold * 1.05
+            let lowerThreshold = alertSettings.threshold * 0.95
+            if rate >= upperThreshold {
+                shouldNotify = true
+                message = "💰 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 5% 상승했습니다!"
+            } else if rate <= lowerThreshold {
+                shouldNotify = true
+                message = "📉 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원으로 기준값(\(String(format: "%.0f", alertSettings.threshold))원)에서 5% 하락했습니다!"
+            }
+        }
+        
+        if shouldNotify {
+            // 마지막 알림 시간 저장
+            UserDefaults.standard.set(now, forKey: lastNotificationKey)
+            sendBackgroundNotification(message: message)
+        }
+    }
+    
+    // 임계점 확인 및 알림 발송 (백그라운드용) - 기존 함수 (하위 호환성)
     private func checkAndSendAlert(rate: Double) {
         // 사용자 설정에서 USD 알림 설정 로드
         guard let alertData = UserDefaults.standard.data(forKey: "CurrencyAlertSettings"),
@@ -180,7 +251,56 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
     }
     
-    // 하드코딩된 임계값 사용 (사용자 설정이 없을 때)
+    // 하드코딩된 임계값 사용 (사용자 설정이 없을 때) - 통화별
+    private func checkWithHardcodedThresholds(currency: CurrencyType, rate: Double) {
+        // 기본 임계값 사용 (USD: 1400/1350, 기타: 통화별 설정)
+        let upperThreshold: Double
+        let lowerThreshold: Double
+        
+        switch currency {
+        case .USD:
+            upperThreshold = 1400.0
+            lowerThreshold = 1350.0
+        case .EUR:
+            upperThreshold = 1500.0
+            lowerThreshold = 1450.0
+        case .JPY:
+            upperThreshold = 10.0
+            lowerThreshold = 9.5
+        default:
+            // 기타 통화는 USD 기준으로 조정
+            upperThreshold = 1400.0
+            lowerThreshold = 1350.0
+        }
+        
+        // 백그라운드 알림 스팸 방지 (5분 간격)
+        let now = Date()
+        let lastNotificationKey = "LastBackgroundNotification_\(currency.rawValue)"
+        if let lastNotification = UserDefaults.standard.object(forKey: lastNotificationKey) as? Date,
+           now.timeIntervalSince(lastNotification) < 300 {
+            print("⚠️ 백그라운드 스팸 방지: \(currency.rawValue) 마지막 알림 후 5분이 지나지 않음")
+            return
+        }
+        
+        var shouldNotify = false
+        var message = ""
+        
+        if rate >= upperThreshold {
+            shouldNotify = true
+            message = "💰 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원에 도달했습니다! (기본 설정)"
+        } else if rate <= lowerThreshold {
+            shouldNotify = true
+            message = "📉 \(currency.rawValue) 환율이 \(String(format: "%.2f", rate))원까지 하락했습니다! (기본 설정)"
+        }
+        
+        if shouldNotify {
+            // 마지막 알림 시간 저장
+            UserDefaults.standard.set(now, forKey: lastNotificationKey)
+            sendBackgroundNotification(message: message)
+        }
+    }
+    
+    // 하드코딩된 임계값 사용 (사용자 설정이 없을 때) - 기존 함수 (하위 호환성)
     private func checkWithHardcodedThresholds(rate: Double) {
         // 기본 임계값 사용 (1400/1350) - 하위 호환성
         let upperThreshold = 1400.0
@@ -353,11 +473,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 let exchangeData = try JSONDecoder().decode([String: ExchangeRate].self, from: data)
                 print("✅ 백그라운드 데이터 새로고침 성공: \(exchangeData.count)개 통화")
                 
-                // USD 환율 확인 및 알림 발송
-                if let usdRate = exchangeData["USD"],
-                   let ttbString = usdRate.ttb,
-                   let currentRate = Double(ttbString.replacingOccurrences(of: ",", with: "")) {
-                    self.checkAndSendAlert(rate: currentRate)
+                // 모든 통화 환율 확인 및 알림 발송 (매매기준율 사용)
+                for (currencyCode, rate) in exchangeData {
+                    if let currency = CurrencyType(rawValue: currencyCode),
+                       let dealBasRString = rate.dealBasR,
+                       let currentRate = Double(dealBasRString.replacingOccurrences(of: ",", with: "")) {
+                        self.checkAndSendAlertForCurrency(currency: currency, rate: currentRate)
+                    }
                 }
                 
                 completion(true)

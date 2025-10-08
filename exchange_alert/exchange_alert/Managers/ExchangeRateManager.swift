@@ -243,6 +243,9 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - API 호출
     func fetchExchangeRate(forceRefresh: Bool = false) {
+        // 데이터 로딩 시작 - 일일 변동 로딩 상태 활성화
+        isDailyChangeLoading = true
+        
         // 강제 새로고침이 아닌 경우에만 API 호출 제한 체크
         if !forceRefresh {
             guard canMakeAPICall() else {
@@ -342,6 +345,9 @@ class ExchangeRateManager: ObservableObject {
     // MARK: - ExchangeRate-API 호출
     private func fetchFromExchangeRateAPI() {
         print("🌐 ExchangeRate-API 호출: \(exchangeRateAPIURL)")
+        
+        // 백업 API 호출 시에도 일일 변동 로딩 상태 활성화
+        isDailyChangeLoading = true
         
         guard let url = URL(string: exchangeRateAPIURL) else {
             DispatchQueue.main.async {
@@ -587,6 +593,9 @@ class ExchangeRateManager: ObservableObject {
     // MARK: - 로컬 데이터 기반 오프라인 모드
     private func showLastSavedData() {
         print("📱 오프라인 모드: 로컬 저장된 데이터 로드 시도...")
+        
+        // 로컬 데이터 로드 시에도 일일 변동 로딩 상태 활성화
+        isDailyChangeLoading = true
         
         // 1. 최신 로컬 데이터 로드
         if let data = UserDefaults.standard.data(forKey: "LastExchangeRates"),
