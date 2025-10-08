@@ -174,12 +174,14 @@ enum CurrencyType: String, CaseIterable, Codable {
     }
 }
 
-// MARK: - ExchangeRate-API Response Model
+// MARK: - ExchangeRate-API Response Model (사용 안함)
+/*
 struct ExchangeRateAPIResponse: Codable {
     let base: String
     let date: String
     let rates: [String: Double]
 }
+*/
 
 // MARK: - Daily Change Model
 struct DailyChange: Codable {

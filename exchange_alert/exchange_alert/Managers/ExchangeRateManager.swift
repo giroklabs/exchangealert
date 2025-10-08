@@ -31,9 +31,9 @@ class ExchangeRateManager: ObservableObject {
     private var lastAPICallDate: Date?
     private let apiCallInterval: TimeInterval = 60 // 60초마다 최대 1회 호출 (성능 최적화)
     
-    private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"
-    private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"
-    private let exchangeRateAPIURL = "https://api.exchangerate-api.com/v4/latest/KRW"
+    // private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"  // 사용 안함
+    // private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"  // 사용 안함
+    // private let exchangeRateAPIURL = "https://api.exchangerate-api.com/v4/latest/KRW"  // 사용 안함
     private var timer: Timer?
     
     var currentRate: ExchangeRate? {
@@ -342,7 +342,8 @@ class ExchangeRateManager: ObservableObject {
     }
     
     
-    // MARK: - ExchangeRate-API 호출
+    // MARK: - ExchangeRate-API 호출 (사용 안함)
+    /*
     private func fetchFromExchangeRateAPI() {
         print("🌐 ExchangeRate-API 호출: \(exchangeRateAPIURL)")
         
@@ -444,6 +445,7 @@ class ExchangeRateManager: ObservableObject {
             }
         }.resume()
     }
+    */
     
     // MARK: - 주말/공휴일 체크
     private func isWeekendOrHoliday() -> Bool {
@@ -497,9 +499,9 @@ class ExchangeRateManager: ObservableObject {
         }
 
         guard let url = URL(string: githubURL) else {
-            print("❌ GitHub API 잘못된 URL: \(githubURL) - ExchangeRate-API로 백업")
-            currentApiSource = "ExchangeRate-API"
-            fetchFromExchangeRateAPI()
+            print("❌ GitHub API 잘못된 URL: \(githubURL) - 오프라인 모드로 전환")
+            currentApiSource = "오프라인 모드"
+            showLastSavedData()
             return
         }
 
@@ -631,10 +633,9 @@ class ExchangeRateManager: ObservableObject {
                 print("✅ 오프라인 모드 활성화 완료")
             }
         } else {
-            print("❌ 로컬 저장된 데이터 없음 - ExchangeRate-API로 백업")
-            self.currentApiSource = "ExchangeRate-API"
+            print("❌ 로컬 저장된 데이터 없음 - 오프라인 모드로 전환")
+            self.currentApiSource = "오프라인 모드"
             self.isDailyChangeLoading = false  // 데이터 없음 - 로딩 중단
-            self.fetchFromExchangeRateAPI()
         }
     }
     
@@ -720,13 +721,14 @@ class ExchangeRateManager: ObservableObject {
                 print("✅ \(newRates.count)개 통화 환율 로드 완료")
             }
         } catch {
-            print("❌ 데이터 파싱 오류: \(error.localizedDescription) - ExchangeRate-API로 백업")
-            self.currentApiSource = "ExchangeRate-API"
-            self.fetchFromExchangeRateAPI()
+            print("❌ 데이터 파싱 오류: \(error.localizedDescription) - 오프라인 모드로 전환")
+            self.currentApiSource = "오프라인 모드"
+            self.isDailyChangeLoading = false  // 파싱 오류 시에도 로딩 중단
         }
     }
 
-    // MARK: - Korea Exim Bank API 호출 (현재 미사용)
+    // MARK: - Korea Exim Bank API 호출 (사용 안함)
+    /*
     private func fetchFromKoreaEximAPI() {
         // 주말인 경우 캐시된 평일 데이터 사용
         if isWeekendOrHoliday() {
@@ -747,9 +749,8 @@ class ExchangeRateManager: ObservableObject {
                     self.checkAlertThresholds(rate: currentRate)
                 }
             } else {
-                print("📅 주말 감지 - 캐시된 데이터 없음, ExchangeRate-API로 백업")
-                self.currentApiSource = "ExchangeRate-API"
-                self.fetchFromExchangeRateAPI()
+                print("📅 주말 감지 - 캐시된 데이터 없음, 오프라인 모드로 전환")
+                self.currentApiSource = "오프라인 모드"
             }
             return
         }
@@ -760,9 +761,8 @@ class ExchangeRateManager: ObservableObject {
         guard let url = URL(string: urlString) else {
             print("❌ 한국수출입은행 API 잘못된 URL: \(urlString) - ExchangeRate-API로 백업 시도")
             DispatchQueue.main.async {
-                self.currentApiSource = "ExchangeRate-API"
+                self.currentApiSource = "오프라인 모드"
             }
-            fetchFromExchangeRateAPI()
             return
         }
         
@@ -771,16 +771,14 @@ class ExchangeRateManager: ObservableObject {
                 self?.isLoading = false
                 
                 if let error = error {
-                    print("❌ 한국수출입은행 API 네트워크 오류: \(error.localizedDescription) - ExchangeRate-API로 백업 시도")
-                    self?.currentApiSource = "ExchangeRate-API"
-                    self?.fetchFromExchangeRateAPI()
+                    print("❌ 한국수출입은행 API 네트워크 오류: \(error.localizedDescription) - 오프라인 모드로 전환")
+                    self?.currentApiSource = "오프라인 모드"
                     return
                 }
                 
                 guard let data = data else {
-                    print("❌ 한국수출입은행 API 데이터 없음 - ExchangeRate-API로 백업 시도")
-                    self?.currentApiSource = "ExchangeRate-API"
-                    self?.fetchFromExchangeRateAPI()
+                    print("❌ 한국수출입은행 API 데이터 없음 - 오프라인 모드로 전환")
+                    self?.currentApiSource = "오프라인 모드"
                     return
                 }
                 
@@ -832,20 +830,19 @@ class ExchangeRateManager: ObservableObject {
                        }
                        
                        if newRates.isEmpty {
-                           print("❌ 한국수출입은행 API에서 환율 정보 없음 - ExchangeRate-API로 백업 시도")
-                           self?.currentApiSource = "ExchangeRate-API"
-                           self?.fetchFromExchangeRateAPI()
+                           print("❌ 한국수출입은행 API에서 환율 정보 없음 - 오프라인 모드로 전환")
+                           self?.currentApiSource = "오프라인 모드"
                        } else {
                            print("✅ 총 \(newRates.count)개 통화 환율 로드 완료 (매매기준율 기준)")
                        }
                 } catch {
-                    print("❌ 한국수출입은행 API 파싱 오류: \(error.localizedDescription) - ExchangeRate-API로 백업 시도")
-                    self?.currentApiSource = "ExchangeRate-API"
-                    self?.fetchFromExchangeRateAPI()
+                    print("❌ 한국수출입은행 API 파싱 오류: \(error.localizedDescription) - 오프라인 모드로 전환")
+                    self?.currentApiSource = "오프라인 모드"
                 }
             }
         }.resume()
     }
+    */
     
     // MARK: - 자동 새로고침
     private func startPeriodicRefresh() {
