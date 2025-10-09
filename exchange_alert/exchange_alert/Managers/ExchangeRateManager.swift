@@ -130,13 +130,33 @@ class ExchangeRateManager: ObservableObject {
         UserDefaults.standard.set(lastAPICallDate, forKey: "LastAPICallDate")
     }
     
-    // MARK: - 로컬 데이터 저장 및 로드 시스템
+    // MARK: - 로컬 데이터 저장 및 로드 시스템 (개선된 검증 로직)
     private func loadPreviousDayData() {
         // 1. 먼저 로컬에 저장된 전일 데이터 확인
         if let data = UserDefaults.standard.data(forKey: "PreviousDayExchangeRates"),
+           let previousRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data),
+           let savedDate = UserDefaults.standard.object(forKey: "PreviousDayDataDate") as? Date {
+            
+            let calendar = Calendar.current
+            let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+            
+            // 저장된 날짜가 어제와 같은 날인지 확인
+            if calendar.isDate(savedDate, inSameDayAs: yesterday) {
+                previousDayData = previousRates
+                print("✅ 로컬 전일 데이터 로드 성공: \(previousRates.count)개 통화 (날짜 검증 완료)")
+                return
+            } else {
+                print("⚠️ 로컬 전일 데이터 날짜 불일치 (저장: \(savedDate), 필요: \(yesterday)) - GitHub에서 재로드 필요")
+            }
+        } else {
+            print("⚠️ 로컬 전일 데이터 없음 또는 날짜 정보 없음")
+        }
+        
+        // 2. 로컬 데이터 검증 실패 시 기존 로직 유지
+        if let data = UserDefaults.standard.data(forKey: "PreviousDayExchangeRates"),
            let previousRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: data) {
             previousDayData = previousRates
-            print("📊 로컬 전일 데이터 로드: \(previousRates.count)개 통화")
+            print("📊 로컬 전일 데이터 로드 (날짜 미검증): \(previousRates.count)개 통화")
             
             // 날짜 확인 - 저장된 데이터가 실제 전일 데이터인지 검증
             if let savedDate = UserDefaults.standard.object(forKey: "PreviousDayDataDate") as? Date {
@@ -672,19 +692,19 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
 
-            // 현재 데이터로 변동 계산 (메인 큐 밖에서 수행)
-            let calculatedChanges = self.calculateDailyChangesSync(newRates: newRates)
-            
             // 메인 큐에서 UI 업데이트 수행 (SwiftUI 퍼블리싱 오류 방지)
             DispatchQueue.main.async {
-                // 계산된 변동 데이터 업데이트
-                self.dailyChanges = calculatedChanges
-                self.isDailyChangeLoading = false  // 로딩 완료
-                
-                // 전일 데이터가 없으면 GitHub에서 전일 데이터 로드
+                // 전일 데이터가 없으면 먼저 GitHub에서 전일 데이터 로드 (비동기)
                 if self.previousDayData.isEmpty {
-                    print("⚠️ 전일 데이터 없음 - GitHub에서 전일 데이터 로드")
+                    print("⚠️ 전일 데이터 없음 - GitHub에서 전일 데이터 로드 후 계산")
                     self.loadPreviousDayFromGitHub()
+                    // loadPreviousDayFromGitHub()가 완료되면 내부에서 재계산됨
+                } else {
+                    // 전일 데이터가 있으면 즉시 계산
+                    let calculatedChanges = self.calculateDailyChangesSync(newRates: newRates)
+                    self.dailyChanges = calculatedChanges
+                    self.isDailyChangeLoading = false  // 로딩 완료
+                    print("✅ 일일 변동 계산 완료 (전일 데이터 존재)")
                 }
                 
                 // 날짜 변경 체크 후 이전 데이터 저장
@@ -1120,17 +1140,28 @@ class ExchangeRateManager: ObservableObject {
     }
     
     
-    // MARK: - GitHub에서 전일 데이터 로드 (백업용)
+    // MARK: - GitHub에서 전일 데이터 로드 (주말/공휴일 고려)
     private func loadPreviousDayFromGitHub() {
         let calendar = Calendar.current
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        var targetDate = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        
+        // 주말/공휴일 처리: 토요일이면 금요일, 일요일이면 금요일 데이터 로드
+        let weekday = calendar.component(.weekday, from: targetDate)
+        if weekday == 1 { // 일요일
+            targetDate = calendar.date(byAdding: .day, value: -2, to: targetDate) ?? targetDate // 금요일
+            print("📅 일요일 감지 - 금요일 데이터 로드")
+        } else if weekday == 7 { // 토요일
+            targetDate = calendar.date(byAdding: .day, value: -1, to: targetDate) ?? targetDate // 금요일
+            print("📅 토요일 감지 - 금요일 데이터 로드")
+        }
+        
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        let yesterdayString = dateFormatter.string(from: yesterday)
+        dateFormatter.dateFormat = "yyyy-MM-dd"  // 하이픈 포함 형식
+        let targetDateString = dateFormatter.string(from: targetDate)
         
-        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/daily/exchange-rates-\(yesterdayString).json"
+        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/daily/exchange-rates-\(targetDateString).json"
         
-        print("📥 GitHub에서 전일 데이터 로드 시도: \(githubURL)")
+        print("📥 GitHub에서 전일 데이터 로드 시도: \(githubURL) (기준일: \(targetDateString))")
         
         guard let url = URL(string: githubURL) else { return }
         
