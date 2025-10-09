@@ -72,7 +72,7 @@ struct ContentView: View {
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.primary)
+                            .foregroundColor(.yellow)
                     }
                     .padding(.top, 12)
                 }
