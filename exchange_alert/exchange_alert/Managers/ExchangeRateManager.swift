@@ -1160,15 +1160,16 @@ class ExchangeRateManager: ObservableObject {
         let targetDateString = dateFormatter.string(from: targetDate)
         
         let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/daily/exchange-rates-\(targetDateString).json"
+        let dateString = targetDateString  // 클로저에서 사용할 수 있도록 로컬 변수로 복사
         
-        print("📥 GitHub에서 전일 데이터 로드 시도: \(githubURL) (기준일: \(targetDateString))")
+        print("📥 GitHub에서 전일 데이터 로드 시도: \(githubURL) (기준일: \(dateString))")
         
         guard let url = URL(string: githubURL) else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let data = data,
                   let rates = try? JSONDecoder().decode([ExchangeRate].self, from: data) else {
-                print("❌ GitHub 전일 데이터 로드 실패: \(yesterdayString)")
+                print("❌ GitHub 전일 데이터 로드 실패: \(dateString)")
                 
                 // GitHub 로드 실패 시에만 로컬 백업 데이터 시도
                 DispatchQueue.main.async {
