@@ -92,11 +92,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 let rates = try JSONDecoder().decode([ExchangeRate].self, from: data)
                 print("✅ 백그라운드 fetch 성공: \(rates.count)개 통화 데이터 로드")
                 
-                // 간단한 알림 체크 로직
-                if let usdRate = rates.first(where: { $0.curUnit == "USD" }),
-                   let dealBasRString = usdRate.dealBasR,
-                   let currentRate = Double(dealBasRString.replacingOccurrences(of: ",", with: "")) {
-                    self.checkAndSendAlert(rate: currentRate)
+                // 모든 통화 환율 확인 및 알림 발송 (매매기준율 사용)
+                for rate in rates {
+                    if let curUnit = rate.curUnit,
+                       let currency = CurrencyType(rawValue: curUnit),
+                       let dealBasRString = rate.dealBasR,
+                       let currentRate = Double(dealBasRString.replacingOccurrences(of: ",", with: "")) {
+                        self.checkAndSendAlertForCurrency(currency: currency, rate: currentRate)
+                    }
                 }
                 
                 completionHandler(.newData)
@@ -333,35 +336,37 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
     }
     
-    // 백그라운드 알림 발송
+    // 백그라운드 알림 발송 (최적화된 버전)
     private func sendBackgroundNotification(message: String) {
-        // 알림 권한 확인
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else {
-                print("❌ 백그라운드 알림 권한 없음: \(settings.authorizationStatus.rawValue)")
-                return
-            }
-            
-            let content = UNMutableNotificationContent()
-            content.title = "💱 환율 알림"
-            content.body = message
-            content.sound = .default
-            content.badge = 1
-            
-            let request = UNNotificationRequest(
-                identifier: "background_alert_\(Date().timeIntervalSince1970)",
-                content: content,
-                trigger: nil
-            )
-            
-            UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    print("❌ 백그라운드 알림 발송 실패: \(error.localizedDescription)")
-                } else {
-                    print("✅ 백그라운드 알림 발송 성공: \(message)")
-                    // 알림 발송 기록
-                    self.recordNotification()
+        print("📱 백그라운드 알림 발송 시도: \(message)")
+        
+        // 즉시 알림 발송 (권한 체크는 앱 시작 시 이미 완료됨)
+        let content = UNMutableNotificationContent()
+        content.title = "💱 환율 알림"
+        content.body = message
+        content.sound = .default
+        content.badge = 1
+        
+        // 고유한 식별자 생성 (타임스탬프 + 랜덤)
+        let uniqueId = "background_alert_\(Int(Date().timeIntervalSince1970))_\(Int.random(in: 1000...9999))"
+        
+        let request = UNNotificationRequest(
+            identifier: uniqueId,
+            content: content,
+            trigger: nil
+        )
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("❌ 백그라운드 알림 발송 실패: \(error.localizedDescription)")
+                // 권한 문제인지 확인
+                UNUserNotificationCenter.current().getNotificationSettings { settings in
+                    print("🔍 알림 권한 상태: \(settings.authorizationStatus.rawValue)")
                 }
+            } else {
+                print("✅ 백그라운드 알림 발송 성공: \(message)")
+                // 알림 발송 기록
+                self.recordNotification()
             }
         }
     }
@@ -447,15 +452,24 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
     }
     
-    // 환율 데이터 새로고침 (공통 함수)
+    // 환율 데이터 새로고침 (최적화된 공통 함수)
     private func refreshExchangeData(completion: @escaping (Bool) -> Void) {
+        print("🔄 백그라운드 환율 데이터 새로고침 시작")
+        
         guard let url = URL(string: "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json") else {
             print("❌ 백그라운드 fetch URL 오류")
             completion(false)
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        // 백그라운드 실행 시간 제한을 고려한 타임아웃 설정
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 10.0  // 10초 타임아웃
+        config.timeoutIntervalForResource = 15.0  // 15초 전체 타임아웃
+        
+        let session = URLSession(configuration: config)
+        
+        session.dataTask(with: url) { data, response, error in
             if let error = error {
                 print("❌ 백그라운드 데이터 새로고침 실패: \(error.localizedDescription)")
                 completion(false)
@@ -468,18 +482,36 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 return
             }
             
-            // 데이터 파싱 시도
+            // 데이터 파싱 시도 (배열 형태)
             do {
-                let exchangeData = try JSONDecoder().decode([String: ExchangeRate].self, from: data)
-                print("✅ 백그라운드 데이터 새로고침 성공: \(exchangeData.count)개 통화")
+                let rates = try JSONDecoder().decode([ExchangeRate].self, from: data)
+                print("✅ 백그라운드 데이터 새로고침 성공: \(rates.count)개 통화")
                 
-                // 모든 통화 환율 확인 및 알림 발송 (매매기준율 사용)
-                for (currencyCode, rate) in exchangeData {
-                    if let currency = CurrencyType(rawValue: currencyCode),
+                // 알림 체크를 병렬로 처리하여 시간 단축
+                let dispatchGroup = DispatchGroup()
+                var alertCount = 0
+                
+                for rate in rates {
+                    if let curUnit = rate.curUnit,
+                       let currency = CurrencyType(rawValue: curUnit),
                        let dealBasRString = rate.dealBasR,
                        let currentRate = Double(dealBasRString.replacingOccurrences(of: ",", with: "")) {
-                        self.checkAndSendAlertForCurrency(currency: currency, rate: currentRate)
+                        
+                        dispatchGroup.enter()
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            self.checkAndSendAlertForCurrency(currency: currency, rate: currentRate)
+                            alertCount += 1
+                            dispatchGroup.leave()
+                        }
                     }
+                }
+                
+                // 모든 알림 체크 완료 대기 (최대 5초)
+                let result = dispatchGroup.wait(timeout: .now() + 5.0)
+                if result == .timedOut {
+                    print("⚠️ 백그라운드 알림 체크 시간 초과 (5초)")
+                } else {
+                    print("✅ 백그라운드 알림 체크 완료: \(alertCount)개 통화 확인")
                 }
                 
                 completion(true)
