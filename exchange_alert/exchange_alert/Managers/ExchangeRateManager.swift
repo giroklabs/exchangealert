@@ -634,8 +634,10 @@ class ExchangeRateManager: ObservableObject {
             }
         } else {
             print("❌ 로컬 저장된 데이터 없음 - 오프라인 모드로 전환")
-            self.currentApiSource = "오프라인 모드"
-            self.isDailyChangeLoading = false  // 데이터 없음 - 로딩 중단
+            DispatchQueue.main.async {
+                self.currentApiSource = "오프라인 모드"
+                self.isDailyChangeLoading = false  // 데이터 없음 - 로딩 중단
+            }
         }
     }
     
@@ -722,8 +724,10 @@ class ExchangeRateManager: ObservableObject {
             }
         } catch {
             print("❌ 데이터 파싱 오류: \(error.localizedDescription) - 오프라인 모드로 전환")
-            self.currentApiSource = "오프라인 모드"
-            self.isDailyChangeLoading = false  // 파싱 오류 시에도 로딩 중단
+            DispatchQueue.main.async {
+                self.currentApiSource = "오프라인 모드"
+                self.isDailyChangeLoading = false  // 파싱 오류 시에도 로딩 중단
+            }
         }
     }
 

@@ -39,7 +39,7 @@ struct ContentView: View {
                             
                             // 알림 설정 카드
                             AlertSettingsCard(currency: exchangeManager.selectedCurrency)
-                                .padding(.horizontal, 16)
+                                
                             
                             
                             // 마지막 업데이트 시간
@@ -63,6 +63,18 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     AppTitleView(baseSize: 26)
                         .padding(.top, 12)
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        print("🔄 헤더 새로고침 버튼 클릭됨")
+                        exchangeManager.pullToRefresh()
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.primary)
+                    }
+                    .padding(.top, 12)
                 }
             }
         }
