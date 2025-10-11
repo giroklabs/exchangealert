@@ -86,22 +86,25 @@ jobs:
             rate_clean=$(echo "$rate" | tr -d ',')
             
             # TTB/TTS 계산 (매매기준율 기준 ±1%)
-            ttb=$(echo "scale=2; $rate_clean * 0.99" | bc)
-            tts=$(echo "scale=2; $rate_clean * 1.01" | bc)
+            # TTB (Telegraphic Transfer Buying) = 은행이 살 때 (고객 입장에서 팔 때) - 낮은 가격
+            # TTS (Telegraphic Transfer Selling) = 은행이 팔 때 (고객 입장에서 살 때) - 높은 가격
+            buy_rate=$(echo "scale=2; $rate_clean * 0.99" | bc)   # 원래 TTB (낮음)
+            sell_rate=$(echo "scale=2; $rate_clean * 1.01" | bc)  # 원래 TTS (높음)
             
             # 쉼표 추가
             rate_formatted="$rate"
-            ttb_formatted=$(printf "%.2f" $ttb)
-            tts_formatted=$(printf "%.2f" $tts)
+            buy_formatted=$(printf "%.2f" $buy_rate)
+            sell_formatted=$(printf "%.2f" $sell_rate)
             
-            # JSON 항목 생성
+            # JSON 항목 생성 (ttb/tts 필드를 의도적으로 반대로 매핑)
+            # 앱에서 ttb를 "살 때"로, tts를 "팔 때"로 표시하므로 값을 바꿔서 저장
             if [ "$FIRST" = true ]; then
               FIRST=false
             else
               echo "," >> data/exchange-rates.json
             fi
             
-            echo "{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$ttb_formatted\",\"tts\":\"$tts_formatted\",\"deal_bas_r\":\"$rate_formatted\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate_formatted\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
+            echo "{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$sell_formatted\",\"tts\":\"$buy_formatted\",\"deal_bas_r\":\"$rate_formatted\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate_formatted\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
             
             echo "  Success: $cur_nm = $rate_formatted KRW"
           else
