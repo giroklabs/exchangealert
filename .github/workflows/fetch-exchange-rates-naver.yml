@@ -2,8 +2,8 @@ name: Fetch Exchange Rates from Naver
 
 on:
   schedule:
-    # 평일 한국시간 15분 간격 실행 (0시~24시) - 안정적인 업데이트
-    - cron: '*/15 * * * 1-5'  # 평일 15분 간격 (안정성 우선)
+    # 한국시간 15분 간격 실행 (주 7일, 0시~24시) - 안정적인 업데이트
+    - cron: '*/15 * * * *'  # 매일 15분 간격 (안정성 우선)
   workflow_dispatch:  # 수동 실행 가능
 
 jobs:
@@ -27,12 +27,12 @@ jobs:
       
     - name: Fetch exchange rates from Naver API (15분 간격)
       run: |
-        echo "=== Naver API Exchange Rate Fetch (평일 15분 간격) ==="
+        echo "=== Naver API Exchange Rate Fetch (매일 15분 간격) ==="
         KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
         SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d')  # 하이픈 포함 형식으로 통일
         
         echo "Current KST time: $KST_DATE"
-        echo "Fetching from Naver API (KEB Hana Bank) - 15분 간격 안정적인 업데이트..."
+        echo "Fetching from Naver API (KEB Hana Bank) - 매일 15분 간격 안정적인 업데이트..."
         
         # 통화 목록 (네이버 API 지원 통화)
         CURRENCIES=(
@@ -154,7 +154,7 @@ jobs:
         # 메타데이터 생성
         echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$(TZ='Asia/Seoul' date -Iseconds)\",\"api_source\":\"naver_keb\",\"data_count\":$DATA_COUNT,\"search_date\":\"$SEARCH_DATE\"}" > "data/history/meta-${SEARCH_DATE}.json"
         
-        echo "Data saved successfully - 15분 간격 안정적인 업데이트 완료"
+        echo "Data saved successfully - 매일 15분 간격 안정적인 업데이트 완료"
         
     - name: Commit and push
       run: |
@@ -183,13 +183,13 @@ jobs:
                 CLOSING_TAG="🔔 [종가 15:30] "
               fi
               
-              git commit -m "${CLOSING_TAG}Update exchange rates from Naver API - $COMMIT_DATE - Current: data/exchange-rates.json - Daily: data/daily/exchange-rates-$SEARCH_DATE.json - Count: $DATA_LENGTH currencies - Source: Naver KEB API (평일 15분 간격)"
+              git commit -m "${CLOSING_TAG}Update exchange rates from Naver API - $COMMIT_DATE - Current: data/exchange-rates.json - Daily: data/daily/exchange-rates-$SEARCH_DATE.json - Count: $DATA_LENGTH currencies - Source: Naver KEB API (매일 15분 간격)"
               
               git push
-              echo "Exchange rate data updated successfully from Naver API (24시간 15분 간격)."
-              echo "Stored $DATA_LENGTH currencies - 평일 24시간 15분 간격 (안정적인 자동 실행)"
+              echo "Exchange rate data updated successfully from Naver API (매일 15분 간격)."
+              echo "Stored $DATA_LENGTH currencies - 매일 24시간 15분 간격 (안정적인 자동 실행)"
             else
-              echo "No data changes (15분 간격 업데이트)."
+              echo "No data changes (매일 15분 간격 업데이트)."
             fi
           else
             echo "No valid data to commit."
