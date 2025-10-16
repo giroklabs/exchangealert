@@ -840,12 +840,9 @@ class ExchangeRateManager: ObservableObject {
                        self?.exchangeRates = newRates
                        // lastUpdateTime은 GitHub에서 별도로 로드됨
                        
-                       // 평일 데이터를 캐시에 저장
+                       // 데이터 저장 (불필요한 캐시 변수들 제거됨)
                        if !newRates.isEmpty {
-                           self?.weekdayLastData = newRates
-                           self?.lastWeekdayUpdate = Date()
-                           self?.lastWeekdayDate = Date() // 현재 날짜를 마지막 평일 날짜로 저장
-                           print("💾 평일 데이터 캐시에 저장 완료")
+                           print("💾 환율 데이터 처리 완료")
                        }
                        
                        // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
