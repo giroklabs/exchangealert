@@ -229,7 +229,7 @@ class ExchangeRateManager: ObservableObject {
             print("💾 현재 환율 데이터 로컬 저장: \(rates.count)개 통화")
         }
         
-        // 2. 날짜별 백업 저장 (히스토리 관리)
+        // 2. 날짜별 백업 저장 (히스토리 관리) - 전일 데이터 저장과 구분
         let calendar = Calendar.current
         let today = Date()
         let dateFormatter = DateFormatter()
@@ -710,14 +710,17 @@ class ExchangeRateManager: ObservableObject {
                 // 날짜 변경 체크 후 이전 데이터 저장
                 self.checkAndResetDailyData()
                 
-                // 현재 데이터를 이전 데이터로 저장 (같은 날짜 내에서만)
+                // 날짜가 바뀌었을 때만 previousDayData 업데이트 (같은 날짜 내 덮어쓰기 방지)
                 let calendar = Calendar.current
                 let today = Date()
                 if let lastUpdate = self.lastUpdateTime {
-                    if calendar.isDate(lastUpdate, inSameDayAs: today) {
-                        // 같은 날짜면 이전 데이터 업데이트
+                    if !calendar.isDate(lastUpdate, inSameDayAs: today) {
+                        // 날짜가 바뀌었을 때만 이전 데이터로 설정
                         self.previousDayData = self.exchangeRates
                         self.savePreviousDayData()
+                        print("📅 날짜 변경 감지 - previousDayData 업데이트")
+                    } else {
+                        print("📅 같은 날짜 - previousDayData 유지 (일일변동 계산 정확성 보장)")
                     }
                 }
                 
@@ -1105,10 +1108,12 @@ class ExchangeRateManager: ObservableObject {
             
             // 로컬 로드 후에도 없으면 빈 결과 반환 (비동기 로드 완료 후 재계산)
             if previousDayData.isEmpty {
-                print("⚠️ 전일 데이터 로드 실패 - 재계산 필요")
+                print("⚠️ 전일 데이터 로드 실패 - GitHub에서 비동기 로드 예정")
                 return changes
             }
         }
+        
+        print("📊 전일 데이터 확인: \(previousDayData.count)개 통화")
         
         for (currency, newRate) in newRates {
             if let currentValue = getDealBasRValue(from: newRate),
@@ -1143,16 +1148,25 @@ class ExchangeRateManager: ObservableObject {
     // MARK: - GitHub에서 전일 데이터 로드 (주말/공휴일 고려)
     private func loadPreviousDayFromGitHub() {
         let calendar = Calendar.current
-        var targetDate = calendar.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        let today = Date()
         
-        // 주말/공휴일 처리: 토요일이면 금요일, 일요일이면 금요일 데이터 로드
-        let weekday = calendar.component(.weekday, from: targetDate)
-        if weekday == 1 { // 일요일
-            targetDate = calendar.date(byAdding: .day, value: -2, to: targetDate) ?? targetDate // 금요일
-            print("📅 일요일 감지 - 금요일 데이터 로드")
-        } else if weekday == 7 { // 토요일
-            targetDate = calendar.date(byAdding: .day, value: -1, to: targetDate) ?? targetDate // 금요일
-            print("📅 토요일 감지 - 금요일 데이터 로드")
+        // 주말/공휴일 처리: 오늘 기준으로 주말이면 금요일 데이터 로드
+        let todayWeekday = calendar.component(.weekday, from: today)
+        var targetDate: Date
+        
+        if todayWeekday == 1 { // 일요일이면 금요일 데이터
+            targetDate = calendar.date(byAdding: .day, value: -2, to: today) ?? today
+            print("📅 오늘이 일요일 - 금요일 데이터 로드")
+        } else if todayWeekday == 7 { // 토요일이면 금요일 데이터
+            targetDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+            print("📅 오늘이 토요일 - 금요일 데이터 로드")
+        } else if todayWeekday == 2 { // 월요일이면 금요일 데이터
+            targetDate = calendar.date(byAdding: .day, value: -3, to: today) ?? today
+            print("📅 오늘이 월요일 - 금요일 데이터 로드")
+        } else {
+            // 평일이면 어제 데이터
+            targetDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+            print("📅 오늘이 평일 - 어제 데이터 로드")
         }
         
         let dateFormatter = DateFormatter()
@@ -1174,7 +1188,7 @@ class ExchangeRateManager: ObservableObject {
                 // GitHub 로드 실패 시에만 로컬 백업 데이터 시도
                 DispatchQueue.main.async {
                     print("❌ GitHub 전일 데이터 로드 실패 - 로컬 백업 데이터 사용")
-                    if let backupData = UserDefaults.standard.data(forKey: "LastExchangeRates"),
+                    if let backupData = UserDefaults.standard.data(forKey: "PreviousDayExchangeRates"),
                        let backupRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: backupData) {
                         self?.previousDayData = backupRates
                         print("📁 로컬 백업 데이터로 전일 데이터 설정 (부정확할 수 있음)")
