@@ -20,20 +20,15 @@ class ExchangeRateManager: ObservableObject {
     // 전일 데이터 저장 (변동 계산용)
     private var previousDayData: [CurrencyType: ExchangeRate] = [:]
     
-    // 평일 마지막 데이터 캐시
-    private var weekdayLastData: [CurrencyType: ExchangeRate] = [:]
-    private var lastWeekdayUpdate: Date?
-    private var lastWeekdayDate: Date? // 마지막 평일 날짜 저장
-    
     // API 호출 제한 관리 (GitHub API 사용으로 제한 완화)
     private let maxDailyAPICalls = 1000  // GitHub API는 제한이 관대함
     private var dailyAPICallCount = 0
     private var lastAPICallDate: Date?
     private let apiCallInterval: TimeInterval = 60 // 60초마다 최대 1회 호출 (성능 최적화)
     
-    // private let apiKey = "cTcUsZGSUum0cSXCpxNdb3TouiJNxSLW"  // 사용 안함
-    // private let baseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"  // 사용 안함
-    // private let exchangeRateAPIURL = "https://api.exchangerate-api.com/v4/latest/KRW"  // 사용 안함
+    // 동시성 안전성을 위한 UI 업데이트 큐
+    private let uiUpdateQueue = DispatchQueue.main
+    
     private var timer: Timer?
     
     var currentRate: ExchangeRate? {
@@ -57,9 +52,11 @@ class ExchangeRateManager: ObservableObject {
         previousDayData = [:]
         print("🔄 앱 시작 - 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드 예정)")
         
-        // 앱 시작 시 강제 즉시 환율 가져오기 (Task 사용)
-        Task { @MainActor in
-            self.forceRefreshOnStartup()
+        // 앱 시작 시 강제 즉시 환율 가져오기 (Task 사용 - 메모리 누수 방지)
+        Task { [weak self] in
+            await MainActor.run {
+                self?.forceRefreshOnStartup()
+            }
         }
         
         startPeriodicRefresh() // 5분마다 자동 새로고침 (API 호출 제한 고려)
@@ -692,8 +689,8 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
 
-            // 메인 큐에서 UI 업데이트 수행 (SwiftUI 퍼블리싱 오류 방지)
-            DispatchQueue.main.async {
+            // 메인 큐에서 UI 업데이트 수행 (동시성 안전성 보장)
+            self.uiUpdateQueue.async {
                 // 전일 데이터가 없으면 먼저 GitHub에서 전일 데이터 로드 (비동기)
                 if self.previousDayData.isEmpty {
                     print("⚠️ 전일 데이터 없음 - GitHub에서 전일 데이터 로드 후 계산")
@@ -1217,29 +1214,29 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
             
-            DispatchQueue.main.async {
-                self?.previousDayData = previousRates
-                self?.savePreviousDayData()
-                print("✅ GitHub 전일 데이터 로드 완료: \(previousRates.count)개 통화")
-                
-                // USD 데이터 디버깅
-                if let usdRate = previousRates[.USD] {
-                    print("📊 GitHub USD 전일 데이터: \(usdRate.dealBasR ?? "N/A")원")
-                }
-                
-                // 전일 데이터 로드 완료 후 일일변동 재계산
-                if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
-                    let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
-                    self?.dailyChanges = recalculatedChanges
-                    self?.isDailyChangeLoading = false  // 로딩 완료
-                    print("🔄 전일 데이터 로드 후 일일변동 재계산 완료")
+                DispatchQueue.main.async {
+                    self?.previousDayData = previousRates
+                    self?.savePreviousDayData()
+                    print("✅ GitHub 전일 데이터 로드 완료: \(previousRates.count)개 통화")
                     
-                    // USD 일일변동 디버깅
-                    if let usdChange = recalculatedChanges[.USD] {
-                        print("📊 USD 일일변동 계산 결과: \(usdChange.changeValue >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changeValue))원 (\(usdChange.changePercent >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changePercent))%)")
+                    // USD 데이터 디버깅
+                    if let usdRate = previousRates[.USD] {
+                        print("📊 GitHub USD 전일 데이터: \(usdRate.dealBasR ?? "N/A")원")
+                    }
+                    
+                    // 전일 데이터 로드 완료 후 일일변동 재계산 (동시성 안전성 보장)
+                    if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
+                        let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
+                        self?.dailyChanges = recalculatedChanges
+                        self?.isDailyChangeLoading = false  // 로딩 완료
+                        print("🔄 전일 데이터 로드 후 일일변동 재계산 완료")
+                        
+                        // USD 일일변동 디버깅
+                        if let usdChange = recalculatedChanges[.USD] {
+                            print("📊 USD 일일변동 계산 결과: \(usdChange.changeValue >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changeValue))원 (\(usdChange.changePercent >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changePercent))%)")
+                        }
                     }
                 }
-            }
         }.resume()
     }
     
