@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     @State private var isKeyboardVisible = false
+    @State private var showingSettings = false
     
     var body: some View {
         NavigationView {
@@ -39,13 +40,23 @@ struct ContentView: View {
                             
                             // 알림 설정 카드
                             AlertSettingsCard(currency: exchangeManager.selectedCurrency)
-                                
-                            
                             
                             // 마지막 업데이트 시간
                             if exchangeManager.currentRate != nil {
                                 LastUpdateView()
                                     .padding(.horizontal, 16)
+                                    .padding(.top, -11)  // 간격을 30% 수준으로 줄임 (LazyVStack spacing 16의 30% ≈ 5, 음수 패딩으로 간격 축소)
+                            }
+                            
+                            // 광고 배너를 ScrollView 내부로 이동 (무효 트래픽 방지)
+                            // 충분한 간격을 두어 의도치 않은 클릭 방지
+                            // 키보드가 보이지 않을 때만 표시
+                            if !isKeyboardVisible {
+                                AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/2141928354")
+                                    .frame(maxWidth: .infinity, maxHeight: 50)
+                                    .padding(.horizontal, 16)
+                                    .padding(.top, 24)  // 상단 여백 확대
+                                    .padding(.bottom, 24)  // 하단 여백 확대 (6pt → 24pt)
                             }
                         }
                         .refreshable {
@@ -66,41 +77,36 @@ struct ContentView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        print("🔄 헤더 새로고침 버튼 클릭됨")
-                        exchangeManager.pullToRefresh()
-                    }) {
-                        Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.yellow)
+                    HStack(spacing: 4) {
+                        // 설정 버튼
+                        Button(action: {
+                            showingSettings = true
+                        }) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.yellow)
+                        }
+                        
+                        // 새로고침 버튼
+                        Button(action: {
+                            print("🔄 헤더 새로고침 버튼 클릭됨")
+                            exchangeManager.pullToRefresh()
+                        }) {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.yellow)
+                        }
                     }
                     .padding(.top, 12)
                 }
+            }
+            .sheet(isPresented: $showingSettings) {
+                AppSettingsView()
             }
         }
         .onAppear {
             if exchangeManager.currentRate == nil {
                 exchangeManager.fetchExchangeRate()
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            // 키보드가 보이지 않을 때만 광고 배너 표시
-            if !isKeyboardVisible {
-                VStack(spacing: 4) {
-                    // 제조사 로고 (우측정렬)
-                    HStack {
-                        Spacer()
-                        SignatureView()
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 4)
-                    
-                    // AdMob 배너 광고
-                    AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/2141928354")
-                        .frame(maxWidth: .infinity, maxHeight: 50)
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 6)
-                }
             }
         }
         .onTapGesture {
