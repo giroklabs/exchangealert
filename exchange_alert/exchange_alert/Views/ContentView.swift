@@ -48,16 +48,6 @@ struct ContentView: View {
                                     .padding(.top, -11)  // 간격을 30% 수준으로 줄임 (LazyVStack spacing 16의 30% ≈ 5, 음수 패딩으로 간격 축소)
                             }
                             
-                            // 광고 배너를 ScrollView 내부로 이동 (무효 트래픽 방지)
-                            // 충분한 간격을 두어 의도치 않은 클릭 방지
-                            // 키보드가 보이지 않을 때만 표시
-                            if !isKeyboardVisible {
-                                AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/2141928354")
-                                    .frame(maxWidth: .infinity, maxHeight: 50)
-                                    .padding(.horizontal, 16)
-                                    .padding(.top, 24)  // 상단 여백 확대
-                                    .padding(.bottom, 24)  // 하단 여백 확대 (6pt → 24pt)
-                            }
                         }
                         .refreshable {
                             // Pull-to-Refresh: 최신 데이터 갱신 (강제 즉시 업데이트)
@@ -70,6 +60,18 @@ struct ContentView: View {
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom) {
+                // AdMob 배너 광고를 화면 하단에 고정 (정책 준수)
+                // 키보드가 보이지 않을 때만 표시하고, 충분한 여백 확보
+                if !isKeyboardVisible {
+                    AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/9991728010")
+                        .frame(height: 50)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)  // 상단 여백
+                        .padding(.bottom, 12)  // 하단 여백 (안전 영역 고려)
+                        .background(Color(.systemBackground))  // 배경색으로 명확히 구분
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     AppTitleView(baseSize: 26)

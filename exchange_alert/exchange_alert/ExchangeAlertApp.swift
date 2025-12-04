@@ -43,10 +43,8 @@ struct ExchangeAlertApp: App {
                     // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
                     setupBackgroundRefresh()
                     
-                    // iOS 13+ 백그라운드 작업 재스케줄링
-                    if #available(iOS 13.0, *) {
-                        scheduleBackgroundTask()
-                    }
+                    // iOS 13+ 백그라운드 작업 재스케줄링은 AppDelegate에서만 처리
+                    // 중복 스케줄링 방지를 위해 여기서는 제거
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                     // 백그라운드 fetch 간격 재설정 (더 적극적으로)
@@ -105,33 +103,6 @@ struct ExchangeAlertApp: App {
         }
     }
     
-    // iOS 13+ 백그라운드 작업 스케줄링
-    @available(iOS 13.0, *)
-    private func scheduleBackgroundTask() {
-        // 기존 요청 취소
-        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
-        
-        let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 5 * 60) // 5분 후로 단축
-        
-        do {
-            try BGTaskScheduler.shared.submit(request)
-            print("✅ ExchangeAlertApp 백그라운드 작업 스케줄링 성공 (5분 후)")
-            
-            // 추가로 더 짧은 간격으로도 요청
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                let shortRequest = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
-                shortRequest.earliestBeginDate = Date(timeIntervalSinceNow: 2 * 60) // 2분 후
-                
-                do {
-                    try BGTaskScheduler.shared.submit(shortRequest)
-                    print("✅ ExchangeAlertApp 짧은 간격 백그라운드 작업 스케줄링 성공 (2분 후)")
-                } catch {
-                    print("❌ ExchangeAlertApp 짧은 간격 백그라운드 작업 스케줄링 실패: \(error)")
-                }
-            }
-        } catch {
-            print("❌ ExchangeAlertApp 백그라운드 작업 스케줄링 실패: \(error)")
-        }
-    }
+    // iOS 13+ 백그라운드 작업 스케줄링은 AppDelegate에서만 처리
+    // 중복 스케줄링 방지를 위해 제거됨
 }

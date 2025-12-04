@@ -403,30 +403,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     private func scheduleBackgroundRefresh() {
         guard #available(iOS 13.0, *) else { return }
         
-        // 기존 요청 취소
+        // 기존 요청 취소 (중복 방지)
         BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.exchangealert.refresh")
         
-        let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 5 * 60) // 5분 후로 단축
-        
-        do {
-            try BGTaskScheduler.shared.submit(request)
-            print("✅ AppDelegate 백그라운드 작업 스케줄링 성공 (5분 후)")
+        // 짧은 딜레이 후 스케줄링 (중복 요청 방지)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let request = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 5 * 60) // 5분 후
             
-            // 추가로 더 짧은 간격으로도 요청
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                let shortRequest = BGAppRefreshTaskRequest(identifier: "com.exchangealert.refresh")
-                shortRequest.earliestBeginDate = Date(timeIntervalSinceNow: 1 * 60) // 1분 후
-                
-                do {
-                    try BGTaskScheduler.shared.submit(shortRequest)
-                    print("✅ AppDelegate 짧은 간격 백그라운드 작업 스케줄링 성공 (1분 후)")
-                } catch {
-                    print("❌ AppDelegate 짧은 간격 백그라운드 작업 스케줄링 실패: \(error)")
+            do {
+                try BGTaskScheduler.shared.submit(request)
+                print("✅ AppDelegate 백그라운드 작업 스케줄링 성공 (5분 후)")
+            } catch {
+                print("❌ AppDelegate 백그라운드 작업 스케줄링 실패: \(error)")
+                // 에러 상세 정보 출력
+                if let nsError = error as NSError? {
+                    print("   에러 도메인: \(nsError.domain)")
+                    print("   에러 코드: \(nsError.code)")
+                    print("   에러 설명: \(nsError.localizedDescription)")
                 }
             }
-        } catch {
-            print("❌ AppDelegate 백그라운드 작업 스케줄링 실패: \(error)")
         }
     }
     

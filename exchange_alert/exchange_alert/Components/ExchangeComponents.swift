@@ -10,7 +10,7 @@ struct ExchangeRateCard: View {
     
     var body: some View {
         CardView(cornerRadius: 16, shadowRadius: 8) {
-            VStack(spacing: 16) {
+            VStack(spacing: 14) {  // 16 * 0.9 = 14.4 ≈ 14
                 // 헤더
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -62,12 +62,12 @@ struct ExchangeRateCard: View {
                 }
                 
                 // 환율 데이터를 세로로 정렬하여 아름다운 레이아웃 구성
-                VStack(spacing: 20) {
+                VStack(spacing: 18) {  // 20 * 0.9 = 18
                     // 매매기준율 (메인) - 완전 중앙 배치
                     if let dealBasR = rate.dealBasR {
                         let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
                         if let rateValue = Double(cleanedRate) {
-                            VStack(spacing: 12) {
+                            VStack(spacing: 11) {  // 12 * 0.9 = 10.8 ≈ 11
                                 Text("매매기준율")
                                     .font(AppTheme.captionFont)
                                     .foregroundColor(.secondary)
@@ -100,7 +100,7 @@ struct ExchangeRateCard: View {
                     ExchangeBuySeelView(rate: rate)
                     
                     // 일일 변동 정보 - 하단에 배치
-                    VStack(spacing: 8) {
+                    VStack(spacing: 7) {  // 8 * 0.9 = 7.2 ≈ 7
                         Text("일일 변동")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
