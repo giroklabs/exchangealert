@@ -71,7 +71,15 @@ jobs:
           echo "📊 FRED API에서 달러 지수(DTWEXBGS) 데이터 가져오기..."
           
           # FRED API 호출 - Trade Weighted U.S. Dollar Index: Broad, Goods (DTWEXBGS)
-          FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&limit=52&sort_order=desc")
+          # 최근 1년치 데이터 가져오기 (약 260 영업일)
+          # observation_start를 1년 전으로 설정하여 충분한 데이터 확보
+          ONE_YEAR_AGO=$(date -d '1 year ago' +%Y-%m-%d 2>/dev/null || date -v-1y +%Y-%m-%d 2>/dev/null || echo "")
+          if [ -z "$ONE_YEAR_AGO" ]; then
+            # 날짜 계산 실패 시 limit만 사용
+            FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&limit=260&sort_order=desc")
+          else
+            FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&observation_start=$ONE_YEAR_AGO&sort_order=desc")
+          fi
           
           echo "$FRED_RESPONSE" > /tmp/fred-response.json
           
@@ -94,26 +102,33 @@ jobs:
             }
             
             const observations = data.observations
-              .filter(obs => obs.value !== '.')
+              .filter(obs => obs.value !== '.' && obs.value !== null)
               .map(obs => ({
                 date: obs.date,
                 value: parseFloat(obs.value)
               }))
               .reverse(); // 오래된 순으로 정렬
             
-            const values = observations.map(obs => obs.value);
+            // 최근 52주 데이터만 사용 (약 260 영업일 중 최근 52개)
+            const recent52Weeks = observations.slice(-52);
+            
+            const values = recent52Weeks.map(obs => obs.value);
             const sorted = [...values].sort((a, b) => a - b);
             
             const dollarIndexData = {
               date: new Date().toISOString().split('T')[0],
-              current: values[values.length - 1],
-              history: observations,
+              current: values[values.length - 1], // 가장 최신값
+              history: recent52Weeks, // 최근 52주 데이터
               "52week": {
                 low: sorted[0],
                 high: sorted[sorted.length - 1],
                 average: values.reduce((a, b) => a + b, 0) / values.length
               }
             };
+            
+            console.log('📊 데이터 수집 결과:');
+            console.log('  - 전체 관측값:', observations.length);
+            console.log('  - 사용된 데이터:', recent52Weeks.length, '개 (최근 52주)');
             
             const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
             fs.mkdirSync(path.dirname(outputPath), { recursive: true });
