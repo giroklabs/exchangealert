@@ -13,6 +13,7 @@ interface DataTableProps {
     average: number;
   };
   isLoading?: boolean;
+  calculationDate?: string;
 }
 
 export function DataTable({
@@ -20,6 +21,7 @@ export function DataTable({
   dollarIndex,
   gapRatio,
   isLoading,
+  calculationDate,
 }: DataTableProps) {
   if (isLoading) {
     return (
@@ -82,6 +84,19 @@ export function DataTable({
             </tr>
           </tbody>
         </table>
+      </div>
+      <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-400">
+        <p>📊 출처: 수출입은행 API 히스토리 데이터 (환율), FRED API (달러 지수)</p>
+        {calculationDate && (
+          <p>🕐 계산 기준일: {new Date(calculationDate).toLocaleString('ko-KR', { 
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone: 'Asia/Seoul'
+          })}</p>
+        )}
+        <p>📈 기간: 최근 52주 (약 1년)</p>
+        <p>🔄 업데이트: 매일 오전 9시 (KST)</p>
       </div>
     </div>
   );

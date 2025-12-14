@@ -5,9 +5,10 @@ interface ExchangeRateCardProps {
   rate: ExchangeRate | null;
   average?: number;
   isLoading?: boolean;
+  lastUpdate?: string;
 }
 
-export function ExchangeRateCard({ rate, average, isLoading }: ExchangeRateCardProps) {
+export function ExchangeRateCard({ rate, average, isLoading, lastUpdate }: ExchangeRateCardProps) {
   if (isLoading) {
     return (
       <div className="bg-white rounded-lg shadow-md p-6 animate-pulse">
@@ -49,6 +50,20 @@ export function ExchangeRateCard({ rate, average, isLoading }: ExchangeRateCardP
       <div className="mt-4 text-sm text-gray-500">
         <p>매수기준율: {rate.ttb}원</p>
         <p>매도기준율: {rate.tts}원</p>
+      </div>
+      <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-400">
+        <p>📊 출처: 한국수출입은행 Open API</p>
+        {lastUpdate && (
+          <p>🕐 기준 시점: {new Date(lastUpdate).toLocaleString('ko-KR', { 
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Seoul'
+          })} (KST)</p>
+        )}
+        <p>🔄 업데이트: 15분 간격</p>
       </div>
     </div>
   );

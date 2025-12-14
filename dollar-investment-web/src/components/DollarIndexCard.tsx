@@ -50,6 +50,17 @@ export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardPro
         <p>52주 최저: {data['52week'].low.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}</p>
         <p>52주 최고: {data['52week'].high.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}</p>
       </div>
+      <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-400">
+        <p>📊 출처: FRED API (Federal Reserve Economic Data)</p>
+        <p>🕐 기준 시점: {new Date(data.date).toLocaleString('ko-KR', { 
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          timeZone: 'Asia/Seoul'
+        })}</p>
+        <p>🔄 업데이트: 매일 오전 9시 (KST)</p>
+        <p>📈 지수: DTWEXBGS (Trade Weighted U.S. Dollar Index: Broad, Goods)</p>
+      </div>
     </div>
   );
 }

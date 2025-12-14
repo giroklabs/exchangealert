@@ -32,6 +32,28 @@ export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
 }
 
 /**
+ * 환율 데이터 마지막 업데이트 시간 로드
+ */
+export async function fetchLastUpdateTime(): Promise<string | null> {
+  try {
+    const url = import.meta.env.PROD 
+      ? 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/last-update.txt'
+      : 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/last-update.txt';
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      return null;
+    }
+
+    const text = await response.text();
+    return text.trim();
+  } catch (error) {
+    console.error('업데이트 시간 로드 실패:', error);
+    return null;
+  }
+}
+
+/**
  * 환율 히스토리 데이터 로드 (52주)
  */
 export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; rate: number }>> {

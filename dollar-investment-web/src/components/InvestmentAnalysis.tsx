@@ -8,7 +8,7 @@ import { calculateGapRatio } from '../services/calculationService';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 
 export function InvestmentAnalysis() {
-  const { exchangeRate, dollarIndex, weeklyAverages, signal, isLoading, error } =
+  const { exchangeRate, dollarIndex, weeklyAverages, signal, isLoading, error, lastUpdateTime } =
     useInvestmentAnalysis();
 
   if (error) {
@@ -42,6 +42,7 @@ export function InvestmentAnalysis() {
           rate={exchangeRate}
           average={weeklyAverages?.exchangeRate.average}
           isLoading={isLoading}
+          lastUpdate={lastUpdateTime || undefined}
         />
         <DollarIndexCard
           data={dollarIndex}
@@ -62,6 +63,7 @@ export function InvestmentAnalysis() {
           dollarIndex={weeklyAverages.dollarIndex}
           gapRatio={weeklyAverages.gapRatio}
           isLoading={isLoading}
+          calculationDate={weeklyAverages.date}
         />
       )}
     </div>

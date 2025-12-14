@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { ExchangeRate, DollarIndexData, InvestmentSignal } from '../types';
-import { fetchCurrentExchangeRate, getCurrentRateValue } from '../services/exchangeRateService';
+import { fetchCurrentExchangeRate, getCurrentRateValue, fetchLastUpdateTime } from '../services/exchangeRateService';
 import { fetchDollarIndex, fetchWeeklyAverages } from '../services/dollarIndexService';
 import {
   calculateGapRatio,
@@ -15,10 +15,12 @@ interface AnalysisData {
     exchangeRate: { low: number; high: number; average: number };
     dollarIndex: { low: number; high: number; average: number };
     gapRatio: { average: number };
+    date?: string;
   } | null;
   signal: InvestmentSignal | null;
   isLoading: boolean;
   error: string | null;
+  lastUpdateTime: string | null;
 }
 
 export function useInvestmentAnalysis(): AnalysisData {
@@ -28,6 +30,7 @@ export function useInvestmentAnalysis(): AnalysisData {
   const [signal, setSignal] = useState<InvestmentSignal | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdateTime, setLastUpdateTime] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -36,11 +39,14 @@ export function useInvestmentAnalysis(): AnalysisData {
 
       try {
         // 병렬로 데이터 로드
-        const [rate, index, averages] = await Promise.all([
+        const [rate, index, averages, updateTime] = await Promise.all([
           fetchCurrentExchangeRate(),
           fetchDollarIndex(),
           fetchWeeklyAverages(),
+          fetchLastUpdateTime(),
         ]);
+        
+        setLastUpdateTime(updateTime);
 
         setExchangeRate(rate);
         setDollarIndex(index);
@@ -86,6 +92,7 @@ export function useInvestmentAnalysis(): AnalysisData {
     signal,
     isLoading,
     error,
+    lastUpdateTime,
   };
 }
 
