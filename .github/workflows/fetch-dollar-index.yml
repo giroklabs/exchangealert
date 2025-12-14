@@ -48,61 +48,51 @@ jobs:
           fi
           
           # 데이터 파싱 (Node.js 스크립트 사용)
-          echo "$RESPONSE" | node << 'EOF'
+          echo "$RESPONSE" > /tmp/dollar-index-response.json
+          
+          node << 'EOF'
           const fs = require('fs');
-          const readline = require('readline');
+          const path = require('path');
           
-          const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            terminal: false
-          });
-          
-          let responseData = '';
-          rl.on('line', (line) => {
-            responseData += line + '\n';
-          });
-          
-          rl.on('close', () => {
-            try {
-              const data = JSON.parse(responseData);
-          
-          if (!data['Time Series (Daily)']) {
-            console.log('⚠️ API 응답에 데이터가 없습니다. 샘플 데이터를 유지합니다.');
-            process.exit(0);
+          try {
+            const responseData = fs.readFileSync('/tmp/dollar-index-response.json', 'utf8');
+            const data = JSON.parse(responseData);
+            
+            if (!data['Time Series (Daily)']) {
+              console.log('⚠️ API 응답에 데이터가 없습니다. 샘플 데이터를 유지합니다.');
+              process.exit(0);
+            }
+            
+            const timeSeries = data['Time Series (Daily)'];
+            const dates = Object.keys(timeSeries).sort().reverse(); // 최신순
+            const values = dates.map(date => parseFloat(timeSeries[date]['4. close']));
+            
+            // 최근 52주 데이터
+            const recent52Weeks = values.slice(0, 52);
+            const sorted = [...recent52Weeks].sort((a, b) => a - b);
+            
+            const dollarIndexData = {
+              date: new Date().toISOString().split('T')[0],
+              current: values[0] || 93.30,
+              history: dates.slice(0, 52).map((date, i) => ({
+                date: date,
+                value: values[i]
+              })),
+              "52week": {
+                low: sorted[0] || 91.73,
+                high: sorted[sorted.length - 1] || 103.96,
+                average: recent52Weeks.reduce((a, b) => a + b, 0) / recent52Weeks.length || 97.84
+              }
+            };
+            
+            const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
+            fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+            fs.writeFileSync(outputPath, JSON.stringify(dollarIndexData, null, 2));
+            console.log('✅ 달러 지수 데이터 저장 완료:', dollarIndexData.current);
+          } catch (e) {
+            console.error('❌ 데이터 파싱 오류:', e.message);
+            process.exit(1);
           }
-          
-          const timeSeries = data['Time Series (Daily)'];
-          const dates = Object.keys(timeSeries).sort().reverse(); // 최신순
-          const values = dates.map(date => parseFloat(timeSeries[date]['4. close']));
-          
-          // 최근 52주 데이터
-          const recent52Weeks = values.slice(0, 52);
-          const sorted = [...recent52Weeks].sort((a, b) => a - b);
-          
-          const dollarIndexData = {
-            date: new Date().toISOString().split('T')[0],
-            current: values[0] || 93.30,
-            history: dates.slice(0, 52).map((date, i) => ({
-              date: date,
-              value: values[i]
-            })),
-            "52week": {
-              low: sorted[0] || 91.73,
-              high: sorted[sorted.length - 1] || 103.96,
-              average: recent52Weeks.reduce((a, b) => a + b, 0) / recent52Weeks.length || 97.84
-            }
-          };
-          
-              const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
-              fs.mkdirSync(require('path').dirname(outputPath), { recursive: true });
-              fs.writeFileSync(outputPath, JSON.stringify(dollarIndexData, null, 2));
-              console.log('✅ 달러 지수 데이터 저장 완료:', dollarIndexData.current);
-            } catch (e) {
-              console.error('❌ 데이터 파싱 오류:', e.message);
-              process.exit(1);
-            }
-          });
           EOF
 
       - name: Fetch Dollar Index from FRED API (Fallback)
