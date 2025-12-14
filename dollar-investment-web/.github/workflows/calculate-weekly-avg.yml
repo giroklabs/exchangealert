@@ -1,0 +1,60 @@
+name: Calculate Weekly Averages
+
+on:
+  schedule:
+    # 매일 한국시간 오전 9시 30분 (UTC 0시 30분)에 실행
+    - cron: '30 0 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  calculate-averages:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Calculate 52-week averages
+        run: |
+          # Node.js 스크립트로 52주 평균 계산
+          # 실제 구현 시 환율 히스토리와 달러 지수 히스토리를 분석
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          // 샘플 데이터 (실제로는 GitHub에서 히스토리 데이터를 로드)
+          const weeklyAverages = {
+            date: new Date().toISOString().split('T')[0],
+            exchangeRate: {
+              low: 1151.11,
+              high: 1292.93,
+              average: 1222.02
+            },
+            dollarIndex: {
+              low: 91.73,
+              high: 103.96,
+              average: 97.84
+            },
+            gapRatio: {
+              average: 8.01
+            }
+          };
+
+          const outputPath = path.join('public', 'data', 'weekly-averages.json');
+          fs.writeFileSync(outputPath, JSON.stringify(weeklyAverages, null, 2));
+          console.log('52주 평균 데이터 생성 완료');
+          EOF
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/data/weekly-averages.json
+          git diff --staged --quiet || git commit -m "Update weekly averages [skip ci]"
+          git push
+
