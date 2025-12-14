@@ -1,4 +1,5 @@
 import type { DollarIndexData } from '../types';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface DollarIndexCardProps {
   data: DollarIndexData | null;
@@ -7,20 +8,32 @@ interface DollarIndexCardProps {
 }
 
 export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardProps) {
+  const { theme } = useTheme();
+
   if (isLoading) {
     return (
-      <div className="bg-gray-800 rounded-lg shadow-md p-6 animate-pulse">
-        <div className="h-4 bg-gray-700 rounded w-1/3 mb-4"></div>
-        <div className="h-8 bg-gray-700 rounded w-1/2"></div>
+      <div className={`rounded-lg shadow-md p-6 animate-pulse ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className={`h-4 rounded w-1/3 mb-4 ${
+          theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+        }`}></div>
+        <div className={`h-8 rounded w-1/2 ${
+          theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+        }`}></div>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold text-gray-200 mb-2">달러 지수</h3>
-        <p className="text-gray-400">데이터를 불러올 수 없습니다.</p>
+      <div className={`rounded-lg shadow-md p-6 ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <h3 className={`text-lg font-semibold mb-2 ${
+          theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+        }`}>달러 지수</h3>
+        <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>데이터를 불러올 수 없습니다.</p>
       </div>
     );
   }
@@ -28,16 +41,24 @@ export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardPro
   const isBelowAverage = average ? data.current < average : false;
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-200 mb-4">달러 지수</h3>
+    <div className={`rounded-lg shadow-md p-6 ${
+      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+    }`}>
+      <h3 className={`text-lg font-semibold mb-4 ${
+        theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+      }`}>달러 지수</h3>
       <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-bold text-white">
+        <span className={`text-3xl font-bold ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
           {data.current.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}
         </span>
         {average && (
           <span
             className={`text-sm font-medium ${
-              isBelowAverage ? 'text-green-400' : 'text-red-400'
+              isBelowAverage 
+                ? (theme === 'dark' ? 'text-green-400' : 'text-green-600')
+                : (theme === 'dark' ? 'text-red-400' : 'text-red-600')
             }`}
           >
             {isBelowAverage ? '↓' : '↑'} 52주 평균: {average.toLocaleString('ko-KR', {
@@ -46,7 +67,9 @@ export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardPro
           </span>
         )}
       </div>
-      <div className="mt-4 text-sm text-gray-300">
+      <div className={`mt-4 text-sm ${
+        theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
+      }`}>
         <p>52주 최저: {data['52week'].low.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}</p>
         <p>52주 최고: {data['52week'].high.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}</p>
       </div>
