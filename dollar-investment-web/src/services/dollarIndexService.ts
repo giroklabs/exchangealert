@@ -14,11 +14,8 @@ const REPO_PATH = 'giroklabs/exchangealert';
  */
 export async function fetchDollarIndex(): Promise<DollarIndexData | null> {
   try {
-    // 로컬 개발 환경에서는 상대 경로 사용
-    // 프로덕션에서는 GitHub Pages의 public/data 또는 raw.githubusercontent.com 사용
-    const url = import.meta.env.DEV
-      ? '/data/dollar-index.json'
-      : `${GITHUB_BASE_URL}/${REPO_PATH}/main/dollar-investment-web/public/data/dollar-index.json`;
+    // GitHub Pages에서는 상대 경로 사용 (public/data가 dist/data로 복사됨)
+    const url = '/data/dollar-index.json';
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -42,9 +39,7 @@ export async function fetchWeeklyAverages(): Promise<{
   gapRatio: { average: number };
 } | null> {
   try {
-    const url = import.meta.env.DEV
-      ? '/data/weekly-averages.json'
-      : `${GITHUB_BASE_URL}/${REPO_PATH}/main/dollar-investment-web/public/data/weekly-averages.json`;
+    const url = '/data/weekly-averages.json';
 
     const response = await fetch(url);
     if (!response.ok) {

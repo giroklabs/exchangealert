@@ -15,11 +15,9 @@ const REPO_PATH = 'giroklabs/exchangealert';
  */
 export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
   try {
-    // 로컬 개발 환경에서는 상대 경로 사용
-    // 프로덕션에서는 GitHub Pages의 public/data 또는 raw.githubusercontent.com 사용
-    const url = import.meta.env.DEV
-      ? '/data/exchange-rates.json'
-      : `${GITHUB_BASE_URL}/${REPO_PATH}/main/dollar-investment-web/public/data/exchange-rates.json`;
+    // GitHub Pages에서는 상대 경로 사용 (public/data가 dist/data로 복사됨)
+    // 개발 환경과 프로덕션 모두 상대 경로 사용
+    const url = '/data/exchange-rates.json';
 
     const response = await fetch(url);
     if (!response.ok) {
