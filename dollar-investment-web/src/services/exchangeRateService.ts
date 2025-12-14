@@ -11,9 +11,10 @@ import { parseExchangeRate } from './calculationService';
  */
 export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
   try {
-    // GitHub Pages에서는 상대 경로 사용 (public/data가 dist/data로 복사됨)
-    // 개발 환경과 프로덕션 모두 상대 경로 사용
-    const url = '/data/exchange-rates.json';
+    // GitHub Pages에서는 base 경로를 포함한 경로 사용
+    const url = import.meta.env.PROD 
+      ? '/exchangealert/data/exchange-rates.json'
+      : '/data/exchange-rates.json';
 
     const response = await fetch(url);
     if (!response.ok) {

@@ -10,8 +10,10 @@ import type { DollarIndexData } from '../types';
  */
 export async function fetchDollarIndex(): Promise<DollarIndexData | null> {
   try {
-    // GitHub Pages에서는 상대 경로 사용 (public/data가 dist/data로 복사됨)
-    const url = '/data/dollar-index.json';
+    // GitHub Pages에서는 base 경로를 포함한 경로 사용
+    const url = import.meta.env.PROD 
+      ? '/exchangealert/data/dollar-index.json'
+      : '/data/dollar-index.json';
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -35,7 +37,9 @@ export async function fetchWeeklyAverages(): Promise<{
   gapRatio: { average: number };
 } | null> {
   try {
-    const url = '/data/weekly-averages.json';
+    const url = import.meta.env.PROD 
+      ? '/exchangealert/data/weekly-averages.json'
+      : '/data/weekly-averages.json';
 
     const response = await fetch(url);
     if (!response.ok) {
