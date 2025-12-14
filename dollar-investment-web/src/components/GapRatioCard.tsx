@@ -34,9 +34,6 @@ export function GapRatioCard({ current, average, isLoading }: GapRatioCardProps)
       <div className="mt-4 text-xs text-gray-500">
         <p>달러 갭 비율 = (원/달러 환율) ÷ (달러 지수) × 100</p>
       </div>
-      <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-400">
-        <p>📊 계산값: 환율과 달러 지수를 기반으로 자동 계산</p>
-      </div>
     </div>
   );
 }

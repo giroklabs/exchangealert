@@ -7,6 +7,7 @@ import { DataTable } from './DataTable';
 import { ExchangeRateChart } from './ExchangeRateChart';
 import { DollarIndexChart } from './DollarIndexChart';
 import { HistoryDataTable } from './HistoryDataTable';
+import { DataSourceInfo } from './DataSourceInfo';
 import { calculateGapRatio } from '../services/calculationService';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useState } from 'react';
@@ -48,7 +49,6 @@ export function InvestmentAnalysis() {
           rate={exchangeRate}
           average={weeklyAverages?.exchangeRate.average}
           isLoading={isLoading}
-          lastUpdate={lastUpdateTime || undefined}
         />
         <DollarIndexCard
           data={dollarIndex}
@@ -69,7 +69,6 @@ export function InvestmentAnalysis() {
           dollarIndex={weeklyAverages.dollarIndex}
           gapRatio={weeklyAverages.gapRatio}
           isLoading={isLoading}
-          calculationDate={weeklyAverages.date}
         />
       )}
 
@@ -113,6 +112,13 @@ export function InvestmentAnalysis() {
           isLoading={isLoading}
         />
       )}
+
+      {/* 데이터 출처 정보 */}
+      <DataSourceInfo
+        exchangeRateUpdateTime={lastUpdateTime || undefined}
+        dollarIndexDate={dollarIndex?.date}
+        calculationDate={weeklyAverages?.date}
+      />
     </div>
   );
 }
