@@ -4,12 +4,18 @@ import { DollarIndexCard } from './DollarIndexCard';
 import { GapRatioCard } from './GapRatioCard';
 import { InvestmentSignal } from './InvestmentSignal';
 import { DataTable } from './DataTable';
+import { ExchangeRateChart } from './ExchangeRateChart';
+import { DollarIndexChart } from './DollarIndexChart';
+import { HistoryDataTable } from './HistoryDataTable';
 import { calculateGapRatio } from '../services/calculationService';
 import { getCurrentRateValue } from '../services/exchangeRateService';
+import { useState } from 'react';
 
 export function InvestmentAnalysis() {
-  const { exchangeRate, dollarIndex, weeklyAverages, signal, isLoading, error, lastUpdateTime } =
+  const { exchangeRate, dollarIndex, weeklyAverages, signal, isLoading, error, lastUpdateTime, exchangeRateHistory } =
     useInvestmentAnalysis();
+  const [showCharts, setShowCharts] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
 
   if (error) {
     return (
@@ -64,6 +70,47 @@ export function InvestmentAnalysis() {
           gapRatio={weeklyAverages.gapRatio}
           isLoading={isLoading}
           calculationDate={weeklyAverages.date}
+        />
+      )}
+
+      {/* 차트 섹션 토글 버튼 */}
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={() => setShowCharts(!showCharts)}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          {showCharts ? '📉 차트 숨기기' : '📈 차트 보기'}
+        </button>
+        <button
+          onClick={() => setShowHistory(!showHistory)}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+        >
+          {showHistory ? '📋 전체 데이터 숨기기' : '📋 전체 데이터 보기'}
+        </button>
+      </div>
+
+      {/* 차트 섹션 */}
+      {showCharts && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <ExchangeRateChart
+            data={exchangeRateHistory}
+            average={weeklyAverages?.exchangeRate.average}
+            isLoading={isLoading}
+          />
+          <DollarIndexChart
+            data={dollarIndex}
+            average={weeklyAverages?.dollarIndex.average}
+            isLoading={isLoading}
+          />
+        </div>
+      )}
+
+      {/* 전체 데이터 테이블 */}
+      {showHistory && (
+        <HistoryDataTable
+          exchangeRateHistory={exchangeRateHistory}
+          dollarIndexHistory={dollarIndex?.history || []}
+          isLoading={isLoading}
         />
       )}
     </div>

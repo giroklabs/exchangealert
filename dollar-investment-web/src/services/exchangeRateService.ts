@@ -58,17 +58,47 @@ export async function fetchLastUpdateTime(): Promise<string | null> {
  */
 export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; rate: number }>> {
   try {
-    // 실제 구현 시 GitHub에서 히스토리 데이터를 로드
-    // 여기서는 예시로 빈 배열 반환
+    // GitHub에서 최근 52주 히스토리 데이터 로드
+    // 실제로는 GitHub API를 통해 파일 목록을 가져와야 하지만,
+    // 여기서는 최근 날짜들을 직접 계산하여 로드
     const history: Array<{ date: string; rate: number }> = [];
-
-    // 로컬 개발 환경에서는 data/history 폴더에서 로드
-    if (import.meta.env.DEV) {
-      // 개발 환경에서는 샘플 데이터 사용
-      return history;
+    const today = new Date();
+    
+    // 최근 52주 데이터 수집 (영업일 기준이므로 실제로는 더 적을 수 있음)
+    for (let i = 0; i < 52 * 7; i++) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      
+      // 날짜 형식: YYYY-MM-DD
+      const dateStr = date.toISOString().split('T')[0];
+      
+      try {
+        const url = import.meta.env.PROD
+          ? `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/history/exchange-rates-${dateStr}.json`
+          : `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/history/exchange-rates-${dateStr}.json`;
+        
+        const response = await fetch(url);
+        if (response.ok) {
+          const data: ExchangeRate[] = await response.json();
+          const usd = data.find((r) => r.cur_unit === 'USD');
+          if (usd) {
+            history.push({
+              date: dateStr,
+              rate: parseExchangeRate(usd.deal_bas_r),
+            });
+          }
+        }
+        
+        // 52주치 데이터가 충분하면 중단
+        if (history.length >= 52) break;
+      } catch (e) {
+        // 파일이 없으면 건너뛰기
+        continue;
+      }
     }
-
-    return history;
+    
+    // 날짜순으로 정렬 (오래된 것부터)
+    return history.sort((a, b) => a.date.localeCompare(b.date));
   } catch (error) {
     console.error('환율 히스토리 로드 실패:', error);
     return [];
