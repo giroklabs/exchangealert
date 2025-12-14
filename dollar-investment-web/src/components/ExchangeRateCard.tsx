@@ -60,6 +60,7 @@ export function ExchangeRateCard({ rate, average, isLoading, lastUpdate }: Excha
             day: '2-digit',
             hour: '2-digit',
             minute: '2-digit',
+            second: '2-digit',
             timeZone: 'Asia/Seoul'
           })} (KST)</p>
         )}
