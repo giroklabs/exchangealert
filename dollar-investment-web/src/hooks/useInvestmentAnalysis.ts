@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { ExchangeRate, DollarIndexData, InvestmentSignal } from '../types';
 import { fetchCurrentExchangeRate, getCurrentRateValue, fetchLastUpdateTime, fetchExchangeRateHistory } from '../services/exchangeRateService';
 import { fetchDollarIndex, fetchWeeklyAverages } from '../services/dollarIndexService';
@@ -7,6 +7,7 @@ import {
   calculateAppropriateRate,
   checkInvestmentSuitability,
 } from '../services/calculationService';
+import { sendInvestmentNotification, getNotificationPermission } from '../utils/notificationService';
 
 interface AnalysisData {
   exchangeRate: ExchangeRate | null;
@@ -33,6 +34,10 @@ export function useInvestmentAnalysis(): AnalysisData {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdateTime, setLastUpdateTime] = useState<string | null>(null);
   const [exchangeRateHistory, setExchangeRateHistory] = useState<Array<{ date: string; rate: number }>>([]);
+  
+  // 이전 신호 상태를 추적하여 변경 감지
+  const previousSignalRef = useRef<InvestmentSignal | null>(null);
+  const lastNotificationTimeRef = useRef<number>(0);
 
   useEffect(() => {
     async function loadData() {
@@ -76,6 +81,26 @@ export function useInvestmentAnalysis(): AnalysisData {
             appropriateRate
           );
 
+          // 신호 상태 변경 감지 및 알림 발송
+          const previousSignal = previousSignalRef.current;
+          if (previousSignal !== null && previousSignal.isSuitable !== investmentSignal.isSuitable) {
+            // 상태가 변경되었고, 마지막 알림 후 5분이 지났는지 확인 (스팸 방지)
+            const now = Date.now();
+            const timeSinceLastNotification = now - lastNotificationTimeRef.current;
+            const fiveMinutes = 5 * 60 * 1000;
+
+            if (timeSinceLastNotification > fiveMinutes) {
+              // 알림 권한이 있는 경우에만 알림 발송
+              const notificationPermission = getNotificationPermission();
+              if (notificationPermission.granted) {
+                const details = `환율: ${currentRate.toFixed(2)}, 달러지수: ${currentDollarIndex.toFixed(2)}`;
+                sendInvestmentNotification(investmentSignal.isSuitable, details);
+                lastNotificationTimeRef.current = now;
+              }
+            }
+          }
+
+          previousSignalRef.current = investmentSignal;
           setSignal(investmentSignal);
         }
       } catch (err) {
@@ -87,6 +112,13 @@ export function useInvestmentAnalysis(): AnalysisData {
     }
 
     loadData();
+
+    // 15분마다 데이터 새로고침 (환율 업데이트 주기와 동일)
+    const interval = setInterval(() => {
+      loadData();
+    }, 15 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return {

@@ -8,6 +8,7 @@ import { ExchangeRateChart } from './ExchangeRateChart';
 import { DollarIndexChart } from './DollarIndexChart';
 import { HistoryDataTable } from './HistoryDataTable';
 import { DataSourceInfo } from './DataSourceInfo';
+import { NotificationSettings } from './NotificationSettings';
 import { calculateGapRatio } from '../services/calculationService';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useState } from 'react';
@@ -112,6 +113,9 @@ export function InvestmentAnalysis() {
           isLoading={isLoading}
         />
       )}
+
+      {/* 알림 설정 */}
+      <NotificationSettings />
 
       {/* 데이터 출처 정보 */}
       <DataSourceInfo
