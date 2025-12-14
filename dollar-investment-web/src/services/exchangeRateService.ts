@@ -11,10 +11,11 @@ import { parseExchangeRate } from './calculationService';
  */
 export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
   try {
-    // GitHub Pages에서는 base 경로를 포함한 경로 사용
+    // 실제 환율 데이터는 GitHub의 data/exchange-rates.json에서 로드
+    // 이 파일은 GitHub Actions로 15분마다 자동 업데이트됨
     const url = import.meta.env.PROD 
-      ? '/exchangealert/data/exchange-rates.json'
-      : '/data/exchange-rates.json';
+      ? 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json'
+      : 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json';
 
     const response = await fetch(url);
     if (!response.ok) {
