@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-green-50">
+    <div className="min-h-screen bg-black">
       <InvestmentAnalysis />
     </div>
   );
