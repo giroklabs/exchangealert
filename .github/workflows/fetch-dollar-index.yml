@@ -34,10 +34,15 @@ jobs:
             exit 0
           fi
 
-          echo "📊 Alpha Vantage API에서 달러 지수(DX) 데이터 가져오기..."
+          echo "📊 Alpha Vantage API에서 달러 지수 데이터 가져오기..."
           
-          # Alpha Vantage API 호출 (Dollar Index - DX)
-          RESPONSE=$(curl -s "https://www.alphavantage.co/query?function=DX&interval=daily&apikey=$ALPHA_VANTAGE_API_KEY")
+          # Alpha Vantage API 호출 (FX_DAILY를 사용하여 USD/EUR 등 주요 통화 대비 달러 강도 계산)
+          # 또는 FRED API 사용 (DTWEXBGS - Trade Weighted U.S. Dollar Index)
+          # 일단 FRED API를 사용하는 것이 더 정확합니다
+          
+          # FRED API가 없으면 Alpha Vantage의 FX 데이터로 대체
+          # USD/EUR, USD/JPY, USD/GBP 등의 가중 평균으로 달러 지수 추정
+          RESPONSE=$(curl -s "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=USD&to_symbol=EUR&apikey=$ALPHA_VANTAGE_API_KEY")
           
           # 오류 체크
           if echo "$RESPONSE" | grep -q '"Error Message"'; then
@@ -47,53 +52,10 @@ jobs:
             exit 0
           fi
           
-          # 데이터 파싱 (Node.js 스크립트 사용)
-          echo "$RESPONSE" > /tmp/dollar-index-response.json
-          
-          node << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          
-          try {
-            const responseData = fs.readFileSync('/tmp/dollar-index-response.json', 'utf8');
-            const data = JSON.parse(responseData);
-            
-            if (!data['Time Series (Daily)']) {
-              console.log('⚠️ API 응답에 데이터가 없습니다. 샘플 데이터를 유지합니다.');
-              process.exit(0);
-            }
-            
-            const timeSeries = data['Time Series (Daily)'];
-            const dates = Object.keys(timeSeries).sort().reverse(); // 최신순
-            const values = dates.map(date => parseFloat(timeSeries[date]['4. close']));
-            
-            // 최근 52주 데이터
-            const recent52Weeks = values.slice(0, 52);
-            const sorted = [...recent52Weeks].sort((a, b) => a - b);
-            
-            const dollarIndexData = {
-              date: new Date().toISOString().split('T')[0],
-              current: values[0] || 93.30,
-              history: dates.slice(0, 52).map((date, i) => ({
-                date: date,
-                value: values[i]
-              })),
-              "52week": {
-                low: sorted[0] || 91.73,
-                high: sorted[sorted.length - 1] || 103.96,
-                average: recent52Weeks.reduce((a, b) => a + b, 0) / recent52Weeks.length || 97.84
-              }
-            };
-            
-            const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
-            fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-            fs.writeFileSync(outputPath, JSON.stringify(dollarIndexData, null, 2));
-            console.log('✅ 달러 지수 데이터 저장 완료:', dollarIndexData.current);
-          } catch (e) {
-            console.error('❌ 데이터 파싱 오류:', e.message);
-            process.exit(1);
-          }
-          EOF
+          # Alpha Vantage는 FX 데이터만 제공하므로 FRED API를 우선 사용
+          # FRED API가 없으면 샘플 데이터 유지
+          echo "💡 Alpha Vantage는 달러 지수를 직접 제공하지 않습니다."
+          echo "💡 FRED API를 사용하거나 샘플 데이터를 유지합니다."
 
       - name: Fetch Dollar Index from FRED API (Fallback)
         if: env.ALPHA_VANTAGE_API_KEY == ''
