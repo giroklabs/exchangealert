@@ -33,14 +33,17 @@ export function calculateGapRatio(exchangeRate: number, dollarIndex: number): nu
 
 /**
  * 적정 환율 계산
- * 공식: 현재 달러 지수 ÷ 52주 평균 달러 갭 비율 × 100
+ * 공식: (52주 평균 달러 갭 비율) × (현재 달러 지수) ÷ 100
+ * 
+ * 달러 갭 비율 = (원/달러 환율) ÷ (달러 지수) × 100
+ * 따라서: 원/달러 환율 = (달러 갭 비율) × (달러 지수) ÷ 100
  */
 export function calculateAppropriateRate(
   currentDollarIndex: number,
   avgGapRatio: number
 ): number {
-  if (avgGapRatio === 0) return 0;
-  return (currentDollarIndex / avgGapRatio) * 100;
+  if (currentDollarIndex === 0) return 0;
+  return (avgGapRatio * currentDollarIndex) / 100;
 }
 
 /**
