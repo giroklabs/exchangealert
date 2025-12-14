@@ -3,12 +3,8 @@ import { parseExchangeRate } from './calculationService';
 
 /**
  * 환율 데이터 서비스
- * GitHub에서 환율 데이터를 로드
+ * GitHub Pages에서 환율 데이터를 로드
  */
-
-// GitHub Raw URL
-const GITHUB_BASE_URL = 'https://raw.githubusercontent.com';
-const REPO_PATH = 'giroklabs/exchangealert';
 
 /**
  * 현재 환율 데이터 로드
