@@ -57,19 +57,76 @@ jobs:
           echo "💡 Alpha Vantage는 달러 지수를 직접 제공하지 않습니다."
           echo "💡 FRED API를 사용하거나 샘플 데이터를 유지합니다."
 
-      - name: Fetch Dollar Index from FRED API (Fallback)
-        if: env.ALPHA_VANTAGE_API_KEY == ''
+      - name: Fetch Dollar Index from FRED API
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: |
           if [ -z "$FRED_API_KEY" ]; then
-            echo "⚠️ FRED API 키도 설정되지 않았습니다."
+            echo "⚠️ FRED API 키가 설정되지 않았습니다."
+            echo "💡 FRED API는 무료이며 https://fred.stlouisfed.org/docs/api/api_key.html 에서 발급받을 수 있습니다."
+            echo "🔄 샘플 데이터를 유지합니다."
             exit 0
           fi
           
-          echo "📊 FRED API에서 달러 지수 데이터 가져오기..."
-          # FRED API는 나중에 구현 가능
-          echo "💡 FRED API 연동은 추후 구현 예정"
+          echo "📊 FRED API에서 달러 지수(DTWEXBGS) 데이터 가져오기..."
+          
+          # FRED API 호출 - Trade Weighted U.S. Dollar Index: Broad, Goods (DTWEXBGS)
+          FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&limit=52&sort_order=desc")
+          
+          echo "$FRED_RESPONSE" > /tmp/fred-response.json
+          
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          try {
+            const responseData = fs.readFileSync('/tmp/fred-response.json', 'utf8');
+            const data = JSON.parse(responseData);
+            
+            if (data.error_code) {
+              console.error('❌ FRED API 오류:', data.error_message);
+              process.exit(0);
+            }
+            
+            if (!data.observations || data.observations.length === 0) {
+              console.log('⚠️ FRED API 응답에 데이터가 없습니다.');
+              process.exit(0);
+            }
+            
+            const observations = data.observations
+              .filter(obs => obs.value !== '.')
+              .map(obs => ({
+                date: obs.date,
+                value: parseFloat(obs.value)
+              }))
+              .reverse(); // 오래된 순으로 정렬
+            
+            const values = observations.map(obs => obs.value);
+            const sorted = [...values].sort((a, b) => a - b);
+            
+            const dollarIndexData = {
+              date: new Date().toISOString().split('T')[0],
+              current: values[values.length - 1],
+              history: observations,
+              "52week": {
+                low: sorted[0],
+                high: sorted[sorted.length - 1],
+                average: values.reduce((a, b) => a + b, 0) / values.length
+              }
+            };
+            
+            const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
+            fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+            fs.writeFileSync(outputPath, JSON.stringify(dollarIndexData, null, 2));
+            console.log('✅ FRED API에서 달러 지수 데이터 저장 완료:', dollarIndexData.current);
+            console.log('📈 52주 최저:', dollarIndexData['52week'].low);
+            console.log('📈 52주 최고:', dollarIndexData['52week'].high);
+            console.log('📈 52주 평균:', dollarIndexData['52week'].average.toFixed(2));
+          } catch (e) {
+            console.error('❌ FRED API 데이터 파싱 오류:', e.message);
+            process.exit(0); // 오류가 있어도 계속 진행
+          }
+          EOF
 
       - name: Commit and push
         if: always()
