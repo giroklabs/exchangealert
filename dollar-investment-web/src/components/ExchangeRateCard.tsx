@@ -35,7 +35,7 @@ export function ExchangeRateCard({ rate, average, isLoading, lastUpdate }: Excha
       <h3 className="text-lg font-semibold text-gray-700 mb-4">원/달러 환율</h3>
       <div className="flex items-baseline gap-2">
         <span className="text-3xl font-bold text-gray-900">
-          {currentRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
+          {currentRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}
         </span>
         {average && (
           <span
@@ -43,13 +43,13 @@ export function ExchangeRateCard({ rate, average, isLoading, lastUpdate }: Excha
               isBelowAverage ? 'text-green-600' : 'text-red-600'
             }`}
           >
-            {isBelowAverage ? '↓' : '↑'} 52주 평균: {average.toLocaleString('ko-KR')}원
+            {isBelowAverage ? '↓' : '↑'} 52주 평균: {average.toLocaleString('ko-KR')}
           </span>
         )}
       </div>
       <div className="mt-4 text-sm text-gray-500">
-        <p>매수기준율: {rate.ttb}원</p>
-        <p>매도기준율: {rate.tts}원</p>
+        <p>매수기준율: {rate.ttb}</p>
+        <p>매도기준율: {rate.tts}</p>
       </div>
       <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-400">
         <p>📊 출처: 한국수출입은행 Open API</p>

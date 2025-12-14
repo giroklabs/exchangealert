@@ -53,13 +53,13 @@ export function DataTable({
             <tr className="border-b border-gray-100">
               <td className="py-3 px-4 text-gray-700">원/달러 환율</td>
               <td className="py-3 px-4 text-right">
-                {exchangeRate.low.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
+                {exchangeRate.low.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}
               </td>
               <td className="py-3 px-4 text-right">
-                {exchangeRate.high.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
+                {exchangeRate.high.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}
               </td>
               <td className="py-3 px-4 text-right font-semibold">
-                {exchangeRate.average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
+                {exchangeRate.average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}
               </td>
             </tr>
             <tr className="border-b border-gray-100">
