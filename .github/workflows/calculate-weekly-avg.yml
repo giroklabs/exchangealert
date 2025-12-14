@@ -21,47 +21,77 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Calculate 52-week averages
+      - name: Calculate 52-week averages from history
         run: |
           node << 'EOF'
           const fs = require('fs');
           const path = require('path');
 
+          console.log('📊 수출입은행 API 히스토리 데이터에서 52주 평균 계산...');
+
           // 환율 히스토리 데이터 로드
           const historyDir = path.join('data', 'history');
+          if (!fs.existsSync(historyDir)) {
+            console.error('❌ 히스토리 디렉토리를 찾을 수 없습니다:', historyDir);
+            process.exit(1);
+          }
+
           const files = fs.readdirSync(historyDir)
             .filter(f => f.startsWith('exchange-rates-') && f.endsWith('.json'))
             .sort()
-            .slice(-52); // 최근 52주
+            .reverse() // 최신순
+            .slice(0, 52); // 최근 52주
+
+          console.log(`📁 ${files.length}개의 히스토리 파일 발견`);
 
           const exchangeRates = [];
           for (const file of files) {
             try {
-              const data = JSON.parse(fs.readFileSync(path.join(historyDir, file), 'utf8'));
+              const filePath = path.join(historyDir, file);
+              const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
               const usd = data.find(r => r.cur_unit === 'USD');
-              if (usd) {
+              if (usd && usd.deal_bas_r) {
                 const rate = parseFloat(usd.deal_bas_r.replace(/,/g, ''));
-                exchangeRates.push(rate);
+                if (!isNaN(rate) && rate > 0) {
+                  exchangeRates.push(rate);
+                }
               }
             } catch (e) {
-              console.error(`Error reading ${file}:`, e.message);
+              console.error(`⚠️ ${file} 읽기 오류:`, e.message);
             }
           }
+
+          if (exchangeRates.length === 0) {
+            console.error('❌ 환율 데이터를 찾을 수 없습니다.');
+            process.exit(1);
+          }
+
+          console.log(`✅ ${exchangeRates.length}개의 환율 데이터 수집 완료`);
 
           // 52주 평균 계산
           const sorted = [...exchangeRates].sort((a, b) => a - b);
           const exchangeRateAvg = {
-            low: sorted[0] || 0,
-            high: sorted[sorted.length - 1] || 0,
-            average: exchangeRates.reduce((a, b) => a + b, 0) / exchangeRates.length || 0
+            low: sorted[0],
+            high: sorted[sorted.length - 1],
+            average: exchangeRates.reduce((a, b) => a + b, 0) / exchangeRates.length
           };
 
-          // 달러 지수는 샘플 데이터 유지 (실제 API 연동 필요)
-          const dollarIndexAvg = {
-            low: 91.73,
-            high: 103.96,
-            average: 97.84
-          };
+          console.log('📈 환율 52주 평균:', exchangeRateAvg);
+
+          // 달러 지수 데이터 로드 (이미 저장된 파일에서)
+          let dollarIndexAvg = { low: 91.73, high: 103.96, average: 97.84 };
+          const dollarIndexPath = path.join('dollar-investment-web', 'public', 'data', 'dollar-index.json');
+          if (fs.existsSync(dollarIndexPath)) {
+            try {
+              const dollarIndexData = JSON.parse(fs.readFileSync(dollarIndexPath, 'utf8'));
+              if (dollarIndexData['52week']) {
+                dollarIndexAvg = dollarIndexData['52week'];
+                console.log('📊 달러 지수 52주 평균:', dollarIndexAvg);
+              }
+            } catch (e) {
+              console.warn('⚠️ 달러 지수 데이터 로드 실패, 기본값 사용:', e.message);
+            }
+          }
 
           // 달러 갭 비율 평균 계산
           const gapRatioAvg = exchangeRateAvg.average / dollarIndexAvg.average * 100;
@@ -79,7 +109,8 @@ jobs:
           const outputPath = path.join('dollar-investment-web', 'public', 'data', 'weekly-averages.json');
           fs.mkdirSync(path.dirname(outputPath), { recursive: true });
           fs.writeFileSync(outputPath, JSON.stringify(weeklyAverages, null, 2));
-          console.log('52주 평균 데이터 생성 완료:', JSON.stringify(weeklyAverages, null, 2));
+          console.log('✅ 52주 평균 데이터 생성 완료');
+          console.log(JSON.stringify(weeklyAverages, null, 2));
           EOF
 
       - name: Commit and push

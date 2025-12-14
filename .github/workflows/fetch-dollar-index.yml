@@ -1,0 +1,134 @@
+name: Fetch Dollar Index
+
+on:
+  schedule:
+    # 매일 한국시간 오전 9시 (UTC 0시)에 실행
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  fetch-dollar-index:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Seoul
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch Dollar Index from Alpha Vantage API
+        env:
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        run: |
+          if [ -z "$ALPHA_VANTAGE_API_KEY" ]; then
+            echo "⚠️ Alpha Vantage API 키가 설정되지 않았습니다."
+            echo "📝 GitHub Secrets에 ALPHA_VANTAGE_API_KEY를 추가하세요."
+            echo "💡 무료 API 키는 https://www.alphavantage.co/support/#api-key 에서 발급받을 수 있습니다."
+            echo ""
+            echo "🔄 샘플 데이터를 유지합니다."
+            exit 0
+          fi
+
+          echo "📊 Alpha Vantage API에서 달러 지수(DX) 데이터 가져오기..."
+          
+          # Alpha Vantage API 호출 (Dollar Index - DX)
+          RESPONSE=$(curl -s "https://www.alphavantage.co/query?function=DX&interval=daily&apikey=$ALPHA_VANTAGE_API_KEY")
+          
+          # 오류 체크
+          if echo "$RESPONSE" | grep -q '"Error Message"'; then
+            echo "❌ API 오류:"
+            echo "$RESPONSE" | grep -o '"Error Message":"[^"]*"'
+            echo "🔄 샘플 데이터를 유지합니다."
+            exit 0
+          fi
+          
+          # 데이터 파싱 (Node.js 스크립트 사용)
+          echo "$RESPONSE" | node << 'EOF'
+          const fs = require('fs');
+          const readline = require('readline');
+          
+          const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+            terminal: false
+          });
+          
+          let responseData = '';
+          rl.on('line', (line) => {
+            responseData += line + '\n';
+          });
+          
+          rl.on('close', () => {
+            try {
+              const data = JSON.parse(responseData);
+          
+          if (!data['Time Series (Daily)']) {
+            console.log('⚠️ API 응답에 데이터가 없습니다. 샘플 데이터를 유지합니다.');
+            process.exit(0);
+          }
+          
+          const timeSeries = data['Time Series (Daily)'];
+          const dates = Object.keys(timeSeries).sort().reverse(); // 최신순
+          const values = dates.map(date => parseFloat(timeSeries[date]['4. close']));
+          
+          // 최근 52주 데이터
+          const recent52Weeks = values.slice(0, 52);
+          const sorted = [...recent52Weeks].sort((a, b) => a - b);
+          
+          const dollarIndexData = {
+            date: new Date().toISOString().split('T')[0],
+            current: values[0] || 93.30,
+            history: dates.slice(0, 52).map((date, i) => ({
+              date: date,
+              value: values[i]
+            })),
+            "52week": {
+              low: sorted[0] || 91.73,
+              high: sorted[sorted.length - 1] || 103.96,
+              average: recent52Weeks.reduce((a, b) => a + b, 0) / recent52Weeks.length || 97.84
+            }
+          };
+          
+              const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
+              fs.mkdirSync(require('path').dirname(outputPath), { recursive: true });
+              fs.writeFileSync(outputPath, JSON.stringify(dollarIndexData, null, 2));
+              console.log('✅ 달러 지수 데이터 저장 완료:', dollarIndexData.current);
+            } catch (e) {
+              console.error('❌ 데이터 파싱 오류:', e.message);
+              process.exit(1);
+            }
+          });
+          EOF
+
+      - name: Fetch Dollar Index from FRED API (Fallback)
+        if: env.ALPHA_VANTAGE_API_KEY == ''
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          if [ -z "$FRED_API_KEY" ]; then
+            echo "⚠️ FRED API 키도 설정되지 않았습니다."
+            exit 0
+          fi
+          
+          echo "📊 FRED API에서 달러 지수 데이터 가져오기..."
+          # FRED API는 나중에 구현 가능
+          echo "💡 FRED API 연동은 추후 구현 예정"
+
+      - name: Commit and push
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add dollar-investment-web/public/data/dollar-index.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Update dollar index data [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
