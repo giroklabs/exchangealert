@@ -47,8 +47,8 @@ export function InvestmentAnalysis() {
       <div className="text-center mb-8">
         <h1 className={`text-4xl font-bold mb-2 ${
           theme === 'dark' ? 'text-white' : 'text-gray-900'
-        }`}>달러 투자 적정 시기 분석</h1>
-        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mt-2`}>데이터가 알려주는 투자 최적기</p>
+        }`}>달러 인베스트</h1>
+        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mt-2`}>데이터가 알려주는 달러 투자 적정 시기 분석</p>
       </div>
 
       {/* 투자 신호 */}

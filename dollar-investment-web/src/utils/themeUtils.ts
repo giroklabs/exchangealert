@@ -32,3 +32,4 @@ export function getBorderClass(theme: Theme): string {
   return theme === 'dark' ? 'border-gray-700' : 'border-gray-200';
 }
 
+
