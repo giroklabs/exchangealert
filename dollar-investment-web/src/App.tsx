@@ -10,7 +10,7 @@ function App() {
     <div className={`min-h-screen transition-colors ${theme === 'dark' ? 'bg-black' : 'bg-green-50'}`}>
       <ThemeToggle />
       <InvestmentAnalysis />
-    </div>
+      </div>
   );
 }
 

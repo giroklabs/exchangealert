@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 @layer base {
-  body {
+body {
     @apply bg-black text-gray-100 font-sans;
   }
 }

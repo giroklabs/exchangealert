@@ -138,13 +138,17 @@ export function InvestmentAnalysis() {
       <div className={`mt-12 pt-8 border-t ${
         theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
       }`}>
-        <div className="text-center py-4">
+        <div className={`text-center p-6 rounded-lg ${
+          theme === 'dark' 
+            ? 'bg-gray-800 border border-gray-700' 
+            : 'bg-gray-50 border border-gray-200'
+        }`}>
           <a
             href="https://apps.apple.com/kr/app/%ED%99%98%EC%9C%A8%EC%95%8C%EB%9D%BC%EB%AF%B8/id6752878684"
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-block text-sm ${
-              theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'
+            className={`inline-block text-lg font-medium ${
+              theme === 'dark' ? 'text-gray-200 hover:text-white' : 'text-gray-800 hover:text-gray-900'
             } transition-colors`}
           >
             📱 환율알라미 - 실시간 환율 정보와 맞춤형 알림
