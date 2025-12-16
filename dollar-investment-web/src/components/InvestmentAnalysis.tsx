@@ -133,6 +133,45 @@ export function InvestmentAnalysis() {
         dollarIndexDate={dollarIndex?.date}
         calculationDate={weeklyAverages?.date}
       />
+
+      {/* 환율알라미 앱 홍보 */}
+      <div className={`mt-12 pt-8 border-t ${
+        theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
+      }`}>
+        <div className={`text-center p-6 rounded-lg ${
+          theme === 'dark' 
+            ? 'bg-gray-800 border border-gray-700' 
+            : 'bg-gray-50 border border-gray-200'
+        }`}>
+          <p className={`text-sm mb-3 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            실시간 환율 정보와 맞춤형 알림을 제공하는
+          </p>
+          <h3 className={`text-xl font-bold mb-4 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            환율알라미
+          </h3>
+          <p className={`text-sm mb-4 ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+          }`}>
+            22개 주요 통화의 실시간 환율 정보와 상한선/하한선 알림 서비스
+          </p>
+          <a
+            href="https://apps.apple.com/kr/app/%ED%99%98%EC%9C%A8%EC%95%8C%EB%9D%BC%EB%AF%B8/id6752878684"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-block px-6 py-3 rounded-lg font-semibold transition-colors ${
+              theme === 'dark'
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-blue-500 hover:bg-blue-600 text-white'
+            }`}
+          >
+            📱 App Store에서 다운로드
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
