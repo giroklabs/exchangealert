@@ -138,21 +138,18 @@ export function InvestmentAnalysis() {
       <div className={`mt-12 pt-8 border-t ${
         theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
       }`}>
-        <div className={`text-center p-6 rounded-lg ${
-          theme === 'dark' 
-            ? 'bg-gray-800 border border-gray-700' 
-            : 'bg-gray-50 border border-gray-200'
-        }`}>
+        <div className="text-center p-6 rounded-lg bg-yellow-400 border border-yellow-500">
           <a
             href="https://apps.apple.com/kr/app/%ED%99%98%EC%9C%A8%EC%95%8C%EB%9D%BC%EB%AF%B8/id6752878684"
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-block text-lg font-medium ${
-              theme === 'dark' ? 'text-gray-200 hover:text-white' : 'text-gray-800 hover:text-gray-900'
-            } transition-colors`}
+            className="inline-block text-lg font-medium text-black hover:text-gray-800 transition-colors"
           >
             📱 환율알라미 - 실시간 환율 정보와 맞춤형 알림
           </a>
+          <p className="text-sm text-black mt-2 opacity-80">
+            위 링크를 클릭하면 App Store에서 앱을 다운로드할 수 있습니다
+          </p>
         </div>
       </div>
     </div>
