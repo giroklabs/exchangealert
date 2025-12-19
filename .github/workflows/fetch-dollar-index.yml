@@ -2,8 +2,10 @@ name: Fetch Dollar Index
 
 on:
   schedule:
-    # 매일 한국시간 오전 9시 (UTC 0시)에 실행
-    - cron: '0 0 * * *'
+    # 매일 한국시간 오후 6시 (UTC 9시)에 실행
+    # FRED API는 미국 동부 시간 기준으로 업데이트되므로, 
+    # 한국시간 오후 6시에는 당일 데이터가 업데이트되어 있을 가능성이 높음
+    - cron: '0 9 * * *'
   workflow_dispatch: # 수동 실행 가능
 
 jobs:
@@ -118,6 +120,22 @@ jobs:
             const values = recent52Weeks.map(obs => obs.value);
             const sorted = [...values].sort((a, b) => a - b);
             
+            // 최신 데이터 날짜 확인
+            const latestDate = recent52Weeks[recent52Weeks.length - 1]?.date;
+            const today = new Date().toISOString().split('T')[0];
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            
+            console.log('📅 날짜 정보:');
+            console.log('  - 오늘:', today);
+            console.log('  - 어제:', yesterdayStr);
+            console.log('  - 최신 데이터 날짜:', latestDate);
+            
+            if (latestDate && latestDate < yesterdayStr) {
+              console.warn('⚠️ 최신 데이터가 어제보다 이전입니다. FRED API 업데이트 지연 가능성.');
+            }
+            
             const dollarIndexData = {
               date: new Date().toISOString().split('T')[0],
               current: values[values.length - 1], // 가장 최신값
@@ -132,6 +150,7 @@ jobs:
             console.log('📊 데이터 수집 결과:');
             console.log('  - 전체 관측값:', observations.length);
             console.log('  - 사용된 데이터:', recent52Weeks.length, '개 (최근 52주, 약', Math.round(recent52Weeks.length / 5), '주)');
+            console.log('  - 최신 데이터 날짜:', latestDate);
             
             const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
             fs.mkdirSync(path.dirname(outputPath), { recursive: true });
