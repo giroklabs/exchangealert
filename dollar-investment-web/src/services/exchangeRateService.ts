@@ -65,6 +65,7 @@ export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; 
     const today = new Date();
     
     // 최근 52주 데이터 수집 (영업일 기준이므로 실제로는 더 적을 수 있음)
+    // 52주 = 약 260 영업일이므로 최대 260개까지 수집
     for (let i = 0; i < 52 * 7; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
@@ -89,8 +90,8 @@ export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; 
           }
         }
         
-        // 52주치 데이터가 충분하면 중단
-        if (history.length >= 52) break;
+        // 52주치 데이터가 충분하면 중단 (약 260 영업일)
+        if (history.length >= 260) break;
       } catch (e) {
         // 파일이 없으면 건너뛰기
         continue;

@@ -45,12 +45,21 @@ jobs:
             return null;
           }
 
+          // 최근 52주 데이터만 사용 (약 260 영업일)
+          const today = new Date();
+          const oneYearAgo = new Date(today);
+          oneYearAgo.setDate(oneYearAgo.getDate() - 365);
+
           const files = fs.readdirSync(historyDir)
             .filter(f => f.startsWith('exchange-rates-') && f.endsWith('.json'))
             .map(f => ({ filename: f, date: extractDate(f) }))
-            .filter(f => f.date !== null)
+            .filter(f => {
+              if (!f.date) return false;
+              const fileDate = new Date(f.date);
+              return fileDate >= oneYearAgo; // 1년 이내 데이터만
+            })
             .sort((a, b) => b.date.localeCompare(a.date)) // 최신순
-            .slice(0, 52); // 최근 52주
+            .slice(0, 260); // 최근 52주 (약 260 영업일)
 
           console.log(`📁 ${files.length}개의 히스토리 파일 발견`);
 
