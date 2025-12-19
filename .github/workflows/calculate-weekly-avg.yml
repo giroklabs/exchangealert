@@ -36,39 +36,51 @@ jobs:
             process.exit(1);
           }
 
+          // 파일명에서 날짜 추출 함수 (YYYY-MM-DD 또는 YYYYMMDD 형식 지원)
+          function extractDate(filename) {
+            const match = filename.match(/exchange-rates-(\d{4})-?(\d{2})-?(\d{2})\.json/);
+            if (match) {
+              return `${match[1]}-${match[2]}-${match[3]}`;
+            }
+            return null;
+          }
+
           const files = fs.readdirSync(historyDir)
             .filter(f => f.startsWith('exchange-rates-') && f.endsWith('.json'))
-            .sort()
-            .reverse() // 최신순
+            .map(f => ({ filename: f, date: extractDate(f) }))
+            .filter(f => f.date !== null)
+            .sort((a, b) => b.date.localeCompare(a.date)) // 최신순
             .slice(0, 52); // 최근 52주
 
           console.log(`📁 ${files.length}개의 히스토리 파일 발견`);
 
-          const exchangeRates = [];
-          for (const file of files) {
+          // 환율 데이터를 날짜별로 저장
+          const exchangeRateByDate = new Map();
+          for (const { filename, date } of files) {
             try {
-              const filePath = path.join(historyDir, file);
+              const filePath = path.join(historyDir, filename);
               const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
               const usd = data.find(r => r.cur_unit === 'USD');
               if (usd && usd.deal_bas_r) {
                 const rate = parseFloat(usd.deal_bas_r.replace(/,/g, ''));
                 if (!isNaN(rate) && rate > 0) {
-                  exchangeRates.push(rate);
+                  exchangeRateByDate.set(date, rate);
                 }
               }
             } catch (e) {
-              console.error(`⚠️ ${file} 읽기 오류:`, e.message);
+              console.error(`⚠️ ${filename} 읽기 오류:`, e.message);
             }
           }
 
-          if (exchangeRates.length === 0) {
+          if (exchangeRateByDate.size === 0) {
             console.error('❌ 환율 데이터를 찾을 수 없습니다.');
             process.exit(1);
           }
 
-          console.log(`✅ ${exchangeRates.length}개의 환율 데이터 수집 완료`);
+          console.log(`✅ ${exchangeRateByDate.size}개의 환율 데이터 수집 완료`);
 
-          // 52주 평균 계산
+          // 환율 배열 생성
+          const exchangeRates = Array.from(exchangeRateByDate.values());
           const sorted = [...exchangeRates].sort((a, b) => a - b);
           const exchangeRateAvg = {
             low: sorted[0],
@@ -79,22 +91,51 @@ jobs:
           console.log('📈 환율 52주 평균:', exchangeRateAvg);
 
           // 달러 지수 데이터 로드 (이미 저장된 파일에서)
-          let dollarIndexAvg = { low: 91.73, high: 103.96, average: 97.84 };
+          let dollarIndexData = null;
+          let dollarIndexAvg = { low: 0, high: 0, average: 0 };
           const dollarIndexPath = path.join('dollar-investment-web', 'public', 'data', 'dollar-index.json');
           if (fs.existsSync(dollarIndexPath)) {
             try {
-              const dollarIndexData = JSON.parse(fs.readFileSync(dollarIndexPath, 'utf8'));
+              dollarIndexData = JSON.parse(fs.readFileSync(dollarIndexPath, 'utf8'));
               if (dollarIndexData['52week']) {
                 dollarIndexAvg = dollarIndexData['52week'];
                 console.log('📊 달러 지수 52주 평균:', dollarIndexAvg);
               }
             } catch (e) {
-              console.warn('⚠️ 달러 지수 데이터 로드 실패, 기본값 사용:', e.message);
+              console.warn('⚠️ 달러 지수 데이터 로드 실패:', e.message);
             }
           }
 
-          // 달러 갭 비율 평균 계산
-          const gapRatioAvg = exchangeRateAvg.average / dollarIndexAvg.average * 100;
+          // 달러 갭 비율 계산: 각 날짜별로 갭 비율을 계산한 후 평균 구하기
+          const gapRatios = [];
+          if (dollarIndexData && dollarIndexData.history) {
+            // 달러지수 히스토리를 날짜별로 매핑
+            const dollarIndexByDate = new Map();
+            for (const item of dollarIndexData.history) {
+              dollarIndexByDate.set(item.date, item.value);
+            }
+
+            // 환율과 달러지수를 날짜별로 매칭하여 갭 비율 계산
+            for (const [date, exchangeRate] of exchangeRateByDate.entries()) {
+              const dollarIndex = dollarIndexByDate.get(date);
+              if (dollarIndex && dollarIndex > 0) {
+                const gapRatio = (exchangeRate / dollarIndex) * 100;
+                gapRatios.push(gapRatio);
+              }
+            }
+          }
+
+          let gapRatioAvg = 0;
+          if (gapRatios.length > 0) {
+            gapRatioAvg = gapRatios.reduce((a, b) => a + b, 0) / gapRatios.length;
+            console.log(`📊 달러 갭 비율 계산: ${gapRatios.length}개 날짜 매칭, 평균: ${gapRatioAvg.toFixed(2)}`);
+          } else {
+            // 매칭된 데이터가 없으면 기존 방식으로 계산 (fallback)
+            if (dollarIndexAvg.average > 0) {
+              gapRatioAvg = exchangeRateAvg.average / dollarIndexAvg.average * 100;
+              console.warn('⚠️ 날짜별 매칭 실패, 평균값으로 계산:', gapRatioAvg.toFixed(2));
+            }
+          }
 
           const weeklyAverages = {
             date: new Date().toISOString().split('T')[0],

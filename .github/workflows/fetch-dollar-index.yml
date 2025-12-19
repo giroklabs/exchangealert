@@ -109,8 +109,11 @@ jobs:
               }))
               .reverse(); // 오래된 순으로 정렬
             
-            // 최근 52주 데이터만 사용 (약 260 영업일 중 최근 52개)
-            const recent52Weeks = observations.slice(-52);
+            // 최근 52주 데이터 사용 (약 260 영업일)
+            // 52주 = 약 260 영업일이므로, 최대 260개까지 사용
+            // 하지만 실제로는 가능한 한 많은 데이터를 사용 (최대 260개)
+            const maxDays = Math.min(260, observations.length);
+            const recent52Weeks = observations.slice(-maxDays);
             
             const values = recent52Weeks.map(obs => obs.value);
             const sorted = [...values].sort((a, b) => a - b);
@@ -128,7 +131,7 @@ jobs:
             
             console.log('📊 데이터 수집 결과:');
             console.log('  - 전체 관측값:', observations.length);
-            console.log('  - 사용된 데이터:', recent52Weeks.length, '개 (최근 52주)');
+            console.log('  - 사용된 데이터:', recent52Weeks.length, '개 (최근 52주, 약', Math.round(recent52Weeks.length / 5), '주)');
             
             const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
             fs.mkdirSync(path.dirname(outputPath), { recursive: true });
