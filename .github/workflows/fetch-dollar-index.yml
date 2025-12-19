@@ -100,8 +100,14 @@ jobs:
             
             if (!data.observations || data.observations.length === 0) {
               console.log('⚠️ FRED API 응답에 데이터가 없습니다.');
+              console.log('응답 데이터:', JSON.stringify(data, null, 2));
               process.exit(0);
             }
+            
+            console.log('📊 FRED API 응답 정보:');
+            console.log('  - 전체 관측값 개수:', data.observations.length);
+            console.log('  - 첫 번째 관측값 (최신):', JSON.stringify(data.observations[0]));
+            console.log('  - 마지막 관측값 (오래됨):', JSON.stringify(data.observations[data.observations.length - 1]));
             
             const observations = data.observations
               .filter(obs => obs.value !== '.' && obs.value !== null)
@@ -110,6 +116,8 @@ jobs:
                 value: parseFloat(obs.value)
               }))
               .reverse(); // 오래된 순으로 정렬
+            
+            console.log('📊 필터링 후 관측값 개수:', observations.length);
             
             // 최근 52주 데이터 사용 (약 260 영업일)
             // 52주 = 약 260 영업일이므로, 최대 260개까지 사용
@@ -122,18 +130,33 @@ jobs:
             
             // 최신 데이터 날짜 확인
             const latestDate = recent52Weeks[recent52Weeks.length - 1]?.date;
+            const latestValue = recent52Weeks[recent52Weeks.length - 1]?.value;
             const today = new Date().toISOString().split('T')[0];
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = yesterday.toISOString().split('T')[0];
             
+            // 주말 확인 (토요일=6, 일요일=0)
+            const todayDate = new Date();
+            const dayOfWeek = todayDate.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            
             console.log('📅 날짜 정보:');
-            console.log('  - 오늘:', today);
+            console.log('  - 오늘:', today, isWeekend ? '(주말)' : '(평일)');
             console.log('  - 어제:', yesterdayStr);
             console.log('  - 최신 데이터 날짜:', latestDate);
+            console.log('  - 최신 데이터 값:', latestValue);
             
-            if (latestDate && latestDate < yesterdayStr) {
-              console.warn('⚠️ 최신 데이터가 어제보다 이전입니다. FRED API 업데이트 지연 가능성.');
+            if (latestDate) {
+              const latestDateObj = new Date(latestDate);
+              const daysDiff = Math.floor((todayDate - latestDateObj) / (1000 * 60 * 60 * 24));
+              console.log('  - 최신 데이터와 오늘의 차이:', daysDiff, '일');
+              
+              if (daysDiff > 3 && !isWeekend) {
+                console.warn('⚠️ 최신 데이터가 3일 이상 지났습니다. FRED API 업데이트 지연 가능성.');
+              } else if (daysDiff > 1 && !isWeekend) {
+                console.warn('⚠️ 최신 데이터가 어제보다 이전입니다. FRED API 업데이트 지연 가능성.');
+              }
             }
             
             const dollarIndexData = {
