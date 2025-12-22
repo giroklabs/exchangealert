@@ -45,17 +45,23 @@ export function useInvestmentAnalysis(): AnalysisData {
       setError(null);
 
       try {
-        // 병렬로 데이터 로드
-        const [rate, index, averages, updateTime, history] = await Promise.all([
+        // 핵심 데이터를 먼저 로드 (히스토리는 나중에)
+        const [rate, index, averages, updateTime] = await Promise.all([
           fetchCurrentExchangeRate(),
           fetchDollarIndex(),
           fetchWeeklyAverages(),
           fetchLastUpdateTime(),
-          fetchExchangeRateHistory(),
         ]);
         
         setLastUpdateTime(updateTime);
-        setExchangeRateHistory(history);
+        
+        // 히스토리는 백그라운드에서 로드 (UI 블로킹 방지)
+        fetchExchangeRateHistory().then(history => {
+          setExchangeRateHistory(history);
+        }).catch(err => {
+          console.error('환율 히스토리 로드 실패:', err);
+          setExchangeRateHistory([]);
+        });
 
         setExchangeRate(rate);
         setDollarIndex(index);
