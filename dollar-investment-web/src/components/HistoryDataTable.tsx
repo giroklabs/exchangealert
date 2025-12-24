@@ -81,15 +81,15 @@ export function HistoryDataTable({
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-700 mb-4">전체 데이터 (최근 52주)</h3>
+      <h3 className="text-lg font-bold text-gray-900 mb-4">전체 데이터 (최근 52주)</h3>
       <div className="overflow-x-auto max-h-96 overflow-y-auto">
         <table className="w-full text-sm">
           <thead className="sticky top-0 bg-white">
             <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">날짜</th>
-              <th className="text-right py-3 px-4 font-semibold text-gray-700">원/달러 환율</th>
-              <th className="text-right py-3 px-4 font-semibold text-gray-700">달러 지수</th>
-              <th className="text-right py-3 px-4 font-semibold text-gray-700">달러 갭 비율</th>
+              <th className="text-left py-3 px-4 font-bold text-gray-900">날짜</th>
+              <th className="text-right py-3 px-4 font-bold text-gray-900">원/달러 환율</th>
+              <th className="text-right py-3 px-4 font-bold text-gray-900">달러 지수</th>
+              <th className="text-right py-3 px-4 font-bold text-gray-900">달러 갭 비율</th>
             </tr>
           </thead>
           <tbody>
@@ -100,27 +100,27 @@ export function HistoryDataTable({
                   index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
                 }`}
               >
-                <td className="py-2 px-4 text-gray-700">
+                <td className="py-2 px-4 font-medium text-gray-900">
                   {new Date(item.date).toLocaleDateString('ko-KR', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',
                   })}
                 </td>
-                <td className="py-2 px-4 text-right">
+                <td className="py-2 px-4 text-right font-semibold text-gray-900">
                   {item.rate
                     ? item.rate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })
-                    : '-'}
+                    : <span className="text-gray-400">-</span>}
                 </td>
-                <td className="py-2 px-4 text-right">
+                <td className="py-2 px-4 text-right font-semibold text-gray-900">
                   {item.dollarIndex
                     ? item.dollarIndex.toLocaleString('ko-KR', { maximumFractionDigits: 2 })
-                    : '-'}
+                    : <span className="text-gray-400">-</span>}
                 </td>
-                <td className="py-2 px-4 text-right">
+                <td className="py-2 px-4 text-right font-semibold text-gray-900">
                   {item.gapRatio
                     ? item.gapRatio.toLocaleString('ko-KR', { maximumFractionDigits: 2 })
-                    : '-'}
+                    : <span className="text-gray-400">-</span>}
                 </td>
               </tr>
             ))}
