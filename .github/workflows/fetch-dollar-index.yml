@@ -11,6 +11,9 @@ on:
 jobs:
   fetch-dollar-index:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     env:
       TZ: Asia/Seoul
     
@@ -203,7 +206,35 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "Update dollar index data"
             git push
+            echo "✅ Dollar index data updated and pushed. Deployment should be triggered automatically."
           else
-            echo "No changes to commit"
+            echo "No changes to commit - data is already up to date"
           fi
+      
+      - name: Trigger deployment workflow
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // 배포 워크플로우를 수동으로 트리거
+            const { data: workflows } = await github.rest.actions.listWorkflowsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            
+            const deployWorkflow = workflows.workflows.find(
+              w => w.name === 'Deploy Dollar Investment Web to GitHub Pages'
+            );
+            
+            if (deployWorkflow) {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: deployWorkflow.id,
+                ref: 'main',
+              });
+              console.log('✅ Deployment workflow triggered');
+            } else {
+              console.log('⚠️ Deployment workflow not found');
+            }
 
