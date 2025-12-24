@@ -77,10 +77,11 @@ jobs:
           # observation_start를 1년 전으로 설정하여 충분한 데이터 확보
           ONE_YEAR_AGO=$(date -d '1 year ago' +%Y-%m-%d 2>/dev/null || date -v-1y +%Y-%m-%d 2>/dev/null || echo "")
           if [ -z "$ONE_YEAR_AGO" ]; then
-            # 날짜 계산 실패 시 limit만 사용
-            FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&limit=260&sort_order=desc")
+            # 날짜 계산 실패 시 limit만 사용 (최신 데이터부터 가져오기)
+            FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&limit=260&sort_order=desc&observation_end=$(date +%Y-%m-%d)")
           else
-            FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&observation_start=$ONE_YEAR_AGO&sort_order=desc")
+            # 최신 데이터부터 가져오기 (최대 260개)
+            FRED_RESPONSE=$(curl -s "https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=$FRED_API_KEY&file_type=json&observation_start=$ONE_YEAR_AGO&sort_order=desc&observation_end=$(date +%Y-%m-%d)")
           fi
           
           echo "$FRED_RESPONSE" > /tmp/fred-response.json
@@ -106,16 +107,21 @@ jobs:
             
             console.log('📊 FRED API 응답 정보:');
             console.log('  - 전체 관측값 개수:', data.observations.length);
-            console.log('  - 첫 번째 관측값 (최신):', JSON.stringify(data.observations[0]));
-            console.log('  - 마지막 관측값 (오래됨):', JSON.stringify(data.observations[data.observations.length - 1]));
+            if (data.observations.length > 0) {
+              // sort_order=desc이므로 첫 번째가 최신
+              console.log('  - 첫 번째 관측값 (최신):', JSON.stringify(data.observations[0]));
+              console.log('  - 마지막 관측값 (오래됨):', JSON.stringify(data.observations[data.observations.length - 1]));
+            }
             
+            // FRED API는 sort_order=desc로 호출했으므로 최신 데이터가 먼저 옴
+            // 하지만 날짜순 정렬이 필요하므로 날짜로 정렬
             const observations = data.observations
               .filter(obs => obs.value !== '.' && obs.value !== null)
               .map(obs => ({
                 date: obs.date,
                 value: parseFloat(obs.value)
               }))
-              .reverse(); // 오래된 순으로 정렬
+              .sort((a, b) => a.date.localeCompare(b.date)); // 날짜순 정렬 (오래된 순)
             
             console.log('📊 필터링 후 관측값 개수:', observations.length);
             
@@ -123,7 +129,7 @@ jobs:
             // 52주 = 약 260 영업일이므로, 최대 260개까지 사용
             // 하지만 실제로는 가능한 한 많은 데이터를 사용 (최대 260개)
             const maxDays = Math.min(260, observations.length);
-            const recent52Weeks = observations.slice(-maxDays);
+            const recent52Weeks = observations.slice(-maxDays); // 마지막 260개 (최신 데이터)
             
             const values = recent52Weeks.map(obs => obs.value);
             const sorted = [...values].sort((a, b) => a - b);
