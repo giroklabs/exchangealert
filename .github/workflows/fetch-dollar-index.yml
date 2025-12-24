@@ -217,24 +217,31 @@ jobs:
         with:
           script: |
             // 배포 워크플로우를 수동으로 트리거
-            const { data: workflows } = await github.rest.actions.listWorkflowsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
-            
-            const deployWorkflow = workflows.workflows.find(
-              w => w.name === 'Deploy Dollar Investment Web to GitHub Pages'
-            );
-            
-            if (deployWorkflow) {
-              await github.rest.actions.createWorkflowDispatch({
+            try {
+              // 올바른 API 메서드 사용
+              const { data: workflows } = await github.rest.actions.listRepoWorkflows({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                workflow_id: deployWorkflow.id,
-                ref: 'main',
               });
-              console.log('✅ Deployment workflow triggered');
-            } else {
-              console.log('⚠️ Deployment workflow not found');
+              
+              const deployWorkflow = workflows.workflows.find(
+                w => w.name === 'Deploy Dollar Investment Web to GitHub Pages'
+              );
+              
+              if (deployWorkflow) {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: deployWorkflow.id,
+                  ref: 'main',
+                });
+                console.log('✅ Deployment workflow triggered:', deployWorkflow.name);
+              } else {
+                console.log('⚠️ Deployment workflow not found. Available workflows:');
+                workflows.workflows.forEach(w => console.log(`  - ${w.name} (${w.path})`));
+              }
+            } catch (error) {
+              console.error('❌ Failed to trigger deployment workflow:', error.message);
+              console.log('💡 Deployment will be triggered automatically by push event');
             }
 
