@@ -27,7 +27,12 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
   }
 
   // 차트 데이터 포맷팅
-  const chartData = data.history.map((item) => ({
+  // 최신 데이터부터 표시 (최근 52주)
+  const sortedHistory = [...data.history].sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  
+  const chartData = sortedHistory.map((item) => ({
     date: new Date(item.date).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' }),
     fullDate: item.date,
     value: item.value,
@@ -44,6 +49,10 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
             stroke="#6b7280"
             fontSize={12}
             tick={{ fill: '#6b7280' }}
+            angle={-45}
+            textAnchor="end"
+            height={60}
+            interval="preserveStartEnd"
           />
           <YAxis 
             stroke="#6b7280"
