@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'dollar-investment-web/**'
+      - 'dollar-investment-web/public/data/dollar-index.json'
   workflow_dispatch:
 
 permissions:

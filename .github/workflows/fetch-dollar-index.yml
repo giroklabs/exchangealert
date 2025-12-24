@@ -201,7 +201,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add dollar-investment-web/public/data/dollar-index.json
           if ! git diff --staged --quiet; then
-            git commit -m "Update dollar index data [skip ci]"
+            git commit -m "Update dollar index data"
             git push
           else
             echo "No changes to commit"
