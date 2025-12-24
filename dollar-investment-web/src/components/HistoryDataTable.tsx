@@ -72,7 +72,7 @@ export function HistoryDataTable({
     });
   
   // 디버깅을 위한 로그 (개발 환경에서만)
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     console.log('HistoryDataTable - Exchange Rate History:', exchangeRateHistory.length);
     console.log('HistoryDataTable - Dollar Index History:', dollarIndexHistory.length);
     console.log('HistoryDataTable - Combined Data:', combinedData.length);
