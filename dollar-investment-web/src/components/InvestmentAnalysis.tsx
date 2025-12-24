@@ -120,7 +120,7 @@ export function InvestmentAnalysis() {
         <HistoryDataTable
           exchangeRateHistory={exchangeRateHistory}
           dollarIndexHistory={dollarIndex?.history || []}
-          isLoading={isLoading}
+          isLoading={isLoading || !dollarIndex}
         />
       )}
 

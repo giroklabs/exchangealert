@@ -30,15 +30,35 @@ export function HistoryDataTable({
     gapRatio: number | null;
   }> = [];
 
-  const rateMap = new Map(exchangeRateHistory.map((item) => [item.date, item.rate]));
-  const indexMap = new Map(dollarIndexHistory.map((item) => [item.date, item.value]));
+  // 날짜 형식 정규화 함수 (YYYY-MM-DD 형식으로 통일)
+  const normalizeDate = (dateStr: string): string => {
+    // 이미 YYYY-MM-DD 형식이면 그대로 반환
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      return dateStr;
+    }
+    // 다른 형식이면 Date 객체를 통해 변환
+    const date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return date.toISOString().split('T')[0];
+    }
+    return dateStr;
+  };
 
-  // 모든 날짜 수집
+  // 날짜를 정규화하여 Map 생성
+  const rateMap = new Map(
+    exchangeRateHistory.map((item) => [normalizeDate(item.date), item.rate])
+  );
+  const indexMap = new Map(
+    dollarIndexHistory.map((item) => [normalizeDate(item.date), item.value])
+  );
+
+  // 모든 날짜 수집 (정규화된 날짜 사용)
   const allDates = new Set([
-    ...exchangeRateHistory.map((item) => item.date),
-    ...dollarIndexHistory.map((item) => item.date),
+    ...exchangeRateHistory.map((item) => normalizeDate(item.date)),
+    ...dollarIndexHistory.map((item) => normalizeDate(item.date)),
   ]);
 
+  // 날짜별로 정렬하여 최신순으로 표시
   Array.from(allDates)
     .sort()
     .reverse() // 최신순
@@ -50,6 +70,14 @@ export function HistoryDataTable({
 
       combinedData.push({ date, rate, dollarIndex, gapRatio });
     });
+  
+  // 디버깅을 위한 로그 (개발 환경에서만)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('HistoryDataTable - Exchange Rate History:', exchangeRateHistory.length);
+    console.log('HistoryDataTable - Dollar Index History:', dollarIndexHistory.length);
+    console.log('HistoryDataTable - Combined Data:', combinedData.length);
+    console.log('HistoryDataTable - Sample dates:', combinedData.slice(0, 5).map(d => d.date));
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
