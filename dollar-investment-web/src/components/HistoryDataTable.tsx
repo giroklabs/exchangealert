@@ -69,18 +69,31 @@ export function HistoryDataTable({
     ...Array.from(indexMap.keys())
   ]);
 
-  // 날짜별로 정렬하여 최신순으로 표시
-  Array.from(allDates)
-    .sort()
-    .reverse() // 최신순
-    .forEach((date) => {
-      const rate = rateMap.get(date) || null;
-      const dollarIndex = indexMap.get(date) || null;
-      const gapRatio =
-        rate && dollarIndex ? (rate / dollarIndex) * 100 : null;
+  // 날짜별로 정렬하여 데이터 병합
+  const sortedDates = Array.from(allDates).sort();
+  let lastKnownDollarIndex: number | null = null;
 
-      combinedData.push({ date, rate, dollarIndex, gapRatio });
-    });
+  sortedDates.forEach((date) => {
+    const rate = rateMap.get(date) || null;
+    let dollarIndex = indexMap.get(date) || null;
+
+    // missing dollarIndex가 있으면 이전 값으로 채움 (Forward Fill)
+    if (dollarIndex === null && lastKnownDollarIndex !== null) {
+      dollarIndex = lastKnownDollarIndex;
+    }
+
+    if (dollarIndex !== null) {
+      lastKnownDollarIndex = dollarIndex;
+    }
+
+    const gapRatio =
+      rate && dollarIndex ? (rate / dollarIndex) * 100 : null;
+
+    combinedData.push({ date, rate, dollarIndex, gapRatio });
+  });
+
+  // 테이블 표시를 위해 최신순으로 역정렬
+  combinedData.reverse();
 
   // 디버깅을 위한 로그 (개발 환경에서만)
   if (import.meta.env.DEV) {
