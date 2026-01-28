@@ -67,3 +67,21 @@ export interface CalculationResult {
   average: number;
 }
 
+// 세븐 스플릿 데이터 타입
+export interface SevenSplitSlot {
+  number: number;
+  isActive: boolean;
+  buyPrice: number | null;
+  amount: number; // 매수 환전액 (USD)
+  krwAmount: number; // 투자 원금 (KRW)
+  targetPrice: number | null;
+  currentProfit?: number;
+  currentRoi?: number;
+}
+
+export interface SevenSplitSettings {
+  totalBudget: number;
+  gapWon: number;
+  targetProfitPercent: number;
+  baseExchangeRate: number;
+}
