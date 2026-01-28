@@ -246,8 +246,12 @@ export function SevenSplitInvestment() {
                                             <span className="font-bold text-blue-500">{slot.targetPrice?.toFixed(2)}원</span>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">수량</span>
+                                            <span className="text-gray-500">매수수량</span>
                                             <span className="font-bold">${slot.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-gray-500">투자금액</span>
+                                            <span className="font-bold">{Math.round(slot.krwAmount).toLocaleString()}원</span>
                                         </div>
                                         <div className="pt-2 border-t border-dashed border-gray-200">
                                             <div className="flex justify-between items-end">
