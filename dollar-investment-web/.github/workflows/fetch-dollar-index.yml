@@ -19,40 +19,19 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Fetch Dollar Index from API
+      - name: Fetch Dollar Index using FRED API
         env:
-          # Alpha Vantage API 키 (GitHub Secrets에 저장 필요)
-          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: |
-          # Alpha Vantage API로 달러 지수(DX) 데이터 가져오기
-          # 또는 FRED API 사용 가능
-          if [ -z "$ALPHA_VANTAGE_API_KEY" ]; then
-            echo "API 키가 설정되지 않았습니다. 샘플 데이터를 사용합니다."
-            # 샘플 데이터 생성
-            cat > public/data/dollar-index.json << EOF
-          {
-            "date": "$(date +%Y-%m-%d)",
-            "current": 93.30,
-            "history": [],
-            "52week": {
-              "low": 91.73,
-              "high": 103.96,
-              "average": 97.84
-            }
-          }
-          EOF
-          else
-            # 실제 API 호출 (예시)
-            curl -s "https://www.alphavantage.co/query?function=DX&interval=daily&apikey=$ALPHA_VANTAGE_API_KEY" > dollar-index-raw.json
-            # JSON 파싱 및 변환 로직 필요
-            # 여기서는 간단한 예시만 제공
-          fi
+          # Use FRED API script to fetch data
+          # The script is already configured to use the API key from environment
+          node scripts/test-fred-api.js
 
       - name: Commit and push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add public/data/dollar-index.json
-          git diff --staged --quiet || git commit -m "Update dollar index data [skip ci]"
+          git diff --staged --quiet || git commit -m "Update dollar index data from FRED [skip ci]"
           git push
 

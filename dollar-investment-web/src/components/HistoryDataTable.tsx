@@ -1,12 +1,14 @@
 interface HistoryDataTableProps {
   exchangeRateHistory: Array<{ date: string; rate: number }>;
   dollarIndexHistory: Array<{ date: string; value: number }>;
+  currentDollarIndex?: { date: string; value: number };
   isLoading?: boolean;
 }
 
 export function HistoryDataTable({
   exchangeRateHistory,
   dollarIndexHistory,
+  currentDollarIndex,
   isLoading,
 }: HistoryDataTableProps) {
   if (isLoading) {
@@ -48,14 +50,23 @@ export function HistoryDataTable({
   const rateMap = new Map(
     exchangeRateHistory.map((item) => [normalizeDate(item.date), item.rate])
   );
-  const indexMap = new Map(
-    dollarIndexHistory.map((item) => [normalizeDate(item.date), item.value])
-  );
+
+  const indexEntries = [...dollarIndexHistory.map((item) => [normalizeDate(item.date), item.value])];
+
+  // 현재 달러 지수 추가 (히스토리에 없는 경우)
+  if (currentDollarIndex) {
+    const normalizedCurrentDate = normalizeDate(currentDollarIndex.date);
+    if (!indexEntries.some(([date]) => date === normalizedCurrentDate)) {
+      indexEntries.push([normalizedCurrentDate, currentDollarIndex.value]);
+    }
+  }
+
+  const indexMap = new Map(indexEntries as [string, number][]);
 
   // 모든 날짜 수집 (정규화된 날짜 사용)
   const allDates = new Set([
     ...exchangeRateHistory.map((item) => normalizeDate(item.date)),
-    ...dollarIndexHistory.map((item) => normalizeDate(item.date)),
+    ...Array.from(indexMap.keys())
   ]);
 
   // 날짜별로 정렬하여 최신순으로 표시
@@ -70,7 +81,7 @@ export function HistoryDataTable({
 
       combinedData.push({ date, rate, dollarIndex, gapRatio });
     });
-  
+
   // 디버깅을 위한 로그 (개발 환경에서만)
   if (import.meta.env.DEV) {
     console.log('HistoryDataTable - Exchange Rate History:', exchangeRateHistory.length);
@@ -96,9 +107,8 @@ export function HistoryDataTable({
             {combinedData.map((item, index) => (
               <tr
                 key={item.date}
-                className={`border-b border-gray-100 ${
-                  index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                }`}
+                className={`border-b border-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                  }`}
               >
                 <td className="py-2 px-4 font-medium text-gray-900">
                   {new Date(item.date).toLocaleDateString('ko-KR', {

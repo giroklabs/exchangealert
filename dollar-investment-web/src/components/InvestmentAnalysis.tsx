@@ -24,14 +24,12 @@ export function InvestmentAnalysis() {
   if (error) {
     return (
       <div className="max-w-6xl mx-auto p-4">
-        <div className={`rounded-lg p-6 ${
-          theme === 'dark' 
-            ? 'bg-red-900 border border-red-700' 
+        <div className={`rounded-lg p-6 ${theme === 'dark'
+            ? 'bg-red-900 border border-red-700'
             : 'bg-red-50 border border-red-200'
-        }`}>
-          <h2 className={`text-xl font-semibold mb-2 ${
-            theme === 'dark' ? 'text-red-200' : 'text-red-800'
-          }`}>오류 발생</h2>
+          }`}>
+          <h2 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-red-200' : 'text-red-800'
+            }`}>오류 발생</h2>
           <p className={theme === 'dark' ? 'text-red-300' : 'text-red-600'}>{error}</p>
         </div>
       </div>
@@ -45,9 +43,8 @@ export function InvestmentAnalysis() {
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">
       <div className="text-center mb-8">
-        <h1 className={`text-4xl font-bold mb-2 ${
-          theme === 'dark' ? 'text-white' : 'text-gray-900'
-        }`}>달러 인베스트</h1>
+        <h1 className={`text-4xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>달러 인베스트</h1>
         <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mt-2`}>데이터가 알려주는 달러 투자 적정 시기 분석</p>
       </div>
 
@@ -120,6 +117,7 @@ export function InvestmentAnalysis() {
         <HistoryDataTable
           exchangeRateHistory={exchangeRateHistory}
           dollarIndexHistory={dollarIndex?.history || []}
+          currentDollarIndex={dollarIndex ? { date: dollarIndex.date, value: dollarIndex.current } : undefined}
           isLoading={isLoading || !dollarIndex}
         />
       )}
@@ -135,9 +133,8 @@ export function InvestmentAnalysis() {
       />
 
       {/* 환율알라미 앱 홍보 */}
-      <div className={`mt-12 pt-8 border-t ${
-        theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
-      }`}>
+      <div className={`mt-12 pt-8 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
+        }`}>
         <div className="text-center p-6 rounded-lg bg-yellow-400 border border-yellow-500">
           <a
             href="https://apps.apple.com/kr/app/%ED%99%98%EC%9C%A8%EC%95%8C%EB%9D%BC%EB%AF%B8/id6752878684"

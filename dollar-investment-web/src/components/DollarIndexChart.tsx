@@ -28,10 +28,10 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
 
   // 차트 데이터 포맷팅
   // 최신 데이터부터 표시 (최근 52주)
-  const sortedHistory = [...data.history].sort((a, b) => 
-    new Date(b.date).getTime() - new Date(a.date).getTime()
+  const sortedHistory = [...data.history].sort((a, b) =>
+    new Date(a.date).getTime() - new Date(b.date).getTime()
   );
-  
+
   const chartData = sortedHistory.map((item) => ({
     date: new Date(item.date).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' }),
     fullDate: item.date,
@@ -44,8 +44,8 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis 
-            dataKey="date" 
+          <XAxis
+            dataKey="date"
             stroke="#6b7280"
             fontSize={12}
             tick={{ fill: '#6b7280' }}
@@ -54,15 +54,15 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
             height={60}
             interval="preserveStartEnd"
           />
-          <YAxis 
+          <YAxis
             stroke="#6b7280"
             fontSize={12}
             tick={{ fill: '#6b7280' }}
             domain={['dataMin - 2', 'dataMax + 2']}
           />
-          <Tooltip 
-            contentStyle={{ 
-              backgroundColor: '#fff', 
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#fff',
               border: '1px solid #e5e7eb',
               borderRadius: '8px',
               padding: '8px'
@@ -71,17 +71,17 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
             labelFormatter={(label) => `날짜: ${label}`}
           />
           {average && (
-            <ReferenceLine 
-              y={average} 
-              stroke="#22c55e" 
-              strokeDasharray="5 5" 
+            <ReferenceLine
+              y={average}
+              stroke="#22c55e"
+              strokeDasharray="5 5"
               label={{ value: `52주 평균: ${average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`, position: 'right' }}
             />
           )}
-          <Line 
-            type="monotone" 
-            dataKey="value" 
-            stroke="#8b5cf6" 
+          <Line
+            type="monotone"
+            dataKey="value"
+            stroke="#8b5cf6"
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 6 }}
