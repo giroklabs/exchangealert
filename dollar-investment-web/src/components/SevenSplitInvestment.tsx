@@ -281,7 +281,11 @@ export function SevenSplitInvestment() {
                                                 {isSlot1 ? (
                                                     '기준 환율 도달 시 투자를 시작하세요'
                                                 ) : (
-                                                    recommendedBuyPrice > 0 ? `매수 권장가: ${recommendedBuyPrice.toLocaleString()}원 이하` : '이전 슬롯을 먼저 매수하세요'
+                                                    prevSlot?.isActive ? (
+                                                        `매수 권장가: ${recommendedBuyPrice.toLocaleString()}원 이하`
+                                                    ) : (
+                                                        '이전 슬롯을 먼저 매수하세요'
+                                                    )
                                                 )}
                                             </span>
                                         </div>
