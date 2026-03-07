@@ -38,7 +38,7 @@ const ECOS_SERIES = [
 
 async function fetchFromFred(seriesId) {
     return new Promise((resolve) => {
-        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&limit=2&sort_order=desc`;
+        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&limit=14&sort_order=desc`;
         https.get(url, (res) => {
             let data = '';
             res.on('data', (chunk) => data += chunk);
@@ -65,7 +65,7 @@ async function fetchFromEcos(item) {
             end = '202412';
         }
 
-        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/10/${item.statCode}/${item.cycle}/${start}/${end}/${item.item1}`;
+        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/15/${item.statCode}/${item.cycle}/${start}/${end}/${item.item1}`;
 
         https.get(url, (res) => {
             let data = '';
