@@ -23,7 +23,14 @@ function App() {
     <div className={`min-h-screen transition-colors duration-500 py-8 ${theme === 'dark' ? 'bg-[#0a0a0c] text-white' : 'bg-gradient-to-br from-green-50 to-blue-50'
       }`}>
       <div className="max-w-6xl mx-auto px-4">
-        <header className="flex justify-end mb-4">
+        <header className="flex justify-between items-center mb-8">
+          <div className="flex items-center gap-2">
+            <span className="text-3xl">💵</span>
+            <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-blue-900'
+              }`}>
+              달러 인베스트
+            </h1>
+          </div>
           <ThemeToggle />
         </header>
 
