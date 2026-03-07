@@ -140,39 +140,55 @@ async function main() {
         }
     }
 
-    // 2. ECOS 데이터 (국내)
+    // 2. ECOS 데이터 수집 (국내)
     for (const item of ECOS_SERIES) {
         try {
             const rows = await fetchFromEcos(item);
+            let currentVal = '-';
+            let trend = 'neutral';
+
             if (rows && rows.length > 0) {
-                // ECOS는 보통 최신 데이터가 마지막에 오거나 함. StatisticSearch는 시간순일 가능성 있음.
-                const currentVal = rows[0].DATA_VALUE;
+                currentVal = rows[0].DATA_VALUE;
                 const prevVal = rows.length > 1 ? rows[1].DATA_VALUE : currentVal;
-                const trend = calculateTrend(prevVal, currentVal);
+                trend = calculateTrend(prevVal, currentVal);
 
                 if (item.impact === 'up') {
-                    if (trend === 'up') upScore += 1.2; // 국내 요인 가중치 약간 더줌
+                    if (trend === 'up') upScore += 1.2;
                     else if (trend === 'down') downScore += 1.2;
                 } else {
                     if (trend === 'up') downScore += 1.2;
                     else if (trend === 'down') upScore += 1.2;
                 }
-
-                indicators.push({
-                    id: item.id,
-                    name: item.name,
-                    category: item.category,
-                    value: isNaN(parseFloat(currentVal)) ? currentVal : parseFloat(currentVal).toLocaleString(),
-                    unit: item.unit,
-                    trend: trend,
-                    impact: item.impact,
-                    description: item.description,
-                    source: item.source
-                });
-                console.log(`✅ ${item.name} 완료: ${currentVal} (${trend})`);
             }
+
+            indicators.push({
+                id: item.id,
+                name: item.name,
+                category: item.category,
+                value: isNaN(parseFloat(currentVal)) ? currentVal : parseFloat(currentVal).toLocaleString(),
+                unit: item.unit,
+                trend: trend,
+                impact: item.impact,
+                description: item.description,
+                source: item.source
+            });
+            if (rows) console.log(`✅ ${item.name} 완료: ${currentVal} (${trend})`);
+            else console.log(`⚠️ ${item.name} 응답 없음/실패`);
+
         } catch (e) {
-            console.error(`❌ ${item.name} 실패: ${e.message}`);
+            console.error(`❌ ${item.name} 에러: ${e.message}`);
+            // 에러 발생 시에도 빈 카드 추가
+            indicators.push({
+                id: item.id,
+                name: item.name,
+                category: item.category,
+                value: '-',
+                unit: item.unit,
+                trend: 'neutral',
+                impact: item.impact,
+                description: item.description,
+                source: item.source
+            });
         }
     }
 
