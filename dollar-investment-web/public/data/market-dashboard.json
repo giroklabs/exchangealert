@@ -67,6 +67,61 @@
       "source": "BEA"
     },
     {
+      "id": "bok-rate",
+      "name": "한국 기준금리",
+      "category": "domestic",
+      "value": "2.75",
+      "unit": "%",
+      "trend": "neutral",
+      "impact": "down",
+      "description": "금리 인상 시 원화 수요 증가로 환율 하락, 인하 시 상승",
+      "source": "한국은행"
+    },
+    {
+      "id": "kr-cpi",
+      "name": "국내 소비자물가(CPI)",
+      "category": "domestic",
+      "value": "116.29",
+      "unit": "%",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "한국 물가가 미국보다 상대적으로 높을 경우 원화 가치 하락",
+      "source": "통계청"
+    },
+    {
+      "id": "kr-gdp",
+      "name": "GDP 성장률",
+      "category": "domestic",
+      "value": "-",
+      "unit": "%",
+      "trend": "neutral",
+      "impact": "down",
+      "description": "경제 성장 호조 시 외국인 투자 유입으로 원화 강세 유도",
+      "source": "한국은행"
+    },
+    {
+      "id": "m2-supply",
+      "name": "통화량(M2)",
+      "category": "domestic",
+      "value": "-",
+      "unit": "",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "과도한 통화 팽창 시 인플레 우려로 원화 가치 하락(환율 상승)",
+      "source": "한국은행"
+    },
+    {
+      "id": "trade-balance",
+      "name": "경상수지",
+      "category": "domestic",
+      "value": "-",
+      "unit": "M$",
+      "trend": "neutral",
+      "impact": "down",
+      "description": "경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락",
+      "source": "한국은행"
+    },
+    {
       "id": "foreign-investment",
       "name": "외국인 증권투자",
       "category": "international",
@@ -89,5 +144,5 @@
       "source": "Market"
     }
   ],
-  "lastUpdate": "2026. 3. 7. 오후 12:22:45"
+  "lastUpdate": "2026. 3. 7. 오후 12:23:03"
 }

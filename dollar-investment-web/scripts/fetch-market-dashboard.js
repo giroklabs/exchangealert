@@ -69,7 +69,7 @@ async function fetchFromEcos(item) {
 
         // ECOS API URL (주기는 지표에 따라 다를 수 있으나 M 또는 Q가 일반적)
         const cycle = item.id === 'kr-gdp' ? 'Q' : 'M';
-        const url = `http://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/1/${item.statCode}/${cycle}/${startDay}/${endDay}/${item.item1}`;
+        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/1/${item.statCode}/${cycle}/${startDay}/${endDay}/${item.item1}`;
 
         https.get(url, (res) => {
             let data = '';
