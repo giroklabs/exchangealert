@@ -111,5 +111,12 @@ export interface MarketIndicator {
 
 export interface DashboardData {
   indicators: MarketIndicator[];
+  forecast?: {
+    sentiment: string;
+    upProb: number;
+    downProb: number;
+    detailedAnalysis: string;
+    score: { upScore: number; downScore: number };
+  };
   lastUpdate: string;
 }

@@ -49,17 +49,49 @@ export function MarketDashboard() {
                 </div>
             </div>
 
-            {/* 개요 안내 */}
-            <div className={`p-6 rounded-3xl border ${theme === 'dark' ? 'bg-gray-800/50 border-gray-700' : 'bg-blue-50/50 border-blue-100'
-                }`}>
-                <div className="flex items-start gap-4">
-                    <span className="text-3xl">💡</span>
-                    <div>
-                        <h3 className={`font-bold mb-1 ${theme === 'dark' ? 'text-blue-300' : 'text-blue-800'}`}>환율 결정의 원리</h3>
-                        <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                            원/달러 환율은 수요와 공급에 의해 결정됩니다. 달러 수요가 늘어나거나 공급이 줄어들면 환율이 상승(원화 가치 하락)하고,
-                            반대로 달러 공급이 늘거나 수요가 줄어들면 환율이 하락(원화 가치 상승)합니다.
-                        </p>
+            {/* 시장 향방 예측 섹션 */}
+            <div className={`p-8 rounded-3xl border shadow-xl ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-gradient-to-br from-blue-50 to-white border-blue-100'}`}>
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className="flex-1 w-full space-y-4">
+                        <div className="flex items-center gap-3">
+                            <span className="text-3xl">🎯</span>
+                            <h3 className={`text-2xl font-black ${theme === 'dark' ? 'text-blue-400' : 'text-blue-800'}`}>실시간 원/달러 환율 예측 모델</h3>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-end">
+                                <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>시장 종합 심리</span>
+                                <span className={`text-3xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
+                                    {data?.forecast?.sentiment || '분석 중...'}
+                                </span>
+                            </div>
+
+                            <div className="relative pt-1">
+                                <div className="flex mb-2 items-center justify-between font-bold text-xs uppercase">
+                                    <span className="text-blue-500">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
+                                    <span className="text-red-500">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
+                                </div>
+                                <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                                    <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-1000"></div>
+                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500 transition-all duration-1000"></div>
+                                </div>
+                            </div>
+
+                            <p className={`text-md leading-relaxed p-4 rounded-xl ${theme === 'dark' ? 'bg-gray-700 text-gray-200' : 'bg-white/60 text-gray-700'}`}>
+                                <b>분석 결과:</b> {data?.forecast?.detailedAnalysis || '데이터 수집 중입니다.'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="hidden lg:flex w-48 h-48 items-center justify-center rounded-full border-8 border-gray-100 dark:border-gray-700 relative overflow-hidden">
+                        <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
+                        <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
+                        <div className="z-10 text-center">
+                            <div className="text-sm font-bold text-gray-400">종합 점수</div>
+                            <div className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+                                {Math.max(data?.forecast?.upProb || 0, data?.forecast?.downProb || 0)}%
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -130,8 +162,8 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
 
     return (
         <div className={`p-5 rounded-2xl transition-all duration-300 border-2 hover:scale-[1.01] ${theme === 'dark'
-                ? 'bg-gray-800/40 border-gray-700 hover:border-gray-500'
-                : 'bg-white border-gray-50 hover:border-blue-100 shadow-sm hover:shadow-md'
+            ? 'bg-gray-800/40 border-gray-700 hover:border-gray-500'
+            : 'bg-white border-gray-50 hover:border-blue-100 shadow-sm hover:shadow-md'
             }`}>
             <div className="flex justify-between items-start mb-3">
                 <div>

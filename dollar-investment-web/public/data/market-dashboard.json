@@ -17,7 +17,7 @@
       "category": "international",
       "value": "158,466",
       "unit": "K",
-      "trend": "neutral",
+      "trend": "down",
       "impact": "up",
       "description": "미국 고용 지표 점진적 호조 시 달러 선호 현상 강화",
       "source": "BLS"
@@ -28,7 +28,7 @@
       "category": "international",
       "value": "156.05",
       "unit": "¥",
-      "trend": "neutral",
+      "trend": "down",
       "impact": "up",
       "description": "엔화 약세 시 아시아 통화 동반 약세로 환율 상승 경향",
       "source": "Market"
@@ -39,7 +39,7 @@
       "category": "international",
       "value": "71.13",
       "unit": "$",
-      "trend": "neutral",
+      "trend": "up",
       "impact": "up",
       "description": "유가 상승 시 달러 결제 수요 증가 및 물가 압박으로 환율 상승",
       "source": "WTI"
@@ -50,7 +50,7 @@
       "category": "international",
       "value": "326.588",
       "unit": "%",
-      "trend": "neutral",
+      "trend": "up",
       "impact": "up",
       "description": "미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발",
       "source": "BLS"
@@ -61,21 +61,10 @@
       "category": "international",
       "value": "31,490.07",
       "unit": "B$",
-      "trend": "neutral",
+      "trend": "up",
       "impact": "up",
       "description": "미국 경제 성장 호조 시 달러 가치 상승으로 환율 상승",
       "source": "BEA"
-    },
-    {
-      "id": "bok-rate",
-      "name": "한국 기준금리",
-      "category": "domestic",
-      "value": "2.75",
-      "unit": "%",
-      "trend": "neutral",
-      "impact": "down",
-      "description": "금리 인상 시 원화 수요 증가로 환율 하락, 인하 시 상승",
-      "source": "한국은행"
     },
     {
       "id": "kr-cpi",
@@ -83,66 +72,32 @@
       "category": "domestic",
       "value": "116.29",
       "unit": "%",
-      "trend": "neutral",
+      "trend": "down",
       "impact": "up",
       "description": "한국 물가가 미국보다 상대적으로 높을 경우 원화 가치 하락",
       "source": "통계청"
     },
     {
-      "id": "kr-gdp",
-      "name": "GDP 성장률",
-      "category": "domestic",
-      "value": "-",
-      "unit": "%",
-      "trend": "neutral",
-      "impact": "down",
-      "description": "경제 성장 호조 시 외국인 투자 유입으로 원화 강세 유도",
-      "source": "한국은행"
-    },
-    {
-      "id": "m2-supply",
-      "name": "통화량(M2)",
-      "category": "domestic",
-      "value": "-",
-      "unit": "",
-      "trend": "neutral",
-      "impact": "up",
-      "description": "과도한 통화 팽창 시 인플레 우려로 원화 가치 하락(환율 상승)",
-      "source": "한국은행"
-    },
-    {
       "id": "trade-balance",
       "name": "경상수지",
       "category": "domestic",
-      "value": "-",
+      "value": "9,583.2",
       "unit": "M$",
-      "trend": "neutral",
+      "trend": "up",
       "impact": "down",
       "description": "경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락",
       "source": "한국은행"
-    },
-    {
-      "id": "foreign-investment",
-      "name": "외국인 증권투자",
-      "category": "international",
-      "value": "순매수",
-      "unit": "",
-      "trend": "up",
-      "impact": "down",
-      "description": "외국인 주식 순매수 시 원화 수요 증가로 환율 하락",
-      "source": "KRX"
-    },
-    {
-      "id": "global-risk",
-      "name": "글로벌 리스크",
-      "category": "international",
-      "value": "보통",
-      "unit": "",
-      "trend": "neutral",
-      "impact": "up",
-      "description": "지정학적 위기(전쟁 등) 시 안전자산 달러 선호로 환율 상승",
-      "source": "Market"
     }
   ],
-  "lastUpdate": "2026. 3. 7. 오후 2:19:16"
+  "forecast": {
+    "sentiment": "보통",
+    "upProb": 41,
+    "downProb": 59,
+    "detailedAnalysis": "시장 지표들이 엇갈리며 횡보 가능성이 높습니다.",
+    "score": {
+      "upScore": 3,
+      "downScore": 4.4
+    }
+  },
+  "lastUpdate": "2026. 3. 7. 오후 2:24:49"
 }
