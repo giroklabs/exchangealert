@@ -9,7 +9,7 @@
       "source": "Federal Reserve",
       "description": "Fed 금리 인상 시 달러 가치 상승으로 환율 상승",
       "value": "3.64",
-      "trend": "neutral"
+      "trend": "down"
     },
     {
       "id": "payems",
@@ -78,7 +78,7 @@
       "description": "금리 인상 시 원화 강세 유도",
       "cycle": "M",
       "value": "3.5",
-      "trend": "neutral"
+      "trend": "down"
     },
     {
       "id": "kr-cpi",
@@ -105,7 +105,7 @@
       "source": "한국은행",
       "description": "경제 성장 호조 시 원화 강세 유도",
       "cycle": "Q",
-      "value": "-",
+      "value": "2.4",
       "trend": "neutral"
     },
     {
@@ -119,13 +119,13 @@
       "source": "한국은행",
       "description": "통화 팽창 시 원화 가치 하락 압력",
       "cycle": "M",
-      "value": "-",
+      "value": "3",
       "trend": "neutral"
     },
     {
       "id": "trade-balance",
-      "statCode": "111Y036",
-      "item1": "10101",
+      "statCode": "301Y013",
+      "item1": "000000",
       "name": "경상수지",
       "unit": "M$",
       "category": "domestic",
@@ -133,19 +133,19 @@
       "source": "한국은행",
       "description": "경상수지 흑자 시 환율 하락 유도",
       "cycle": "M",
-      "value": "-",
-      "trend": "neutral"
+      "value": "8,417.3",
+      "trend": "up"
     }
   ],
   "forecast": {
-    "sentiment": "환율 상승 우세",
-    "upProb": 64,
-    "downProb": 36,
-    "detailedAnalysis": "종합 지수 분석 결과 현재 시장은 환율 상승 우세 상태입니다.",
+    "sentiment": "보통",
+    "upProb": 55,
+    "downProb": 45,
+    "detailedAnalysis": "국내외 시장 지표를 종합 분석한 결과입니다.",
     "score": {
-      "upScore": 5.4,
-      "downScore": 3
+      "upScore": 6.6000000000000005,
+      "downScore": 5.4
     }
   },
-  "lastUpdate": "2026. 3. 7. 오후 5:02:09"
+  "lastUpdate": "2026. 3. 7. 오후 5:03:00"
 }
