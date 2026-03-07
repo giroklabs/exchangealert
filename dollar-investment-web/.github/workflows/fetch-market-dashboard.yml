@@ -2,8 +2,8 @@ name: Fetch Market Dashboard Data
 
 on:
   schedule:
-    # 매일 한국시간 오전 9시 10분 (UTC 0시 10분)에 실행
-    - cron: '10 0 * * *'
+    # 하루 3회 실행 (KST 오전 9:10, 오후 2:10, 오후 9:10)
+    - cron: '10 0,5,12 * * *'
   workflow_dispatch: # 수동 실행 가능
 
 jobs:
