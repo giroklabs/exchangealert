@@ -85,3 +85,14 @@ export interface SevenSplitSettings {
   targetProfitPercent: number;
   baseExchangeRate: number;
 }
+
+export interface FXInvestment {
+  id: string;
+  date: string;
+  usdAmount: number;
+  buyRate: number;
+  sellRate: number | null;
+  sellDate: string | null;
+  status: 'holding' | 'sold';
+  memo: string;
+}
