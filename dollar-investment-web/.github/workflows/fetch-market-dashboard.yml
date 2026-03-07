@@ -22,6 +22,7 @@ jobs:
       - name: Fetch Market Indicators using FRED API
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
         run: |
           node scripts/fetch-market-dashboard.js
 
