@@ -52,9 +52,10 @@ export interface InvestmentSignal {
   conditions: {
     rateBelowAverage: boolean;
     dollarIndexBelowAverage: boolean;
-    gapRatioAboveAverage: boolean;
+    gapRatioBelowAverage: boolean;
     rateBelowAppropriate: boolean;
   };
+  score: number;
   appropriateRate: number;
   currentGapRatio: number;
   averageGapRatio: number;

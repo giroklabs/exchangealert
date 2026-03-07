@@ -64,21 +64,21 @@ export function checkInvestmentSuitability(
     rateBelowAverage: currentRate < avgRate,
     // 조건 2: 현재 달러 지수 < 52주 평균 달러 지수
     dollarIndexBelowAverage: currentDollarIndex < avgDollarIndex,
-    // 조건 3: 현재 달러 갭 비율 > 52주 평균 달러 갭 비율
-    gapRatioAboveAverage: currentGapRatio > avgGapRatio,
+    // 조건 3: 현재 달러 갭 비율 < 52주 평균 달러 갭 비율
+    gapRatioBelowAverage: currentGapRatio < avgGapRatio,
     // 조건 4: 현재 원/달러 환율 < 적정 환율
     rateBelowAppropriate: currentRate < appropriateRate,
   };
 
-  // 모든 조건을 만족해야 투자 적합
-  const isSuitable =
-    conditions.rateBelowAverage &&
-    conditions.dollarIndexBelowAverage &&
-    conditions.gapRatioAboveAverage &&
-    conditions.rateBelowAppropriate;
+  // 점수 계산 (각 조건당 1점)
+  const score = Object.values(conditions).filter(Boolean).length;
+
+  // 3개 이상 만족 시 투자 시작 적합으로 판단 (4개는 너무 빡빡하므로 완화)
+  const isSuitable = score >= 3;
 
   return {
     isSuitable,
+    score,
     conditions,
     appropriateRate,
     currentGapRatio,
