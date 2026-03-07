@@ -70,7 +70,7 @@
       "id": "bok-rate",
       "name": "한국 기준금리",
       "category": "domestic",
-      "value": "-",
+      "value": "2.5",
       "unit": "%",
       "trend": "neutral",
       "impact": "down",
@@ -81,7 +81,7 @@
       "id": "kr-cpi",
       "name": "국내 소비자물가(CPI)",
       "category": "domestic",
-      "value": "113.27",
+      "value": "117.42",
       "unit": "%",
       "trend": "up",
       "impact": "up",
@@ -90,7 +90,7 @@
     },
     {
       "id": "kr-gdp",
-      "name": "GDP 성장률",
+      "name": "경제성장률",
       "category": "domestic",
       "value": "-",
       "unit": "%",
@@ -114,23 +114,23 @@
       "id": "trade-balance",
       "name": "경상수지",
       "category": "domestic",
-      "value": "8,417.3",
+      "value": "-",
       "unit": "M$",
-      "trend": "up",
+      "trend": "neutral",
       "impact": "down",
       "description": "경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락",
       "source": "한국은행"
     }
   ],
   "forecast": {
-    "sentiment": "보통",
-    "upProb": 57,
-    "downProb": 43,
-    "detailedAnalysis": "시장 지표들이 엇갈리며 횡보 가능성이 높습니다.",
+    "sentiment": "환율 상승 우세",
+    "upProb": 68,
+    "downProb": 32,
+    "detailedAnalysis": "미국 금리 및 경제지표 호조와 국내 통화량 증가 요인이 겹치며 달러 강세 압력이 높습니다.",
     "score": {
       "upScore": 4.2,
-      "downScore": 3.2
+      "downScore": 2
     }
   },
-  "lastUpdate": "2026. 3. 7. 오후 2:35:08"
+  "lastUpdate": "2026. 3. 7. 오후 2:40:41"
 }

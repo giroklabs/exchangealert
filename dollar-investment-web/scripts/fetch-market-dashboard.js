@@ -26,11 +26,11 @@ const FRED_SERIES = [
 
 // 2. 수집할 ECOS 시리즈 (국내)
 const ECOS_SERIES = [
-    { id: 'bok-rate', statCode: '060Y001', item1: '0101000', name: '한국 기준금리', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '금리 인상 시 원화 수요 증가로 환율 하락, 인하 시 상승', cycle: 'M' },
+    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '금리 인상 시 원화 수요 증가로 환율 하락, 인하 시 상승', cycle: 'M' },
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '국내 소비자물가(CPI)', unit: '%', category: 'domestic', impact: 'up', source: '통계청', description: '한국 물가가 미국보다 상대적으로 높을 경우 원화 가치 하락', cycle: 'M' },
-    { id: 'kr-gdp', statCode: '200Y005', item1: '10101', name: 'GDP 성장률', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '경제 성장 호조 시 외국인 투자 유입으로 원화 강세 유도', cycle: 'Q' },
+    { id: 'kr-gdp', statCode: '200Y005', item1: '10101', name: '경제성장률', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '경제 성장 호조 시 외국인 투자 유입으로 원화 강세 유도', cycle: 'Q' },
     { id: 'm2-supply', statCode: '101Y001', item1: 'BBHS01', name: '통화량(M2)', unit: '조원', category: 'domestic', impact: 'up', source: '한국은행', description: '과도한 통화 팽창 시 인플레 우려로 원화 가치 하락(환율 상승)', cycle: 'M' },
-    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', category: 'domestic', impact: 'down', source: '한국은행', description: '경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락', cycle: 'M' }
+    { id: 'trade-balance', statCode: '111Y036', item1: '10101', name: '경상수지', unit: 'M$', category: 'domestic', impact: 'down', source: '한국은행', description: '경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락', cycle: 'M' }
 ];
 
 async function fetchFromFred(seriesId) {
@@ -60,9 +60,21 @@ async function fetchFromEcos(item) {
     if (!ECOS_API_KEY) return null;
 
     return new Promise((resolve, reject) => {
-        // 충분히 넓은 범위를 잡아 최신 데이터를 확실히 가져오도록 함
-        const startDay = '202301';
-        const endDay = '202612';
+        const today = new Date();
+        const year = today.getFullYear();
+        let startDay, endDay;
+
+        // 주기별 날짜 형식 맞춤
+        if (item.cycle === 'M') {
+            startDay = `${year - 1}01`;
+            endDay = `${year}12`;
+        } else if (item.cycle === 'Q') {
+            startDay = `${year - 1}1`;
+            endDay = `${year}4`;
+        } else {
+            startDay = `${year - 1}0101`;
+            endDay = `${year}1231`;
+        }
 
         const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/10/${item.statCode}/${item.cycle}/${startDay}/${endDay}/${item.item1}`;
 
@@ -73,8 +85,10 @@ async function fetchFromEcos(item) {
                 try {
                     const json = JSON.parse(data);
                     if (json.StatisticSearch && json.StatisticSearch.row && json.StatisticSearch.row.length > 0) {
-                        // 통계는 보통 과거순으로 오므로, 역순으로 정렬하여 최신이 앞으로 오게 함
                         resolve(json.StatisticSearch.row.reverse());
+                    } else if (json.RESULT && json.RESULT.MESSAGE) {
+                        console.warn(`[ECOS API Info] ${item.name}: ${json.RESULT.MESSAGE}`);
+                        resolve(null);
                     } else {
                         resolve(null);
                     }
