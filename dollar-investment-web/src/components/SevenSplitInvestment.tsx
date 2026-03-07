@@ -53,7 +53,7 @@ export function SevenSplitInvestment() {
     // 매수 처리
     const handleBuy = (slotNumber: number) => {
         const slotIndex = slotNumber - 1;
-        let buyPrice = currentRate;
+        const buyPrice = currentRate;
 
         // 슬롯 2~7은 이전 슬롯 매수가 - Gap 조건 확인 (선택 사항이지만 권장)
         if (slotNumber > 1 && slots[slotIndex - 1].isActive) {

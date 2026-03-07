@@ -23,12 +23,6 @@ export function FXExchangeProfitTracker() {
         status: 'holding'
     });
 
-    // 현재 환율이 로드되면 기본 매수 환율 업데이트 (새 투자 추가 시에만)
-    useEffect(() => {
-        if (currentRate && newInvestment.buyRate === 0) {
-            setNewInvestment(prev => ({ ...prev, buyRate: currentRate }));
-        }
-    }, [currentRate]);
 
     useEffect(() => {
         localStorage.setItem('fx-investments', JSON.stringify(investments));
@@ -202,7 +196,7 @@ export function FXExchangeProfitTracker() {
                             <input
                                 type="number"
                                 step="0.1"
-                                value={newInvestment.buyRate}
+                                value={newInvestment.buyRate || currentRate || ''}
                                 onChange={(e) => setNewInvestment({ ...newInvestment, buyRate: Number(e.target.value) })}
                                 className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                             />
