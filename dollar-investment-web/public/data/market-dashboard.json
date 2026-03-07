@@ -1,0 +1,104 @@
+{
+  "indicators": [
+    {
+      "id": "bok-rate",
+      "name": "한국 기준금리",
+      "category": "domestic",
+      "value": "3.50",
+      "unit": "%",
+      "trend": "neutral",
+      "impact": "down",
+      "description": "금리 인상 시 원화 수요 증가로 환율 하락, 인하 시 상승",
+      "source": "한국은행"
+    },
+    {
+      "id": "kr-cpi",
+      "name": "국내 소비자물가(CPI)",
+      "category": "domestic",
+      "value": "2.7",
+      "unit": "%",
+      "trend": "up",
+      "impact": "up",
+      "description": "한국 물가가 미국보다 상대적으로 높을 경우 원화 가치 하락",
+      "source": "통계청"
+    },
+    {
+      "id": "kr-gdp",
+      "name": "GDP 성장률",
+      "category": "domestic",
+      "value": "2.4",
+      "unit": "%",
+      "trend": "up",
+      "impact": "down",
+      "description": "경제 성장 호조 시 외국인 투자 유입으로 원화 강세 유도",
+      "source": "한국은행"
+    },
+    {
+      "id": "trade-balance",
+      "name": "무역수지",
+      "category": "domestic",
+      "value": "흑자",
+      "unit": "",
+      "trend": "up",
+      "impact": "down",
+      "description": "경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락",
+      "source": "관세청"
+    },
+    {
+      "id": "fedfunds",
+      "name": "미국 기준금리(Fed)",
+      "category": "international",
+      "value": "3.64",
+      "unit": "%",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "Fed 금리 인상 시 달러 가치 상승으로 원/달러 환율 상승",
+      "source": "Federal Reserve"
+    },
+    {
+      "id": "payems",
+      "name": "미 비농업고용지수",
+      "category": "international",
+      "value": "158466.00",
+      "unit": "K",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "미국 고용 지표 점진적 호조 시 달러 선호 현상 강화",
+      "source": "BLS"
+    },
+    {
+      "id": "dexjpus",
+      "name": "엔/달러 환율",
+      "category": "international",
+      "value": "156.05",
+      "unit": "¥",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "엔화 약세 시 아시아 통화 동반 약세로 환율 상승 경향",
+      "source": "Market"
+    },
+    {
+      "id": "dcoilwtico",
+      "name": "국제 유가(WTI)",
+      "category": "international",
+      "value": "71.13",
+      "unit": "$",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "유가 상승 시 달러 결제 수요 증가 및 물가 압박으로 환율 상승",
+      "source": "WTI"
+    },
+    {
+      "id": "cpiaucsl",
+      "name": "미 소비자물가(CPI)",
+      "category": "international",
+      "value": "326.59",
+      "unit": "%",
+      "trend": "neutral",
+      "impact": "up",
+      "description": "미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발",
+      "source": "BLS"
+    }
+  ],
+  "lastUpdate": "2026. 3. 7. 오후 12:10:33"
+}
