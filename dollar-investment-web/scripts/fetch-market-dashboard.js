@@ -60,14 +60,11 @@ async function fetchFromEcos(item) {
     if (!ECOS_API_KEY) return null;
 
     return new Promise((resolve, reject) => {
-        const today = new Date();
-        const lastYear = new Date();
-        lastYear.setFullYear(today.getFullYear() - 1);
+        // 충분히 넓은 범위를 잡아 최신 데이터를 확실히 가져오도록 함
+        const startDay = '202301';
+        const endDay = '202612';
 
-        const endDay = today.toISOString().split('T')[0].replace(/-/g, '');
-        const startDay = lastYear.toISOString().split('T')[0].replace(/-/g, '');
-
-        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/2/${item.statCode}/${item.cycle}/${startDay.substring(0, item.cycle === 'Q' ? 5 : 6)}/${endDay.substring(0, item.cycle === 'Q' ? 5 : 6)}/${item.item1}`;
+        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/10/${item.statCode}/${item.cycle}/${startDay}/${endDay}/${item.item1}`;
 
         https.get(url, (res) => {
             let data = '';
@@ -76,7 +73,8 @@ async function fetchFromEcos(item) {
                 try {
                     const json = JSON.parse(data);
                     if (json.StatisticSearch && json.StatisticSearch.row && json.StatisticSearch.row.length > 0) {
-                        resolve(json.StatisticSearch.row);
+                        // 통계는 보통 과거순으로 오므로, 역순으로 정렬하여 최신이 앞으로 오게 함
+                        resolve(json.StatisticSearch.row.reverse());
                     } else {
                         resolve(null);
                     }

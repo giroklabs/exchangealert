@@ -70,9 +70,9 @@
       "id": "kr-cpi",
       "name": "국내 소비자물가(CPI)",
       "category": "domestic",
-      "value": "116.29",
+      "value": "113.27",
       "unit": "%",
-      "trend": "down",
+      "trend": "up",
       "impact": "up",
       "description": "한국 물가가 미국보다 상대적으로 높을 경우 원화 가치 하락",
       "source": "통계청"
@@ -81,7 +81,7 @@
       "id": "trade-balance",
       "name": "경상수지",
       "category": "domestic",
-      "value": "9,583.2",
+      "value": "8,417.3",
       "unit": "M$",
       "trend": "up",
       "impact": "down",
@@ -91,13 +91,13 @@
   ],
   "forecast": {
     "sentiment": "보통",
-    "upProb": 41,
-    "downProb": 59,
+    "upProb": 57,
+    "downProb": 43,
     "detailedAnalysis": "시장 지표들이 엇갈리며 횡보 가능성이 높습니다.",
     "score": {
-      "upScore": 3,
-      "downScore": 4.4
+      "upScore": 4.2,
+      "downScore": 3.2
     }
   },
-  "lastUpdate": "2026. 3. 7. 오후 2:24:49"
+  "lastUpdate": "2026. 3. 7. 오후 2:28:11"
 }
