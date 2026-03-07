@@ -96,3 +96,20 @@ export interface FXInvestment {
   status: 'holding' | 'sold';
   memo: string;
 }
+
+export interface MarketIndicator {
+  id: string;
+  name: string;
+  category: 'domestic' | 'international';
+  value: string | number;
+  unit: string;
+  trend: 'up' | 'down' | 'neutral';
+  impact: 'up' | 'down' | 'neutral'; // Impact on Exchange Rate (USD/KRW)
+  description: string;
+  source?: string;
+}
+
+export interface DashboardData {
+  indicators: MarketIndicator[];
+  lastUpdate: string;
+}
