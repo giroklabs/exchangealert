@@ -108,6 +108,7 @@ export interface MarketIndicator {
   impact: 'up' | 'down' | 'neutral'; // Impact on Exchange Rate (USD/KRW)
   description: string;
   source?: string;
+  history?: Array<{ date: string; value: number }>;
 }
 
 export interface DashboardData {

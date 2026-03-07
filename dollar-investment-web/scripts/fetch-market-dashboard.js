@@ -103,7 +103,12 @@ async function main() {
             displayVal = yoy.toFixed(1);
         }
 
-        indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend });
+        const history = obs.slice(0, 10).reverse().map(o => ({
+            date: o.date,
+            value: parseFloat(o.value)
+        }));
+
+        indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, history });
         console.log(`✅ [FRED] ${s.name}: ${displayVal}`);
     }
 
@@ -132,7 +137,12 @@ async function main() {
             displayVal = yoy.toFixed(1);
         }
 
-        indicators.push({ ...item, value: displayVal, trend });
+        const history = rows ? rows.slice(0, 10).map(r => ({
+            date: r.TIME,
+            value: parseFloat(r.DATA_VALUE)
+        })) : [];
+
+        indicators.push({ ...item, value: displayVal, trend, history });
         console.log(`✅ [ECOS] ${item.name}: ${displayVal}`);
     }
 
