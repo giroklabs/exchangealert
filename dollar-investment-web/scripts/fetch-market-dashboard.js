@@ -19,7 +19,8 @@ const FRED_SERIES = [
     { id: 'PAYEMS', name: '미 비농업고용지수', unit: 'K', category: 'international', impact: 'up', source: 'BLS', description: '미국 고용 지표 점진적 호조 시 달러 선호 현상 강화' },
     { id: 'DEXJPUS', name: '엔/달러 환율', unit: '¥', category: 'international', impact: 'up', source: 'Market', description: '엔화 약세 시 아시아 통화 동반 약세로 환율 상승 경향' },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', category: 'international', impact: 'up', source: 'WTI', description: '유가 상승 시 달러 결제 수요 증가 및 물가 압박으로 환율 상승' },
-    { id: 'CPIAUCSL', name: '미 소비자물가(CPI)', unit: '%', category: 'international', impact: 'up', source: 'BLS', description: '미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발' }
+    { id: 'CPIAUCSL', name: '미 소비자물가(CPI)', unit: '%', category: 'international', impact: 'up', source: 'BLS', description: '미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발' },
+    { id: 'GDP', name: '미국 GDP', unit: 'B$', category: 'international', impact: 'up', source: 'BEA', description: '미국 경제 성장 호조 시 달러 가치 상승으로 환율 상승' }
 ];
 
 async function fetchFromFred(seriesId) {
@@ -65,7 +66,7 @@ async function main() {
                     id: series.id.toLowerCase(),
                     name: series.name,
                     category: series.category,
-                    value: parseFloat(value).toFixed(2),
+                    value: isNaN(parseFloat(value)) ? value : parseFloat(value).toLocaleString(),
                     unit: series.unit,
                     trend: 'neutral', // 추후 히스토리 비교로 구현 가능
                     impact: series.impact,
@@ -125,10 +126,47 @@ async function main() {
             impact: 'down',
             description: '경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락',
             source: '관세청'
+        },
+        {
+            id: 'm2-supply',
+            name: '통화량(M2)',
+            category: 'domestic',
+            value: '증가',
+            unit: '',
+            trend: 'up',
+            impact: 'up',
+            description: '과도한 통화 팽창 시 인플레 우려로 원화 가치 하락(환율 상승)',
+            source: '한국은행'
         }
     ];
 
-    const finalIndicators = [...domesticDefaults, ...indicators];
+    // 3. 기타 해외 요인 추가 (정성적 지표 등)
+    const extraInternational = [
+        {
+            id: 'foreign-investment',
+            name: '외국인 증권투자',
+            category: 'international',
+            value: '순매수',
+            unit: '',
+            trend: 'up',
+            impact: 'down',
+            description: '외국인 주식 순매수 시 원화 수요 증가로 환율 하락',
+            source: 'KRX'
+        },
+        {
+            id: 'global-risk',
+            name: '글로벌 리스크',
+            category: 'international',
+            value: '보통',
+            unit: '',
+            trend: 'neutral',
+            impact: 'up',
+            description: '지정학적 위기(전쟁 등) 시 안전자산 달러 선호로 환율 상승',
+            source: 'Market'
+        }
+    ];
+
+    const finalIndicators = [...domesticDefaults, ...indicators, ...extraInternational];
 
     const dashboardData = {
         indicators: finalIndicators,
