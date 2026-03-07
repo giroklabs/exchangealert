@@ -6,9 +6,8 @@ import type { DashboardData, MarketIndicator } from '../types';
  */
 export const fetchMarketDashboardData = async (): Promise<DashboardData> => {
     try {
-        const url = import.meta.env.PROD
-            ? 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/public/data/market-dashboard.json'
-            : '/data/market-dashboard.json';
+        const baseUrl = import.meta.env.BASE_URL || '/';
+        const url = `${baseUrl}data/market-dashboard.json`;
 
         const response = await fetch(url);
         if (response.ok) {
