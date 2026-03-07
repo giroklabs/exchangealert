@@ -30,12 +30,12 @@ const ECOS_SERIES = [
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '국내 소비자물가(CPI)', unit: '%', category: 'domestic', impact: 'up', source: '통계청', description: '한국 물가가 미국보다 상대적으로 높을 경우 원화 가치 하락', cycle: 'M' },
     { id: 'kr-gdp', statCode: '200Y005', item1: '10101', name: '경제성장률', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '경제 성장 호조 시 외국인 투자 유입으로 원화 강세 유도', cycle: 'Q' },
     { id: 'm2-supply', statCode: '101Y001', item1: 'BBHS01', name: '통화량(M2)', unit: '조원', category: 'domestic', impact: 'up', source: '한국은행', description: '과도한 통화 팽창 시 인플레 우려로 원화 가치 하락(환율 상승)', cycle: 'M' },
-    { id: 'trade-balance', statCode: '111Y036', item1: '10101', name: '경상수지', unit: 'M$', category: 'domestic', impact: 'down', source: '한국은행', description: '경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락', cycle: 'M' }
+    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', category: 'domestic', impact: 'down', source: '한국은행', description: '경상수지 흑자(수출>수입) 시 달러 공급 증가로 환율 하락', cycle: 'M' }
 ];
 
 async function fetchFromFred(seriesId) {
     return new Promise((resolve, reject) => {
-        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&limit=2&sort_order=desc`; // 2개 가져와서 트렌드 분석
+        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&limit=2&sort_order=desc`;
 
         https.get(url, (res) => {
             let data = '';
@@ -64,7 +64,7 @@ async function fetchFromEcos(item) {
         const year = today.getFullYear();
         let startDay, endDay;
 
-        // 주기별 날짜 형식 맞춤
+        // 주기별 날짜 형식 엄격 적용
         if (item.cycle === 'M') {
             startDay = `${year - 1}01`;
             endDay = `${year}12`;
@@ -85,9 +85,10 @@ async function fetchFromEcos(item) {
                 try {
                     const json = JSON.parse(data);
                     if (json.StatisticSearch && json.StatisticSearch.row && json.StatisticSearch.row.length > 0) {
+                        // 통계는 보통 과거순으로 오므로, 역순으로 정렬하여 최신이 앞으로 오게 함
                         resolve(json.StatisticSearch.row.reverse());
                     } else if (json.RESULT && json.RESULT.MESSAGE) {
-                        console.warn(`[ECOS API Info] ${item.name}: ${json.RESULT.MESSAGE}`);
+                        console.warn(`[ECOS Info] ${item.name}: ${json.RESULT.MESSAGE}`);
                         resolve(null);
                     } else {
                         resolve(null);
@@ -116,7 +117,7 @@ async function main() {
     let upScore = 0;
     let downScore = 0;
 
-    // 1. FRED 데이터 (해외)
+    // 1. FRED 데이터 수집 (해외)
     for (const series of FRED_SERIES) {
         try {
             const obs = await fetchFromFred(series.id);
@@ -125,9 +126,6 @@ async function main() {
                 const prevVal = obs.length > 1 ? obs[1].value : currentVal;
                 const trend = calculateTrend(prevVal, currentVal);
 
-                // 예측 점수 계산
-                // impact 'up'인 지표가 상승세면 환율 상승(+)
-                // impact 'up'인 지표가 하락세면 환율 하락(-)
                 if (series.impact === 'up') {
                     if (trend === 'up') upScore += 1;
                     else if (trend === 'down') downScore += 1;
@@ -162,8 +160,12 @@ async function main() {
             let trend = 'neutral';
 
             if (rows && rows.length > 0) {
-                currentVal = rows[0].DATA_VALUE;
-                const prevVal = rows.length > 1 ? rows[1].DATA_VALUE : currentVal;
+                // 데이터가 0인 경우를 제외하고 유의미한 최신값 찾기
+                const validRow = rows.find(r => parseFloat(r.DATA_VALUE) !== 0) || rows[0];
+                currentVal = validRow.DATA_VALUE;
+
+                const prevIdx = rows.indexOf(validRow) + 1;
+                const prevVal = rows[prevIdx] ? rows[prevIdx].DATA_VALUE : currentVal;
                 trend = calculateTrend(prevVal, currentVal);
 
                 if (item.impact === 'up') {
@@ -187,11 +189,10 @@ async function main() {
                 source: item.source
             });
             if (rows) console.log(`✅ ${item.name} 완료: ${currentVal} (${trend})`);
-            else console.log(`⚠️ ${item.name} 응답 없음/실패`);
+            else console.log(`⚠️ ${item.name} 수집 실패`);
 
         } catch (e) {
             console.error(`❌ ${item.name} 에러: ${e.message}`);
-            // 에러 발생 시에도 빈 카드 추가
             indicators.push({
                 id: item.id,
                 name: item.name,
@@ -207,20 +208,13 @@ async function main() {
     }
 
     // 3. 예측 요약 생성
-    const totalScore = upScore + downScore;
+    const totalScore = Math.max(0.1, upScore + downScore);
     const upProb = Math.round((upScore / totalScore) * 100);
     const downProb = 100 - upProb;
 
     let sentiment = '보통';
-    let detailedAnalysis = '시장 지표들이 엇갈리며 횡보 가능성이 높습니다.';
-
-    if (upProb > 60) {
-        sentiment = '환율 상승 우세';
-        detailedAnalysis = '미국 금리 및 경제지표 호조와 국내 통화량 증가 요인이 겹치며 달러 강세 압력이 높습니다.';
-    } else if (downProb > 60) {
-        sentiment = '환율 하락 우세';
-        detailedAnalysis = '국내 금리 인상 기조와 무역수지 흑자 전환 등 원화 강세 요인이 시장을 주도하고 있습니다.';
-    }
+    if (upProb > 60) sentiment = '환율 상승 우세';
+    else if (downProb > 60) sentiment = '환율 하락 우세';
 
     const dashboardData = {
         indicators: indicators,
@@ -228,7 +222,11 @@ async function main() {
             sentiment,
             upProb,
             downProb,
-            detailedAnalysis,
+            detailedAnalysis: sentiment === '보통'
+                ? '국내외 경제 지표들이 혼조세를 보이며 환율이 박스권에서 움직일 가능성이 높습니다.'
+                : sentiment === '환율 상승 우세'
+                    ? '미국 금리 및 경제 강세 요인이 원화 대비 달러 가치를 밀어올리는 압력으로 작용하고 있습니다.'
+                    : '국내 경상수지 흑자 및 통화 정책 요인이 달러 공급 우위를 만들며 환율 하향 안정화를 유도하고 있습니다.',
             score: { upScore, downScore }
         },
         lastUpdate: new Date().toLocaleString('ko-KR')
@@ -238,7 +236,7 @@ async function main() {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2));
 
-    console.log(`✨ 분석 완료 및 저장: ${sentiment} (${upProb}% vs ${downProb}%)`);
+    console.log(`✨ 분석 완료: ${sentiment} (${upProb}% vs ${downProb}%)`);
 }
 
 main();
