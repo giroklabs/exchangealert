@@ -136,7 +136,7 @@ export interface AssetSplitSlot {
 export interface AssetSplitSettings {
   assetName: string;
   totalBudget: number;
-  gapPrice: number;
+  gapPercent: number;
   targetProfitPercent: number;
   basePrice: number;
 }

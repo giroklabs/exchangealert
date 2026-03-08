@@ -14,7 +14,7 @@ export function AssetSplitInvestment() {
         return saved ? JSON.parse(saved) : {
             assetName: '삼성전자',
             totalBudget: 10000000, // 1000만원
-            gapPrice: 500,
+            gapPercent: 3.0,
             targetProfitPercent: 3.0,
             basePrice: 70000
         };
@@ -156,12 +156,13 @@ export function AssetSplitInvestment() {
                     </div>
                     <div>
                         <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            매수 간격 (Gap)
+                            매수 간격 (%)
                         </label>
                         <input
                             type="number"
-                            value={settings.gapPrice}
-                            onChange={(e) => handleSettingUpdate('gapPrice', Number(e.target.value))}
+                            step="0.1"
+                            value={settings.gapPercent}
+                            onChange={(e) => handleSettingUpdate('gapPercent', Number(e.target.value))}
                             className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                     </div>
@@ -222,7 +223,7 @@ export function AssetSplitInvestment() {
                     if (isSlot1) {
                         recommendedBuyPrice = settings.basePrice;
                     } else if (prevSlot && prevSlot.buyPrice) {
-                        recommendedBuyPrice = prevSlot.buyPrice - settings.gapPrice;
+                        recommendedBuyPrice = prevSlot.buyPrice * (1 - settings.gapPercent / 100);
                     }
 
                     const canBuy = currentPrice > 0 && !slot.isActive && (isSlot1 || (prevSlot && prevSlot.isActive && currentPrice <= recommendedBuyPrice));
