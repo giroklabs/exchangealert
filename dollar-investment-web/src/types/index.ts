@@ -122,3 +122,21 @@ export interface DashboardData {
   };
   lastUpdate: string;
 }
+
+// 자산 투자 데이터 타입
+export interface AssetSplitSlot {
+  number: number;
+  isActive: boolean;
+  buyPrice: number | null;
+  quantity: number;
+  investedAmount: number;
+  targetPrice: number | null;
+}
+
+export interface AssetSplitSettings {
+  assetName: string;
+  totalBudget: number;
+  gapPrice: number;
+  targetProfitPercent: number;
+  basePrice: number;
+}

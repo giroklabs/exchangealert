@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { InvestmentAnalysis } from './components/InvestmentAnalysis';
 import { SevenSplitInvestment } from './components/SevenSplitInvestment';
+import { AssetSplitInvestment } from './components/AssetSplitInvestment';
 import { FXExchangeProfitTracker } from './components/FXExchangeProfitTracker';
 import { MarketDashboard } from './components/MarketDashboard';
 import { Tabs } from './components/Tabs';
@@ -15,6 +16,7 @@ function App() {
   const tabs = [
     { id: 'analysis', label: '투자적정성 분석', icon: '📊' },
     { id: 'sevensplit', label: '세븐스플릿 투자', icon: '📈' },
+    { id: 'asset-split', label: '자산투자', icon: '🏦' },
     { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
     { id: 'dashboard', label: '시장 대시보드', icon: '🌍' },
   ];
@@ -45,6 +47,8 @@ function App() {
             <InvestmentAnalysis />
           ) : activeTab === 'sevensplit' ? (
             <SevenSplitInvestment />
+          ) : activeTab === 'asset-split' ? (
+            <AssetSplitInvestment />
           ) : activeTab === 'fx-profit' ? (
             <FXExchangeProfitTracker />
           ) : (
