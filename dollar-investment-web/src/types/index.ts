@@ -140,3 +140,10 @@ export interface AssetSplitSettings {
   targetProfitPercent: number;
   basePrice: number;
 }
+
+export interface AssetInvestment {
+  id: string;
+  settings: AssetSplitSettings;
+  slots: AssetSplitSlot[];
+  lastPrice: number;
+}

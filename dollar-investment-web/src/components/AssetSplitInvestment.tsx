@@ -1,85 +1,56 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import type { AssetSplitSettings, AssetSplitSlot } from '../types';
+import type { AssetInvestment, AssetSplitSettings } from '../types';
 
-export function AssetSplitInvestment() {
+// 단일 종목 관리자 컴포넌트
+function SingleAssetManager({
+    investment,
+    onUpdate,
+    onDelete
+}: {
+    investment: AssetInvestment,
+    onUpdate: (updated: AssetInvestment) => void,
+    onDelete: () => void
+}) {
     const { theme } = useTheme();
+    const [currentPrice, setCurrentPrice] = useState<number>(investment.lastPrice || 0);
 
-    // 수동 현재가 입력 상태 (주식 등은 실시간 API 연동 대신 수동 입력)
-    const [currentPrice, setCurrentPrice] = useState<number>(0);
-
-    // 기본 설정 상태
-    const [settings, setSettings] = useState<AssetSplitSettings>(() => {
-        const saved = localStorage.getItem('asset-split-settings');
-        return saved ? JSON.parse(saved) : {
-            assetName: '삼성전자',
-            totalBudget: 10000000, // 1000만원
-            gapPercent: 3.0,
-            targetProfitPercent: 3.0,
-            basePrice: 70000
-        };
-    });
-
-    // 슬롯 상태
-    const [slots, setSlots] = useState<AssetSplitSlot[]>(() => {
-        const saved = localStorage.getItem('asset-split-slots');
-        if (saved) return JSON.parse(saved);
-
-        return Array.from({ length: 7 }, (_, i) => ({
-            number: i + 1,
-            isActive: false,
-            buyPrice: null,
-            quantity: 0,
-            investedAmount: 0,
-            targetPrice: null
-        }));
-    });
-
-    // 설정 저장
-    useEffect(() => {
-        localStorage.setItem('asset-split-settings', JSON.stringify(settings));
-    }, [settings]);
-
-    // 슬롯 저장
-    useEffect(() => {
-        localStorage.setItem('asset-split-slots', JSON.stringify(slots));
-    }, [slots]);
-
-    // 설정 변경 핸들러 (String/Number 구분)
-    const handleSettingUpdate = (key: keyof AssetSplitSettings, value: string | number) => {
-        setSettings(prev => ({ ...prev, [key]: value }));
+    // 내부 상태 변경 시 상위로 전파
+    const handleUpdate = (updates: Partial<AssetInvestment>) => {
+        onUpdate({ ...investment, ...updates });
     };
 
-    // 매수 처리
-    const handleBuy = (slotNumber: number) => {
-        const slotIndex = slotNumber - 1;
+    const handleSettingUpdate = (key: keyof AssetSplitSettings, value: string | number) => {
+        const updatedSettings = { ...investment.settings, [key]: value };
+        handleUpdate({ settings: updatedSettings });
+    };
 
-        // 현재가가 0이면 매수 불가
+    const handleBuy = (slotNumber: number) => {
         if (currentPrice <= 0) {
             alert('현재가를 먼저 입력해주세요.');
             return;
         }
 
+        const slotIndex = slotNumber - 1;
         const buyPrice = currentPrice;
-        const budgetPerSlot = settings.totalBudget / 7;
+        const budgetPerSlot = investment.settings.totalBudget / 7;
         const quantity = budgetPerSlot / buyPrice;
 
-        const newSlots = [...slots];
+        const newSlots = [...investment.slots];
         newSlots[slotIndex] = {
             ...newSlots[slotIndex],
             isActive: true,
             buyPrice: buyPrice,
             quantity: quantity,
             investedAmount: budgetPerSlot,
-            targetPrice: buyPrice * (1 + settings.targetProfitPercent / 100)
+            targetPrice: buyPrice * (1 + investment.settings.targetProfitPercent / 100)
         };
-        setSlots(newSlots);
+        handleUpdate({ slots: newSlots, lastPrice: currentPrice });
     };
 
-    // 매도 처리
     const handleSell = (slotNumber: number) => {
         const slotIndex = slotNumber - 1;
-        const newSlots = [...slots];
+        const newSlots = [...investment.slots];
         newSlots[slotIndex] = {
             ...newSlots[slotIndex],
             isActive: false,
@@ -88,256 +59,314 @@ export function AssetSplitInvestment() {
             investedAmount: 0,
             targetPrice: null
         };
-        setSlots(newSlots);
+        handleUpdate({ slots: newSlots, lastPrice: currentPrice });
     };
 
-    // 리셋
     const handleReset = () => {
-        if (window.confirm('모든 자산 투자 데이터를 초기화하시겠습니까?')) {
-            setSlots(Array.from({ length: 7 }, (_, i) => ({
+        if (window.confirm('이 종목의 모든 슬롯 데이터를 초기화하시겠습니까?')) {
+            const resetSlots = Array.from({ length: 7 }, (_, i) => ({
                 number: i + 1,
                 isActive: false,
                 buyPrice: null,
                 quantity: 0,
                 investedAmount: 0,
                 targetPrice: null
-            })));
+            }));
+            handleUpdate({ slots: resetSlots });
         }
     };
 
-    return (
-        <div className="max-w-6xl mx-auto p-4 space-y-8">
-            {/* 타이틀 섹션 */}
-            <div className="text-center mb-8">
-                <h1 className={`text-4xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    자산 분할 매수/매도 관리
-                </h1>
-                <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                    주식, 코인 등 모든 자산을 위한 세븐스플릿 변형 전략
-                </p>
-            </div>
+    // 통계 계산
+    const activeSlots = investment.slots.filter(s => s.isActive);
+    const totalInvested = activeSlots.reduce((sum, s) => sum + (s.buyPrice! * s.quantity), 0);
+    const totalValue = activeSlots.reduce((sum, s) => sum + (currentPrice * s.quantity), 0);
+    const totalProfit = totalValue - totalInvested;
+    const totalRoi = totalInvested > 0 ? (totalValue / totalInvested - 1) * 100 : 0;
 
-            {/* 설정 섹션 */}
-            <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-                        ⚙️ {settings.assetName || '자산'} 투자 설정
-                    </h2>
-                    <button
-                        onClick={handleReset}
-                        className="text-sm px-3 py-1 bg-red-100 text-red-600 rounded-md hover:bg-red-200"
-                    >
-                        초기화
-                    </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    return (
+        <div className={`p-6 rounded-3xl space-y-8 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-indigo-100 shadow-xl'}`}>
+            {/* 헤더: 종목명 및 기본 정보 */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6 border-dashed border-gray-200">
+                <div className="flex items-center gap-4">
+                    <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/30' : 'bg-indigo-50'}`}>
+                        <span className="text-2xl">📊</span>
+                    </div>
                     <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            자산 명칭 (예: 삼성전자, 비트코인)
-                        </label>
                         <input
                             type="text"
-                            value={settings.assetName}
+                            value={investment.settings.assetName}
                             onChange={(e) => handleSettingUpdate('assetName', e.target.value)}
-                            className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
-                            placeholder="자산 이름 입력"
+                            className={`text-2xl font-black bg-transparent border-b-2 border-transparent hover:border-indigo-300 focus:border-indigo-500 focus:outline-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
                         />
+                        <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                            전체 수익률: {totalRoi >= 0 ? '+' : ''}{totalRoi.toFixed(2)}% ({Math.round(totalProfit).toLocaleString()}원)
+                        </div>
                     </div>
-                    <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            총 투자 예산
-                        </label>
-                        <input
-                            type="number"
-                            value={settings.totalBudget}
-                            onChange={(e) => handleSettingUpdate('totalBudget', Number(e.target.value))}
-                            className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
-                        />
-                    </div>
-                    <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            매수 간격 (%)
-                        </label>
-                        <input
-                            type="number"
-                            step="0.1"
-                            value={settings.gapPercent}
-                            onChange={(e) => handleSettingUpdate('gapPercent', Number(e.target.value))}
-                            className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
-                        />
-                    </div>
-                    <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            목표 수익률 (%)
-                        </label>
-                        <input
-                            type="number"
-                            step="0.1"
-                            value={settings.targetProfitPercent}
-                            onChange={(e) => handleSettingUpdate('targetProfitPercent', Number(e.target.value))}
-                            className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
-                        />
-                    </div>
-                    <div>
-                        <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                            기준 가격 (슬롯1)
-                        </label>
-                        <input
-                            type="number"
-                            value={settings.basePrice}
-                            onChange={(e) => handleSettingUpdate('basePrice', Number(e.target.value))}
-                            className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
-                        />
-                    </div>
+                </div>
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleReset}
+                        className="px-4 py-2 text-xs font-bold rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200"
+                    >
+                        데이터 리셋
+                    </button>
+                    <button
+                        onClick={onDelete}
+                        className="px-4 py-2 text-xs font-bold rounded-xl bg-red-50 text-red-500 hover:bg-red-100"
+                    >
+                        종목 삭제
+                    </button>
                 </div>
             </div>
 
-            {/* 실시간 가격 입력 섹션 */}
-            <div className={`p-6 rounded-2xl border-2 flex flex-col md:flex-row justify-between items-center gap-4 ${theme === 'dark' ? 'bg-indigo-900/20 border-indigo-500/30' : 'bg-indigo-50 border-indigo-200'}`}>
-                <div>
-                    <h3 className={`text-lg font-bold ${theme === 'dark' ? 'text-indigo-200' : 'text-indigo-800'}`}>
-                        📈 현재 {settings.assetName} 가격 입력
-                    </h3>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600'}`}>평가 손익 계산을 위해 수시로 업데이트 해주세요</p>
+            {/* 설정 및 현재가 입력 섹션 */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 mb-1 block">총 예산</label>
+                        <input
+                            type="number"
+                            value={investment.settings.totalBudget}
+                            onChange={(e) => handleSettingUpdate('totalBudget', Number(e.target.value))}
+                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                        />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 mb-1 block">간격 (%)</label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            value={investment.settings.gapPercent}
+                            onChange={(e) => handleSettingUpdate('gapPercent', Number(e.target.value))}
+                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                        />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 mb-1 block">목표 (%)</label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            value={investment.settings.targetProfitPercent}
+                            onChange={(e) => handleSettingUpdate('targetProfitPercent', Number(e.target.value))}
+                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                        />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 mb-1 block">기준가(슬롯1)</label>
+                        <input
+                            type="number"
+                            value={investment.settings.basePrice}
+                            onChange={(e) => handleSettingUpdate('basePrice', Number(e.target.value))}
+                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                        />
+                    </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    <input
-                        type="number"
-                        value={currentPrice || ''}
-                        onChange={(e) => setCurrentPrice(Number(e.target.value))}
-                        className={`text-2xl font-black w-48 p-3 rounded-xl border-2 focus:ring-4 focus:ring-indigo-500/20 ${theme === 'dark' ? 'bg-gray-800 border-indigo-500 text-white' : 'bg-white border-indigo-300 text-indigo-900'}`}
-                        placeholder="0"
-                    />
-                    <span className={`text-xl font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>원</span>
+                <div className={`lg:col-span-4 p-4 rounded-2xl flex flex-col justify-center items-center gap-2 border-2 ${theme === 'dark' ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100 shadow-inner'}`}>
+                    <label className="text-xs font-black text-indigo-500 uppercase tracking-wider">현재 {investment.settings.assetName} 가격</label>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="number"
+                            value={currentPrice || ''}
+                            onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setCurrentPrice(val);
+                                handleUpdate({ lastPrice: val });
+                            }}
+                            className={`text-xl font-black w-32 p-1 bg-transparent border-b-2 text-center focus:outline-none ${theme === 'dark' ? 'text-white border-indigo-500' : 'text-indigo-900 border-indigo-300'}`}
+                            placeholder="0"
+                        />
+                        <span className="font-bold text-indigo-400">원</span>
+                    </div>
                 </div>
             </div>
 
             {/* 슬롯 그리드 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {slots.map((slot, index) => {
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {investment.slots.map((slot, index) => {
                     const isSlot1 = slot.number === 1;
-                    const prevSlot = index > 0 ? slots[index - 1] : null;
+                    const prevSlot = index > 0 ? investment.slots[index - 1] : null;
 
-                    // 매수 권장 가격 계산
                     let recommendedBuyPrice = 0;
                     if (isSlot1) {
-                        recommendedBuyPrice = settings.basePrice;
+                        recommendedBuyPrice = investment.settings.basePrice;
                     } else if (prevSlot && prevSlot.buyPrice) {
-                        recommendedBuyPrice = prevSlot.buyPrice * (1 - settings.gapPercent / 100);
+                        recommendedBuyPrice = prevSlot.buyPrice * (1 - investment.settings.gapPercent / 100);
                     }
 
                     const canBuy = currentPrice > 0 && !slot.isActive && (isSlot1 || (prevSlot && prevSlot.isActive && currentPrice <= recommendedBuyPrice));
                     const canSell = slot.isActive && currentPrice >= (slot.targetPrice || 0);
-
-                    const profit = slot.isActive ? (currentPrice - slot.buyPrice!) * slot.quantity : 0;
-                    const roi = slot.isActive ? ((currentPrice / slot.buyPrice!) - 1) * 100 : 0;
+                    const slotRoi = slot.isActive ? ((currentPrice / slot.buyPrice!) - 1) * 100 : 0;
 
                     return (
                         <div
                             key={slot.number}
-                            className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${slot.isActive
-                                ? 'border-indigo-500 shadow-lg shadow-indigo-500/20'
-                                : 'border-transparent shadow-md hover:border-gray-300'
-                                } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
+                            className={`relative p-4 rounded-2xl border-2 transition-all ${slot.isActive
+                                ? 'border-green-500/50 bg-green-500/5'
+                                : 'border-gray-200 bg-gray-50/50'
+                                } ${theme === 'dark' ? 'border-gray-700 bg-gray-900/30' : ''}`}
                         >
-                            {/* 슬롯 헤더 */}
-                            <div className={`p-4 flex justify-between items-center ${slot.isActive ? 'bg-indigo-500 text-white' : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')
-                                }`}>
-                                <span className="font-bold">Slot {slot.number} {isSlot1 && '(Base)'}</span>
-                                <span className={`text-xs px-2 py-1 rounded-full ${slot.isActive ? 'bg-white/20' : (theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200')
-                                    }`}>
-                                    {slot.isActive ? '보유 주표' : '비어 있음'}
+                            <div className="flex justify-between items-center mb-4">
+                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${slot.isActive ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                                    Slot {slot.number}
                                 </span>
-                            </div>
-
-                            {/* 슬롯 바디 */}
-                            <div className="p-5 space-y-4">
-                                {slot.isActive ? (
-                                    <>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">매수가</span>
-                                            <span className="font-bold">{slot.buyPrice?.toLocaleString()}원</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">목표가</span>
-                                            <span className="font-bold text-red-500">{slot.targetPrice?.toLocaleString(undefined, { maximumFractionDigits: 0 })}원</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">보유수량</span>
-                                            <span className="font-bold">{slot.quantity.toLocaleString(undefined, { maximumFractionDigits: 2 })}주</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">평가금액</span>
-                                            <span className="font-bold">{Math.round(currentPrice * slot.quantity).toLocaleString()}원</span>
-                                        </div>
-                                        <div className="pt-2 border-t border-dashed border-gray-200">
-                                            <div className="flex justify-between items-end">
-                                                <span className="text-xs text-gray-500">현재 수익률</span>
-                                                <span className={`text-lg font-black ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
-                                                    {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
-                                                </span>
-                                            </div>
-                                            <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
-                                                {profit >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={() => handleSell(slot.number)}
-                                            className={`w-full py-3 rounded-xl font-bold transition-all ${canSell
-                                                ? 'bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/30'
-                                                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                                }`}
-                                        >
-                                            {canSell ? '💰 매도 실행!' : '보유 중'}
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="h-24 flex flex-col justify-center items-center text-center space-y-2">
-                                            <span className="text-xs text-gray-400">
-                                                {isSlot1 ? (
-                                                    '기준 가격 도달 시 분할 매수를 시작하세요'
-                                                ) : (
-                                                    prevSlot?.isActive ? (
-                                                        `매수 권장가: ${recommendedBuyPrice.toLocaleString()}원 이하`
-                                                    ) : (
-                                                        '이전 슬롯을 먼저 매수하세요'
-                                                    )
-                                                )}
-                                            </span>
-                                        </div>
-                                        <button
-                                            onClick={() => handleBuy(slot.number)}
-                                            disabled={!canBuy}
-                                            className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
-                                                ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-500/30'
-                                                : 'bg-gray-100 text-gray-300 cursor-not-allowed'
-                                                }`}
-                                        >
-                                            {canBuy ? '🛒 매수 실행' : '매수 대기'}
-                                        </button>
-                                        {canBuy && (
-                                            <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500 animate-pulse"></div>
-                                        )}
-                                    </>
+                                {slot.isActive && (
+                                    <span className={`text-[10px] font-bold ${slotRoi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                        {slotRoi >= 0 ? '▲' : '▼'} {Math.abs(slotRoi).toFixed(2)}%
+                                    </span>
                                 )}
                             </div>
+
+                            {slot.isActive ? (
+                                <div className="space-y-2 mb-4">
+                                    <div className="flex justify-between text-[11px]">
+                                        <span className="text-gray-400">매수가</span>
+                                        <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{slot.buyPrice?.toLocaleString()}원</span>
+                                    </div>
+                                    <div className="flex justify-between text-[11px]">
+                                        <span className="text-gray-400">목표가</span>
+                                        <span className="text-red-400 font-bold">{Math.round(slot.targetPrice!).toLocaleString()}원</span>
+                                    </div>
+                                    <div className="flex justify-between text-[11px]">
+                                        <span className="text-gray-400">수량</span>
+                                        <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{slot.quantity.toFixed(2)}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => handleSell(slot.number)}
+                                        className={`w-full py-2 rounded-xl text-xs font-bold ${canSell ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500'}`}
+                                    >
+                                        {canSell ? '💰 매도 실행' : '대기 중'}
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center h-24 mb-4">
+                                    <span className="text-[10px] text-gray-400 text-center px-4">
+                                        {isSlot1 ? '기준가 도달 시 진입' : (prevSlot?.isActive ? `${Math.round(recommendedBuyPrice).toLocaleString()}원 이하` : '이전 슬롯 대기')}
+                                    </span>
+                                    <button
+                                        onClick={() => handleBuy(slot.number)}
+                                        disabled={!canBuy}
+                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy ? 'bg-indigo-600 text-white' : 'bg-transparent border border-dashed border-gray-300 text-gray-300'}`}
+                                    >
+                                        매수
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     );
                 })}
             </div>
+        </div>
+    );
+}
 
-            {/* 전략 가이드 */}
-            <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                <h3 className={`font-bold mb-4 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-                    💡 자산 투자(주식) 분할 전략
-                </h3>
-                <ul className={`space-y-2 text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                    <li>• <strong>평단가 관리</strong>: 가격이 하락할 때마다 다음 슬롯을 매수하여 평균 단가를 낮춥니다.</li>
-                    <li>• <strong>보유 비중 원칙</strong>: 각 슬롯에 총 자산의 1/7 또는 정해진 비중을 균등하게 배분하여 위험을 분산합니다.</li>
-                    <li>• <strong>수동 현재가 업데이트</strong>: 주식 등은 변동성이 크므로 실시간으로 현재가를 입력하여 수익 현황을 체크하세요.</li>
-                    <li>• <strong>탈출 전략</strong>: 목표 수익률에 도달한 슬롯은 수익 실현하고, 다시 매수 권장가에 진입할 때까지 기다립니다.</li>
-                </ul>
+export function AssetSplitInvestment() {
+    const { theme } = useTheme();
+
+    // 여러 종목 상태 관리
+    const [investments, setInvestments] = useState<AssetInvestment[]>(() => {
+        const saved = localStorage.getItem('asset-investments-v2');
+        if (saved) return JSON.parse(saved);
+
+        // 초기 샘플 종목
+        return [{
+            id: 'init-1',
+            settings: {
+                assetName: '삼성전자',
+                totalBudget: 10000000,
+                gapPercent: 3.0,
+                targetProfitPercent: 3.0,
+                basePrice: 70000
+            },
+            slots: Array.from({ length: 7 }, (_, i) => ({
+                number: i + 1,
+                isActive: false,
+                buyPrice: null,
+                quantity: 0,
+                investedAmount: 0,
+                targetPrice: null
+            })),
+            lastPrice: 70000
+        }];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('asset-investments-v2', JSON.stringify(investments));
+    }, [investments]);
+
+    // 종목 추가
+    const addInvestment = () => {
+        const newAsset: AssetInvestment = {
+            id: Date.now().toString(),
+            settings: {
+                assetName: '새 종목',
+                totalBudget: 10000000,
+                gapPercent: 3.0,
+                targetProfitPercent: 3.0,
+                basePrice: 50000
+            },
+            slots: Array.from({ length: 7 }, (_, i) => ({
+                number: i + 1,
+                isActive: false,
+                buyPrice: null,
+                quantity: 0,
+                investedAmount: 0,
+                targetPrice: null
+            })),
+            lastPrice: 0
+        };
+        setInvestments(prev => [...prev, newAsset]);
+    };
+
+    // 종목 삭제
+    const deleteInvestment = (id: string) => {
+        if (window.confirm('정말로 이 종목을 삭제하시겠습니까? 데이터가 모두 소멸됩니다.')) {
+            setInvestments(prev => prev.filter(inv => inv.id !== id));
+        }
+    };
+
+    // 종목 업데이트
+    const updateInvestment = (updated: AssetInvestment) => {
+        setInvestments(prev => prev.map(inv => inv.id === updated.id ? updated : inv));
+    };
+
+    return (
+        <div className="max-w-7xl mx-auto p-4 space-y-12">
+            {/* 상단 타이틀 및 추가 버튼 */}
+            <div className="flex flex-col md:flex-row justify-between items-center bg-transparent gap-6">
+                <div className="text-center md:text-left">
+                    <h1 className={`text-4xl font-extrabold mb-2 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        자산 포트폴리오 <span className="text-indigo-500">분할 관리</span>
+                    </h1>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        주식, 가상자산 등 각 종목별 세븐스플릿 전략을 동시에 운영하세요
+                    </p>
+                </div>
+                <button
+                    onClick={addInvestment}
+                    className="group relative flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-3xl font-black shadow-xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all hover:scale-105"
+                >
+                    <span className="text-xl group-hover:rotate-90 transition-transform">➕</span>
+                    새 종목 추가하기
+                </button>
+            </div>
+
+            {/* 종목 리스트 */}
+            <div className="space-y-16 pb-20">
+                {investments.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center p-20 border-4 border-dashed border-gray-200 rounded-3xl opacity-50">
+                        <span className="text-6xl mb-6">🏜️</span>
+                        <p className="text-xl font-bold text-gray-400">운영 중인 종목이 없습니다</p>
+                    </div>
+                ) : (
+                    investments.map(inv => (
+                        <SingleAssetManager
+                            key={inv.id}
+                            investment={inv}
+                            onUpdate={updateInvestment}
+                            onDelete={() => deleteInvestment(inv.id)}
+                        />
+                    ))
+                )}
             </div>
         </div>
     );
