@@ -16,8 +16,8 @@ const ECOS_API_KEY = process.env.ECOS_API_KEY;
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
-        // Yahoo Finance Chart API (v8)
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
+        // Yahoo Finance Chart API (v8) - 15일치 데이터 요청
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=15d`;
         const options = {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -31,18 +31,28 @@ async function fetchFromYahooFinance(symbol) {
                 try {
                     const json = JSON.parse(data);
                     const result = json.chart.result[0];
-                    const price = result.indicators.quote[0].close.filter(v => v !== null).pop();
-                    const timestamp = result.timestamp.pop();
-                    const date = new Date(timestamp * 1000).toISOString().split('T')[0];
-                    resolve({ date, value: price.toFixed(2) });
+                    const timestamps = result.timestamp;
+                    const closes = result.indicators.quote[0].close;
+
+                    // 유효한 데이터만 필터링하여 히스토리 생성
+                    const observations = [];
+                    for (let i = 0; i < timestamps.length; i++) {
+                        if (closes[i] !== null) {
+                            observations.push({
+                                date: new Date(timestamps[i] * 1000).toISOString().split('T')[0],
+                                value: closes[i].toFixed(2)
+                            });
+                        }
+                    }
+                    resolve(observations.reverse()); // 최신순으로 반환
                 } catch (e) {
                     console.error(`❌ Yahoo Finance Parse Error (${symbol}):`, e.message);
-                    resolve(null);
+                    resolve([]);
                 }
             });
         }).on('error', (e) => {
             console.error(`❌ Yahoo Finance Network Error (${symbol}):`, e.message);
-            resolve(null);
+            resolve([]);
         });
     });
 }
@@ -190,10 +200,18 @@ async function main() {
 
         // 🚀 실시간 보정: Yahoo Finance 등을 통해 지연 데이터 보완
         if (s.realtimeSymbol) {
-            const rt = await fetchFromYahooFinance(s.realtimeSymbol);
-            if (rt && (!obs.length || rt.date > obs[0].date)) {
-                console.log(`⚡ [Realtime] ${s.name} 보정: ${rt.value} (${rt.date})`);
-                obs.unshift({ date: rt.date, value: rt.value });
+            const rtObs = await fetchFromYahooFinance(s.realtimeSymbol);
+            if (rtObs && rtObs.length > 0) {
+                // Yahoo 데이터와 FRED 데이터를 합치거나, FRED 데이터가 없으면 Yahoo 데이터만 사용
+                if (!obs.length) {
+                    obs = rtObs;
+                } else {
+                    // FRED에 없는 최신 데이터만 Yahoo에서 추가
+                    const latestFredDate = obs[0].date;
+                    const newerObs = rtObs.filter(r => r.date > latestFredDate);
+                    obs = [...newerObs, ...obs];
+                }
+                console.log(`⚡ [Realtime] ${s.name} 보정 완료 (${rtObs[0].value})`);
             }
         }
 
