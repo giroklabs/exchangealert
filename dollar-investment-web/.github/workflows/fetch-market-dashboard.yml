@@ -35,5 +35,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add public/data/market-dashboard.json
-          git diff --staged --quiet || git commit -m "Update market dashboard data from FRED [skip ci]"
+          git diff --staged --quiet || git commit -m "data: 환율 지표 데이터 및 AI 분석 업데이트"
           git push
