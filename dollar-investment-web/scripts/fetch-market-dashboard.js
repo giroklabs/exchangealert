@@ -93,7 +93,7 @@ async function fetchAiAnalysis(indicators) {
 
     const summary = indicators.map(i => `- ${i.name}: ${i.value}${i.unit} (추세: ${i.trend}, 환율영향: ${i.impact})`).join('\n');
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요.
-응답은 2~3문장의 짧고 명확한 한락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 적어주세요.
+응답은 2~3문장의 짧고 명확한 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 적어주세요.
 
 경제 지표 현황:
 ${summary}
@@ -106,8 +106,8 @@ ${summary}
 
     console.log('🤖 AI 분석 요청 중...');
     return new Promise((resolve) => {
-        // v1beta와 gemini-1.5-flash-latest 조합으로 다시 시도
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+        // v1 버전과 표준 모델명으로 최종 시도
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         const req = https.request(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }

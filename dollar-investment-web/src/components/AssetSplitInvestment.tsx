@@ -230,6 +230,10 @@ function SingleAssetManager({
                                         <span className="text-gray-400">수량</span>
                                         <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{slot.quantity.toFixed(2)}</span>
                                     </div>
+                                    <div className="flex justify-between text-[11px]">
+                                        <span className="text-gray-400">총투자액</span>
+                                        <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{Math.round(slot.investedAmount || 0).toLocaleString()}원</span>
+                                    </div>
                                     <button
                                         onClick={() => handleSell(slot.number)}
                                         className={`w-full py-2 rounded-xl text-xs font-bold ${canSell ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500'}`}
