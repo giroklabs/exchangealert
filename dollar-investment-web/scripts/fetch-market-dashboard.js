@@ -158,6 +158,7 @@ ${summary}
         { ver: 'v1beta', model: 'gemini-2.0-flash-exp' }
     ];
 
+    let lastError = '';
     for (const config of modelConfigs) {
         console.log(`🤖 AI 분석 요청 중... (${config.model} - ${config.ver})`);
         try {
@@ -175,9 +176,9 @@ ${summary}
                             if (res.statusCode === 200 && json.candidates?.[0]?.content?.parts?.[0]?.text) {
                                 resolve(json.candidates[0].content.parts[0].text.trim());
                             } else {
-                                reject(new Error(`Status ${res.statusCode}: ${json.error?.message || 'Unknown error'}`));
+                                reject(new Error(`[${config.model}] Status ${res.statusCode}: ${json.error?.message || JSON.stringify(json)}`));
                             }
-                        } catch (e) { reject(e); }
+                        } catch (e) { reject(new Error(`[${config.model}] Parse Error: ${e.message}`)); }
                     });
                 });
                 req.on('error', reject);
@@ -187,11 +188,12 @@ ${summary}
             return result; // 성공 시 즉시 반환
         } catch (err) {
             console.warn(`⚠️ ${config.model} 실패: ${err.message}`);
+            lastError += err.message + '\n';
             continue; // 다음 모델로 시도
         }
     }
 
-    return "모든 AI 모델 요청에 실패했습니다. API 키 권한 또는 할당량을 확인해주세요.";
+    return `AI 분석 요청 실패 내역:\n${lastError.trim()}`;
 }
 
 async function main() {
