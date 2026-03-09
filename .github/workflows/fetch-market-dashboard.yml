@@ -1,0 +1,81 @@
+name: Fetch Market Dashboard Data
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'dollar-investment-web/scripts/fetch-market-dashboard.js'
+  schedule:
+    # 하루 3회 실행 (KST 오전 9:10, 오후 2:10, 오후 9:10)
+    - cron: '10 0,5,12 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  fetch-market-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch Market Indicators
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node dollar-investment-web/scripts/fetch-market-dashboard.js
+
+      - name: Commit and push
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add dollar-investment-web/public/data/market-dashboard.json
+          if ! git diff --staged --quiet; then
+            git commit -m "data: 환율 지표 데이터 및 AI 분석 업데이트"
+            git push
+            echo "✅ Data updated and pushed."
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Trigger deployment workflow
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // 배포 워크플로우를 수동으로 트리거
+            try {
+              const { data: workflows } = await github.rest.actions.listRepoWorkflows({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              });
+              
+              const deployWorkflow = workflows.workflows.find(
+                w => w.name === 'Deploy Dollar Investment Web to GitHub Pages'
+              );
+              
+              if (deployWorkflow) {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: deployWorkflow.id,
+                  ref: 'main',
+                });
+                console.log('✅ Deployment workflow triggered:', deployWorkflow.name);
+              } else {
+                console.log('⚠️ Deployment workflow not found.');
+              }
+            } catch (error) {
+              console.error('❌ Failed to trigger deployment workflow:', error.message);
+            }
