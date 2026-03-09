@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.25",
+      "value": "158.29",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 158.25
+          "value": 158.29
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "99.8",
+      "value": "99.87",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 99.8
+          "value": 99.87
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.22",
+      "value": "99.16",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 99.22
+          "value": 99.16
         }
       ]
     },
@@ -564,11 +564,11 @@
     "sentiment": "보통",
     "upProb": 71,
     "downProb": 29,
-    "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
     "score": {
       "upScore": 10.599999999999998,
       "downScore": 4.4
     }
   },
-  "lastUpdate": "2026. 3. 9. 오후 1:33:28"
+  "lastUpdate": "2026. 3. 9. 오후 1:40:04"
 }
