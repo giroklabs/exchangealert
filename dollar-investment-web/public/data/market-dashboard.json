@@ -9,7 +9,7 @@
       "source": "Federal Reserve",
       "description": "Fed 금리 인상 시 달러 가치 상승으로 환율 상승",
       "value": "3.64",
-      "trend": "down",
+      "trend": "neutral",
       "history": [
         {
           "date": "2025-05-01",
@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.29",
+      "value": "158.34",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 158.29
+          "value": 158.34
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "99.87",
+      "value": "97.82",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 99.87
+          "value": 97.82
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.16",
+      "value": "99.11",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 99.16
+          "value": 99.11
         }
       ]
     },
@@ -562,13 +562,13 @@
   ],
   "forecast": {
     "sentiment": "보통",
-    "upProb": 71,
-    "downProb": 29,
+    "upProb": 88,
+    "downProb": 12,
     "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
     "score": {
-      "upScore": 10.599999999999998,
-      "downScore": 4.4
+      "upScore": 7,
+      "downScore": 1
     }
   },
-  "lastUpdate": "2026. 3. 9. 오후 1:40:04"
+  "lastUpdate": "2026. 3. 9. 오후 1:43:25"
 }
