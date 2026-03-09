@@ -330,49 +330,8 @@
       "description": "금리 인상 시 원화 강세 유도",
       "cycle": "M",
       "value": "2.5",
-      "trend": "down",
-      "history": [
-        {
-          "date": "202602",
-          "value": 2.5
-        },
-        {
-          "date": "202601",
-          "value": 2.5
-        },
-        {
-          "date": "202512",
-          "value": 2.5
-        },
-        {
-          "date": "202511",
-          "value": 2.5
-        },
-        {
-          "date": "202510",
-          "value": 2.5
-        },
-        {
-          "date": "202509",
-          "value": 2.5
-        },
-        {
-          "date": "202508",
-          "value": 2.5
-        },
-        {
-          "date": "202507",
-          "value": 2.5
-        },
-        {
-          "date": "202506",
-          "value": 2.5
-        },
-        {
-          "date": "202505",
-          "value": 2.5
-        }
-      ]
+      "trend": "neutral",
+      "history": []
     },
     {
       "id": "kr-cpi",
@@ -385,50 +344,9 @@
       "source": "통계청",
       "description": "물가 상승 시 원화 가치 하락 압력",
       "cycle": "M",
-      "value": "2.0",
-      "trend": "up",
-      "history": [
-        {
-          "date": "202602",
-          "value": 118.4
-        },
-        {
-          "date": "202601",
-          "value": 118.03
-        },
-        {
-          "date": "202512",
-          "value": 117.57
-        },
-        {
-          "date": "202511",
-          "value": 117.2
-        },
-        {
-          "date": "202510",
-          "value": 117.42
-        },
-        {
-          "date": "202509",
-          "value": 117.06
-        },
-        {
-          "date": "202508",
-          "value": 116.45
-        },
-        {
-          "date": "202507",
-          "value": 116.52
-        },
-        {
-          "date": "202506",
-          "value": 116.31
-        },
-        {
-          "date": "202505",
-          "value": 116.27
-        }
-      ]
+      "value": "3.1",
+      "trend": "neutral",
+      "history": []
     },
     {
       "id": "kr-gdp",
@@ -471,61 +389,20 @@
       "source": "한국은행",
       "description": "경상수지 흑자 시 환율 하락 유도",
       "cycle": "M",
-      "value": "13,259.1",
-      "trend": "down",
-      "history": [
-        {
-          "date": "202601",
-          "value": 13259.1
-        },
-        {
-          "date": "202512",
-          "value": 18702.6
-        },
-        {
-          "date": "202511",
-          "value": 12898
-        },
-        {
-          "date": "202510",
-          "value": 7567.6
-        },
-        {
-          "date": "202509",
-          "value": 14220.3
-        },
-        {
-          "date": "202508",
-          "value": 9848
-        },
-        {
-          "date": "202507",
-          "value": 11945.1
-        },
-        {
-          "date": "202506",
-          "value": 13968.5
-        },
-        {
-          "date": "202505",
-          "value": 9906.7
-        },
-        {
-          "date": "202504",
-          "value": 4510.6
-        }
-      ]
+      "value": "13,260",
+      "trend": "neutral",
+      "history": []
     }
   ],
   "forecast": {
     "sentiment": "보통",
-    "upProb": 65,
-    "downProb": 35,
-    "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
+    "upProb": 55,
+    "downProb": 45,
+    "detailedAnalysis": "AI 분석을 일시적으로 불러올 수 없습니다.",
     "score": {
-      "upScore": 7.800000000000001,
-      "downScore": 4.2
+      "upScore": 6.6000000000000005,
+      "downScore": 5.4
     }
   },
-  "lastUpdate": "2026. 3. 9. 오후 1:45:24"
+  "lastUpdate": "2026. 3. 9. 오전 5:00:23"
 }
