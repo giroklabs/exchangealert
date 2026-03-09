@@ -7,11 +7,12 @@ import { MarketDashboard } from './components/MarketDashboard';
 import { Tabs } from './components/Tabs';
 import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
+import { BackupManager } from './components/BackupManager'; // Added import
 import './App.css';
 
 function App() {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState('analysis');
+  const [activeTab, setActiveTab] = useState('dashboard'); // Changed initial activeTab to 'dashboard'
 
   const tabs = [
     { id: 'analysis', label: '투자적정성 분석', icon: '📊' },
@@ -56,10 +57,10 @@ function App() {
           )}
         </main>
 
-        <footer className={`mt-20 pb-10 text-center text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-          }`}>
-          © 2026 Dollar Invest. 무단 전재 및 재배포 금지.
+        <footer className={`mt-20 py-10 border-t ${theme === 'dark' ? 'border-gray-800 text-gray-500' : 'border-gray-100 text-gray-400'} text-center text-xs`}>
+          © 2026 GirokLabs. All rights reserved.
         </footer>
+        <BackupManager />
       </div>
     </div>
   );

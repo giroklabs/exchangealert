@@ -148,3 +148,22 @@ export interface AssetInvestment {
   slots: AssetSplitSlot[];
   lastPrice: number;
 }
+
+// 통합 백업 데이터 타입
+export interface UserBackupData {
+  version: string;
+  timestamp: string;
+  fxInvestments: FXInvestment[];
+  assetInvestments: AssetInvestment[];
+  sevenSplitSettings?: SevenSplitSettings;
+  sevenSplitSlots?: SevenSplitSlot[];
+}
+
+// GitHub 동기화 정보 타입
+export interface GitHubSyncInfo {
+  pat: string;
+  owner: string;
+  repo: string;
+  filePath: string;
+  lastSync?: string;
+}

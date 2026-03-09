@@ -384,49 +384,6 @@ export function AssetSplitInvestment() {
         setInvestments(prev => prev.map(inv => inv.id === updated.id ? updated : inv));
     };
 
-    // 데이터 백업 (내보내기)
-    const handleExportData = () => {
-        const dataStr = JSON.stringify(investments, null, 2);
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
-        const exportFileDefaultName = `dollar-invest-backup-${new Date().toISOString().split('T')[0]}.json`;
-
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', exportFileDefaultName);
-        linkElement.click();
-    };
-
-    // 데이터 복구 (불러오기)
-    const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fileReader = new FileReader();
-        const files = event.target.files;
-        if (!files || files.length === 0) return;
-
-        fileReader.onload = (e) => {
-            try {
-                const content = e.target?.result;
-                if (typeof content !== 'string') return;
-
-                const importedData = JSON.parse(content);
-                if (Array.isArray(importedData)) {
-                    if (window.confirm('기존 데이터를 덮어쓰고 백업 데이터를 불러오시겠습니까?')) {
-                        setInvestments(importedData);
-                        alert('데이터 복구가 완료되었습니다.');
-                    }
-                } else {
-                    alert('올바른 백업 파일 형식이 아닙니다.');
-                }
-            } catch (error) {
-                console.error('Import error:', error);
-                alert('파일을 읽는 중 오류가 발생했습니다.');
-            }
-        };
-        fileReader.readAsText(files[0]);
-        // 같은 파일을 다시 선택할 수 있도록 초기화
-        event.target.value = '';
-    };
-
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-12">
             {/* 상단 타이틀 및 추가 버튼 */}
@@ -440,23 +397,6 @@ export function AssetSplitInvestment() {
                     </p>
                 </div>
                 <div className="flex flex-col md:flex-row gap-2">
-                    <div className="flex gap-2">
-                        <button
-                            onClick={handleExportData}
-                            className={`px-4 py-2 text-xs font-bold rounded-xl border ${theme === 'dark' ? 'border-gray-600 text-gray-400 hover:text-white' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
-                        >
-                            📥 데이터 백업
-                        </button>
-                        <label className={`px-4 py-2 text-xs font-bold rounded-xl border cursor-pointer ${theme === 'dark' ? 'border-gray-600 text-gray-400 hover:text-white' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
-                            📤 데이터 복구
-                            <input
-                                type="file"
-                                accept=".json"
-                                onChange={handleImportData}
-                                className="hidden"
-                            />
-                        </label>
-                    </div>
                     <button
                         onClick={addInvestment}
                         className="group relative flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-3xl font-black shadow-xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all hover:scale-105"
