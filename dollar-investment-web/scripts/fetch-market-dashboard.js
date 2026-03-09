@@ -106,7 +106,8 @@ ${summary}
 
     console.log('🤖 AI 분석 요청 중...');
     return new Promise((resolve) => {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        // v1beta -> v1으로 변경하고 모델명을 더 명시적인 최신버전으로 테스트
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         const req = https.request(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
