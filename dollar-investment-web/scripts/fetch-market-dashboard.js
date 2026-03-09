@@ -154,8 +154,9 @@ ${summary}
     const modelConfigs = [
         { ver: 'v1beta', model: 'gemini-1.5-flash' },
         { ver: 'v1', model: 'gemini-1.5-flash' },
-        { ver: 'v1beta', model: 'gemini-1.5-flash-latest' },
-        { ver: 'v1beta', model: 'gemini-2.0-flash-exp' }
+        { ver: 'v1beta', model: 'gemini-1.5-pro' },
+        { ver: 'v1beta', model: 'gemini-pro' },
+        { ver: 'v1', model: 'gemini-pro' }
     ];
 
     let lastError = '';
