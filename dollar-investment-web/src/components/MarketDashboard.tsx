@@ -77,10 +77,6 @@ export function MarketDashboard() {
                                     <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500 transition-all duration-1000"></div>
                                 </div>
                             </div>
-
-                            <p className={`text-md leading-relaxed p-4 rounded-xl ${theme === 'dark' ? 'bg-gray-700 text-gray-200' : 'bg-white/60 text-gray-700'}`}>
-                                <b>분석 결과:</b> {data?.forecast?.detailedAnalysis || '데이터 수집 중입니다.'}
-                            </p>
                         </div>
                     </div>
 
@@ -127,11 +123,11 @@ export function MarketDashboard() {
 
             {/* 하단 요약 가이드 */}
             <div className={`p-8 rounded-3xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100 shadowed-lg'}`}>
-                <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/20' : 'bg-indigo-50 border border-indigo-100'}`}>
+                <div className={`p-6 mb-8 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/20' : 'bg-indigo-50 border border-indigo-100 shadow-inner'}`}>
                     <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-indigo-200' : 'text-indigo-900'}`}>
-                        <span>🤖</span> Gemini AI 시장 분석
+                        <span>🤖</span> Gemini AI 심층 시장 분석
                     </h3>
-                    <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <p className={`text-md leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                         {data?.forecast?.detailedAnalysis}
                     </p>
                 </div>

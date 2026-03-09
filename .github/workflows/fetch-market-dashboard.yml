@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'dollar-investment-web/scripts/fetch-market-dashboard.js'
   schedule:
     # 하루 3회 실행 (KST 오전 9:10, 오후 2:10, 오후 9:10)
     - cron: '10 0,5,12 * * *'
@@ -21,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,7 +33,9 @@ jobs:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          echo "🚀 Starting data fetch..."
           node dollar-investment-web/scripts/fetch-market-dashboard.js
+          echo "✅ Data fetch process completed."
 
       - name: Commit and push
         if: always()
@@ -43,8 +45,9 @@ jobs:
           git add dollar-investment-web/public/data/market-dashboard.json
           if ! git diff --staged --quiet; then
             git commit -m "data: 환율 지표 데이터 및 AI 분석 업데이트"
-            git push
-            echo "✅ Data updated and pushed."
+            git pull --rebase origin main
+            git push origin main
+            echo "✅ Data updated and pushed to main."
           else
             echo "No changes to commit"
           fi
@@ -54,7 +57,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            // 배포 워크플로우를 수동으로 트리거
             try {
               const { data: workflows } = await github.rest.actions.listRepoWorkflows({
                 owner: context.repo.owner,
