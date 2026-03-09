@@ -21,7 +21,7 @@ function App() {
     { id: 'asset-split', label: '자산투자', icon: '🏦' },
     { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
     { id: 'dashboard', label: '시장 대시보드', icon: '🌍' },
-    { id: 'about', label: '소개', icon: '❓' },
+    // { id: 'about', label: '소개', icon: '❓' }, // 임시 숨김 처리
   ];
 
   return (
