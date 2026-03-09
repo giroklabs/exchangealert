@@ -52,7 +52,10 @@ const FRED_SERIES = [
     { id: 'FEDFUNDS', name: '미국 기준금리(Fed)', unit: '%', category: 'international', impact: 'up', source: 'Federal Reserve', description: 'Fed 금리 인상 시 달러 가치 상승으로 환율 상승' },
     { id: 'PAYEMS', name: '미 비농업고용지수', unit: 'K', category: 'international', impact: 'up', source: 'BLS', description: '미국 고용 지표 호조 시 달러 선호 현상 강화' },
     { id: 'DEXJPUS', name: '엔/달러 환율', unit: '¥', category: 'international', impact: 'up', source: 'Market', description: '엔화 약세 시 환율 상승 경향', realtimeSymbol: 'JPY=X' },
-    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', category: 'international', impact: 'up', source: 'WTI', description: '실시간에 가까운 선물 가격 반영 중', realtimeSymbol: 'CL=F' },
+    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', category: 'international', impact: 'up', source: 'WTI', description: '실시간 선물 가격 반영 중', realtimeSymbol: 'CL=F' },
+    { id: 'TNX', name: '미 10년물 국채금리', unit: '%', category: 'international', impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
+    { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', category: 'international', impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
+    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', category: 'domestic', impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11' },
     { id: 'CPIAUCSL', name: '미 소비자물가(CPI)', unit: '%', category: 'international', impact: 'up', source: 'BLS', description: '미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발' },
     { id: 'GDP', name: '미국 GDP', unit: 'B$', category: 'international', impact: 'up', source: 'BEA', description: '미국 경제 성장 호조 시 달러 가치 상승' }
 ];
@@ -183,7 +186,7 @@ async function main() {
     let upScore = 0, downScore = 0;
 
     for (const s of FRED_SERIES) {
-        let obs = await fetchFromFred(s.id);
+        let obs = await fetchFromFred(s.fredId || s.id);
 
         // 🚀 실시간 보정: Yahoo Finance 등을 통해 지연 데이터 보완
         if (s.realtimeSymbol) {
