@@ -9,23 +9,29 @@ export const githubSyncService = {
      */
     async fetchBackup(syncInfo: GitHubSyncInfo): Promise<{ data: UserBackupData; sha: string } | null> {
         const { pat, owner, repo, filePath } = syncInfo;
+        const trimmedPat = pat.trim();
         const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
 
         try {
             const response = await fetch(url, {
                 headers: {
-                    'Authorization': `Bearer ${pat}`,
+                    'Authorization': trimmedPat.startsWith('ghp_') ? `token ${trimmedPat}` : `Bearer ${trimmedPat}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Cache-Control': 'no-cache'
                 }
             });
 
             if (response.status === 404) return null;
-            if (!response.ok) throw new Error(`GitHub API error: ${response.statusText}`);
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({ message: response.statusText }));
+                throw new Error(`${response.status}: ${err.message}`);
+            }
 
             const json = await response.json();
-            const content = atob(json.content);
-            const decoded = decodeURIComponent(escape(content)); // UTF-8 대응
+            // Unicode 안전한 Base64 디코딩
+            const decoded = decodeURIComponent(Array.prototype.map.call(atob(json.content.replace(/\n/g, '')), (c) => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
 
             return {
                 data: JSON.parse(decoded),
@@ -42,9 +48,14 @@ export const githubSyncService = {
      */
     async pushBackup(syncInfo: GitHubSyncInfo, data: UserBackupData, sha?: string): Promise<string> {
         const { pat, owner, repo, filePath } = syncInfo;
+        const trimmedPat = pat.trim();
         const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
 
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        // Unicode 안전한 Base64 인코딩
+        const jsonStr = JSON.stringify(data, null, 2);
+        const content = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (_, p1) => {
+            return String.fromCharCode(parseInt(p1, 16));
+        }));
 
         const body: any = {
             message: `data: User investment data backup - ${new Date().toLocaleString()}`,
@@ -58,7 +69,7 @@ export const githubSyncService = {
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${pat}`,
+                    'Authorization': trimmedPat.startsWith('ghp_') ? `token ${trimmedPat}` : `Bearer ${trimmedPat}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },
@@ -66,8 +77,8 @@ export const githubSyncService = {
             });
 
             if (!response.ok) {
-                const errorJson = await response.json();
-                throw new Error(errorJson.message || `GitHub API error: ${response.statusText}`);
+                const errorJson = await response.json().catch(() => ({ message: response.statusText }));
+                throw new Error(`${response.status}: ${errorJson.message || response.statusText}`);
             }
 
             const json = await response.json();
