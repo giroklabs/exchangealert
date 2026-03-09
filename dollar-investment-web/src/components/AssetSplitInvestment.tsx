@@ -22,7 +22,39 @@ function SingleAssetManager({
 
     const handleSettingUpdate = (key: keyof AssetSplitSettings, value: string | number) => {
         const updatedSettings = { ...investment.settings, [key]: value };
-        handleUpdate({ settings: updatedSettings });
+
+        // 분할 횟수가 변경될 때 슬롯 배열 조정
+        if (key === 'splitCount') {
+            const newCount = Number(value);
+            let newSlots = [...investment.slots];
+
+            if (newSlots.length < newCount) {
+                // 슬롯 추가
+                const toAdd = newCount - newSlots.length;
+                const startNum = newSlots.length + 1;
+                const addedSlots = Array.from({ length: toAdd }, (_, i) => ({
+                    number: startNum + i,
+                    isActive: false,
+                    buyPrice: null,
+                    quantity: 0,
+                    investedAmount: 0,
+                    targetPrice: null
+                }));
+                newSlots = [...newSlots, ...addedSlots];
+            } else if (newSlots.length > newCount) {
+                // 슬롯 축소 (활성화된 슬롯이 있는지 확인)
+                const activeBeyondLimit = newSlots.slice(newCount).some(s => s.isActive);
+                if (activeBeyondLimit) {
+                    if (!window.confirm('축소하려는 슬롯 범위에 이미 매수된 내역이 있습니다. 정말로 축소하시겠습니까? (삭제됨)')) {
+                        return;
+                    }
+                }
+                newSlots = newSlots.slice(0, newCount);
+            }
+            handleUpdate({ settings: updatedSettings, slots: newSlots });
+        } else {
+            handleUpdate({ settings: updatedSettings });
+        }
     };
 
     const handleBuy = (slotNumber: number) => {
@@ -33,7 +65,7 @@ function SingleAssetManager({
 
         const slotIndex = slotNumber - 1;
         const buyPrice = currentPrice;
-        const budgetPerSlot = investment.settings.totalBudget / 7;
+        const budgetPerSlot = investment.settings.totalBudget / investment.settings.splitCount;
         const quantity = budgetPerSlot / buyPrice;
 
         const newSlots = [...investment.slots];
@@ -64,7 +96,7 @@ function SingleAssetManager({
 
     const handleReset = () => {
         if (window.confirm('이 종목의 모든 슬롯 데이터를 초기화하시겠습니까?')) {
-            const resetSlots = Array.from({ length: 7 }, (_, i) => ({
+            const resetSlots = Array.from({ length: investment.settings.splitCount }, (_, i) => ({
                 number: i + 1,
                 isActive: false,
                 buyPrice: null,
@@ -159,6 +191,23 @@ function SingleAssetManager({
                             onChange={(e) => handleSettingUpdate('basePrice', Number(e.target.value))}
                             className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
+                    </div>
+                </div>
+                <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 mb-1 block">분할 횟수</label>
+                        <select
+                            value={investment.settings.splitCount || 7}
+                            onChange={(e) => handleSettingUpdate('splitCount', Number(e.target.value))}
+                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                        >
+                            <option value={5}>5분할</option>
+                            <option value={6}>6분할</option>
+                            <option value={7}>7분할</option>
+                            <option value={8}>8분할</option>
+                            <option value={9}>9분할</option>
+                            <option value={10}>10분할</option>
+                        </select>
                     </div>
                 </div>
                 <div className={`lg:col-span-4 p-4 rounded-2xl flex flex-col justify-center items-center gap-2 border-2 ${theme === 'dark' ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100 shadow-inner'}`}>
@@ -279,7 +328,8 @@ export function AssetSplitInvestment() {
                 totalBudget: 10000000,
                 gapPercent: 3.0,
                 targetProfitPercent: 3.0,
-                basePrice: 70000
+                basePrice: 70000,
+                splitCount: 7
             },
             slots: Array.from({ length: 7 }, (_, i) => ({
                 number: i + 1,
@@ -306,7 +356,8 @@ export function AssetSplitInvestment() {
                 totalBudget: 10000000,
                 gapPercent: 3.0,
                 targetProfitPercent: 3.0,
-                basePrice: 50000
+                basePrice: 50000,
+                splitCount: 7
             },
             slots: Array.from({ length: 7 }, (_, i) => ({
                 number: i + 1,

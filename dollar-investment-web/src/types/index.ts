@@ -139,6 +139,7 @@ export interface AssetSplitSettings {
   gapPercent: number;
   targetProfitPercent: number;
   basePrice: number;
+  splitCount: number; // 분할 횟수 (예: 5, 6, 7)
 }
 
 export interface AssetInvestment {
