@@ -166,7 +166,7 @@
       "category": "international",
       "impact": "up",
       "source": "WTI",
-      "description": "유가 상승 시 달러 수요 증가로 환율 상승",
+      "description": "지정학적 위기 시 상승 (FRED API 특성상 3~7일 지연 가능)",
       "value": "71.13",
       "trend": "up",
       "history": [
@@ -398,11 +398,11 @@
     "sentiment": "보통",
     "upProb": 55,
     "downProb": 45,
-    "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
     "score": {
       "upScore": 6.6000000000000005,
       "downScore": 5.4
     }
   },
-  "lastUpdate": "2026. 3. 9. 오후 1:19:04"
+  "lastUpdate": "2026. 3. 9. 오후 1:22:14"
 }
