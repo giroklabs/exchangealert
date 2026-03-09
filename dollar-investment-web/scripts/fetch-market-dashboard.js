@@ -104,6 +104,7 @@ ${summary}
         contents: [{ parts: [{ text: prompt }] }]
     });
 
+    console.log('🤖 AI 분석 요청 중...');
     return new Promise((resolve) => {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         const req = https.request(url, {
@@ -115,11 +116,28 @@ ${summary}
             res.on('end', () => {
                 try {
                     const json = JSON.parse(body);
-                    resolve(json.candidates[0].content.parts[0].text.trim());
-                } catch (e) { resolve('AI 분석을 일시적으로 불러올 수 없습니다.'); }
+                    if (res.statusCode !== 200) {
+                        console.error(`❌ Gemini API 오류 (${res.statusCode}):`, JSON.stringify(json, null, 2));
+                        resolve('AI 분석 서비스 응답 오류');
+                        return;
+                    }
+                    if (json.candidates && json.candidates[0] && json.candidates[0].content) {
+                        resolve(json.candidates[0].content.parts[0].text.trim());
+                    } else {
+                        console.error('❌ Gemini API 응답 구조 이상:', JSON.stringify(json, null, 2));
+                        resolve('AI 분석 결과 형식이 올바르지 않습니다.');
+                    }
+                } catch (e) {
+                    console.error('❌ JSON 파싱 오류 또는 예외 발생:', e.message);
+                    console.error('응답 본문 일부:', body.substring(0, 100));
+                    resolve('AI 분석을 일시적으로 불러올 수 없습니다.');
+                }
             });
         });
-        req.on('error', () => resolve('네트워크 오류로 AI 분석 실패'));
+        req.on('error', (err) => {
+            console.error('❌ 네트워크 오류:', err.message);
+            resolve('네트워크 오류로 AI 분석 실패');
+        });
         req.write(data);
         req.end();
     });
