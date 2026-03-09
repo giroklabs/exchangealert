@@ -86,6 +86,19 @@ export function BackupManager() {
         reader.readAsText(file);
     };
 
+    // 연결 테스트
+    const handleTestConnection = async () => {
+        setIsLoading(true);
+        setStatus('서버 연결 확인 중...');
+        const ok = await githubSyncService.testConnection();
+        setIsLoading(false);
+        if (ok) {
+            setStatus('연결 성공: GitHub 서버에 접속 가능합니다.');
+        } else {
+            setStatus('연결 실패: 브라우저 또는 네트워크가 GitHub API를 차단하고 있습니다. 광고 차단기 등을 확인해 주세요.');
+        }
+    };
+
     // GitHub로 동기화 (Push)
     const handleGitHubPush = async () => {
         if (!syncInfo.pat) {
@@ -108,8 +121,9 @@ export function BackupManager() {
             setStatus(`동기화 성공: ${now}`);
         } catch (error: any) {
             console.error('Push Error:', error);
-            const msg = error.message === 'Load failed' || error.message === 'Failed to fetch'
-                ? '네트워크 연결 오류 (토큰 권한 또는 CORS 문제)'
+            const isNetworkError = error.message === 'Load failed' || error.message === 'Failed to fetch' || error.name === 'TypeError';
+            const msg = isNetworkError
+                ? '네트워크 연결 차단 (브라우저 확장 프로그램 또는 네트워크 환경 확인 필요)'
                 : error.message;
             setStatus(`오류: ${msg}`);
         } finally {
@@ -141,8 +155,9 @@ export function BackupManager() {
             }
         } catch (error: any) {
             console.error('Fetch Error:', error);
-            const msg = error.message === 'Load failed' || error.message === 'Failed to fetch'
-                ? '네트워크 연결 오류 (토큰 권한 또는 CORS 문제)'
+            const isNetworkError = error.message === 'Load failed' || error.message === 'Failed to fetch' || error.name === 'TypeError';
+            const msg = isNetworkError
+                ? '네트워크 연결 차단 (브라우저 확장 프로그램 또는 네트워크 환경 확인 필요)'
                 : error.message;
             setStatus(`오류: ${msg}`);
         } finally {
@@ -247,10 +262,26 @@ export function BackupManager() {
                                         GitHub에서 복구
                                     </button>
                                 </div>
+                                <button
+                                    onClick={handleTestConnection}
+                                    className="w-full py-2 text-[10px] text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    서버 연결 테스트 (오류 지속 시 클릭)
+                                </button>
                                 {syncInfo.lastSync && (
                                     <p className="text-[10px] text-gray-400 text-center">최근 동기화: {syncInfo.lastSync}</p>
                                 )}
                             </div>
+                        </div>
+
+                        {/* 상세 도움말 */}
+                        <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-xl border border-blue-100 dark:border-blue-800">
+                            <h5 className="text-[10px] font-black text-blue-500 mb-1">🆘 오류가 계속되나요?</h5>
+                            <ul className="text-[10px] text-blue-700 dark:text-blue-300 space-y-1">
+                                <li>• 토큰 발급 시 <strong>repo</strong> 권한을 체크했는지 확인해 주세요.</li>
+                                <li>• 브라우저의 <strong>광고 차단기(AdBlock)</strong>를 끄고 시도해 주세요.</li>
+                                <li>• 리포지토리 이름이 <strong>exchangealert</strong>가 맞는지 확인해 주세요.</li>
+                            </ul>
                         </div>
 
                         {/* 수동 백업 */}
