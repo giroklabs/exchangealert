@@ -202,11 +202,9 @@ async function main() {
         if (s.realtimeSymbol) {
             const rtObs = await fetchFromYahooFinance(s.realtimeSymbol);
             if (rtObs && rtObs.length > 0) {
-                // Yahoo 데이터와 FRED 데이터를 합치거나, FRED 데이터가 없으면 Yahoo 데이터만 사용
                 if (!obs.length) {
                     obs = rtObs;
                 } else {
-                    // FRED에 없는 최신 데이터만 Yahoo에서 추가
                     const latestFredDate = obs[0].date;
                     const newerObs = rtObs.filter(r => r.date > latestFredDate);
                     obs = [...newerObs, ...obs];
@@ -216,14 +214,20 @@ async function main() {
         }
 
         const val = obs.length > 0 ? obs[0].value : '0';
-        const trend = obs.length > 1 ? (parseFloat(val) > parseFloat(obs[1].value) ? 'up' : 'down') : 'neutral';
+        const numVal = parseFloat(val.replace(/,/g, ''));
+        const prevVal = obs.length > 1 ? parseFloat(obs[1].value.replace(/,/g, '')) : numVal;
 
-        if (s.impact === 'up') trend === 'up' ? upScore++ : downScore++;
-        else trend === 'up' ? downScore++ : upScore++;
+        // 정밀한 추세 계산 (보합 포함)
+        const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
 
-        let displayVal = parseFloat(val).toLocaleString();
-        if (s.id === 'CPIAUCSL' && obs.length > 12) {
-            const yoy = ((parseFloat(val) / parseFloat(obs[12].value)) - 1) * 100;
+        if (trend !== 'neutral') {
+            if (s.impact === 'up') trend === 'up' ? upScore++ : downScore++;
+            else trend === 'up' ? downScore++ : upScore++;
+        }
+
+        let displayVal = numVal.toLocaleString();
+        if ((s.id === 'CPIAUCSL' || s.fredId === 'CPIAUCSL') && obs.length > 12) {
+            const yoy = ((numVal / parseFloat(obs[12].value)) - 1) * 100;
             displayVal = yoy.toFixed(1);
         }
 
@@ -233,7 +237,7 @@ async function main() {
         }));
 
         indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, history });
-        console.log(`✅ [FRED] ${s.name}: ${displayVal}`);
+        console.log(`✅ [FRED/RT] ${s.name}: ${displayVal}`);
     }
 
     const fallbacks = {
@@ -249,10 +253,12 @@ async function main() {
         let rawVal = rows && rows.length > 0 ? rows[0].DATA_VALUE : fallbacks[item.id];
         let val = parseFloat(String(rawVal).replace(/,/g, ''));
 
-        let trend = rows && rows.length > 1 ? (val > parseFloat(rows[1].DATA_VALUE) ? 'up' : 'down') : 'neutral';
+        let trend = rows && rows.length > 1 ? (val > parseFloat(rows[1].DATA_VALUE) ? 'up' : (val < parseFloat(rows[1].DATA_VALUE) ? 'down' : 'neutral')) : 'neutral';
 
-        if (item.impact === 'up') trend === 'up' ? upScore += 1.2 : downScore += 1.2;
-        else trend === 'up' ? downScore += 1.2 : upScore += 1.2;
+        if (trend !== 'neutral') {
+            if (item.impact === 'up') trend === 'up' ? upScore += 1.2 : downScore += 1.2;
+            else trend === 'up' ? downScore += 1.2 : upScore += 1.2;
+        }
 
         let displayVal = val.toLocaleString();
 
@@ -271,16 +277,21 @@ async function main() {
     }
 
     const total = upScore + downScore;
-    const upProb = Math.round((upScore / total) * 100);
+    const upProb = total > 0 ? Math.round((upScore / total) * 100) : 50;
     const downProb = 100 - upProb;
 
     console.log('🤖 AI 시장 분석 생성 중...');
     const aiAnalysis = await fetchAiAnalysis(indicators);
 
+    // 더 유연한 Regex 기반 감성 추출
+    let sentiment = '보통';
+    if (/상승\s*우세|상향\s*돌파|달러\s*강세/i.test(aiAnalysis)) sentiment = '환율 상승 우세';
+    else if (/하락\s*우세|하향\s*이탈|달러\s*약세/i.test(aiAnalysis)) sentiment = '환율 하락 우세';
+
     const dashboardData = {
         indicators,
         forecast: {
-            sentiment: aiAnalysis.includes('상승 우세') ? '환율 상승 우세' : aiAnalysis.includes('하락 우세') ? '환율 하락 우세' : '보통',
+            sentiment,
             upProb, downProb,
             detailedAnalysis: aiAnalysis,
             score: { upScore, downScore }
