@@ -14,12 +14,45 @@ const __dirname = path.dirname(__filename);
 const FRED_API_KEY = process.env.FRED_API_KEY || '0a8892024728a9a0fa015e609cd5d232';
 const ECOS_API_KEY = process.env.ECOS_API_KEY;
 
+async function fetchFromYahooFinance(symbol) {
+    return new Promise((resolve) => {
+        // Yahoo Finance Chart API (v8)
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
+        const options = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        };
+
+        https.get(url, options, (res) => {
+            let data = '';
+            res.on('data', (chunk) => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    const result = json.chart.result[0];
+                    const price = result.indicators.quote[0].close.filter(v => v !== null).pop();
+                    const timestamp = result.timestamp.pop();
+                    const date = new Date(timestamp * 1000).toISOString().split('T')[0];
+                    resolve({ date, value: price.toFixed(2) });
+                } catch (e) {
+                    console.error(`❌ Yahoo Finance Parse Error (${symbol}):`, e.message);
+                    resolve(null);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`❌ Yahoo Finance Network Error (${symbol}):`, e.message);
+            resolve(null);
+        });
+    });
+}
+
 // 1. 해외지표 (FRED)
 const FRED_SERIES = [
     { id: 'FEDFUNDS', name: '미국 기준금리(Fed)', unit: '%', category: 'international', impact: 'up', source: 'Federal Reserve', description: 'Fed 금리 인상 시 달러 가치 상승으로 환율 상승' },
     { id: 'PAYEMS', name: '미 비농업고용지수', unit: 'K', category: 'international', impact: 'up', source: 'BLS', description: '미국 고용 지표 호조 시 달러 선호 현상 강화' },
-    { id: 'DEXJPUS', name: '엔/달러 환율', unit: '¥', category: 'international', impact: 'up', source: 'Market', description: '엔화 약세 시 환율 상승 경향' },
-    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', category: 'international', impact: 'up', source: 'WTI', description: '지정학적 위기 시 상승 (FRED API 특성상 3~7일 지연 가능)' },
+    { id: 'DEXJPUS', name: '엔/달러 환율', unit: '¥', category: 'international', impact: 'up', source: 'Market', description: '엔화 약세 시 환율 상승 경향', realtimeSymbol: 'JPY=X' },
+    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', category: 'international', impact: 'up', source: 'WTI', description: '실시간에 가까운 선물 가격 반영 중', realtimeSymbol: 'CL=F' },
     { id: 'CPIAUCSL', name: '미 소비자물가(CPI)', unit: '%', category: 'international', impact: 'up', source: 'BLS', description: '미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발' },
     { id: 'GDP', name: '미국 GDP', unit: 'B$', category: 'international', impact: 'up', source: 'BEA', description: '미국 경제 성장 호조 시 달러 가치 상승' }
 ];
@@ -150,7 +183,17 @@ async function main() {
     let upScore = 0, downScore = 0;
 
     for (const s of FRED_SERIES) {
-        const obs = await fetchFromFred(s.id);
+        let obs = await fetchFromFred(s.id);
+
+        // 🚀 실시간 보정: Yahoo Finance 등을 통해 지연 데이터 보완
+        if (s.realtimeSymbol) {
+            const rt = await fetchFromYahooFinance(s.realtimeSymbol);
+            if (rt && (!obs.length || rt.date > obs[0].date)) {
+                console.log(`⚡ [Realtime] ${s.name} 보정: ${rt.value} (${rt.date})`);
+                obs.unshift({ date: rt.date, value: rt.value });
+            }
+        }
+
         const val = obs.length > 0 ? obs[0].value : '0';
         const trend = obs.length > 1 ? (parseFloat(val) > parseFloat(obs[1].value) ? 'up' : 'down') : 'neutral';
 
