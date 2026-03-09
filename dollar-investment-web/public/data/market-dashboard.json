@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.29",
+      "value": "158.28",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 158.29
+          "value": 158.28
         }
       ]
     },
@@ -167,9 +167,9 @@
       "category": "international",
       "impact": "up",
       "source": "WTI",
-      "description": "실시간에 가까운 선물 가격 반영 중",
+      "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "98.94",
+      "value": "99.65",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,135 @@
         },
         {
           "date": "2026-03-09",
-          "value": 98.94
+          "value": 99.65
+        }
+      ]
+    },
+    {
+      "id": "tnx",
+      "name": "미 10년물 국채금리",
+      "unit": "%",
+      "category": "international",
+      "impact": "up",
+      "source": "CBOE",
+      "description": "미 국채 금리 상승 시 달러 강세 유발",
+      "realtimeSymbol": "^TNX",
+      "fredId": "GS10",
+      "value": "4.16",
+      "trend": "up",
+      "history": [
+        {
+          "date": "2025-06-01",
+          "value": 4.38
+        },
+        {
+          "date": "2025-07-01",
+          "value": 4.39
+        },
+        {
+          "date": "2025-08-01",
+          "value": 4.26
+        },
+        {
+          "date": "2025-09-01",
+          "value": 4.12
+        },
+        {
+          "date": "2025-10-01",
+          "value": 4.06
+        },
+        {
+          "date": "2025-11-01",
+          "value": 4.09
+        },
+        {
+          "date": "2025-12-01",
+          "value": 4.14
+        },
+        {
+          "date": "2026-01-01",
+          "value": 4.21
+        },
+        {
+          "date": "2026-02-01",
+          "value": 4.13
+        },
+        {
+          "date": "2026-03-09",
+          "value": 4.16
+        }
+      ]
+    },
+    {
+      "id": "dxy",
+      "name": "달러 인덱스(DXY)",
+      "unit": "pt",
+      "category": "international",
+      "impact": "up",
+      "source": "ICE",
+      "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
+      "realtimeSymbol": "DX-Y.NYB",
+      "fredId": "DTWEXBGS",
+      "value": "99.22",
+      "trend": "down",
+      "history": [
+        {
+          "date": "2026-02-17",
+          "value": 117.7375
+        },
+        {
+          "date": "2026-02-18",
+          "value": 117.8426
+        },
+        {
+          "date": "2026-02-19",
+          "value": 118.2354
+        },
+        {
+          "date": "2026-02-20",
+          "value": 117.9917
+        },
+        {
+          "date": "2026-02-23",
+          "value": 117.9395
+        },
+        {
+          "date": "2026-02-24",
+          "value": 117.9463
+        },
+        {
+          "date": "2026-02-25",
+          "value": 117.769
+        },
+        {
+          "date": "2026-02-26",
+          "value": 117.9042
+        },
+        {
+          "date": "2026-02-27",
+          "value": 117.8223
+        },
+        {
+          "date": "2026-03-09",
+          "value": 99.22
+        }
+      ]
+    },
+    {
+      "id": "kospi",
+      "name": "코스피 지수",
+      "unit": "pt",
+      "category": "domestic",
+      "impact": "down",
+      "source": "KRX",
+      "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
+      "realtimeSymbol": "^KS11",
+      "value": "5,251.87",
+      "trend": "neutral",
+      "history": [
+        {
+          "date": "2026-03-09",
+          "value": 5251.87
         }
       ]
     },
@@ -398,13 +526,13 @@
   ],
   "forecast": {
     "sentiment": "보통",
-    "upProb": 63,
-    "downProb": 37,
+    "upProb": 64,
+    "downProb": 36,
     "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
     "score": {
-      "upScore": 7.6000000000000005,
-      "downScore": 4.4
+      "upScore": 9.6,
+      "downScore": 5.4
     }
   },
-  "lastUpdate": "2026. 3. 9. 오후 1:26:09"
+  "lastUpdate": "2026. 3. 9. 오후 1:30:17"
 }
