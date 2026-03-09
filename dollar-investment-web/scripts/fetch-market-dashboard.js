@@ -150,44 +150,48 @@ ${summary}
         contents: [{ parts: [{ text: prompt }] }]
     });
 
-    console.log('🤖 AI 분석 요청 중...');
-    return new Promise((resolve) => {
-        // v1 버전과 표준 모델명으로 최종 시도
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-        const req = https.request(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        }, (res) => {
-            let body = '';
-            res.on('data', chunk => body += chunk);
-            res.on('end', () => {
-                try {
-                    const json = JSON.parse(body);
-                    if (res.statusCode !== 200) {
-                        const errMsg = json.error ? json.error.message : '알 수 없는 오류';
-                        console.error(`❌ Gemini API 오류 (${res.statusCode}):`, JSON.stringify(json, null, 2));
-                        resolve(`AI 분석 오류 (${res.statusCode}): ${errMsg}`);
-                        return;
-                    }
-                    if (json.candidates && json.candidates[0] && json.candidates[0].content) {
-                        resolve(json.candidates[0].content.parts[0].text.trim());
-                    } else {
-                        console.error('❌ Gemini API 응답 구조 이상:', JSON.stringify(json, null, 2));
-                        resolve('AI 분석 결과 형식이 올바르지 않습니다.');
-                    }
-                } catch (e) {
-                    console.error('❌ JSON 파싱 오류 또는 예외 발생:', e.message);
-                    resolve(`AI 분석실패: ${e.message}`);
-                }
+    // 시도할 모델 리스트
+    const modelConfigs = [
+        { ver: 'v1beta', model: 'gemini-1.5-flash' },
+        { ver: 'v1', model: 'gemini-1.5-flash' },
+        { ver: 'v1beta', model: 'gemini-1.5-flash-latest' },
+        { ver: 'v1beta', model: 'gemini-2.0-flash-exp' }
+    ];
+
+    for (const config of modelConfigs) {
+        console.log(`🤖 AI 분석 요청 중... (${config.model} - ${config.ver})`);
+        try {
+            const result = await new Promise((resolve, reject) => {
+                const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`;
+                const req = https.request(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }, (res) => {
+                    let body = '';
+                    res.on('data', chunk => body += chunk);
+                    res.on('end', () => {
+                        try {
+                            const json = JSON.parse(body);
+                            if (res.statusCode === 200 && json.candidates?.[0]?.content?.parts?.[0]?.text) {
+                                resolve(json.candidates[0].content.parts[0].text.trim());
+                            } else {
+                                reject(new Error(`Status ${res.statusCode}: ${json.error?.message || 'Unknown error'}`));
+                            }
+                        } catch (e) { reject(e); }
+                    });
+                });
+                req.on('error', reject);
+                req.write(data);
+                req.end();
             });
-        });
-        req.on('error', (err) => {
-            console.error('❌ 네트워크 오류:', err.message);
-            resolve('네트워크 오류로 AI 분석 실패');
-        });
-        req.write(data);
-        req.end();
-    });
+            return result; // 성공 시 즉시 반환
+        } catch (err) {
+            console.warn(`⚠️ ${config.model} 실패: ${err.message}`);
+            continue; // 다음 모델로 시도
+        }
+    }
+
+    return "모든 AI 모델 요청에 실패했습니다. API 키 권한 또는 할당량을 확인해주세요.";
 }
 
 async function main() {
