@@ -14,7 +14,7 @@ export const githubSyncService = {
         try {
             const response = await fetch(url, {
                 headers: {
-                    'Authorization': `token ${pat}`,
+                    'Authorization': `Bearer ${pat}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Cache-Control': 'no-cache'
                 }
@@ -58,7 +58,7 @@ export const githubSyncService = {
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${pat}`,
+                    'Authorization': `Bearer ${pat}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },

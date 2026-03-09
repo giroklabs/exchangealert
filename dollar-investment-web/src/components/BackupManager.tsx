@@ -107,8 +107,11 @@ export function BackupManager() {
             setSyncInfo({ ...syncInfo, lastSync: now });
             setStatus(`동기화 성공: ${now}`);
         } catch (error: any) {
-            console.error(error);
-            setStatus(`오류 발생: ${error.message}`);
+            console.error('Push Error:', error);
+            const msg = error.message === 'Load failed' || error.message === 'Failed to fetch'
+                ? '네트워크 연결 오류 (토큰 권한 또는 CORS 문제)'
+                : error.message;
+            setStatus(`오류: ${msg}`);
         } finally {
             setIsLoading(false);
         }
@@ -137,12 +140,17 @@ export function BackupManager() {
                 setStatus('취소됨');
             }
         } catch (error: any) {
-            console.error(error);
-            setStatus(`오류 발생: ${error.message}`);
+            console.error('Fetch Error:', error);
+            const msg = error.message === 'Load failed' || error.message === 'Failed to fetch'
+                ? '네트워크 연결 오류 (토큰 권한 또는 CORS 문제)'
+                : error.message;
+            setStatus(`오류: ${msg}`);
         } finally {
             setIsLoading(false);
         }
     };
+
+    const [showSettings, setShowSettings] = useState(false);
 
     return (
         <div className="fixed bottom-6 right-6 z-50">
@@ -170,16 +178,59 @@ export function BackupManager() {
                     <div className="space-y-6">
                         {/* GitHub 설정 */}
                         <div className="space-y-3">
-                            <h4 className="text-xs font-black text-indigo-500 uppercase tracking-widest">GitHub 클라우드 동기화</h4>
+                            <div className="flex justify-between items-center">
+                                <h4 className="text-xs font-black text-indigo-500 uppercase tracking-widest">GitHub 동기화</h4>
+                                <button
+                                    onClick={() => setShowSettings(!showSettings)}
+                                    className="text-[10px] bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-500"
+                                >
+                                    {showSettings ? '설정 숨기기' : '상세 설정'}
+                                </button>
+                            </div>
+
                             <div className="space-y-2 text-sm">
-                                <label className="block text-[10px] text-gray-500 font-bold uppercase">Personal Access Token (PAT)</label>
-                                <input
-                                    type="password"
-                                    value={syncInfo.pat}
-                                    placeholder="ghp_..."
-                                    onChange={(e) => setSyncInfo({ ...syncInfo, pat: e.target.value })}
-                                    className={`w-full p-2 rounded-xl border text-xs ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}`}
-                                />
+                                {showSettings && (
+                                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl space-y-2 mb-3">
+                                        <div>
+                                            <label className="text-[10px] text-gray-500 font-bold">Owner / Repo</label>
+                                            <div className="flex gap-1">
+                                                <input
+                                                    type="text"
+                                                    value={syncInfo.owner}
+                                                    onChange={(e) => setSyncInfo({ ...syncInfo, owner: e.target.value })}
+                                                    className={`flex-1 p-1 text-[10px] rounded border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white'}`}
+                                                />
+                                                <span className="text-gray-400">/</span>
+                                                <input
+                                                    type="text"
+                                                    value={syncInfo.repo}
+                                                    onChange={(e) => setSyncInfo({ ...syncInfo, repo: e.target.value })}
+                                                    className={`flex-1 p-1 text-[10px] rounded border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white'}`}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] text-gray-500 font-bold">File Path</label>
+                                            <input
+                                                type="text"
+                                                value={syncInfo.filePath}
+                                                onChange={(e) => setSyncInfo({ ...syncInfo, filePath: e.target.value })}
+                                                className={`w-full p-1 text-[10px] rounded border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white'}`}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="space-y-1">
+                                    <label className="block text-[10px] text-gray-500 font-bold uppercase">Personal Access Token (PAT)</label>
+                                    <input
+                                        type="password"
+                                        value={syncInfo.pat}
+                                        placeholder="ghp_..."
+                                        onChange={(e) => setSyncInfo({ ...syncInfo, pat: e.target.value })}
+                                        className={`w-full p-2 rounded-xl border text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}`}
+                                    />
+                                </div>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleGitHubPush}
