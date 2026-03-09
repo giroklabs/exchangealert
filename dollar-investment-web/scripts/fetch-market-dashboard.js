@@ -84,6 +84,47 @@ async function fetchFromEcos(item) {
     });
 }
 
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+async function fetchAiAnalysis(indicators) {
+    if (!GEMINI_API_KEY) {
+        return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
+    }
+
+    const summary = indicators.map(i => `- ${i.name}: ${i.value}${i.unit} (추세: ${i.trend}, 환율영향: ${i.impact})`).join('\n');
+    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요.
+응답은 2~3문장의 짧고 명확한 한락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 적어주세요.
+
+경제 지표 현황:
+${summary}
+
+환율에 미치는 심리적, 거시적 요인을 분석해줘.`;
+
+    const data = JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+    });
+
+    return new Promise((resolve) => {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const req = https.request(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        }, (res) => {
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(body);
+                    resolve(json.candidates[0].content.parts[0].text.trim());
+                } catch (e) { resolve('AI 분석을 일시적으로 불러올 수 없습니다.'); }
+            });
+        });
+        req.on('error', () => resolve('네트워크 오류로 AI 분석 실패'));
+        req.write(data);
+        req.end();
+    });
+}
+
 async function main() {
     console.log('🚀 2026년 실시간 데이터 수집 시작...');
     const indicators = [];
@@ -113,11 +154,11 @@ async function main() {
     }
 
     const fallbacks = {
-        'bok-rate': '2.50', // 최신 기준금리 반영
+        'bok-rate': '2.50',
         'kr-cpi': '3.1',
         'kr-gdp': '2.4',
         'm2-supply': '4500',
-        'trade-balance': '13260' // 2026년 1월 흑자분 반영
+        'trade-balance': '13260'
     };
 
     for (const item of ECOS_SERIES) {
@@ -150,12 +191,15 @@ async function main() {
     const upProb = Math.round((upScore / total) * 100);
     const downProb = 100 - upProb;
 
+    console.log('🤖 AI 시장 분석 생성 중...');
+    const aiAnalysis = await fetchAiAnalysis(indicators);
+
     const dashboardData = {
         indicators,
         forecast: {
-            sentiment: upProb > 60 ? '환율 상승 우세' : downProb > 60 ? '환율 하락 우세' : '보통',
+            sentiment: aiAnalysis.includes('상승 우세') ? '환율 상승 우세' : aiAnalysis.includes('하락 우세') ? '환율 하락 우세' : '보통',
             upProb, downProb,
-            detailedAnalysis: '2026년 최신 지표 분석 결과, 한국 기준금리 2.5% 인하 기조와 경상수지 흑자 지속이 환율 안정 요인으로 작용하고 있습니다.',
+            detailedAnalysis: aiAnalysis,
             score: { upScore, downScore }
         },
         lastUpdate: new Date().toLocaleString('ko-KR')
@@ -164,6 +208,6 @@ async function main() {
     const outputPath = path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json');
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2));
-    console.log('✨ 2026년 데이터 업데이트 완료!');
+    console.log('✨ AI 분석 포함 데이터 업데이트 완료!');
 }
 main();

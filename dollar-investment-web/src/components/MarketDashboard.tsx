@@ -127,7 +127,15 @@ export function MarketDashboard() {
 
             {/* 하단 요약 가이드 */}
             <div className={`p-8 rounded-3xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100 shadowed-lg'}`}>
-                <h3 className={`text-xl font-bold mb-6 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/20' : 'bg-indigo-50 border border-indigo-100'}`}>
+                    <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-indigo-200' : 'text-indigo-900'}`}>
+                        <span>🤖</span> Gemini AI 시장 분석
+                    </h3>
+                    <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                        {data?.forecast?.detailedAnalysis}
+                    </p>
+                </div>
+                <h3 className={`text-xl font-bold mb-6 mt-8 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     📊 지표 해석 가이드
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
