@@ -106,8 +106,8 @@ ${summary}
 
     console.log('🤖 AI 분석 요청 중...');
     return new Promise((resolve) => {
-        // v1beta -> v1으로 변경하고 모델명을 더 명시적인 최신버전으로 테스트
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        // v1beta와 gemini-1.5-flash-latest 조합으로 다시 시도
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
         const req = https.request(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
@@ -118,8 +118,9 @@ ${summary}
                 try {
                     const json = JSON.parse(body);
                     if (res.statusCode !== 200) {
+                        const errMsg = json.error ? json.error.message : '알 수 없는 오류';
                         console.error(`❌ Gemini API 오류 (${res.statusCode}):`, JSON.stringify(json, null, 2));
-                        resolve('AI 분석 서비스 응답 오류');
+                        resolve(`AI 분석 오류 (${res.statusCode}): ${errMsg}`);
                         return;
                     }
                     if (json.candidates && json.candidates[0] && json.candidates[0].content) {
@@ -130,8 +131,7 @@ ${summary}
                     }
                 } catch (e) {
                     console.error('❌ JSON 파싱 오류 또는 예외 발생:', e.message);
-                    console.error('응답 본문 일부:', body.substring(0, 100));
-                    resolve('AI 분석을 일시적으로 불러올 수 없습니다.');
+                    resolve(`AI 분석실패: ${e.message}`);
                 }
             });
         });
