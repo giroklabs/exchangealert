@@ -4,15 +4,16 @@ import { SevenSplitInvestment } from './components/SevenSplitInvestment';
 import { AssetSplitInvestment } from './components/AssetSplitInvestment';
 import { FXExchangeProfitTracker } from './components/FXExchangeProfitTracker';
 import { MarketDashboard } from './components/MarketDashboard';
+import { AboutPage } from './components/AboutPage';
 import { Tabs } from './components/Tabs';
 import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
-import { BackupManager } from './components/BackupManager'; // Added import
+import { BackupManager } from './components/BackupManager';
 import './App.css';
 
 function App() {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState('dashboard'); // Changed initial activeTab to 'dashboard'
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   const tabs = [
     { id: 'analysis', label: '투자적정성 분석', icon: '📊' },
@@ -20,6 +21,7 @@ function App() {
     { id: 'asset-split', label: '자산투자', icon: '🏦' },
     { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
     { id: 'dashboard', label: '시장 대시보드', icon: '🌍' },
+    { id: 'about', label: '소개', icon: '❓' },
   ];
 
   return (
@@ -52,6 +54,8 @@ function App() {
             <AssetSplitInvestment />
           ) : activeTab === 'fx-profit' ? (
             <FXExchangeProfitTracker />
+          ) : activeTab === 'about' ? (
+            <AboutPage />
           ) : (
             <MarketDashboard />
           )}
