@@ -1,0 +1,264 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-03-09T13:18:42.991Z",
+  "fxInvestments": [
+    {
+      "id": "e940ac34-b6f1-4ac5-9fb7-57cfeac0fe9d",
+      "date": "2026-03-07",
+      "usdAmount": 674000,
+      "buyRate": 1430,
+      "sellRate": 1482,
+      "sellDate": "2026-03-07",
+      "status": "sold",
+      "memo": ""
+    },
+    {
+      "id": "4f1a0bb5-3959-4d0d-a3c2-a69522b08b9f",
+      "date": "2026-03-07",
+      "usdAmount": 30000,
+      "buyRate": 1430,
+      "sellRate": 1482,
+      "sellDate": "2026-03-07",
+      "status": "sold",
+      "memo": ""
+    },
+    {
+      "id": "33e9c5ee-278a-4632-be5c-ab827445ac77",
+      "date": "2026-03-01",
+      "usdAmount": 10000,
+      "buyRate": 1430,
+      "sellRate": 1480,
+      "sellDate": "2026-03-07",
+      "status": "sold",
+      "memo": ""
+    }
+  ],
+  "assetInvestments": [
+    {
+      "id": "init-1",
+      "settings": {
+        "assetName": "삼성전자",
+        "totalBudget": 150000000,
+        "gapPercent": 3,
+        "targetProfitPercent": 30,
+        "basePrice": 173500,
+        "splitCount": 5
+      },
+      "slots": [
+        {
+          "number": 1,
+          "isActive": true,
+          "buyPrice": 173500,
+          "quantity": 172.9106628242075,
+          "investedAmount": 30000000,
+          "targetPrice": 225550
+        },
+        {
+          "number": 2,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 3,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 4,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 5,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        }
+      ],
+      "lastPrice": 173500
+    },
+    {
+      "id": "1773057394911",
+      "settings": {
+        "assetName": "현대차",
+        "totalBudget": 150000000,
+        "gapPercent": 3,
+        "targetProfitPercent": 30,
+        "basePrice": 507000,
+        "splitCount": 5
+      },
+      "slots": [
+        {
+          "number": 1,
+          "isActive": true,
+          "buyPrice": 507000,
+          "quantity": 59.171597633136095,
+          "investedAmount": 30000000,
+          "targetPrice": 659100
+        },
+        {
+          "number": 2,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 3,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 4,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 5,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        }
+      ],
+      "lastPrice": 507000
+    },
+    {
+      "id": "1773058258935",
+      "settings": {
+        "assetName": "미래에셋증권",
+        "totalBudget": 100000000,
+        "gapPercent": 3,
+        "targetProfitPercent": 30,
+        "basePrice": 64200,
+        "splitCount": 5
+      },
+      "slots": [
+        {
+          "number": 1,
+          "isActive": true,
+          "buyPrice": 64200,
+          "quantity": 311.52647975077883,
+          "investedAmount": 20000000,
+          "targetPrice": 83460
+        },
+        {
+          "number": 2,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 3,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 4,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        },
+        {
+          "number": 5,
+          "isActive": false,
+          "buyPrice": null,
+          "quantity": 0,
+          "investedAmount": 0,
+          "targetPrice": null
+        }
+      ],
+      "lastPrice": 64200
+    }
+  ],
+  "sevenSplitSettings": {
+    "totalBudget": 500000000,
+    "gapWon": 5,
+    "targetProfitPercent": 3,
+    "baseExchangeRate": 1430
+  },
+  "sevenSplitSlots": [
+    {
+      "number": 1,
+      "isActive": true,
+      "buyPrice": 1430.5,
+      "amount": 49932.591002147106,
+      "krwAmount": 71428571.42857143,
+      "targetPrice": 1473.415
+    },
+    {
+      "number": 2,
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
+    },
+    {
+      "number": 3,
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
+    },
+    {
+      "number": 4,
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
+    },
+    {
+      "number": 5,
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
+    },
+    {
+      "number": 6,
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
+    },
+    {
+      "number": 7,
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
+    }
+  ]
+}
