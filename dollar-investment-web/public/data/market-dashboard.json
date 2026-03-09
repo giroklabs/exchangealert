@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.34",
+      "value": "158.36",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 158.34
+          "value": 158.36
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "97.82",
+      "value": "97.7",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 97.82
+          "value": 97.7
         }
       ]
     },
@@ -224,7 +224,7 @@
       "description": "미 국채 금리 상승 시 달러 강세 유발",
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
-      "value": "4.16",
+      "value": "4.15",
       "trend": "up",
       "history": [
         {
@@ -265,7 +265,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 4.16
+          "value": 4.15
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.11",
+      "value": "99.09",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-09",
-          "value": 99.11
+          "value": 99.09
         }
       ]
     },
@@ -564,11 +564,11 @@
     "sentiment": "보통",
     "upProb": 88,
     "downProb": 12,
-    "detailedAnalysis": "AI 분석 오류 (404): models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "모든 AI 모델 요청에 실패했습니다. API 키 권한 또는 할당량을 확인해주세요.",
     "score": {
       "upScore": 7,
       "downScore": 1
     }
   },
-  "lastUpdate": "2026. 3. 9. 오후 1:43:25"
+  "lastUpdate": "2026. 3. 9. 오후 1:46:50"
 }
