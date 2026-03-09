@@ -152,8 +152,8 @@ ${summary}
 
     console.log('🤖 AI 분석 요청 중...');
     return new Promise((resolve) => {
-        // v1beta 버전과 flash-latest 모델로 수정하여 404 해결 시도
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+        // v1 버전과 표준 모델명으로 최종 시도
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         const req = https.request(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
