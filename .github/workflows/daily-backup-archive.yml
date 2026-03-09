@@ -1,0 +1,44 @@
+name: Daily User Data Backup Archive
+
+on:
+  schedule:
+    # 매일 KST 새벽 4시에 실행 (UTC 19:00)
+    - cron: '0 19 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  archive-backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Backup Archive
+        run: |
+          BACKUP_FILE="dollar-investment-web/data/user-backup.json"
+          if [ -f "$BACKUP_FILE" ]; then
+            DATE=$(date +'%Y-%m-%d')
+            ARCHIVE_DIR="dollar-investment-web/data/backups"
+            mkdir -p "$ARCHIVE_DIR"
+            cp "$BACKUP_FILE" "$ARCHIVE_DIR/backup-$DATE.json"
+            echo "✅ Backup archived for $DATE"
+          else
+            echo "⚠️ No user-backup.json found to archive."
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add dollar-investment-web/data/backups/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chrono: daily backup archive $(date +'%Y-%m-%d')"
+            git push origin main
+          fi
