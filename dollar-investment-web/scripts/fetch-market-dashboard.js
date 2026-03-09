@@ -150,7 +150,9 @@ ${summary}
         contents: [{ parts: [{ text: prompt }] }]
     });
 
-    // 시도할 모델 리스트
+    let lastError = '';
+
+    // 1. 등록된 모델 리스트 시도
     const modelConfigs = [
         { ver: 'v1beta', model: 'gemini-1.5-flash' },
         { ver: 'v1', model: 'gemini-1.5-flash' },
@@ -159,7 +161,6 @@ ${summary}
         { ver: 'v1', model: 'gemini-pro' }
     ];
 
-    let lastError = '';
     for (const config of modelConfigs) {
         console.log(`🤖 AI 분석 요청 중... (${config.model} - ${config.ver})`);
         try {
@@ -192,6 +193,57 @@ ${summary}
             lastError += err.message + '\n';
             continue; // 다음 모델로 시도
         }
+    }
+
+    // 2. 실패 시, 동적 모델 탐색 시도
+    console.log(`🤖 모든 기본 모델 실패. 사용 가능한 모델 탐색 중...`);
+    try {
+        const availableModels = await new Promise((resolve, reject) => {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`;
+            https.get(url, (res) => {
+                let body = '';
+                res.on('data', chunk => body += chunk);
+                res.on('end', () => {
+                    try {
+                        const json = JSON.parse(body);
+                        if (res.statusCode === 200 && json.models) {
+                            const validModels = json.models.filter(m => m.supportedGenerationMethods?.includes('generateContent'));
+                            resolve(validModels.map(m => m.name.replace('models/', '')));
+                        } else {
+                            resolve([]);
+                        }
+                    } catch (e) { resolve([]); }
+                });
+            }).on('error', () => resolve([]));
+        });
+
+        if (availableModels.length > 0) {
+            const fallbackModel = availableModels[0];
+            console.log(`💡 대체 모델 발견: ${fallbackModel}. 시도 중...`);
+            const result = await new Promise((resolve, reject) => {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${fallbackModel}:generateContent?key=${GEMINI_API_KEY}`;
+                const req = https.request(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {
+                    let body = '';
+                    res.on('data', chunk => body += chunk);
+                    res.on('end', () => {
+                        try {
+                            const json = JSON.parse(body);
+                            if (res.statusCode === 200 && json.candidates?.[0]?.content?.parts?.[0]?.text) {
+                                resolve(json.candidates[0].content.parts[0].text.trim());
+                            } else {
+                                reject(new Error(`[Dynamic-${fallbackModel}] Failed`));
+                            }
+                        } catch (e) { reject(e); }
+                    });
+                });
+                req.on('error', reject);
+                req.write(data);
+                req.end();
+            });
+            return result;
+        }
+    } catch (err) {
+        console.warn('동적 모델 탐색 실패:', err.message);
     }
 
     return `AI 분석 요청 실패 내역:\n${lastError.trim()}`;
