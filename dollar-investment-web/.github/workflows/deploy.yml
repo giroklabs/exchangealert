@@ -18,6 +18,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +31,13 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify Environment Variables
+        run: |
+          echo "Checking for VITE_ variables..."
+          if [ -z "$VITE_FIREBASE_PROJECT_ID" ]; then echo "WARNING: VITE_FIREBASE_PROJECT_ID is EMPTY"; else echo "VITE_FIREBASE_PROJECT_ID is present"; fi
+        env:
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
 
       - name: Build
         run: npm run build
