@@ -98,7 +98,7 @@ export function SevenSplitInvestment() {
                     </h2>
                     <button
                         onClick={handleReset}
-                        className="text-sm px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-gray-900 dark:text-gray-100 rounded-md hover:bg-red-200"
+                        className="px-4 py-2 text-sm font-bold rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors"
                     >
                         초기화
                     </button>

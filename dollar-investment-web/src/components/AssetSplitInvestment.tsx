@@ -139,13 +139,13 @@ function SingleAssetManager({
                 <div className="flex gap-2">
                     <button
                         onClick={handleReset}
-                        className="px-4 py-2 text-xs font-bold rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200"
+                        className="px-4 py-2 text-sm font-bold rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors"
                     >
                         데이터 리셋
                     </button>
                     <button
                         onClick={onDelete}
-                        className="px-4 py-2 text-xs font-bold rounded-xl bg-red-50 text-gray-900 dark:text-gray-100 font-bold hover:bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                        className="px-4 py-2 text-sm font-bold rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 transition-colors"
                     >
                         종목 삭제
                     </button>
@@ -253,14 +253,14 @@ function SingleAssetManager({
                         <div
                             key={slot.number}
                             className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${slot.isActive
-                                    ? 'border-gray-800 dark:border-gray-200 shadow-lg shadow-gray-500/10'
-                                    : 'border-transparent shadow-md hover:border-gray-300'
+                                ? 'border-gray-800 dark:border-gray-200 shadow-lg shadow-gray-500/10'
+                                : 'border-transparent shadow-md hover:border-gray-300'
                                 } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
                         >
                             {/* 슬롯 헤더 */}
                             <div className={`p-4 flex justify-between items-center ${slot.isActive
-                                    ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900'
-                                    : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')
+                                ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900'
+                                : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')
                                 }`}>
                                 <span className="font-bold">Slot {slot.number} {isSlot1 && '(Base)'}</span>
                                 <span className={`text-xs px-2 py-1 rounded-full ${slot.isActive ? 'bg-white/20' : (theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200')
@@ -303,8 +303,8 @@ function SingleAssetManager({
                                         <button
                                             onClick={() => handleSell(slot.number)}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canSell
-                                                    ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
-                                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                                                ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
+                                                : 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
                                                 }`}
                                         >
                                             {canSell ? '💰 매도 가능!' : '보유 중'}
@@ -329,10 +329,10 @@ function SingleAssetManager({
                                             onClick={() => handleBuy(slot.number)}
                                             disabled={!canBuy}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
-                                                    ? (isRecommendBuy
-                                                        ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
-                                                        : 'bg-yellow-200 text-gray-700 hover:bg-yellow-300 shadow-md')
-                                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-300 cursor-not-allowed'
+                                                ? (isRecommendBuy
+                                                    ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
+                                                    : 'bg-yellow-200 text-gray-700 hover:bg-yellow-300 shadow-md')
+                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-300 cursor-not-allowed'
                                                 }`}
                                         >
                                             {canBuy ? (isRecommendBuy ? '🛒 매수 실행' : '🛒 임의 매수') : '매수 대기'}
@@ -418,9 +418,9 @@ export function AssetSplitInvestment() {
             <div className="flex justify-end gap-2 mb-4">
                 <button
                     onClick={addInvestment}
-                    className="group relative flex items-center gap-2 px-8 py-4 bg-yellow-400 text-gray-900 rounded-3xl font-black shadow-xl shadow-yellow-400/30 hover:bg-yellow-500 transition-all hover:scale-105"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
                 >
-                    <span className="text-xl group-hover:rotate-90 transition-transform">➕</span>
+                    <span>➕</span>
                     새 종목 추가하기
                 </button>
             </div>

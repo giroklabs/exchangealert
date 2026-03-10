@@ -23,10 +23,7 @@ export function UserProfile() {
                     </div>
                     <button
                         onClick={logout}
-                        className={`text-sm px-4 py-2 rounded-full font-medium transition-colors ${theme === 'dark'
-                            ? 'bg-gray-800 hover:bg-gray-700 text-gray-300'
-                            : 'bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 shadow-sm'
-                            }`}
+                        className={`text-sm px-4 py-2 rounded-xl font-bold transition-colors ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 shadow-sm'}`}
                     >
                         로그아웃
                     </button>
@@ -34,9 +31,7 @@ export function UserProfile() {
             ) : (
                 <button
                     onClick={login}
-                    className={`flex items-center gap-2 text-sm px-5 py-2 rounded-full font-bold transition-all shadow-sm ${theme === 'dark'
-                        ? 'bg-yellow-400 hover:bg-yellow-300 text-gray-900' : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
-                        }`}
+                    className={`flex items-center gap-2 text-sm px-5 py-2.5 rounded-xl font-bold transition-colors shadow-md bg-yellow-400 hover:bg-yellow-500 text-gray-900`}
                 >
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

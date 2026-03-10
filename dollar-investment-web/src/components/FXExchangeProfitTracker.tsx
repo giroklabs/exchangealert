@@ -156,11 +156,11 @@ export function FXExchangeProfitTracker() {
                             <button onClick={() => {
                                 setManualRate(Number(tempRate) || apiRate);
                                 setIsEditingRate(false);
-                            }} className="px-3 py-1.5 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white rounded-lg text-sm hover:bg-green-600 transition shadow-sm font-bold">적용</button>
+                            }} className="px-4 py-2 text-sm font-bold rounded-xl bg-yellow-400 text-gray-900 hover:bg-yellow-500 transition-colors">적용</button>
                             <button onClick={() => {
                                 setManualRate(null);
                                 setIsEditingRate(false);
-                            }} className="px-3 py-1.5 bg-gray-500 text-white rounded-lg text-sm hover:bg-gray-600 transition shadow-sm font-bold">실시간</button>
+                            }} className="px-4 py-2 text-sm font-bold rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 transition-colors">실시간</button>
                         </div>
                     ) : (
                         <div
@@ -181,7 +181,7 @@ export function FXExchangeProfitTracker() {
                 </div>
                 <button
                     onClick={() => setIsAdding(!isAdding)}
-                    className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-500 transition-colors shadow-lg shadow-gray-500/10"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
                 >
                     {isAdding ? '취소' : '➕ 새 투자 기록'}
                 </button>
@@ -320,21 +320,21 @@ export function FXExchangeProfitTracker() {
                                                                     handleSettleInvestment(inv.id, Number(rate));
                                                                 }
                                                             }}
-                                                            className="px-2 py-1 bg-green-100 text-green-600 rounded text-xs hover:bg-green-200"
+                                                            className="px-3 py-1.5 text-xs font-bold rounded-lg bg-yellow-400 text-gray-900 hover:bg-yellow-500 transition-colors"
                                                         >
                                                             매도 처리
                                                         </button>
                                                     ) : (
                                                         <button
                                                             onClick={() => handleRevertToHolding(inv.id)}
-                                                            className="px-2 py-1 bg-gray-200 text-gray-800 dark:text-gray-200 rounded text-xs hover:bg-blue-200"
+                                                            className="px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 transition-colors"
                                                         >
                                                             보유 전환
                                                         </button>
                                                     )}
                                                     <button
                                                         onClick={() => handleDeleteInvestment(inv.id)}
-                                                        className="px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-gray-900 dark:text-gray-100 rounded text-xs hover:bg-red-200"
+                                                        className="px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
                                                     >
                                                         삭제
                                                     </button>
