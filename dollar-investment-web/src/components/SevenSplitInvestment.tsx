@@ -90,16 +90,6 @@ export function SevenSplitInvestment() {
 
     return (
         <div className="max-w-6xl mx-auto p-4 space-y-8">
-            {/* 타이틀 섹션 */}
-            <div className="text-center mb-8">
-                <h1 className={`text-4xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    스플릿 투자 관리
-                </h1>
-                <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                    7개의 독립 계좌로 나누어 매수/매도하는 시스템 투자 전략
-                </p>
-            </div>
-
             {/* 설정 섹션 */}
             <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="flex justify-between items-center mb-6">

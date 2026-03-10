@@ -37,19 +37,6 @@ export function MarketDashboard() {
 
     return (
         <div className="max-w-6xl mx-auto p-4 space-y-8 animate-in fade-in duration-500">
-            {/* 헤더 섹션 */}
-            <div className="text-center mb-10">
-                <h1 className={`text-4xl font-extrabold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    환율 시장 대시보드
-                </h1>
-                <p className={`text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                    원/달러 환율에 영향을 미치는 국내외 주요 경제 지표 현황
-                </p>
-                <div className="mt-4 inline-block px-4 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs text-gray-500">
-                    최근 업데이트: {data?.lastUpdate}
-                </div>
-            </div>
-
             {/* 시장 향방 예측 섹션 */}
             <div className={`p-8 rounded-3xl border shadow-xl ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-gradient-to-br from-blue-50 to-white border-gray-200'}`}>
                 <div className="flex flex-col md:flex-row items-center gap-8">

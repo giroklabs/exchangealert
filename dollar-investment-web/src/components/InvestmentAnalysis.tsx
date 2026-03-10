@@ -25,8 +25,8 @@ export function InvestmentAnalysis() {
     return (
       <div className="max-w-6xl mx-auto p-4">
         <div className={`rounded-lg p-6 ${theme === 'dark'
-            ? 'bg-red-900 border border-red-700'
-            : 'bg-red-50 border border-red-200'
+          ? 'bg-red-900 border border-red-700'
+          : 'bg-red-50 border border-red-200'
           }`}>
           <h2 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-red-200' : 'text-red-800'
             }`}>오류 발생</h2>
@@ -42,12 +42,6 @@ export function InvestmentAnalysis() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">
-      <div className="text-center mb-8">
-        <h1 className={`text-4xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>달러 인베스트</h1>
-        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mt-2`}>데이터가 알려주는 달러 투자 적정 시기 분석</p>
-      </div>
-
       {/* 투자 신호 */}
       <InvestmentSignal signal={signal} isLoading={isLoading} />
 

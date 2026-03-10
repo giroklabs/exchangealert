@@ -315,7 +315,6 @@ function SingleAssetManager({
 }
 
 export function AssetSplitInvestment() {
-    const { theme } = useTheme();
 
     // 여러 종목 상태 관리
     const [investments, setInvestments] = useSyncState<AssetInvestment[]>('asset-investments-v2', () => {
@@ -381,25 +380,15 @@ export function AssetSplitInvestment() {
 
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-12">
-            {/* 상단 타이틀 및 추가 버튼 */}
-            <div className="flex flex-col md:flex-row justify-between items-center bg-transparent gap-6">
-                <div className="text-center md:text-left">
-                    <h1 className={`text-4xl font-extrabold mb-2 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                        자산 포트폴리오 <span className="text-indigo-500">분할 관리</span>
-                    </h1>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        주식, 가상자산 등 각 종목별 스플릿 전략을 동시에 운영하세요
-                    </p>
-                </div>
-                <div className="flex flex-col md:flex-row gap-2">
-                    <button
-                        onClick={addInvestment}
-                        className="group relative flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-3xl font-black shadow-xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all hover:scale-105"
-                    >
-                        <span className="text-xl group-hover:rotate-90 transition-transform">➕</span>
-                        새 종목 추가하기
-                    </button>
-                </div>
+            {/* 상단 추가 버튼 (우측 정렬로 변경) */}
+            <div className="flex justify-end gap-2 mb-4">
+                <button
+                    onClick={addInvestment}
+                    className="group relative flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-3xl font-black shadow-xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all hover:scale-105"
+                >
+                    <span className="text-xl group-hover:rotate-90 transition-transform">➕</span>
+                    새 종목 추가하기
+                </button>
             </div>
 
             {/* 종목 리스트 */}
