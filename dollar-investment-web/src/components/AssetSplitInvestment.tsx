@@ -117,11 +117,11 @@ function SingleAssetManager({
     const totalRoi = totalInvested > 0 ? (totalValue / totalInvested - 1) * 100 : 0;
 
     return (
-        <div className={`p-6 rounded-3xl space-y-8 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-indigo-100 shadow-xl'}`}>
+        <div className={`p-6 rounded-3xl space-y-8 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-yellow-100 shadow-xl'}`}>
             {/* 헤더: 종목명 및 기본 정보 */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6 border-dashed border-gray-200">
                 <div className="flex items-center gap-4">
-                    <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/30' : 'bg-indigo-50'}`}>
+                    <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-yellow-900/30' : 'bg-yellow-50'}`}>
                         <span className="text-2xl">📊</span>
                     </div>
                     <div>
@@ -129,7 +129,7 @@ function SingleAssetManager({
                             type="text"
                             value={investment.settings.assetName}
                             onChange={(e) => handleSettingUpdate('assetName', e.target.value)}
-                            className={`text-2xl font-black bg-transparent border-b-2 border-transparent hover:border-indigo-300 focus:border-indigo-500 focus:outline-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+                            className={`text-2xl font-black bg-transparent border-b-2 border-transparent hover:border-yellow-300 focus:border-yellow-500 focus:outline-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
                         />
                         <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
                             전체 수익률: {totalRoi >= 0 ? '+' : ''}{totalRoi.toFixed(2)}% ({Math.round(totalProfit).toLocaleString()}원)
@@ -211,8 +211,8 @@ function SingleAssetManager({
                         </select>
                     </div>
                 </div>
-                <div className={`lg:col-span-4 p-4 rounded-2xl flex flex-col justify-center items-center gap-2 border-2 ${theme === 'dark' ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100 shadow-inner'}`}>
-                    <label className="text-xs font-black text-indigo-500 uppercase tracking-wider">현재 {investment.settings.assetName} 가격</label>
+                <div className={`lg:col-span-4 p-4 rounded-2xl flex flex-col justify-center items-center gap-2 border-2 ${theme === 'dark' ? 'bg-yellow-900/10 border-yellow-500/20' : 'bg-yellow-50 border-yellow-100 shadow-inner'}`}>
+                    <label className="text-xs font-black text-yellow-600 uppercase tracking-wider">현재 {investment.settings.assetName} 가격</label>
                     <div className="flex items-center gap-2">
                         <input
                             type="number"
@@ -222,10 +222,10 @@ function SingleAssetManager({
                                 setCurrentPrice(val);
                                 handleUpdate({ lastPrice: val });
                             }}
-                            className={`text-xl font-black w-32 p-1 bg-transparent border-b-2 text-center focus:outline-none ${theme === 'dark' ? 'text-white border-indigo-500' : 'text-indigo-900 border-indigo-300'}`}
+                            className={`text-xl font-black w-32 p-1 bg-transparent border-b-2 text-center focus:outline-none ${theme === 'dark' ? 'text-white border-yellow-500' : 'text-yellow-900 border-yellow-300'}`}
                             placeholder="0"
                         />
-                        <span className="font-bold text-indigo-400">원</span>
+                        <span className="font-bold text-yellow-500">원</span>
                     </div>
                 </div>
             </div>
@@ -300,7 +300,7 @@ function SingleAssetManager({
                                     <button
                                         onClick={() => handleBuy(slot.number)}
                                         disabled={!canBuy}
-                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy ? (isRecommendBuy ? 'bg-indigo-600 text-white' : 'bg-indigo-300 text-white hover:bg-indigo-400') : 'bg-transparent border border-dashed border-gray-300 text-gray-300'}`}
+                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy ? (isRecommendBuy ? 'bg-yellow-400 text-gray-900' : 'bg-yellow-300 text-gray-900 hover:bg-yellow-300') : 'bg-transparent border border-dashed border-gray-300 text-gray-300'}`}
                                     >
                                         {canBuy ? (isRecommendBuy ? '매수' : '임의 매수') : '매수'}
                                     </button>
@@ -384,7 +384,7 @@ export function AssetSplitInvestment() {
             <div className="flex justify-end gap-2 mb-4">
                 <button
                     onClick={addInvestment}
-                    className="group relative flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-3xl font-black shadow-xl shadow-indigo-500/30 hover:bg-indigo-700 transition-all hover:scale-105"
+                    className="group relative flex items-center gap-2 px-8 py-4 bg-yellow-400 text-gray-900 rounded-3xl font-black shadow-xl shadow-yellow-400/30 hover:bg-yellow-500 transition-all hover:scale-105"
                 >
                     <span className="text-xl group-hover:rotate-90 transition-transform">➕</span>
                     새 종목 추가하기

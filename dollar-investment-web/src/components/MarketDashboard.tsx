@@ -80,8 +80,8 @@ export function MarketDashboard() {
                 </div>
 
                 {/* Gemini AI 심층 시장 분석 영역 (이동됨) */}
-                <div className={`mt-8 p-6 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/20 border border-indigo-800/50' : 'bg-indigo-50/50 border border-indigo-100 shadow-inner'}`}>
-                    <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-800'}`}>
+                <div className={`mt-8 p-6 rounded-2xl ${theme === 'dark' ? 'bg-yellow-900/20 border border-yellow-800/50' : 'bg-yellow-50/50 border border-yellow-100 shadow-inner'}`}>
+                    <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-800'}`}>
                         <span>🤖</span> Gemini AI 심층 시장 분석
                     </h3>
                     <p className={`text-md leading-relaxed whitespace-pre-wrap ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>

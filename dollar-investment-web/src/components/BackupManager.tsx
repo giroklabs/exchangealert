@@ -238,7 +238,7 @@ export function BackupManager() {
             {/* 메인 버튼 */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'bg-indigo-600 text-white' : 'bg-indigo-500 text-white'
+                className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 ${theme === 'dark' ? 'bg-yellow-400 text-gray-900' : 'bg-yellow-400 text-gray-900'
                     }`}
             >
                 <span className="text-xl">🛡️</span>
@@ -260,7 +260,7 @@ export function BackupManager() {
                         {/* GitHub 설정 */}
                         <div className="space-y-3">
                             <div className="flex justify-between items-center">
-                                <h4 className="text-xs font-black text-indigo-500 uppercase tracking-widest">GitHub 동기화</h4>
+                                <h4 className="text-xs font-black text-yellow-600 uppercase tracking-widest">GitHub 동기화</h4>
                                 <button
                                     onClick={() => setShowSettings(!showSettings)}
                                     className="text-[10px] bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-500"
@@ -312,8 +312,8 @@ export function BackupManager() {
                                         className={`w-full p-2 rounded-xl border text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}`}
                                     />
                                 </div>
-                                <div className="flex items-center justify-between p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800">
-                                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                                <div className="flex items-center justify-between p-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800">
+                                    <span className="text-xs font-bold text-yellow-700 dark:text-yellow-400">
                                         ⚡ 실시간 자동 동기화
                                     </span>
                                     <label className="relative inline-flex items-center cursor-pointer">
@@ -323,14 +323,14 @@ export function BackupManager() {
                                             checked={autoSync}
                                             onChange={(e) => setAutoSync(e.target.checked)}
                                         />
-                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-400"></div>
                                     </label>
                                 </div>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleGitHubPush}
                                         disabled={isLoading}
-                                        className="flex-1 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 disabled:opacity-50"
+                                        className="flex-1 py-2 bg-yellow-400 text-gray-900 rounded-xl text-xs font-bold hover:bg-yellow-500 disabled:opacity-50"
                                     >
                                         GitHub로 백업
                                     </button>
