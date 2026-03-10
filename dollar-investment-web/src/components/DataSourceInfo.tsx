@@ -39,7 +39,7 @@ export function DataSourceInfo({
         <div className="mt-4 space-y-4 text-sm">
           {/* 환율 데이터 출처 */}
           <div className={`p-4 rounded-lg ${
-            theme === 'dark' ? 'bg-blue-900' : 'bg-blue-50'
+            theme === 'dark' ? 'bg-blue-900' : 'bg-gray-100'
           }`}>
             <h4 className={`font-semibold mb-2 ${
               theme === 'dark' ? 'text-gray-200' : 'text-gray-700'

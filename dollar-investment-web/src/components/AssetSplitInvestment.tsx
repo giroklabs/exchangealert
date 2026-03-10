@@ -131,7 +131,7 @@ function SingleAssetManager({
                             onChange={(e) => handleSettingUpdate('assetName', e.target.value)}
                             className={`text-2xl font-black bg-transparent border-b-2 border-transparent hover:border-indigo-300 focus:border-indigo-500 focus:outline-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
                         />
-                        <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                        <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
                             전체 수익률: {totalRoi >= 0 ? '+' : ''}{totalRoi.toFixed(2)}% ({Math.round(totalProfit).toLocaleString()}원)
                         </div>
                     </div>
@@ -145,7 +145,7 @@ function SingleAssetManager({
                     </button>
                     <button
                         onClick={onDelete}
-                        className="px-4 py-2 text-xs font-bold rounded-xl bg-red-50 text-red-500 hover:bg-red-100"
+                        className="px-4 py-2 text-xs font-bold rounded-xl bg-red-50 text-gray-900 dark:text-gray-100 font-bold hover:bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                     >
                         종목 삭제
                     </button>
@@ -252,16 +252,16 @@ function SingleAssetManager({
                         <div
                             key={slot.number}
                             className={`relative p-4 rounded-2xl border-2 transition-all ${slot.isActive
-                                ? 'border-green-500/50 bg-green-500/5'
+                                ? 'border-gray-800 dark:border-gray-200/50 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900/5'
                                 : 'border-gray-200 bg-gray-50/50'
                                 } ${theme === 'dark' ? 'border-gray-700 bg-gray-900/30' : ''}`}
                         >
                             <div className="flex justify-between items-center mb-4">
-                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${slot.isActive ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${slot.isActive ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white' : 'bg-gray-200 text-gray-500'}`}>
                                     Slot {slot.number}
                                 </span>
                                 {slot.isActive && (
-                                    <span className={`text-[10px] font-bold ${slotRoi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                    <span className={`text-[10px] font-bold ${slotRoi >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
                                         {slotRoi >= 0 ? '▲' : '▼'} {Math.abs(slotRoi).toFixed(2)}%
                                     </span>
                                 )}
@@ -275,7 +275,7 @@ function SingleAssetManager({
                                     </div>
                                     <div className="flex justify-between text-[11px]">
                                         <span className="text-gray-400">목표가</span>
-                                        <span className="text-red-400 font-bold">{Math.round(slot.targetPrice!).toLocaleString()}원</span>
+                                        <span className="text-gray-700 dark:text-gray-300 font-bold">{Math.round(slot.targetPrice!).toLocaleString()}원</span>
                                     </div>
                                     <div className="flex justify-between text-[11px]">
                                         <span className="text-gray-400">수량</span>
@@ -287,7 +287,7 @@ function SingleAssetManager({
                                     </div>
                                     <button
                                         onClick={() => handleSell(slot.number)}
-                                        className={`w-full py-2 rounded-xl text-xs font-bold ${canSell ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-500'}`}
+                                        className={`w-full py-2 rounded-xl text-xs font-bold ${canSell ? 'bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 text-white' : 'bg-gray-200 text-gray-500'}`}
                                     >
                                         {canSell ? '💰 매도 실행' : '대기 중'}
                                     </button>

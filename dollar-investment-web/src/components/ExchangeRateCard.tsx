@@ -60,7 +60,7 @@ export function ExchangeRateCard({ rate, average, isLoading }: ExchangeRateCardP
             className={`text-sm font-medium ${
               isBelowAverage 
                 ? (theme === 'dark' ? 'text-green-400' : 'text-green-600')
-                : (theme === 'dark' ? 'text-red-400' : 'text-red-600')
+                : (theme === 'dark' ? 'text-gray-700 dark:text-gray-300' : 'text-gray-900 dark:text-gray-100')
             }`}
           >
             {isBelowAverage ? '↓' : '↑'} 52주 평균: {average.toLocaleString('ko-KR')}

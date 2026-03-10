@@ -108,7 +108,7 @@ export function SevenSplitInvestment() {
                     </h2>
                     <button
                         onClick={handleReset}
-                        className="text-sm px-3 py-1 bg-red-100 text-red-600 rounded-md hover:bg-red-200"
+                        className="text-sm px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-gray-900 dark:text-gray-100 rounded-md hover:bg-red-200"
                     >
                         초기화
                     </button>
@@ -163,13 +163,13 @@ export function SevenSplitInvestment() {
             </div>
 
             {/* 현재 상태 정보 */}
-            <div className={`p-4 rounded-xl flex justify-between items-center ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
-                <span className={`font-medium ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'}`}>
+            <div className={`p-4 rounded-xl flex justify-between items-center ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-100'}`}>
+                <span className={`font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900 dark:text-white'}`}>
                     현재 원/달러 환율: <span className="text-xl font-bold">{currentRate.toLocaleString()}원</span>
                 </span>
                 <div className="flex gap-4 text-sm">
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 rounded-full"></div>
                         <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>운영 중</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -204,12 +204,12 @@ export function SevenSplitInvestment() {
                         <div
                             key={slot.number}
                             className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${slot.isActive
-                                ? 'border-green-500 shadow-lg shadow-green-500/20'
+                                ? 'border-gray-800 dark:border-gray-200 shadow-lg shadow-gray-500/10'
                                 : 'border-transparent shadow-md hover:border-gray-300'
                                 } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
                         >
                             {/* 슬롯 헤더 */}
-                            <div className={`p-4 flex justify-between items-center ${slot.isActive ? 'bg-green-500 text-white' : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')
+                            <div className={`p-4 flex justify-between items-center ${slot.isActive ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white' : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')
                                 }`}>
                                 <span className="font-bold">Slot {slot.number} {isSlot1 && '(Base)'}</span>
                                 <span className={`text-xs px-2 py-1 rounded-full ${slot.isActive ? 'bg-white/20' : (theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200')
@@ -228,7 +228,7 @@ export function SevenSplitInvestment() {
                                         </div>
                                         <div className="flex justify-between text-sm">
                                             <span className="text-gray-500">목표가</span>
-                                            <span className="font-bold text-blue-500">{slot.targetPrice?.toFixed(2)}원</span>
+                                            <span className="font-bold text-gray-600 dark:text-gray-300">{slot.targetPrice?.toFixed(2)}원</span>
                                         </div>
                                         <div className="flex justify-between text-sm">
                                             <span className="text-gray-500">매수수량</span>
@@ -241,18 +241,18 @@ export function SevenSplitInvestment() {
                                         <div className="pt-2 border-t border-dashed border-gray-200">
                                             <div className="flex justify-between items-end">
                                                 <span className="text-xs text-gray-500">현재 수익률</span>
-                                                <span className={`text-lg font-black ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                                <span className={`text-lg font-black ${roi >= 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}`}>
                                                     {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
                                                 </span>
                                             </div>
-                                            <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
+                                            <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-gray-800 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>
                                                 {profit >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
                                             </div>
                                         </div>
                                         <button
                                             onClick={() => handleSell(slot.number)}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canSell
-                                                ? 'bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/30'
+                                                ? 'bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 text-white hover:bg-gray-800 dark:hover:bg-gray-200 shadow-lg shadow-gray-500/10'
                                                 : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                                                 }`}
                                         >
@@ -278,7 +278,7 @@ export function SevenSplitInvestment() {
                                             onClick={() => handleBuy(slot.number)}
                                             disabled={!canBuy}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
-                                                ? (isRecommendBuy ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30' : 'bg-blue-400 text-white hover:bg-blue-500 shadow-md')
+                                                ? (isRecommendBuy ? 'bg-gray-900 dark:bg-gray-100 dark:text-black text-white hover:bg-black dark:hover:bg-white shadow-lg shadow-gray-500/10' : 'bg-gray-600 dark:bg-gray-400 text-white hover:bg-gray-800 dark:bg-gray-200 dark:text-black shadow-md')
                                                 : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                 }`}
                                         >

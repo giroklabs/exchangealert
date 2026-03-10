@@ -51,38 +51,38 @@ export function MarketDashboard() {
             </div>
 
             {/* 시장 향방 예측 섹션 */}
-            <div className={`p-8 rounded-3xl border shadow-xl ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-gradient-to-br from-blue-50 to-white border-blue-100'}`}>
+            <div className={`p-8 rounded-3xl border shadow-xl ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-gradient-to-br from-blue-50 to-white border-gray-200'}`}>
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1 w-full space-y-4">
                         <div className="flex items-center gap-3">
                             <span className="text-3xl">🎯</span>
-                            <h3 className={`text-2xl font-black ${theme === 'dark' ? 'text-blue-400' : 'text-blue-800'}`}>실시간 원/달러 환율 예측 모델</h3>
+                            <h3 className={`text-2xl font-black ${theme === 'dark' ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>실시간 원/달러 환율 예측 모델</h3>
                         </div>
 
                         <div className="space-y-6">
                             <div className="flex justify-between items-end">
                                 <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>시장 종합 심리</span>
-                                <span className={`text-3xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
+                                <span className={`text-3xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-gray-900 dark:text-gray-100 font-bold' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-gray-600 dark:text-gray-300' : 'text-gray-500'}`}>
                                     {data?.forecast?.sentiment || '분석 중...'}
                                 </span>
                             </div>
 
                             <div className="relative pt-1">
                                 <div className="flex mb-2 items-center justify-between font-bold text-xs uppercase">
-                                    <span className="text-blue-500">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
-                                    <span className="text-red-500">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
+                                    <span className="text-gray-600 dark:text-gray-300">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
+                                    <span className="text-gray-900 dark:text-gray-100 font-bold">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
                                 </div>
                                 <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                    <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-1000"></div>
-                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500 transition-all duration-1000"></div>
+                                    <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-800 dark:bg-gray-200 dark:text-black transition-all duration-1000"></div>
+                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 transition-all duration-1000"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div className="hidden lg:flex w-48 h-48 items-center justify-center rounded-full border-8 border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                        <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
-                        <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
+                        <div className={`absolute bottom-0 w-full bg-gray-800 dark:bg-gray-200 dark:text-black transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
+                        <div className={`absolute top-0 w-full bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
                         <div className="z-10 text-center">
                             <div className="text-sm font-bold text-gray-400">종합 점수</div>
                             <div className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
@@ -138,7 +138,7 @@ export function MarketDashboard() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
                     <div className="space-y-3">
-                        <h4 className="font-bold text-red-500">환율 상승 요인 (원화 약세)</h4>
+                        <h4 className="font-bold text-gray-900 dark:text-gray-100 font-bold">환율 상승 요인 (원화 약세)</h4>
                         <ul className={`space-y-2 list-disc list-inside ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                             <li>미국 기준금리 인상 (달러 강세)</li>
                             <li>미국 주요 경제지표(고용, CPI) 호조</li>
@@ -148,7 +148,7 @@ export function MarketDashboard() {
                         </ul>
                     </div>
                     <div className="space-y-3">
-                        <h4 className="font-bold text-blue-500">환율 하락 요인 (원화 강세)</h4>
+                        <h4 className="font-bold text-gray-600 dark:text-gray-300">환율 하락 요인 (원화 강세)</h4>
                         <ul className={`space-y-2 list-disc list-inside ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                             <li>한국 기준금리 인상 (원화 가치 증가)</li>
                             <li>무역수지 흑자 기록 (달러 유입)</li>
@@ -171,7 +171,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
     return (
         <div className={`p-5 rounded-2xl transition-all duration-300 border-2 hover:scale-[1.01] ${theme === 'dark'
             ? 'bg-gray-800/40 border-gray-700 hover:border-gray-500'
-            : 'bg-white border-gray-50 hover:border-blue-100 shadow-sm hover:shadow-md'
+            : 'bg-white border-gray-50 hover:border-gray-200 shadow-sm hover:shadow-md'
             }`}>
             <div className="flex justify-between items-start mb-3">
                 <div className="flex-1">
@@ -188,7 +188,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                     <div className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                         {indicator.value}{indicator.unit}
                     </div>
-                    <div className={`flex items-center justify-end gap-1 text-xs font-bold mt-1 ${isImpactUp ? 'text-red-500' : isImpactDown ? 'text-blue-500' : 'text-gray-400'
+                    <div className={`flex items-center justify-end gap-1 text-xs font-bold mt-1 ${isImpactUp ? 'text-gray-900 dark:text-gray-100 font-bold' : isImpactDown ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400'
                         }`}>
                         <span>환율 영향:</span>
                         <span className="text-sm">{isImpactUp ? '▲ 상승' : isImpactDown ? '▼ 하락' : '─'}</span>
@@ -239,7 +239,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
 
             {!indicator.history && (
                 <div className="mt-4 h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${isImpactUp ? 'bg-red-500 w-2/3' : isImpactDown ? 'bg-blue-500 w-1/3' : 'bg-gray-400 w-1/2'
+                    <div className={`h-full rounded-full ${isImpactUp ? 'bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 w-2/3' : isImpactDown ? 'bg-gray-800 dark:bg-gray-200 dark:text-black w-1/3' : 'bg-gray-400 w-1/2'
                         }`}></div>
                 </div>
             )}

@@ -355,9 +355,9 @@ export function BackupManager() {
                         </div>
 
                         {/* 상세 도움말 */}
-                        <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-xl border border-blue-100 dark:border-blue-800">
-                            <h5 className="text-[10px] font-black text-blue-500 mb-1">🆘 오류가 계속되나요?</h5>
-                            <ul className="text-[10px] text-blue-700 dark:text-blue-300 space-y-1">
+                        <div className="bg-gray-100 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <h5 className="text-[10px] font-black text-gray-600 dark:text-gray-300 mb-1">🆘 오류가 계속되나요?</h5>
+                            <ul className="text-[10px] text-gray-800 dark:text-gray-200 dark:text-blue-300 space-y-1">
                                 <li>• 토큰 발급 시 <strong>repo</strong> 권한을 체크했는지 확인해 주세요.</li>
                                 <li>• 브라우저의 <strong>광고 차단기(AdBlock)</strong>를 끄고 시도해 주세요.</li>
                                 <li>• 리포지토리 이름이 <strong>exchangealert</strong>가 맞는지 확인해 주세요.</li>
@@ -384,17 +384,17 @@ export function BackupManager() {
                         {/* 상태 메시지 */}
                         {status && (
                             <div className={`p-3 rounded-xl text-[11px] font-bold text-center ${status.includes('성공') ? 'bg-green-100 text-green-600' :
-                                status.includes('오류') ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
+                                status.includes('오류') ? 'bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-gray-900 dark:text-gray-100' : 'bg-gray-200 text-gray-800 dark:text-gray-200'
                                 }`}>
                                 {status}
                             </div>
                         )}
 
-                        <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl border border-amber-100 dark:border-amber-800 space-y-2">
-                            <p className="text-[10px] text-amber-700 dark:text-amber-200 leading-relaxed font-bold">
+                        <div className="bg-gray-50 dark:bg-gray-800/20 p-3 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2">
+                            <p className="text-[10px] text-gray-700 dark:text-gray-200 leading-relaxed font-bold">
                                 💡 스플릿, 자산 스플릿, 환차익 계산기의 데이터가 GitHub 리포지토리 파일 하나로 안전하게 통합 관리됩니다.
                             </p>
-                            <p className="text-[10px] text-amber-600 dark:text-amber-300 leading-relaxed">
+                            <p className="text-[10px] text-gray-600 dark:text-gray-300 leading-relaxed">
                                 🔔 <strong>자동 동기화 설정 시:</strong> 버튼을 누르거나 키보드 입력이 끝난 후 약 3초 뒤에 백그라운드에서 조용히 저장됩니다.
                             </p>
                         </div>

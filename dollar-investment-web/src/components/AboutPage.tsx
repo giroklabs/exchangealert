@@ -45,11 +45,11 @@ export function AboutPage() {
             </div>
 
             {/* Info Section */}
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800 mt-8">
-                <h3 className="text-sm font-bold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
+            <div className="bg-gray-100 dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 mt-8">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white dark:text-blue-300 mb-3 flex items-center gap-2">
                     <span>💡</span> 투자 유의사항 및 면책 조항
                 </h3>
-                <ul className="text-xs text-blue-700 dark:text-blue-400 space-y-2 leading-relaxed">
+                <ul className="text-xs text-gray-800 dark:text-gray-200 dark:text-gray-500 dark:text-gray-400 space-y-2 leading-relaxed">
                     <li>• 본 사이트에서 제공하는 환율 예측, 시장 지표, AI 분석 결과는 <strong>참고용 정보</strong>일 뿐입니다.</li>
                     <li>• 야후 파이낸스의 일부 실시간 데이터 및 FRED 지표는 수집 시점에 따라 실제 시장가와 미세한 차이나 지연이 있을 수 있습니다.</li>
                     <li>• 모든 투자의 최종 결정과 그에 따른 결과는 투자자 본인에게 책임이 귀속됩니다.</li>

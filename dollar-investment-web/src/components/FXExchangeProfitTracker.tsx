@@ -130,16 +130,16 @@ export function FXExchangeProfitTracker() {
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>평가 손익 (미실현)</h3>
-                    <p className={`text-2xl font-bold ${unrealizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                    <p className={`text-2xl font-bold ${unrealizedProfit >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
                         {unrealizedProfit >= 0 ? '+' : ''}{Math.round(unrealizedProfit).toLocaleString()}원
                     </p>
-                    <p className={`text-sm mt-1 ${unrealizedProfit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
+                    <p className={`text-sm mt-1 ${unrealizedProfit >= 0 ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>
                         {unrealizedRoi.toFixed(2)}%
                     </p>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>실현 손익 (누적)</h3>
-                    <p className={`text-2xl font-bold ${realizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                    <p className={`text-2xl font-bold ${realizedProfit >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
                         {realizedProfit >= 0 ? '+' : ''}{Math.round(realizedProfit).toLocaleString()}원
                     </p>
                     <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -149,9 +149,9 @@ export function FXExchangeProfitTracker() {
             </div>
 
             {/* 현재 환율 정보 바 */}
-            <div className={`p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-center ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
+            <div className={`p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-center ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-100'}`}>
                 <div className="flex items-center gap-3">
-                    <span className={`font-medium ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'}`}>
+                    <span className={`font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900 dark:text-white'}`}>
                         적용 환율:
                     </span>
                     {isEditingRate ? (
@@ -166,7 +166,7 @@ export function FXExchangeProfitTracker() {
                             <button onClick={() => {
                                 setManualRate(Number(tempRate) || apiRate);
                                 setIsEditingRate(false);
-                            }} className="px-3 py-1.5 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition shadow-sm font-bold">적용</button>
+                            }} className="px-3 py-1.5 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white rounded-lg text-sm hover:bg-green-600 transition shadow-sm font-bold">적용</button>
                             <button onClick={() => {
                                 setManualRate(null);
                                 setIsEditingRate(false);
@@ -182,7 +182,7 @@ export function FXExchangeProfitTracker() {
                             title="환율 직접 수정하기"
                         >
                             <span className="text-xl font-bold">{currentRate.toLocaleString()}원</span>
-                            <span className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded">✏️ 편집</span>
+                            <span className="text-xs text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-200 dark:bg-blue-900 px-2 py-1 rounded">✏️ 편집</span>
                             {manualRate !== null && (
                                 <span className="text-[10px] bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full font-bold ml-1 border border-yellow-200">수동</span>
                             )}
@@ -191,7 +191,7 @@ export function FXExchangeProfitTracker() {
                 </div>
                 <button
                     onClick={() => setIsAdding(!isAdding)}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-gray-100 dark:text-black text-white rounded-lg hover:bg-black dark:hover:bg-white transition-colors shadow-lg shadow-gray-500/10"
                 >
                     {isAdding ? '취소' : '➕ 새 투자 기록'}
                 </button>
@@ -249,7 +249,7 @@ export function FXExchangeProfitTracker() {
                     <div className="mt-6 flex justify-end">
                         <button
                             onClick={handleAddInvestment}
-                            className="px-8 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all shadow-lg shadow-green-500/20"
+                            className="px-8 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all shadow-lg shadow-gray-500/10"
                         >
                             기록 저장하기
                         </button>
@@ -290,7 +290,7 @@ export function FXExchangeProfitTracker() {
                                         <tr key={inv.id} className={`${theme === 'dark' ? 'hover:bg-gray-750' : 'hover:bg-gray-50'} transition-colors`}>
                                             <td className="p-4">
                                                 <span className={`px-2 py-1 rounded text-xs font-bold ${isHolding
-                                                    ? 'bg-blue-100 text-blue-700'
+                                                    ? 'bg-gray-200 text-gray-800 dark:text-gray-200'
                                                     : 'bg-green-100 text-green-700'
                                                     }`}>
                                                     {isHolding ? '보유 중' : '매도 완료'}
@@ -313,10 +313,10 @@ export function FXExchangeProfitTracker() {
                                                 {!isHolding && <div className="text-xs text-gray-500">{inv.sellDate}</div>}
                                             </td>
                                             <td className="p-4">
-                                                <div className={`font-bold ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                                <div className={`font-bold ${roi >= 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}`}>
                                                     {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
                                                 </div>
-                                                <div className={`text-xs ${roi >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
+                                                <div className={`text-xs ${roi >= 0 ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>
                                                     {roi >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
                                                 </div>
                                             </td>
@@ -337,14 +337,14 @@ export function FXExchangeProfitTracker() {
                                                     ) : (
                                                         <button
                                                             onClick={() => handleRevertToHolding(inv.id)}
-                                                            className="px-2 py-1 bg-blue-100 text-blue-600 rounded text-xs hover:bg-blue-200"
+                                                            className="px-2 py-1 bg-gray-200 text-gray-800 dark:text-gray-200 rounded text-xs hover:bg-blue-200"
                                                         >
                                                             보유 전환
                                                         </button>
                                                     )}
                                                     <button
                                                         onClick={() => handleDeleteInvestment(inv.id)}
-                                                        className="px-2 py-1 bg-red-100 text-red-600 rounded text-xs hover:bg-red-200"
+                                                        className="px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-gray-900 dark:text-gray-100 rounded text-xs hover:bg-red-200"
                                                     >
                                                         삭제
                                                     </button>

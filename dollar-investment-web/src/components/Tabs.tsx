@@ -18,8 +18,8 @@ export function Tabs({ activeTab, onTabChange, tabs }: TabsProps) {
                         key={tab.id}
                         onClick={() => onTabChange(tab.id)}
                         className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${activeTab === tab.id
-                            ? (theme === 'dark' ? 'bg-blue-600 text-white shadow-lg' : 'bg-blue-500 text-white shadow-md')
-                            : (theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50')
+                            ? (theme === 'dark' ? 'bg-gray-100 text-gray-900 shadow-md' : 'bg-black text-white shadow-md')
+                            : (theme === 'dark' ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-800' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100')
                             }`}
                     >
                         {tab.icon && <span>{tab.icon}</span>}

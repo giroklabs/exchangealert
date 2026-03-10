@@ -90,7 +90,7 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
               permission.granted
                 ? 'text-green-400'
                 : permission.denied
-                ? 'text-red-400'
+                ? 'text-gray-700 dark:text-gray-300'
                 : 'text-yellow-400'
             }`}
           >
@@ -107,7 +107,7 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
           <button
             onClick={handleRequestPermission}
             disabled={isRequesting}
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-2 bg-gray-800 dark:bg-gray-200 dark:text-black text-white rounded-lg hover:bg-gray-900 dark:bg-gray-100 dark:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isRequesting ? '요청 중...' : '🔔 알림 권한 요청'}
           </button>
@@ -124,7 +124,7 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
               알림이 거부되었습니다. 브라우저 설정에서 알림 권한을 허용해주세요.
             </p>
             <p className={`text-xs mt-1 ${
-              theme === 'dark' ? 'text-red-300' : 'text-red-600'
+              theme === 'dark' ? 'text-red-300' : 'text-gray-900 dark:text-gray-100'
             }`}>
               Safari: 환경설정 → 웹사이트 → 알림
             </p>
@@ -135,7 +135,7 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
         {permission.granted && (
           <button
             onClick={handleTestNotification}
-            className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+            className="w-full px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white rounded-lg hover:bg-green-600 transition-colors"
           >
             🔔 테스트 알림 보내기
           </button>

@@ -76,7 +76,7 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
   };
 
   const getBgColor = () => {
-    if (signal.score >= 3) return theme === 'dark' ? 'bg-green-900 border-green-500' : 'bg-green-50 border-green-500';
+    if (signal.score >= 3) return theme === 'dark' ? 'bg-green-900 border-gray-800 dark:border-gray-200' : 'bg-green-50 border-gray-800 dark:border-gray-200';
     if (signal.score === 2) return theme === 'dark' ? 'bg-yellow-900/30 border-yellow-500' : 'bg-yellow-50 border-yellow-500';
     return theme === 'dark' ? 'bg-red-900 border-red-500' : 'bg-red-50 border-red-500';
   };
@@ -127,9 +127,9 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
         ))}
       </div>
 
-      <div className={`mt-6 p-4 rounded-lg ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'
+      <div className={`mt-6 p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-100'
         }`}>
-        <p className={`text-sm ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'
+        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900 dark:text-white'
           }`}>
           <strong>알림:</strong> 4개 조건 중 3개 이상 만족 시 '매수 시작 적합' 단계로 판단합니다.
           현재 점수는 <strong>{signal.score}점</strong>입니다.

@@ -30,7 +30,7 @@ export function InvestmentAnalysis() {
           }`}>
           <h2 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-red-200' : 'text-red-800'
             }`}>오류 발생</h2>
-          <p className={theme === 'dark' ? 'text-red-300' : 'text-red-600'}>{error}</p>
+          <p className={theme === 'dark' ? 'text-red-300' : 'text-gray-900 dark:text-gray-100'}>{error}</p>
         </div>
       </div>
     );
@@ -84,13 +84,13 @@ export function InvestmentAnalysis() {
       <div className="flex justify-center gap-4">
         <button
           onClick={() => setShowCharts(!showCharts)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 bg-gray-800 dark:bg-gray-200 dark:text-black text-white rounded-lg hover:bg-gray-900 dark:bg-gray-100 dark:text-black transition-colors"
         >
           {showCharts ? '📉 차트 숨기기' : '📈 차트 보기'}
         </button>
         <button
           onClick={() => setShowHistory(!showHistory)}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          className="px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white rounded-lg hover:bg-green-600 transition-colors"
         >
           {showHistory ? '📋 전체 데이터 숨기기' : '📋 전체 데이터 보기'}
         </button>
