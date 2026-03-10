@@ -11,6 +11,7 @@ import { useTheme } from './contexts/ThemeContext';
 import { UserProfile } from './components/UserProfile';
 import { BackupManager } from './components/BackupManager';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
+import logo from './assets/logo.png';
 import './App.css';
 
 function App() {
@@ -32,7 +33,8 @@ function App() {
       {/* 헤더 */}
       <div className="max-w-6xl mx-auto px-4 pt-8">
         <header className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="로장보로" className="w-10 h-10 rounded-xl shadow-sm" />
             <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
               달러 인베스트
             </h1>
