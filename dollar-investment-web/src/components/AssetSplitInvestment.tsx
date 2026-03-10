@@ -252,16 +252,22 @@ function SingleAssetManager({
                         <div
                             key={slot.number}
                             className={`relative p-4 rounded-2xl border-2 transition-all ${slot.isActive
-                                ? 'border-gray-800 dark:border-gray-200/50 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900/5'
-                                : 'border-gray-200 bg-gray-50/50'
-                                } ${theme === 'dark' ? 'border-gray-700 bg-gray-900/30' : ''}`}
+                                    ? (theme === 'dark' ? 'border-yellow-400 bg-gray-800' : 'border-yellow-400 bg-white shadow-md')
+                                    : (theme === 'dark' ? 'border-gray-700 bg-gray-900/30' : 'border-gray-200 bg-gray-50/50')
+                                }`}
                         >
                             <div className="flex justify-between items-center mb-4">
-                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${slot.isActive ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${slot.isActive
+                                        ? 'bg-yellow-400 text-gray-900'
+                                        : (theme === 'dark' ? 'bg-gray-700 text-gray-400' : 'bg-gray-200 text-gray-500')
+                                    }`}>
                                     Slot {slot.number}
                                 </span>
                                 {slot.isActive && (
-                                    <span className={`text-[10px] font-bold ${slotRoi >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
+                                    <span className={`text-[10px] font-bold ${slotRoi >= 0
+                                            ? 'text-yellow-500 dark:text-yellow-400'
+                                            : (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
+                                        }`}>
                                         {slotRoi >= 0 ? '▲' : '▼'} {Math.abs(slotRoi).toFixed(2)}%
                                     </span>
                                 )}
@@ -270,39 +276,45 @@ function SingleAssetManager({
                             {slot.isActive ? (
                                 <div className="space-y-2 mb-4">
                                     <div className="flex justify-between text-[11px]">
-                                        <span className="text-gray-400">매수가</span>
-                                        <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{slot.buyPrice?.toLocaleString()}원</span>
+                                        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>매수가</span>
+                                        <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{slot.buyPrice?.toLocaleString()}원</span>
                                     </div>
                                     <div className="flex justify-between text-[11px]">
-                                        <span className="text-gray-400">목표가</span>
-                                        <span className="text-gray-700 dark:text-gray-300 font-bold">{Math.round(slot.targetPrice!).toLocaleString()}원</span>
+                                        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>목표가</span>
+                                        <span className="font-bold text-yellow-500 dark:text-yellow-400">{Math.round(slot.targetPrice!).toLocaleString()}원</span>
                                     </div>
                                     <div className="flex justify-between text-[11px]">
-                                        <span className="text-gray-400">수량</span>
-                                        <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{slot.quantity.toFixed(2)}</span>
+                                        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>수량</span>
+                                        <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{slot.quantity.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between text-[11px]">
-                                        <span className="text-gray-400">총투자액</span>
-                                        <span className={theme === 'dark' ? 'text-white' : 'text-gray-700'}>{Math.round(slot.investedAmount || 0).toLocaleString()}원</span>
+                                        <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>총투자액</span>
+                                        <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{Math.round(slot.investedAmount || 0).toLocaleString()}원</span>
                                     </div>
                                     <button
                                         onClick={() => handleSell(slot.number)}
-                                        className={`w-full py-2 rounded-xl text-xs font-bold ${canSell ? 'bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 text-white' : 'bg-gray-200 text-gray-500'}`}
+                                        className={`w-full py-2 rounded-xl text-xs font-bold mt-1 ${canSell
+                                                ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
+                                                : (theme === 'dark' ? 'bg-gray-700 text-gray-500' : 'bg-gray-100 text-gray-400')
+                                            }`}
                                     >
                                         {canSell ? '💰 매도 실행' : '대기 중'}
                                     </button>
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center h-24 mb-4">
-                                    <span className="text-[10px] text-gray-400 text-center px-4">
+                                    <span className={`text-[10px] text-center px-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
                                         {isSlot1 ? '기준가 도달 시 진입' : (prevSlot?.isActive ? `${Math.round(recommendedBuyPrice).toLocaleString()}원 이하` : '이전 슬롯 대기')}
                                     </span>
                                     <button
                                         onClick={() => handleBuy(slot.number)}
                                         disabled={!canBuy}
-                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy ? (isRecommendBuy ? 'bg-yellow-400 text-gray-900' : 'bg-yellow-300 text-gray-900 hover:bg-yellow-300') : 'bg-transparent border border-dashed border-gray-300 text-gray-300'}`}
+                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy
+                                                ? (isRecommendBuy ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500' : 'bg-yellow-200 text-gray-700 hover:bg-yellow-300')
+                                                : 'bg-transparent border border-dashed border-gray-300 text-gray-400 cursor-not-allowed'
+                                            }`}
                                     >
-                                        {canBuy ? (isRecommendBuy ? '매수' : '임의 매수') : '매수'}
+                                        {canBuy ? (isRecommendBuy ? '🛒 매수' : '임의 매수') : '매수 대기'}
                                     </button>
                                 </div>
                             )}
