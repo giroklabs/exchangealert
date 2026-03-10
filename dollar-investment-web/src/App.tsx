@@ -26,13 +26,12 @@ function App() {
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 py-8 ${theme === 'dark' ? 'bg-[#0a0a0c] text-gray-100' : 'bg-gray-50 text-gray-900'
-      }`}>
-      <div className="max-w-6xl mx-auto px-4">
+    <div className={`min-h-screen transition-colors duration-500 ${theme === 'dark' ? 'bg-[#0a0a0c] text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+      {/* 헤더 */}
+      <div className="max-w-6xl mx-auto px-4 pt-8">
         <header className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-2">
-            <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-              }`}>
+            <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
               달러 인베스트
             </h1>
           </div>
@@ -41,13 +40,21 @@ function App() {
             <ThemeToggle />
           </div>
         </header>
+      </div>
 
-        <Tabs
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          tabs={tabs}
-        />
+      {/* 전체 너비 탭바 */}
+      <div className={`w-full border-b mb-8 ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-100'} shadow-sm`}>
+        <div className="flex">
+          <Tabs
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            tabs={tabs}
+          />
+        </div>
+      </div>
 
+      {/* 본문 */}
+      <div className="max-w-6xl mx-auto px-4">
         <main className="transition-all duration-300">
           {activeTab === 'analysis' ? (
             <InvestmentAnalysis />
