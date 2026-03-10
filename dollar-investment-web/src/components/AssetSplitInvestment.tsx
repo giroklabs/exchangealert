@@ -242,7 +242,8 @@ function SingleAssetManager({
                         recommendedBuyPrice = prevSlot.buyPrice * (1 - investment.settings.gapPercent / 100);
                     }
 
-                    const canBuy = currentPrice > 0 && !slot.isActive && (isSlot1 || (prevSlot && prevSlot.isActive && currentPrice <= recommendedBuyPrice));
+                    const isRecommendBuy = currentPrice > 0 && !slot.isActive && (isSlot1 || (prevSlot && prevSlot.isActive && currentPrice <= recommendedBuyPrice));
+                    const canBuy = currentPrice > 0 && !slot.isActive;
                     const canSell = slot.isActive && currentPrice >= (slot.targetPrice || 0);
                     const slotRoi = slot.isActive ? ((currentPrice / slot.buyPrice!) - 1) * 100 : 0;
 
@@ -298,9 +299,9 @@ function SingleAssetManager({
                                     <button
                                         onClick={() => handleBuy(slot.number)}
                                         disabled={!canBuy}
-                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy ? 'bg-indigo-600 text-white' : 'bg-transparent border border-dashed border-gray-300 text-gray-300'}`}
+                                        className={`mt-3 w-full py-2 rounded-xl text-xs font-bold transition-all ${canBuy ? (isRecommendBuy ? 'bg-indigo-600 text-white' : 'bg-indigo-300 text-white hover:bg-indigo-400') : 'bg-transparent border border-dashed border-gray-300 text-gray-300'}`}
                                     >
-                                        매수
+                                        {canBuy ? (isRecommendBuy ? '매수' : '임의 매수') : '매수'}
                                     </button>
                                 </div>
                             )}

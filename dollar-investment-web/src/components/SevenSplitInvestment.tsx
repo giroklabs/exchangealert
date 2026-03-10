@@ -209,7 +209,8 @@ export function SevenSplitInvestment() {
                         recommendedBuyPrice = prevSlot.buyPrice - settings.gapWon;
                     }
 
-                    const canBuy = !slot.isActive && (isSlot1 || (prevSlot && prevSlot.isActive && currentRate <= recommendedBuyPrice));
+                    const isRecommendBuy = !slot.isActive && (isSlot1 || (prevSlot && prevSlot.isActive && currentRate <= recommendedBuyPrice));
+                    const canBuy = !slot.isActive;
                     const canSell = slot.isActive && currentRate >= (slot.targetPrice || 0);
 
                     const profit = slot.isActive ? (currentRate - slot.buyPrice!) * slot.amount : 0;
@@ -293,13 +294,13 @@ export function SevenSplitInvestment() {
                                             onClick={() => handleBuy(slot.number)}
                                             disabled={!canBuy}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
-                                                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30'
+                                                ? (isRecommendBuy ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30' : 'bg-blue-400 text-white hover:bg-blue-500 shadow-md')
                                                 : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                 }`}
                                         >
-                                            {canBuy ? '🛒 매수 실행' : '매수 대기'}
+                                            {canBuy ? (isRecommendBuy ? '🛒 매수 실행' : '🛒 임의 매수') : '매수 대기'}
                                         </button>
-                                        {canBuy && (
+                                        {isRecommendBuy && (
                                             <div className="absolute top-0 left-0 w-full h-1 bg-blue-500 animate-pulse"></div>
                                         )}
                                     </>
