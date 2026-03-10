@@ -10,6 +10,7 @@ import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
 import { UserProfile } from './components/UserProfile';
 import { BackupManager } from './components/BackupManager';
+import { ExchangeRateNews } from './components/ExchangeRateNews';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
     { id: 'sevensplit', label: '환율 스플릿', icon: '📈' },
     { id: 'asset-split', label: '자산 스플릿', icon: '🏦' },
     { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
+    { id: 'news', label: '환율 뉴스', icon: '📰' },
     // { id: 'about', label: '소개', icon: '❓' }, // 임시 숨김 처리
   ];
 
@@ -64,6 +66,8 @@ function App() {
             <AssetSplitInvestment />
           ) : activeTab === 'fx-profit' ? (
             <FXExchangeProfitTracker />
+          ) : activeTab === 'news' ? (
+            <ExchangeRateNews />
           ) : activeTab === 'about' ? (
             <AboutPage />
           ) : (
