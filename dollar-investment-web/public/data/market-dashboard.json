@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "157.69",
+      "value": "157.68",
       "trend": "down",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 157.69
+          "value": 157.68
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "88.27",
+      "value": "88.77",
       "trend": "down",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 88.27
+          "value": 88.77
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,505.46",
+      "value": "5,501.97",
       "trend": "up",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 5505.46
+          "value": 5501.97
         }
       ]
     },
@@ -561,14 +561,14 @@
     }
   ],
   "forecast": {
-    "sentiment": "환율 상승 우세",
+    "sentiment": "보통",
     "upProb": 38,
     "downProb": 62,
-    "detailedAnalysis": "한수지입니다. 제공해주신 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n현재 미국 경제의 견조한 흐름이 원/달러 환율 상승 압력을 강하게 가하고 있습니다. 높은 미국 기준금리(3.64%)와 상승하는 미 10년물 국채금리(4.14%)는 달러 자산의 매력을 높이며 자금 유입을 촉진하고, 견고한 미국 GDP 성장률과 상승 추세의 소비자물가지수는 연준의 긴축 기조 유지 심리를 지지하며 달러 강세의 주요 거시적 요인으로 작용합니다. 엔/달러 환율의 상승 추세와 국제 유가, 달러 인덱스의 환율 영향 또한 전반적인 달러 강세 심리를 강화합니다.\n\n반면, 코스피 지수의 상승, 흑자 기조의 경상수지, 그리고 양호한 경제성장��은 원화 강세 요인으로 작용할 수 있습니다. 하지만, 미국과의 상당한 금리 격차(한국 2.5%)가 지속되며 달러 선호 심리를 자극하고, 국내 소비자물가 상승(3.1%) 및 통화량 증가의 환율 영향 또한 원화 약세에 기여하여, 전반적으로 미국 경제의 강력한 지표들이 국내 요인의 긍정적 영향을 상쇄하는 거시적 압력으로 작용합니다.\n\n결론적으로, 미국 경제의 견고함과 지속적인 금리 및 성장률 차이, 그리고 전반적인 달러 강세 심리가 원/달러 환율의 상승을 이끌 가능성이 높습니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-1.5-pro] Status 404: models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-pro] Status 404: models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-pro] Status 404: models/gemini-pro is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
     "score": {
       "upScore": 3,
       "downScore": 5
     }
   },
-  "lastUpdate": "2026. 3. 10. 오전 5:33:11"
+  "lastUpdate": "2026. 3. 10. 오전 5:34:23"
 }
