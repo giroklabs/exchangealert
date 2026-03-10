@@ -17,11 +17,11 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
   const tabs = [
-    { id: 'analysis', label: '투자적정성 분석', icon: '📊' },
-    { id: 'sevensplit', label: '세븐스플릿 투자', icon: '📈' },
-    { id: 'asset-split', label: '자산투자', icon: '🏦' },
-    { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
     { id: 'dashboard', label: '시장 대시보드', icon: '🌍' },
+    { id: 'analysis', label: '투자적정성 분석', icon: '📊' },
+    { id: 'sevensplit', label: '환율 스플릿', icon: '📈' },
+    { id: 'asset-split', label: '자산 스플릿', icon: '🏦' },
+    { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
     // { id: 'about', label: '소개', icon: '❓' }, // 임시 숨김 처리
   ];
 
