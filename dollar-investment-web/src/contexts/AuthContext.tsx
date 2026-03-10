@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, loginWithGoogle, logout } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 interface AuthContextType {
@@ -35,6 +35,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                                 localStorage.setItem(key, JSON.stringify(data[key]));
                             }
                         });
+                    } else {
+                        // 최초 로그인 시 로컬 스토리지에 있는 데이터를 Firestore에 동기화
+                        const localData: Record<string, any> = {};
+                        const keysToSync = ['seven-split-settings', 'seven-split-slots', 'asset-investments-v2', 'fx-investments'];
+
+                        keysToSync.forEach(key => {
+                            const item = localStorage.getItem(key);
+                            if (item) {
+                                try {
+                                    localData[key] = JSON.parse(item);
+                                } catch (e) {
+                                    console.error("Parse error for key", key);
+                                }
+                            }
+                        });
+
+                        if (Object.keys(localData).length > 0) {
+                            localData.lastUpdated = new Date().toISOString();
+                            await setDoc(docRef, localData);
+                        }
                     }
                 } catch (error) {
                     console.error("데이터 동기화 실패:", error);
