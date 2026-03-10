@@ -21,7 +21,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // 테마 변경 시 로컬 스토리지에 저장
     localStorage.setItem('theme', theme);
     // body 클래스 업데이트
-    document.body.className = theme === 'dark' ? 'bg-black text-gray-100' : 'bg-green-50 text-gray-900';
+    document.body.className = theme === 'dark' ? 'bg-black text-gray-100' : 'bg-gray-50 text-gray-900';
   }, [theme]);
 
   const toggleTheme = () => {
