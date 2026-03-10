@@ -120,16 +120,16 @@ export function FXExchangeProfitTracker() {
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>평가 손익 (미실현)</h3>
-                    <p className={`text-2xl font-bold ${unrealizedProfit >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
+                    <p className={`text-2xl font-bold ${unrealizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
                         {unrealizedProfit >= 0 ? '+' : ''}{Math.round(unrealizedProfit).toLocaleString()}원
                     </p>
-                    <p className={`text-sm mt-1 ${unrealizedProfit >= 0 ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>
+                    <p className={`text-sm mt-1 ${unrealizedProfit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
                         {unrealizedRoi.toFixed(2)}%
                     </p>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>실현 손익 (누적)</h3>
-                    <p className={`text-2xl font-bold ${realizedProfit >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
+                    <p className={`text-2xl font-bold ${realizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
                         {realizedProfit >= 0 ? '+' : ''}{Math.round(realizedProfit).toLocaleString()}원
                     </p>
                     <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -181,7 +181,7 @@ export function FXExchangeProfitTracker() {
                 </div>
                 <button
                     onClick={() => setIsAdding(!isAdding)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-gray-100 dark:text-black text-white rounded-lg hover:bg-black dark:hover:bg-white transition-colors shadow-lg shadow-gray-500/10"
+                    className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-500 transition-colors shadow-lg shadow-gray-500/10"
                 >
                     {isAdding ? '취소' : '➕ 새 투자 기록'}
                 </button>
@@ -303,10 +303,10 @@ export function FXExchangeProfitTracker() {
                                                 {!isHolding && <div className="text-xs text-gray-500">{inv.sellDate}</div>}
                                             </td>
                                             <td className="p-4">
-                                                <div className={`font-bold ${roi >= 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                                                <div className={`font-bold ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
                                                     {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
                                                 </div>
-                                                <div className={`text-xs ${roi >= 0 ? 'text-gray-700 dark:text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}>
+                                                <div className={`text-xs ${roi >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
                                                     {roi >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
                                                 </div>
                                             </td>

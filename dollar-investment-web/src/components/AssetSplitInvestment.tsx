@@ -131,7 +131,7 @@ function SingleAssetManager({
                             onChange={(e) => handleSettingUpdate('assetName', e.target.value)}
                             className={`text-2xl font-black bg-transparent border-b-2 border-transparent hover:border-yellow-300 focus:border-yellow-500 focus:outline-none ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
                         />
-                        <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-gray-900 dark:text-gray-100 font-bold' : 'text-gray-600 dark:text-gray-300'}`}>
+                        <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-red-500 font-bold' : 'text-blue-500 font-bold'}`}>
                             전체 수익률: {totalRoi >= 0 ? '+' : ''}{totalRoi.toFixed(2)}% ({Math.round(totalProfit).toLocaleString()}원)
                         </div>
                     </div>
@@ -264,9 +264,7 @@ function SingleAssetManager({
                                     Slot {slot.number}
                                 </span>
                                 {slot.isActive && (
-                                    <span className={`text-[10px] font-bold ${slotRoi >= 0
-                                            ? 'text-yellow-500 dark:text-yellow-400'
-                                            : (theme === 'dark' ? 'text-gray-400' : 'text-gray-500')
+                                    <span className={`text-[10px] font-bold ${slotRoi >= 0 ? 'text-red-500' : 'text-blue-500'
                                         }`}>
                                         {slotRoi >= 0 ? '▲' : '▼'} {Math.abs(slotRoi).toFixed(2)}%
                                     </span>

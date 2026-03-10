@@ -61,7 +61,7 @@ export function MarketDashboard() {
                                 </div>
                                 <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
                                     <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-800 dark:bg-gray-200 dark:text-black transition-all duration-1000"></div>
-                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 transition-all duration-1000"></div>
+                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500 transition-all duration-1000"></div>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ export function MarketDashboard() {
 
                     <div className="hidden lg:flex w-48 h-48 items-center justify-center rounded-full border-8 border-gray-100 dark:border-gray-700 relative overflow-hidden">
                         <div className={`absolute bottom-0 w-full bg-gray-800 dark:bg-gray-200 dark:text-black transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
-                        <div className={`absolute top-0 w-full bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
+                        <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
                         <div className="z-10 text-center">
                             <div className="text-sm font-bold text-gray-400">종합 점수</div>
                             <div className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
@@ -226,7 +226,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
 
             {!indicator.history && (
                 <div className="mt-4 h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${isImpactUp ? 'bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 w-2/3' : isImpactDown ? 'bg-gray-800 dark:bg-gray-200 dark:text-black w-1/3' : 'bg-gray-400 w-1/2'
+                    <div className={`h-full rounded-full ${isImpactUp ? 'bg-red-500 w-2/3' : isImpactDown ? 'bg-gray-800 dark:bg-gray-200 dark:text-black w-1/3' : 'bg-gray-400 w-1/2'
                         }`}></div>
                 </div>
             )}

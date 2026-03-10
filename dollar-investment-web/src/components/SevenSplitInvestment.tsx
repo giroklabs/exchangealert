@@ -218,7 +218,7 @@ export function SevenSplitInvestment() {
                                         </div>
                                         <div className="flex justify-between text-sm">
                                             <span className="text-gray-500">목표가</span>
-                                            <span className="font-bold text-gray-600 dark:text-gray-300">{slot.targetPrice?.toFixed(2)}원</span>
+                                            <span className="font-bold text-yellow-500 dark:text-yellow-400">{slot.targetPrice?.toFixed(2)}원</span>
                                         </div>
                                         <div className="flex justify-between text-sm">
                                             <span className="text-gray-500">매수수량</span>
@@ -231,18 +231,18 @@ export function SevenSplitInvestment() {
                                         <div className="pt-2 border-t border-dashed border-gray-200">
                                             <div className="flex justify-between items-end">
                                                 <span className="text-xs text-gray-500">현재 수익률</span>
-                                                <span className={`text-lg font-black ${roi >= 0 ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                                                <span className={`text-lg font-black ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
                                                     {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
                                                 </span>
                                             </div>
-                                            <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-gray-800 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>
+                                            <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
                                                 {profit >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
                                             </div>
                                         </div>
                                         <button
                                             onClick={() => handleSell(slot.number)}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canSell
-                                                ? 'bg-black dark:bg-white dark:text-black text-white border border-gray-800 dark:border-gray-200 text-white hover:bg-gray-800 dark:hover:bg-gray-200 shadow-lg shadow-gray-500/10'
+                                                ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
                                                 : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                                                 }`}
                                         >
@@ -268,7 +268,7 @@ export function SevenSplitInvestment() {
                                             onClick={() => handleBuy(slot.number)}
                                             disabled={!canBuy}
                                             className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
-                                                ? (isRecommendBuy ? 'bg-gray-900 dark:bg-gray-100 dark:text-black text-white hover:bg-black dark:hover:bg-white shadow-lg shadow-gray-500/10' : 'bg-gray-600 dark:bg-gray-400 text-white hover:bg-gray-800 dark:bg-gray-200 dark:text-black shadow-md')
+                                                ? (isRecommendBuy ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20' : 'bg-yellow-200 text-gray-700 hover:bg-yellow-300 shadow-md')
                                                 : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                 }`}
                                         >

@@ -35,8 +35,7 @@ export function UserProfile() {
                 <button
                     onClick={login}
                     className={`flex items-center gap-2 text-sm px-5 py-2 rounded-full font-bold transition-all shadow-sm ${theme === 'dark'
-                        ? 'bg-gray-100 hover:bg-white text-gray-900'
-                        : 'bg-black hover:bg-gray-800 text-white'
+                        ? 'bg-yellow-400 hover:bg-yellow-300 text-gray-900' : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
                         }`}
                 >
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
