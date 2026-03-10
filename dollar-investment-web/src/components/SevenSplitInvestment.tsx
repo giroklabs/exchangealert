@@ -300,9 +300,6 @@ export function SevenSplitInvestment() {
                                         >
                                             {canBuy ? (isRecommendBuy ? '🛒 매수 실행' : '🛒 임의 매수') : '매수 대기'}
                                         </button>
-                                        {isRecommendBuy && (
-                                            <div className="absolute top-0 left-0 w-full h-1 bg-blue-500 animate-pulse"></div>
-                                        )}
                                     </>
                                 )}
                             </div>
