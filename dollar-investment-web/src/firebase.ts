@@ -3,7 +3,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCtK8kOMXa24XOvrHhZ2-a6NTfUKRZFnxo",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCtK8kOMXaZ4XOvrHhZ2-a6NTfUKRZFnxo",
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "dollar-invest-c893e.firebaseapp.com",
     projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "dollar-invest-c893e",
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "dollar-invest-c893e.firebasestorage.app",
