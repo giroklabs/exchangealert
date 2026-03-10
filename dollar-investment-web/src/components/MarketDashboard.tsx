@@ -91,6 +91,16 @@ export function MarketDashboard() {
                         </div>
                     </div>
                 </div>
+
+                {/* Gemini AI 심층 시장 분석 영역 (이동됨) */}
+                <div className={`mt-8 p-6 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/20 border border-indigo-800/50' : 'bg-indigo-50/50 border border-indigo-100 shadow-inner'}`}>
+                    <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-800'}`}>
+                        <span>🤖</span> Gemini AI 심층 시장 분석
+                    </h3>
+                    <p className={`text-md leading-relaxed whitespace-pre-wrap ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                        {data?.forecast?.detailedAnalysis}
+                    </p>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -123,15 +133,7 @@ export function MarketDashboard() {
 
             {/* 하단 요약 가이드 */}
             <div className={`p-8 rounded-3xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100 shadowed-lg'}`}>
-                <div className={`p-6 mb-8 rounded-2xl ${theme === 'dark' ? 'bg-indigo-900/20' : 'bg-indigo-50 border border-indigo-100 shadow-inner'}`}>
-                    <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-indigo-200' : 'text-indigo-900'}`}>
-                        <span>🤖</span> Gemini AI 심층 시장 분석
-                    </h3>
-                    <p className={`text-md leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {data?.forecast?.detailedAnalysis}
-                    </p>
-                </div>
-                <h3 className={`text-xl font-bold mb-6 mt-8 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-xl font-bold mb-6 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     📊 지표 해석 가이드
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
