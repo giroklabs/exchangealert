@@ -82,10 +82,9 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
   };
 
   return (
-    <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-      }`}>
+    <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
       <div className="flex items-center gap-3 mb-6">
-        <div className={`flex-1 p-4 rounded-lg border-2 ${getBgColor()}`}>
+        <div className={`flex-1 p-4 rounded-xl border-2 ${getBgColor()}`}>
           <div className="flex items-center gap-2">
             <span className="text-2xl">
               {signal.score >= 3 ? '✅' : signal.score === 2 ? '⚠️' : '❌'}
@@ -97,23 +96,22 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
         </div>
       </div>
 
-      <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-        }`}>투자 조건 체크리스트</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h3 className={`text-base font-bold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>지표 체크리스트</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {conditions.map((condition, index) => (
           <div
             key={index}
-            className={`flex items-start gap-3 p-3 rounded-lg ${condition.met
-                ? (theme === 'dark' ? 'bg-green-900/40' : 'bg-green-50')
-                : (theme === 'dark' ? 'bg-red-900/40' : 'bg-red-50')
+            className={`flex items-start gap-3 p-3 rounded-xl border ${condition.met
+                ? (theme === 'dark' ? 'bg-gray-700 border-yellow-500/50' : 'bg-yellow-50 border-yellow-200')
+                : (theme === 'dark' ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200')
               }`}
           >
             <span className="text-xl mt-0.5">{condition.met ? '✅' : '❌'}</span>
             <div className="flex-1">
               <p
                 className={`font-medium ${condition.met
-                    ? (theme === 'dark' ? 'text-green-300' : 'text-green-700')
-                    : (theme === 'dark' ? 'text-red-300' : 'text-red-700')
+                  ? (theme === 'dark' ? 'text-green-300' : 'text-green-700')
+                  : (theme === 'dark' ? 'text-red-300' : 'text-red-700')
                   }`}
               >
                 {condition.label}
@@ -127,15 +125,12 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
         ))}
       </div>
 
-      <div className={`mt-6 p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-100'
-        }`}>
-        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900 dark:text-white'
-          }`}>
-          <strong>알림:</strong> 4개 조건 중 3개 이상 만족 시 '매수 시작 적합' 단계로 판단합니다.
-          현재 점수는 <strong>{signal.score}점</strong>입니다.
+      <div className={`mt-6 p-4 rounded-xl ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50 border border-gray-100'}`}>
+        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+          <strong>알림:</strong> 4개 조건 중 3개 이상 만족 시 '매수 시작 적합' 단게로 판단합니다.
+          현재 점수는 <strong className="text-yellow-500">{signal.score}점</strong>입니다.
         </p>
       </div>
     </div>
   );
 }
-

@@ -75,16 +75,22 @@ export function InvestmentAnalysis() {
       )}
 
       {/* 차트 섹션 토글 버튼 */}
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-3">
         <button
           onClick={() => setShowCharts(!showCharts)}
-          className="px-4 py-2 bg-gray-800 dark:bg-gray-200 dark:text-black text-white rounded-lg hover:bg-gray-900 dark:bg-gray-100 dark:text-black transition-colors"
+          className={`px-5 py-2 rounded-xl text-sm font-bold transition-colors ${showCharts
+              ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
+              : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+            }`}
         >
           {showCharts ? '📉 차트 숨기기' : '📈 차트 보기'}
         </button>
         <button
           onClick={() => setShowHistory(!showHistory)}
-          className="px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900 text-white rounded-lg hover:bg-green-600 transition-colors"
+          className={`px-5 py-2 rounded-xl text-sm font-bold transition-colors ${showHistory
+              ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
+              : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+            }`}
         >
           {showHistory ? '📋 전체 데이터 숨기기' : '📋 전체 데이터 보기'}
         </button>

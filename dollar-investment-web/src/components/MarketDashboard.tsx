@@ -38,30 +38,30 @@ export function MarketDashboard() {
     return (
         <div className="max-w-6xl mx-auto p-4 space-y-8 animate-in fade-in duration-500">
             {/* 시장 향방 예측 섹션 */}
-            <div className={`p-8 rounded-3xl border shadow-xl ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-gradient-to-br from-blue-50 to-white border-gray-200'}`}>
+            <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1 w-full space-y-4">
                         <div className="flex items-center gap-3">
                             <span className="text-3xl">🎯</span>
-                            <h3 className={`text-2xl font-black ${theme === 'dark' ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>실시간 원/달러 환율 예측 모델</h3>
+                            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>실시간 원/달러 환율 예측 모델</h3>
                         </div>
 
                         <div className="space-y-6">
                             <div className="flex justify-between items-end">
                                 <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>시장 종합 심리</span>
-                                <span className={`text-3xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-gray-900 dark:text-gray-100 font-bold' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-gray-600 dark:text-gray-300' : 'text-gray-500'}`}>
+                                <span className={`text-2xl font-bold ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
                                     {data?.forecast?.sentiment || '분석 중...'}
                                 </span>
                             </div>
 
                             <div className="relative pt-1">
                                 <div className="flex mb-2 items-center justify-between font-bold text-xs uppercase">
-                                    <span className="text-gray-600 dark:text-gray-300">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
-                                    <span className="text-gray-900 dark:text-gray-100 font-bold">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
+                                    <span className="text-blue-500 font-bold text-xs">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
+                                    <span className="text-red-500 font-bold text-xs">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
                                 </div>
                                 <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                    <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gray-800 dark:bg-gray-200 dark:text-black transition-all duration-1000"></div>
-                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500 transition-all duration-1000"></div>
+                                    <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400 transition-all duration-1000"></div>
+                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400 transition-all duration-1000"></div>
                                 </div>
                             </div>
                         </div>
@@ -90,12 +90,12 @@ export function MarketDashboard() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* 국내 요인 섹션 */}
-                <section className="space-y-4">
+                <section className={`p-6 rounded-2xl shadow-xl space-y-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">🇰🇷</span>
-                        <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>국내 요인</h2>
+                        <span className="text-xl">🇰🇷</span>
+                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>국내 요인</h2>
                     </div>
                     <div className="grid grid-cols-1 gap-4">
                         {domesticIndicators.map((indicator) => (
@@ -105,10 +105,10 @@ export function MarketDashboard() {
                 </section>
 
                 {/* 해외 요인 섹션 */}
-                <section className="space-y-4">
+                <section className={`p-6 rounded-2xl shadow-xl space-y-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-2xl">🌎</span>
-                        <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>해외 요인</h2>
+                        <span className="text-xl">🌎</span>
+                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>해외 요인</h2>
                     </div>
                     <div className="grid grid-cols-1 gap-4">
                         {internationalIndicators.map((indicator) => (
@@ -119,8 +119,8 @@ export function MarketDashboard() {
             </div>
 
             {/* 하단 요약 가이드 */}
-            <div className={`p-8 rounded-3xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100 shadowed-lg'}`}>
-                <h3 className={`text-xl font-bold mb-6 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+            <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                <h3 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                     📊 지표 해석 가이드
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
