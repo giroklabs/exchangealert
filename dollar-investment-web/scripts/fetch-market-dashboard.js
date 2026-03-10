@@ -153,12 +153,15 @@ ${summary}
     let lastError = '';
 
     // 1. 등록된 모델 리스트 시도
+    // 2026년 기준 실제 사용 가능한 모델 우선순위 목록
     const modelConfigs = [
-        { ver: 'v1beta', model: 'gemini-1.5-flash' },
-        { ver: 'v1', model: 'gemini-1.5-flash' },
-        { ver: 'v1beta', model: 'gemini-1.5-pro' },
-        { ver: 'v1beta', model: 'gemini-pro' },
-        { ver: 'v1', model: 'gemini-pro' }
+        { ver: 'v1beta', model: 'gemini-2.0-flash' },
+        { ver: 'v1beta', model: 'gemini-2.0-flash-lite' },
+        { ver: 'v1beta', model: 'gemini-2.0-flash-001' },
+        { ver: 'v1beta', model: 'gemini-2.5-pro-exp-03-25' },
+        { ver: 'v1beta', model: 'gemini-1.5-flash-002' },
+        { ver: 'v1beta', model: 'gemini-1.5-flash-8b' },
+        { ver: 'v1beta', model: 'gemini-1.5-pro-002' },
     ];
 
     for (const config of modelConfigs) {
