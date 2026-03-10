@@ -1,0 +1,79 @@
+import { createContext, useContext, useEffect, useState } from 'react';
+import type { User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, loginWithGoogle, logout } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+
+interface AuthContextType {
+    user: User | null;
+    loading: boolean;
+    login: () => Promise<void>;
+    logout: () => Promise<void>;
+    userDataLoaded: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [userDataLoaded, setUserDataLoaded] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            setUser(currentUser);
+            if (currentUser) {
+                // 로그인 시 Firestore에서 데이터 가져와서 localStorage에 병합/덮어쓰기
+                try {
+                    const docRef = doc(db, 'users', currentUser.uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        Object.keys(data).forEach(key => {
+                            if (key !== 'lastUpdated') {
+                                localStorage.setItem(key, JSON.stringify(data[key]));
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error("데이터 동기화 실패:", error);
+                }
+            } else {
+                // 로그아웃 시 필요하다면 localStorage를 초기화하거나 유지 (여기서는 유지)
+            }
+            setUserDataLoaded(true);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const login = async () => {
+        try {
+            await loginWithGoogle();
+        } catch (error) {
+            console.error('로그인 실패:', error);
+        }
+    };
+
+    const logoutUser = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            console.error('로그아웃 실패:', error);
+        }
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, loading, login, logout: logoutUser, userDataLoaded }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) throw new Error('useAuth must be used within an AuthProvider');
+    return context;
+};

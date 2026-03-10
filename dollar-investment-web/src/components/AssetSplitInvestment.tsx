@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import type { AssetInvestment, AssetSplitSettings } from '../types';
+import { useSyncState } from '../hooks/useSyncState';
+import { useState } from 'react';
 
 // 단일 종목 관리자 컴포넌트
 function SingleAssetManager({
@@ -317,10 +318,7 @@ export function AssetSplitInvestment() {
     const { theme } = useTheme();
 
     // 여러 종목 상태 관리
-    const [investments, setInvestments] = useState<AssetInvestment[]>(() => {
-        const saved = localStorage.getItem('asset-investments-v2');
-        if (saved) return JSON.parse(saved);
-
+    const [investments, setInvestments] = useSyncState<AssetInvestment[]>('asset-investments-v2', () => {
         // 초기 샘플 종목
         return [{
             id: 'init-1',
@@ -343,10 +341,6 @@ export function AssetSplitInvestment() {
             lastPrice: 70000
         }];
     });
-
-    useEffect(() => {
-        localStorage.setItem('asset-investments-v2', JSON.stringify(investments));
-    }, [investments]);
 
     // 종목 추가
     const addInvestment = () => {

@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useInvestmentAnalysis } from '../hooks/useInvestmentAnalysis';
 import type { FXInvestment } from '../types';
+import { useSyncState } from '../hooks/useSyncState';
 
 export function FXExchangeProfitTracker() {
     const { theme } = useTheme();
@@ -14,12 +15,8 @@ export function FXExchangeProfitTracker() {
     const [isEditingRate, setIsEditingRate] = useState(false);
     const [tempRate, setTempRate] = useState<string>('');
 
-    const [investments, setInvestments] = useState<FXInvestment[]>(() => {
-        const saved = localStorage.getItem('fx-investments');
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [investments, setInvestments] = useSyncState<FXInvestment[]>('fx-investments', []);
 
-    const [isAdding, setIsAdding] = useState(false);
     const [newInvestment, setNewInvestment] = useState<Partial<FXInvestment>>({
         date: new Date().toISOString().split('T')[0],
         usdAmount: 1000,
@@ -27,11 +24,7 @@ export function FXExchangeProfitTracker() {
         memo: '',
         status: 'holding'
     });
-
-
-    useEffect(() => {
-        localStorage.setItem('fx-investments', JSON.stringify(investments));
-    }, [investments]);
+    const [isAdding, setIsAdding] = useState(false);
 
     const handleAddInvestment = () => {
         if (!newInvestment.date || !newInvestment.usdAmount || !newInvestment.buyRate) {
@@ -374,7 +367,7 @@ export function FXExchangeProfitTracker() {
                 <ul className={`space-y-2 text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                     <li>• <strong>미실현 손익</strong>: 현재 보유 중인 달러를 현재 환율로 매도했을 때의 예상 수익입니다.</li>
                     <li>• <strong>실현 손익</strong>: 이미 매도 처리를 완료하여 확정된 수익의 합계입니다.</li>
-                    <li>• <strong>로컬 저장</strong>: 입력하신 데이터는 브라우저의 로컬 스토리지에만 저장되며 서버로 전송되지 않습니다.</li>
+                    <li>• <strong>클라우드 동기화</strong>: 구글 로그인 시 기기 간 데이터가 자동으로 동기화됩니다.</li>
                 </ul>
             </div>
         </div>

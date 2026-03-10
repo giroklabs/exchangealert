@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import type { SevenSplitSettings, SevenSplitSlot } from '../types';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useInvestmentAnalysis } from '../hooks/useInvestmentAnalysis';
+import { useSyncState } from '../hooks/useSyncState';
 
 export function SevenSplitInvestment() {
     const { theme } = useTheme();
@@ -10,21 +10,15 @@ export function SevenSplitInvestment() {
     const currentRate = exchangeRate ? getCurrentRateValue(exchangeRate) : 0;
 
     // 기본 설정 상태
-    const [settings, setSettings] = useState<SevenSplitSettings>(() => {
-        const saved = localStorage.getItem('seven-split-settings');
-        return saved ? JSON.parse(saved) : {
-            totalBudget: 10000000, // 1000만원
-            gapWon: 10,
-            targetProfitPercent: 1.0,
-            baseExchangeRate: currentRate || 1400
-        };
+    const [settings, setSettings] = useSyncState<SevenSplitSettings>('seven-split-settings', {
+        totalBudget: 10000000, // 1000만원
+        gapWon: 10,
+        targetProfitPercent: 1.0,
+        baseExchangeRate: currentRate || 1400
     });
 
     // 슬롯 상태
-    const [slots, setSlots] = useState<SevenSplitSlot[]>(() => {
-        const saved = localStorage.getItem('seven-split-slots');
-        if (saved) return JSON.parse(saved);
-
+    const [slots, setSlots] = useSyncState<SevenSplitSlot[]>('seven-split-slots', () => {
         return Array.from({ length: 7 }, (_, i) => ({
             number: i + 1,
             isActive: false,
@@ -34,16 +28,6 @@ export function SevenSplitInvestment() {
             targetPrice: null
         }));
     });
-
-    // 설정 저장
-    useEffect(() => {
-        localStorage.setItem('seven-split-settings', JSON.stringify(settings));
-    }, [settings]);
-
-    // 슬롯 저장
-    useEffect(() => {
-        localStorage.setItem('seven-split-slots', JSON.stringify(slots));
-    }, [slots]);
 
     // 설정 변경 핸들러
     const handleSettingChange = (key: keyof SevenSplitSettings, value: number) => {

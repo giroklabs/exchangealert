@@ -8,6 +8,7 @@ import { AboutPage } from './components/AboutPage';
 import { Tabs } from './components/Tabs';
 import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
+import { UserProfile } from './components/UserProfile';
 import { BackupManager } from './components/BackupManager';
 import './App.css';
 
@@ -36,7 +37,10 @@ function App() {
               달러 인베스트
             </h1>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <UserProfile />
+            <ThemeToggle />
+          </div>
         </header>
 
         <Tabs
