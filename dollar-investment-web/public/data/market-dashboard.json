@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "157.33",
+      "value": "157.41",
       "trend": "down",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 157.33
+          "value": 157.41
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "86.76",
+      "value": "86.04",
       "trend": "down",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 86.76
+          "value": 86.04
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "98.53",
+      "value": "98.57",
       "trend": "down",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 98.53
+          "value": 98.57
         }
       ]
     },
@@ -561,14 +561,14 @@
     }
   ],
   "forecast": {
-    "sentiment": "환율 상승 우세",
+    "sentiment": "보통",
     "upProb": 38,
     "downProb": 62,
-    "detailedAnalysis": "글로벌 거시 경제 지표를 종합할 때, 미국은 높은 기준금리와 견조한 GDP 성장이 지속적인 물가 상승 압력과 맞물려 달러 강세 요인이 뚜렷합니다. 한국과의 기준금리 격차가 확대된 가운데 미 10년물 국채금리 상승, 엔/달러 환율 상승 및 달러 인덱스의 전반적인 강세 영향은 원/달러 환율의 상승 압력을 심화시키고 있습니다.\n\n투자자들의 심리적 측면에서는 미국 경제의 견고함과 높은 수익률이 달러 선호 심리를 강화하며 안전자산으로서의 지위를 부각시킵니다. 국내적으로 코스피 지수 상승과 경상수지 흑자 등 원화 강세 요인이 일부 존재하나, 미 비농업고용지수 둔화에도 달러 선호 현상이 유지되고 국내 통화량 증가 및 물가 상승 압���은 원화 약세 요인으로 작용하고 있습니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-1.5-pro] Status 404: models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-pro] Status 404: models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-pro] Status 404: models/gemini-pro is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
     "score": {
       "upScore": 3,
       "downScore": 5
     }
   },
-  "lastUpdate": "2026. 3. 10. 오전 8:00:43"
+  "lastUpdate": "2026. 3. 10. 오전 8:15:23"
 }
