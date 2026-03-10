@@ -192,6 +192,7 @@ jobs:
               
               git commit -m "${CLOSING_TAG}Update exchange rates from Naver API - $COMMIT_DATE - Current: data/exchange-rates.json - Daily: data/daily/exchange-rates-$SEARCH_DATE.json - Count: $DATA_LENGTH currencies - Source: Naver KEB API (매일 5분 간격)"
               
+              git pull --rebase origin main
               git push
               echo "Exchange rate data updated successfully from Naver API (매일 5분 간격)."
               echo "Stored $DATA_LENGTH currencies - 매일 24시간 5분 간격 (안정적인 자동 실행)"
