@@ -388,7 +388,7 @@ export function AssetSplitInvestment() {
                         자산 포트폴리오 <span className="text-indigo-500">분할 관리</span>
                     </h1>
                     <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        주식, 가상자산 등 각 종목별 세븐스플릿 전략을 동시에 운영하세요
+                        주식, 가상자산 등 각 종목별 스플릿 전략을 동시에 운영하세요
                     </p>
                 </div>
                 <div className="flex flex-col md:flex-row gap-2">

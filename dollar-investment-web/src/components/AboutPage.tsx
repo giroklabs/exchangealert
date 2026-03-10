@@ -14,7 +14,7 @@ export function AboutPage() {
                 </div>
 
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
-                    <strong>달러 인베스트</strong>는 박성현 작가의 '세븐 스플릿(7 Split)' 투자 철학에 영감을 받아 제작된
+                    <strong>달러 인베스트</strong>는 박성현 작가의 '스플릿(7 Split)' 투자 철학에 영감을 받아 제작된
                     개인 맞춤형 달러 투자 및 자산 관리 플랫폼입니다. 사용자들은 거시 경제 지표를 실시간으로 확인하고,
                     AI 분석을 통해 투자 적정성을 판단하며, 시스템화된 분할 매수/매도 기법을 통해 안정적인 수익을 창출할 수 있습니다.
                 </p>
@@ -29,7 +29,7 @@ export function AboutPage() {
                 />
                 <FeatureCard
                     icon="🏦"
-                    title="세븐스플릿 & 자산투자"
+                    title="스플릿 & 자산투자"
                     desc="금액을 분할하여 투자하는 시스템을 제공합니다. 사용자의 투자 성향에 맞게 슬롯을 분할하고 목표 수익률에 도달하면 자동으로 매도 알림을 받을 수 있습니다."
                 />
                 <FeatureCard

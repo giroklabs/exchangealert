@@ -392,7 +392,7 @@ export function BackupManager() {
 
                         <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl border border-amber-100 dark:border-amber-800 space-y-2">
                             <p className="text-[10px] text-amber-700 dark:text-amber-200 leading-relaxed font-bold">
-                                💡 세븐스플릿, 자산투자, 환차익 계산기의 데이터가 GitHub 리포지토리 파일 하나로 안전하게 통합 관리됩니다.
+                                💡 스플릿, 자산 스플릿, 환차익 계산기의 데이터가 GitHub 리포지토리 파일 하나로 안전하게 통합 관리됩니다.
                             </p>
                             <p className="text-[10px] text-amber-600 dark:text-amber-300 leading-relaxed">
                                 🔔 <strong>자동 동기화 설정 시:</strong> 버튼을 누르거나 키보드 입력이 끝난 후 약 3초 뒤에 백그라운드에서 조용히 저장됩니다.

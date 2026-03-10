@@ -68,7 +68,7 @@ export interface CalculationResult {
   average: number;
 }
 
-// 세븐 스플릿 데이터 타입
+// 스플릿 데이터 타입
 export interface SevenSplitSlot {
   number: number;
   isActive: boolean;
