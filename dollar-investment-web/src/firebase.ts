@@ -3,8 +3,6 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
-console.log("🚀 Firebase initialization version: 3");
-
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -14,12 +12,6 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
-
-// Debug: 환경 변수 누락 확인 (절대 비밀 키 값 자체를 출력하지 마세요)
-if (!firebaseConfig.projectId) {
-    console.error("❌ CRITICAL: VITE_FIREBASE_PROJECT_ID is MISSING from the build!");
-    console.log("Currently available VITE keys:", Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')));
-}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
