@@ -13,6 +13,12 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
+// Debug: 환경 변수 누락 확인 (절대 비밀 키 값 자체를 출력하지 마세요)
+if (!firebaseConfig.projectId) {
+    console.error("Firebase Error: VITE_FIREBASE_PROJECT_ID is missing!");
+    console.log("Available Env Keys:", Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')));
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
