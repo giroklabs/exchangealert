@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "157.68",
+      "value": "157.69",
       "trend": "down",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 157.68
+          "value": 157.69
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "88.77",
+      "value": "89.09",
       "trend": "down",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 88.77
+          "value": 89.09
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,501.97",
+      "value": "5,497.01",
       "trend": "up",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 5501.97
+          "value": 5497.01
         }
       ]
     },
@@ -561,14 +561,14 @@
     }
   ],
   "forecast": {
-    "sentiment": "보통",
+    "sentiment": "환율 상승 우세",
     "upProb": 38,
     "downProb": 62,
-    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-1.5-pro] Status 404: models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-pro] Status 404: models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\n[gemini-pro] Status 404: models/gemini-pro is not found for API version v1, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n현재 미국 기준금리와 10년물 국채금리가 상승 추세를 유지하며 한국과의 금리 격차를 확대하고 있고, 견조한 미국 GDP 성장률 및 소비자물가 상승은 연준의 고금리 장기화 가능성을 높여 달러 강세에 힘을 싣고 있습니다. 또한 엔/달러 환율 약세와 국내 소비자물가 상승, 통화량 증가는 원화 가치에 하락 압력을 가하는 요인으로 작용합니다.\n\n비록 국내 코스피 지수 상승과 경제성장률, 경상수지 흑자가 원화 강세에 긍정적인 요인이지만, 미국 경제의 전반적인 강세와 달러 선호 심리가 더욱 우세한 상황입니다. ��� 비농업고용지수의 추세적 하락과 달러 인덱스(DXY) 하락 추세에도 불구하고 원/달러 환율에는 상승 영향이 더 크게 반영될 것으로 보입니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 3,
       "downScore": 5
     }
   },
-  "lastUpdate": "2026. 3. 10. 오전 5:34:23"
+  "lastUpdate": "2026. 3. 10. 오전 5:38:39"
 }
