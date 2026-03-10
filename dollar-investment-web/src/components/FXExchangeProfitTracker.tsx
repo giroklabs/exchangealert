@@ -7,7 +7,12 @@ import type { FXInvestment } from '../types';
 export function FXExchangeProfitTracker() {
     const { theme } = useTheme();
     const { exchangeRate } = useInvestmentAnalysis();
-    const currentRate = exchangeRate ? getCurrentRateValue(exchangeRate) : 0;
+    const apiRate = exchangeRate ? getCurrentRateValue(exchangeRate) : 0;
+    const [manualRate, setManualRate] = useState<number | null>(null);
+    const currentRate = manualRate !== null ? manualRate : apiRate;
+
+    const [isEditingRate, setIsEditingRate] = useState(false);
+    const [tempRate, setTempRate] = useState<string>('');
 
     const [investments, setInvestments] = useState<FXInvestment[]>(() => {
         const saved = localStorage.getItem('fx-investments');
@@ -151,10 +156,46 @@ export function FXExchangeProfitTracker() {
             </div>
 
             {/* 현재 환율 정보 바 */}
-            <div className={`p-4 rounded-xl flex justify-between items-center ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
-                <span className={`font-medium ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'}`}>
-                    현재 실시간 환율: <span className="text-xl font-bold">{currentRate.toLocaleString()}원</span>
-                </span>
+            <div className={`p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-center ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
+                <div className="flex items-center gap-3">
+                    <span className={`font-medium ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'}`}>
+                        적용 환율:
+                    </span>
+                    {isEditingRate ? (
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="number"
+                                value={tempRate}
+                                onChange={(e) => setTempRate(e.target.value)}
+                                className="w-24 p-1 rounded-lg border border-gray-300 text-right font-bold text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                autoFocus
+                            />
+                            <button onClick={() => {
+                                setManualRate(Number(tempRate) || apiRate);
+                                setIsEditingRate(false);
+                            }} className="px-3 py-1.5 bg-green-500 text-white rounded-lg text-sm hover:bg-green-600 transition shadow-sm font-bold">적용</button>
+                            <button onClick={() => {
+                                setManualRate(null);
+                                setIsEditingRate(false);
+                            }} className="px-3 py-1.5 bg-gray-500 text-white rounded-lg text-sm hover:bg-gray-600 transition shadow-sm font-bold">실시간</button>
+                        </div>
+                    ) : (
+                        <div
+                            className="flex items-center gap-2 group cursor-pointer"
+                            onClick={() => {
+                                setTempRate(currentRate.toString());
+                                setIsEditingRate(true);
+                            }}
+                            title="환율 직접 수정하기"
+                        >
+                            <span className="text-xl font-bold">{currentRate.toLocaleString()}원</span>
+                            <span className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded">✏️ 편집</span>
+                            {manualRate !== null && (
+                                <span className="text-[10px] bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full font-bold ml-1 border border-yellow-200">수동</span>
+                            )}
+                        </div>
+                    )}
+                </div>
                 <button
                     onClick={() => setIsAdding(!isAdding)}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
