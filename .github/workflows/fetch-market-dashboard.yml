@@ -8,6 +8,8 @@ on:
     # 15분 단위로 실행 (실시간성 극대화)
     - cron: '*/15 * * * *'
   workflow_dispatch: # 수동 실행 가능
+  repository_dispatch:
+    types: [trigger-fetch-dashboard] # 외부 서비스(cron-job 등)에서 정밀 타격하기 위한 웹훅 트리거
 
 jobs:
   fetch-market-data:
