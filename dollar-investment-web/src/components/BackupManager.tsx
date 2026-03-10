@@ -18,6 +18,26 @@ export function BackupManager() {
 
     const [status, setStatus] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
+    const [autoSync, setAutoSync] = useState(() => {
+        return localStorage.getItem('github-auto-sync') === 'true';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('github-auto-sync', String(autoSync));
+    }, [autoSync]);
+
+    // 전역 localStorage 변경 감지 설정 (자동 동기화 트리거용)
+    useEffect(() => {
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = function (key, value) {
+            const event = new CustomEvent('local-storage-update', { detail: { key } });
+            window.dispatchEvent(event);
+            originalSetItem.apply(this, [key, value] as any);
+        };
+        return () => {
+            localStorage.setItem = originalSetItem;
+        };
+    }, []);
 
     useEffect(() => {
         localStorage.setItem('github-sync-info', JSON.stringify(syncInfo));
@@ -130,6 +150,52 @@ export function BackupManager() {
             setIsLoading(false);
         }
     };
+
+    // 알림창이 없는 자동 동기화용 Push
+    const handleSilentPush = async () => {
+        if (!syncInfo.pat) return;
+        try {
+            setStatus('자동 동기화 중... 🔄');
+            const existing = await githubSyncService.fetchBackup(syncInfo);
+            const data = collectLocalData();
+            await githubSyncService.pushBackup(syncInfo, data, existing?.sha);
+
+            const now = new Date().toLocaleString();
+            setSyncInfo(prev => ({ ...prev, lastSync: now }));
+            setStatus(`자동 동기화 완료 ✅ (${now})`);
+
+            // 3초 후 상태 메시지 지우기
+            setTimeout(() => {
+                setStatus(prev => prev.includes('자동 동기화 완료') ? '' : prev);
+            }, 3000);
+        } catch (error) {
+            console.error('Auto Sync Error:', error);
+            setStatus('자동 동기화 실패 ❌ (GitHub 토큰 또는 연결 오류)');
+        }
+    };
+
+    // 자동 동기화 이벤트 리스너 (디바운스 적용)
+    useEffect(() => {
+        if (!autoSync || !syncInfo.pat) return;
+
+        let timeoutId: ReturnType<typeof setTimeout>;
+        const handleUpdate = (e: any) => {
+            const interestedKeys = ['fx-investments', 'asset-investments-v2', 'seven-split-settings', 'seven-split-slots'];
+            if (interestedKeys.includes(e.detail?.key)) {
+                clearTimeout(timeoutId);
+                // 3초간 추가 입력이 없으면 백그라운드 동기화 실행
+                timeoutId = setTimeout(() => {
+                    handleSilentPush();
+                }, 3000);
+            }
+        };
+
+        window.addEventListener('local-storage-update', handleUpdate);
+        return () => {
+            window.removeEventListener('local-storage-update', handleUpdate);
+            clearTimeout(timeoutId);
+        };
+    }, [autoSync, syncInfo]);
 
     // GitHub에서 불러오기 (Fetch)
     const handleGitHubFetch = async () => {
@@ -246,6 +312,20 @@ export function BackupManager() {
                                         className={`w-full p-2 rounded-xl border text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}`}
                                     />
                                 </div>
+                                <div className="flex items-center justify-between p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800">
+                                    <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                                        ⚡ 실시간 자동 동기화
+                                    </span>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only peer"
+                                            checked={autoSync}
+                                            onChange={(e) => setAutoSync(e.target.checked)}
+                                        />
+                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                                    </label>
+                                </div>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleGitHubPush}
@@ -310,9 +390,12 @@ export function BackupManager() {
                             </div>
                         )}
 
-                        <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl">
-                            <p className="text-[10px] text-amber-700 dark:text-amber-200 leading-relaxed">
-                                💡 세븐스플릿, 자산투자, 환차익 계산기의 모든 데이터가 하나의 파일에 통합되어 백업됩니다.
+                        <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl border border-amber-100 dark:border-amber-800 space-y-2">
+                            <p className="text-[10px] text-amber-700 dark:text-amber-200 leading-relaxed font-bold">
+                                💡 세븐스플릿, 자산투자, 환차익 계산기의 데이터가 GitHub 리포지토리 파일 하나로 안전하게 통합 관리됩니다.
+                            </p>
+                            <p className="text-[10px] text-amber-600 dark:text-amber-300 leading-relaxed">
+                                🔔 <strong>자동 동기화 설정 시:</strong> 버튼을 누르거나 키보드 입력이 끝난 후 약 3초 뒤에 백그라운드에서 조용히 저장됩니다.
                             </p>
                         </div>
                     </div>
