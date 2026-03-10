@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-10T04:46:02.150Z",
+  "timestamp": "2026-03-10T06:26:17.688Z",
   "fxInvestments": [
     {
       "id": "898d1791-a34c-40b4-b568-5594c1969385",
@@ -233,11 +233,11 @@
         },
         {
           "number": 2,
-          "isActive": false,
-          "buyPrice": null,
-          "quantity": 0,
-          "investedAmount": 0,
-          "targetPrice": null
+          "isActive": true,
+          "buyPrice": 64700,
+          "quantity": 154.5595054095827,
+          "investedAmount": 10000000,
+          "targetPrice": 84110
         },
         {
           "number": 3,
@@ -304,7 +304,7 @@
           "targetPrice": null
         }
       ],
-      "lastPrice": 67300
+      "lastPrice": 64700
     }
   ],
   "sevenSplitSettings": {
@@ -316,11 +316,11 @@
   "sevenSplitSlots": [
     {
       "number": 1,
-      "isActive": true,
-      "buyPrice": 1467.5,
-      "amount": 973.4728644439036,
-      "krwAmount": 1428571.4285714286,
-      "targetPrice": 1511.525
+      "isActive": false,
+      "buyPrice": null,
+      "amount": 0,
+      "krwAmount": 0,
+      "targetPrice": null
     },
     {
       "number": 2,
