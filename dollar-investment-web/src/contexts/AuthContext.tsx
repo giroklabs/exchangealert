@@ -52,8 +52,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const login = async () => {
         try {
             await loginWithGoogle();
-        } catch (error) {
+        } catch (error: any) {
             console.error('로그인 실패:', error);
+            alert(`로그인 중 문제가 발생했습니다: ${error.message || '알 수 없는 오류'}\nFirebase 콘솔의 승인된 도메인 설정을 확인해주세요.`);
         }
     };
 
