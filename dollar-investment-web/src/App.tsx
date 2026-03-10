@@ -36,7 +36,7 @@ function App() {
           <div className="flex items-center gap-3">
             <img src={logo} alt="로장보로" className="w-10 h-10 rounded-xl shadow-sm" />
             <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-              달러 인베스트
+              달러 인베스트.
             </h1>
           </div>
           <div className="flex items-center gap-4">
