@@ -198,7 +198,8 @@ function SingleAssetManager({
                         <select
                             value={investment.settings.splitCount || 7}
                             onChange={(e) => handleSettingUpdate('splitCount', Number(e.target.value))}
-                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
+                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all appearance-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
+                            style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
                         >
                             <option value={5}>5분할</option>
                             <option value={6}>6분할</option>
