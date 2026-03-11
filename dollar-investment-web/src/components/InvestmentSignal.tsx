@@ -11,19 +11,13 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
 
   if (isLoading) {
     return (
-      <div className={`rounded-lg shadow-md p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-        }`}>
-        <div className={`h-6 rounded w-1/2 mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-          }`}></div>
-        <div className="space-y-2">
-          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-            }`}></div>
-          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-            }`}></div>
-          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-            }`}></div>
-          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-            }`}></div>
+      <div className={`rounded-3xl shadow-sm border p-6 animate-pulse ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
+        <div className={`h-16 rounded-2xl w-full mb-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
+        <div className={`h-4 rounded w-32 mb-5 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className={`h-20 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}></div>
+          ))}
         </div>
       </div>
     );
@@ -31,11 +25,9 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
 
   if (!signal) {
     return (
-      <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-        }`}>
-        <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-          }`}>투자 적합성 분석</h3>
-        <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>데이터를 불러올 수 없습니다.</p>
+      <div className={`rounded-3xl shadow-sm p-6 border ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
+        <h3 className={`text-lg font-bold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>투자 적합성 분석</h3>
+        <p className={theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}>데이터를 불러올 수 없습니다.</p>
       </div>
     );
   }
@@ -56,76 +48,95 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
     {
       label: '현재 원/달러 환율 < 적정 환율',
       met: signal.conditions.rateBelowAppropriate,
-      detail: `(적정 환율: ${signal.appropriateRate.toLocaleString('ko-KR', {
-        maximumFractionDigits: 2,
-      })}원)`,
+      detail: `(적정 환율: ${signal.appropriateRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원)`,
     },
   ];
 
-  const getStatusText = () => {
-    if (signal.score === 4) return '적극 매수 권장 (4/4)';
-    if (signal.score === 3) return '매수 시작 적합 (3/4)';
-    if (signal.score === 2) return '관망 및 분할 매수 (2/4)';
-    return '매수 부적합 (1/4)';
+  const getStatusConfig = () => {
+    if (signal.score >= 3) return {
+      text: `적극 매수 권장 (${signal.score}/4)`,
+      color: theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600',
+      bg: theme === 'dark' ? 'bg-emerald-400/10' : 'bg-emerald-50',
+      icon: <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    };
+    if (signal.score === 2) return {
+      text: `관망 및 분할 매수 (2/4)`,
+      color: theme === 'dark' ? 'text-amber-400' : 'text-amber-600',
+      bg: theme === 'dark' ? 'bg-amber-400/10' : 'bg-amber-50',
+      icon: <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+    };
+    return {
+      text: `매수 부적합 (${signal.score}/4)`,
+      color: theme === 'dark' ? 'text-rose-400' : 'text-rose-600',
+      bg: theme === 'dark' ? 'bg-rose-400/10' : 'bg-rose-50',
+      icon: <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    };
   };
 
-  const getStatusColor = () => {
-    if (signal.score >= 3) return theme === 'dark' ? 'text-green-300' : 'text-green-700';
-    if (signal.score === 2) return theme === 'dark' ? 'text-yellow-300' : 'text-yellow-700';
-    return theme === 'dark' ? 'text-red-300' : 'text-red-700';
-  };
-
-  const getBgColor = () => {
-    if (signal.score >= 3) return theme === 'dark' ? 'bg-green-900 border-gray-800 dark:border-gray-200' : 'bg-green-50 border-gray-800 dark:border-gray-200';
-    if (signal.score === 2) return theme === 'dark' ? 'bg-yellow-900/30 border-yellow-500' : 'bg-yellow-50 border-yellow-500';
-    return theme === 'dark' ? 'bg-red-900 border-red-500' : 'bg-red-50 border-red-500';
-  };
+  const status = getStatusConfig();
 
   return (
-    <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-      <div className="flex items-center gap-3 mb-6">
-        <div className={`flex-1 p-4 rounded-xl border-2 ${getBgColor()}`}>
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">
-              {signal.score >= 3 ? '✅' : signal.score === 2 ? '⚠️' : '❌'}
-            </span>
-            <span className={`text-xl font-bold ${getStatusColor()}`}>
-              {getStatusText()}
-            </span>
-          </div>
+    <div className={`p-6 md:p-8 rounded-3xl shadow-sm border transition-colors duration-300 ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
+      {/* Top Banner */}
+      <div className={`flex items-center justify-center md:justify-start gap-3 p-5 rounded-2xl mb-8 ${status.bg}`}>
+        <div className={`${status.color}`}>
+          {status.icon}
         </div>
+        <h2 className={`text-xl font-black tracking-tight ${status.color}`}>
+          {status.text}
+        </h2>
       </div>
 
-      <h3 className={`text-base font-bold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>지표 체크리스트</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {conditions.map((condition, index) => (
-          <div
-            key={index}
-            className={`flex items-start gap-3 p-3 rounded-xl border ${condition.met
-              ? (theme === 'dark' ? 'bg-gray-700 border-yellow-500/50' : 'bg-yellow-50 border-yellow-200')
-              : (theme === 'dark' ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200')
-              }`}
-          >
-            <span className="text-xl mt-0.5">{condition.met ? '✅' : '❌'}</span>
-            <div className="flex-1">
-              <p
-                className={`font-medium ${condition.met
-                  ? (theme === 'dark' ? 'text-green-300' : 'text-green-700')
-                  : (theme === 'dark' ? 'text-red-300' : 'text-red-700')
-                  }`}
-              >
-                {condition.label}
-              </p>
-              {condition.detail && (
-                <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                  }`}>{condition.detail}</p>
-              )}
+      <div className="flex items-center gap-2 mb-5">
+        <h3 className={`text-xs font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>지표 체크리스트</h3>
+      </div>
+
+      {/* Checklist Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {conditions.map((condition, index) => {
+          const isMet = condition.met;
+          const cardBg = isMet
+            ? (theme === 'dark' ? 'bg-emerald-900/10' : 'bg-emerald-50/50')
+            : (theme === 'dark' ? 'bg-gray-800/20' : 'bg-gray-50/50');
+
+          const borderColor = isMet
+            ? (theme === 'dark' ? 'border-emerald-500/20' : 'border-emerald-200')
+            : (theme === 'dark' ? 'border-gray-800' : 'border-gray-100');
+
+          const textColor = isMet
+            ? (theme === 'dark' ? 'text-emerald-400' : 'text-emerald-700')
+            : (theme === 'dark' ? 'text-gray-500' : 'text-gray-500');
+
+          const iconColor = isMet
+            ? (theme === 'dark' ? 'text-emerald-400' : 'text-emerald-500')
+            : (theme === 'dark' ? 'text-gray-600' : 'text-gray-300');
+
+          return (
+            <div
+              key={index}
+              className={`flex items-start gap-4 p-5 rounded-2xl border transition-all duration-300 ${cardBg} ${borderColor}`}
+            >
+              <div className={`mt-0.5 shrink-0 ${iconColor}`}>
+                {isMet ? (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className={`font-semibold text-sm leading-snug ${textColor}`}>
+                  {condition.label}
+                </p>
+                {condition.detail && (
+                  <p className={`text-xs mt-1.5 font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                    {condition.detail}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-
-
     </div>
   );
 }
