@@ -130,7 +130,7 @@ export function FXExchangeProfitTracker() {
         <div className="space-y-8">
             {/* 요약 카드 */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보유 중인 달러</h3>
                     <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                         ${totalHoldingUsd.toLocaleString()}
@@ -171,7 +171,7 @@ export function FXExchangeProfitTracker() {
                         </div>
                     </div>
                 </div>
-                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>누적 거래총액</h3>
                     <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                         {Math.round(totalTransactionVolume).toLocaleString()}원
@@ -233,7 +233,7 @@ export function FXExchangeProfitTracker() {
 
             {/* 입력 폼 */}
             {isAdding && (
-                <div className={`p-6 rounded-2xl shadow-xl animate-in fade-in slide-in-from-top-4 duration-300 ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                <div className={`p-6 rounded-2xl shadow-xl border animate-in fade-in slide-in-from-top-4 duration-300 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <h2 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                         📝 새로운 달러 매수 기록
                     </h2>
@@ -292,7 +292,7 @@ export function FXExchangeProfitTracker() {
             )}
 
             {/* 기록 리스트 */}
-            <div className={`overflow-hidden rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+            <div className={`overflow-hidden rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead className={theme === 'dark' ? 'bg-gray-700/50' : 'bg-gray-50'}>

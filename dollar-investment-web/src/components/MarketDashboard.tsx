@@ -74,7 +74,7 @@ export function MarketDashboard() {
             )}
 
             {/* 시장 향방 예측 섹션 */}
-            <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1 w-full space-y-4">
                         <div className="flex items-center gap-3">
@@ -128,7 +128,7 @@ export function MarketDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* 국내 요인 섹션 */}
-                <section className={`p-6 rounded-2xl shadow-xl space-y-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                <section className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">🇰🇷</span>
                         <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>국내 요인</h2>
@@ -141,7 +141,7 @@ export function MarketDashboard() {
                 </section>
 
                 {/* 해외 요인 섹션 */}
-                <section className={`p-6 rounded-2xl shadow-xl space-y-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                <section className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">🌎</span>
                         <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>해외 요인</h2>
@@ -155,7 +155,7 @@ export function MarketDashboard() {
             </div>
 
             {/* 하단 요약 가이드 */}
-            <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <h3 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                     📊 지표 해석 가이드
                 </h3>
@@ -193,9 +193,9 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
     const chartColor = isImpactUp ? '#ef4444' : isImpactDown ? '#3b82f6' : '#9ca3af';
 
     return (
-        <div className={`p-5 rounded-2xl transition-all duration-300 border-2 hover:scale-[1.01] ${theme === 'dark'
-            ? 'bg-gray-800/40 border-gray-700 hover:border-gray-500'
-            : 'bg-white border-gray-50 hover:border-gray-200 shadow-sm hover:shadow-md'
+        <div className={`p-5 rounded-2xl transition-all duration-300 border hover:scale-[1.01] shadow-md hover:shadow-xl ${theme === 'dark'
+            ? 'bg-gray-800 border-gray-700'
+            : 'bg-white border-gray-100'
             }`}>
             <div className="flex justify-between items-start mb-3">
                 <div className="flex-1">
@@ -276,9 +276,9 @@ function MajorRateCard({ rate, theme }: { rate: MajorRate, theme: string }) {
     const isDown = rate.trend === 'down';
 
     return (
-        <div className={`p-4 rounded-2xl transition-all duration-300 border-2 hover:scale-[1.02] ${theme === 'dark'
-            ? 'bg-gray-800/40 border-gray-700 hover:border-gray-500'
-            : 'bg-white border-gray-50 hover:border-gray-200 shadow-sm hover:shadow-md'
+        <div className={`p-4 rounded-2xl transition-all duration-300 border hover:scale-[1.02] shadow-md hover:shadow-xl ${theme === 'dark'
+            ? 'bg-gray-800 border-gray-700'
+            : 'bg-white border-gray-100'
             }`}>
             <div className="flex justify-between items-start mb-2">
                 <span className="text-2xl">{rate.flag}</span>

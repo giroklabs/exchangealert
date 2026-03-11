@@ -91,7 +91,7 @@ export function SevenSplitInvestment() {
     return (
         <div className="space-y-8">
             {/* 설정 섹션 */}
-            <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="flex justify-between items-center mb-6">
                     <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                         ⚙️ 투자 설정
@@ -193,9 +193,9 @@ export function SevenSplitInvestment() {
                     return (
                         <div
                             key={slot.number}
-                            className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${slot.isActive
-                                ? 'border-gray-800 dark:border-gray-200 shadow-lg shadow-gray-500/10'
-                                : 'border-transparent shadow-md hover:border-gray-300'
+                            className={`relative overflow-hidden rounded-2xl border transition-all duration-300 shadow-md hover:shadow-xl ${slot.isActive
+                                ? 'border-gray-800 dark:border-gray-200'
+                                : 'border-gray-100 dark:border-gray-700'
                                 } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
                         >
                             {/* 슬롯 헤더 */}

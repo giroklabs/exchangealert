@@ -177,7 +177,6 @@ export function ExchangeRateNews() {
         fetchNews(activeKeyword);
     }, [activeKeyword, fetchNews]);
 
-    const cardBase = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
 
     return (
         <div className="space-y-6">
@@ -217,7 +216,7 @@ export function ExchangeRateNews() {
 
             {/* 오류 상태 */}
             {error && (
-                <div className={`p-6 rounded-2xl shadow-xl text-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className={`p-6 rounded-2xl shadow-xl border text-center ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <p className="text-red-500 font-bold mb-2">⚠️ {error}</p>
                     <button onClick={() => fetchNews(activeKeyword, true)} className="px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500">
                         다시 시도
@@ -229,7 +228,7 @@ export function ExchangeRateNews() {
             {isLoading && !error && (
                 <div className="space-y-4">
                     {Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className={`p-6 rounded-2xl shadow-xl animate-pulse ${cardBase}`}>
+                        <div key={i} className={`p-6 rounded-2xl shadow-xl border animate-pulse ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                             <div className={`h-5 rounded-lg w-3/4 mb-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
                             <div className={`h-4 rounded-lg w-1/4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
                         </div>
@@ -248,7 +247,7 @@ export function ExchangeRateNews() {
                         return (
                             <div
                                 key={item.id}
-                                className={`p-6 rounded-2xl shadow-xl transition-all duration-200 ${cardBase} ${isExpanded ? 'ring-2 ring-yellow-400' : ''}`}
+                                className={`p-6 rounded-2xl shadow-xl border transition-all duration-200 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} ${isExpanded ? 'ring-2 ring-yellow-400' : ''}`}
                             >
                                 {/* 메인 기사 */}
                                 <div className="flex items-start justify-between gap-4">
@@ -319,7 +318,7 @@ export function ExchangeRateNews() {
 
             {/* 빈 상태 */}
             {!isLoading && !error && news.length === 0 && (
-                <div className={`p-12 rounded-2xl shadow-xl text-center ${cardBase}`}>
+                <div className={`p-12 rounded-2xl shadow-xl border text-center ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <p className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                         관련 뉴스가 없습니다.
                     </p>

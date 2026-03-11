@@ -117,7 +117,7 @@ function SingleAssetManager({
     const totalRoi = totalInvested > 0 ? (totalValue / totalInvested - 1) * 100 : 0;
 
     return (
-        <div className={`p-6 rounded-3xl space-y-8 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-yellow-100 shadow-xl'}`}>
+        <div className={`p-6 rounded-2xl space-y-8 border shadow-xl ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
             {/* 헤더: 종목명 및 기본 정보 */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6 border-dashed border-gray-200">
                 <div className="flex items-center gap-4">
@@ -251,9 +251,9 @@ function SingleAssetManager({
                     return (
                         <div
                             key={slot.number}
-                            className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${slot.isActive
-                                ? 'border-gray-800 dark:border-gray-200 shadow-lg shadow-gray-500/10'
-                                : 'border-transparent shadow-md hover:border-gray-300'
+                            className={`relative overflow-hidden rounded-2xl border transition-all duration-300 shadow-md hover:shadow-xl ${slot.isActive
+                                ? 'border-gray-800 dark:border-gray-200'
+                                : 'border-gray-100 dark:border-gray-700'
                                 } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
                         >
                             {/* 슬롯 헤더 */}
