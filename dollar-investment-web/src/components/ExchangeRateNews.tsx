@@ -112,31 +112,33 @@ export function ExchangeRateNews() {
     const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
-    const fetchNews = useCallback(async (query: string) => {
+    const fetchNews = useCallback(async (query: string, forceRefresh: boolean = false) => {
         // 1. 캐시 확인
-        const cached = newsCache[query];
-        if (cached) {
-            // 아직 로딩 중인 프로미스(Pre-fetch 등)가 있는 경우
-            if (cached.promise) {
-                setIsLoading(true);
-                try {
-                    const parsed = await cached.promise;
-                    if (parsed && parsed.length > 0) {
-                        setNews(parsed);
-                        setLastUpdated(newsCache[query]?.timestamp || new Date());
-                        return; // 프로미스 대기 완료, 조기 종료
+        if (!forceRefresh) {
+            const cached = newsCache[query];
+            if (cached) {
+                // 아직 로딩 중인 프로미스(Pre-fetch 등)가 있는 경우
+                if (cached.promise) {
+                    setIsLoading(true);
+                    try {
+                        const parsed = await cached.promise;
+                        if (parsed && parsed.length > 0) {
+                            setNews(parsed);
+                            setLastUpdated(newsCache[query]?.timestamp || new Date());
+                            return; // 프로미스 대기 완료, 조기 종료
+                        }
+                    } catch (e) {
+                        // pre-fetch 실패 시 진행 (아래의 일반 fetch로 재시도)
+                    } finally {
+                        setIsLoading(false);
                     }
-                } catch (e) {
-                    // pre-fetch 실패 시 진행 (아래의 일반 fetch로 재시도)
-                } finally {
-                    setIsLoading(false);
                 }
-            }
-            // 유효한 데이터가 단위 시간 내에 있는 경우 즉시 반환 (캐싱)
-            else if (cached.data.length > 0 && (new Date().getTime() - cached.timestamp.getTime() < CACHE_EXPIRY_MS)) {
-                setNews(cached.data);
-                setLastUpdated(cached.timestamp);
-                return; // 바로 렌더링, 네트워크 요청 생략
+                // 유효한 데이터가 단위 시간 내에 있는 경우 즉시 반환 (캐싱)
+                else if (cached.data.length > 0 && (new Date().getTime() - cached.timestamp.getTime() < CACHE_EXPIRY_MS)) {
+                    setNews(cached.data);
+                    setLastUpdated(cached.timestamp);
+                    return; // 바로 렌더링, 네트워크 요청 생략
+                }
             }
         }
 
@@ -203,7 +205,7 @@ export function ExchangeRateNews() {
                         </span>
                     )}
                     <button
-                        onClick={() => fetchNews(activeKeyword)}
+                        onClick={() => fetchNews(activeKeyword, true)}
                         disabled={isLoading}
                         className="flex items-center gap-2 px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md disabled:opacity-50"
                     >
@@ -217,7 +219,7 @@ export function ExchangeRateNews() {
             {error && (
                 <div className={`p-6 rounded-2xl shadow-xl text-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                     <p className="text-red-500 font-bold mb-2">⚠️ {error}</p>
-                    <button onClick={() => fetchNews(activeKeyword)} className="px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500">
+                    <button onClick={() => fetchNews(activeKeyword, true)} className="px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500">
                         다시 시도
                     </button>
                 </div>
