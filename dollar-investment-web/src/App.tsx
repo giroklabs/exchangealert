@@ -46,9 +46,9 @@ function App() {
         </header>
       </div>
 
-      {/* 전체 너비 탭바 */}
+      {/* 90% 너비 탭바 */}
       <div className={`w-full border-b mb-8 ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-100'} shadow-sm`}>
-        <div className="flex">
+        <div className="w-[90%] mx-auto flex">
           <Tabs
             activeTab={activeTab}
             onTabChange={setActiveTab}
