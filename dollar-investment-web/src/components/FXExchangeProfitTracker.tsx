@@ -105,10 +105,35 @@ export function FXExchangeProfitTracker() {
         .filter(inv => inv.status === 'sold')
         .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
 
+    // 기간별 실현 손익 계산
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const thisMonthStr = now.toISOString().slice(0, 7); // YYYY-MM
+    const thisYearStr = now.getFullYear().toString();
+
+    const realizedToday = investments
+        .filter(inv => inv.status === 'sold' && inv.sellDate === todayStr)
+        .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
+
+    const realizedMonth = investments
+        .filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisMonthStr))
+        .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
+
+    const realizedYear = investments
+        .filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisYearStr))
+        .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
+
+    // 거래 총액 계산 (매수 원금 + 매도 원금)
+    const totalBuyKrw = investments.reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0);
+    const totalSellKrw = investments
+        .filter(inv => inv.status === 'sold')
+        .reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
+    const totalTransactionVolume = totalBuyKrw + totalSellKrw;
+
     return (
         <div className="space-y-8">
             {/* 요약 카드 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보유 중인 달러</h3>
                     <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
@@ -128,12 +153,35 @@ export function FXExchangeProfitTracker() {
                     </p>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
-                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>실현 손익 (누적)</h3>
-                    <p className={`text-2xl font-bold ${realizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
-                        {realizedProfit >= 0 ? '+' : ''}{Math.round(realizedProfit).toLocaleString()}원
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>실현 손익 (일/월/년)</h3>
+                    <div className="space-y-1">
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-xs text-gray-500">오늘:</span>
+                            <span className={`text-md font-bold ${realizedToday >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                {realizedToday >= 0 ? '+' : ''}{Math.round(realizedToday).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-xs text-gray-500">이번 달:</span>
+                            <span className={`text-md font-bold ${realizedMonth >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                {realizedMonth >= 0 ? '+' : ''}{Math.round(realizedMonth).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-baseline border-t border-gray-100 dark:border-gray-700 pt-1 mt-1">
+                            <span className="text-xs font-bold text-gray-600 dark:text-gray-300">올해 합계:</span>
+                            <span className={`text-lg font-black ${realizedYear >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                {realizedYear >= 0 ? '+' : ''}{Math.round(realizedYear).toLocaleString()}원
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>누적 거래총액</h3>
+                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {Math.round(totalTransactionVolume).toLocaleString()}원
                     </p>
-                    <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        기록 내 확정된 수익
+                    <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        매수+매도 합산 규모
                     </p>
                 </div>
             </div>
