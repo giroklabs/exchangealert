@@ -102,8 +102,8 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
           <div
             key={index}
             className={`flex items-start gap-3 p-3 rounded-xl border ${condition.met
-                ? (theme === 'dark' ? 'bg-gray-700 border-yellow-500/50' : 'bg-yellow-50 border-yellow-200')
-                : (theme === 'dark' ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200')
+              ? (theme === 'dark' ? 'bg-gray-700 border-yellow-500/50' : 'bg-yellow-50 border-yellow-200')
+              : (theme === 'dark' ? 'bg-gray-700/50 border-gray-600' : 'bg-gray-50 border-gray-200')
               }`}
           >
             <span className="text-xl mt-0.5">{condition.met ? '✅' : '❌'}</span>
@@ -125,12 +125,7 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
         ))}
       </div>
 
-      <div className={`mt-6 p-4 rounded-xl ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50 border border-gray-100'}`}>
-        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-          <strong>알림:</strong> 4개 조건 중 3개 이상 만족 시 '매수 시작 적합' 단게로 판단합니다.
-          현재 점수는 <strong className="text-yellow-500">{signal.score}점</strong>입니다.
-        </p>
-      </div>
+
     </div>
   );
 }
