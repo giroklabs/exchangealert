@@ -29,6 +29,9 @@ export function SevenSplitInvestment() {
         }));
     });
 
+    const [editingSlot, setEditingSlot] = useSyncState<number | null>('seven-split-editing-slot', null);
+    const [editValues, setEditValues] = useSyncState<{ buyPrice: number; amount: number; targetPrice: number }>('seven-split-edit-values', { buyPrice: 0, amount: 0, targetPrice: 0 });
+
     // 설정 변경 핸들러
     const handleSettingChange = (key: keyof SevenSplitSettings, value: number) => {
         setSettings(prev => ({ ...prev, [key]: value }));
@@ -72,6 +75,29 @@ export function SevenSplitInvestment() {
             targetPrice: null
         };
         setSlots(newSlots);
+    };
+
+    const handleEditStart = (slot: SevenSplitSlot) => {
+        setEditValues({
+            buyPrice: slot.buyPrice || 0,
+            amount: slot.amount || 0,
+            targetPrice: slot.targetPrice || 0
+        });
+        setEditingSlot(slot.number);
+    };
+
+    const handleEditSave = (slotNumber: number) => {
+        const slotIndex = slotNumber - 1;
+        const newSlots = [...slots];
+        newSlots[slotIndex] = {
+            ...newSlots[slotIndex],
+            buyPrice: editValues.buyPrice,
+            amount: editValues.amount,
+            krwAmount: editValues.buyPrice * editValues.amount,
+            targetPrice: editValues.targetPrice
+        };
+        setSlots(newSlots);
+        setEditingSlot(null);
     };
 
     // 리셋
@@ -211,44 +237,98 @@ export function SevenSplitInvestment() {
                             {/* 슬롯 바디 */}
                             <div className="p-5 space-y-4">
                                 {slot.isActive ? (
-                                    <>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">매수가</span>
-                                            <span className="font-bold">{slot.buyPrice?.toLocaleString()}원</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">목표가</span>
-                                            <span className="font-bold text-yellow-500 dark:text-yellow-400">{slot.targetPrice?.toFixed(2)}원</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">매수수량</span>
-                                            <span className="font-bold">${slot.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-gray-500">투자금액</span>
-                                            <span className="font-bold">{Math.round(slot.krwAmount).toLocaleString()}원</span>
-                                        </div>
-                                        <div className="pt-2 border-t border-dashed border-gray-200">
-                                            <div className="flex justify-between items-end">
-                                                <span className="text-xs text-gray-500">현재 수익률</span>
-                                                <span className={`text-lg font-black ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
-                                                    {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
-                                                </span>
+                                    editingSlot === slot.number ? (
+                                        <div className="space-y-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-gray-400">매수가</label>
+                                                <input
+                                                    type="number"
+                                                    value={editValues.buyPrice}
+                                                    onChange={(e) => setEditValues(prev => ({ ...prev, buyPrice: Number(e.target.value) }))}
+                                                    className={`w-full p-1 text-xs border rounded ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}
+                                                />
                                             </div>
-                                            <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
-                                                {profit >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
+                                            <div>
+                                                <label className="text-[10px] font-bold text-gray-400">매수수량 ($)</label>
+                                                <input
+                                                    type="number"
+                                                    value={editValues.amount}
+                                                    onChange={(e) => setEditValues(prev => ({ ...prev, amount: Number(e.target.value) }))}
+                                                    className={`w-full p-1 text-xs border rounded ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-bold text-gray-400">목표가</label>
+                                                <input
+                                                    type="number"
+                                                    value={editValues.targetPrice}
+                                                    onChange={(e) => setEditValues(prev => ({ ...prev, targetPrice: Number(e.target.value) }))}
+                                                    className={`w-full p-1 text-xs border rounded ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'}`}
+                                                />
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => handleEditSave(slot.number)}
+                                                    className="flex-1 py-1 text-xs font-bold bg-green-500 text-white rounded"
+                                                >
+                                                    저장
+                                                </button>
+                                                <button
+                                                    onClick={() => setEditingSlot(null)}
+                                                    className="flex-1 py-1 text-xs font-bold bg-gray-400 text-white rounded"
+                                                >
+                                                    취소
+                                                </button>
                                             </div>
                                         </div>
-                                        <button
-                                            onClick={() => handleSell(slot.number)}
-                                            className={`w-full py-3 rounded-xl font-bold transition-all ${canSell
-                                                ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
-                                                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                                }`}
-                                        >
-                                            {canSell ? '💰 매도 가능!' : '보유 중'}
-                                        </button>
-                                    </>
+                                    ) : (
+                                        <>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500">매수가</span>
+                                                <span className="font-bold">{slot.buyPrice?.toLocaleString()}원</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500">목표가</span>
+                                                <span className="font-bold text-yellow-500 dark:text-yellow-400">{slot.targetPrice?.toFixed(2)}원</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500">매수수량</span>
+                                                <span className="font-bold">${slot.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500">투자금액</span>
+                                                <span className="font-bold">{Math.round(slot.krwAmount).toLocaleString()}원</span>
+                                            </div>
+                                            <div className="pt-2 border-t border-dashed border-gray-200">
+                                                <div className="flex justify-between items-end">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs text-gray-500">현재 수익률</span>
+                                                        <button
+                                                            onClick={() => handleEditStart(slot)}
+                                                            className="text-[10px] text-blue-500 hover:underline text-left"
+                                                        >
+                                                            데이터 수정 ✏️
+                                                        </button>
+                                                    </div>
+                                                    <span className={`text-lg font-black ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                                        {roi >= 0 ? '+' : ''}{roi.toFixed(2)}%
+                                                    </span>
+                                                </div>
+                                                <div className={`text-right text-xs mt-1 ${profit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
+                                                    {profit >= 0 ? '+' : ''}{Math.round(profit).toLocaleString()}원
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => handleSell(slot.number)}
+                                                className={`w-full py-3 rounded-xl font-bold transition-all ${canSell
+                                                    ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
+                                                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                                    }`}
+                                            >
+                                                {canSell ? '💰 매도 가능!' : '보유 중'}
+                                            </button>
+                                        </>
+                                    )
                                 ) : (
                                     <>
                                         <div className="h-24 flex flex-col justify-center items-center text-center space-y-2">
