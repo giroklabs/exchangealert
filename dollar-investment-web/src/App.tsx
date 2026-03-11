@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InvestmentAnalysis } from './components/InvestmentAnalysis';
 import { SevenSplitInvestment } from './components/SevenSplitInvestment';
 import { AssetSplitInvestment } from './components/AssetSplitInvestment';
@@ -11,12 +11,36 @@ import { useTheme } from './contexts/ThemeContext';
 import { UserProfile } from './components/UserProfile';
 import { BackupManager } from './components/BackupManager';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
+import { fetchCurrentExchangeRate, getCurrentRateValue, fetchLastUpdateTime } from './services/exchangeRateService';
 import logo from './assets/logo.png';
 import './App.css';
 
 function App() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [currentRateInfo, setCurrentRateInfo] = useState<{ rate: number; time: string } | null>(null);
+
+  useEffect(() => {
+    async function fetchHeaderRate() {
+      try {
+        const [rateData, updateTime] = await Promise.all([
+          fetchCurrentExchangeRate(),
+          fetchLastUpdateTime()
+        ]);
+        if (rateData) {
+          setCurrentRateInfo({
+            rate: getCurrentRateValue(rateData),
+            time: updateTime || ''
+          });
+        }
+      } catch (e) {
+        console.error("Header rate fetch error:", e);
+      }
+    }
+    fetchHeaderRate();
+    const interval = setInterval(fetchHeaderRate, 15 * 60 * 1000); // 15분
+    return () => clearInterval(interval);
+  }, []);
 
   const tabs = [
     { id: 'dashboard', label: '시장 대시보드', icon: '🌍' },
@@ -33,13 +57,23 @@ function App() {
       {/* 헤더 */}
       <div className="max-w-6xl mx-auto px-4 pt-8">
         <header className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-3">
-            <img src={logo} alt="로장보로" className="w-10 h-10 rounded-xl shadow-sm" />
-            <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-              달러 인베스트
-            </h1>
-          </div>
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="로장보로" className="w-10 h-10 rounded-xl shadow-sm" />
+              <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                달러 인베스트
+              </h1>
+            </div>
+            {currentRateInfo && (
+              <div className={`text-sm font-bold flex items-center pt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                <span className={`text-base mr-1 ${theme === 'dark' ? 'text-yellow-400' : 'text-blue-600'}`}>
+                  원/달러 {currentRateInfo.rate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
+                </span>
+                <span className="text-xs font-medium">({currentRateInfo.time})</span>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-4 flex-shrink-0">
             <UserProfile />
             <ThemeToggle />
           </div>
