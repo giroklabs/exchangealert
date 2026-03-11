@@ -1,3 +1,5 @@
+import { useTheme } from '../contexts/ThemeContext';
+
 interface HistoryDataTableProps {
   exchangeRateHistory: Array<{ date: string; rate: number }>;
   dollarIndexHistory: Array<{ date: string; value: number }>;
@@ -11,14 +13,16 @@ export function HistoryDataTable({
   currentDollarIndex,
   isLoading,
 }: HistoryDataTableProps) {
+  const { theme } = useTheme();
+
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-        <div className="space-y-2">
-          <div className="h-4 bg-gray-200 rounded"></div>
-          <div className="h-4 bg-gray-200 rounded"></div>
-          <div className="h-4 bg-gray-200 rounded"></div>
+      <div className={`rounded-2xl shadow-xl border p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+        <div className={`h-6 rounded w-1/3 mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+        <div className="space-y-4">
+          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+          <div className={`h-4 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
         </div>
       </div>
     );
@@ -34,11 +38,9 @@ export function HistoryDataTable({
 
   // 날짜 형식 정규화 함수 (YYYY-MM-DD 형식으로 통일)
   const normalizeDate = (dateStr: string): string => {
-    // 이미 YYYY-MM-DD 형식이면 그대로 반환
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
       return dateStr;
     }
-    // 다른 형식이면 Date 객체를 통해 변환
     const date = new Date(dateStr);
     if (!isNaN(date.getTime())) {
       return date.toISOString().split('T')[0];
@@ -46,14 +48,12 @@ export function HistoryDataTable({
     return dateStr;
   };
 
-  // 날짜를 정규화하여 Map 생성
   const rateMap = new Map(
     exchangeRateHistory.map((item) => [normalizeDate(item.date), item.rate])
   );
 
   const indexEntries = [...dollarIndexHistory.map((item) => [normalizeDate(item.date), item.value])];
 
-  // 현재 달러 지수 추가 (히스토리에 없는 경우)
   if (currentDollarIndex) {
     const normalizedCurrentDate = normalizeDate(currentDollarIndex.date);
     if (!indexEntries.some(([date]) => date === normalizedCurrentDate)) {
@@ -63,13 +63,11 @@ export function HistoryDataTable({
 
   const indexMap = new Map(indexEntries as [string, number][]);
 
-  // 모든 날짜 수집 (정규화된 날짜 사용)
   const allDates = new Set([
     ...exchangeRateHistory.map((item) => normalizeDate(item.date)),
     ...Array.from(indexMap.keys())
   ]);
 
-  // 날짜별로 정렬하여 데이터 병합
   const sortedDates = Array.from(allDates).sort();
   let lastKnownDollarIndex: number | null = null;
 
@@ -77,7 +75,6 @@ export function HistoryDataTable({
     const rate = rateMap.get(date) || null;
     let dollarIndex = indexMap.get(date) || null;
 
-    // missing dollarIndex가 있으면 이전 값으로 채움 (Forward Fill)
     if (dollarIndex === null && lastKnownDollarIndex !== null) {
       dollarIndex = lastKnownDollarIndex;
     }
@@ -92,69 +89,61 @@ export function HistoryDataTable({
     combinedData.push({ date, rate, dollarIndex, gapRatio });
   });
 
-  // 테이블 표시를 위해 최신순으로 역정렬
   combinedData.reverse();
 
-  // 디버깅을 위한 로그 (개발 환경에서만)
-  if (import.meta.env.DEV) {
-    console.log('HistoryDataTable - Exchange Rate History:', exchangeRateHistory.length);
-    console.log('HistoryDataTable - Dollar Index History:', dollarIndexHistory.length);
-    console.log('HistoryDataTable - Combined Data:', combinedData.length);
-    console.log('HistoryDataTable - Sample dates:', combinedData.slice(0, 5).map(d => d.date));
-  }
-
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">전체 데이터 (최근 52주)</h3>
+    <div className={`rounded-2xl shadow-xl border p-6 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+      <h3 className={`text-lg font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>전체 데이터 (최근 52주)</h3>
       <div className="overflow-x-auto max-h-96 overflow-y-auto">
         <table className="w-full text-sm">
-          <thead className="sticky top-0 bg-white">
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-bold text-gray-900">날짜</th>
-              <th className="text-right py-3 px-4 font-bold text-gray-900">원/달러 환율</th>
-              <th className="text-right py-3 px-4 font-bold text-gray-900">달러 지수</th>
-              <th className="text-right py-3 px-4 font-bold text-gray-900">달러 갭 비율</th>
+          <thead className={`sticky top-0 z-10 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+            <tr className={`border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+              <th className={`text-left py-3 px-4 font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>날짜</th>
+              <th className={`text-right py-3 px-4 font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>원/달러 환율</th>
+              <th className={`text-right py-3 px-4 font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>달러 지수</th>
+              <th className={`text-right py-3 px-4 font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>달러 갭 비율</th>
             </tr>
           </thead>
           <tbody>
             {combinedData.map((item, index) => (
               <tr
                 key={item.date}
-                className={`border-b border-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                className={`border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-50'} ${index % 2 === 0
+                    ? (theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-50/50')
+                    : (theme === 'dark' ? 'bg-gray-800' : 'bg-white')
                   }`}
               >
-                <td className="py-2 px-4 font-medium text-gray-900">
+                <td className={`py-2 px-4 font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                   {new Date(item.date).toLocaleDateString('ko-KR', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',
                   })}
                 </td>
-                <td className="py-2 px-4 text-right font-semibold text-gray-900">
+                <td className={`py-2 px-4 text-right font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                   {item.rate
                     ? item.rate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })
-                    : <span className="text-gray-400">-</span>}
+                    : <span className="text-gray-500">-</span>}
                 </td>
-                <td className="py-2 px-4 text-right font-semibold text-gray-900">
+                <td className={`py-2 px-4 text-right font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                   {item.dollarIndex
                     ? item.dollarIndex.toLocaleString('ko-KR', { maximumFractionDigits: 2 })
-                    : <span className="text-gray-400">-</span>}
+                    : <span className="text-gray-500">-</span>}
                 </td>
-                <td className="py-2 px-4 text-right font-semibold text-gray-900">
+                <td className={`py-2 px-4 text-right font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                   {item.gapRatio
                     ? item.gapRatio.toLocaleString('ko-KR', { maximumFractionDigits: 2 })
-                    : <span className="text-gray-400">-</span>}
+                    : <span className="text-gray-500">-</span>}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-400">
+      <div className={`mt-4 pt-4 border-t ${theme === 'dark' ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-400'} text-xs`}>
         <p>📊 총 {combinedData.length}개 데이터</p>
         <p>💡 스크롤하여 전체 데이터 확인 가능</p>
       </div>
     </div>
   );
 }
-

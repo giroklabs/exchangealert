@@ -27,7 +27,7 @@ export function DataTable({
 
   if (isLoading) {
     return (
-      <div className={`rounded-lg shadow-md p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      <div className={`rounded-2xl shadow-xl border p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
         }`}>
         <div className={`h-6 rounded w-1/3 mb-6 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
           }`}></div>
@@ -46,7 +46,7 @@ export function DataTable({
   }
 
   return (
-    <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+    <div className={`rounded-2xl shadow-xl border p-6 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
       }`}>
       <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
         }`}>52주 평균 데이터</h3>

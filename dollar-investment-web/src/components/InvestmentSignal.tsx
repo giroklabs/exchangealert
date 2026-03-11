@@ -1,8 +1,8 @@
-import type { InvestmentSignal } from '../types';
+import type { InvestmentSignal as InvestmentSignalType } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface InvestmentSignalProps {
-  signal: InvestmentSignal | null;
+  signal: InvestmentSignalType | null;
   isLoading?: boolean;
 }
 
@@ -11,12 +11,12 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
 
   if (isLoading) {
     return (
-      <div className={`rounded-3xl shadow-sm border p-6 md:p-8 animate-pulse ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
-        <div className={`h-16 rounded-2xl w-full mb-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
-        <div className={`h-4 rounded w-32 mb-5 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
+      <div className={`rounded-2xl shadow-xl border p-6 md:p-8 animate-pulse ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+        <div className={`h-16 rounded-2xl w-full mb-8 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}></div>
+        <div className={`h-4 rounded w-32 mb-5 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className={`h-24 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}></div>
+            <div key={i} className={`h-24 rounded-2xl ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}></div>
           ))}
         </div>
       </div>
@@ -25,7 +25,7 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
 
   if (!signal) {
     return (
-      <div className={`rounded-3xl shadow-sm p-6 border ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
+      <div className={`rounded-2xl shadow-xl p-6 border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
         <h3 className={`text-lg font-bold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>투자 적합성 분석</h3>
         <p className={theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}>데이터를 불러올 수 없습니다.</p>
       </div>
@@ -76,7 +76,7 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
   const status = getStatusConfig();
 
   return (
-    <div className={`p-6 md:p-8 rounded-3xl shadow-sm border transition-colors duration-300 ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
+    <div className={`p-6 md:p-8 rounded-2xl shadow-xl border transition-all duration-300 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
       {/* Top Banner */}
       <div className={`flex items-center justify-center md:justify-start gap-3 p-5 rounded-2xl mb-8 ${status.bg}`}>
         <div className={`${status.color}`}>

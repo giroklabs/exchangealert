@@ -2,7 +2,7 @@ export function AboutPage() {
     return (
         <div className="space-y-8 animate-fade-in pb-12">
             {/* Header Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
                 <div className="flex items-center gap-4 mb-6">
                     <span className="text-4xl">👋</span>
                     <div>
@@ -78,7 +78,7 @@ export function AboutPage() {
 
 function FeatureCard({ icon, title, desc }: { icon: string, title: string, desc: string }) {
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow">
             <div className="text-3xl mb-3">{icon}</div>
             <h3 className="font-black text-gray-900 dark:text-white mb-2">{title}</h3>
             <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{desc}</p>

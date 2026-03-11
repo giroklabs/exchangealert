@@ -59,12 +59,10 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
 
   if (!('Notification' in window)) {
     return (
-      <div className={`border rounded-lg p-4 ${
-        theme === 'dark' ? 'bg-yellow-900 border-yellow-700' : 'bg-yellow-50 border-yellow-200'
-      }`}>
-        <p className={`text-sm ${
-          theme === 'dark' ? 'text-yellow-200' : 'text-yellow-800'
+      <div className={`border rounded-2xl p-4 shadow-xl ${theme === 'dark' ? 'bg-yellow-900/20 border-yellow-700' : 'bg-yellow-50 border-yellow-200'
         }`}>
+        <p className={`text-sm ${theme === 'dark' ? 'text-yellow-200' : 'text-yellow-800'
+          }`}>
           ⚠️ 이 브라우저는 알림을 지원하지 않습니다.
         </p>
       </div>
@@ -72,33 +70,29 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
   }
 
   return (
-    <div className={`rounded-lg shadow-md p-4 ${
-      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-    }`}>
-      <h3 className={`text-lg font-semibold mb-4 ${
-        theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-      }`}>🔔 알림 설정</h3>
-      
+    <div className={`rounded-2xl shadow-xl border p-4 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+      }`}>
+      <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+        }`}>🔔 알림 설정</h3>
+
       <div className="space-y-3">
         {/* 권한 상태 표시 */}
         <div className="flex items-center justify-between">
-          <span className={`text-sm ${
-            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-          }`}>알림 권한:</span>
+          <span className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>알림 권한:</span>
           <span
-            className={`text-sm font-medium ${
-              permission.granted
+            className={`text-sm font-medium ${permission.granted
                 ? 'text-green-400'
                 : permission.denied
-                ? 'text-gray-700 dark:text-gray-300'
-                : 'text-yellow-400'
-            }`}
+                  ? 'text-gray-700 dark:text-gray-300'
+                  : 'text-yellow-400'
+              }`}
           >
             {permission.granted
               ? '✅ 허용됨'
               : permission.denied
-              ? '❌ 거부됨'
-              : '⚠️ 요청 필요'}
+                ? '❌ 거부됨'
+                : '⚠️ 요청 필요'}
           </span>
         </div>
 
@@ -115,17 +109,14 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
 
         {/* 거부된 경우 안내 */}
         {permission.denied && (
-          <div className={`border rounded-lg p-3 ${
-            theme === 'dark' ? 'bg-red-900 border-red-700' : 'bg-red-50 border-red-200'
-          }`}>
-            <p className={`text-xs ${
-              theme === 'dark' ? 'text-red-200' : 'text-red-800'
+          <div className={`border rounded-xl p-3 ${theme === 'dark' ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-200'
             }`}>
+            <p className={`text-xs ${theme === 'dark' ? 'text-red-200' : 'text-red-800'
+              }`}>
               알림이 거부되었습니다. 브라우저 설정에서 알림 권한을 허용해주세요.
             </p>
-            <p className={`text-xs mt-1 ${
-              theme === 'dark' ? 'text-red-300' : 'text-gray-900 dark:text-gray-100'
-            }`}>
+            <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-red-300' : 'text-gray-900 dark:text-gray-100'
+              }`}>
               Safari: 환경설정 → 웹사이트 → 알림
             </p>
           </div>
@@ -142,17 +133,14 @@ export function NotificationSettings({ onPermissionChange }: NotificationSetting
         )}
 
         {/* 알림 설명 */}
-        <div className={`mt-4 pt-4 border-t ${
-          theme === 'dark' ? 'border-gray-600' : 'border-gray-200'
-        }`}>
-          <p className={`text-xs ${
-            theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
+        <div className={`mt-4 pt-4 border-t ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'
           }`}>
+          <p className={`text-xs ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
+            }`}>
             투자 적합성 상태가 변경되면 자동으로 알림을 받을 수 있습니다.
           </p>
-          <p className={`text-xs mt-1 ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
-          }`}>
+          <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
+            }`}>
             • 투자 적합 상태로 변경될 때 알림
             <br />
             • 투자 부적합 상태로 변경될 때 알림

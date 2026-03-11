@@ -24,9 +24,9 @@ export function InvestmentAnalysis() {
   if (error) {
     return (
       <div>
-        <div className={`rounded-lg p-6 ${theme === 'dark'
-          ? 'bg-red-900 border border-red-700'
-          : 'bg-red-50 border border-red-200'
+        <div className={`rounded-2xl p-6 shadow-xl border ${theme === 'dark'
+          ? 'bg-red-900/20 border-red-700 text-red-200'
+          : 'bg-red-50 border-red-200 text-red-800'
           }`}>
           <h2 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-red-200' : 'text-red-800'
             }`}>오류 발생</h2>
@@ -135,7 +135,7 @@ export function InvestmentAnalysis() {
       {/* 환율알라미 앱 홍보 */}
       <div className={`mt-12 pt-8 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'
         }`}>
-        <div className="text-center p-6 rounded-lg bg-yellow-400 border border-yellow-500">
+        <div className="text-center p-6 rounded-2xl shadow-xl bg-yellow-400 border border-yellow-500">
           <a
             href="https://apps.apple.com/kr/app/%ED%99%98%EC%9C%A8%EC%95%8C%EB%9D%BC%EB%AF%B8/id6752878684"
             target="_blank"
@@ -152,4 +152,3 @@ export function InvestmentAnalysis() {
     </div>
   );
 }
-

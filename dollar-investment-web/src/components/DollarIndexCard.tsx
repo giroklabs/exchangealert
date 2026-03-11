@@ -12,7 +12,7 @@ export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardPro
 
   if (isLoading) {
     return (
-      <div className={`rounded-lg shadow-md p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      <div className={`rounded-2xl shadow-xl border p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
         }`}>
         <div className={`h-4 rounded w-1/3 mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
           }`}></div>
@@ -46,7 +46,7 @@ export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardPro
   const isBelowAverage = average ? data.current < average : false;
 
   return (
-    <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+    <div className={`rounded-2xl shadow-xl border p-6 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
       }`}>
       <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
         }`}>달러 지수</h3>
@@ -58,8 +58,8 @@ export function DollarIndexCard({ data, average, isLoading }: DollarIndexCardPro
         {average && (
           <span
             className={`text-sm font-medium ${isBelowAverage
-                ? (theme === 'dark' ? 'text-green-400' : 'text-green-600')
-                : (theme === 'dark' ? 'text-gray-700 dark:text-gray-300' : 'text-gray-900 dark:text-gray-100')
+              ? (theme === 'dark' ? 'text-green-400' : 'text-green-600')
+              : (theme === 'dark' ? 'text-gray-700 dark:text-gray-300' : 'text-gray-900 dark:text-gray-100')
               }`}
           >
             {isBelowAverage ? '↓' : '↑'} 52주 평균: {average.toLocaleString('ko-KR', {
