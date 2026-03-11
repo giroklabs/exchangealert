@@ -7,28 +7,31 @@ import { parseExchangeRate } from './calculationService';
  */
 
 /**
- * 현재 환율 데이터 로드
+ * 현재 모든 환율 데이터 리스트 로드
  */
-export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
+export async function fetchAllCurrentExchangeRates(): Promise<ExchangeRate[]> {
   try {
-    // 실제 환율 데이터는 GitHub의 data/exchange-rates.json에서 로드
-    // 이 파일은 GitHub Actions로 15분마다 자동 업데이트됨
-    const url = import.meta.env.PROD 
-      ? 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json'
-      : 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json';
+    const url = 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json';
 
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: ExchangeRate[] = await response.json();
-    const usdRate = data.find((rate) => rate.cur_unit === 'USD');
-    return usdRate || null;
+    return await response.json();
   } catch (error) {
-    console.error('환율 데이터 로드 실패:', error);
-    return null;
+    console.error('모든 환율 데이터 로드 실패:', error);
+    return [];
   }
+}
+
+/**
+ * 현재 환율 데이터 로드 (USD 기준)
+ */
+export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
+  const data = await fetchAllCurrentExchangeRates();
+  const usdRate = data.find((rate) => rate.cur_unit === 'USD');
+  return usdRate || null;
 }
 
 /**
@@ -36,7 +39,7 @@ export async function fetchCurrentExchangeRate(): Promise<ExchangeRate | null> {
  */
 export async function fetchLastUpdateTime(): Promise<string | null> {
   try {
-    const url = import.meta.env.PROD 
+    const url = import.meta.env.PROD
       ? 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/last-update.txt'
       : 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/last-update.txt';
 
@@ -63,11 +66,11 @@ export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; 
     const cacheKey = 'exchange-rate-history';
     const cacheTimestampKey = 'exchange-rate-history-timestamp';
     const CACHE_DURATION = 15 * 60 * 1000; // 15분 캐시
-    
+
     // 캐시 확인
     const cachedData = sessionStorage.getItem(cacheKey);
     const cachedTimestamp = sessionStorage.getItem(cacheTimestampKey);
-    
+
     if (cachedData && cachedTimestamp) {
       const timestamp = parseInt(cachedTimestamp, 10);
       if (Date.now() - timestamp < CACHE_DURATION) {
@@ -75,22 +78,22 @@ export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; 
         return JSON.parse(cachedData);
       }
     }
-    
+
     // GitHub에서 최근 52주 히스토리 데이터 로드
     const today = new Date();
-    
+
     // 날짜 배열 생성 (최근 52주, 약 364일)
     const datePromises: Array<Promise<{ date: string; rate: number } | null>> = [];
     const maxDays = 52 * 7;
-    
+
     // 병렬로 모든 날짜에 대한 요청 생성
     for (let i = 0; i < maxDays; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
-      
+
       const url = `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/history/exchange-rates-${dateStr}.json`;
-      
+
       // 각 날짜에 대한 fetch Promise 생성
       const promise = fetch(url)
         .then(response => {
@@ -109,36 +112,36 @@ export async function fetchExchangeRateHistory(): Promise<Array<{ date: string; 
           return null;
         })
         .catch(() => null);
-      
+
       datePromises.push(promise);
-      
+
       // 260개 요청이 충분하면 중단
       if (i >= 260) break;
     }
-    
+
     // 모든 요청을 병렬로 실행 (배치 처리로 동시 요청 수 제한)
     const BATCH_SIZE = 20; // 동시에 20개씩 처리
     const results: Array<{ date: string; rate: number } | null> = [];
-    
+
     for (let i = 0; i < datePromises.length; i += BATCH_SIZE) {
       const batch = datePromises.slice(i, i + BATCH_SIZE);
       const batchResults = await Promise.all(batch);
       results.push(...batchResults);
-      
+
       // 유효한 데이터가 260개 이상이면 중단
       const validCount = results.filter(r => r !== null).length;
       if (validCount >= 260) break;
     }
-    
+
     // null 제거 및 정렬
     const validHistory = results
       .filter((item): item is { date: string; rate: number } => item !== null)
       .sort((a, b) => a.date.localeCompare(b.date));
-    
+
     // 캐시 저장
     sessionStorage.setItem(cacheKey, JSON.stringify(validHistory));
     sessionStorage.setItem(cacheTimestampKey, Date.now().toString());
-    
+
     console.log(`✅ 환율 히스토리 로드 완료: ${validHistory.length}개 데이터`);
     return validHistory;
   } catch (error) {
