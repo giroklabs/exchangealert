@@ -154,14 +154,14 @@ function SingleAssetManager({
 
             {/* 설정 및 현재가 입력 섹션 */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
                         <label className="text-xs font-bold text-gray-400 mb-1 block">총 예산</label>
                         <input
                             type="number"
                             value={investment.settings.totalBudget}
                             onChange={(e) => handleSettingUpdate('totalBudget', Number(e.target.value))}
-                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
                         />
                     </div>
                     <div>
@@ -171,7 +171,7 @@ function SingleAssetManager({
                             step="0.1"
                             value={investment.settings.gapPercent}
                             onChange={(e) => handleSettingUpdate('gapPercent', Number(e.target.value))}
-                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
                         />
                     </div>
                     <div>
@@ -181,7 +181,7 @@ function SingleAssetManager({
                             step="0.1"
                             value={investment.settings.targetProfitPercent}
                             onChange={(e) => handleSettingUpdate('targetProfitPercent', Number(e.target.value))}
-                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
                         />
                     </div>
                     <div>
@@ -190,17 +190,15 @@ function SingleAssetManager({
                             type="number"
                             value={investment.settings.basePrice}
                             onChange={(e) => handleSettingUpdate('basePrice', Number(e.target.value))}
-                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
                         />
                     </div>
-                </div>
-                <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
                         <label className="text-xs font-bold text-gray-400 mb-1 block">분할 횟수</label>
                         <select
                             value={investment.settings.splitCount || 7}
                             onChange={(e) => handleSettingUpdate('splitCount', Number(e.target.value))}
-                            className={`w-full p-2 text-sm rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                            className={`w-full p-2.5 text-sm font-bold rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900 shadow-sm'}`}
                         >
                             <option value={5}>5분할</option>
                             <option value={6}>6분할</option>
@@ -211,7 +209,7 @@ function SingleAssetManager({
                         </select>
                     </div>
                 </div>
-                <div className={`lg:col-span-4 p-4 rounded-2xl flex flex-col justify-center items-center gap-2 border-2 ${theme === 'dark' ? 'bg-yellow-900/10 border-yellow-500/20' : 'bg-yellow-50 border-yellow-100 shadow-inner'}`}>
+                <div className={`lg:col-span-4 p-4 rounded-2xl flex flex-col justify-center items-center gap-3 border-2 ${theme === 'dark' ? 'bg-yellow-900/10 border-yellow-500/20' : 'bg-yellow-50 border-yellow-100 shadow-inner'}`}>
                     <label className="text-xs font-black text-yellow-600 uppercase tracking-wider">현재 {investment.settings.assetName} 가격</label>
                     <div className="flex items-center gap-2">
                         <input
@@ -222,10 +220,10 @@ function SingleAssetManager({
                                 setCurrentPrice(val);
                                 handleUpdate({ lastPrice: val });
                             }}
-                            className={`text-xl font-black w-32 p-1 bg-transparent border-b-2 text-center focus:outline-none ${theme === 'dark' ? 'text-white border-yellow-500' : 'text-yellow-900 border-yellow-300'}`}
+                            className={`w-40 p-2 text-xl font-black rounded-lg border focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all text-center ${theme === 'dark' ? 'bg-gray-800 border-yellow-500/50 text-white shadow-sm' : 'bg-yellow-100 border-yellow-300 text-yellow-900 shadow-sm'}`}
                             placeholder="0"
                         />
-                        <span className="font-bold text-yellow-500">원</span>
+                        <span className="font-bold text-yellow-600">원</span>
                     </div>
                 </div>
             </div>
