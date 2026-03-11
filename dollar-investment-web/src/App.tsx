@@ -47,14 +47,12 @@ function App() {
       </div>
 
       {/* 탭바 */}
-      <div className={`w-full border-b mb-8 ${theme === 'dark' ? 'bg-gray-800/80 border-gray-700' : 'bg-white border-gray-100'} shadow-sm`}>
-        <div className="max-w-6xl mx-auto px-4 flex">
-          <Tabs
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            tabs={tabs}
-          />
-        </div>
+      <div className="max-w-6xl mx-auto px-4 mb-8">
+        <Tabs
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          tabs={tabs}
+        />
       </div>
 
       {/* 본문 */}
