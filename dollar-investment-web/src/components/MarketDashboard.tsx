@@ -129,6 +129,7 @@ export function MarketDashboard() {
                         <ul className={`space-y-2 list-disc list-inside ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                             <li>미국 기준금리 인상 (달러 강세)</li>
                             <li>미국 주요 경제지표(고용, CPI) 호조</li>
+                            <li>VIX 공포지수 상승 (시장 불안정성 및 달러 선호)</li>
                             <li>엔/달러 환율 상승 (엔화 약세 동조)</li>
                             <li>국제 유가 상승 (달러 수요 증가)</li>
                             <li>글로벌 리스크 확산 (안전자산 선호)</li>

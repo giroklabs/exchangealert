@@ -1,5 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import type { DollarIndexData } from '../types';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface DollarIndexChartProps {
   data: DollarIndexData | null;
@@ -8,11 +9,22 @@ interface DollarIndexChartProps {
 }
 
 export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartProps) {
+  const { theme } = useTheme();
+
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-        <div className="h-64 bg-gray-200 rounded"></div>
+      <div className={`rounded-lg shadow-md p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+        }`}>
+        <div className={`h-6 rounded w-1/3 mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+          }`}></div>
+        <div className={`h-[300px] rounded mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+          }`}></div>
+        <div className="space-y-2">
+          <div className={`h-3 rounded w-1/2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}></div>
+          <div className={`h-3 rounded w-1/3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}></div>
+        </div>
       </div>
     );
   }
@@ -39,34 +51,35 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
   }));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-700 mb-4">달러 지수 추이 (52주)</h3>
+    <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+      <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>달러 지수 추이 (52주)</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#e5e7eb'} />
           <XAxis
             dataKey="date"
-            stroke="#6b7280"
+            stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
             fontSize={12}
-            tick={{ fill: '#6b7280' }}
+            tick={{ fill: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
             angle={-45}
             textAnchor="end"
             height={60}
             interval="preserveStartEnd"
           />
           <YAxis
-            stroke="#6b7280"
+            stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
             fontSize={12}
-            tick={{ fill: '#6b7280' }}
+            tick={{ fill: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
             domain={['dataMin - 2', 'dataMax + 2']}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#fff',
-              border: '1px solid #e5e7eb',
+              backgroundColor: theme === 'dark' ? '#1f2937' : '#fff',
+              border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
               borderRadius: '8px',
               padding: '8px'
             }}
+            itemStyle={{ color: '#8b5cf6' }}
             formatter={(value: number) => [`${value.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`, '달러 지수']}
             labelFormatter={(label) => `날짜: ${label}`}
           />
@@ -75,7 +88,12 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
               y={average}
               stroke="#22c55e"
               strokeDasharray="5 5"
-              label={{ value: `52주 평균: ${average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`, position: 'right' }}
+              label={{
+                value: `52주 평균: ${average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`,
+                position: 'right',
+                fill: theme === 'dark' ? '#4ade80' : '#16a34a',
+                fontSize: 10
+              }}
             />
           )}
           <Line
@@ -88,7 +106,7 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
           />
         </LineChart>
       </ResponsiveContainer>
-      <div className="mt-4 text-xs text-gray-400">
+      <div className={`mt-4 text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
         <p>📊 기간: 최근 52주</p>
         <p>📈 보라색 선: 달러 지수, 초록색 점선: 52주 평균</p>
       </div>

@@ -91,7 +91,7 @@ function App() {
 
       {/* 본문 */}
       <div className="max-w-6xl mx-auto px-4">
-        <main className="transition-all duration-300">
+        <main>
           {activeTab === 'analysis' ? (
             <InvestmentAnalysis />
           ) : activeTab === 'sevensplit' ? (

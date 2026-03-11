@@ -11,15 +11,18 @@ export function GapRatioCard({ current, average, isLoading }: GapRatioCardProps)
 
   if (isLoading) {
     return (
-      <div className={`rounded-lg shadow-md p-6 animate-pulse ${
-        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-      }`}>
-        <div className={`h-4 rounded w-1/3 mb-4 ${
-          theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-        }`}></div>
-        <div className={`h-8 rounded w-1/2 ${
-          theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-        }`}></div>
+      <div className={`rounded-lg shadow-md p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+        }`}>
+        <div className={`h-4 rounded w-1/3 mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+          }`}></div>
+        <div className="flex items-baseline gap-2 mb-4">
+          <div className={`h-8 rounded w-1/2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}></div>
+          <div className={`h-4 rounded w-1/4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}></div>
+        </div>
+        <div className={`h-3 rounded w-3/4 mt-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+          }`}></div>
       </div>
     );
   }
@@ -27,33 +30,28 @@ export function GapRatioCard({ current, average, isLoading }: GapRatioCardProps)
   const isAboveAverage = current > average;
 
   return (
-    <div className={`rounded-lg shadow-md p-6 ${
-      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-    }`}>
-      <h3 className={`text-lg font-semibold mb-4 ${
-        theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-      }`}>달러 갭 비율</h3>
+    <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+      <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+        }`}>달러 갭 비율</h3>
       <div className="flex items-baseline gap-2">
-        <span className={`text-3xl font-bold ${
-          theme === 'dark' ? 'text-white' : 'text-gray-900'
-        }`}>
+        <span className={`text-3xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
           {current.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}
         </span>
         <span
-          className={`text-sm font-medium ${
-            isAboveAverage 
+          className={`text-sm font-medium ${isAboveAverage
               ? (theme === 'dark' ? 'text-green-400' : 'text-green-600')
               : (theme === 'dark' ? 'text-gray-700 dark:text-gray-300' : 'text-gray-900 dark:text-gray-100')
-          }`}
+            }`}
         >
           {isAboveAverage ? '↑' : '↓'} 52주 평균: {average.toLocaleString('ko-KR', {
             maximumFractionDigits: 2,
           })}
         </span>
       </div>
-      <div className={`mt-4 text-xs ${
-        theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
-      }`}>
+      <div className={`mt-4 text-xs ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
+        }`}>
         <p>달러 갭 비율 = (원/달러 환율) ÷ (달러 지수) × 100</p>
       </div>
     </div>

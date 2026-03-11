@@ -11,12 +11,12 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
 
   if (isLoading) {
     return (
-      <div className={`rounded-3xl shadow-sm border p-6 animate-pulse ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
+      <div className={`rounded-3xl shadow-sm border p-6 md:p-8 animate-pulse ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100'}`}>
         <div className={`h-16 rounded-2xl w-full mb-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
         <div className={`h-4 rounded w-32 mb-5 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className={`h-20 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}></div>
+            <div key={i} className={`h-24 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}></div>
           ))}
         </div>
       </div>
@@ -114,7 +114,7 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
           return (
             <div
               key={index}
-              className={`flex items-start gap-4 p-5 rounded-2xl border transition-all duration-300 ${cardBg} ${borderColor}`}
+              className={`flex items-start gap-4 p-5 rounded-2xl border transition-colors duration-300 ${cardBg} ${borderColor}`}
             >
               <div className={`mt-0.5 shrink-0 ${iconColor}`}>
                 {isMet ? (

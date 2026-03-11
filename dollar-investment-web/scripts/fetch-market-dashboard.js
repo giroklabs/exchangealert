@@ -67,7 +67,8 @@ const FRED_SERIES = [
     { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', category: 'international', impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
     { id: 'KOSPI', name: '코스피 지수', unit: 'pt', category: 'domestic', impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11' },
     { id: 'CPIAUCSL', name: '미 소비자물가(CPI)', unit: '%', category: 'international', impact: 'up', source: 'BLS', description: '미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발' },
-    { id: 'GDP', name: '미국 GDP', unit: 'B$', category: 'international', impact: 'up', source: 'BEA', description: '미국 경제 성장 호조 시 달러 가치 상승' }
+    { id: 'GDP', name: '미국 GDP', unit: 'B$', category: 'international', impact: 'up', source: 'BEA', description: '미국 경제 성장 호조 시 달러 가치 상승' },
+    { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', category: 'international', impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)', realtimeSymbol: '^VIX' }
 ];
 
 // 2. 국내지표 (ECOS)
@@ -138,7 +139,7 @@ async function fetchAiAnalysis(indicators) {
     }
 
     const summary = indicators.map(i => `- ${i.name}: ${i.value}${i.unit} (추세: ${i.trend}, 환율영향: ${i.impact})`).join('\n');
-    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요.
+    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요. 특히 VIX(공포지수)의 움직임이 시장의 리스크 온/오프 심리에 미치는 영향을 중요하게 고려해 주세요.
 응답은 2~3문장의 짧고 명확한 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 적어주세요.
 
 경제 지표 현황:

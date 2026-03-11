@@ -1,4 +1,5 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface ExchangeRateChartProps {
   data: Array<{ date: string; rate: number }>;
@@ -7,11 +8,21 @@ interface ExchangeRateChartProps {
 }
 
 export function ExchangeRateChart({ data, average, isLoading }: ExchangeRateChartProps) {
+  const { theme } = useTheme();
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-        <div className="h-64 bg-gray-200 rounded"></div>
+      <div className={`rounded-lg shadow-md p-6 animate-pulse ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+        }`}>
+        <div className={`h-6 rounded w-1/3 mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+          }`}></div>
+        <div className={`h-[300px] rounded mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+          }`}></div>
+        <div className="space-y-2">
+          <div className={`h-3 rounded w-1/2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}></div>
+          <div className={`h-3 rounded w-1/3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}></div>
+        </div>
       </div>
     );
   }
@@ -33,52 +44,58 @@ export function ExchangeRateChart({ data, average, isLoading }: ExchangeRateChar
   }));
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-700 mb-4">원/달러 환율 추이 (52주)</h3>
+    <div className={`rounded-lg shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+      <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>원/달러 환율 추이 (52주)</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis 
-            dataKey="date" 
-            stroke="#6b7280"
+          <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#e5e7eb'} />
+          <XAxis
+            dataKey="date"
+            stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
             fontSize={12}
-            tick={{ fill: '#6b7280' }}
+            tick={{ fill: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
           />
-          <YAxis 
-            stroke="#6b7280"
+          <YAxis
+            stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
             fontSize={12}
-            tick={{ fill: '#6b7280' }}
+            tick={{ fill: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
             domain={['dataMin - 50', 'dataMax + 50']}
           />
-          <Tooltip 
-            contentStyle={{ 
-              backgroundColor: '#fff', 
-              border: '1px solid #e5e7eb',
+          <Tooltip
+            contentStyle={{
+              backgroundColor: theme === 'dark' ? '#1f2937' : '#fff',
+              border: `1px solid ${theme === 'dark' ? '#374151' : '#e5e7eb'}`,
               borderRadius: '8px',
               padding: '8px'
             }}
+            itemStyle={{ color: '#3b82f6' }}
             formatter={(value: number) => [`${value.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`, '환율']}
             labelFormatter={(label) => `날짜: ${label}`}
           />
           {average && (
-            <ReferenceLine 
-              y={average} 
-              stroke="#22c55e" 
-              strokeDasharray="5 5" 
-              label={{ value: `52주 평균: ${average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`, position: 'right' }}
+            <ReferenceLine
+              y={average}
+              stroke="#22c55e"
+              strokeDasharray="5 5"
+              label={{
+                value: `52주 평균: ${average.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}`,
+                position: 'right',
+                fill: theme === 'dark' ? '#4ade80' : '#16a34a',
+                fontSize: 10
+              }}
             />
           )}
-          <Line 
-            type="monotone" 
-            dataKey="rate" 
-            stroke="#3b82f6" 
+          <Line
+            type="monotone"
+            dataKey="rate"
+            stroke="#3b82f6"
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>
-      <div className="mt-4 text-xs text-gray-400">
+      <div className={`mt-4 text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
         <p>📊 기간: 최근 52주 (영업일 기준)</p>
         <p>📈 파란색 선: 원/달러 환율, 초록색 점선: 52주 평균</p>
       </div>
