@@ -418,44 +418,71 @@ export function AssetSplitInvestment() {
     }, 0);
     const totalBudget = investments.reduce((sum, inv) => sum + inv.settings.totalBudget, 0);
 
+    const totalCurrentValue = investments.reduce((sum, inv) => {
+        const activeSlots = inv.slots.filter(s => s.isActive);
+        return sum + activeSlots.reduce((slotSum, slot) => slotSum + ((inv.lastPrice || 0) * slot.quantity), 0);
+    }, 0);
+    const totalProfit = totalCurrentValue - totalInvestedAmount;
+    const totalRoi = totalInvestedAmount > 0 ? (totalProfit / totalInvestedAmount) * 100 : 0;
+
     return (
-        <div className="space-y-12">
-            {/* 상단 통계 요약 및 추가 버튼 */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                {/* 왼쪽: 총계 카드 */}
-                <div className={`flex flex-1 max-w-xl items-center justify-between gap-4 px-6 py-4 rounded-3xl border ${theme === 'dark' ? 'bg-[#151518] border-gray-800' : 'bg-white border-gray-100 shadow-sm'}`}>
-                    <div className="flex flex-col">
-                        <span className={`text-xs font-bold leading-none mb-1.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>운용 종목 수</span>
-                        <div className="flex items-baseline gap-1">
-                            <span className={`text-xl font-black leading-none ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{totalItems}</span>
-                            <span className={`text-sm font-bold ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>개</span>
-                        </div>
-                    </div>
-                    <div className={`w-px h-10 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}></div>
-                    <div className="flex flex-col">
-                        <span className={`text-xs font-bold leading-none mb-1.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>현재 매수 총액</span>
-                        <div className="flex items-baseline gap-1">
-                            <span className={`text-xl font-black leading-none ${theme === 'dark' ? 'text-amber-400' : 'text-amber-500'}`}>{totalInvestedAmount.toLocaleString()}</span>
-                            <span className={`text-sm font-bold ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>원</span>
-                        </div>
-                    </div>
-                    <div className={`w-px h-10 hidden sm:block ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}></div>
-                    <div className="flex flex-col hidden sm:flex">
-                        <span className={`text-xs font-bold leading-none mb-1.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>예산 총액</span>
-                        <div className="flex items-baseline gap-1">
-                            <span className={`text-xl font-black leading-none ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`}>{totalBudget.toLocaleString()}</span>
-                            <span className={`text-sm font-bold ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>원</span>
-                        </div>
-                    </div>
+        <div className="space-y-8">
+            {/* 상단 통계 요약 (FX Tracker와 동일한 4개 카드 디자인) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>운용 종목 수</h3>
+                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {totalItems}개
+                    </p>
+                    <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        전체 포트폴리오
+                    </p>
                 </div>
 
-                {/* 오른쪽: 추가 버튼 */}
+                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>현재 매수 총액</h3>
+                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {Math.round(totalInvestedAmount).toLocaleString()}원
+                    </p>
+                    <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        투입 원금 합계
+                    </p>
+                </div>
+
+                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>평가 손익 (미실현)</h3>
+                    <p className={`text-2xl font-bold ${totalProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                        {totalProfit >= 0 ? '+' : ''}{Math.round(totalProfit).toLocaleString()}원
+                    </p>
+                    <p className={`text-sm mt-1 ${totalProfit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
+                        {totalRoi.toFixed(2)}%
+                    </p>
+                </div>
+
+                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>예산 총액</h3>
+                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`}>
+                        {totalBudget.toLocaleString()}원
+                    </p>
+                    <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        설정된 전체 한도
+                    </p>
+                </div>
+            </div>
+
+            {/* 액션 바 (FX Tracker와 동일한 스타일) */}
+            <div className={`p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-center ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-100'}`}>
+                <div className="flex items-center gap-3">
+                    <span className={`font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
+                        포트폴리오 관리:
+                    </span>
+                    <span className="text-sm text-gray-500">종목별 분할 매수 상황을 확인하세요.</span>
+                </div>
                 <button
                     onClick={addInvestment}
-                    className="flex shrink-0 items-center justify-center gap-2 px-6 py-4 bg-yellow-400 text-gray-900 rounded-2xl text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
+                    className="flex shrink-0 items-center justify-center gap-2 px-6 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
                 >
-                    <span>➕</span>
-                    새 종목 추가하기
+                    ➕ 새 종목 추가하기
                 </button>
             </div>
 

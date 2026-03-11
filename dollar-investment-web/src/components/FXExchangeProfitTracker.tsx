@@ -101,10 +101,6 @@ export function FXExchangeProfitTracker() {
     const unrealizedProfit = currentHoldingsValue - totalHoldingKrw;
     const unrealizedRoi = totalHoldingKrw > 0 ? (unrealizedProfit / totalHoldingKrw) * 100 : 0;
 
-    const realizedProfit = investments
-        .filter(inv => inv.status === 'sold')
-        .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
-
     // 기간별 실현 손익 계산
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
