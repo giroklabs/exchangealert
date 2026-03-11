@@ -58,12 +58,12 @@ function App() {
       <div className="max-w-6xl mx-auto px-4 pt-8">
         <header className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
+            <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
               <img src={logo} alt="로장보로" className="w-10 h-10 rounded-xl shadow-sm" />
               <h1 className={`text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 달러 인베스트
               </h1>
-            </div>
+            </a>
             {currentRateInfo && (
               <div className={`text-sm font-bold flex items-center pt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                 <span className={`text-base mr-1 ${theme === 'dark' ? 'text-yellow-400' : 'text-blue-600'}`}>
