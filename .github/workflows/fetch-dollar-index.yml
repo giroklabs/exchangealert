@@ -205,7 +205,14 @@ jobs:
           git add dollar-investment-web/public/data/dollar-index.json
           if ! git diff --staged --quiet; then
             git commit -m "Update dollar index data"
-            git push
+            for i in 1 2 3; do
+              git pull --rebase origin main || true
+              if git push origin main; then
+                break
+              else
+                sleep 5
+              fi
+            done
             echo "✅ Dollar index data updated and pushed. Deployment should be triggered automatically."
           else
             echo "No changes to commit - data is already up to date"

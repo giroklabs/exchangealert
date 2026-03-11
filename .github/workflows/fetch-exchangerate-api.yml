@@ -71,4 +71,11 @@ jobs:
         git config --local user.name "GitHub Action"
         git add data/exchangerate-api.json data/exchangerate-api-last-update.txt
         git diff --staged --quiet || git commit -m "Update ExchangeRate-API data - $(date -u +"%Y-%m-%d %H:%M UTC")"
-        git push
+        for i in 1 2 3; do
+          git pull --rebase origin main || true
+          if git push origin main; then
+            break
+          else
+            sleep 5
+          fi
+        done

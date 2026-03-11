@@ -40,5 +40,12 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "chrono: daily backup archive $(date +'%Y-%m-%d')"
-            git push origin main
+            for i in 1 2 3; do
+              git pull --rebase origin main || true
+              if git push origin main; then
+                break
+              else
+                sleep 5
+              fi
+            done
           fi
