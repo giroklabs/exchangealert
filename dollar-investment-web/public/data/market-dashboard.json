@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.21",
+      "value": "158.24",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 158.21
+          "value": 158.24
         }
       ]
     },
@@ -169,8 +169,8 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "83.67",
-      "trend": "up",
+      "value": "83.27",
+      "trend": "down",
       "history": [
         {
           "date": "2026-02-26",
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 83.67
+          "value": 83.27
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "98.85",
+      "value": "98.86",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 98.85
+          "value": 98.86
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,708.98",
+      "value": "5,704.27",
       "trend": "up",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 5708.98
+          "value": 5704.27
         }
       ]
     },
@@ -495,9 +495,38 @@
       "source": "한국은행",
       "description": "금리 인상 시 원화 강세 유도",
       "cycle": "M",
-      "value": "2.5",
+      "value": "2.50",
       "trend": "neutral",
-      "history": []
+      "history": [
+        {
+          "date": "2025-08",
+          "value": 2.5
+        },
+        {
+          "date": "2025-09",
+          "value": 2.5
+        },
+        {
+          "date": "2025-10",
+          "value": 2.5
+        },
+        {
+          "date": "2025-11",
+          "value": 2.5
+        },
+        {
+          "date": "2025-12",
+          "value": 2.5
+        },
+        {
+          "date": "2026-01",
+          "value": 2.5
+        },
+        {
+          "date": "2026-02",
+          "value": 2.5
+        }
+      ]
     },
     {
       "id": "kr-cpi",
@@ -511,8 +540,37 @@
       "description": "물가 상승 시 원화 가치 하락 압력",
       "cycle": "M",
       "value": "3.1",
-      "trend": "neutral",
-      "history": []
+      "trend": "up",
+      "history": [
+        {
+          "date": "2025-08",
+          "value": 3.4
+        },
+        {
+          "date": "2025-09",
+          "value": 3.7
+        },
+        {
+          "date": "2025-10",
+          "value": 3.8
+        },
+        {
+          "date": "2025-11",
+          "value": 3.3
+        },
+        {
+          "date": "2025-12",
+          "value": 3.2
+        },
+        {
+          "date": "2026-01",
+          "value": 2.8
+        },
+        {
+          "date": "2026-02",
+          "value": 3.1
+        }
+      ]
     },
     {
       "id": "kr-gdp",
@@ -526,8 +584,37 @@
       "description": "경제 성장 호조 시 원화 강세 유도",
       "cycle": "Q",
       "value": "2.4",
-      "trend": "neutral",
-      "history": []
+      "trend": "up",
+      "history": [
+        {
+          "date": "2024Q3",
+          "value": 1.4
+        },
+        {
+          "date": "2024Q4",
+          "value": 1.7
+        },
+        {
+          "date": "2025Q1",
+          "value": 2
+        },
+        {
+          "date": "2025Q2",
+          "value": 2.2
+        },
+        {
+          "date": "2025Q3",
+          "value": 2.3
+        },
+        {
+          "date": "2025Q4",
+          "value": 2.4
+        },
+        {
+          "date": "2026Q1",
+          "value": 2.4
+        }
+      ]
     },
     {
       "id": "m2-supply",
@@ -540,9 +627,38 @@
       "source": "한국은행",
       "description": "통화 팽창 시 원화 가치 하락 압력",
       "cycle": "M",
-      "value": "4,500",
-      "trend": "neutral",
-      "history": []
+      "value": "4500",
+      "trend": "up",
+      "history": [
+        {
+          "date": "2025-08",
+          "value": 4200
+        },
+        {
+          "date": "2025-09",
+          "value": 4250
+        },
+        {
+          "date": "2025-10",
+          "value": 4300
+        },
+        {
+          "date": "2025-11",
+          "value": 4380
+        },
+        {
+          "date": "2025-12",
+          "value": 4420
+        },
+        {
+          "date": "2026-01",
+          "value": 4480
+        },
+        {
+          "date": "2026-02",
+          "value": 4500
+        }
+      ]
     },
     {
       "id": "trade-balance",
@@ -555,20 +671,49 @@
       "source": "한국은행",
       "description": "경상수지 흑자 시 환율 하락 유도",
       "cycle": "M",
-      "value": "13,260",
-      "trend": "neutral",
-      "history": []
+      "value": "13260",
+      "trend": "up",
+      "history": [
+        {
+          "date": "2025-08",
+          "value": 8000
+        },
+        {
+          "date": "2025-09",
+          "value": 9500
+        },
+        {
+          "date": "2025-10",
+          "value": 10200
+        },
+        {
+          "date": "2025-11",
+          "value": 11000
+        },
+        {
+          "date": "2025-12",
+          "value": 11800
+        },
+        {
+          "date": "2026-01",
+          "value": 12500
+        },
+        {
+          "date": "2026-02",
+          "value": 13260
+        }
+      ]
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 71,
-    "downProb": 29,
-    "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해 드립니다.\n\n거시적 측면에서, 견조한 미국 GDP 성장률과 높은 미 소비자물가는 미국 연방준비제도(Fed)의 긴축 기조 유지 압력을 높이며 달러 강세 요인으로 작용합니다. 달러 인덱스와 미 10년물 국채금리 또한 상승 추세를 보이거나 강세 수준을 유지하고 있으며, 국제 유가 상승과 엔/달러 환율 상승은 원화 약세에 추가적인 부담을 줄 것으로 예상됩니다.\n\n심리적 측면에서는, 강한 미국 경제 지표와 높은 금리가 지지하는 달러 강세 심리가 지배적입니다. 비록 미 비농업고용지수의 추세가 하락하고 있으나, 전반적인 대외 지표��이 달러 선호 심리를 강화하고 있어 투자자들은 안전자산인 달러에 대한 수요를 지속할 것으로 보입니다. 국내 지표 중 코스피 상승과 경상수지 흑자 등 원화 강세 요인이 일부 존재하지만, 압도적인 달러 강세 분위기에 대항하기에는 역부족입니다.\n\n결론: 상승 우세",
+    "upProb": 54,
+    "downProb": 46,
+    "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 5,
-      "downScore": 2
+      "upScore": 6.4,
+      "downScore": 5.4
     }
   },
-  "lastUpdate": "2026. 3. 11. 오전 1:45:33"
+  "lastUpdate": "2026. 3. 11. 오전 10:47:38"
 }
