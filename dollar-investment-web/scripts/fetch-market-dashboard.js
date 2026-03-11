@@ -345,10 +345,19 @@ async function main() {
     console.log('🤖 AI 시장 분석 생성 중...');
     const aiAnalysis = await fetchAiAnalysis(indicators);
 
-    // 더 유연한 Regex 기반 감성 추출
+    // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
     let sentiment = '보통';
-    if (/상승\s*우세|상향\s*돌파|달러\s*강세/i.test(aiAnalysis)) sentiment = '환율 상승 우세';
-    else if (/하락\s*우세|하향\s*이탈|달러\s*약세/i.test(aiAnalysis)) sentiment = '환율 하락 우세';
+    const conclusionMatch = aiAnalysis.match(/결론\s*:\s*(상승|하락|보합)/);
+    if (conclusionMatch) {
+        if (conclusionMatch[1] === '상승') sentiment = '환율 상승 우세';
+        else if (conclusionMatch[1] === '하락') sentiment = '환율 하락 우세';
+        else sentiment = '보통';
+    } else {
+        // Fallback: 문장 말미나 결론부 근처 단어 탐색
+        if (/결론.*상승/i.test(aiAnalysis) || /상승\s*우세|상향\s*돌파/i.test(aiAnalysis)) sentiment = '환율 상승 우세';
+        else if (/결론.*하락/i.test(aiAnalysis) || /하락\s*우세|하향\s*이탈/i.test(aiAnalysis)) sentiment = '환율 하락 우세';
+        else sentiment = upProb > downProb ? '환율 상승 우세' : (downProb > upProb ? '환율 하락 우세' : '보통');
+    }
 
     const dashboardData = {
         indicators,
