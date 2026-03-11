@@ -372,8 +372,69 @@ async function main() {
         else sentiment = upProb > downProb ? '환율 상승 우세' : (downProb > upProb ? '환율 하락 우세' : '보통');
     }
 
+    // 3. 주요국 환율 정보 (환율알라미 앱 데이터 - Naver/Hana Bank)
+    const majorRates = [];
+    const MAJOR_CURRENCIES_MAP = {
+        'USD': { id: 'usd-krw', name: '미국 달러', unit: '원', flag: '🇺🇸' },
+        'JPY': { id: 'jpy-krw', name: '일본 엔 (100엔)', unit: '원', flag: '🇯🇵', is100Yen: true },
+        'EUR': { id: 'eur-krw', name: '유럽 유로', unit: '원', flag: '🇪🇺' },
+        'CNY': { id: 'cny-krw', name: '중국 위안', unit: '원', flag: '🇨🇳' }
+    };
+
+    console.log('💱 주요국 환율 수집 중 (Local App Data)...');
+    try {
+        const currentDataPath = path.join(__dirname, '..', '..', 'data', 'exchange-rates.json');
+        const currentRates = JSON.parse(fs.readFileSync(currentDataPath, 'utf8'));
+
+        // 전일 데이터 로드 (변동량 계산용)
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yDateStr = yesterday.toISOString().split('T')[0];
+        const yesterdayDataPath = path.join(__dirname, '..', '..', 'data', 'daily', `exchange-rates-${yDateStr}.json`);
+
+        let yesterdayRates = [];
+        if (fs.existsSync(yesterdayDataPath)) {
+            yesterdayRates = JSON.parse(fs.readFileSync(yesterdayDataPath, 'utf8'));
+        } else {
+            // 어제가 없으면 그저께 시도 (주말 등 대비)
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yDateStr2 = yesterday.toISOString().split('T')[0];
+            const yesterdayDataPath2 = path.join(__dirname, '..', '..', 'data', 'daily', `exchange-rates-${yDateStr2}.json`);
+            if (fs.existsSync(yesterdayDataPath2)) {
+                yesterdayRates = JSON.parse(fs.readFileSync(yesterdayDataPath2, 'utf8'));
+            }
+        }
+
+        for (const [curUnit, config] of Object.entries(MAJOR_CURRENCIES_MAP)) {
+            const currentItem = currentRates.find(r => r.cur_unit === curUnit);
+            if (currentItem) {
+                const currentValStr = currentItem.deal_bas_r.replace(/,/g, '');
+                const currentVal = parseFloat(currentValStr);
+
+                const yesterdayItem = yesterdayRates.find(r => r.cur_unit === curUnit);
+                const prevVal = yesterdayItem ? parseFloat(yesterdayItem.deal_bas_r.replace(/,/g, '')) : currentVal;
+
+                const change = currentVal - prevVal;
+                const changePercent = (prevVal > 0) ? (change / prevVal) * 100 : 0;
+                const trend = change > 0 ? 'up' : (change < 0 ? 'down' : 'neutral');
+
+                majorRates.push({
+                    ...config,
+                    value: currentVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                    change: (change > 0 ? '+' : '') + change.toFixed(2),
+                    changePercent: (change > 0 ? '+' : '') + changePercent.toFixed(2),
+                    trend
+                });
+                console.log(`✅ [Exchange] ${config.name}: ${currentVal}`);
+            }
+        }
+    } catch (err) {
+        console.warn(`⚠️ 앱 데이터 수집 실패: ${err.message}`);
+    }
+
     const dashboardData = {
         indicators,
+        majorRates,
         forecast: {
             sentiment,
             upProb, downProb,

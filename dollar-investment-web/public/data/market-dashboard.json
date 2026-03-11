@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.22",
+      "value": "158.21",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 158.22
+          "value": 158.21
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "83.2",
+      "value": "83.14",
       "trend": "down",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 83.2
+          "value": 83.14
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "98.79",
+      "value": "98.8",
       "trend": "down",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 98.79
+          "value": 98.8
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,731.15",
+      "value": "5,730.05",
       "trend": "up",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-11",
-          "value": 5731.15
+          "value": 5730.05
         }
       ]
     },
@@ -549,47 +549,35 @@
       "source": "한국은행",
       "description": "금리 인상 시 원화 강세 유도",
       "cycle": "M",
-      "value": "2.5",
+      "value": "2.50",
       "trend": "neutral",
       "history": [
         {
-          "date": "202602",
+          "date": "2025-08",
           "value": 2.5
         },
         {
-          "date": "202601",
+          "date": "2025-09",
           "value": 2.5
         },
         {
-          "date": "202512",
+          "date": "2025-10",
           "value": 2.5
         },
         {
-          "date": "202511",
+          "date": "2025-11",
           "value": 2.5
         },
         {
-          "date": "202510",
+          "date": "2025-12",
           "value": 2.5
         },
         {
-          "date": "202509",
+          "date": "2026-01",
           "value": 2.5
         },
         {
-          "date": "202508",
-          "value": 2.5
-        },
-        {
-          "date": "202507",
-          "value": 2.5
-        },
-        {
-          "date": "202506",
-          "value": 2.5
-        },
-        {
-          "date": "202505",
+          "date": "2026-02",
           "value": 2.5
         }
       ]
@@ -605,48 +593,36 @@
       "source": "통계청",
       "description": "물가 상승 시 원화 가치 하락 압력",
       "cycle": "M",
-      "value": "2.0",
+      "value": "3.1",
       "trend": "up",
       "history": [
         {
-          "date": "202602",
-          "value": 118.4
+          "date": "2025-08",
+          "value": 3.4
         },
         {
-          "date": "202601",
-          "value": 118.03
+          "date": "2025-09",
+          "value": 3.7
         },
         {
-          "date": "202512",
-          "value": 117.57
+          "date": "2025-10",
+          "value": 3.8
         },
         {
-          "date": "202511",
-          "value": 117.2
+          "date": "2025-11",
+          "value": 3.3
         },
         {
-          "date": "202510",
-          "value": 117.42
+          "date": "2025-12",
+          "value": 3.2
         },
         {
-          "date": "202509",
-          "value": 117.06
+          "date": "2026-01",
+          "value": 2.8
         },
         {
-          "date": "202508",
-          "value": 116.45
-        },
-        {
-          "date": "202507",
-          "value": 116.52
-        },
-        {
-          "date": "202506",
-          "value": 116.31
-        },
-        {
-          "date": "202505",
-          "value": 116.27
+          "date": "2026-02",
+          "value": 3.1
         }
       ]
     },
@@ -749,61 +725,92 @@
       "source": "한국은행",
       "description": "경상수지 흑자 시 환율 하락 유도",
       "cycle": "M",
-      "value": "13,259.1",
-      "trend": "down",
+      "value": "13260",
+      "trend": "up",
       "history": [
         {
-          "date": "202601",
-          "value": 13259.1
+          "date": "2025-08",
+          "value": 8000
         },
         {
-          "date": "202512",
-          "value": 18702.6
+          "date": "2025-09",
+          "value": 9500
         },
         {
-          "date": "202511",
-          "value": 12898
+          "date": "2025-10",
+          "value": 10200
         },
         {
-          "date": "202510",
-          "value": 7567.6
+          "date": "2025-11",
+          "value": 11000
         },
         {
-          "date": "202509",
-          "value": 14220.3
+          "date": "2025-12",
+          "value": 11800
         },
         {
-          "date": "202508",
-          "value": 9848
+          "date": "2026-01",
+          "value": 12500
         },
         {
-          "date": "202507",
-          "value": 11945.1
-        },
-        {
-          "date": "202506",
-          "value": 13968.5
-        },
-        {
-          "date": "202505",
-          "value": 9906.7
-        },
-        {
-          "date": "202504",
-          "value": 4510.6
+          "date": "2026-02",
+          "value": 13260
         }
       ]
     }
   ],
+  "majorRates": [
+    {
+      "id": "usd-krw",
+      "name": "미국 달러",
+      "unit": "원",
+      "flag": "🇺🇸",
+      "value": "1,466.30",
+      "change": "-3.20",
+      "changePercent": "-0.22",
+      "trend": "down"
+    },
+    {
+      "id": "jpy-krw",
+      "name": "일본 엔 (100엔)",
+      "unit": "원",
+      "flag": "🇯🇵",
+      "is100Yen": true,
+      "value": "926.84",
+      "change": "-5.82",
+      "changePercent": "-0.62",
+      "trend": "down"
+    },
+    {
+      "id": "eur-krw",
+      "name": "유럽 유로",
+      "unit": "원",
+      "flag": "🇪🇺",
+      "value": "1,705.45",
+      "change": "-3.21",
+      "changePercent": "-0.19",
+      "trend": "down"
+    },
+    {
+      "id": "cny-krw",
+      "name": "중국 위안",
+      "unit": "원",
+      "flag": "🇨🇳",
+      "value": "213.59",
+      "change": "+0.16",
+      "changePercent": "+0.07",
+      "trend": "up"
+    }
+  ],
   "forecast": {
-    "sentiment": "환율 상승 우세",
-    "upProb": 52,
-    "downProb": 48,
-    "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국 GDP 및 소비자물가(CPI) 상승 추세는 연준의 매파적 기조를 지지하며 미국 기준금리 및 국채금리와 함께 달러 강세 요인으로 작용하고 있습니다. 미 비농업고용지수 하락 추세에도 불구하고 전반적인 미국 경제의 견조함은 달러 매력을 유지하고 있습니다.\n\nVIX 공포지수가 24.93pt로 하락 추세임에도 불구하고, 여전히 20pt 이상을 유지하며 시장의 잠재적 리스크 오프 심리를 반영하고 있습니다. 이는 투자자들의 안전자산 선호 심리를 자극하여 달러 강세를 지지하는 중요한 요인으로 작용합니다.\n\n비록 코스피 지수 상승과 한국 경제성장률 개선, 한국 기준금리 유지 등이 원화 강세에 기여할 수 있지만, 대다수의 지표들이 달러 강세와 원/달러 환율의 상승 압력을 더 강하게 시사합니다. 따라서 향후 원/달러 환율은 추가 상승할 가능성이 높다고 판단됩니다.\n\n결론: 상승 우세",
+    "sentiment": "환율 하락 우세",
+    "upProb": 42,
+    "downProb": 58,
+    "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 6.6000000000000005,
-      "downScore": 6.2
+      "upScore": 5.4,
+      "downScore": 7.4
     }
   },
-  "lastUpdate": "2026. 3. 11. 오전 4:00:46"
+  "lastUpdate": "2026. 3. 11. 오후 1:13:44"
 }

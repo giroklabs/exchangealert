@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { fetchMarketDashboardData } from '../services/marketDashboardService';
-import type { DashboardData, MarketIndicator } from '../types';
+import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 
 export function MarketDashboard() {
@@ -36,7 +36,16 @@ export function MarketDashboard() {
     const internationalIndicators = data?.indicators.filter(i => i.category === 'international') || [];
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="space-y-6 animate-in fade-in duration-500">
+            {/* 주요국 실시간 환율 카드 */}
+            {data?.majorRates && data.majorRates.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {data.majorRates.map((rate) => (
+                        <MajorRateCard key={rate.id} rate={rate} theme={theme} />
+                    ))}
+                </div>
+            )}
+
             {/* 시장 향방 예측 섹션 */}
             <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="flex flex-col md:flex-row items-center gap-8">
@@ -231,6 +240,44 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                         }`}></div>
                 </div>
             )}
+        </div>
+    );
+}
+
+function MajorRateCard({ rate, theme }: { rate: MajorRate, theme: string }) {
+    const isUp = rate.trend === 'up';
+    const isDown = rate.trend === 'down';
+
+    return (
+        <div className={`p-4 rounded-2xl transition-all duration-300 border-2 hover:scale-[1.02] ${theme === 'dark'
+            ? 'bg-gray-800/40 border-gray-700 hover:border-gray-500'
+            : 'bg-white border-gray-50 hover:border-gray-200 shadow-sm hover:shadow-md'
+            }`}>
+            <div className="flex justify-between items-start mb-2">
+                <span className="text-2xl">{rate.flag}</span>
+                <div className={`flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${isUp
+                    ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400'
+                    : isDown
+                        ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+                        : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                    }`}>
+                    <span>{isUp ? '▲' : isDown ? '▼' : '─'}</span>
+                    <span>{rate.changePercent}%</span>
+                </div>
+            </div>
+            <div>
+                <h4 className={`text-xs font-bold mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {rate.name}
+                </h4>
+                <div className="flex items-baseline gap-1">
+                    <span className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {rate.value}
+                    </span>
+                    <span className={`text-[10px] font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                        {rate.unit}
+                    </span>
+                </div>
+            </div>
         </div>
     );
 }

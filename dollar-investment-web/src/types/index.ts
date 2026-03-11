@@ -111,8 +111,22 @@ export interface MarketIndicator {
   history?: Array<{ date: string; value: number }>;
 }
 
+export interface MajorRate {
+  id: string;
+  symbol?: string;
+  name: string;
+  unit: string;
+  flag: string;
+  value: string;
+  change: string;
+  changePercent: string;
+  trend: 'up' | 'down' | 'neutral';
+  is100Yen?: boolean;
+}
+
 export interface DashboardData {
   indicators: MarketIndicator[];
+  majorRates?: MajorRate[];
   forecast?: {
     sentiment: string;
     upProb: number;
