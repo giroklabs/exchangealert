@@ -23,7 +23,7 @@ export function InvestmentAnalysis() {
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto p-4">
+      <div>
         <div className={`rounded-lg p-6 ${theme === 'dark'
           ? 'bg-red-900 border border-red-700'
           : 'bg-red-50 border border-red-200'
@@ -41,7 +41,7 @@ export function InvestmentAnalysis() {
   const currentGapRatio = calculateGapRatio(currentRate, currentDollarIndex);
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-6">
+    <div className="space-y-6">
       {/* 투자 신호 */}
       <InvestmentSignal signal={signal} isLoading={isLoading} />
 
@@ -79,8 +79,8 @@ export function InvestmentAnalysis() {
         <button
           onClick={() => setShowCharts(!showCharts)}
           className={`px-5 py-2 rounded-xl text-sm font-bold transition-colors ${showCharts
-              ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
-              : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+            ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
+            : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
             }`}
         >
           {showCharts ? '📉 차트 숨기기' : '📈 차트 보기'}
@@ -88,8 +88,8 @@ export function InvestmentAnalysis() {
         <button
           onClick={() => setShowHistory(!showHistory)}
           className={`px-5 py-2 rounded-xl text-sm font-bold transition-colors ${showHistory
-              ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
-              : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+            ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500'
+            : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
             }`}
         >
           {showHistory ? '📋 전체 데이터 숨기기' : '📋 전체 데이터 보기'}

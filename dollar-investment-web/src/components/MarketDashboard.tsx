@@ -36,7 +36,7 @@ export function MarketDashboard() {
     const internationalIndicators = data?.indicators.filter(i => i.category === 'international') || [];
 
     return (
-        <div className="max-w-6xl mx-auto p-4 space-y-8 animate-in fade-in duration-500">
+        <div className="space-y-8 animate-in fade-in duration-500">
             {/* 시장 향방 예측 섹션 */}
             <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="flex flex-col md:flex-row items-center gap-8">

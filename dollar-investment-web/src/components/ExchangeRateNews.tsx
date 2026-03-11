@@ -111,7 +111,7 @@ export function ExchangeRateNews() {
     const cardBase = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
 
     return (
-        <div className="max-w-6xl mx-auto p-4 space-y-6">
+        <div className="space-y-6">
 
             {/* 검색어 프리셋 + 새로고침 */}
             <div className={`p-4 rounded-xl flex flex-col md:flex-row justify-between items-center gap-4 ${theme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-100'}`}>
@@ -121,8 +121,8 @@ export function ExchangeRateNews() {
                             key={kw.query}
                             onClick={() => setActiveKeyword(kw.query)}
                             className={`px-4 py-2 text-sm font-bold rounded-xl transition-colors ${activeKeyword === kw.query
-                                    ? 'bg-yellow-400 text-gray-900'
-                                    : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200')
+                                ? 'bg-yellow-400 text-gray-900'
+                                : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200')
                                 }`}
                         >
                             {kw.label}
@@ -207,8 +207,8 @@ export function ExchangeRateNews() {
                                         <button
                                             onClick={() => setExpandedId(isExpanded ? null : item.id)}
                                             className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-lg font-bold transition-colors ${isExpanded
-                                                    ? 'bg-yellow-400 text-gray-900'
-                                                    : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+                                                ? 'bg-yellow-400 text-gray-900'
+                                                : (theme === 'dark' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
                                                 }`}
                                         >
                                             관련 {item.relatedLinks.length}건 {isExpanded ? '▲' : '▼'}
