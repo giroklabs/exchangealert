@@ -48,7 +48,7 @@ export function MarketDashboard() {
 
                         <div className="space-y-6">
                             <div className="flex justify-between items-end">
-                                <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>시장 종합 심리</span>
+                                <span className={`text-lg font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>🤖 AI 종합 예측</span>
                                 <span className={`text-2xl font-bold ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
                                     {data?.forecast?.sentiment || '분석 중...'}
                                 </span>
