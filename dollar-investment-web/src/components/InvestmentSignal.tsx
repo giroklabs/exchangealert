@@ -55,8 +55,8 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
   const getStatusConfig = () => {
     if (signal.score >= 3) return {
       text: `적극 매수 권장 (${signal.score}/4)`,
-      color: theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600',
-      bg: theme === 'dark' ? 'bg-emerald-400/10' : 'bg-emerald-50',
+      color: theme === 'dark' ? 'text-amber-400' : 'text-amber-600',
+      bg: theme === 'dark' ? 'bg-amber-400/10' : 'bg-amber-50',
       icon: <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     };
     if (signal.score === 2) return {
@@ -67,8 +67,8 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
     };
     return {
       text: `매수 부적합 (${signal.score}/4)`,
-      color: theme === 'dark' ? 'text-rose-400' : 'text-rose-600',
-      bg: theme === 'dark' ? 'bg-rose-400/10' : 'bg-rose-50',
+      color: theme === 'dark' ? 'text-amber-400' : 'text-amber-600',
+      bg: theme === 'dark' ? 'bg-amber-400/10' : 'bg-amber-50',
       icon: <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     };
   };
@@ -96,19 +96,19 @@ export function InvestmentSignal({ signal, isLoading }: InvestmentSignalProps) {
         {conditions.map((condition, index) => {
           const isMet = condition.met;
           const cardBg = isMet
-            ? (theme === 'dark' ? 'bg-emerald-900/10' : 'bg-emerald-50/50')
+            ? (theme === 'dark' ? 'bg-amber-900/10' : 'bg-amber-50/50')
             : (theme === 'dark' ? 'bg-gray-800/20' : 'bg-gray-50/50');
 
           const borderColor = isMet
-            ? (theme === 'dark' ? 'border-emerald-500/20' : 'border-emerald-200')
+            ? (theme === 'dark' ? 'border-amber-500/20' : 'border-amber-200')
             : (theme === 'dark' ? 'border-gray-800' : 'border-gray-100');
 
           const textColor = isMet
-            ? (theme === 'dark' ? 'text-emerald-400' : 'text-emerald-700')
+            ? (theme === 'dark' ? 'text-amber-400' : 'text-amber-700')
             : (theme === 'dark' ? 'text-gray-500' : 'text-gray-500');
 
           const iconColor = isMet
-            ? (theme === 'dark' ? 'text-emerald-400' : 'text-emerald-500')
+            ? (theme === 'dark' ? 'text-amber-400' : 'text-amber-500')
             : (theme === 'dark' ? 'text-gray-600' : 'text-gray-300');
 
           return (
