@@ -76,6 +76,33 @@ function parseRSS(xmlText: string): NewsItem[] {
     return results;
 }
 
+// 컴포넌트 외부 전역 캐시 (앱 로드 시 유지)
+const newsCache: Record<string, { data: NewsItem[]; timestamp: Date; promise?: Promise<NewsItem[]> }> = {};
+const CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5분 유효기간
+
+// 앱이 렌더링되자마자 백그라운드에서 첫 번째 데이터(기본값) 미리 가져오기 (Pre-fetch)
+const defaultQuery = KEYWORD_PRESETS[0].query;
+const defaultRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(defaultQuery)}&hl=ko&gl=KR&ceid=KR:ko`;
+newsCache[defaultQuery] = {
+    data: [],
+    timestamp: new Date(),
+    promise: fetch(`${PROXY}${encodeURIComponent(defaultRssUrl)}`)
+        .then(res => {
+            if (!res.ok) throw new Error('Prefetch failed');
+            return res.text();
+        })
+        .then(text => {
+            const parsed = parseRSS(text);
+            newsCache[defaultQuery] = { data: parsed, timestamp: new Date() };
+            return parsed;
+        })
+        .catch(e => {
+            console.warn('News prefetch error:', e);
+            delete newsCache[defaultQuery]; // 실패 시 초기화하여 나중에 재시도하게 함
+            return [];
+        })
+};
+
 export function ExchangeRateNews() {
     const { theme } = useTheme();
     const [news, setNews] = useState<NewsItem[]>([]);
@@ -86,19 +113,59 @@ export function ExchangeRateNews() {
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     const fetchNews = useCallback(async (query: string) => {
+        // 1. 캐시 확인
+        const cached = newsCache[query];
+        if (cached) {
+            // 아직 로딩 중인 프로미스(Pre-fetch 등)가 있는 경우
+            if (cached.promise) {
+                setIsLoading(true);
+                try {
+                    const parsed = await cached.promise;
+                    if (parsed && parsed.length > 0) {
+                        setNews(parsed);
+                        setLastUpdated(newsCache[query]?.timestamp || new Date());
+                        return; // 프로미스 대기 완료, 조기 종료
+                    }
+                } catch (e) {
+                    // pre-fetch 실패 시 진행 (아래의 일반 fetch로 재시도)
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+            // 유효한 데이터가 단위 시간 내에 있는 경우 즉시 반환 (캐싱)
+            else if (cached.data.length > 0 && (new Date().getTime() - cached.timestamp.getTime() < CACHE_EXPIRY_MS)) {
+                setNews(cached.data);
+                setLastUpdated(cached.timestamp);
+                return; // 바로 렌더링, 네트워크 요청 생략
+            }
+        }
+
+        // 2. 처음 가져오거나 캐시가 만료된 경우 API 요청
         setIsLoading(true);
         setError(null);
         try {
             const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ko&gl=KR&ceid=KR:ko`;
-            const res = await fetch(`${PROXY}${encodeURIComponent(rssUrl)}`);
-            if (!res.ok) throw new Error('뉴스를 불러오지 못했습니다.');
-            const text = await res.text();
-            const parsed = parseRSS(text);
+            const promise = fetch(`${PROXY}${encodeURIComponent(rssUrl)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('뉴스를 불러오지 못했습니다.');
+                    return res.text();
+                })
+                .then(text => parseRSS(text));
+
+            // 동일 검색어 동시 요청 방지를 위해 임시 promise 저장
+            newsCache[query] = { data: [], timestamp: new Date(), promise };
+
+            const parsed = await promise;
+            newsCache[query] = { data: parsed, timestamp: new Date() };
+
+            // 활성 키워드가 바뀐 사이 응답이 올 수 있으므로 한 번 더 방어 필요 (React 특성)
+            // 여기서는 심플하게 setState
             setNews(parsed);
             setLastUpdated(new Date());
         } catch (e) {
             setError('뉴스를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
             console.error(e);
+            delete newsCache[query]; // 오류 시 캐시 삭제
         } finally {
             setIsLoading(false);
         }
