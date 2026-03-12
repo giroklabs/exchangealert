@@ -432,9 +432,53 @@ async function main() {
         console.warn(`⚠️ 앱 데이터 수집 실패: ${err.message}`);
     }
 
+    // 4. 주요 주식 시세 정보 (자산 스플릿 자동화용)
+    const trackedStocks = [
+        { id: 'samsung', symbol: '005930.KS', name: '삼성전자', enName: 'Samsung Electronics' },
+        { id: 'hynix', symbol: '000660.KS', name: 'SK하이닉스', enName: 'SK Hynix' },
+        { id: 'hyundai', symbol: '005380.KS', name: '현대차', enName: 'Hyundai Motor' },
+        { id: 'kia', symbol: '000270.KS', name: '기아', enName: 'Kia' },
+        { id: 'naver', symbol: '035420.KS', name: '네이버', enName: 'NAVER' },
+        { id: 'kakao', symbol: '035720.KS', name: '카카오', enName: 'Kakao' },
+        { id: 'apple', symbol: 'AAPL', name: '애플', enName: 'Apple' },
+        { id: 'tesla', symbol: 'TSLA', name: '테슬라', enName: 'Tesla' },
+        { id: 'nvidia', symbol: 'NVDA', name: '엔비디아', enName: 'NVIDIA' },
+        { id: 'microsoft', symbol: 'MSFT', name: '마이크로소프트', enName: 'Microsoft' },
+        { id: 'google', symbol: 'GOOGL', name: '구글', enName: 'Google' },
+        { id: 'amazon', symbol: 'AMZN', name: '아마존', enName: 'Amazon' },
+        { id: 'qqq', symbol: 'QQQ', name: 'QQQ', enName: 'Invesco QQQ Trust' },
+        { id: 'spy', symbol: 'SPY', name: 'SPY', enName: 'SPDR S&P 500 ETF' },
+        { id: 'schd', symbol: 'SCHD', name: 'SCHD', enName: 'Schwab US Dividend Equity ETF' }
+    ];
+
+    const stockPrices = [];
+    console.log('📈 주요 주식 시세 수집 중...');
+    for (const stock of trackedStocks) {
+        try {
+            const history = await fetchFromYahooFinance(stock.symbol);
+            if (history && history.length > 0) {
+                const currentVal = parseFloat(history[0].value);
+                const prevVal = history.length > 1 ? parseFloat(history[1].value) : currentVal;
+                const change = currentVal - prevVal;
+                const changePercent = (change / prevVal * 100).toFixed(2);
+
+                stockPrices.push({
+                    ...stock,
+                    price: currentVal,
+                    changePercent: (change >= 0 ? '+' : '') + changePercent,
+                    trend: change >= 0 ? 'up' : 'down'
+                });
+                console.log(`✅ [Stock] ${stock.name}: ${currentVal}`);
+            }
+        } catch (e) {
+            console.warn(`⚠️ 주식 시세 수집 실패 (${stock.symbol}):`, e.message);
+        }
+    }
+
     const dashboardData = {
         indicators,
         majorRates,
+        stockPrices,
         forecast: {
             sentiment,
             upProb, downProb,
@@ -447,6 +491,6 @@ async function main() {
     const outputPath = path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json');
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2));
-    console.log('✨ AI 분석 포함 데이터 업데이트 완료!');
+    console.log('✨ AI 분석 및 주식 시세 포함 데이터 업데이트 완료!');
 }
 main();

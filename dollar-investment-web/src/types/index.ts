@@ -124,9 +124,20 @@ export interface MajorRate {
   is100Yen?: boolean;
 }
 
+export interface TrackedStock {
+  id: string;
+  symbol: string;
+  name: string;
+  enName: string;
+  price: number;
+  changePercent: string;
+  trend: 'up' | 'down' | 'neutral';
+}
+
 export interface DashboardData {
   indicators: MarketIndicator[];
   majorRates?: MajorRate[];
+  stockPrices?: TrackedStock[];
   forecast?: {
     sentiment: string;
     upProb: number;

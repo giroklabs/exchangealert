@@ -1,15 +1,20 @@
 import { useTheme } from '../contexts/ThemeContext';
 import type { AssetInvestment, AssetSplitSettings } from '../types';
 import { useSyncState } from '../hooks/useSyncState';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+import { fetchMarketDashboardData } from '../services/marketDashboardService';
+import type { TrackedStock } from '../types';
 
 // 단일 종목 관리자 컴포넌트
 function SingleAssetManager({
     investment,
+    stockPrices,
     onUpdate,
     onDelete
 }: {
     investment: AssetInvestment,
+    stockPrices: TrackedStock[],
     onUpdate: (updated: AssetInvestment) => void,
     onDelete: () => void
 }) {
@@ -22,6 +27,38 @@ function SingleAssetManager({
     const [editQuantity, setEditQuantity] = useState<number>(0);
     const [editTargetPrice, setEditTargetPrice] = useState<number>(0);
 
+    // 주가 자동 검색 및 업데이트 로직
+    const searchAndApplyPrice = (name: string) => {
+        if (!name) return;
+
+        const searchName = name.trim().toLowerCase();
+        const found = stockPrices.find(s =>
+            s.name.toLowerCase() === searchName ||
+            s.enName.toLowerCase() === searchName ||
+            s.symbol.toLowerCase().includes(searchName) ||
+            s.id.toLowerCase() === searchName
+        );
+
+        if (found) {
+            setCurrentPrice(found.price);
+            handleUpdate({ lastPrice: found.price });
+        }
+    };
+
+    // 로컬 현재가 동기화
+    useEffect(() => {
+        if (investment.lastPrice && investment.lastPrice !== currentPrice) {
+            setCurrentPrice(investment.lastPrice);
+        }
+    }, [investment.lastPrice]);
+
+    // 초기 로딩 시 가격 검색 (가격이 아직 없는 경우)
+    useEffect(() => {
+        if (investment.settings.assetName && currentPrice === 0) {
+            searchAndApplyPrice(investment.settings.assetName);
+        }
+    }, [stockPrices]);
+
     // 내부 상태 변경 시 상위로 전파
     const handleUpdate = (updates: Partial<AssetInvestment>) => {
         onUpdate({ ...investment, ...updates });
@@ -29,6 +66,11 @@ function SingleAssetManager({
 
     const handleSettingUpdate = (key: keyof AssetSplitSettings, value: string | number) => {
         const updatedSettings = { ...investment.settings, [key]: value };
+
+        // 종목명 변경 시 주가 검색 자동 시도
+        if (key === 'assetName') {
+            searchAndApplyPrice(String(value));
+        }
 
         // 분할 횟수가 변경될 때 슬롯 배열 조정
         if (key === 'splitCount') {
@@ -430,6 +472,33 @@ function SingleAssetManager({
 
 export function AssetSplitInvestment() {
     const { theme } = useTheme();
+    const [stockPrices, setStockPrices] = useState<TrackedStock[]>([]);
+
+    useEffect(() => {
+        const loadDashboardData = async () => {
+            const data = await fetchMarketDashboardData();
+            if (data.stockPrices) {
+                setStockPrices(data.stockPrices);
+
+                // 기존 투자 종목들의 현재가를 실시간 가격으로 자동 업데이트
+                setInvestments(prev => prev.map(inv => {
+                    const searchName = inv.settings.assetName.trim().toLowerCase();
+                    const found = data.stockPrices?.find(s =>
+                        s.name.toLowerCase() === searchName ||
+                        s.enName.toLowerCase() === searchName ||
+                        s.symbol.toLowerCase().includes(searchName) ||
+                        s.id.toLowerCase() === searchName
+                    );
+
+                    if (found && inv.lastPrice !== found.price) {
+                        return { ...inv, lastPrice: found.price };
+                    }
+                    return inv;
+                }));
+            }
+        };
+        loadDashboardData();
+    }, []);
 
     // 여러 종목 상태 관리
     const [investments, setInvestments] = useSyncState<AssetInvestment[]>('asset-investments-v2', () => {
@@ -579,6 +648,7 @@ export function AssetSplitInvestment() {
                         <SingleAssetManager
                             key={inv.id}
                             investment={inv}
+                            stockPrices={stockPrices}
                             onUpdate={updateInvestment}
                             onDelete={() => deleteInvestment(inv.id)}
                         />
