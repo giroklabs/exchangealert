@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.13",
+      "value": "159.2",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 159.13
+          "value": 159.2
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "95.19",
+      "value": "95.87",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 95.19
+          "value": 95.87
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.61",
+      "value": "99.66",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 99.61
+          "value": 99.66
         }
       ]
     },
@@ -493,7 +493,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
       "realtimeSymbol": "^VIX",
-      "value": "26.76",
+      "value": "26.24",
       "trend": "up",
       "history": [
         {
@@ -534,7 +534,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 26.76
+          "value": 26.24
         }
       ]
     },
@@ -801,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,492.40",
-      "change": "+26.00",
-      "changePercent": "+1.77",
+      "value": "1,494.30",
+      "change": "+27.90",
+      "changePercent": "+1.90",
       "trend": "up"
     },
     {
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.85",
-      "change": "+9.69",
-      "changePercent": "+1.04",
+      "value": "938.93",
+      "change": "+10.77",
+      "changePercent": "+1.16",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,719.62",
-      "change": "+13.46",
-      "changePercent": "+0.79",
+      "value": "1,721.73",
+      "change": "+15.57",
+      "changePercent": "+0.91",
       "trend": "up"
     },
     {
@@ -832,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.93",
-      "change": "+3.25",
-      "changePercent": "+1.52",
+      "value": "217.18",
+      "change": "+3.50",
+      "changePercent": "+1.64",
       "trend": "up"
     }
   ],
@@ -906,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 255.26,
-      "changePercent": "-2.13",
+      "price": 254.81,
+      "changePercent": "-2.30",
       "trend": "down"
     },
     {
@@ -917,8 +917,8 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 397.37,
-      "changePercent": "-2.56",
+      "price": 395.91,
+      "changePercent": "-2.92",
       "trend": "down"
     },
     {
@@ -928,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 182.31,
-      "changePercent": "-2.00",
+      "price": 182.22,
+      "changePercent": "-2.05",
       "trend": "down"
     },
     {
@@ -939,9 +939,9 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 404.83,
-      "changePercent": "-0.01",
-      "trend": "down"
+      "price": 405.14,
+      "changePercent": "+0.06",
+      "trend": "up"
     },
     {
       "id": "google",
@@ -950,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 302.6,
-      "changePercent": "-1.98",
+      "price": 301.73,
+      "changePercent": "-2.26",
       "trend": "down"
     },
     {
@@ -961,8 +961,8 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 210.5,
-      "changePercent": "-1.01",
+      "price": 209.31,
+      "changePercent": "-1.57",
       "trend": "down"
     },
     {
@@ -972,8 +972,8 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 599.52,
-      "changePercent": "-1.34",
+      "price": 598.7,
+      "changePercent": "-1.48",
       "trend": "down"
     },
     {
@@ -983,8 +983,8 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 668.9,
-      "changePercent": "-1.10",
+      "price": 668.13,
+      "changePercent": "-1.21",
       "trend": "down"
     },
     {
@@ -994,8 +994,8 @@
       "excd": "NYS",
       "name": "SCHD",
       "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.95,
-      "changePercent": "-0.16",
+      "price": 30.93,
+      "changePercent": "-0.23",
       "trend": "down"
     }
   ],
@@ -1003,11 +1003,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 84,
     "downProb": 16,
-    "detailedAnalysis": "미국 기준금리가 한국보다 높고 미 GDP, CPI 등 주요 경제지표가 강세를 보이며 달러 인덱스(DXY)가 상승하는 등 전반적인 달러 강세 요인이 지배적입니다. 이는 원/달러 환율 상승 압력으로 작용하며, 국내 경상수지 악화 추세는 원화 약세에 힘을 더하고 있습니다.\n\n특히 VIX 공포지수가 26.76pt로 높게 상승하고 있다는 점은 글로벌 시장의 리스크 오프(Risk-off) 심리가 고조되었음을 명확히 보여줍니다. 이러한 불안 심리는 안전 자산인 달러 선호를 부추기고 외국인 투자자들의 코스피 순매도를 야기하여 원화 약세를 가속화시키고 있습니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n현재 미국 경제 지표들은 기준금리, GDP, CPI, 10년물 국채금리, 달러 인덱스 등 전반적으로 견조한 상승 추세를 보이며 달러화 강세 압력을 높이고 있습니다. 특히 엔/달러 환율의 상승세와 높은 국제 유가는 한국 경제에 부담을 주며 원화 약세 요인으로 작용합니다.\n\nVIX 공포지수가 26.24pt로 높은 수준을 유지하며 상승 추세에 있다는 점은 글로벌 시장의 리스크 회피(risk-off) 심리가 매우 강함을 명확히 보여줍니다. 이러한 극도의 불안 심리는 외국인 투자자들의 한국 주식 및 채권 순매도 흐름을 유발하여 원화를 달러로 전환하려는 수요를 증���시키고, 이는 원/달러 환율의 상승(원화 약세)을 가속화할 것입니다.\n\n국내 기준금리나 경제성장률 등 일부 원화 강세 요인이 있으나, 압도적인 미국 발 달러 강세 요인과 VIX로 대변되는 글로벌 리스크 오프 심리가 원화에 미치는 하방 압력이 훨씬 강력합니다. 따라서 향후 원/달러 환율은 강한 상승 추세를 보일 것으로 전망됩니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 11.599999999999998,
       "downScore": 2.2
     }
   },
-  "lastUpdate": "2026. 3. 12. 오후 2:45:41"
+  "lastUpdate": "2026. 3. 12. PM 3:01:01"
 }
