@@ -13,6 +13,9 @@ const __dirname = path.dirname(__filename);
 
 const FRED_API_KEY = process.env.FRED_API_KEY || '0a8892024728a9a0fa015e609cd5d232';
 const ECOS_API_KEY = process.env.ECOS_API_KEY;
+const KIS_APP_KEY = process.env.KIS_APP_KEY;
+const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
+const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
@@ -129,6 +132,81 @@ async function fetchFromEcos(item) {
             });
         }).on('error', () => resolve(null));
     });
+}
+
+async function getKisAccessToken() {
+    if (!KIS_APP_KEY || !KIS_APP_SECRET) {
+        console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜁니다.");
+        return null;
+    }
+    try {
+        const res = await fetch(`${KIS_BASE_URL}/oauth2/tokenP`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                grant_type: "client_credentials",
+                appkey: KIS_APP_KEY,
+                appsecret: KIS_APP_SECRET
+            })
+        });
+        const data = await res.json();
+        return data.access_token;
+    } catch (e) {
+        console.error("❌ KIS 토큰 발급 에러:", e.message);
+        return null;
+    }
+}
+
+async function fetchDomesticStockFromKIS(code, token) {
+    try {
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${code}`;
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`,
+                "appkey": KIS_APP_KEY,
+                "appsecret": KIS_APP_SECRET,
+                "tr_id": "FHKST01010100"
+            }
+        });
+        const data = await res.json();
+        if (data.output) {
+            return {
+                price: parseFloat(data.output.stck_prpr),
+                changePercent: (parseFloat(data.output.prdy_ctrt)).toFixed(2),
+                trend: parseFloat(data.output.prdy_vrss) >= 0 ? 'up' : 'down'
+            };
+        }
+    } catch (e) {
+        console.error(`❌ KIS 국내주식 조회 에러 (${code}):`, e.message);
+    }
+    return null;
+}
+
+async function fetchOverseasStockFromKIS(excd, symbol, token) {
+    try {
+        const url = `${KIS_BASE_URL}/uapi/overseas-stock/v1/quotations/price?AUTH=&EXCD=${excd}&SYMB=${symbol}`;
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`,
+                "appkey": KIS_APP_KEY,
+                "appsecret": KIS_APP_SECRET,
+                "tr_id": "HHDFS00000300"
+            }
+        });
+        const data = await res.json();
+        if (data.output) {
+            return {
+                price: parseFloat(data.output.last),
+                changePercent: (parseFloat(data.output.rate)).toFixed(2),
+                trend: parseFloat(data.output.diff) >= 0 ? 'up' : 'down'
+            };
+        }
+    } catch (e) {
+        console.error(`❌ KIS 해외주식 조회 에러 (${symbol}):`, e.message);
+    }
+    return null;
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -432,46 +510,83 @@ async function main() {
         console.warn(`⚠️ 앱 데이터 수집 실패: ${err.message}`);
     }
 
-    // 4. 주요 주식 시세 정보 (자산 스플릿 자동화용)
+    // 4. 주요 주식 시세 정보 (자산 스플릿 자동화용) - KIS API 활용
     const trackedStocks = [
-        { id: 'samsung', symbol: '005930.KS', name: '삼성전자', enName: 'Samsung Electronics' },
-        { id: 'hynix', symbol: '000660.KS', name: 'SK하이닉스', enName: 'SK Hynix' },
-        { id: 'hyundai', symbol: '005380.KS', name: '현대차', enName: 'Hyundai Motor' },
-        { id: 'kia', symbol: '000270.KS', name: '기아', enName: 'Kia' },
-        { id: 'naver', symbol: '035420.KS', name: '네이버', enName: 'NAVER' },
-        { id: 'kakao', symbol: '035720.KS', name: '카카오', enName: 'Kakao' },
-        { id: 'apple', symbol: 'AAPL', name: '애플', enName: 'Apple' },
-        { id: 'tesla', symbol: 'TSLA', name: '테슬라', enName: 'Tesla' },
-        { id: 'nvidia', symbol: 'NVDA', name: '엔비디아', enName: 'NVIDIA' },
-        { id: 'microsoft', symbol: 'MSFT', name: '마이크로소프트', enName: 'Microsoft' },
-        { id: 'google', symbol: 'GOOGL', name: '구글', enName: 'Google' },
-        { id: 'amazon', symbol: 'AMZN', name: '아마존', enName: 'Amazon' },
-        { id: 'qqq', symbol: 'QQQ', name: 'QQQ', enName: 'Invesco QQQ Trust' },
-        { id: 'spy', symbol: 'SPY', name: 'SPY', enName: 'SPDR S&P 500 ETF' },
-        { id: 'schd', symbol: 'SCHD', name: 'SCHD', enName: 'Schwab US Dividend Equity ETF' }
+        { id: 'samsung', symbol: '005930', market: 'domestic', name: '삼성전자', enName: 'Samsung Electronics' },
+        { id: 'hynix', symbol: '000660', market: 'domestic', name: 'SK하이닉스', enName: 'SK Hynix' },
+        { id: 'hyundai', symbol: '005380', market: 'domestic', name: '현대차', enName: 'Hyundai Motor' },
+        { id: 'kia', symbol: '000270', market: 'domestic', name: '기아', enName: 'Kia' },
+        { id: 'naver', symbol: '035420', market: 'domestic', name: '네이버', enName: 'NAVER' },
+        { id: 'kakao', symbol: '035720', market: 'domestic', name: '카카오', enName: 'Kakao' },
+        { id: 'apple', symbol: 'AAPL', market: 'overseas', excd: 'NAS', name: '애플', enName: 'Apple' },
+        { id: 'tesla', symbol: 'TSLA', market: 'overseas', excd: 'NAS', name: '테슬라', enName: 'Tesla' },
+        { id: 'nvidia', symbol: 'NVDA', market: 'overseas', excd: 'NAS', name: '엔비디아', enName: 'NVIDIA' },
+        { id: 'microsoft', symbol: 'MSFT', market: 'overseas', excd: 'NAS', name: '마이크로소프트', enName: 'Microsoft' },
+        { id: 'google', symbol: 'GOOGL', market: 'overseas', excd: 'NAS', name: '구글', enName: 'Google' },
+        { id: 'amazon', symbol: 'AMZN', market: 'overseas', excd: 'NAS', name: '아마존', enName: 'Amazon' },
+        { id: 'qqq', symbol: 'QQQ', market: 'overseas', excd: 'NAS', name: 'QQQ', enName: 'Invesco QQQ Trust' },
+        { id: 'spy', symbol: 'SPY', market: 'overseas', excd: 'NYS', name: 'SPY', enName: 'SPDR S&P 500 ETF' },
+        { id: 'schd', symbol: 'SCHD', market: 'overseas', excd: 'NYS', name: 'SCHD', enName: 'Schwab US Dividend Equity ETF' }
     ];
 
     const stockPrices = [];
-    console.log('📈 주요 주식 시세 수집 중...');
-    for (const stock of trackedStocks) {
-        try {
-            const history = await fetchFromYahooFinance(stock.symbol);
-            if (history && history.length > 0) {
-                const currentVal = parseFloat(history[0].value);
-                const prevVal = history.length > 1 ? parseFloat(history[1].value) : currentVal;
-                const change = currentVal - prevVal;
-                const changePercent = (change / prevVal * 100).toFixed(2);
+    const kisToken = await getKisAccessToken();
 
-                stockPrices.push({
-                    ...stock,
-                    price: currentVal,
-                    changePercent: (change >= 0 ? '+' : '') + changePercent,
-                    trend: change >= 0 ? 'up' : 'down'
-                });
-                console.log(`✅ [Stock] ${stock.name}: ${currentVal}`);
+    if (kisToken) {
+        console.log('📈 주요 주식 시세 수집 중 (KIS API)...');
+        for (const stock of trackedStocks) {
+            try {
+                let kisData = null;
+                if (stock.market === 'domestic') {
+                    kisData = await fetchDomesticStockFromKIS(stock.symbol, kisToken);
+                } else {
+                    kisData = await fetchOverseasStockFromKIS(stock.excd, stock.symbol, kisToken);
+                }
+
+                if (kisData) {
+                    stockPrices.push({
+                        ...stock,
+                        price: kisData.price,
+                        changePercent: (kisData.changePercent >= 0 ? '+' : '') + kisData.changePercent,
+                        trend: kisData.trend
+                    });
+                    console.log(`✅ [KIS] ${stock.name}: ${kisData.price}`);
+                }
+
+                // 초당 요청 제한(TPS) 방지를 위한 짧은 지연
+                await new Promise(resolve => setTimeout(resolve, 50));
+            } catch (e) {
+                console.warn(`⚠️ KIS 주식 시세 수집 실패 (${stock.symbol}):`, e.message);
             }
-        } catch (e) {
-            console.warn(`⚠️ 주식 시세 수집 실패 (${stock.symbol}):`, e.message);
+        }
+    } else {
+        // KIS 실패 시 Yahoo FinanceFallback 시도 (기존 로직)
+        console.log('📈 KIS 토큰 없음. Yahoo Finance로 대체 수집 중...');
+        const yahooFallbackStocks = trackedStocks.map(s => ({
+            ...s,
+            symbol: s.market === 'domestic' ? `${s.symbol}.KS` : s.symbol
+        }));
+
+        for (const stock of yahooFallbackStocks) {
+            try {
+                const history = await fetchFromYahooFinance(stock.symbol);
+                if (history && history.length > 0) {
+                    const currentVal = parseFloat(history[0].value);
+                    const prevVal = history.length > 1 ? parseFloat(history[1].value) : currentVal;
+                    const change = currentVal - prevVal;
+                    const changePercent = (change / prevVal * 100).toFixed(2);
+
+                    stockPrices.push({
+                        ...stock,
+                        price: currentVal,
+                        changePercent: (change >= 0 ? '+' : '') + changePercent,
+                        trend: change >= 0 ? 'up' : 'down'
+                    });
+                    console.log(`✅ [Fallback-Yahoo] ${stock.name}: ${currentVal}`);
+                }
+            } catch (e) {
+                console.warn(`⚠️ Yahoo 주식 시세 수집 실패 (${stock.symbol}):`, e.message);
+            }
         }
     }
 

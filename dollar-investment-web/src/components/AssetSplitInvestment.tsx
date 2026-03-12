@@ -497,7 +497,14 @@ export function AssetSplitInvestment() {
                 }));
             }
         };
+
+        // 초기 로드
         loadDashboardData();
+
+        // 60초마다 주기적으로 새로고침
+        const interval = setInterval(loadDashboardData, 60000);
+
+        return () => clearInterval(interval);
     }, []);
 
     // 여러 종목 상태 관리

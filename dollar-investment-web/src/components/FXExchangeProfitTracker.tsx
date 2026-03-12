@@ -138,12 +138,13 @@ export function FXExchangeProfitTracker() {
     const unrealizedProfit = currentHoldingsValue - totalHoldingKrw;
     const unrealizedRoi = totalHoldingKrw > 0 ? (unrealizedProfit / totalHoldingKrw) * 100 : 0;
 
-    // 기간별 실현 손익 계산
+    // 기간별 데이터 계산을 위한 기준일 설정
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
     const thisMonthStr = now.toISOString().slice(0, 7); // YYYY-MM
     const thisYearStr = now.getFullYear().toString();
 
+    // 기간별 실현 손익
     const realizedToday = investments
         .filter(inv => inv.status === 'sold' && inv.sellDate === todayStr)
         .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
@@ -156,12 +157,27 @@ export function FXExchangeProfitTracker() {
         .filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisYearStr))
         .reduce((sum, inv) => sum + (inv.usdAmount * (inv.sellRate! - inv.buyRate)), 0);
 
-    // 거래 총액 계산 (매수 원금 + 매도 원금)
-    const totalBuyKrw = investments.reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0);
-    const totalSellKrw = investments
-        .filter(inv => inv.status === 'sold')
-        .reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
-    const totalTransactionVolume = totalBuyKrw + totalSellKrw;
+    // 기간별 평가 손익 (미실현 - 보유중인 항목의 매수일 기준)
+    const unrealizedToday = investments
+        .filter(inv => inv.status === 'holding' && inv.date === todayStr)
+        .reduce((sum, inv) => sum + (inv.usdAmount * (currentRate - inv.buyRate)), 0);
+
+    const unrealizedMonth = investments
+        .filter(inv => inv.status === 'holding' && inv.date?.startsWith(thisMonthStr))
+        .reduce((sum, inv) => sum + (inv.usdAmount * (currentRate - inv.buyRate)), 0);
+
+    // 기간별 거래 총액 (매수 원금 @ buyDate + 매도 원금 @ sellDate)
+    const volumeToday =
+        investments.filter(inv => inv.date === todayStr).reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0) +
+        investments.filter(inv => inv.status === 'sold' && inv.sellDate === todayStr).reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
+
+    const volumeMonth =
+        investments.filter(inv => inv.date?.startsWith(thisMonthStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0) +
+        investments.filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisMonthStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
+
+    const volumeYear =
+        investments.filter(inv => inv.date?.startsWith(thisYearStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0) +
+        investments.filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisYearStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
 
     return (
         <div className="space-y-8">
@@ -177,13 +193,30 @@ export function FXExchangeProfitTracker() {
                     </p>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
-                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>평가 손익 (미실현)</h3>
-                    <p className={`text-2xl font-bold ${unrealizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
-                        {unrealizedProfit >= 0 ? '+' : ''}{Math.round(unrealizedProfit).toLocaleString()}원
-                    </p>
-                    <p className={`text-sm mt-1 ${unrealizedProfit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
-                        {unrealizedRoi.toFixed(2)}%
-                    </p>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>평가 손익 (일/월/년)</h3>
+                    <div className="space-y-1">
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-xs text-gray-500">오늘 매수분:</span>
+                            <span className={`text-md font-bold ${unrealizedToday >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                {unrealizedToday >= 0 ? '+' : ''}{Math.round(unrealizedToday).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-xs text-gray-500">이번 달:</span>
+                            <span className={`text-md font-bold ${unrealizedMonth >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                {unrealizedMonth >= 0 ? '+' : ''}{Math.round(unrealizedMonth).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-baseline border-t border-gray-100 dark:border-gray-700 pt-1 mt-1">
+                            <span className="text-xs font-bold text-gray-600 dark:text-gray-300">총 미실현 손익:</span>
+                            <span className={`text-lg font-black ${unrealizedProfit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                {unrealizedProfit >= 0 ? '+' : ''}{Math.round(unrealizedProfit).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className={`text-[10px] text-right ${unrealizedProfit >= 0 ? 'text-red-400' : 'text-blue-400'}`}>
+                            전체 수익률: {unrealizedRoi.toFixed(2)}%
+                        </div>
+                    </div>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>실현 손익 (일/월/년)</h3>
@@ -209,13 +242,30 @@ export function FXExchangeProfitTracker() {
                     </div>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>누적 거래총액</h3>
-                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                        {Math.round(totalTransactionVolume).toLocaleString()}원
-                    </p>
-                    <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                        매수+매도 합산 규모
-                    </p>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>누적 거래총액 (일/월/년)</h3>
+                    <div className="space-y-1">
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-xs text-gray-500">오늘:</span>
+                            <span className={`text-md font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                {Math.round(volumeToday).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-baseline">
+                            <span className="text-xs text-gray-500">이번 달:</span>
+                            <span className={`text-md font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                {Math.round(volumeMonth).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-baseline border-t border-gray-100 dark:border-gray-700 pt-1 mt-1">
+                            <span className="text-xs font-bold text-gray-600 dark:text-gray-300">올해 누적:</span>
+                            <span className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                {Math.round(volumeYear).toLocaleString()}원
+                            </span>
+                        </div>
+                        <div className="text-[10px] text-right text-gray-400">
+                            매수+매도 합산 규모
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -334,7 +384,7 @@ export function FXExchangeProfitTracker() {
                     <h2 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                         💰 달러 분할 매도 기록
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>매도 금액 (USD)</label>
                             <div className="relative">
@@ -359,19 +409,23 @@ export function FXExchangeProfitTracker() {
                                 className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                             />
                         </div>
-                        <div className="flex items-end gap-2">
-                            <button
-                                onClick={() => handlePartialSell(partialSellId, partialSellAmount, partialSellRate)}
-                                className="flex-1 py-3 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-500 transition-all shadow-lg shadow-gray-500/10"
-                            >
-                                매도 확정
-                            </button>
-                            <button
-                                onClick={() => setPartialSellId(null)}
-                                className="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-200 transition-all shadow-md"
-                            >
-                                취소
-                            </button>
+                        <div className="flex flex-col">
+                            {/* 라벨 높이만큼 스페이서 추가 */}
+                            <div className="hidden md:block h-7 mb-2"></div>
+                            <div className="flex gap-2 items-center">
+                                <button
+                                    onClick={() => handlePartialSell(partialSellId, partialSellAmount, partialSellRate)}
+                                    className="px-5 h-9 flex items-center justify-center bg-yellow-400 text-gray-900 text-sm font-bold rounded-lg hover:bg-yellow-500 transition-all shadow-md"
+                                >
+                                    매도 확정
+                                </button>
+                                <button
+                                    onClick={() => setPartialSellId(null)}
+                                    className="px-4 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-bold rounded-lg hover:bg-gray-200 transition-all shadow-sm"
+                                >
+                                    취소
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

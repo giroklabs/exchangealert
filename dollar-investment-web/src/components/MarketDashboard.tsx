@@ -83,9 +83,9 @@ export function MarketDashboard() {
                         </div>
 
                         <div className="space-y-6">
-                            <div className="flex justify-between items-end">
+                            <div className="flex items-center gap-4">
                                 <span className={`text-lg font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>🤖 AI 종합 예측</span>
-                                <span className={`text-2xl font-bold ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
+                                <span className={`text-2xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
                                     {data?.forecast?.sentiment || '분석 중...'}
                                 </span>
                             </div>
@@ -117,8 +117,8 @@ export function MarketDashboard() {
 
                 {/* Gemini AI 심층 시장 분석 영역 */}
                 <div className={`mt-8 p-8 rounded-2xl border-l-4 shadow-sm transition-all duration-300 ${theme === 'dark'
-                        ? 'bg-yellow-900/10 border-l-yellow-600 border-y-gray-700 border-r-gray-700'
-                        : 'bg-yellow-50/30 border-l-yellow-500 border-y-yellow-100/50 border-r-yellow-100/50 shadow-inner'
+                    ? 'bg-yellow-900/10 border-l-yellow-600 border-y-gray-700 border-r-gray-700'
+                    : 'bg-yellow-50/30 border-l-yellow-500 border-y-yellow-100/50 border-r-yellow-100/50 shadow-inner'
                     }`}>
                     <div className="flex items-center gap-3 mb-6">
                         <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>

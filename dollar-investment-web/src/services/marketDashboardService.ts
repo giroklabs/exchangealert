@@ -7,7 +7,7 @@ import type { DashboardData, MarketIndicator } from '../types';
 export const fetchMarketDashboardData = async (): Promise<DashboardData> => {
     try {
         const baseUrl = import.meta.env.BASE_URL || '/';
-        const url = `${baseUrl}data/market-dashboard.json`;
+        const url = `${baseUrl}data/market-dashboard.json?t=${Date.now()}`;
 
         const response = await fetch(url);
         if (response.ok) {
