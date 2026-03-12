@@ -15,14 +15,14 @@ export function Tabs({ activeTab, onTabChange, tabs }: TabsProps) {
                 <button
                     key={tab.id}
                     onClick={() => onTabChange(tab.id)}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 font-bold transition-all duration-300 border-b-4 ${activeTab === tab.id
+                    className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-3.5 font-bold text-[0.9rem] whitespace-nowrap transition-all duration-300 border-b-4 ${activeTab === tab.id
                         ? 'border-yellow-400 text-gray-900 dark:text-white bg-yellow-400/10'
                         : (theme === 'dark'
                             ? 'border-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-700/50'
                             : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50')
                         }`}
                 >
-                    {tab.icon && <span>{tab.icon}</span>}
+                    {tab.icon && <span className="text-lg">{tab.icon}</span>}
                     {tab.label}
                 </button>
             ))}

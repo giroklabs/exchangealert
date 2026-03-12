@@ -149,12 +149,15 @@ async function fetchMarketInvestorTrend(token) {
             }
         });
         const data = await res.json();
-        if (data.output && data.output.length > 0) {
-            return data.output.slice(0, 14).map(d => ({
-                date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                // 단위: 백만원 -> 억원 변환
-                value: Math.round(parseFloat(d.frgn_ntby_tr_pbmn) / 100)
-            }));
+        if (data.output && Array.isArray(data.output)) {
+            return data.output
+                .filter(d => d.frgn_ntby_tr_pbmn && !isNaN(parseFloat(d.frgn_ntby_tr_pbmn)))
+                .slice(0, 14)
+                .map(d => ({
+                    date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                    // 단위: 백만원 -> 억원 변환
+                    value: Math.round(parseFloat(d.frgn_ntby_tr_pbmn) / 100)
+                }));
         }
     } catch (e) {
         console.error("❌ KIS 외인수급 조회 에러:", e.message);

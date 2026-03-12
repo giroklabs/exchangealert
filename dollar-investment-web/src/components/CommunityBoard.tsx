@@ -138,7 +138,7 @@ export const CommunityBoard: React.FC = () => {
     }
 
     return (
-        <div className="space-y-6 max-w-4xl mx-auto pb-20">
+        <div className="space-y-6 max-w-6xl mx-auto pb-20">
             {/* 상단 통계/인사이드 섹션 */}
             <div className={`p-6 rounded-3xl border ${isDark ? 'bg-gray-900/40 border-gray-800' : 'bg-white border-gray-100'} shadow-sm flex justify-between items-center`}>
                 <div>
