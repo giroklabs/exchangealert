@@ -12,14 +12,15 @@ import {
     doc,
     updateDoc,
     increment,
-    Timestamp
+    Timestamp,
+    arrayUnion
 } from 'firebase/firestore';
 
 interface Comment {
     id: string;
     author: string;
     content: string;
-    date: string | Timestamp;
+    createdAt: string;
 }
 
 interface Post {
@@ -55,6 +56,7 @@ export const CommunityBoard: React.FC = () => {
         sentiment: 'neutral',
         tags: ''
     });
+    const [commentTexts, setCommentTexts] = useState<{ [postId: string]: string }>({});
 
     // Real-time Firestore sync
     useEffect(() => {
@@ -65,7 +67,6 @@ export const CommunityBoard: React.FC = () => {
                 return {
                     id: doc.id,
                     ...data,
-                    // Firestore Timestamp -> Readable string fallback
                     date: data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('ko-KR', { hour12: false }).substring(0, 16) : '방금 전'
                 } as Post;
             });
@@ -123,6 +124,31 @@ export const CommunityBoard: React.FC = () => {
             });
         } catch (error) {
             console.error("Reaction error:", error);
+        }
+    };
+
+    const handleAddComment = async (postId: string) => {
+        const text = commentTexts[postId];
+        if (!user) {
+            alert('댓글을 달려면 로그인이 필요합니다.');
+            login();
+            return;
+        }
+        if (!text || !text.trim()) return;
+
+        try {
+            const postRef = doc(db, 'community_posts', postId);
+            await updateDoc(postRef, {
+                comments: arrayUnion({
+                    id: Date.now().toString(),
+                    author: user.displayName || '익명',
+                    content: text,
+                    createdAt: new Date().toISOString()
+                })
+            });
+            setCommentTexts({ ...commentTexts, [postId]: '' });
+        } catch (error) {
+            console.error("Comment error:", error);
         }
     };
 
@@ -259,7 +285,7 @@ export const CommunityBoard: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="flex justify-between items-center pt-4 border-t border-gray-800/20">
+                        <div className="flex justify-between items-center pt-4 border-t border-gray-800/10">
                             <div className="flex gap-2">
                                 {['🔥', '🤔', '🕯️', '🚀', '💰'].map(emoji => (
                                     <button
@@ -278,17 +304,38 @@ export const CommunityBoard: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* 댓글 미리보기/시스템 (MVP) */}
-                        {post.comments && post.comments.length > 0 && (
-                            <div className={`mt-4 p-4 rounded-2xl ${isDark ? 'bg-gray-800/30' : 'bg-gray-50/50'} space-y-3`}>
-                                {post.comments.map((c, idx) => (
-                                    <div key={idx} className="text-sm">
-                                        <span className="font-bold mr-2">{c.author}</span>
-                                        <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>{c.content}</span>
-                                    </div>
-                                ))}
+                        {/* 댓글 섹션 */}
+                        <div className="mt-6 space-y-4">
+                            {post.comments && post.comments.length > 0 && (
+                                <div className={`space-y-3 p-4 rounded-2xl ${isDark ? 'bg-gray-800/30' : 'bg-gray-50/50'}`}>
+                                    {post.comments.map((c, idx) => (
+                                        <div key={idx} className="text-sm flex gap-2 items-start">
+                                            <span className="font-bold whitespace-nowrap">{c.author}</span>
+                                            <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>{c.content}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* 댓글 입력창 */}
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    placeholder="따뜻한 댓글을 남겨주세요..."
+                                    value={commentTexts[post.id] || ''}
+                                    onChange={(e) => setCommentTexts({ ...commentTexts, [post.id]: e.target.value })}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleAddComment(post.id)}
+                                    className={`flex-1 px-4 py-2.5 rounded-xl border outline-none text-sm transition-all focus:ring-2 focus:ring-indigo-500/20 ${isDark ? 'bg-gray-800/50 border-gray-700 text-gray-200' : 'bg-gray-50 border-gray-100 text-gray-800'
+                                        }`}
+                                />
+                                <button
+                                    onClick={() => handleAddComment(post.id)}
+                                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-colors"
+                                >
+                                    등록
+                                </button>
                             </div>
-                        )}
+                        </div>
                     </div>
                 ))}
             </div>
