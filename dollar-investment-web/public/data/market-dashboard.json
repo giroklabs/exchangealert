@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "94.85",
+      "value": "94.52",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 94.85
+          "value": 94.52
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.66",
+      "value": "99.65",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 99.66
+          "value": 99.65
         }
       ]
     },
@@ -493,7 +493,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
       "realtimeSymbol": "^VIX",
-      "value": "26.3",
+      "value": "26.31",
       "trend": "up",
       "history": [
         {
@@ -534,7 +534,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 26.3
+          "value": 26.31
         }
       ]
     },
@@ -906,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 255.76,
-      "changePercent": "-1.94",
+      "price": 255.69,
+      "changePercent": "-1.96",
       "trend": "down"
     },
     {
@@ -917,7 +917,7 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 400.25,
+      "price": 400.22,
       "changePercent": "-1.86",
       "trend": "down"
     },
@@ -928,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 184.58,
-      "changePercent": "-0.78",
+      "price": 184.45,
+      "changePercent": "-0.85",
       "trend": "down"
     },
     {
@@ -939,8 +939,8 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 405.22,
-      "changePercent": "+0.08",
+      "price": 405.31,
+      "changePercent": "+0.11",
       "trend": "up"
     },
     {
@@ -950,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 303.58,
-      "changePercent": "-1.66",
+      "price": 303.66,
+      "changePercent": "-1.63",
       "trend": "down"
     },
     {
@@ -961,8 +961,8 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 210.1,
-      "changePercent": "-1.20",
+      "price": 210.13,
+      "changePercent": "-1.19",
       "trend": "down"
     },
     {
@@ -972,8 +972,8 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 600.81,
-      "changePercent": "-1.13",
+      "price": 600.63,
+      "changePercent": "-1.16",
       "trend": "down"
     },
     {
@@ -983,8 +983,8 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 669.84,
-      "changePercent": "-0.96",
+      "price": 669.59,
+      "changePercent": "-1.00",
       "trend": "down"
     },
     {
@@ -1003,11 +1003,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 84,
     "downProb": 16,
-    "detailedAnalysis": "미국 기준금리, 높은 국제 유가 및 인플레이션, 견고한 GDP 등 전반적인 미국 경제 지표들은 달러 강세를 지지합니다. 이는 달러 인덱스 상승과 함께 원/달러 환율의 상방 압력을 강화하는 주요 요인입니다.\n\n특히 VIX 공포지수가 26.3pt로 상승 추세를 보이는 것은 시장의 강한 위험 회피 심리를 반영하며, 이는 외국인 투자자들의 국내 자산 순매도와 자본 유출을 유발하여 원화 약세를 심화시킵니다. 코스피 지수 하락과 경상수지 둔화 또한 원화 가치 하락에 기여합니다.\n\n종합적으로 볼 때, 달러 강세 요인과 시장의 위험 회피 심리가 지배적인 상황에서 국내 경제 지표의 약세까지 더해져 원/달러 환율은 상승할 가능성이 높습니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "안녕하십니까, 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n현재 VIX 공포지수가 26.31pt로 높고 상승 추세인 것은 글로벌 금융 시장의 위험 회피 심리(risk-off)가 강화되고 있음을 명확히 보여줍니다. 이는 안전 자산인 달러 수요를 증대시켜 원/달러 환율의 상승 압력으로 작용하며, 코스피 지수 하락 추세와 맞물려 외국인 자금의 순유출 우려를 심화시켜 원화 약세를 부추기고 있습니다.\n\n미국은 견조한 경제 성장률과 높은 물가, 강한 고용 지표를 바탕으로 달러 강세 요인이 뚜렷한 반면, 한국은 경상수지 악화 추세와 상대적으로 낮은 기준금리로 인해 원화 약세 압력을 받고 있습니다. ��은 국제 유가 및 엔/달러 환율 상승 또한 원화 약세를 부추기는 외부 요인으로 작용하여 전반적으로 달러 강세 흐름이 지속될 것으로 판단됩니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 11.599999999999998,
       "downScore": 2.2
     }
   },
-  "lastUpdate": "2026. 3. 12. 오후 4:43:48"
+  "lastUpdate": "2026. 3. 12. 오후 4:45:36"
 }
