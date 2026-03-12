@@ -85,6 +85,7 @@ export interface SevenSplitSettings {
   gapWon: number;
   targetProfitPercent: number;
   baseExchangeRate: number;
+  splitCount: number; // 분할 횟수
 }
 
 export interface FXInvestment {

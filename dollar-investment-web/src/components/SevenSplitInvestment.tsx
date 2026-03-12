@@ -14,7 +14,8 @@ export function SevenSplitInvestment() {
         totalBudget: 10000000, // 1000만원
         gapWon: 10,
         targetProfitPercent: 1.0,
-        baseExchangeRate: currentRate || 1400
+        baseExchangeRate: currentRate || 1400,
+        splitCount: 7 // 기본 7분할
     });
 
     // 슬롯 상태
@@ -28,6 +29,39 @@ export function SevenSplitInvestment() {
             targetPrice: null
         }));
     });
+
+    // 분할 횟수 변경 시 슬롯 조정
+    const handleSplitCountChange = (newCount: number) => {
+        if (newCount < 1) return;
+
+        let newSlots = [...slots];
+        if (newSlots.length < newCount) {
+            // 슬롯 추가
+            const toAdd = newCount - newSlots.length;
+            const startNum = newSlots.length + 1;
+            const addedSlots = Array.from({ length: toAdd }, (_, i) => ({
+                number: startNum + i,
+                isActive: false,
+                buyPrice: null,
+                amount: 0,
+                krwAmount: 0,
+                targetPrice: null
+            }));
+            newSlots = [...newSlots, ...addedSlots];
+        } else if (newSlots.length > newCount) {
+            // 슬롯 축소 (활성화된 슬롯이 있는지 확인)
+            const activeBeyondLimit = newSlots.slice(newCount).some(s => s.isActive);
+            if (activeBeyondLimit) {
+                if (!window.confirm('축소하려는 슬롯 범위에 이미 매수된 내역이 있습니다. 정말로 축소하시겠습니까? (삭제됨)')) {
+                    return;
+                }
+            }
+            newSlots = newSlots.slice(0, newCount);
+        }
+
+        setSlots(newSlots);
+        setSettings(prev => ({ ...prev, splitCount: newCount }));
+    };
 
     const [editingSlot, setEditingSlot] = useSyncState<number | null>('seven-split-editing-slot', null);
     const [editValues, setEditValues] = useSyncState<{ buyPrice: number; amount: number; targetPrice: number }>('seven-split-edit-values', { buyPrice: 0, amount: 0, targetPrice: 0 });
@@ -47,7 +81,7 @@ export function SevenSplitInvestment() {
             // 강제는 아니지만 가이드 제공 가능
         }
 
-        const budgetPerSlot = settings.totalBudget / 7; // 단순 균등 배분 (슬롯1 비중 조절 로직 추가 가능)
+        const budgetPerSlot = settings.totalBudget / settings.splitCount; // 단순 균등 배분 (슬롯1 비중 조절 로직 추가 가능)
         const amount = budgetPerSlot / buyPrice;
 
         const newSlots = [...slots];
@@ -103,7 +137,7 @@ export function SevenSplitInvestment() {
     // 리셋
     const handleReset = () => {
         if (window.confirm('모든 슬롯 데이터를 초기화하시겠습니까?')) {
-            setSlots(Array.from({ length: 7 }, (_, i) => ({
+            setSlots(Array.from({ length: settings.splitCount }, (_, i) => ({
                 number: i + 1,
                 isActive: false,
                 buyPrice: null,
@@ -172,6 +206,22 @@ export function SevenSplitInvestment() {
                             type="number"
                             value={settings.baseExchangeRate}
                             onChange={(e) => handleSettingChange('baseExchangeRate', Number(e.target.value))}
+                            className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                    <div>
+                        <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                            분할 횟수
+                        </label>
+                        <input
+                            type="number"
+                            min="1"
+                            max="20"
+                            value={settings.splitCount}
+                            onChange={(e) => handleSplitCountChange(Number(e.target.value))}
                             className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                         />
                     </div>

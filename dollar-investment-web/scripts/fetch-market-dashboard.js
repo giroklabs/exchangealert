@@ -134,6 +134,34 @@ async function fetchFromEcos(item) {
     });
 }
 
+async function fetchMarketInvestorTrend(token) {
+    if (!token) return null;
+    try {
+        // 삼성전자를 시장 외인 수급의 프록시(Proxy)로 사용
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=005930`;
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+                "appkey": KIS_APP_KEY,
+                "appsecret": KIS_APP_SECRET,
+                "tr_id": "FHKST01010900"
+            }
+        });
+        const data = await res.json();
+        if (data.output && data.output.length > 0) {
+            return data.output.slice(0, 14).map(d => ({
+                date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                // 단위: 백만원 -> 억원 변환
+                value: Math.round(parseFloat(d.frgn_ntby_tr_pbmn) / 100)
+            }));
+        }
+    } catch (e) {
+        console.error("❌ KIS 외인수급 조회 에러:", e.message);
+    }
+    return null;
+}
+
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
         console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜁니다.");
@@ -217,7 +245,7 @@ async function fetchAiAnalysis(indicators) {
     }
 
     const summary = indicators.map(i => `- ${i.name}: ${i.value}${i.unit} (추세: ${i.trend}, 환율영향: ${i.impact})`).join('\n');
-    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요. 특히 VIX(공포지수)의 움직임이 시장의 리스크 온/오프 심리에 미치는 영향을 중요하게 고려해 주세요.
+    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요. 특히 VIX(공포지수)와 외국인 순매수(주문흐름)의 움직임이 시장의 리스크 온/오프 심리와 환율에 미치는 영향을 중요하게 고려해 주세요.
 응답은 2~3문장의 짧고 명확한 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 적어주세요.
 
 경제 지표 현황:
@@ -334,6 +362,7 @@ ${summary}
 async function main() {
     console.log('🚀 2026년 실시간 데이터 수집 시작...');
     const indicators = [];
+    const kisToken = await getKisAccessToken();
     let upScore = 0, downScore = 0;
 
     for (const s of FRED_SERIES) {
@@ -427,6 +456,37 @@ async function main() {
 
         indicators.push({ ...item, value: displayVal, trend, history });
         console.log(`✅ [ECOS] ${item.name}: ${displayVal}`);
+    }
+
+
+
+    // 2.1 외국인 순매도 영향권 (KIS API 연동)
+    if (kisToken) {
+        const investorTrend = await fetchMarketInvestorTrend(kisToken);
+        if (investorTrend && investorTrend.length > 0) {
+            const latest = investorTrend[0].value;
+            const prev = investorTrend.length > 1 ? investorTrend[1].value : latest;
+            const trend = latest > 0 ? 'up' : 'down'; // 순매수(+) vs 순매도(-)
+
+            // 환율 영향: 외인 순매수 시 환율 하락(down), 순매도 시 환율 상승(up)
+            // 가중치 부여 (1.5)
+            if (latest > 0) downScore += 1.5;
+            else if (latest < 0) upScore += 1.5;
+
+            indicators.push({
+                id: 'foreigner-net-buy',
+                name: '주문흐름 (외인 순매수)',
+                unit: '억원',
+                category: 'domestic',
+                impact: 'down',
+                source: 'KIS (삼성전자 기준)',
+                description: '외국인 자금 유입 시 원화 강세(환율 하락) 유발',
+                value: latest.toLocaleString(),
+                trend: latest >= prev ? 'up' : 'down',
+                history: investorTrend.reverse()
+            });
+            console.log(`✅ [KIS] 외인 순매수: ${latest}억원`);
+        }
     }
 
     const total = upScore + downScore;
@@ -530,7 +590,7 @@ async function main() {
     ];
 
     const stockPrices = [];
-    const kisToken = await getKisAccessToken();
+
 
     if (kisToken) {
         console.log('📈 주요 주식 시세 수집 중 (KIS API)...');
