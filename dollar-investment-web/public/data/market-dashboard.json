@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.1",
+      "value": "158.96",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 159.1
+          "value": 158.96
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "93.26",
+      "value": "92.65",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 93.26
+          "value": 92.65
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.46",
+      "value": "99.39",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 99.46
+          "value": 99.39
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,581.35",
+      "value": "5,620.23",
       "trend": "up",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 5581.35
+          "value": 5620.23
         }
       ]
     },
@@ -801,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,482.20",
-      "change": "+15.80",
-      "changePercent": "+1.08",
+      "value": "1,479.60",
+      "change": "+13.20",
+      "changePercent": "+0.90",
       "trend": "up"
     },
     {
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "931.06",
-      "change": "+2.90",
-      "changePercent": "+0.31",
+      "value": "929.95",
+      "change": "+1.79",
+      "changePercent": "+0.19",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,710.38",
-      "change": "+4.22",
-      "changePercent": "+0.25",
+      "value": "1,708.42",
+      "change": "+2.26",
+      "changePercent": "+0.13",
       "trend": "up"
     },
     {
@@ -832,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.34",
-      "change": "+1.66",
-      "changePercent": "+0.78",
+      "value": "215.03",
+      "change": "+1.35",
+      "changePercent": "+0.63",
       "trend": "up"
     }
   ],
@@ -844,8 +844,8 @@
       "symbol": "005930.KS",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 187400,
-      "changePercent": "-1.37",
+      "price": 189000,
+      "changePercent": "-0.53",
       "trend": "down"
     },
     {
@@ -853,8 +853,8 @@
       "symbol": "000660.KS",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 941000,
-      "changePercent": "-1.47",
+      "price": 951000,
+      "changePercent": "-0.42",
       "trend": "down"
     },
     {
@@ -862,8 +862,8 @@
       "symbol": "005380.KS",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 524000,
-      "changePercent": "-1.13",
+      "price": 527000,
+      "changePercent": "-0.57",
       "trend": "down"
     },
     {
@@ -871,8 +871,8 @@
       "symbol": "000270.KS",
       "name": "기아",
       "enName": "Kia",
-      "price": 164500,
-      "changePercent": "+1.54",
+      "price": 165700,
+      "changePercent": "+2.28",
       "trend": "up"
     },
     {
@@ -880,8 +880,8 @@
       "symbol": "035420.KS",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 223500,
-      "changePercent": "+0.68",
+      "price": 225000,
+      "changePercent": "+1.35",
       "trend": "up"
     },
     {
@@ -889,9 +889,9 @@
       "symbol": "035720.KS",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50800,
-      "changePercent": "-0.20",
-      "trend": "down"
+      "price": 51000,
+      "changePercent": "+0.20",
+      "trend": "up"
     },
     {
       "id": "apple",
@@ -979,11 +979,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 70,
     "downProb": 30,
-    "detailedAnalysis": "미국 GDP, CPI, 기준금리 및 국채금리의 견조한 상승 추세는 미 연준의 매파적 기조 유지 기대감을 높이며 달러 인덱스의 강세를 지지하고 있습니다. 국제 유가 상승과 엔/달러 환율의 동반 상승은 글로벌 시장 전반의 달러 선호 심리를 강화하여 원/달러 환율에 상승 압력을 가하고 있습니다.\n\nVIX 공포지수가 하락 추세임에도 불구하고 그 환율영향이 '상승'으로 제시된 것은, 시장의 극단적인 공포는 다소 완화되었으나 여전히 높은 VIX 레벨과 더불어 압도적인 달러 강세 요인들로 인해 전반적인 리스크 회피 심리가 지속되며 달러 선호 현상을 유지하고 있음을 시사합니다. 국내 코스피 지수 및 경제성장률 상승에도 불구하고, 미국 대비 낮은 ���국 기준금리와 하락하는 경상수지는 원화 약세 요인으로 작용합니다.\n\n결론적으로, 압도적인 미국 경제의 견조함과 이에 따른 달러 강세 압력이 국내 일부 원화 강세 요인을 상쇄하며 원/달러 환율의 추가 상승 압력이 우세합니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "안녕하세요, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국 기준금리, 소비자물가, GDP, 10년물 국채금리 및 달러 인덱스 등 대부분의 미국 지표들이 견조한 상승 추세를 보이며 달러 강세 압력을 지속적으로 높이고 있습니다. 이는 한국과의 금리 격차와 경제력 차이를 부각하며 원/달러 환율 상승 요인으로 강하게 작용하고 있습니다.\n\n특히 VIX 공포지수가 하락 추세임에도 불구하고 원/달러 환율 상승에 영향을 미친다는 점은 주목할 만합니다. 이는 글로벌 시장의 리스크 온 심리가 다소 개선되었음에도 불구하고, 미국의 독보적인 경제 펀더멘털과 고금리 기조가 다른 ���험자산보다 달러 선호를 더 강하게 유도하고 있음을 보여줍니다. 즉, 전반적인 리스크 오프 해소보다는 '강달러' 중심의 자금 흐름이 더욱 지배적입니다.\n\n국내 코스피와 경제성장률 상승이 원화 강세 요인이 될 수 있으나, 한국 기준금리 중립 추세와 경상수지 악화, 국내 통화량 증가는 원화 약세 압력을 가중시키고 있습니다. 따라서 강력한 미국 경제와 달러 강세 요인이 한국의 펀더멘털 약화 요인과 결합하여 환율 상승을 지지할 것으로 보입니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 9.6,
       "downScore": 4.2
     }
   },
-  "lastUpdate": "2026. 3. 12. 오전 12:45:39"
+  "lastUpdate": "2026. 3. 12. 오전 1:00:42"
 }
