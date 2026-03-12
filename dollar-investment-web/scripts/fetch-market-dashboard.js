@@ -137,8 +137,8 @@ async function fetchFromEcos(item) {
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
     try {
-        // 삼성전자를 시장 외인 수급의 프록시(Proxy)로 사용
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=005930`;
+        // KOSPI 전체 시장 수급의 프록시(Proxy)로 KODEX 200 ETF(069500)의 외인 수급 사용
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=069500`;
         const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
@@ -475,12 +475,12 @@ async function main() {
 
             indicators.push({
                 id: 'foreigner-net-buy',
-                name: '주문흐름 (외인 순매수)',
+                name: '주문흐름 (KOSPI 외인 수급)',
                 unit: '억원',
                 category: 'domestic',
                 impact: 'down',
-                source: 'KIS (삼성전자 기준)',
-                description: '외국인 자금 유입 시 원화 강세(환율 하락) 유발',
+                source: 'KIS (KODEX 200 기준)',
+                description: 'KOSPI 대형주 중심의 외국인 자금 흐름 (시장 전체 심리 반영)',
                 value: latest.toLocaleString(),
                 trend: latest >= prev ? 'up' : 'down',
                 history: investorTrend.reverse()

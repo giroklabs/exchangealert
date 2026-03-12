@@ -4,13 +4,13 @@ import { SevenSplitInvestment } from './components/SevenSplitInvestment';
 import { AssetSplitInvestment } from './components/AssetSplitInvestment';
 import { FXExchangeProfitTracker } from './components/FXExchangeProfitTracker';
 import { MarketDashboard } from './components/MarketDashboard';
-import { AboutPage } from './components/AboutPage';
 import { Tabs } from './components/Tabs';
 import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
 import { UserProfile } from './components/UserProfile';
 import { BackupManager } from './components/BackupManager';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
+import { CommunityBoard } from './components/CommunityBoard';
 import { fetchCurrentExchangeRate, getCurrentRateValue, fetchLastUpdateTime } from './services/exchangeRateService';
 import logo from './assets/logo.png';
 import './App.css';
@@ -49,6 +49,7 @@ function App() {
     { id: 'asset-split', label: '자산 스플릿', icon: '🏦' },
     { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
     { id: 'news', label: '환율 뉴스', icon: '📰' },
+    { id: 'community', label: '커뮤니티', icon: '🗨️' },
     // { id: 'about', label: '소개', icon: '❓' }, // 임시 숨김 처리
   ];
 
@@ -102,8 +103,8 @@ function App() {
             <FXExchangeProfitTracker />
           ) : activeTab === 'news' ? (
             <ExchangeRateNews />
-          ) : activeTab === 'about' ? (
-            <AboutPage />
+          ) : activeTab === 'community' ? (
+            <CommunityBoard />
           ) : (
             <MarketDashboard />
           )}
