@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.02",
+      "value": "159.04",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 159.02
+          "value": 159.04
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "94.12",
+      "value": "94.24",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 94.12
+          "value": 94.24
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,530.5",
+      "value": "5,536.09",
       "trend": "down",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 5530.5
+          "value": 5536.09
         }
       ]
     },
@@ -801,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,480.90",
-      "change": "+14.50",
-      "changePercent": "+0.99",
+      "value": "1,480.50",
+      "change": "+14.10",
+      "changePercent": "+0.96",
       "trend": "up"
     },
     {
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "931.30",
-      "change": "+3.14",
-      "changePercent": "+0.34",
+      "value": "930.87",
+      "change": "+2.71",
+      "changePercent": "+0.29",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,708.81",
-      "change": "+2.65",
-      "changePercent": "+0.16",
+      "value": "1,708.13",
+      "change": "+1.97",
+      "changePercent": "+0.12",
       "trend": "up"
     },
     {
@@ -832,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.18",
-      "change": "+1.50",
-      "changePercent": "+0.70",
+      "value": "215.09",
+      "change": "+1.41",
+      "changePercent": "+0.66",
       "trend": "up"
     }
   ],
@@ -845,8 +845,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 186100,
-      "changePercent": "-2.05",
+      "price": 186500,
+      "changePercent": "-1.84",
       "trend": "down"
     },
     {
@@ -875,8 +875,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 162600,
-      "changePercent": "+0.37",
+      "price": 163100,
+      "changePercent": "+0.68",
       "trend": "up"
     },
     {
@@ -885,8 +885,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 221000,
-      "changePercent": "-0.45",
+      "price": 220500,
+      "changePercent": "-0.68",
       "trend": "down"
     },
     {
@@ -895,8 +895,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50300,
-      "changePercent": "-1.18",
+      "price": 50400,
+      "changePercent": "-0.98",
       "trend": "down"
     },
     {
@@ -1003,11 +1003,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 77,
     "downProb": 23,
-    "detailedAnalysis": "한수지입니다. 현재 경제 지표들을 종합적으로 분석한 결과, 향후 원/달러 환율은 상승 압력이 강할 것으로 판단됩니다.\n\n미국 GDP 및 소비자물가 상승, 10년물 국채금리 및 달러 인덱스의 견조한 상승 추세는 강력한 달러 강세 요인으로 작용하고 있습니다. 더불어 한미 금리 격차와 국제 유가 상승 또한 원화 약세 압력을 가중시키는 거시적 요인입니다.\n\nVIX 공포지수가 24.23pt로 여전히 높은 수준을 유지하며 글로벌 금융시장의 불확실성과 리스크 회피 심리가 지속되고 있음을 시사합니다. 이러한 리스크 오프 환경은 안전자산인 달러 선호를 부추기는 한편, 코스피 지수 하락은 외국인 자금의 순유출을 의미하여 원/달러 환율의 상승 요인으로 작용할 것입니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석하겠습니다.\n\n미국 기준금리, 국채금리, 달러 인덱스 및 견조한 미국 경제 지표(GDP, CPI)들은 일관되게 달러 강세 압력을 높이고 있습니다. 이는 한미 금리차를 유지하며 투자 자금을 달러 자산으로 유인하는 요인으로 작용하고 있습니다.\n\nVIX 공포지수가 하락 추세임에도 불구하고 24.23pt라는 절대적인 레벨은 여전히 시장의 내재된 경계심을 반영하고 있습니다. 이는 외국인 자본의 국내 주식시장 유입을 제한하고 코스피 지수 하락과 경상수지 둔화가 겹치며 원화 약세 압력을 가중시킬 것으로 예상됩니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 10.599999999999998,
       "downScore": 3.2
     }
   },
-  "lastUpdate": "2026. 3. 12. 오전 4:00:48"
+  "lastUpdate": "2026. 3. 12. 오전 4:15:41"
 }
