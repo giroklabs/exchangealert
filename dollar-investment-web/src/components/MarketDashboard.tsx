@@ -115,14 +115,45 @@ export function MarketDashboard() {
                     </div>
                 </div>
 
-                {/* Gemini AI 심층 시장 분석 영역 (이동됨) */}
-                <div className={`mt-8 p-6 rounded-2xl ${theme === 'dark' ? 'bg-yellow-900/20 border border-yellow-800/50' : 'bg-yellow-50/50 border border-yellow-100 shadow-inner'}`}>
-                    <h3 className={`text-lg font-bold mb-3 flex items-center gap-2 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-800'}`}>
-                        <span>🤖</span> Gemini AI 심층 시장 분석
-                    </h3>
-                    <p className={`text-md leading-relaxed whitespace-pre-wrap ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {data?.forecast?.detailedAnalysis}
-                    </p>
+                {/* Gemini AI 심층 시장 분석 영역 */}
+                <div className={`mt-8 p-8 rounded-2xl border-l-4 shadow-sm transition-all duration-300 ${theme === 'dark'
+                        ? 'bg-yellow-900/10 border-l-yellow-600 border-y-gray-700 border-r-gray-700'
+                        : 'bg-yellow-50/30 border-l-yellow-500 border-y-yellow-100/50 border-r-yellow-100/50 shadow-inner'
+                    }`}>
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 className={`text-xl font-black ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-900'}`}>
+                            Gemini AI 심층 시장 분석
+                        </h3>
+                    </div>
+
+                    <div className={`text-left space-y-4`}>
+                        {data?.forecast?.detailedAnalysis ? (
+                            data.forecast.detailedAnalysis.split('\n').map((line, i) => {
+                                if (line.trim().startsWith('결론:')) {
+                                    return (
+                                        <div key={i} className={`mt-8 p-4 rounded-xl font-bold flex items-center gap-3 ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-400 border border-yellow-400/20' : 'bg-yellow-400 text-yellow-900'
+                                            }`}>
+                                            <span className="text-xl">💡</span>
+                                            <span>{line.trim()}</span>
+                                        </div>
+                                    );
+                                }
+                                return line.trim() ? (
+                                    <p key={i} className={`text-[15px] leading-[1.8] font-medium tracking-tight whitespace-pre-wrap ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                                        }`}>
+                                        {line.trim()}
+                                    </p>
+                                ) : <div key={i} className="h-2"></div>;
+                            })
+                        ) : (
+                            <p className="text-gray-400 italic">분석 데이터를 불러오는 중입니다...</p>
+                        )}
+                    </div>
                 </div>
             </div>
 

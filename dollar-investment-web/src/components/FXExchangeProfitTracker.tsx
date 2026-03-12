@@ -25,6 +25,9 @@ export function FXExchangeProfitTracker() {
         status: 'holding'
     });
     const [isAdding, setIsAdding] = useState(false);
+    const [partialSellId, setPartialSellId] = useState<string | null>(null);
+    const [partialSellAmount, setPartialSellAmount] = useState<number>(0);
+    const [partialSellRate, setPartialSellRate] = useState<number>(currentRate);
 
     const handleAddInvestment = () => {
         if (!newInvestment.date || !newInvestment.usdAmount || !newInvestment.buyRate) {
@@ -72,6 +75,40 @@ export function FXExchangeProfitTracker() {
             }
             return inv;
         }));
+    };
+
+    const handlePartialSell = (id: string, amountToSell: number, sellRate: number) => {
+        const inv = investments.find(i => i.id === id);
+        if (!inv || amountToSell <= 0 || amountToSell > inv.usdAmount) {
+            alert('유효하지 않은 매도 금액입니다.');
+            return;
+        }
+
+        const sellDate = new Date().toISOString().split('T')[0];
+        const newSoldRecord: FXInvestment = {
+            id: crypto.randomUUID(),
+            date: inv.date,
+            usdAmount: amountToSell,
+            buyRate: inv.buyRate,
+            sellRate,
+            sellDate,
+            status: 'sold',
+            memo: `${inv.memo ? inv.memo + ' ' : ''}(분할매도)`
+        };
+
+        const updatedInvestments = investments.map(item => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    usdAmount: item.usdAmount - amountToSell
+                };
+            }
+            return item;
+        }).filter(item => item.usdAmount > 0);
+
+        setInvestments([newSoldRecord, ...updatedInvestments]);
+        setPartialSellId(null);
+        setPartialSellAmount(0);
     };
 
     const handleRevertToHolding = (id: string) => {
@@ -291,6 +328,55 @@ export function FXExchangeProfitTracker() {
                 </div>
             )}
 
+            {/* 분할 매도 폼 */}
+            {partialSellId && (
+                <div className={`p-6 rounded-2xl shadow-xl border animate-in fade-in slide-in-from-top-4 duration-300 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <h2 className={`text-xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+                        💰 달러 분할 매도 기록
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>매도 금액 (USD)</label>
+                            <div className="relative">
+                                <span className="absolute left-3 top-3 text-gray-400">$</span>
+                                <input
+                                    type="number"
+                                    max={investments.find(i => i.id === partialSellId)?.usdAmount}
+                                    value={partialSellAmount}
+                                    onChange={(e) => setPartialSellAmount(Number(e.target.value))}
+                                    className={`w-full p-3 pl-8 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                                />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">최대 가능 금액: ${investments.find(i => i.id === partialSellId)?.usdAmount.toLocaleString()}</p>
+                        </div>
+                        <div>
+                            <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>매도 환율 (원)</label>
+                            <input
+                                type="number"
+                                step="0.1"
+                                value={partialSellRate}
+                                onChange={(e) => setPartialSellRate(Number(e.target.value))}
+                                className={`w-full p-3 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
+                            />
+                        </div>
+                        <div className="flex items-end gap-2">
+                            <button
+                                onClick={() => handlePartialSell(partialSellId, partialSellAmount, partialSellRate)}
+                                className="flex-1 py-3 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-500 transition-all shadow-lg shadow-gray-500/10"
+                            >
+                                매도 확정
+                            </button>
+                            <button
+                                onClick={() => setPartialSellId(null)}
+                                className="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-200 transition-all shadow-md"
+                            >
+                                취소
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* 기록 리스트 */}
             <div className={`overflow-hidden rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="overflow-x-auto">
@@ -357,17 +443,29 @@ export function FXExchangeProfitTracker() {
                                             <td className="p-4">
                                                 <div className="flex gap-2">
                                                     {isHolding ? (
-                                                        <button
-                                                            onClick={() => {
-                                                                const rate = prompt('매도 환율을 입력하세요:', currentRate.toString());
-                                                                if (rate && !isNaN(Number(rate))) {
-                                                                    handleSettleInvestment(inv.id, Number(rate));
-                                                                }
-                                                            }}
-                                                            className="px-3 py-1.5 text-xs font-bold rounded-lg bg-yellow-400 text-gray-900 hover:bg-yellow-500 transition-colors"
-                                                        >
-                                                            매도 처리
-                                                        </button>
+                                                        <>
+                                                            <button
+                                                                onClick={() => {
+                                                                    const rate = prompt('매도 환율을 입력하세요:', currentRate.toString());
+                                                                    if (rate && !isNaN(Number(rate))) {
+                                                                        handleSettleInvestment(inv.id, Number(rate));
+                                                                    }
+                                                                }}
+                                                                className="px-3 py-1.5 text-xs font-bold rounded-lg bg-yellow-400 text-gray-900 hover:bg-yellow-500 transition-colors"
+                                                            >
+                                                                전체매도
+                                                            </button>
+                                                            <button
+                                                                onClick={() => {
+                                                                    setPartialSellId(inv.id);
+                                                                    setPartialSellAmount(inv.usdAmount);
+                                                                    setPartialSellRate(currentRate);
+                                                                }}
+                                                                className="px-3 py-1.5 text-xs font-bold rounded-lg bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300 hover:bg-orange-200 transition-colors"
+                                                            >
+                                                                분할매도
+                                                            </button>
+                                                        </>
                                                     ) : (
                                                         <button
                                                             onClick={() => handleRevertToHolding(inv.id)}
