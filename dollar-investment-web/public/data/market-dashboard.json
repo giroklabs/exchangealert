@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "158.88",
+      "value": "158.96",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 158.88
+          "value": 158.96
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "93.39",
+      "value": "93.55",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 93.39
+          "value": 93.55
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.35",
+      "value": "99.36",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 99.35
+          "value": 99.36
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,584.08",
+      "value": "5,584.41",
       "trend": "down",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 5584.08
+          "value": 5584.41
         }
       ]
     },
@@ -801,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,478.80",
-      "change": "+12.40",
-      "changePercent": "+0.85",
+      "value": "1,478.60",
+      "change": "+12.20",
+      "changePercent": "+0.83",
       "trend": "up"
     },
     {
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "930.85",
-      "change": "+2.69",
-      "changePercent": "+0.29",
+      "value": "930.49",
+      "change": "+2.33",
+      "changePercent": "+0.25",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,707.94",
-      "change": "+1.78",
-      "changePercent": "+0.10",
+      "value": "1,708.00",
+      "change": "+1.84",
+      "changePercent": "+0.11",
       "trend": "up"
     },
     {
@@ -832,8 +832,8 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.04",
-      "change": "+1.36",
+      "value": "215.05",
+      "change": "+1.37",
       "changePercent": "+0.64",
       "trend": "up"
     }
@@ -845,8 +845,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 187700,
-      "changePercent": "-1.21",
+      "price": 187650,
+      "changePercent": "-1.24",
       "trend": "down"
     },
     {
@@ -865,8 +865,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 522500,
-      "changePercent": "-1.42",
+      "price": 522000,
+      "changePercent": "-1.51",
       "trend": "down"
     },
     {
@@ -875,8 +875,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 164000,
-      "changePercent": "+1.23",
+      "price": 164100,
+      "changePercent": "+1.30",
       "trend": "up"
     },
     {
@@ -895,8 +895,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50700,
-      "changePercent": "-0.39",
+      "price": 50800,
+      "changePercent": "-0.20",
       "trend": "down"
     },
     {
@@ -1003,11 +1003,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 77,
     "downProb": 23,
-    "detailedAnalysis": "한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해 드립니다.\n\n미국 기준금리가 한국보다 높은 수준을 유지하며 달러 강세 압력을 가중시키고 있습니다. 견조한 미국 경제지표(GDP, CPI) 및 상승하는 미 10년물 국채금리와 달러 인덱스는 글로벌 달러 선호 심리를 강화하며 원/달러 환율 상승을 지지합니다. 국내 경상수지 악화 및 코스피 지수 하락은 원화 약세를 지지하는 거시적 요인으로 작용하고 있습니다.\n\nVIX 공포지수가 24.23pt로 여전히 높은 수준을 유지하고 있다는 점은 시장의 리스크 회피 심리가 지속되고 있음을 나타냅니다. 이러한 리스크 오프(Risk-Off) 심리는 외국인 투자자들의 국내 자산 순매도를 유발하여 원화 약세에 추가적인 압력을 가할 수 있습니다. 엔/달러 환율의 급등 또한 아시아 통화 전반의 약세를 유도하며 원화에 하방 압력을 더하고 있습니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해 드립니다.\n\n미국은 높은 기준금리와 견조한 GDP, 소비자물가 상승세를 보이며 전반적인 달러 강세 압력을 지속하고 있습니다. 한국의 경상수지 둔화와 미국과의 금리 격차가 원화 약세 요인으로 작용하며, 달러 인덱스 상승과 국제 유가 급등세가 환율 상승을 지지합니다.\n\nVIX 지수는 하락 추세에도 불구하고 24pt대의 높은 수준을 유지하며 시장의 잠재적 불확실성을 시사합니다. 이는 코스피 지수 하락과 맞물려 외국인 투자자들의 리스크 회피 심리를 자극하고 원화 매도 압력을 가중시키는 요인으로 분석됩니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 10.599999999999998,
       "downScore": 3.2
     }
   },
-  "lastUpdate": "2026. 3. 12. 오전 2:15:35"
+  "lastUpdate": "2026. 3. 12. 오전 2:23:52"
 }
