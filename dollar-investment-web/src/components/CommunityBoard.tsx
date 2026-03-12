@@ -12,7 +12,7 @@ import {
     doc,
     updateDoc,
     increment,
-    Timestamp,
+    deleteDoc,
     arrayUnion
 } from 'firebase/firestore';
 
@@ -49,8 +49,15 @@ export const CommunityBoard: React.FC = () => {
     const { user, login } = useAuth();
     const [posts, setPosts] = useState<Post[]>([]);
     const [isWriting, setIsWriting] = useState(false);
+    const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [newPost, setNewPost] = useState<{ title: string; content: string; sentiment: 'up' | 'down' | 'neutral'; tags: string }>({
+        title: '',
+        content: '',
+        sentiment: 'neutral',
+        tags: ''
+    });
+    const [editForm, setEditForm] = useState<{ title: string; content: string; sentiment: 'up' | 'down' | 'neutral'; tags: string }>({
         title: '',
         content: '',
         sentiment: 'neutral',
@@ -109,6 +116,47 @@ export const CommunityBoard: React.FC = () => {
             console.error("Post creation error:", error);
             alert("글 등록에 실패했습니다. 다시 시도해 주세요.");
         }
+    };
+
+    const handleEditSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingPostId) return;
+
+        try {
+            const postRef = doc(db, 'community_posts', editingPostId);
+            await updateDoc(postRef, {
+                title: editForm.title,
+                content: editForm.content,
+                sentiment: editForm.sentiment,
+                tags: editForm.tags.split(' ').filter(t => t.startsWith('#'))
+            });
+            setEditingPostId(null);
+        } catch (error) {
+            console.error("Post edit error:", error);
+            alert("글 수정에 실패했습니다.");
+        }
+    };
+
+    const handleDeletePost = async (postId: string) => {
+        if (!window.confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
+
+        try {
+            await deleteDoc(doc(db, 'community_posts', postId));
+        } catch (error) {
+            console.error("Post deletion error:", error);
+            alert("글 삭제에 실패했습니다.");
+        }
+    };
+
+    const startEditing = (post: Post) => {
+        setEditingPostId(post.id);
+        setEditForm({
+            title: post.title,
+            content: post.content,
+            sentiment: post.sentiment,
+            tags: (post.tags || []).join(' ')
+        });
+        setIsWriting(false);
     };
 
     const handleReaction = async (postId: string, emoji: string) => {
@@ -177,6 +225,7 @@ export const CommunityBoard: React.FC = () => {
                             login();
                         } else {
                             setIsWriting(!isWriting);
+                            setEditingPostId(null);
                         }
                     }}
                     className={`px-5 py-2.5 rounded-xl font-bold transition-all ${isWriting
@@ -188,17 +237,17 @@ export const CommunityBoard: React.FC = () => {
                 </button>
             </div>
 
-            {/* 글쓰기 폼 */}
-            {isWriting && user && (
-                <form onSubmit={handleSubmit} className={`p-8 rounded-3xl border animate-in slide-in-from-top-4 duration-300 ${isDark ? 'bg-gray-900/60 border-gray-800' : 'bg-white border-gray-200'} shadow-xl`}>
+            {/* 글쓰기/수정 폼 */}
+            {(isWriting || editingPostId) && user && (
+                <form onSubmit={editingPostId ? handleEditSubmit : handleSubmit} className={`p-8 rounded-3xl border animate-in slide-in-from-top-4 duration-300 ${isDark ? 'bg-gray-900/60 border-gray-800' : 'bg-white border-gray-200'} shadow-xl`}>
                     <div className="space-y-4">
                         <div className="flex gap-4 items-center mb-6">
                             {(['up', 'down', 'neutral'] as const).map(s => (
                                 <button
                                     key={s}
                                     type="button"
-                                    onClick={() => setNewPost({ ...newPost, sentiment: s })}
-                                    className={`flex-1 py-3 px-4 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 font-bold ${newPost.sentiment === s
+                                    onClick={() => editingPostId ? setEditForm({ ...editForm, sentiment: s }) : setNewPost({ ...newPost, sentiment: s })}
+                                    className={`flex-1 py-3 px-4 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 font-bold ${(editingPostId ? editForm.sentiment : newPost.sentiment) === s
                                         ? (s === 'up' ? 'border-red-500 bg-red-500/10 text-red-500' : s === 'down' ? 'border-blue-500 bg-blue-500/10 text-blue-500' : 'border-gray-500 bg-gray-500/10 text-gray-500')
                                         : (isDark ? 'border-gray-800 bg-gray-800/40 text-gray-400' : 'border-gray-100 bg-gray-50 text-gray-500')
                                         }`}
@@ -211,31 +260,40 @@ export const CommunityBoard: React.FC = () => {
                         <input
                             type="text"
                             placeholder="제목을 입력하세요"
-                            value={newPost.title}
-                            onChange={e => setNewPost({ ...newPost, title: e.target.value })}
+                            value={editingPostId ? editForm.title : newPost.title}
+                            onChange={e => editingPostId ? setEditForm({ ...editForm, title: e.target.value }) : setNewPost({ ...newPost, title: e.target.value })}
                             className={`w-full px-5 py-4 rounded-2xl border outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-100'}`}
                             required
                         />
                         <textarea
                             placeholder="거시경제나 환율에 대한 의견을 자유롭게 나눠보세요..."
-                            value={newPost.content}
-                            onChange={e => setNewPost({ ...newPost, content: e.target.value })}
+                            value={editingPostId ? editForm.content : newPost.content}
+                            onChange={e => editingPostId ? setEditForm({ ...editForm, content: e.target.value }) : setNewPost({ ...newPost, content: e.target.value })}
                             className={`w-full h-40 px-5 py-4 rounded-2xl border outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all resize-none ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-100'}`}
                             required
                         />
                         <input
                             type="text"
                             placeholder="#태그를 입력하세요 (예: #달러 #엔화)"
-                            value={newPost.tags}
-                            onChange={e => setNewPost({ ...newPost, tags: e.target.value })}
+                            value={editingPostId ? editForm.tags : newPost.tags}
+                            onChange={e => editingPostId ? setEditForm({ ...editForm, tags: e.target.value }) : setNewPost({ ...newPost, tags: e.target.value })}
                             className={`w-full px-5 py-4 rounded-2xl border outline-none ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-100'}`}
                         />
-                        <div className="flex justify-end pt-2">
+                        <div className="flex justify-end pt-2 gap-3">
+                            {editingPostId && (
+                                <button
+                                    type="button"
+                                    onClick={() => setEditingPostId(null)}
+                                    className={`font-bold py-4 px-8 rounded-2xl transition-all ${isDark ? 'bg-gray-800 text-gray-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+                                >
+                                    취소
+                                </button>
+                            )}
                             <button
                                 type="submit"
                                 className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-2xl shadow-lg transition-all"
                             >
-                                의견 등록하기
+                                {editingPostId ? '수정 완료' : '의견 등록하기'}
                             </button>
                         </div>
                     </div>
@@ -264,9 +322,17 @@ export const CommunityBoard: React.FC = () => {
                                     <div className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{post.date}</div>
                                 </div>
                             </div>
-                            <div className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${SENTIMENT_LABELS[post.sentiment].bg} ${SENTIMENT_LABELS[post.sentiment].color}`}>
-                                <span>{SENTIMENT_LABELS[post.sentiment].icon}</span>
-                                {SENTIMENT_LABELS[post.sentiment].label}
+                            <div className="flex items-center gap-3">
+                                {user && user.uid === post.authorId && (
+                                    <div className="flex gap-2">
+                                        <button onClick={() => startEditing(post)} className={`text-xs font-bold px-2 py-1 rounded-lg ${isDark ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>🛠️ 수정</button>
+                                        <button onClick={() => handleDeletePost(post.id)} className={`text-xs font-bold px-2 py-1 rounded-lg ${isDark ? 'bg-red-900/20 text-red-400 hover:bg-red-900/40' : 'bg-red-50 text-red-500 hover:bg-red-100'}`}>🗑️ 삭제</button>
+                                    </div>
+                                )}
+                                <div className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${SENTIMENT_LABELS[post.sentiment].bg} ${SENTIMENT_LABELS[post.sentiment].color}`}>
+                                    <span>{SENTIMENT_LABELS[post.sentiment].icon}</span>
+                                    {SENTIMENT_LABELS[post.sentiment].label}
+                                </div>
                             </div>
                         </div>
 

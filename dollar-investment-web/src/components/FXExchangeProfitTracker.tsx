@@ -137,8 +137,8 @@ export function FXExchangeProfitTracker() {
     const currentHoldingsValue = totalHoldingUsd * currentRate;
     const unrealizedProfit = currentHoldingsValue - totalHoldingKrw;
     const unrealizedRoi = totalHoldingKrw > 0 ? (unrealizedProfit / totalHoldingKrw) * 100 : 0;
+    const avgBuyRate = totalHoldingUsd > 0 ? totalHoldingKrw / totalHoldingUsd : 0;
 
-    // 기간별 데이터 계산을 위한 기준일 설정
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
     const thisMonthStr = now.toISOString().slice(0, 7); // YYYY-MM
@@ -178,11 +178,10 @@ export function FXExchangeProfitTracker() {
     const volumeYear =
         investments.filter(inv => inv.date?.startsWith(thisYearStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0) +
         investments.filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisYearStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
-
     return (
         <div className="space-y-8">
             {/* 요약 카드 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보유 중인 달러</h3>
                     <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
@@ -190,6 +189,17 @@ export function FXExchangeProfitTracker() {
                     </p>
                     <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                         원금: {Math.round(totalHoldingKrw).toLocaleString()}원
+                    </p>
+                </div>
+                <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보유달러 평단가</h3>
+                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {avgBuyRate > 0 ? avgBuyRate.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '0'}원
+                    </p>
+                    <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        현재 환율 대비: <span className={currentRate >= avgBuyRate ? 'text-red-500' : 'text-blue-500'}>
+                            {(currentRate - avgBuyRate).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}원
+                        </span>
                     </p>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
