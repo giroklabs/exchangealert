@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.25",
+      "value": "159.26",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 159.25
+          "value": 159.26
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "93.85",
+      "value": "93.88",
       "trend": "down",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 93.85
+          "value": 93.88
         }
       ]
     },
@@ -279,9 +279,13 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "100.02",
+      "value": "99.66",
       "trend": "up",
       "history": [
+        {
+          "date": "2026-02-27",
+          "value": 117.8223
+        },
         {
           "date": "2026-03-02",
           "value": 118.667
@@ -316,11 +320,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 99.74
-        },
-        {
-          "date": "2026-03-13",
-          "value": 100.02
+          "value": 99.66
         }
       ]
     },
@@ -801,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,490.20",
-      "change": "+9.50",
-      "changePercent": "+0.64",
+      "value": "1,491.20",
+      "change": "+10.50",
+      "changePercent": "+0.71",
       "trend": "up"
     },
     {
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "935.61",
-      "change": "+4.26",
-      "changePercent": "+0.46",
+      "value": "936.12",
+      "change": "+4.77",
+      "changePercent": "+0.51",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,711.05",
-      "change": "+1.29",
-      "changePercent": "+0.08",
+      "value": "1,711.30",
+      "change": "+1.54",
+      "changePercent": "+0.09",
       "trend": "up"
     },
     {
@@ -832,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.35",
-      "change": "+1.13",
-      "changePercent": "+0.53",
+      "value": "216.40",
+      "change": "+1.18",
+      "changePercent": "+0.55",
       "trend": "up"
     }
   ],
@@ -906,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 255.27,
-      "changePercent": "-0.19",
+      "price": 255.56,
+      "changePercent": "-0.08",
       "trend": "down"
     },
     {
@@ -917,8 +917,8 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 398.41,
-      "changePercent": "+0.86",
+      "price": 397.17,
+      "changePercent": "+0.55",
       "trend": "up"
     },
     {
@@ -928,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 185.13,
-      "changePercent": "+1.09",
+      "price": 185.35,
+      "changePercent": "+1.21",
       "trend": "up"
     },
     {
@@ -939,8 +939,8 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 400.93,
-      "changePercent": "-0.23",
+      "price": 400.7,
+      "changePercent": "-0.29",
       "trend": "down"
     },
     {
@@ -950,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 307.3,
-      "changePercent": "+1.24",
+      "price": 305.54,
+      "changePercent": "+0.66",
       "trend": "up"
     },
     {
@@ -961,9 +961,9 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 209.59,
-      "changePercent": "+0.03",
-      "trend": "up"
+      "price": 208.7,
+      "changePercent": "-0.40",
+      "trend": "down"
     },
     {
       "id": "qqq",
@@ -972,8 +972,8 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 600.4,
-      "changePercent": "+0.53",
+      "price": 600.02,
+      "changePercent": "+0.46",
       "trend": "up"
     },
     {
@@ -983,8 +983,8 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 670.17,
-      "changePercent": "+0.62",
+      "price": 669.59,
+      "changePercent": "+0.53",
       "trend": "up"
     },
     {
@@ -994,8 +994,8 @@
       "excd": "NYS",
       "name": "SCHD",
       "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.97,
-      "changePercent": "+0.49",
+      "price": 30.95,
+      "changePercent": "+0.42",
       "trend": "up"
     }
   ],
@@ -1003,11 +1003,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 70,
     "downProb": 30,
-    "detailedAnalysis": "한수지입니다. 제공해주신 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n글로벌 시장은 VIX 공포지수가 27.29pt로 높은 수준을 유지하며 상승 추세를 보임에 따라 리스크 회피 심리가 매우 강하게 작용하고 있습니다. 미국 기준금리가 한국 대비 높은 수준을 유지하고, 달러 인덱스 및 미국 GDP, CPI 등 주요 미국 경제 지표들이 달러 강세를 지지하는 경향을 보이며 원/달러 환율의 전반적인 상승 압력이 우세합니다.\n\n특히 VIX 지수의 상승과 코스피 지수 하락 추세는 외국인 투자자들의 원화 자산에 대한 순매도 전환 가능성을 높여 자본 유출과 원화 약세로 이어질 전망입니다. 국내 경제성장률 상승이 원화 강세 요인으로 작용할 수 있으나, 미국과의 금리 격차 심화 및 경상수지 악화 추세는 이러한 리스크 오프(risk-off) 심리에 원화를 더욱 취약하게 만들고 있습니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "안녕하세요, 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국 기준금리, 견조한 GDP, 상승하는 미 소비자물가는 전반적인 달러 강세를 지지하는 거시적 환경을 조성하고 있습니다. 달러 인덱스 상승과 엔/달러 환율의 급등 추세는 글로벌 시장에서 달러화의 우위를 공고히 하며 원/달러 환율에 상방 압력을 가하고 있습니다.\n\n특히 VIX 공포지수가 27.29pt로 상승 추세인 것은 시장의 리스크 회피 심리가 매우 고조되었음을 명확히 보여줍니다. 이러한 강력한 리스크 오프 환경에서는 외국인 투자자들이 국내 주식 및 채권 등 위험자산 순매도를 통해 자금을 회수하고 안전자산인 달러로 이��하려는 경향이 강해져 원화 약세가 가속화될 것입니다.\n\n한국 기준금리가 미국보다 낮은 수준이고 국내 물가 및 통화량 증가가 관찰되는 점 또한 원화 약세 요인으로 작용합니다. 비록 일부 국내 경제 지표가 원화 강세를 지지할 수 있으나, 전반적인 강달러 기조와 고조된 글로벌 리스크 회피 심리가 환율 상승을 주도할 것으로 예상됩니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 9.6,
       "downScore": 4.2
     }
   },
-  "lastUpdate": "2026. 3. 13. 오후 1:30:54"
+  "lastUpdate": "2026. 3. 13. PM 1:34:46"
 }
