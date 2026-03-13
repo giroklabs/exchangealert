@@ -29,7 +29,7 @@ interface ChartDataItem {
     fullDate: string;
 }
 
-export function UnifiedFXChart() {
+export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean }) {
     const { theme } = useTheme();
     const [historyData, setHistoryData] = useState<FXHistoryData[]>([]);
     const [intradayData, setIntradayData] = useState<FXIntradayData[]>([]);
@@ -124,7 +124,7 @@ export function UnifiedFXChart() {
 
     if (isLoading) {
         return (
-            <div className={`rounded-2xl shadow-xl border p-6 animate-pulse h-[500px] ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+            <div className={`p-6 animate-pulse h-[500px] ${!isEmbedded ? `rounded-2xl shadow-xl border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}` : ''}`}>
                 <div className="h-6 rounded w-1/4 mb-6 bg-gray-200 dark:bg-gray-700"></div>
                 <div className="h-full rounded bg-gray-100 dark:bg-gray-800"></div>
             </div>
@@ -132,7 +132,7 @@ export function UnifiedFXChart() {
     }
 
     return (
-        <div className={`rounded-2xl shadow-xl border p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+        <div className={`p-6 ${!isEmbedded ? `rounded-2xl shadow-xl border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}` : ''}`}>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
                     <h3 className={`text-xl font-bold flex items-center gap-2 ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>

@@ -4,11 +4,13 @@ import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchAllCurrentExchangeRates } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { UnifiedFXChart } from './UnifiedFXChart';
 
 export function MarketDashboard() {
     const { theme } = useTheme();
     const [data, setData] = useState<DashboardData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isChartExpanded, setIsChartExpanded] = useState(true);
 
     useEffect(() => {
         const loadData = async () => {
@@ -72,6 +74,33 @@ export function MarketDashboard() {
                     ))}
                 </div>
             )}
+
+            {/* 통합 환율 분석 차트 (접기 기능 포함) */}
+            <div className={`rounded-2xl shadow-xl border overflow-hidden transition-all duration-300 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                <button
+                    onClick={() => setIsChartExpanded(!isChartExpanded)}
+                    className={`w-full px-6 py-4 flex items-center justify-between font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${theme === 'dark' ? 'text-white border-b border-gray-700' : 'text-gray-800 border-b border-gray-100'
+                        }`}
+                >
+                    <div className="flex items-center gap-2">
+                        <span>📈</span>
+                        <span>원/달러 환율 실시간 통합 분석</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        {!isChartExpanded && (
+                            <span className="text-xs font-medium text-blue-500 animate-pulse">상세 데이터 보기</span>
+                        )}
+                        <span className={`transform transition-transform duration-300 ${isChartExpanded ? 'rotate-180' : ''}`}>
+                            ▼
+                        </span>
+                    </div>
+                </button>
+                <div className={`transition-all duration-500 ease-in-out ${isChartExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                    <div className="p-1">
+                        <UnifiedFXChart isEmbedded={true} />
+                    </div>
+                </div>
+            </div>
 
             {/* 시장 향방 예측 섹션 */}
             <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>

@@ -6,7 +6,6 @@ import { InvestmentSignal } from './InvestmentSignal';
 import { DataTable } from './DataTable';
 import { ExchangeRateChart } from './ExchangeRateChart';
 import { DollarIndexChart } from './DollarIndexChart';
-import { UnifiedFXChart } from './UnifiedFXChart';
 import { HistoryDataTable } from './HistoryDataTable';
 import { DataSourceInfo } from './DataSourceInfo';
 import { NotificationSettings } from './NotificationSettings';
@@ -110,9 +109,6 @@ export function InvestmentAnalysis() {
             average={weeklyAverages?.dollarIndex.average}
             isLoading={isLoading}
           />
-          <div className="md:col-span-2">
-            <UnifiedFXChart />
-          </div>
         </div>
       )}
 
