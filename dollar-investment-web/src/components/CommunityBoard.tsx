@@ -13,11 +13,13 @@ import {
     updateDoc,
     increment,
     deleteDoc,
-    arrayUnion
+    arrayUnion,
+    arrayRemove
 } from 'firebase/firestore';
 
 interface Comment {
     id: string;
+    authorId: string;
     author: string;
     content: string;
     createdAt: string;
@@ -141,10 +143,12 @@ export const CommunityBoard: React.FC = () => {
         if (!window.confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
 
         try {
+            console.log("Attempting to delete post:", postId);
             await deleteDoc(doc(db, 'community_posts', postId));
+            console.log("Post deleted successfully");
         } catch (error) {
-            console.error("Post deletion error:", error);
-            alert("글 삭제에 실패했습니다.");
+            console.error("Post deletion error details:", error);
+            alert("글 삭제에 실패했습니다. 권한이 없거나 네트워크 오류일 수 있습니다.");
         }
     };
 
@@ -189,6 +193,7 @@ export const CommunityBoard: React.FC = () => {
             await updateDoc(postRef, {
                 comments: arrayUnion({
                     id: Date.now().toString(),
+                    authorId: user.uid,
                     author: user.displayName || '익명',
                     content: text,
                     createdAt: new Date().toISOString()
@@ -197,6 +202,21 @@ export const CommunityBoard: React.FC = () => {
             setCommentTexts({ ...commentTexts, [postId]: '' });
         } catch (error) {
             console.error("Comment error:", error);
+            alert("댓글 등록에 실패했습니다.");
+        }
+    };
+
+    const handleDeleteComment = async (postId: string, comment: Comment) => {
+        if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
+
+        try {
+            const postRef = doc(db, 'community_posts', postId);
+            await updateDoc(postRef, {
+                comments: arrayRemove(comment)
+            });
+        } catch (error) {
+            console.error("Comment deletion error:", error);
+            alert("댓글 삭제에 실패했습니다.");
         }
     };
 
@@ -374,10 +394,20 @@ export const CommunityBoard: React.FC = () => {
                         <div className="mt-6 space-y-4">
                             {post.comments && post.comments.length > 0 && (
                                 <div className={`space-y-3 p-4 rounded-2xl ${isDark ? 'bg-gray-800/30' : 'bg-gray-50/50'}`}>
-                                    {post.comments.map((c, idx) => (
-                                        <div key={idx} className="text-sm flex gap-2 items-start">
-                                            <span className="font-bold whitespace-nowrap">{c.author}</span>
-                                            <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>{c.content}</span>
+                                    {post.comments.map((c) => (
+                                        <div key={c.id} className="text-sm flex justify-between items-start group/comment">
+                                            <div className="flex gap-2 items-start">
+                                                <span className="font-bold whitespace-nowrap">{c.author}</span>
+                                                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>{c.content}</span>
+                                            </div>
+                                            {user && (user.uid === c.authorId || user.uid === post.authorId) && (
+                                                <button
+                                                    onClick={() => handleDeleteComment(post.id, c)}
+                                                    className="opacity-0 group-hover/comment:opacity-100 text-[10px] text-red-400 hover:text-red-500 transition-opacity ml-2"
+                                                >
+                                                    삭제
+                                                </button>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
