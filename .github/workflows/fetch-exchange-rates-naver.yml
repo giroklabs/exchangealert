@@ -178,10 +178,15 @@ jobs:
         if [ -f data/exchange-rates.json ] && [ -s data/exchange-rates.json ]; then
           DATA_LENGTH=$(cat data/exchange-rates.json | jq 'length')
           if [ "$DATA_LENGTH" -gt 0 ]; then
+            # 고도화 차트용 데이터 통합 및 이평선 계산 실행
+            echo "📊 Consolidating FX history for advanced charts..."
+            node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
+            
             git add data/exchange-rates.json
             git add data/last-update.txt
             git add data/history/*.json 2>/dev/null || true
             git add data/daily/*.json 2>/dev/null || true
+            git add dollar-investment-web/public/data/fx-history.json 2>/dev/null || true
             
             if ! git diff --staged --quiet; then
               COMMIT_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
