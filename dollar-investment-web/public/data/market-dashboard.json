@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "98.06",
+      "value": "97.74",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 98.06
+          "value": 97.74
         }
       ]
     },
@@ -279,29 +279,9 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "119.491",
+      "value": "99.69",
       "trend": "down",
       "history": [
-        {
-          "date": "2026-02-23",
-          "value": 117.9395
-        },
-        {
-          "date": "2026-02-24",
-          "value": 117.9463
-        },
-        {
-          "date": "2026-02-25",
-          "value": 117.769
-        },
-        {
-          "date": "2026-02-26",
-          "value": 117.9042
-        },
-        {
-          "date": "2026-02-27",
-          "value": 117.8223
-        },
         {
           "date": "2026-03-02",
           "value": 118.667
@@ -321,6 +301,26 @@
         {
           "date": "2026-03-06",
           "value": 119.491
+        },
+        {
+          "date": "2026-03-09",
+          "value": 99.18
+        },
+        {
+          "date": "2026-03-10",
+          "value": 98.83
+        },
+        {
+          "date": "2026-03-11",
+          "value": 99.23
+        },
+        {
+          "date": "2026-03-12",
+          "value": 99.74
+        },
+        {
+          "date": "2026-03-13",
+          "value": 99.69
         }
       ]
     },
@@ -493,7 +493,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
       "realtimeSymbol": "^VIX",
-      "value": "27.35",
+      "value": "27.32",
       "trend": "up",
       "history": [
         {
@@ -534,7 +534,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 27.35
+          "value": 27.32
         }
       ]
     },
@@ -906,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 250.39,
-      "changePercent": "-2.10",
+      "price": 249.97,
+      "changePercent": "-2.26",
       "trend": "down"
     },
     {
@@ -917,8 +917,8 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 390.97,
-      "changePercent": "-1.02",
+      "price": 390.65,
+      "changePercent": "-1.10",
       "trend": "down"
     },
     {
@@ -928,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 180.67,
-      "changePercent": "-1.35",
+      "price": 180.35,
+      "changePercent": "-1.52",
       "trend": "down"
     },
     {
@@ -939,8 +939,8 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 395.02,
-      "changePercent": "-1.70",
+      "price": 394.78,
+      "changePercent": "-1.76",
       "trend": "down"
     },
     {
@@ -950,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 301.46,
-      "changePercent": "-0.69",
+      "price": 301.19,
+      "changePercent": "-0.78",
       "trend": "down"
     },
     {
@@ -961,8 +961,8 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 208.2,
-      "changePercent": "-0.63",
+      "price": 207.95,
+      "changePercent": "-0.75",
       "trend": "down"
     },
     {
@@ -972,8 +972,8 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 593.46,
-      "changePercent": "-0.64",
+      "price": 592.78,
+      "changePercent": "-0.75",
       "trend": "down"
     },
     {
@@ -983,8 +983,8 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 662.73,
-      "changePercent": "-0.50",
+      "price": 661.52,
+      "changePercent": "-0.68",
       "trend": "down"
     },
     {
@@ -994,20 +994,20 @@
       "excd": "NYS",
       "name": "SCHD",
       "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.84,
-      "changePercent": "+0.06",
-      "trend": "up"
+      "price": 30.77,
+      "changePercent": "-0.16",
+      "trend": "down"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
     "upProb": 77,
     "downProb": 23,
-    "detailedAnalysis": "한수지입니다. 현재 경제 지표들을 종합하여 향후 원/달러 환율 방향성을 분석해 드립니다.\n\n현재 VIX 공포지수가 27.35pt로 높고 상승 추세에 있어 시장의 리스크 회피 심리가 고조되고 있습니다. 이는 외국인 투자자의 국내 자산 순매도(주문흐름)와 자본 유출 가능성을 시사하며, 코스피 지수 하락과 맞물려 원화 약세 압력을 가중시키는 핵심 요인입니다.\n\n미국 기준금리 및 10년물 국채금리가 한국보다 높은 수준을 유지하고 있고, 강달러 기조를 반영하는 엔/달러 환율 상승, 국제 유가 강세 등이 원화 약세를 부추기고 있습니다. 미 견조한 경제 지표들과 한국의 경상수지 감소 추세 또한 달러 강세를 지지하여 원/달러 환율의 상방 압력을 ���이는 거시적 요인으로 작용합니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "안녕하세요, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n높은 VIX(공포지수 27.32pt, 상승 추세)는 시장의 리스크 오프 심리가 확산되고 있음을 명확히 보여줍니다. 이는 코스피 지수 하락 추세와 맞물려 외국인 순매도 압력을 가중시키며 달러 강세 및 원화 약세 요인으로 작용합니다.\n\n미국 기준금리(3.64%)와 10년물 국채금리(4.28%) 상승 추세는 달러의 매력도를 높이며, 국제 유가(WTI 97.74$, 상승 추세) 및 엔/달러 환율(159.66¥, 상승 추세)은 원화 약세 압력을 가중시키고 있습니다. 미 비농업고용지수 및 CPI 상승 추세 또한 달러 강세를 지지하는 거시적 환경을 조성합니다.\n\n국�� 경제성장률 상승 추세가 원화 강세 요인으로 작용할 수 있으나, 한국 기준금리가 미국 대비 낮은 수준을 유지하고 국내 CPI 및 통화량 증가가 원화 약세 압력을 지속합니다. 전반적으로 글로벌 리스크 회피 심리와 압도적인 달러 강세 요인들이 복합적으로 원/달러 환율의 상승을 지지하는 상황입니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 10.599999999999998,
       "downScore": 3.2
     }
   },
-  "lastUpdate": "2026. 3. 13. 오후 7:30:46"
+  "lastUpdate": "2026. 3. 13. 오후 7:45:46"
 }
