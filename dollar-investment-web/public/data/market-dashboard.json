@@ -8,9 +8,50 @@
       "impact": "up",
       "source": "Federal Reserve",
       "description": "Fed 금리 인상 시 달러 가치 상승으로 환율 상승",
-      "value": "0",
+      "value": "3.64",
       "trend": "neutral",
-      "history": []
+      "history": [
+        {
+          "date": "2025-05-01",
+          "value": 4.33
+        },
+        {
+          "date": "2025-06-01",
+          "value": 4.33
+        },
+        {
+          "date": "2025-07-01",
+          "value": 4.33
+        },
+        {
+          "date": "2025-08-01",
+          "value": 4.33
+        },
+        {
+          "date": "2025-09-01",
+          "value": 4.22
+        },
+        {
+          "date": "2025-10-01",
+          "value": 4.09
+        },
+        {
+          "date": "2025-11-01",
+          "value": 3.88
+        },
+        {
+          "date": "2025-12-01",
+          "value": 3.72
+        },
+        {
+          "date": "2026-01-01",
+          "value": 3.64
+        },
+        {
+          "date": "2026-02-01",
+          "value": 3.64
+        }
+      ]
     },
     {
       "id": "payems",
@@ -20,9 +61,50 @@
       "impact": "up",
       "source": "BLS",
       "description": "미국 고용 지표 호조 시 달러 선호 현상 강화",
-      "value": "0",
-      "trend": "neutral",
-      "history": []
+      "value": "158,466",
+      "trend": "down",
+      "history": [
+        {
+          "date": "2025-05-01",
+          "value": 158498
+        },
+        {
+          "date": "2025-06-01",
+          "value": 158478
+        },
+        {
+          "date": "2025-07-01",
+          "value": 158542
+        },
+        {
+          "date": "2025-08-01",
+          "value": 158472
+        },
+        {
+          "date": "2025-09-01",
+          "value": 158548
+        },
+        {
+          "date": "2025-10-01",
+          "value": 158408
+        },
+        {
+          "date": "2025-11-01",
+          "value": 158449
+        },
+        {
+          "date": "2025-12-01",
+          "value": 158432
+        },
+        {
+          "date": "2026-01-01",
+          "value": 158558
+        },
+        {
+          "date": "2026-02-01",
+          "value": 158466
+        }
+      ]
     },
     {
       "id": "dexjpus",
@@ -33,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.56",
+      "value": "159.6",
       "trend": "up",
       "history": [
         {
@@ -74,7 +156,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 159.56
+          "value": 159.6
         }
       ]
     },
@@ -87,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "97.94",
+      "value": "98.07",
       "trend": "up",
       "history": [
         {
@@ -128,7 +210,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 97.94
+          "value": 98.07
         }
       ]
     },
@@ -197,48 +279,48 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "98.87",
+      "value": "119.491",
       "trend": "down",
       "history": [
         {
+          "date": "2026-02-23",
+          "value": 117.9395
+        },
+        {
+          "date": "2026-02-24",
+          "value": 117.9463
+        },
+        {
           "date": "2026-02-25",
-          "value": 97.7
+          "value": 117.769
         },
         {
           "date": "2026-02-26",
-          "value": 97.79
+          "value": 117.9042
         },
         {
           "date": "2026-02-27",
-          "value": 97.61
+          "value": 117.8223
         },
         {
           "date": "2026-03-02",
-          "value": 98.38
+          "value": 118.667
         },
         {
           "date": "2026-03-03",
-          "value": 99.05
+          "value": 119.4341
         },
         {
           "date": "2026-03-04",
-          "value": 98.77
+          "value": 119.0705
         },
         {
           "date": "2026-03-05",
-          "value": 99.32
+          "value": 119.5683
         },
         {
           "date": "2026-03-06",
-          "value": 98.99
-        },
-        {
-          "date": "2026-03-09",
-          "value": 99.18
-        },
-        {
-          "date": "2026-03-11",
-          "value": 98.87
+          "value": 119.491
         }
       ]
     },
@@ -357,9 +439,50 @@
       "impact": "up",
       "source": "BEA",
       "description": "미국 경제 성장 호조 시 달러 가치 상승",
-      "value": "0",
-      "trend": "neutral",
-      "history": []
+      "value": "31,442.483",
+      "trend": "up",
+      "history": [
+        {
+          "date": "2023-07-01",
+          "value": 28074.846
+        },
+        {
+          "date": "2023-10-01",
+          "value": 28424.722
+        },
+        {
+          "date": "2024-01-01",
+          "value": 28708.161
+        },
+        {
+          "date": "2024-04-01",
+          "value": 29147.044
+        },
+        {
+          "date": "2024-07-01",
+          "value": 29511.664
+        },
+        {
+          "date": "2024-10-01",
+          "value": 29825.182
+        },
+        {
+          "date": "2025-01-01",
+          "value": 30042.113
+        },
+        {
+          "date": "2025-04-01",
+          "value": 30485.729
+        },
+        {
+          "date": "2025-07-01",
+          "value": 31098.027
+        },
+        {
+          "date": "2025-10-01",
+          "value": 31442.483
+        }
+      ]
     },
     {
       "id": "vixcls",
@@ -370,8 +493,8 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
       "realtimeSymbol": "^VIX",
-      "value": "27.12",
-      "trend": "down",
+      "value": "27.58",
+      "trend": "up",
       "history": [
         {
           "date": "2026-03-02",
@@ -411,7 +534,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 27.12
+          "value": 27.58
         }
       ]
     },
@@ -678,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,497.20",
-      "change": "+16.50",
-      "changePercent": "+1.11",
+      "value": "1,498.20",
+      "change": "+17.50",
+      "changePercent": "+1.18",
       "trend": "up"
     },
     {
@@ -689,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "938.21",
-      "change": "+6.86",
-      "changePercent": "+0.74",
+      "value": "939.50",
+      "change": "+8.15",
+      "changePercent": "+0.88",
       "trend": "up"
     },
     {
@@ -699,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,713.40",
-      "change": "+3.64",
-      "changePercent": "+0.21",
+      "value": "1,714.39",
+      "change": "+4.63",
+      "changePercent": "+0.27",
       "trend": "up"
     },
     {
@@ -709,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.87",
-      "change": "+1.65",
-      "changePercent": "+0.77",
+      "value": "216.99",
+      "change": "+1.77",
+      "changePercent": "+0.82",
       "trend": "up"
     }
   ],
@@ -783,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 251.44,
-      "changePercent": "-1.69",
+      "price": 250.95,
+      "changePercent": "-1.88",
       "trend": "down"
     },
     {
@@ -794,8 +917,8 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 392.99,
-      "changePercent": "-0.51",
+      "price": 392.86,
+      "changePercent": "-0.54",
       "trend": "down"
     },
     {
@@ -805,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 180.47,
-      "changePercent": "-1.46",
+      "price": 180.4,
+      "changePercent": "-1.50",
       "trend": "down"
     },
     {
@@ -816,8 +939,8 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 396.77,
-      "changePercent": "-1.27",
+      "price": 396.66,
+      "changePercent": "-1.29",
       "trend": "down"
     },
     {
@@ -827,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 300.7,
-      "changePercent": "-0.94",
+      "price": 301.36,
+      "changePercent": "-0.72",
       "trend": "down"
     },
     {
@@ -838,8 +961,8 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 206.9,
-      "changePercent": "-1.26",
+      "price": 207.13,
+      "changePercent": "-1.15",
       "trend": "down"
     },
     {
@@ -849,8 +972,8 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 593.28,
-      "changePercent": "-0.67",
+      "price": 593.68,
+      "changePercent": "-0.60",
       "trend": "down"
     },
     {
@@ -860,8 +983,8 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 662.83,
-      "changePercent": "-0.48",
+      "price": 663.17,
+      "changePercent": "-0.43",
       "trend": "down"
     },
     {
@@ -871,20 +994,20 @@
       "excd": "NYS",
       "name": "SCHD",
       "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.86,
-      "changePercent": "+0.13",
+      "price": 30.89,
+      "changePercent": "+0.23",
       "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 73,
-    "downProb": 27,
-    "detailedAnalysis": "안녕하세요, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석하겠습니다.\n\n미국 기준금리, 비농업고용지수, CPI 등 다수의 미국 지표들이 원/달러 환율 상승(원화 약세)에 영향을 미치고 있으며, 국제 유가 및 미 국채금리 상승 또한 달러 강세 압력을 높이고 있습니다. 엔/달러 환율 상승도 달러 전반의 강세를 지지하는 요인으로 작용합니다.\n\nVIX 공포지수는 27.12pt로 높은 수준이지만 하락 추세를 보이고 있어 표면적으로는 리스크 완화를 시사합니다. 그러나 해당 지표가 원/달러 환율 상승(원화 약세)에 영향을 미친다고 명시된 점을 고려할 때, 시장의 근본적인 리스크 오프 심리는 여전히 강하�� 외국인 자금 유입을 제약하는 것으로 판단됩니다.\n\n국내 경제성장률 상승 및 한국 기준금리 중립 추세, 경상수지 하락 요인이 원화 강세에 기여함에도 불구하고, 국내 소비자물가 상승 및 통화량 증가 요인은 원화 약세 압력을 가중시킵니다. 코스피 지수 하락은 원화 강세 요인으로 제시되었으나, 전반적인 시장 심리가 불안정하여 그 영향력은 제한적일 수 있습니다.\n\n결론: 상승 우세",
+    "upProb": 77,
+    "downProb": 23,
+    "detailedAnalysis": "한수지입니다. 제공해주신 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n현재 VIX 공포지수가 27.58pt로 높아지며 글로벌 시장의 위험 회피(Risk-off) 심리가 고조되고 있습니다. 이러한 투자 심리 위축은 코스피 지수 하락으로 이어져 외국인 자본 유출을 가속화하며 원화 약세에 강한 압력을 가하고 있습니다. 달러 인덱스(DXY)가 하락 추세임에도 불구하고, 신흥국 통화인 원화는 리스크 오프 환경에서 더욱 취약하게 반응하는 경향이 있습니다.\n\n동시에 미국의 높은 기준금리와 견조한 경제 지표(GDP, CPI 상승)는 달러 강세 요인으로 작용하고 있으며, 국제 유가 상승 또한 원화의 약세를 부추기고 있습니다. 한국은 ���국과의 금리 격차가 상당하고, 국내 통화량 증가 추세는 원화 가치에 추가적인 하방 압력을 더하고 있어 환율 상승을 지지합니다.\n\n결론: 상승 우세",
     "score": {
-      "upScore": 8.6,
+      "upScore": 10.599999999999998,
       "downScore": 3.2
     }
   },
-  "lastUpdate": "2026. 3. 13. 오후 6:00:49"
+  "lastUpdate": "2026. 3. 13. 오후 6:15:50"
 }
