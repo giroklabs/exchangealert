@@ -10,13 +10,7 @@ import {
 } from 'recharts';
 import { useTheme } from '../contexts/ThemeContext';
 
-interface FXHistoryData {
-    date: string;
-    rate: number;
-    ma5: number | null;
-    ma20: number | null;
-    ma60: number | null;
-}
+import { fetchFXHistoryData, type FXHistoryData } from '../services/fxHistoryService';
 
 export function AdvancedFXChart() {
     const { theme } = useTheme();
@@ -31,18 +25,12 @@ export function AdvancedFXChart() {
     });
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('./data/fx-history.json');
-                const json = await response.json();
-                setData(json);
-            } catch (error) {
-                console.error('Error loading FX history data:', error);
-            } finally {
-                setIsLoading(false);
-            }
+        const loadHistory = async () => {
+            const history = await fetchFXHistoryData();
+            setData(history);
+            setIsLoading(false);
         };
-        fetchData();
+        loadHistory();
     }, []);
 
     const getFilteredData = () => {

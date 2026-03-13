@@ -4,6 +4,7 @@ const path = require('path');
 const HISTORY_DIR = path.join(__dirname, '../../data/history');
 const DAILY_DIR = path.join(__dirname, '../../data/daily');
 const OUTPUT_FILE = path.join(__dirname, '../public/data/fx-history.json');
+const ROOT_OUTPUT_FILE = path.join(__dirname, '../../data/fx-history.json');
 
 /**
  * 쉼표가 포함된 문자열 숫자를 숫자로 변환
@@ -107,7 +108,10 @@ async function consolidate() {
     }
 
     fs.writeFileSync(OUTPUT_FILE, JSON.stringify(finalData, null, 2));
-    console.log(`✅ Success! Consolidated ${finalData.length} records to ${OUTPUT_FILE}`);
+    fs.writeFileSync(ROOT_OUTPUT_FILE, JSON.stringify(finalData, null, 2));
+    console.log(`✅ Success! Consolidated ${finalData.length} records.`);
+    console.log(`- Local: ${OUTPUT_FILE}`);
+    console.log(`- Root: ${ROOT_OUTPUT_FILE}`);
 }
 
 consolidate();
