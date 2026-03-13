@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.54",
+      "value": "159.61",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 159.54
+          "value": 159.61
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "96.91",
+      "value": "96.9",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 96.91
+          "value": 96.9
         }
       ]
     },
@@ -224,7 +224,7 @@
       "description": "미 국채 금리 상승 시 달러 강세 유발",
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
-      "value": "4.28",
+      "value": "4.29",
       "trend": "up",
       "history": [
         {
@@ -265,7 +265,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 4.28
+          "value": 4.29
         }
       ]
     },
@@ -279,21 +279,9 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "119.491",
-      "trend": "down",
+      "value": "98.94",
+      "trend": "up",
       "history": [
-        {
-          "date": "2026-02-23",
-          "value": 117.9395
-        },
-        {
-          "date": "2026-02-24",
-          "value": 117.9463
-        },
-        {
-          "date": "2026-02-25",
-          "value": 117.769
-        },
         {
           "date": "2026-02-26",
           "value": 117.9042
@@ -321,6 +309,18 @@
         {
           "date": "2026-03-06",
           "value": 119.491
+        },
+        {
+          "date": "2026-03-09",
+          "value": 99.18
+        },
+        {
+          "date": "2026-03-10",
+          "value": 98.83
+        },
+        {
+          "date": "2026-03-11",
+          "value": 98.94
         }
       ]
     },
@@ -493,8 +493,8 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
       "realtimeSymbol": "^VIX",
-      "value": "26.91",
-      "trend": "down",
+      "value": "27.29",
+      "trend": "neutral",
       "history": [
         {
           "date": "2026-03-02",
@@ -534,7 +534,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 26.91
+          "value": 27.29
         }
       ]
     },
@@ -906,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 252.22,
-      "changePercent": "-1.38",
+      "price": 251.53,
+      "changePercent": "-1.65",
       "trend": "down"
     },
     {
@@ -917,9 +917,9 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 395.5,
-      "changePercent": "+0.12",
-      "trend": "up"
+      "price": 394.49,
+      "changePercent": "-0.13",
+      "trend": "down"
     },
     {
       "id": "nvidia",
@@ -928,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 181.55,
-      "changePercent": "-0.87",
+      "price": 181.15,
+      "changePercent": "-1.09",
       "trend": "down"
     },
     {
@@ -939,8 +939,8 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 396.29,
-      "changePercent": "-1.39",
+      "price": 395.3,
+      "changePercent": "-1.63",
       "trend": "down"
     },
     {
@@ -950,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 301.48,
-      "changePercent": "-0.68",
+      "price": 300.99,
+      "changePercent": "-0.84",
       "trend": "down"
     },
     {
@@ -961,8 +961,8 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 207.2,
-      "changePercent": "-1.11",
+      "price": 206.91,
+      "changePercent": "-1.25",
       "trend": "down"
     },
     {
@@ -972,8 +972,8 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 595.2,
-      "changePercent": "-0.34",
+      "price": 594,
+      "changePercent": "-0.55",
       "trend": "down"
     },
     {
@@ -983,8 +983,8 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 664.7,
-      "changePercent": "-0.20",
+      "price": 663.62,
+      "changePercent": "-0.37",
       "trend": "down"
     },
     {
@@ -994,20 +994,20 @@
       "excd": "NYS",
       "name": "SCHD",
       "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.9,
-      "changePercent": "+0.26",
+      "price": 30.88,
+      "changePercent": "+0.19",
       "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 70,
-    "downProb": 30,
-    "detailedAnalysis": "안녕하세요, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n견조한 미국 경제 지표와 인플레이션 압력, 국제 유가 상승 및 엔/달러 환율 급등은 전반적인 달러 강세와 원화 약세 압력을 가중시키고 있습니다. 미-한 기준금리 격차 유지 및 미 10년물 국채금리 상승 역시 달러 선호 심리를 강화하는 요인입니다.\n\nVIX 공포지수가 하락 추세임에도 불구하고 그 영향이 원/달러 환율 상승으로 명시된 점은 시장의 리스크 온 심리가 원화 강세로 즉각 이어지기 어려운 구조를 시사합니다. 이는 국내 증시의 하락에도 불구하고 외국인 자금 유출이 원화 약세로 강하게 작용하지 않고 있���나, 다른 요인에 의해 상쇄되고 있음을 보여줍니다.\n\n한국 기준금리 및 경제성장률의 '환율영향: down'은 원화 강세 요인이지만, 국내 물가 상승과 통화량 증가는 장기적으로 인플레이션 압박을 가중시킬 수 있습니다. 또한 경상수지 악화 추세는 원화의 수요 감소로 이어져 환율 상승 요인으로 작용합니다.\n\n결론: 상승 우세",
+    "upProb": 83,
+    "downProb": 17,
+    "detailedAnalysis": "한수지입니다. 제공된 지표들을 바탕으로 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국의 견조한 경제 성장세(GDP, CPI)와 높은 국채금리, 그리고 달러 인덱스 상승은 전반적인 달러 강세 압력을 가중시키고 있습니다. 반면, 국내 코스피 지수 하락과 경상수지 둔화, 고유가 등은 원화 약세 요인으로 작용하여 원/달러 환율의 상방 압력을 키우고 있습니다.\n\nVIX 공포지수가 27.29pt로 높은 수준을 유지하고 있다는 점은 글로벌 시장의 위험 회피 심리가 여전함을 보여줍니다. 이는 달러를 안전자산으로 선호하게 하여 원화 매도 압력을 높이며, 코스피 지수 하락에서 엿볼 수 있는 외국인 순매도(자본 유출) 심화와 맞물려 원/달러 환율의 추가 상승을 부추길 가능성이 큽니다.\n\n결론: 상승 우세",
     "score": {
-      "upScore": 9.6,
-      "downScore": 4.2
+      "upScore": 10.599999999999998,
+      "downScore": 2.2
     }
   },
-  "lastUpdate": "2026. 3. 13. PM 4:53:46"
+  "lastUpdate": "2026. 3. 13. 오후 5:00:50"
 }
