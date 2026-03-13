@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.39",
+      "value": "159.4",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 159.39
+          "value": 159.4
         }
       ]
     },
@@ -169,8 +169,8 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "95.15",
-      "trend": "down",
+      "value": "95.81",
+      "trend": "up",
       "history": [
         {
           "date": "2026-03-02",
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 95.15
+          "value": 95.81
         }
       ]
     },
@@ -279,7 +279,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.31",
+      "value": "99.66",
       "trend": "up",
       "history": [
         {
@@ -320,7 +320,7 @@
         },
         {
           "date": "2026-03-12",
-          "value": 99.31
+          "value": 99.66
         }
       ]
     },
@@ -493,7 +493,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
       "realtimeSymbol": "^VIX",
-      "value": "26.26",
+      "value": "26.93",
       "trend": "down",
       "history": [
         {
@@ -534,7 +534,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 26.26
+          "value": 26.93
         }
       ]
     },
@@ -801,9 +801,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,492.40",
-      "change": "+11.70",
-      "changePercent": "+0.79",
+      "value": "1,494.50",
+      "change": "+13.80",
+      "changePercent": "+0.93",
       "trend": "up"
     },
     {
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.64",
-      "change": "+6.29",
-      "changePercent": "+0.68",
+      "value": "937.84",
+      "change": "+6.49",
+      "changePercent": "+0.70",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,712.83",
-      "change": "+3.07",
-      "changePercent": "+0.18",
+      "value": "1,712.70",
+      "change": "+2.94",
+      "changePercent": "+0.17",
       "trend": "up"
     },
     {
@@ -832,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.52",
-      "change": "+1.30",
-      "changePercent": "+0.60",
+      "value": "216.71",
+      "change": "+1.49",
+      "changePercent": "+0.69",
       "trend": "up"
     }
   ],
@@ -906,8 +906,8 @@
       "excd": "NAS",
       "name": "애플",
       "enName": "Apple",
-      "price": 253.87,
-      "changePercent": "-0.74",
+      "price": 254.1,
+      "changePercent": "-0.65",
       "trend": "down"
     },
     {
@@ -917,9 +917,9 @@
       "excd": "NAS",
       "name": "테슬라",
       "enName": "Tesla",
-      "price": 392.49,
-      "changePercent": "-0.64",
-      "trend": "down"
+      "price": 395.2,
+      "changePercent": "+0.05",
+      "trend": "up"
     },
     {
       "id": "nvidia",
@@ -928,8 +928,8 @@
       "excd": "NAS",
       "name": "엔비디아",
       "enName": "NVIDIA",
-      "price": 182,
-      "changePercent": "-0.62",
+      "price": 182.68,
+      "changePercent": "-0.25",
       "trend": "down"
     },
     {
@@ -939,8 +939,8 @@
       "excd": "NAS",
       "name": "마이크로소프트",
       "enName": "Microsoft",
-      "price": 398.82,
-      "changePercent": "-0.76",
+      "price": 398.62,
+      "changePercent": "-0.81",
       "trend": "down"
     },
     {
@@ -950,8 +950,8 @@
       "excd": "NAS",
       "name": "구글",
       "enName": "Google",
-      "price": 304.89,
-      "changePercent": "+0.44",
+      "price": 305.88,
+      "changePercent": "+0.77",
       "trend": "up"
     },
     {
@@ -961,8 +961,8 @@
       "excd": "NAS",
       "name": "아마존",
       "enName": "Amazon",
-      "price": 208.58,
-      "changePercent": "-0.45",
+      "price": 208.68,
+      "changePercent": "-0.41",
       "trend": "down"
     },
     {
@@ -972,9 +972,9 @@
       "excd": "NAS",
       "name": "QQQ",
       "enName": "Invesco QQQ Trust",
-      "price": 595.88,
-      "changePercent": "-0.23",
-      "trend": "down"
+      "price": 597.37,
+      "changePercent": "+0.02",
+      "trend": "up"
     },
     {
       "id": "spy",
@@ -983,9 +983,9 @@
       "excd": "NYS",
       "name": "SPY",
       "enName": "SPDR S&P 500 ETF",
-      "price": 665.23,
-      "changePercent": "-0.12",
-      "trend": "down"
+      "price": 666.55,
+      "changePercent": "+0.07",
+      "trend": "up"
     },
     {
       "id": "schd",
@@ -994,20 +994,20 @@
       "excd": "NYS",
       "name": "SCHD",
       "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.81,
-      "changePercent": "-0.03",
-      "trend": "down"
+      "price": 30.85,
+      "changePercent": "+0.10",
+      "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 62,
-    "downProb": 38,
-    "detailedAnalysis": "안녕하세요, 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\nVIX 공포지수는 26.26pt로 여전히 높은 수준이지만, 추세가 하락하고 있어 시장의 즉각적인 공포감은 다소 완화되는 양상입니다. 하지만 VIX 하락에도 불구하고 '환율영향: up'으로 제시된 바에 따라, 이는 달러 강세 요인으로 작용하며 원화 약세 압력을 높일 수 있습니다.\n\n코스피 지수의 하락세는 외국인 순매도 압력을 시사하며 원/달러 환율 상승 요인으로 작용합니다. 또한, 미국 기준금리, 달러 인덱스, 미국 GDP 및 CPI의 긍정적 추세 등 대부분의 미국발 지표들이 달러 강세를 지지하고 있어 원화 약세 압력이 가중될 것으로 보입���다.\n\n국내 경상수지 악화와 한국 기준금리의 중립 추세는 원화 방어에 한계가 있으며, 국내 소비자물가 상승과 통화량 증가 추세 역시 환율 상승에 기여하고 있습니다. 전반적으로 달러 강세 요인이 원화 방어 요인을 압도하는 상황입니다.\n\n결론: 상승 우세",
+    "upProb": 70,
+    "downProb": 30,
+    "detailedAnalysis": "한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국 기준금리의 견조함, 높은 GDP와 CPI 수치는 달러 인덱스 상승 및 엔/달러 환율 급등과 함께 전반적인 달러 강세 기조를 확고히 하고 있습니다. 여기에 국제 유가 상승까지 더해져 원/달러 환율에 상당한 상승 압력으로 작용하고 있습니다.\n\nVIX 공포지수(26.93pt)는 하락 추세에도 불구하고 높은 수준을 유지하여 시장의 리스크 회피 심리가 강함을 나타냅니다. 이러한 리스크 오프 심리는 안전 자산인 달러 선호를 강화하며, 코스피 지수 하락 추세와 맞물려 외국인 순매도 압력을 높여 원화 약세를 심화시킬 가능성이 큽니다.\n\n국내 경제성장률 상승과 한국 기준금리가 원화 강세 요인으로 작용할 수 있으나, 경상수지 악화 추세와 국내 소비자물가 상승, 통화량 증가는 원화 가치 하락에 기여합니다. 따라서 국내 요인만으로는 대외적인 달러 강세 흐름을 상쇄하기 어려워 보입니다.\n\n결론: 상승 우세",
     "score": {
-      "upScore": 8.6,
-      "downScore": 5.2
+      "upScore": 9.6,
+      "downScore": 4.2
     }
   },
-  "lastUpdate": "2026. 3. 13. PM 3:00:47"
+  "lastUpdate": "2026. 3. 13. 오후 3:12:31"
 }
