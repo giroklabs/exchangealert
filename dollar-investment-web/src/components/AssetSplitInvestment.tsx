@@ -646,15 +646,26 @@ export function AssetSplitInvestment() {
                             실시간 시세: {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                         <button
-                            onClick={() => {
-                                // 기존 useEffect 내의 loadDashboardData가 다시 실행되도록 처리하거나 
-                                // 직접 호출 (여기서는 간단히 컴포넌트 전체 리로딩 로직 재사용 가능성 고려)
-                                window.location.reload();
-                            }}
-                            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors group"
+                            onClick={() => window.location.reload()}
+                            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center group ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                                }`}
                             title="시세 새로고침"
                         >
-                            <span className="text-xs group-active:rotate-180 transition-transform inline-block">🔄</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className={`transition-transform duration-500 group-hover:rotate-180 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+                            >
+                                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                                <polyline points="21 3 21 8 16 8" />
+                            </svg>
                         </button>
                     </div>
                 </div>
