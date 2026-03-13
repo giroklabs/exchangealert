@@ -144,11 +144,16 @@ export const CommunityBoard: React.FC = () => {
 
         try {
             console.log("Attempting to delete post:", postId);
+            console.log("Current user UID:", user?.uid);
             await deleteDoc(doc(db, 'community_posts', postId));
             console.log("Post deleted successfully");
-        } catch (error) {
+        } catch (error: any) {
             console.error("Post deletion error details:", error);
-            alert("글 삭제에 실패했습니다. 권한이 없거나 네트워크 오류일 수 있습니다.");
+            if (error.code === 'permission-denied') {
+                alert("삭제 권한이 없습니다. 본인이 작성한 글만 삭제할 수 있습니다. (Firebase Rules 확인 필요)");
+            } else {
+                alert("글 삭제에 실패했습니다: " + error.message);
+            }
         }
     };
 

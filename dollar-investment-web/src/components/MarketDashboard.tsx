@@ -254,7 +254,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
             {/* 미니 차트 (Sparkline) */}
             {indicator.history && indicator.history.length > 0 && (
                 <div className="mt-4 h-16 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                         <AreaChart data={indicator.history}>
                             <defs>
                                 <linearGradient id={`gradient-${indicator.id}`} x1="0" y1="0" x2="0" y2="1">
