@@ -33,7 +33,7 @@ export function AdvancedFXChart() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/data/fx-history.json');
+                const response = await fetch('./data/fx-history.json');
                 const json = await response.json();
                 setData(json);
             } catch (error) {
