@@ -5,6 +5,10 @@ on:
   repository_dispatch:
     types: [trigger-fetch-naver] # 외부 서비스(cron-job 등)에서 정확한 간격으로 실행하기 위한 웹훅 트리거
 
+# 동일한 워크플로우가 겹칠 경우 이전 작업을 취소하고 최신 것만 실행 (안정성 확보)
+concurrency:
+  group: fetch-exchange-rates-naver
+  cancel-in-progress: true
 
 jobs:
   fetch-rates:
@@ -212,18 +216,3 @@ jobs:
           echo "No data file or empty file."
         fi
 
-    - name: Trigger next run in 5 minutes
-      if: always() # 실패하더라도 다음 트리거는 시도 (연쇄 중단 방지)
-      env:
-        TRIGGER_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
-      run: |
-        echo "⏳ 5분 대기 후 다음 업데이트를 예약합니다..."
-        sleep 300
-        
-        curl -X POST \
-          -H "Authorization: token $TRIGGER_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/giroklabs/exchangealert/dispatches \
-          -d '{"event_type": "trigger-fetch-naver"}'
-        
-        echo "🚀 다음 페치 트리거 전송 완료!"
