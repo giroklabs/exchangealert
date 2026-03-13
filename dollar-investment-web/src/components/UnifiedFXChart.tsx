@@ -18,7 +18,7 @@ import {
     type FXIntradayData
 } from '../services/fxHistoryService';
 
-type Period = '1D' | '1M' | '1Y' | 'ALL';
+type Period = '1D' | '1W' | '1M' | '1Y' | 'ALL';
 
 interface ChartDataItem {
     label: string;
@@ -74,7 +74,11 @@ export function UnifiedFXChart() {
         let filtered = [...historyData];
         const lastDate = new Date(historyData[historyData.length - 1].date);
 
-        if (period === '1M') {
+        if (period === '1W') {
+            const oneWeekAgo = new Date(lastDate);
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            filtered = historyData.filter(item => new Date(item.date) >= oneWeekAgo);
+        } else if (period === '1M') {
             const oneMonthAgo = new Date(lastDate);
             oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
             filtered = historyData.filter(item => new Date(item.date) >= oneMonthAgo);
@@ -143,7 +147,7 @@ export function UnifiedFXChart() {
                 </div>
 
                 <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-xl">
-                    {(['1D', '1M', '1Y', 'ALL'] as const).map((p) => (
+                    {(['1D', '1W', '1M', '1Y', 'ALL'] as const).map((p) => (
                         <button
                             key={p}
                             onClick={() => setPeriod(p)}
@@ -152,7 +156,7 @@ export function UnifiedFXChart() {
                                 : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                         >
-                            {p === '1D' ? '1일' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
+                            {p === '1D' ? '1일' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
                         </button>
                     ))}
                 </div>
