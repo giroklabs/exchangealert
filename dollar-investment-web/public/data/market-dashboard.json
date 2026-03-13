@@ -115,7 +115,7 @@
       "source": "Market",
       "description": "엔화 약세 시 환율 상승 경향",
       "realtimeSymbol": "JPY=X",
-      "value": "159.09",
+      "value": "159.1",
       "trend": "up",
       "history": [
         {
@@ -156,7 +156,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 159.09
+          "value": 159.1
         }
       ]
     },
@@ -169,7 +169,7 @@
       "source": "WTI",
       "description": "실시간 선물 가격 반영 중",
       "realtimeSymbol": "CL=F",
-      "value": "95.22",
+      "value": "94.83",
       "trend": "up",
       "history": [
         {
@@ -210,7 +210,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 95.22
+          "value": 94.83
         }
       ]
     },
@@ -333,7 +333,7 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
-      "value": "5,462.16",
+      "value": "5,467.51",
       "trend": "down",
       "history": [
         {
@@ -374,7 +374,7 @@
         },
         {
           "date": "2026-03-13",
-          "value": 5462.16
+          "value": 5467.51
         }
       ]
     },
@@ -812,9 +812,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "934.72",
-      "change": "+3.37",
-      "changePercent": "+0.36",
+      "value": "934.49",
+      "change": "+3.14",
+      "changePercent": "+0.34",
       "trend": "up"
     },
     {
@@ -822,9 +822,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,714.21",
-      "change": "+4.45",
-      "changePercent": "+0.26",
+      "value": "1,714.06",
+      "change": "+4.30",
+      "changePercent": "+0.25",
       "trend": "up"
     },
     {
@@ -832,9 +832,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.17",
-      "change": "+0.95",
-      "changePercent": "+0.44",
+      "value": "216.08",
+      "change": "+0.86",
+      "changePercent": "+0.40",
       "trend": "up"
     }
   ],
@@ -845,8 +845,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 182300,
-      "changePercent": "-2.98",
+      "price": 182600,
+      "changePercent": "-2.82",
       "trend": "down"
     },
     {
@@ -865,8 +865,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 510000,
-      "changePercent": "-2.11",
+      "price": 509000,
+      "changePercent": "-2.30",
       "trend": "down"
     },
     {
@@ -875,8 +875,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 161000,
-      "changePercent": "-3.59",
+      "price": 161500,
+      "changePercent": "-3.29",
       "trend": "down"
     },
     {
@@ -885,8 +885,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 221500,
-      "changePercent": "-0.23",
+      "price": 221750,
+      "changePercent": "-0.11",
       "trend": "down"
     },
     {
@@ -1003,11 +1003,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 84,
     "downProb": 16,
-    "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 제공된 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국 경제 지표(GDP, CPI, 10년물 국채금리 등)의 견조한 흐름과 달러 인덱스 상승은 달러 강세를 지지합니다. 국제 유가 상승 및 엔/달러 환율 상승(엔화 약세) 등 외부 요인들 또한 원/달러 환율의 상승 압력으로 작용하고 있습니다.\n\nVIX 공포지수가 27.29pt로 상승 추세에 있으며, 이는 시장의 강력한 리스크 오프(risk-off) 심리를 반영합니다. 이로 인해 외국인 투자자들의 국내 증시 순매도(코스피 지수 하락)가 유발되어 달러 매수 수요를 증가시키고 원화 약세를 심화할 것으로 예상됩니다.\n\n국내 경제성장률과 소비��물가 상승에도 불구하고, 경상수지 악화와 코스피 하락 추세는 원화 약세에 추가적인 부담을 주고 있습니다. 한국 기준금리가 중립을 유지하는 상황에서 이러한 복합적인 요인들은 전반적인 원화 약세를 가속화할 가능성이 큽니다.\n\n결론: 상승 우세",
+    "detailedAnalysis": "한수지입니다. 제공된 경제 지표를 바탕으로 향후 원/달러 환율 방향성을 분석하겠습니다.\n\n현재 VIX 공포지수가 27.29pt로 상승 추세에 있으며, 이는 글로벌 시장의 위험 회피 심리를 크게 반영합니다. 외국인 자금 이탈을 시사하는 코스피 지수 하락과 맞물려 안전자산인 달러 수요를 강하게 자극하고 있습니다.\n\n미국은 기준금리, CPI, GDP 등 전반적인 지표가 견조하여 달러 강세를 지지하며, 한미 금리차 확대 압력도 원화 약세를 부추깁니다. 여기에 엔/달러 환율 상승, 국제 유가 강세, 달러 인덱스 상승까지 더해져 원/달러 환율의 상방 압력이 가중되고 있습니다.\n\n국내 경제성장률의 상승 추세는 긍정적이나, 경상수지 감소 추세와 미약한 한국 기준금리 인하 압력은 원화 방어에 한계가 있습니다. 전반적으로 글로벌 리스크 회피와 미국 경제의 상대적 강세가 원화 약세 요인으로 작용하고 있습니다.\n\n결론: 상승 우세",
     "score": {
       "upScore": 11.599999999999998,
       "downScore": 2.2
     }
   },
-  "lastUpdate": "2026. 3. 13. 오전 1:16:16"
+  "lastUpdate": "2026. 3. 13. AM 1:20:09"
 }
