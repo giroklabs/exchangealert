@@ -135,7 +135,6 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         <div className={`p-6 ${!isEmbedded ? `rounded-2xl shadow-xl border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}` : ''}`}>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
-                    {period === '1D' && <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>}
                 </div>
 
                 <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-xl">
