@@ -6,6 +6,13 @@ export interface FXHistoryData {
     ma60: number | null;
 }
 
+export interface FXIntradayData {
+    time: string;
+    fullTime: string;
+    rate: number;
+    timestamp: number;
+}
+
 export async function fetchFXHistoryData(): Promise<FXHistoryData[]> {
     try {
         const url = import.meta.env.DEV
@@ -19,6 +26,21 @@ export async function fetchFXHistoryData(): Promise<FXHistoryData[]> {
         return await response.json();
     } catch (error) {
         console.error('Error loading FX history data:', error);
+        return [];
+    }
+}
+
+export async function fetchFXIntradayData(): Promise<FXIntradayData[]> {
+    try {
+        const url = import.meta.env.DEV
+            ? '/exchangealert/data/fx-intraday.json'
+            : 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/fx-intraday.json';
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to load intraday data');
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading FX intraday data:', error);
         return [];
     }
 }

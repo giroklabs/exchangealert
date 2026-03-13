@@ -182,11 +182,16 @@ jobs:
             echo "📊 Consolidating FX history for advanced charts..."
             node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
             
+            echo "📈 Generating intra-day data from git history..."
+            node dollar-investment-web/scripts/generate-intraday.cjs
+            
             git add data/exchange-rates.json
             git add data/last-update.txt
             git add data/history/*.json 2>/dev/null || true
             git add data/daily/*.json 2>/dev/null || true
+            git add data/fx-intraday.json 2>/dev/null || true
             git add dollar-investment-web/public/data/fx-history.json 2>/dev/null || true
+            git add dollar-investment-web/public/data/fx-intraday.json 2>/dev/null || true
             
             if ! git diff --staged --quiet; then
               COMMIT_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
