@@ -124,6 +124,7 @@ function SingleAssetManager({
             buyPrice: buyPrice,
             quantity: quantity,
             investedAmount: budgetPerSlot,
+            buyDate: new Date().toISOString().split('T')[0],
             targetPrice: buyPrice * (1 + investment.settings.targetProfitPercent / 100)
         };
         handleUpdate({ slots: newSlots, lastPrice: currentPrice });
@@ -138,6 +139,7 @@ function SingleAssetManager({
             buyPrice: null,
             quantity: 0,
             investedAmount: 0,
+            buyDate: undefined,
             targetPrice: null
         };
         handleUpdate({ slots: newSlots, lastPrice: currentPrice });
@@ -172,7 +174,8 @@ function SingleAssetManager({
                 buyPrice: null,
                 quantity: 0,
                 investedAmount: 0,
-                targetPrice: null
+                targetPrice: null,
+                buyDate: undefined
             }));
             handleUpdate({ slots: resetSlots });
         }
@@ -392,7 +395,11 @@ function SingleAssetManager({
                                             </div>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-500">목표가</span>
-                                                <span className="font-bold text-yellow-500 dark:text-yellow-400">{Math.round(slot.targetPrice!).toLocaleString()}원</span>
+                                                <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{slot.targetPrice?.toLocaleString()}원</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="text-gray-500">매수일자</span>
+                                                <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{slot.buyDate || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-500">수량</span>
@@ -634,6 +641,22 @@ export function AssetSplitInvestment() {
                         포트폴리오 관리:
                     </span>
                     <span className="text-sm text-gray-500">종목별 분할 매수 상황을 확인하세요.</span>
+                    <div className="flex items-center gap-2 ml-4 px-3 py-1 bg-white/50 dark:bg-gray-700/50 rounded-lg">
+                        <span className={`text-[10px] font-bold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            실시간 시세: {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <button
+                            onClick={() => {
+                                // 기존 useEffect 내의 loadDashboardData가 다시 실행되도록 처리하거나 
+                                // 직접 호출 (여기서는 간단히 컴포넌트 전체 리로딩 로직 재사용 가능성 고려)
+                                window.location.reload();
+                            }}
+                            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors group"
+                            title="시세 새로고침"
+                        >
+                            <span className="text-xs group-active:rotate-180 transition-transform inline-block">🔄</span>
+                        </button>
+                    </div>
                 </div>
                 <button
                     onClick={addInvestment}

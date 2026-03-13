@@ -37,8 +37,11 @@ export function useSyncState<T>(key: string, initialValue: T | (() => T)): [T, (
             const valueToStore = value instanceof Function ? value(state) : value;
             setState(valueToStore);
 
+            const now = new Date().toISOString();
+
             // LocalStorage 저장
             window.localStorage.setItem(key, JSON.stringify(valueToStore));
+            window.localStorage.setItem(`${key}_lastUpdated`, now);
 
             // Firestore 저장 (로그인 되어있는 경우)
             if (user) {
@@ -46,7 +49,7 @@ export function useSyncState<T>(key: string, initialValue: T | (() => T)): [T, (
                 // merge: true로 부분 업데이트 처리
                 setDoc(docRef, {
                     [key]: valueToStore,
-                    lastUpdated: new Date().toISOString()
+                    lastUpdated: now
                 }, { merge: true }).catch(err => console.error("Firestore sync failed:", err));
             }
         } catch (error) {

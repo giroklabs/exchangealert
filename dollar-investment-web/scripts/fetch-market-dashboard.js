@@ -205,7 +205,7 @@ async function fetchDomesticStockFromKIS(code, token) {
             return {
                 price: parseFloat(data.output.stck_prpr),
                 changePercent: (parseFloat(data.output.prdy_ctrt)).toFixed(2),
-                trend: parseFloat(data.output.prdy_vrss) >= 0 ? 'up' : 'down'
+                trend: parseFloat(data.output.prdy_vrss) > 0 ? 'up' : (parseFloat(data.output.prdy_vrss) < 0 ? 'down' : 'neutral')
             };
         }
     } catch (e) {
@@ -231,7 +231,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
             return {
                 price: parseFloat(data.output.last),
                 changePercent: (parseFloat(data.output.rate)).toFixed(2),
-                trend: parseFloat(data.output.diff) >= 0 ? 'up' : 'down'
+                trend: parseFloat(data.output.diff) > 0 ? 'up' : (parseFloat(data.output.diff) < 0 ? 'down' : 'neutral')
             };
         }
     } catch (e) {

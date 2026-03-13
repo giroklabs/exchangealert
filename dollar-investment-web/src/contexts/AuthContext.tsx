@@ -29,10 +29,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const docRef = doc(db, 'users', currentUser.uid);
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        Object.keys(data).forEach(key => {
+                        const firestoreData = docSnap.data();
+                        const firestoreLastUpdated = firestoreData.lastUpdated ? new Date(firestoreData.lastUpdated).getTime() : 0;
+
+                        Object.keys(firestoreData).forEach(key => {
                             if (key !== 'lastUpdated') {
-                                localStorage.setItem(key, JSON.stringify(data[key]));
+                                const localLastUpdatedStr = localStorage.getItem(`${key}_lastUpdated`);
+                                const localLastUpdated = localLastUpdatedStr ? new Date(localLastUpdatedStr).getTime() : 0;
+
+                                // Firestore 데이터가 로컬 데이터보다 최신인 경우에만 덮어쓰기
+                                if (firestoreLastUpdated > localLastUpdated) {
+                                    localStorage.setItem(key, JSON.stringify(firestoreData[key]));
+                                    localStorage.setItem(`${key}_lastUpdated`, firestoreData.lastUpdated);
+                                }
                             }
                         });
                     } else {
@@ -59,7 +68,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 } catch (error) {
                     console.error("데이터 동기화 실패:", error);
                 }
-            } else {
+            }
+            else {
                 // 로그아웃 시 필요하다면 localStorage를 초기화하거나 유지 (여기서는 유지)
             }
             setUserDataLoaded(true);

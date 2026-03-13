@@ -26,7 +26,8 @@ export function SevenSplitInvestment() {
             buyPrice: null,
             amount: 0,
             krwAmount: 0,
-            targetPrice: null
+            targetPrice: null,
+            buyDate: undefined
         }));
     });
 
@@ -45,7 +46,8 @@ export function SevenSplitInvestment() {
                 buyPrice: null,
                 amount: 0,
                 krwAmount: 0,
-                targetPrice: null
+                targetPrice: null,
+                buyDate: undefined
             }));
             newSlots = [...newSlots, ...addedSlots];
         } else if (newSlots.length > newCount) {
@@ -91,7 +93,8 @@ export function SevenSplitInvestment() {
             buyPrice: buyPrice,
             amount: amount,
             krwAmount: budgetPerSlot,
-            targetPrice: buyPrice * (1 + settings.targetProfitPercent / 100)
+            targetPrice: buyPrice * (1 + settings.targetProfitPercent / 100),
+            buyDate: new Date().toISOString().split('T')[0]
         };
         setSlots(newSlots);
     };
@@ -106,7 +109,8 @@ export function SevenSplitInvestment() {
             buyPrice: null,
             amount: 0,
             krwAmount: 0,
-            targetPrice: null
+            targetPrice: null,
+            buyDate: undefined
         };
         setSlots(newSlots);
     };
@@ -143,7 +147,8 @@ export function SevenSplitInvestment() {
                 buyPrice: null,
                 amount: 0,
                 krwAmount: 0,
-                targetPrice: null
+                targetPrice: null,
+                buyDate: undefined
             })));
         }
     };
@@ -340,6 +345,10 @@ export function SevenSplitInvestment() {
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-500">목표가</span>
                                                 <span className="font-bold text-yellow-500 dark:text-yellow-400">{slot.targetPrice?.toFixed(2)}원</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500">매수일자</span>
+                                                <span className="font-bold">{slot.buyDate || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-500">매수수량</span>

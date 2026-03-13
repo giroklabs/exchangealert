@@ -28,6 +28,9 @@ export function FXExchangeProfitTracker() {
     const [partialSellId, setPartialSellId] = useState<string | null>(null);
     const [partialSellAmount, setPartialSellAmount] = useState<number>(0);
     const [partialSellRate, setPartialSellRate] = useState<number>(currentRate);
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 50;
+    const [showDailyLog, setShowDailyLog] = useState(false);
 
     const handleAddInvestment = () => {
         if (!newInvestment.date || !newInvestment.usdAmount || !newInvestment.buyRate) {
@@ -178,6 +181,27 @@ export function FXExchangeProfitTracker() {
     const volumeYear =
         investments.filter(inv => inv.date?.startsWith(thisYearStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.buyRate), 0) +
         investments.filter(inv => inv.status === 'sold' && inv.sellDate?.startsWith(thisYearStr)).reduce((sum, inv) => sum + (inv.usdAmount * inv.sellRate!), 0);
+
+    // 일별 일지 데이터 계산
+    const dailyLogs = investments
+        .filter(inv => inv.status === 'sold')
+        .reduce((acc: Record<string, { profit: number; count: number; volume: number }>, inv) => {
+            const date = inv.sellDate || 'unknown';
+            if (!acc[date]) acc[date] = { profit: 0, count: 0, volume: 0 };
+            acc[date].profit += inv.usdAmount * (inv.sellRate! - inv.buyRate);
+            acc[date].count += 1;
+            acc[date].volume += inv.usdAmount * inv.sellRate!;
+            return acc;
+        }, {});
+
+    const sortedDates = Object.keys(dailyLogs).sort((a, b) => b.localeCompare(a));
+
+    // 페이징 처리
+    const totalPages = Math.ceil(investments.length / ITEMS_PER_PAGE);
+    const paginatedInvestments = investments.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
     return (
         <div className="space-y-8">
             {/* 요약 카드 */}
@@ -225,8 +249,14 @@ export function FXExchangeProfitTracker() {
                         </div>
                     </div>
                 </div>
-                <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
-                    <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>실현 손익 (일/월/년)</h3>
+                <div
+                    onClick={() => setShowDailyLog(true)}
+                    className={`p-6 rounded-2xl shadow-xl cursor-pointer hover:ring-2 hover:ring-yellow-400 transition-all ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}
+                >
+                    <div className="flex justify-between items-start mb-2 text-sm font-medium">
+                        <h3 className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>실현 손익 (일/월/년)</h3>
+                        <span className="text-[10px] bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-500">일지보기 🔍</span>
+                    </div>
                     <div className="space-y-1">
                         <div className="flex justify-between items-baseline">
                             <span className="text-xs text-gray-500">오늘:</span>
@@ -461,7 +491,7 @@ export function FXExchangeProfitTracker() {
                                     </td>
                                 </tr>
                             ) : (
-                                investments.map(inv => {
+                                paginatedInvestments.map(inv => {
                                     const isHolding = inv.status === 'holding';
                                     const targetRate = isHolding ? currentRate : inv.sellRate!;
                                     const profit = inv.usdAmount * (targetRate - inv.buyRate);
@@ -550,7 +580,99 @@ export function FXExchangeProfitTracker() {
                         </tbody>
                     </table>
                 </div>
+
+                {/* 페이지네이션 */}
+                {totalPages > 1 && (
+                    <div className="p-4 flex justify-center items-center gap-4">
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                            className={`px-3 py-1 rounded-lg border text-sm font-bold ${currentPage === 1
+                                ? 'bg-gray-100 text-gray-300 cursor-not-allowed border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600'
+                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600'
+                                }`}
+                        >
+                            이전
+                        </button>
+                        <div className="flex gap-2">
+                            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                let pageNum = 1;
+                                if (totalPages <= 5) pageNum = i + 1;
+                                else {
+                                    if (currentPage <= 3) pageNum = i + 1;
+                                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                                    else pageNum = currentPage - 2 + i;
+                                }
+
+                                return (
+                                    <button
+                                        key={pageNum}
+                                        onClick={() => setCurrentPage(pageNum)}
+                                        className={`w-8 h-8 rounded-lg text-xs font-bold transition-colors ${currentPage === pageNum
+                                            ? 'bg-yellow-400 text-gray-900 shadow-md'
+                                            : 'bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600'
+                                            }`}
+                                    >
+                                        {pageNum}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages}
+                            className={`px-3 py-1 rounded-lg border text-sm font-bold ${currentPage === totalPages
+                                ? 'bg-gray-100 text-gray-300 cursor-not-allowed border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600'
+                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600'
+                                }`}
+                        >
+                            다음
+                        </button>
+                    </div>
+                )}
             </div>
+
+            {/* 일별 일지 팝업 */}
+            {showDailyLog && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowDailyLog(false)}>
+                    <div
+                        className={`w-full max-w-2xl max-h-[80vh] overflow-hidden rounded-3xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className={`p-6 border-b flex justify-between items-center ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+                            <h2 className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>📅 일별 실현손익 일지</h2>
+                            <button onClick={() => setShowDailyLog(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors font-bold">✕</button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-6">
+                            {sortedDates.length === 0 ? (
+                                <div className="text-center py-20 text-gray-500">아직 실현 기록이 없습니다.</div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {sortedDates.map(date => {
+                                        const log = dailyLogs[date];
+                                        return (
+                                            <div key={date} className={`p-4 rounded-2xl border flex justify-between items-center ${theme === 'dark' ? 'bg-gray-750 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                                                <div className="space-y-1">
+                                                    <div className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{date}</div>
+                                                    <div className="text-xs text-gray-500">{log.count}건의 거래 / 거래액 {Math.round(log.volume).toLocaleString()}원</div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className={`text-lg font-black ${log.profit >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                                                        {log.profit >= 0 ? '+' : ''}{Math.round(log.profit).toLocaleString()}원
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                        <div className={`p-6 border-t text-center text-xs text-gray-400 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+                            매도 시점의 환율 차액을 합산한 결과입니다.
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* 안내 문구 */}
             <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>

@@ -76,6 +76,7 @@ export interface SevenSplitSlot {
   amount: number; // 매수 환전액 (USD)
   krwAmount: number; // 투자 원금 (KRW)
   targetPrice: number | null;
+  buyDate?: string;
   currentProfit?: number;
   currentRoi?: number;
 }
@@ -157,6 +158,7 @@ export interface AssetSplitSlot {
   quantity: number;
   investedAmount: number;
   targetPrice: number | null;
+  buyDate?: string;
 }
 
 export interface AssetSplitSettings {
