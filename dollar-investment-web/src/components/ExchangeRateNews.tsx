@@ -73,6 +73,9 @@ function parseRSS(xmlText: string): NewsItem[] {
         });
     });
 
+    // 최신순 정렬 (pubDate 기준 내림차순)
+    results.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+
     return results;
 }
 
@@ -207,8 +210,8 @@ export function ExchangeRateNews() {
                         onClick={() => fetchNews(activeKeyword, true)}
                         disabled={isLoading}
                         className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-bold transition-all duration-300 shadow-sm hover:shadow-md disabled:opacity-50 ${theme === 'dark'
-                                ? 'bg-gray-800 text-yellow-400 border border-gray-700 hover:bg-gray-700'
-                                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                            ? 'bg-gray-800 text-yellow-400 border border-gray-700 hover:bg-gray-700'
+                            : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
                             }`}
                     >
                         <svg
