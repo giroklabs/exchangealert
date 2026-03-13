@@ -30,24 +30,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
                         const firestoreData = docSnap.data();
-                        const firestoreLastUpdated = firestoreData.lastUpdated ? new Date(firestoreData.lastUpdated).getTime() : 0;
 
                         Object.keys(firestoreData).forEach(key => {
-                            if (key !== 'lastUpdated') {
+                            if (key !== 'lastUpdated' && !key.endsWith('_lastUpdated')) {
                                 const localLastUpdatedStr = localStorage.getItem(`${key}_lastUpdated`);
                                 const localLastUpdated = localLastUpdatedStr ? new Date(localLastUpdatedStr).getTime() : 0;
 
-                                // Firestore 데이터가 로컬 데이터보다 최신인 경우에만 덮어쓰기
-                                if (firestoreLastUpdated > localLastUpdated) {
+                                // 개별 항목의 타임스탬프 확인 (없으면 전역 lastUpdated 사용)
+                                const firestoreKeyLastUpdatedStr = firestoreData[`${key}_lastUpdated`] || firestoreData.lastUpdated;
+                                const firestoreKeyLastUpdated = firestoreKeyLastUpdatedStr ? new Date(firestoreKeyLastUpdatedStr).getTime() : 0;
+
+                                // Firestore 데이터가 존재하고, 로컬 데이터보다 최신인 경우에만 덮어쓰기
+                                if (firestoreData[key] !== undefined && firestoreKeyLastUpdated > localLastUpdated) {
+                                    console.log(`Syncing ${key} from Firestore (Cloud: ${firestoreKeyLastUpdatedStr}, Local: ${localLastUpdatedStr})`);
                                     localStorage.setItem(key, JSON.stringify(firestoreData[key]));
-                                    localStorage.setItem(`${key}_lastUpdated`, firestoreData.lastUpdated);
+                                    localStorage.setItem(`${key}_lastUpdated`, firestoreKeyLastUpdatedStr);
                                 }
                             }
                         });
                     } else {
                         // 최초 로그인 시 로컬 스토리지에 있는 데이터를 Firestore에 동기화
                         const localData: Record<string, any> = {};
-                        const keysToSync = ['seven-split-settings', 'seven-split-slots', 'asset-investments-v2', 'fx-investments'];
+                        const keysToSync = [
+                            'seven-split-settings',
+                            'seven-split-slots',
+                            'asset-investments-v2',
+                            'fx-investments',
+                            'seven-split-editing-slot',
+                            'seven-split-edit-values'
+                        ];
 
                         keysToSync.forEach(key => {
                             const item = localStorage.getItem(key);

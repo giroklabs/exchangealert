@@ -49,6 +49,7 @@ export function useSyncState<T>(key: string, initialValue: T | (() => T)): [T, (
                 // merge: true로 부분 업데이트 처리
                 setDoc(docRef, {
                     [key]: valueToStore,
+                    [`${key}_lastUpdated`]: now, // 개별 항목별 업데이트 시간 기록
                     lastUpdated: now
                 }, { merge: true }).catch(err => console.error("Firestore sync failed:", err));
             }

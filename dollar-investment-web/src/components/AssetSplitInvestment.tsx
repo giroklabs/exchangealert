@@ -1,6 +1,7 @@
 import { useTheme } from '../contexts/ThemeContext';
 import type { AssetInvestment, AssetSplitSettings } from '../types';
 import { useSyncState } from '../hooks/useSyncState';
+import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect } from 'react';
 
 import { fetchMarketDashboardData } from '../services/marketDashboardService';
@@ -479,9 +480,12 @@ function SingleAssetManager({
 
 export function AssetSplitInvestment() {
     const { theme } = useTheme();
+    const { userDataLoaded } = useAuth();
     const [stockPrices, setStockPrices] = useState<TrackedStock[]>([]);
 
     useEffect(() => {
+        if (!userDataLoaded) return; // 유저 데이터가 로드(클라우드 동기화)되기 전에는 자동 업데이트 방지
+
         const loadDashboardData = async () => {
             const data = await fetchMarketDashboardData();
             if (data.stockPrices) {
@@ -512,7 +516,7 @@ export function AssetSplitInvestment() {
         const interval = setInterval(loadDashboardData, 60000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [userDataLoaded]);
 
     // 여러 종목 상태 관리
     const [investments, setInvestments] = useSyncState<AssetInvestment[]>('asset-investments-v2', () => {
