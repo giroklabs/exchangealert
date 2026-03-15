@@ -5,9 +5,16 @@ on:
     branches:
       - main
   schedule:
-    # 하루 3회 실행 (KST 오전 9:10, 오후 2:10, 오후 9:10)
+    # 하루 3회 실행 (KST 오전 9:10, 오후 2:10, 오후 9:10) - 백업용
     - cron: '10 0,5,12 * * *'
   workflow_dispatch: # 수동 실행 가능
+  repository_dispatch:
+    types: [trigger-market-update]
+
+# 동시 실행 방지: 이전 작업이 진행 중이면 취소하고 최신 작업 수행
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   fetch-market-data:

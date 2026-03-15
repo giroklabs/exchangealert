@@ -1,0 +1,228 @@
+name: Fetch Exchange Rates from Naver
+
+on:
+  workflow_dispatch:  # 수동 실행 가능
+  repository_dispatch:
+    types: [trigger-fetch-naver] # 외부 서비스(cron-job 등)에서 정확한 간격으로 실행하기 위한 웹훅 트리거
+
+# 동일한 워크플로우가 겹칠 경우 이전 작업을 취소하고 최신 것만 실행 (안정성 확보)
+concurrency:
+  group: fetch-exchange-rates-naver
+  cancel-in-progress: true
+
+jobs:
+  fetch-rates:
+    runs-on: ubuntu-latest
+    # 한국 시간대 설정 (UTC+9)
+    env:
+      TZ: Asia/Seoul
+    # 안정성 향상을 위한 설정
+    timeout-minutes: 10
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create data directories
+      run: |
+        mkdir -p data
+        mkdir -p data/history
+        mkdir -p data/daily
+      
+    - name: Fetch exchange rates from Naver API (15분 간격)
+      run: |
+        echo "=== Naver API Exchange Rate Fetch (매일 15분 간격) ==="
+        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
+        SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d')  # 하이픈 포함 형식으로 통일
+        
+        echo "Current KST time: $KST_DATE"
+        echo "Fetching from Naver API (KEB Hana Bank) - 매일 15분 간격 안정적인 업데이트..."
+        
+        # 통화 목록 (네이버 API 지원 통화)
+        CURRENCIES=(
+          "USD:미국 달러:1"
+          "JPY:일본 엔:100"
+          "EUR:유로:1"
+          "GBP:영국 파운드:1"
+          "CNY:중국 위안:1"
+          "AUD:호주 달러:1"
+          "CAD:캐나다 달러:1"
+          "CHF:스위스 프랑:1"
+          "HKD:홍콩 달러:1"
+          "THB:태국 바트:1"
+          "SGD:싱가포르 달러:1"
+          "NZD:뉴질랜드 달러:1"
+          "SEK:스웨덴 크로나:1"
+          "NOK:노르웨이 크로네:1"
+          "DKK:덴마크 크로네:1"
+          "MYR:말레이시아 링깃:1"
+          "SAR:사우디 리얄:1"
+          "AED:아랍에미리트 디르함:1"
+          "KWD:쿠웨이트 디나르:1"
+          "BHD:바레인 디나르:1"
+          "IDR:인도네시아 루피아:100"
+          "BND:브루나이 달러:1"
+          "KRW:한국 원:1"
+        )
+        
+        # 현재 시간을 KST로 저장 (ISO 8601 형식)
+        CURRENT_TIME=$(TZ='Asia/Seoul' date '+%Y-%m-%dT%H:%M:%S%z')
+        echo "$CURRENT_TIME" > data/last-update.txt
+        echo "📅 데이터 기준 시간 저장: $CURRENT_TIME"
+        
+        # JSON 배열 시작
+        echo "[" > data/exchange-rates.json
+        
+        FIRST=true
+        for currency_info in "${CURRENCIES[@]}"; do
+          IFS=':' read -r cur_unit cur_nm multiplier <<< "$currency_info"
+          
+          echo "Fetching $cur_unit ($cur_nm)..."
+          
+          # 네이버 API 호출
+          response=$(curl -s "https://m.search.naver.com/p/csearch/content/qapirender.nhn?key=calculator&pkid=141&q=환율&where=m&u1=keb&u6=standardUnit&u7=0&u3=$cur_unit&u4=KRW&u8=down&u2=$multiplier")
+          
+          # 환율 추출
+          rate=$(echo "$response" | jq -r '.country[1].value // "0"')
+          
+          if [ "$rate" != "0" ] && [ "$rate" != "null" ]; then
+            # 쉼표 제거 후 계산
+            rate_clean=$(echo "$rate" | tr -d ',')
+            
+            # 환율 스프레드 계산 (네이버금융 기준: 약 ±1.8%)
+            # 고객 입장:
+            # - 살 때 (외화 매입) = 높은 가격 (+1.8%)
+            # - 팔 때 (외화 매도) = 낮은 가격 (-1.8%)
+            customer_buy=$(echo "scale=2; $rate_clean * 1.018" | bc)   # 고객이 살 때 (높음)
+            customer_sell=$(echo "scale=2; $rate_clean * 0.982" | bc)  # 고객이 팔 때 (낮음)
+            
+            # 쉼표 추가
+            rate_formatted="$rate"
+            customer_buy_formatted=$(printf "%.2f" $customer_buy)
+            customer_sell_formatted=$(printf "%.2f" $customer_sell)
+            
+            # JSON 항목 생성
+            # ttb = 고객이 살 때 (높은 가격)
+            # tts = 고객이 팔 때 (낮은 가격)
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              echo "," >> data/exchange-rates.json
+            fi
+            
+            echo "{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$customer_buy_formatted\",\"tts\":\"$customer_sell_formatted\",\"deal_bas_r\":\"$rate_formatted\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate_formatted\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
+            
+            echo "  Success: $cur_nm = $rate_formatted KRW"
+          else
+            echo "  Skipped: $cur_unit (no data)"
+          fi
+          
+        # API 호출 간격 (Rate limit 방지 - 15분 간격으로 충분한 여유)
+        sleep 0.1
+        done
+        
+        # JSON 배열 종료
+        echo "]" >> data/exchange-rates.json
+        
+        # 데이터 검증
+        DATA_COUNT=$(cat data/exchange-rates.json | jq 'length')
+        echo "Total currencies fetched: $DATA_COUNT"
+        
+        if [ "$DATA_COUNT" -eq 0 ]; then
+          echo "Error: No data fetched"
+          exit 1
+        fi
+        
+        # 히스토리 저장
+        HISTORY_FILENAME="data/history/exchange-rates-${SEARCH_DATE}.json"
+        DAILY_FILENAME="data/daily/exchange-rates-${SEARCH_DATE}.json"
+        
+        cp data/exchange-rates.json "$HISTORY_FILENAME"
+        
+        # 현재 시간 확인 (KST)
+        CURRENT_HOUR=$(TZ='Asia/Seoul' date '+%H')
+        CURRENT_MINUTE=$(TZ='Asia/Seoul' date '+%M')
+        
+        # 15:30 종가 저장 로직 (15:30 ~ 15:44 사이)
+        if [ "$CURRENT_HOUR" -eq 15 ] && [ "$CURRENT_MINUTE" -ge 30 ] && [ "$CURRENT_MINUTE" -lt 45 ]; then
+          echo "🔔 외환시장 종가 시간 (15:30) - 종가 데이터 저장"
+          cp data/exchange-rates.json "$DAILY_FILENAME"
+          echo "✅ 종가 저장 완료: $DAILY_FILENAME"
+          
+          # 종가 메타데이터 생성
+          echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$(TZ='Asia/Seoul' date -Iseconds)\",\"api_source\":\"naver_keb\",\"data_count\":$DATA_COUNT,\"is_closing_price\":true,\"closing_time\":\"15:30 KST\"}" > "data/daily/meta-${SEARCH_DATE}.json"
+          
+        # 종가 파일이 아직 없으면 현재 데이터로 임시 저장
+        elif [ ! -f "$DAILY_FILENAME" ]; then
+          echo "⚠️ 종가 데이터 없음 - 현재 데이터로 임시 저장 (15:30에 갱신 예정)"
+          cp data/exchange-rates.json "$DAILY_FILENAME"
+        else
+          echo "📊 종가 데이터 이미 존재 - 유지 (15:30 종가 기준)"
+        fi
+        
+        # 메타데이터 생성
+        echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$(TZ='Asia/Seoul' date -Iseconds)\",\"api_source\":\"naver_keb\",\"data_count\":$DATA_COUNT,\"search_date\":\"$SEARCH_DATE\"}" > "data/history/meta-${SEARCH_DATE}.json"
+        
+        echo "Data saved successfully - 매일 15분 간격 안정적인 업데이트 완료"
+        
+    - name: Commit and push
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
+        SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d')  # 하이픈 포함 형식
+        CURRENT_HOUR=$(TZ='Asia/Seoul' date '+%H')
+        CURRENT_MINUTE=$(TZ='Asia/Seoul' date '+%M')
+        
+        if [ -f data/exchange-rates.json ] && [ -s data/exchange-rates.json ]; then
+          DATA_LENGTH=$(cat data/exchange-rates.json | jq 'length')
+          if [ "$DATA_LENGTH" -gt 0 ]; then
+            # 고도화 차트용 데이터 통합 및 이평선 계산 실행
+            echo "📊 Consolidating FX history for advanced charts..."
+            node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
+            
+            echo "📈 Generating intra-day data from git history..."
+            node dollar-investment-web/scripts/generate-intraday.cjs
+            
+            git add data/exchange-rates.json
+            git add data/last-update.txt
+            git add data/history/*.json 2>/dev/null || true
+            git add data/daily/*.json 2>/dev/null || true
+            git add data/fx-intraday.json 2>/dev/null || true
+            git add dollar-investment-web/public/data/fx-history.json 2>/dev/null || true
+            git add dollar-investment-web/public/data/fx-intraday.json 2>/dev/null || true
+            
+            if ! git diff --staged --quiet; then
+              COMMIT_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
+              
+              # 종가 시간 여부 체크
+              CLOSING_TAG=""
+              if [ "$CURRENT_HOUR" -eq 15 ] && [ "$CURRENT_MINUTE" -ge 30 ] && [ "$CURRENT_MINUTE" -lt 45 ]; then
+                CLOSING_TAG="🔔 [종가 15:30] "
+              fi
+              
+              git commit -m "${CLOSING_TAG}Update exchange rates from Naver API - $COMMIT_DATE - Current: data/exchange-rates.json - Daily: data/daily/exchange-rates-$SEARCH_DATE.json - Count: $DATA_LENGTH currencies - Source: Naver KEB API (매일 15분 간격)"
+              
+              # 충돌 방지 및 재시도 로직 (최대 3회)
+              for i in 1 2 3; do
+                git pull --rebase origin main || true
+                if git push https://${{ secrets.TRIGGER_TOKEN }}@github.com/giroklabs/exchangealert.git main; then
+                  echo "Exchange rate data updated successfully from Naver API (매일 15분 간격)."
+                  break
+                else
+                  echo "Push failed, retrying in 5 seconds... ($i/3)"
+                  sleep 5
+                fi
+              done
+              echo "Stored $DATA_LENGTH currencies - 매일 24시간 15분 간격 (안정적인 자동 실행)"
+            else
+              echo "No data changes (매일 15분 간격 업데이트)."
+            fi
+          else
+            echo "No valid data to commit."
+          fi
+        else
+          echo "No data file or empty file."
+        fi
+
