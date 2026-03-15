@@ -132,12 +132,15 @@ export function MarketDashboard() {
                         </div>
                     </div>
 
-                    <div className="hidden lg:flex w-48 h-48 items-center justify-center rounded-full border-8 border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                        <div className={`absolute bottom-0 w-full bg-gray-800 dark:bg-gray-200 dark:text-black transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
+                    <div className={`hidden lg:flex w-48 h-48 items-center justify-center rounded-full border-8 relative overflow-hidden transition-colors duration-500 ${data?.forecast?.sentiment === '환율 상승 우세' ? 'border-red-100 dark:border-red-900/20' : data?.forecast?.sentiment === '환율 하락 우세' ? 'border-blue-100 dark:border-blue-900/20' : 'border-gray-100 dark:border-gray-700'}`}>
+                        {/* Down (Blue) layer */}
+                        <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
+                        {/* Up (Red) layer */}
                         <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
+                        
                         <div className="z-10 text-center">
                             <div className="text-sm font-bold text-gray-400">종합 점수</div>
-                            <div className={`text-4xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+                            <div className={`text-4xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-600 dark:text-red-400' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}>
                                 {Math.max(data?.forecast?.upProb || 0, data?.forecast?.downProb || 0)}%
                             </div>
                         </div>
@@ -305,7 +308,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                     <div className={`flex items-center justify-end gap-1 text-xs font-bold mt-1 ${isImpactUp ? 'text-red-500' : isImpactDown ? 'text-blue-500' : 'text-gray-400'}`}>
                         <span>환율 영향:</span>
                         <span className="text-sm">
-                            {isImpactUp ? '▲ 상승' : isImpactDown ? '▼ 하락' : '─ 중립'}
+                            {(indicator.realizedImpact === 'up' || isImpactUp) ? '▲ 상승' : (indicator.realizedImpact === 'down' || isImpactDown) ? '▼ 하락' : '─ 중립'}
                             {indicator.realizedImpact === 'neutral' ? ' (보합)' : ''}
                         </span>
                     </div>
