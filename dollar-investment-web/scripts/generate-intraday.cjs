@@ -2,24 +2,27 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Git 명령어에서 사용할 저장소 루트 기준 파일 경로
+// 1. 경로 설정 (저장소 루트 기준 및 절대 경로)
 const FILE_PATH = 'data/exchange-rates.json'; 
-const OUTPUT_FILE = path.join(__dirname, '../public/data/fx-intraday.json');
-const ROOT_OUTPUT_FILE = path.join(__dirname, '../../data/fx-intraday.json');
+// 웹 배포용 경로 (public/data)
+const WEB_OUTPUT_FILE = path.join(__dirname, '../public/data/fx-intraday.json');
+// 백업용 데이터 경로
+const DATA_OUTPUT_FILE = path.join(__dirname, '../../data/fx-intraday.json');
 
 function getIntradayData() {
-    console.log('🚀 Generating intra-day data from git history...');
+    console.log('🚀 Generating intra-day data...');
 
     const intradayData = [];
 
-    // 0. 현재 폴더에 있는 실시간 데이터 먼저 추가 (Git 히스토리에 반영 전의 최신점)
+    // 0. 현재 메모리에 있는 실시간 데이터 먼저 추가 (Git 히스토리에 반영 전의 최신점)
     try {
         if (fs.existsSync(FILE_PATH)) {
             const content = fs.readFileSync(FILE_PATH, 'utf8');
             const json = JSON.parse(content);
             const usd = json.find(item => item.cur_unit === 'USD');
-            const lastUpdate = fs.existsSync('data/last-update.txt') 
-                ? fs.readFileSync('data/last-update.txt', 'utf8').trim() 
+            const lastUpdateFile = 'data/last-update.txt';
+            const lastUpdate = fs.existsSync(lastUpdateFile) 
+                ? fs.readFileSync(lastUpdateFile, 'utf8').trim() 
                 : new Date().toISOString();
             
             if (usd) {
@@ -31,35 +34,36 @@ function getIntradayData() {
                     timestamp: date.getTime(),
                     isLive: true
                 });
+                console.log(`📍 Added live point: ${lastUpdate} - ${usd.deal_bas_r}`);
             }
         }
     } catch (e) {
-        console.warn('Error reading live rate:', e.message);
+        console.warn('⚠️ Error adding live point:', e.message);
     }
 
+    // 1. Git 히스토리 읽기
     try {
-        // 1. 최근 300개의 커밋 내역 가져오기 (날짜와 해시)
-        const log = execSync(`git log -n 300 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
+        const log = execSync(`git log -n 500 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
         const lines = log.split('\n');
 
         const now = new Date();
-        const isWeekend = now.getDay() === 0 || now.getDay() === 6; // 0: 일요일, 6: 토요일
-        const maxAge = isWeekend ? 72 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
+        const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+        // 주말에는 96시간(4일)까지 넉넉하게 조회
+        const maxAge = isWeekend ? 96 * 60 * 60 * 1000 : 36 * 60 * 60 * 1000;
 
         for (const line of lines) {
+            if (!line.trim()) continue;
             const [hash, dateStr] = line.split('|');
             const date = new Date(dateStr);
 
-            // 주말이면 72시간(금요일 포함), 평일이면 24시간 데이터만 수집
             if (now - date > maxAge) continue;
 
             try {
-                // 특정 커밋 시점의 파일 내용 읽기
                 const content = execSync(`git show ${hash}:${FILE_PATH}`, { encoding: 'utf8' });
                 const json = JSON.parse(content);
                 const usd = json.find(item => item.cur_unit === 'USD');
 
-                if (usd) {
+                if (usd && usd.deal_bas_r) {
                     intradayData.push({
                         time: date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }),
                         fullTime: dateStr,
@@ -68,42 +72,46 @@ function getIntradayData() {
                     });
                 }
             } catch (e) {
-                console.warn(`Skipping commit ${hash}: ${e.message}`);
+                // 커밋에서 파일을 못 가져오는 경우 무시
             }
         }
-        
-        // 데이터가 너무 적으면(예: 월요일 새벽 등) 필터링 조건을 완화하여 300개 다 가져옴
-        if (intradayData.length < 10) {
-            console.log('⚠️ Too few records in timeframe, ignoring age filter...');
-            // 위 루프와 동일하지만 age 필터 없이 재수행하는 로직을 간단히 구현하거나
-            // 그냥 300개 중에서USD 있는 걸 다 넣음
-        }
     } catch (error) {
-        console.error('Error reading git history:', error);
+        console.error('❌ Git log error:', error.message);
+    }
+
+    if (intradayData.length === 0) {
+        console.error('❌ No data points found!');
         return;
     }
 
-    // 시간순 정렬 (과거 -> 현재)
+    // 2. 시간순 정렬 및 중복 제거
     intradayData.sort((a, b) => a.timestamp - b.timestamp);
-
-    // 중복 시간 제거 (같은 분에 여러 번 실행된 경우 최신 것만)
+    
     const uniqueData = [];
     const seenTimes = new Set();
+    // 최신 데이터를 우선하기 위해 역순으로 처리
     for (let i = intradayData.length - 1; i >= 0; i--) {
-        if (!seenTimes.has(intradayData[i].time)) {
+        const key = intradayData[i].time;
+        if (!seenTimes.has(key)) {
             uniqueData.unshift(intradayData[i]);
-            seenTimes.add(intradayData[i].time);
+            seenTimes.add(key);
         }
     }
 
-    const outputDir = path.dirname(OUTPUT_FILE);
-    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    // 3. 파일 저장 (Web용 및 데이터 저장용 모두)
+    const saveFile = (filePath, data) => {
+        try {
+            const dir = path.dirname(filePath);
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+            fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+            console.log(`✅ Saved: ${filePath} (${data.length} pts)`);
+        } catch (err) {
+            console.error(`❌ Save error (${filePath}):`, err.message);
+        }
+    };
 
-    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(uniqueData, null, 2));
-    fs.writeFileSync(ROOT_OUTPUT_FILE, JSON.stringify(uniqueData, null, 2));
-
-    console.log(`✅ Success! Generated ${uniqueData.length} intra-day records.`);
-    console.log(`- Local: ${OUTPUT_FILE}`);
+    saveFile(WEB_OUTPUT_FILE, uniqueData);
+    saveFile(DATA_OUTPUT_FILE, uniqueData);
 }
 
 getIntradayData();
