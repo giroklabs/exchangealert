@@ -82,7 +82,10 @@ const FRED_SERIES = [
 const ECOS_SERIES = [
     { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'M' },
     { id: 'kr-10y', statCode: '721Y001', item1: '010200000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
-    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' }
+    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },
+    { id: 'cds-korea', statCode: '902Y003', item1: '0000140', name: 'CDS 프리미엄', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 부도 위험 지표 (상승 시 환율 상승 압력)', cycle: 'D' },
+    { id: 'sovereign-spread', statCode: '902Y003', item1: '0000147', name: '외평채 가산금리', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 신용 가산금리 (상승 시 자본 유출 위험)', cycle: 'D' },
+    { id: 'short-debt-ratio', statCode: '731Y003', item1: '0000002', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '외환보유액 대비 단기외채 비중 (상승 시 건전성 악화)', cycle: 'Q' }
 ];
 
 async function fetchFromFred(seriesId) {
@@ -308,7 +311,7 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
 2. [환율 추세] 제공된 원/달러 환율의 최근 기술적 흐름(지지/저항, 추세 지속성)을 분석에 포함하세요.
 3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요.
-4. [펀딩·정책] 요인을 고려하여 변동성 확대 여부를 판단하세요.
+4. [펀딩·정책] 블록의 CDS 프리미엄, 가산금리, 단기외채 비중을 통해 한국의 대외 건전성과 펀딩 리스크를 심층 진단하세요.
 
 응답은 전문적이고 분석적인 톤으로 3~4개 단락으로 작성하되, 마크다운 기호(##, **)나 이모지를 절대 사용하지 마세요. 마지막에 "결론: [상승/하락/보합] 우세"라고 명확히 적어주세요.`;
 
@@ -489,7 +492,10 @@ async function main() {
         'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
         'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
-        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] }
+        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] },
+        'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '03-10', value: 32 }, { date: '03-11', value: 34 }, { date: '03-12', value: 35 }, { date: '03-13', value: 35 }] },
+        'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '03-10', value: 38 }, { date: '03-11', value: 40 }, { date: '03-12', value: 42 }, { date: '03-13', value: 42 }] },
+        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q2', value: 37.8 }, { date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] }
     };
 
     for (const item of ECOS_SERIES) {
