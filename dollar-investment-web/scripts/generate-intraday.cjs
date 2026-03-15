@@ -50,6 +50,10 @@ function getIntradayData() {
         const isWeekend = now.getDay() === 0 || now.getDay() === 6;
         // 주말에는 96시간(4일)까지 넉넉하게 조회
         const maxAge = isWeekend ? 96 * 60 * 60 * 1000 : 36 * 60 * 60 * 1000;
+        
+        console.log(`🕒 Current Time: ${now.toISOString()}`);
+        console.log(`🕒 Lookback Period: ${maxAge / (60*60*1000)} hours`);
+        console.log(`🔍 Total Git Commits to check: ${lines.length}`);
 
         for (const line of lines) {
             if (!line.trim()) continue;

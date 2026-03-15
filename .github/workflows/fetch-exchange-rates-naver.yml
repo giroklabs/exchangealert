@@ -1,11 +1,10 @@
 name: Fetch Exchange Rates from Naver (5m)
 
 on:
-  workflow_dispatch:  # 수동 실행 가능
+  workflow_dispatch:
   repository_dispatch:
-    types: [trigger-fetch-naver] # 외부 서비스(cron-job 등)에서 정확한 간격으로 실행하기 위한 웹훅 트리거
+    types: [trigger-fetch-naver]
 
-# 동일한 워크플로우가 겹칠 경우 이전 작업을 취소하고 최신 것만 실행 (안정성 확보)
 concurrency:
   group: fetch-exchange-rates-naver
   cancel-in-progress: true
@@ -15,27 +14,29 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TZ: Asia/Seoul
-    timeout-minutes: 10
+    timeout-minutes: 15
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.TRIGGER_TOKEN || secrets.GITHUB_TOKEN }}
-        fetch-depth: 0 # 히스토리를 모두 가져와야 intraday 그래프(지난 24시간) 작성이 가능합니다.
+        fetch-depth: 0
       
     - name: Create data directories
-      run: |
-        mkdir -p data/history data/daily
+      run: mkdir -p data/history data/daily
       
-    - name: Fetch exchange rates from Naver API (5분 단위 최적화)
+    - name: Fetch and Process
       run: |
-        echo "=== Naver API Exchange Rate Fetch (실시간 5분 간격 단위) ==="
-        KST_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M:%S KST')
-        SEARCH_DATE=$(TZ='Asia/Seoul' date '+%Y-%m-%d')
+        echo "=== Naver API Fetch Start ==="
+        CURRENT_TIME=$(date '+%Y-%m-%dT%H:%M:%S%z')
+        SEARCH_DATE=$(date '+%Y-%m-%d')
         
-        echo "Current KST time: $KST_DATE"
-        echo "Fetching from Naver API (KEB Hana Bank)..."
+        echo "$CURRENT_TIME" > data/last-update.txt
+        
+        # JSON generation with META field to ensure file change every time
+        echo "[" > data/exchange-rates.json
+        echo "{\"cur_unit\":\"META\",\"fetched_at\":\"$CURRENT_TIME\"}" >> data/exchange-rates.json
         
         CURRENCIES=(
           "USD:미국 달러:1" "JPY:일본 엔:100" "EUR:유로:1" "GBP:영국 파운드:1" "CNY:중국 위안:1"
@@ -45,12 +46,6 @@ jobs:
           "KWD:쿠웨이트 디나르:1" "BHD:바레인 디나르:1" "IDR:인도네시아 루피아:100" "BND:브루나이 달러:1" "KRW:한국 원:1"
         )
         
-        CURRENT_TIME=$(TZ='Asia/Seoul' date '+%Y-%m-%dT%H:%M:%S%z')
-        echo "$CURRENT_TIME" > data/last-update.txt
-        
-        echo "[" > data/exchange-rates.json
-        echo "{\"cur_unit\":\"META\",\"fetched_at\":\"$CURRENT_TIME\"}," >> data/exchange-rates.json
-        FIRST=true
         for currency_info in "${CURRENCIES[@]}"; do
           IFS=':' read -r cur_unit cur_nm multiplier <<< "$currency_info"
           response=$(curl -s "https://m.search.naver.com/p/csearch/content/qapirender.nhn?key=calculator&pkid=141&q=환율&where=m&u1=keb&u6=standardUnit&u7=0&u3=$cur_unit&u4=KRW&u8=down&u2=$multiplier")
@@ -63,70 +58,56 @@ jobs:
             customer_buy_formatted=$(printf "%.2f" $customer_buy)
             customer_sell_formatted=$(printf "%.2f" $customer_sell)
             
-            if [ "$FIRST" = true ]; then FIRST=false; else echo "," >> data/exchange-rates.json; fi
-            echo "{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$customer_buy_formatted\",\"tts\":\"$customer_sell_formatted\",\"deal_bas_r\":\"$rate\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
+            echo ",{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$customer_buy_formatted\",\"tts\":\"$customer_sell_formatted\",\"deal_bas_r\":\"$rate\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
           fi
-          sleep 0.1
         done
         echo "]" >> data/exchange-rates.json
         
-        DATA_COUNT=$(cat data/exchange-rates.json | jq 'length')
-        if [ "$DATA_COUNT" -eq 0 ]; then echo "Error: No data fetched"; exit 1; fi
+        # Verify valid JSON
+        if ! jq . data/exchange-rates.json > /dev/null; then
+          echo "❌ Invalid JSON generated!"
+          exit 1
+        fi
         
         cp data/exchange-rates.json "data/history/exchange-rates-${SEARCH_DATE}.json"
         
-        CURRENT_HOUR=$(TZ='Asia/Seoul' date '+%H')
-        CURRENT_MINUTE=$(TZ='Asia/Seoul' date '+%M')
-        if [ "$CURRENT_HOUR" -eq 15 ] && [ "$CURRENT_MINUTE" -ge 30 ] && [ "$CURRENT_MINUTE" -lt 45 ]; then
-          cp data/exchange-rates.json "data/daily/exchange-rates-${SEARCH_DATE}.json"
-          echo "{\"date\":\"$SEARCH_DATE\",\"fetch_time\":\"$CURRENT_TIME\",\"api_source\":\"naver_keb\",\"data_count\":$DATA_COUNT,\"is_closing_price\":true}" > "data/daily/meta-${SEARCH_DATE}.json"
-        elif [ ! -f "data/daily/exchange-rates-${SEARCH_DATE}.json" ]; then
-          cp data/exchange-rates.json "data/daily/exchange-rates-${SEARCH_DATE}.json"
-        fi
+        # Scripts
+        node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
+        node dollar-investment-web/scripts/generate-intraday.cjs
+        node dollar-investment-web/scripts/fetch-news.js
         
-    - name: Commit and push
+    - name: Commit and Push
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        if [ -s data/exchange-rates.json ]; then
-          # 차트 및 뉴스 데이터 업데이트
-          node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
-          node dollar-investment-web/scripts/generate-intraday.cjs
-          node dollar-investment-web/scripts/fetch-news.js
+        git add -A
+        
+        if git diff --staged --quiet; then
+          echo "No changes detected."
+        else
+          COMMIT_TIME=$(date '+%Y-%m-%d %H:%M:%S KST')
+          git commit -m "data: [LIVE-SYNC] Exchange rates update ($COMMIT_TIME)"
           
-          git add data/ last-update.txt dollar-investment-web/public/data/ 2>/dev/null || true
-          
-          if ! git diff --staged --quiet; then
-            COMMIT_TIME=$(TZ='Asia/Seoul' date '+%Y-%m-%d %H:%M KST')
-            git commit -m "Update exchange rates (Naver 5m) - $COMMIT_TIME"
-            
-            # 충돌 방지 및 PAT 기반 푸시
-            PUSHED=false
-            for i in 1 2 3; do
-              git pull --rebase origin main || true
-              if git push origin main; then
-                echo "✅ Success: Exchange rate updated."
-                PUSHED=true
-                break
-              else
-                echo "⚠️ Push failed, retrying... ($i/3)"
-                sleep 5
-              fi
-            done
-            
-            if [ "$PUSHED" = true ]; then
-              # 배포 워크플로우 강제 트리거
-              echo "🚀 Triggering maintenance deployment..."
-              TOKEN="${{ secrets.TRIGGER_TOKEN }}"
-              if [ -z "$TOKEN" ]; then TOKEN="${{ secrets.GITHUB_TOKEN }}"; fi
-              
-              curl -X POST -H "Authorization: token $TOKEN" \
-                -H "Accept: application/vnd.github.v3+json" \
-                "https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches" \
-                -d '{"ref":"main"}' || true
+          PUSHED=false
+          for i in 1 2 3; do
+            git pull --rebase origin main || true
+            if git push origin main; then
+              echo "✅ Success: Data pushed."
+              PUSHED=true
+              break
             fi
-          else
-            echo "No changes in exchange rates."
+            sleep 5
+          done
+          
+          if [ "$PUSHED" = true ]; then
+            echo "🚀 Triggering Deploy..."
+            TOKEN="${{ secrets.TRIGGER_TOKEN }}"
+            if [ -z "$TOKEN" ]; then TOKEN="${{ secrets.GITHUB_TOKEN }}"; fi
+            
+            curl -X POST -H "Authorization: token $TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches" \
+              -d '{"ref":"main"}' || true
           fi
         fi

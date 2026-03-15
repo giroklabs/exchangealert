@@ -16,9 +16,7 @@ export interface FXIntradayData {
 export async function fetchFXHistoryData(): Promise<FXHistoryData[]> {
     try {
         const timestamp = new Date().getTime();
-        const url = import.meta.env.DEV
-            ? `/exchangealert/data/fx-history.json?t=${timestamp}`
-            : `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/fx-history.json?t=${timestamp}`;
+        const url = `/exchangealert/data/fx-history.json?t=${timestamp}`;
 
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
@@ -34,9 +32,7 @@ export async function fetchFXHistoryData(): Promise<FXHistoryData[]> {
 export async function fetchFXIntradayData(): Promise<FXIntradayData[]> {
     try {
         const timestamp = new Date().getTime();
-        const url = import.meta.env.DEV
-            ? `/exchangealert/data/fx-intraday.json?t=${timestamp}`
-            : `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/fx-intraday.json?t=${timestamp}`;
+        const url = `/exchangealert/data/fx-intraday.json?t=${timestamp}`;
 
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error('Failed to load intraday data');
