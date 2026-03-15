@@ -104,6 +104,23 @@ async function fetchFromFred(seriesId) {
     });
 }
 
+// --- 모델 고도화 유틸리티 ---
+function calculateZScore(value, history) {
+    if (!history || history.length < 5) return 0;
+    const values = history.map(h => h.value);
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+    const stdDev = Math.sqrt(variance);
+    return stdDev === 0 ? 0 : (value - mean) / stdDev;
+}
+
+function getFreshnessMultiplier(cycle) {
+    if (cycle === 'realtime' || cycle === 'D') return 1.2; // 실시간/일간 데이터 우선
+    if (cycle === 'M') return 0.8; // 월간 데이터 감쇠
+    if (cycle === 'Q') return 0.5; // 분기 데이터 대폭 감쇠
+    return 1.0;
+}
+
 function summarizeByBlock(indicators) {
     const summary = {};
     Object.values(FACTOR_BLOCKS).forEach(block => {
@@ -428,12 +445,17 @@ async function main() {
     console.log('🚀 2026년 실시간 데이터 수집 시작...');
     const indicators = [];
     const kisToken = await getKisAccessToken();
-    let upScore = 0, downScore = 0;
+    // 블록별 점수 합산용 (정규화용)
+    const blockScores = {
+        'rates-dollar': { up: 0, down: 0 },
+        'risk': { up: 0, down: 0 },
+        'assets': { up: 0, down: 0 },
+        'funding-policy': { up: 0, down: 0 }
+    };
 
     for (const s of FRED_SERIES) {
         let obs = await fetchFromFred(s.fredId || s.id);
 
-        // 🚀 실시간 보정: Yahoo Finance 등을 통해 지연 데이터 보완
         if (s.realtimeSymbol) {
             const rtObs = await fetchFromYahooFinance(s.realtimeSymbol);
             if (rtObs && rtObs.length > 0) {
@@ -451,20 +473,26 @@ async function main() {
         const val = obs.length > 0 ? obs[0].value : '0';
         const numVal = parseFloat(val.replace(/,/g, ''));
         const prevVal = obs.length > 1 ? parseFloat(obs[1].value.replace(/,/g, '')) : numVal;
-
-        // 정밀한 추세 계산 (보합 포함)
         const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
 
-        // 1. 기본 배경 압력 (지표의 본질적인 성격 반영)
-        const baseWeight = 0.5;
-        if (s.impact === 'up') upScore += baseWeight;
-        else if (s.impact === 'down') downScore += baseWeight;
+        const history = obs.slice(0, 10).reverse().map(o => ({ date: o.date, value: parseFloat(o.value) }));
+        
+        // --- 고도화 로직 적용 ---
+        const zScore = calculateZScore(numVal, history);
+        const freshness = getFreshnessMultiplier(s.realtimeSymbol ? 'realtime' : 'D');
+        
+        // 변동 강도 반영 (Z-Score가 클수록 점수 가중)
+        const volatilityWeight = Math.min(Math.abs(zScore), 2.0); // 최대 2배까지만
+        const finalWeight = (1.0 + volatilityWeight) * freshness;
 
-        // 2. 모멘텀 점수 (최근 추세 반영)
-        const momentumWeight = 1.0;
-        if (trend !== 'neutral') {
-            if (s.impact === 'up') trend === 'up' ? upScore += momentumWeight : downScore += momentumWeight;
-            else trend === 'up' ? downScore += momentumWeight : upScore += momentumWeight;
+        if (s.impact === 'up') {
+            blockScores[s.block].up += 0.5 * finalWeight;
+            if (trend === 'up') blockScores[s.block].up += 1.0 * finalWeight;
+            else if (trend === 'down') blockScores[s.block].down += 1.0 * finalWeight;
+        } else {
+            blockScores[s.block].down += 0.5 * finalWeight;
+            if (trend === 'up') blockScores[s.block].down += 1.0 * finalWeight;
+            else if (trend === 'down') blockScores[s.block].up += 1.0 * finalWeight;
         }
 
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
@@ -476,13 +504,8 @@ async function main() {
             displayVal = yoy.toFixed(1);
         }
 
-        const history = obs.slice(0, 10).reverse().map(o => ({
-            date: o.date,
-            value: parseFloat(o.value)
-        }));
-
         indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history });
-        console.log(`✅ [FRED/RT] ${s.name}: ${displayVal}`);
+        console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (Z:${zScore.toFixed(2)})`);
     }
 
     // API 키 누락 시 UI가 텅 비어보이지 않도록 시각적 그래프용 가상 히스토리(history) 데이터 포함
@@ -501,50 +524,46 @@ async function main() {
 
     for (const item of ECOS_SERIES) {
         const rows = await fetchFromEcos(item);
-
-        let rawVal, val, trend, displayVal, history;
+        let val, trend, displayVal, history;
 
         if (rows && rows.length > 0) {
-            rawVal = rows[0].DATA_VALUE;
-            val = parseFloat(String(rawVal).replace(/,/g, ''));
+            val = parseFloat(String(rows[0].DATA_VALUE).replace(/,/g, ''));
             trend = rows.length > 1 ? (val > parseFloat(rows[1].DATA_VALUE) ? 'up' : (val < parseFloat(rows[1].DATA_VALUE) ? 'down' : 'neutral')) : 'neutral';
             displayVal = val.toLocaleString();
-
-            if (item.id === 'kr-cpi' && rows.length > 12) {
-                const yoy = ((val / parseFloat(rows[12].DATA_VALUE)) - 1) * 100;
-                displayVal = yoy.toFixed(1);
-            }
-
-            history = rows.slice(0, 10).map(r => ({
-                date: r.TIME,
-                value: parseFloat(r.DATA_VALUE)
-            }));
+            history = rows.slice(0, 10).map(r => ({ date: r.TIME, value: parseFloat(r.DATA_VALUE) }));
         } else {
-            // ECOS API 키 누락 또는 실패 시 하드코딩된 fallback 데이터 사용
             const fallback = fallbacks[item.id];
-            rawVal = fallback.value;
-            val = parseFloat(String(rawVal).replace(/,/g, ''));
+            val = parseFloat(String(fallback.value).replace(/,/g, ''));
             trend = fallback.trend;
-            displayVal = rawVal;
+            displayVal = fallback.value;
             history = fallback.history;
         }
 
-        // 1. 기본 배경 압력
-        const ecosBaseWeight = 0.6;
-        if (item.impact === 'up') upScore += ecosBaseWeight;
-        else if (item.impact === 'down') downScore += ecosBaseWeight;
+        // --- 고도화 로직 적용 ---
+        const zScore = calculateZScore(val, history);
+        const freshness = getFreshnessMultiplier(item.cycle);
+        const volatilityWeight = Math.min(Math.abs(zScore), 1.5);
+        let finalWeight = (1.0 + volatilityWeight) * freshness;
 
-        // 2. 모멘텀 점수
-        if (trend !== 'neutral') {
-            if (item.impact === 'up') trend === 'up' ? upScore += 0.8 : downScore += 0.8;
-            else trend === 'up' ? downScore += 0.8 : upScore += 0.8;
+        // 임계값(Threshold) 기반 특수 가중치
+        if (item.id === 'cds-korea' && val > 40) finalWeight *= 1.5; // CDS 40bp 돌파 시 리스크 가중
+        if (item.id === 'short-debt-ratio' && val > 40) finalWeight *= 1.3; // 단기외채 40% 돌파 시 가중
+
+        if (item.impact === 'up') {
+            blockScores[item.block].up += 0.6 * finalWeight;
+            if (trend === 'up') blockScores[item.block].up += 0.8 * finalWeight;
+            else if (trend === 'down') blockScores[item.block].down += 0.8 * finalWeight;
+        } else {
+            blockScores[item.block].down += 0.6 * finalWeight;
+            if (trend === 'up') blockScores[item.block].down += 0.8 * finalWeight;
+            else if (trend === 'down') blockScores[item.block].up += 0.8 * finalWeight;
         }
 
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
             ((item.impact === 'up' && trend === 'up') || (item.impact === 'down' && trend === 'down') ? 'up' : 'down');
 
         indicators.push({ ...item, value: displayVal, trend, realizedImpact, history });
-        console.log(`✅ [ECOS] ${item.name}: ${displayVal}`);
+        console.log(`✅ [ECOS] ${item.name}: ${displayVal} (Z:${zScore.toFixed(2)})`);
     }
 
 
@@ -560,8 +579,8 @@ async function main() {
         const prev = investorTrend.length > 1 ? investorTrend[1].value : latest;
         const trend = latest > 0 ? 'up' : 'down';
 
-        if (latest > 0) downScore += 1.5;
-        else if (latest < 0) upScore += 1.5;
+        if (latest > 0) blockScores['assets'].down += 1.5;
+        else if (latest < 0) blockScores['assets'].up += 1.5;
 
         const realizedImpact = latest < 0 ? 'up' : (latest > 100 ? 'down' : 'neutral');
 
@@ -611,11 +630,11 @@ async function main() {
         const prevDiff = (prevUs - prevKr).toFixed(2);
         const trend = diff > prevDiff ? 'up' : (diff < prevDiff ? 'down' : 'neutral');
 
+        // 금리차는 가장 핵심 지표이므로 블록 점수에 강력히 반영
         if (trend !== 'neutral') {
-            trend === 'up' ? upScore += 1.2 : downScore += 1.2;
-        } else {
-            // 중립이어도 금리차 수준 자체가 높으면 상승 압력으로 간주 (+0.5)
-            if (parseFloat(diff) > 0.5) upScore += 0.5;
+            trend === 'up' ? blockScores['rates-dollar'].up += 2.5 : blockScores['rates-dollar'].down += 2.5;
+        } else if (parseFloat(diff) > 0.5) {
+            blockScores['rates-dollar'].up += 1.0;
         }
 
         indicators.push({
@@ -636,6 +655,24 @@ async function main() {
         });
         console.log(`✅ [Calc] 한미 금리차: ${diff}%p (추세: ${trend})`);
     }
+
+    // --- 최종 점수 정규화 및 블록 간 밸런싱 ---
+    let upScore = 0;
+    let downScore = 0;
+
+    Object.keys(blockScores).forEach(blockId => {
+        const b = blockScores[blockId];
+        const blockTotal = b.up + b.down;
+        
+        // 블록 내 점수가 너무 크면 감쇠 적용 (중복 계산 및 다중공선성 방지)
+        // 로그 스케일을 활용해 지표가 많아져도 점수가 무한히 커지지 않게 함
+        const dampenedUp = b.up > 0 ? Math.log1p(b.up) * 5 : 0;
+        const dampenedDown = b.down > 0 ? Math.log1p(b.down) * 5 : 0;
+        
+        upScore += dampenedUp;
+        downScore += dampenedDown;
+        console.log(`📊 [Block] ${blockId}: Up:${dampenedUp.toFixed(1)}, Down:${dampenedDown.toFixed(1)}`);
+    });
 
     // 노이즈 점수 (극단적 쏠림 방지)
     let upScoreFinal = upScore + 0.5;
