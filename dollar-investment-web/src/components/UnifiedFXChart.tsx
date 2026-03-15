@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
     LineChart,
     Line,
@@ -31,6 +31,7 @@ interface ChartDataItem {
 
 export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean }) {
     const { theme } = useTheme();
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [historyData, setHistoryData] = useState<FXHistoryData[]>([]);
     const [intradayData, setIntradayData] = useState<FXIntradayData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -59,6 +60,14 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         };
         loadAllData();
     }, []);
+
+    // 1D 모드일 때 최신 데이터(오른쪽)로 자동 스크롤
+    useEffect(() => {
+        if (!isLoading && period === '1D' && scrollContainerRef.current) {
+            const container = scrollContainerRef.current;
+            container.scrollLeft = container.scrollWidth;
+        }
+    }, [isLoading, period, intradayData]);
 
     const chartData = useMemo<ChartDataItem[]>(() => {
         if (period === '1D') {
@@ -131,10 +140,37 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         );
     }
 
+    // 데이터 포인트 개수에 따라 동적 너비 계산 (최소 1200px 이상 확보하여 스크롤 유도)
+    const dynamicWidth = period === '1D' 
+        ? Math.max(1200, chartData.length * 15) 
+        : '100%';
+
     return (
         <div className={`p-6 ${!isEmbedded ? `rounded-2xl shadow-xl border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}` : ''}`}>
+            <style>{`
+                .chart-scrollbar::-webkit-scrollbar {
+                    height: 6px;
+                }
+                .chart-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .chart-scrollbar::-webkit-scrollbar-thumb {
+                    background: ${isDark ? '#4b5563' : '#d1d5db'};
+                    border-radius: 10px;
+                }
+                .chart-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: ${isDark ? '#6b7280' : '#9ca3af'};
+                }
+            `}</style>
+
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div>
+                <div className="flex items-center gap-2">
+                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                        {period === '1D' ? '실시간 5분 단위' : '일봉 기준'}
+                    </span>
+                    {period === '1D' && (
+                        <span className="text-[10px] text-gray-400 animate-pulse">● 실시간 추적 중</span>
+                    )}
                 </div>
 
                 <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-xl">
@@ -185,111 +221,118 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                 </div>
             )}
 
-            <div className="h-[350px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    {period === '1D' ? (
-                        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                            <defs>
-                                <linearGradient id="colorRateUni" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor={accentColor} stopOpacity={0.2} />
-                                    <stop offset="95%" stopColor={accentColor} stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
-                            <XAxis
-                                dataKey="label"
-                                stroke={textColor}
-                                fontSize={11}
-                                tickLine={false}
-                                axisLine={false}
-                                minTickGap={30}
-                            />
-                            <YAxis
-                                domain={[yMin, yMax]}
-                                orientation="right"
-                                stroke={textColor}
-                                fontSize={11}
-                                tickLine={false}
-                                axisLine={false}
-                                tickFormatter={(v) => v.toLocaleString()}
-                            />
-                            <Tooltip
-                                contentStyle={{
-                                    backgroundColor: isDark ? '#1f2937' : '#ffffff',
-                                    border: 'none',
-                                    borderRadius: '12px',
-                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                                    color: isDark ? '#ffffff' : '#000000'
-                                }}
-                                formatter={(value: number) => [`${value.toLocaleString()} 원`, '환율']}
-                                labelStyle={{ color: textColor, marginBottom: '4px' }}
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="rate"
-                                stroke={accentColor}
-                                strokeWidth={3}
-                                fillOpacity={1}
-                                fill="url(#colorRateUni)"
-                                isAnimationActive={true}
-                            />
-                        </AreaChart>
-                    ) : (
-                        <LineChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
-                            <XAxis
-                                dataKey="label"
-                                stroke={textColor}
-                                fontSize={11}
-                                tickLine={false}
-                                axisLine={false}
-                                minTickGap={30}
-                            />
-                            <YAxis
-                                domain={[yMin, yMax]}
-                                orientation="right"
-                                stroke={textColor}
-                                fontSize={11}
-                                tickLine={false}
-                                axisLine={false}
-                                tickFormatter={(v) => v.toLocaleString()}
-                            />
-                            <Tooltip
-                                contentStyle={{
-                                    backgroundColor: isDark ? '#1f2937' : '#ffffff',
-                                    border: 'none',
-                                    borderRadius: '12px',
-                                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                                    color: isDark ? '#ffffff' : '#000000'
-                                }}
-                                formatter={(value: number) => [`${value.toLocaleString()} 원`, '']}
-                                labelStyle={{ color: textColor, marginBottom: '4px' }}
-                            />
-                            <Line
-                                type="monotone"
-                                dataKey="rate"
-                                stroke={accentColor}
-                                strokeWidth={3}
-                                dot={false}
-                                isAnimationActive={true}
-                            />
-                            {visibleLines.ma5 && (
-                                <Line type="monotone" dataKey="ma5" stroke="#ef4444" strokeWidth={1.5} dot={false} strokeDasharray="3 3" />
-                            )}
-                            {visibleLines.ma20 && (
-                                <Line type="monotone" dataKey="ma20" stroke="#f97316" strokeWidth={1.5} dot={false} strokeDasharray="3 3" />
-                            )}
-                            {visibleLines.ma60 && (
-                                <Line type="monotone" dataKey="ma60" stroke="#22c55e" strokeWidth={1.5} dot={false} strokeDasharray="3 3" />
-                            )}
-                        </LineChart>
-                    )}
-                </ResponsiveContainer>
+            <div 
+                ref={scrollContainerRef}
+                className="h-[350px] w-full overflow-x-auto overflow-y-hidden chart-scrollbar"
+            >
+                <div style={{ width: dynamicWidth, height: '100%', minHeight: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        {period === '1D' ? (
+                            <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorRateUni" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor={accentColor} stopOpacity={0.2} />
+                                        <stop offset="95%" stopColor={accentColor} stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
+                                <XAxis
+                                    dataKey="label"
+                                    stroke={textColor}
+                                    fontSize={11}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    minTickGap={30}
+                                />
+                                <YAxis
+                                    domain={[yMin, yMax]}
+                                    orientation="right"
+                                    stroke={textColor}
+                                    fontSize={11}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickFormatter={(v) => v.toLocaleString()}
+                                    width={45} // Y축 너비 고정
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                                        border: 'none',
+                                        borderRadius: '12px',
+                                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                                        color: isDark ? '#ffffff' : '#000000'
+                                    }}
+                                    formatter={(value: number) => [`${value.toLocaleString()} 원`, '환율']}
+                                    labelStyle={{ color: textColor, marginBottom: '4px' }}
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="rate"
+                                    stroke={accentColor}
+                                    strokeWidth={3}
+                                    fillOpacity={1}
+                                    fill="url(#colorRateUni)"
+                                    isAnimationActive={true}
+                                />
+                            </AreaChart>
+                        ) : (
+                            <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
+                                <XAxis
+                                    dataKey="label"
+                                    stroke={textColor}
+                                    fontSize={11}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    minTickGap={30}
+                                />
+                                <YAxis
+                                    domain={[yMin, yMax]}
+                                    orientation="right"
+                                    stroke={textColor}
+                                    fontSize={11}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickFormatter={(v) => v.toLocaleString()}
+                                    width={45}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                                        border: 'none',
+                                        borderRadius: '12px',
+                                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                                        color: isDark ? '#ffffff' : '#000000'
+                                    }}
+                                    formatter={(value: number) => [`${value.toLocaleString()} 원`, '']}
+                                    labelStyle={{ color: textColor, marginBottom: '4px' }}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="rate"
+                                    stroke={accentColor}
+                                    strokeWidth={3}
+                                    dot={false}
+                                    isAnimationActive={true}
+                                />
+                                {visibleLines.ma5 && (
+                                    <Line type="monotone" dataKey="ma5" stroke="#ef4444" strokeWidth={1.5} dot={false} strokeDasharray="3 3" />
+                                )}
+                                {visibleLines.ma20 && (
+                                    <Line type="monotone" dataKey="ma20" stroke="#f97316" strokeWidth={1.5} dot={false} strokeDasharray="3 3" />
+                                )}
+                                {visibleLines.ma60 && (
+                                    <Line type="monotone" dataKey="ma60" stroke="#22c55e" strokeWidth={1.5} dot={false} strokeDasharray="3 3" />
+                                )}
+                            </LineChart>
+                        )}
+                    </ResponsiveContainer>
+                </div>
             </div>
 
             <div className={`mt-6 p-4 rounded-xl text-[11px] leading-relaxed italic ${isDark ? 'bg-gray-900/50 text-gray-500' : 'bg-gray-50 text-gray-400'}`}>
                 {period === '1D' ? (
-                    <p>📍 마지막 업데이트: {chartData.length > 0 ? chartData[chartData.length - 1].fullDate : '-'}</p>
+                    <p>📍 <b>Tip:</b> 그래프를 좌우로 드래그하여 과거 데이터를 확인할 수 있습니다. 가장 오른쪽이 최신 데이터입니다.</p>
                 ) : (
                     <p>💡 <b>Tip:</b> 이동평균선은 가격 추세를 보여줍니다. 단기평균선(MA5)이 장기평균선(MA60)을 상향 돌파하면 강세 신호로 해석되기도 합니다.</p>
                 )}
