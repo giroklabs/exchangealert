@@ -11,6 +11,7 @@ import { UserProfile } from './components/UserProfile';
 import { BackupManager } from './components/BackupManager';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
 import { CommunityBoard } from './components/CommunityBoard';
+import { FXHistoryTimeline } from './components/FXHistoryTimeline';
 import { fetchCurrentExchangeRate, getCurrentRateValue, fetchLastUpdateTime } from './services/exchangeRateService';
 import logo from './assets/logo.png';
 import './App.css';
@@ -50,6 +51,7 @@ function App() {
     { id: 'fx-profit', label: '환차익 계산기' },
     { id: 'news', label: '환율 뉴스' },
     { id: 'community', label: '커뮤니티' },
+    { id: 'history', label: '환율 연혁' },
     // { id: 'about', label: '소개' }, // 임시 숨김 처리
   ];
 
@@ -105,6 +107,8 @@ function App() {
             <ExchangeRateNews />
           ) : activeTab === 'community' ? (
             <CommunityBoard />
+          ) : activeTab === 'history' ? (
+            <FXHistoryTimeline />
           ) : (
             <MarketDashboard />
           )}
