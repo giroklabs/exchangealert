@@ -345,14 +345,19 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                             <Tooltip
                                 contentStyle={{
                                     backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
-                                    border: 'none',
+                                    border: theme === 'dark' ? '1px solid #374151' : '1px solid #f3f4f6',
                                     borderRadius: '8px',
-                                    fontSize: '10px',
-                                    padding: '4px 8px'
+                                    fontSize: '11px',
+                                    padding: '8px',
+                                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
                                 }}
-                                itemStyle={{ color: chartColor, fontWeight: 'bold' }}
-                                labelStyle={{ display: 'none' }}
-                                cursor={{ stroke: theme === 'dark' ? '#374151' : '#e5e7eb', strokeWidth: 1 }}
+                                itemStyle={{ color: chartColor, fontWeight: 'bold', fontSize: '12px' }}
+                                labelStyle={{ 
+                                    color: theme === 'dark' ? '#9ca3af' : '#6b7280',
+                                    marginBottom: '4px',
+                                    fontSize: '10px'
+                                }}
+                                cursor={{ stroke: theme === 'dark' ? '#4b5563' : '#e5e7eb', strokeWidth: 1 }}
                             />
                             <Area
                                 type="monotone"
