@@ -167,9 +167,32 @@ async function fetchMarketInvestorTrend(token) {
 
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
-        console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜁니다.");
+        console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜜니다.");
         return null;
     }
+
+    const tokenPath = path.join(__dirname, '..', '.kis-token.json');
+    
+    // 1. 캐시된 토큰 확인
+    try {
+        if (fs.existsSync(tokenPath)) {
+            const cached = JSON.parse(fs.readFileSync(tokenPath, 'utf8'));
+            const now = Date.now();
+            const issuedAt = cached.issued_at || 0;
+            const hoursPassed = (now - issuedAt) / (1000 * 60 * 60);
+
+            // 23시간 이내면 재사용 (보수적으로 23시간으로 설정)
+            if (hoursPassed < 23) {
+                console.log(`✅ KIS 토큰 재사용 중 (발급 후 ${Math.round(hoursPassed)}시간 경과)`);
+                return cached.access_token;
+            }
+        }
+    } catch (e) {
+        console.warn("⚠️ 토큰 캐시 읽기 실패, 새로 발급합니다.");
+    }
+
+    // 2. 새 토큰 발급
+    console.log("🚀 KIS 신규 토큰 발급 요청 중...");
     try {
         const res = await fetch(`${KIS_BASE_URL}/oauth2/tokenP`, {
             method: 'POST',
@@ -181,11 +204,19 @@ async function getKisAccessToken() {
             })
         });
         const data = await res.json();
-        return data.access_token;
+        
+        if (data.access_token) {
+            // 토큰 저장 (발급 시간 포함)
+            fs.writeFileSync(tokenPath, JSON.stringify({
+                access_token: data.access_token,
+                issued_at: Date.now()
+            }, null, 2));
+            return data.access_token;
+        }
     } catch (e) {
         console.error("❌ KIS 토큰 발급 에러:", e.message);
-        return null;
     }
+    return null;
 }
 
 async function fetchDomesticStockFromKIS(code, token) {

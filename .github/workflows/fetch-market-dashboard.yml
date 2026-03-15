@@ -34,6 +34,14 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Cache KIS Token
+        uses: actions/cache@v4
+        with:
+          path: dollar-investment-web/.kis-token.json
+          key: kis-token-${{ github.run_id }}
+          restore-keys: |
+            kis-token-
+
       - name: Fetch Market Indicators
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
