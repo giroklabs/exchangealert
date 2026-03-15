@@ -87,7 +87,9 @@ export function MarketDashboard() {
                         <span>원/달러 환율 실시간 통합 분석</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        {!isChartExpanded && (
+                        {isChartExpanded ? (
+                            <span className="text-xs font-medium text-gray-400">숨기기</span>
+                        ) : (
                             <span className="text-xs font-medium text-blue-500 animate-pulse">상세 데이터 보기</span>
                         )}
                         <span className={`transform transition-transform duration-300 ${isChartExpanded ? 'rotate-180' : ''}`}>

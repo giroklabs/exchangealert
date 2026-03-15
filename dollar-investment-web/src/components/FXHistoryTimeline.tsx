@@ -150,18 +150,6 @@ export function FXHistoryTimeline() {
                     </div>
                 ))}
             </div>
-
-            {/* 정보 출처 */}
-            <div className={`p-6 rounded-3xl flex items-start gap-4 ${isDark ? 'bg-gray-900/40 text-gray-500' : 'bg-gray-50 text-gray-400'}`}>
-                <span className="text-2xl mt-0.5">ℹ️</span>
-                <div className="space-y-1">
-                    <p className="text-xs leading-relaxed font-bold">참조 안내</p>
-                    <p className="text-[11px] leading-relaxed font-medium opacity-80">
-                        본 데이터는 한국은행(ECOS), 미 연방준비제도(Fed), 주요 외신 보도 및 시장 분석 자료를 바탕으로 재구성되었습니다. <br />
-                        환율 수치는 시장 상황(종가/장중 최고가) 및 소스에 따라 일부 차이가 있을 수 있으며, 과거의 흐름을 파악하기 위한 참고용으로만 활용해 주시기 바랍니다.
-                    </p>
-                </div>
-            </div>
         </div>
     );
 }

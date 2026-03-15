@@ -8,7 +8,7 @@ import { Tabs } from './components/Tabs';
 import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
 import { UserProfile } from './components/UserProfile';
-import { BackupManager } from './components/BackupManager';
+// import { BackupManager } from './components/BackupManager';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
 import { CommunityBoard } from './components/CommunityBoard';
 import { FXHistoryTimeline } from './components/FXHistoryTimeline';
@@ -117,7 +117,7 @@ function App() {
         <footer className={`mt-20 py-10 border-t ${theme === 'dark' ? 'border-gray-800 text-gray-500' : 'border-gray-100 text-gray-400'} text-center text-xs`}>
           © 2026 GirokLabs. All rights reserved.
         </footer>
-        <BackupManager />
+        {/* <BackupManager /> */}
       </div>
     </div>
   );
