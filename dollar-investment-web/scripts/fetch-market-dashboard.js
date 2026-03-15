@@ -288,7 +288,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-async function fetchAiAnalysis(indicators) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = []) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -301,10 +301,14 @@ async function fetchAiAnalysis(indicators) {
 분석 대상 지표:
 ${blockSummary}
 
+원/달러 환율 최근 추세 (최신순):
+${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
+
 분석 가이드:
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
-2. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요.
-3. [펀딩·정책] 요인을 고려하여 변동성 확대 여부를 판단하세요.
+2. [환율 추세] 제공된 원/달러 환율의 최근 기술적 흐름(지지/저항, 추세 지속성)을 분석에 포함하세요.
+3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요.
+4. [펀딩·정책] 요인을 고려하여 변동성 확대 여부를 판단하세요.
 
 응답은 전문적이고 분석적인 톤으로 3~4개 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 명확히 적어주세요.`;
 
@@ -633,7 +637,8 @@ async function main() {
     const downProb = 100 - upProb;
 
     console.log('🤖 AI 시장 분석 생성 중...');
-    const aiAnalysis = await fetchAiAnalysis(indicators);
+    const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
+    const aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
     let sentiment = '보통';
