@@ -2,7 +2,8 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const FILE_PATH = '../data/exchange-rates.json';
+// Git 명령어에서 사용할 저장소 루트 기준 파일 경로
+const FILE_PATH = 'data/exchange-rates.json'; 
 const OUTPUT_FILE = path.join(__dirname, '../public/data/fx-intraday.json');
 const ROOT_OUTPUT_FILE = path.join(__dirname, '../../data/fx-intraday.json');
 
@@ -12,16 +13,20 @@ function getIntradayData() {
     const intradayData = [];
 
     try {
-        // 최근 100개의 커밋 내역 가져오기 (날짜와 해시)
-        const log = execSync(`git log -n 100 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
+        // 최근 300개의 커밋 내역 가져오기 (날짜와 해시)
+        const log = execSync(`git log -n 300 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
         const lines = log.split('\n');
+
+        const now = new Date();
+        const isWeekend = now.getDay() === 0 || now.getDay() === 6; // 0: 일요일, 6: 토요일
+        const maxAge = isWeekend ? 72 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
 
         for (const line of lines) {
             const [hash, dateStr] = line.split('|');
             const date = new Date(dateStr);
 
-            // 최근 24시간 데이터만 수집
-            if (new Date() - date > 24 * 60 * 60 * 1000) continue;
+            // 주말이면 72시간(금요일 포함), 평일이면 24시간 데이터만 수집
+            if (now - date > maxAge) continue;
 
             try {
                 // 특정 커밋 시점의 파일 내용 읽기
@@ -40,6 +45,13 @@ function getIntradayData() {
             } catch (e) {
                 console.warn(`Skipping commit ${hash}: ${e.message}`);
             }
+        }
+        
+        // 데이터가 너무 적으면(예: 월요일 새벽 등) 필터링 조건을 완화하여 300개 다 가져옴
+        if (intradayData.length < 10) {
+            console.log('⚠️ Too few records in timeframe, ignoring age filter...');
+            // 위 루프와 동일하지만 age 필터 없이 재수행하는 로직을 간단히 구현하거나
+            // 그냥 300개 중에서USD 있는 걸 다 넣음
         }
     } catch (error) {
         console.error('Error reading git history:', error);

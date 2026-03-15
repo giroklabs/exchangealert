@@ -116,61 +116,53 @@ export function ExchangeRateNews() {
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     const fetchNews = useCallback(async (query: string, forceRefresh: boolean = false) => {
-        // 1. 캐시 확인
+        // 1. 캐시 확인 (메모리)
         if (!forceRefresh) {
             const cached = newsCache[query];
-            if (cached) {
-                // 아직 로딩 중인 프로미스(Pre-fetch 등)가 있는 경우
-                if (cached.promise) {
-                    setIsLoading(true);
-                    try {
-                        const parsed = await cached.promise;
-                        if (parsed && parsed.length > 0) {
-                            setNews(parsed);
-                            setLastUpdated(newsCache[query]?.timestamp || new Date());
-                            return; // 프로미스 대기 완료, 조기 종료
-                        }
-                    } catch (e) {
-                        // pre-fetch 실패 시 진행 (아래의 일반 fetch로 재시도)
-                    } finally {
-                        setIsLoading(false);
-                    }
-                }
-                // 유효한 데이터가 단위 시간 내에 있는 경우 즉시 반환 (캐싱)
-                else if (cached.data.length > 0 && (new Date().getTime() - cached.timestamp.getTime() < CACHE_EXPIRY_MS)) {
-                    setNews(cached.data);
-                    setLastUpdated(cached.timestamp);
-                    return; // 바로 렌더링, 네트워크 요청 생략
-                }
+            if (cached && cached.data.length > 0 && (new Date().getTime() - cached.timestamp.getTime() < CACHE_EXPIRY_MS)) {
+                setNews(cached.data);
+                setLastUpdated(cached.timestamp);
+                return;
             }
         }
 
-        // 2. 처음 가져오거나 캐시가 만료된 경우 API 요청
         setIsLoading(true);
         setError(null);
+
         try {
+            // [최적화] 1순위: GitHub Actions로 수집된 정적 JSON 파일 확인 (매우 빠름)
+            const staticUrl = `${import.meta.env.BASE_URL || '/'}data/news.json?t=${Date.now()}`;
+            const staticRes = await fetch(staticUrl);
+            
+            if (staticRes.ok) {
+                const staticData = await staticRes.json();
+                if (staticData.news && staticData.news[query]) {
+                    const parsedNews = staticData.news[query];
+                    setNews(parsedNews);
+                    setLastUpdated(new Date(staticData.lastUpdate));
+                    
+                    // 메모리 캐시 업데이트
+                    newsCache[query] = { data: parsedNews, timestamp: new Date(staticData.lastUpdate) };
+                    setIsLoading(false);
+                    return; // 성공 시 조기 종료
+                }
+            }
+
+            // 2순위: 정적 파일이 없거나 해당 키워드 데이터가 없는 경우 기존 실시간 RSS 방식 사용 (Fallback)
+            console.log(`📡 [Fallback] 실시간 RSS 수집 중... (${query})`);
             const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ko&gl=KR&ceid=KR:ko`;
-            const promise = fetch(`${PROXY}${encodeURIComponent(rssUrl)}`)
-                .then(res => {
-                    if (!res.ok) throw new Error('뉴스를 불러오지 못했습니다.');
-                    return res.text();
-                })
-                .then(text => parseRSS(text));
-
-            // 동일 검색어 동시 요청 방지를 위해 임시 promise 저장
-            newsCache[query] = { data: [], timestamp: new Date(), promise };
-
-            const parsed = await promise;
-            newsCache[query] = { data: parsed, timestamp: new Date() };
-
-            // 활성 키워드가 바뀐 사이 응답이 올 수 있으므로 한 번 더 방어 필요 (React 특성)
-            // 여기서는 심플하게 setState
+            const response = await fetch(`${PROXY}${encodeURIComponent(rssUrl)}`);
+            if (!response.ok) throw new Error('뉴스를 불러오지 못했습니다.');
+            
+            const text = await response.text();
+            const parsed = parseRSS(text);
+            
             setNews(parsed);
             setLastUpdated(new Date());
+            newsCache[query] = { data: parsed, timestamp: new Date() };
         } catch (e) {
             setError('뉴스를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
             console.error(e);
-            delete newsCache[query]; // 오류 시 캐시 삭제
         } finally {
             setIsLoading(false);
         }

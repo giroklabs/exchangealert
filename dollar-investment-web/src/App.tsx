@@ -43,14 +43,14 @@ function App() {
   }, []);
 
   const tabs = [
-    { id: 'dashboard', label: '시장 대시보드', icon: '🌍' },
-    { id: 'analysis', label: '투자적정성 분석', icon: '📊' },
-    { id: 'sevensplit', label: '환율 스플릿', icon: '📈' },
-    { id: 'asset-split', label: '자산 스플릿', icon: '🏦' },
-    { id: 'fx-profit', label: '환차익 계산기', icon: '💰' },
-    { id: 'news', label: '환율 뉴스', icon: '📰' },
-    { id: 'community', label: '커뮤니티', icon: '🗨️' },
-    // { id: 'about', label: '소개', icon: '❓' }, // 임시 숨김 처리
+    { id: 'dashboard', label: '시장 대시보드' },
+    { id: 'analysis', label: '투자적정성 분석' },
+    { id: 'sevensplit', label: '환율 스플릿' },
+    { id: 'asset-split', label: '자산 스플릿' },
+    { id: 'fx-profit', label: '환차익 계산기' },
+    { id: 'news', label: '환율 뉴스' },
+    { id: 'community', label: '커뮤니티' },
+    // { id: 'about', label: '소개' }, // 임시 숨김 처리
   ];
 
   return (

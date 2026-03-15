@@ -5,11 +5,16 @@ on:
     branches:
       - main
   schedule:
-    # 15분 단위로 실행 (실시간성 극대화)
+    # 15분 단위로 실행 (기본 스케줄 유지)
     - cron: '*/15 * * * *'
   workflow_dispatch: # 수동 실행 가능
   repository_dispatch:
-    types: [trigger-fetch-dashboard] # 외부 서비스(cron-job 등)에서 정밀 타격하기 위한 웹훅 트리거
+    types: [trigger-market-update] # 공유된 트리거 이름 사용
+
+# 동시 실행 방지: 이전 작업이 진행 중이면 취소하고 최신 작업 수행
+concurrency:
+  group: fetch-market-dashboard
+  cancel-in-progress: true
 
 jobs:
   fetch-market-data:

@@ -11,9 +11,10 @@ import { parseExchangeRate } from './calculationService';
  */
 export async function fetchAllCurrentExchangeRates(): Promise<ExchangeRate[]> {
   try {
-    const url = 'https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json';
+    const timestamp = new Date().getTime();
+    const url = `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json?t=${timestamp}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
