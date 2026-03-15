@@ -388,13 +388,13 @@
       "source": "한국은행",
       "description": "한미 금리차 산출용",
       "cycle": "D",
-      "value": "3.30",
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "3.45",
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-01",
-          "value": 3.5
+          "value": 3.3
         },
         {
           "date": "2026-03-05",
@@ -402,7 +402,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 3.3
+          "value": 3.45
         }
       ]
     },
@@ -417,37 +417,21 @@
       "source": "한국은행",
       "description": "수지 흑자 시 원화 강세(환율 하락) 유도",
       "cycle": "M",
-      "value": "13260",
+      "value": "15200",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-08",
-          "value": 8000
-        },
-        {
-          "date": "2025-09",
-          "value": 9500
-        },
-        {
-          "date": "2025-10",
-          "value": 10200
-        },
-        {
-          "date": "2025-11",
-          "value": 11000
-        },
         {
           "date": "2025-12",
           "value": 11800
         },
         {
           "date": "2026-01",
-          "value": 12500
+          "value": 13500
         },
         {
           "date": "2026-02",
-          "value": 13260
+          "value": 15200
         }
       ]
     },
@@ -459,32 +443,24 @@
       "impact": "down",
       "source": "데이터 예측",
       "description": "외국인 수급은 환율의 가장 강력한 선행 지표입니다.",
-      "value": "-1250",
-      "trend": "down",
+      "value": "520",
+      "trend": "up",
       "history": [
-        {
-          "date": "03-08",
-          "value": 500
-        },
-        {
-          "date": "03-09",
-          "value": 800
-        },
         {
           "date": "03-10",
           "value": -200
         },
         {
           "date": "03-11",
-          "value": -900
+          "value": 100
         },
         {
           "date": "03-12",
-          "value": -1100
+          "value": 400
         },
         {
           "date": "03-13",
-          "value": -1250
+          "value": 520
         }
       ]
     },
@@ -496,13 +472,13 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.98",
+      "value": "0.83",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-03",
-          "value": 0.56
+          "value": 0.76
         },
         {
           "date": "2026-03-04",
@@ -522,7 +498,7 @@
         },
         {
           "date": "2026-03-10",
-          "value": 0.84
+          "value": 0.69
         },
         {
           "date": "2026-03-11",
@@ -749,13 +725,13 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 76,
-    "downProb": 24,
+    "upProb": 51,
+    "downProb": 49,
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 3.7,
-      "downScore": 1.2
+      "upScore": 2.5,
+      "downScore": 2.4
     }
   },
-  "lastUpdate": "2026. 3. 15. 오후 2:18:26"
+  "lastUpdate": "2026. 3. 15. 오후 2:51:00"
 }

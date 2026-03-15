@@ -471,12 +471,12 @@ async function main() {
     // API 키 누락 시 UI가 텅 비어보이지 않도록 시각적 그래프용 가상 히스토리(history) 데이터 포함
     const fallbacks = {
         'bok-rate': { value: '2.50', trend: 'neutral', history: [{ date: '2025-08', value: 2.5 }, { date: '2025-09', value: 2.5 }, { date: '2025-10', value: 2.5 }, { date: '2025-11', value: 2.5 }, { date: '2025-12', value: 2.5 }, { date: '2026-01', value: 2.5 }, { date: '2026-02', value: 2.5 }] },
-        'kr-cpi': { value: '3.1', trend: 'up', history: [{ date: '2025-08', value: 3.4 }, { date: '2025-09', value: 3.7 }, { date: '2025-10', value: 3.8 }, { date: '2025-11', value: 3.3 }, { date: '2025-12', value: 3.2 }, { date: '2026-01', value: 2.8 }, { date: '2026-02', value: 3.1 }] },
-        'kr-gdp': { value: '2.4', trend: 'up', history: [{ date: '2024Q3', value: 1.4 }, { date: '2024Q4', value: 1.7 }, { date: '2025Q1', value: 2.0 }, { date: '2025Q2', value: 2.2 }, { date: '2025Q3', value: 2.3 }, { date: '2025Q4', value: 2.4 }, { date: '2026Q1', value: 2.4 }] },
-        'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-08', value: 4200 }, { date: '2025-09', value: 4250 }, { date: '2025-10', value: 4300 }, { date: '2025-11', value: 4380 }, { date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
-        'trade-balance': { value: '13260', trend: 'up', history: [{ date: '2025-08', value: 8000 }, { date: '2025-09', value: 9500 }, { date: '2025-10', value: 10200 }, { date: '2025-11', value: 11000 }, { date: '2025-12', value: 11800 }, { date: '2026-01', value: 12500 }, { date: '2026-02', value: 13260 }] },
-        'kr-10y': { value: '3.30', trend: 'down', history: [{ date: '2026-03-01', value: 3.5 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.3 }] },
-        'foreigner-net-buy': { value: '-1250', trend: 'down', history: [{ date: '03-08', value: 500 }, { date: '03-09', value: 800 }, { date: '03-10', value: -200 }, { date: '03-11', value: -900 }, { date: '03-12', value: -1100 }, { date: '03-13', value: -1250 }] }
+        'kr-cpi': { value: '2.8', trend: 'down', history: [{ date: '2025-12', value: 3.2 }, { date: '2026-01', value: 3.1 }, { date: '2026-02', value: 2.9 }, { date: '2026-03', value: 2.8 }] },
+        'kr-gdp': { value: '2.6', trend: 'up', history: [{ date: '2024Q4', value: 1.7 }, { date: '2025Q1', value: 2.0 }, { date: '2025Q2', value: 2.3 }, { date: '2026Q1', value: 2.6 }] },
+        'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
+        'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
+        'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
+        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] }
     };
 
     for (const item of ECOS_SERIES) {
@@ -608,8 +608,12 @@ async function main() {
         console.log(`✅ [Calc] 한미 금리차: ${diff}%p (추세: ${trend})`);
     }
 
-    const total = upScore + downScore;
-    const upProb = total > 0 ? Math.round((upScore / total) * 100) : 50;
+    // 기본 불확실성/노이즈 추가 (0% 방지)
+    let upScoreFinal = upScore + 1.0;
+    let downScoreFinal = downScore + 1.0;
+
+    const total = upScoreFinal + downScoreFinal;
+    const upProb = Math.round((upScoreFinal / total) * 100);
     const downProb = 100 - upProb;
 
     console.log('🤖 AI 시장 분석 생성 중...');
