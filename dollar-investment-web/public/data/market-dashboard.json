@@ -222,6 +222,174 @@
       ]
     },
     {
+      "id": "sofr",
+      "name": "SOFR",
+      "unit": "%",
+      "block": "risk",
+      "impact": "up",
+      "source": "NY Fed",
+      "description": "담보 유동성 지표",
+      "hidden": true,
+      "value": 3.65,
+      "trend": "up",
+      "realizedImpact": "up",
+      "history": [
+        {
+          "date": "2026-02-27",
+          "value": 3.68
+        },
+        {
+          "date": "2026-03-02",
+          "value": 3.71
+        },
+        {
+          "date": "2026-03-03",
+          "value": 3.7
+        },
+        {
+          "date": "2026-03-04",
+          "value": 3.67
+        },
+        {
+          "date": "2026-03-05",
+          "value": 3.66
+        },
+        {
+          "date": "2026-03-06",
+          "value": 3.65
+        },
+        {
+          "date": "2026-03-09",
+          "value": 3.65
+        },
+        {
+          "date": "2026-03-10",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-11",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-12",
+          "value": 3.65
+        }
+      ],
+      "isInternal": true
+    },
+    {
+      "id": "effr",
+      "name": "EFFR",
+      "unit": "%",
+      "block": "risk",
+      "impact": "up",
+      "source": "Fed",
+      "description": "무담보 유동성 지표",
+      "hidden": true,
+      "value": 3.64,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
+      "history": [
+        {
+          "date": "2026-02-27",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-02",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-03",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-04",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-05",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-06",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-09",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-10",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-11",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-12",
+          "value": 3.64
+        }
+      ],
+      "isInternal": true
+    },
+    {
+      "id": "dtb3",
+      "name": "T-Bill 3M",
+      "unit": "%",
+      "block": "risk",
+      "impact": "down",
+      "source": "Fed",
+      "description": "무위험 단기 금리",
+      "hidden": true,
+      "value": 3.61,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
+      "history": [
+        {
+          "date": "2026-02-27",
+          "value": 3.59
+        },
+        {
+          "date": "2026-03-02",
+          "value": 3.61
+        },
+        {
+          "date": "2026-03-03",
+          "value": 3.6
+        },
+        {
+          "date": "2026-03-04",
+          "value": 3.6
+        },
+        {
+          "date": "2026-03-05",
+          "value": 3.59
+        },
+        {
+          "date": "2026-03-06",
+          "value": 3.58
+        },
+        {
+          "date": "2026-03-09",
+          "value": 3.61
+        },
+        {
+          "date": "2026-03-10",
+          "value": 3.6
+        },
+        {
+          "date": "2026-03-11",
+          "value": 3.61
+        },
+        {
+          "date": "2026-03-12",
+          "value": 3.61
+        }
+      ],
+      "isInternal": true
+    },
+    {
       "id": "kospi",
       "name": "코스피 지수",
       "unit": "pt",
@@ -612,6 +780,114 @@
           "value": 0
         }
       ]
+    },
+    {
+      "id": "ted-spread",
+      "name": "TED 스프레드",
+      "unit": "%",
+      "block": "risk",
+      "impact": "up",
+      "source": "계산치",
+      "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
+      "value": "0.040",
+      "trend": "down",
+      "realizedImpact": "down",
+      "history": [
+        {
+          "date": "2026-02-27",
+          "value": 0.09
+        },
+        {
+          "date": "2026-03-02",
+          "value": 0.1
+        },
+        {
+          "date": "2026-03-03",
+          "value": 0.1
+        },
+        {
+          "date": "2026-03-04",
+          "value": 0.07
+        },
+        {
+          "date": "2026-03-05",
+          "value": 0.07
+        },
+        {
+          "date": "2026-03-06",
+          "value": 0.07
+        },
+        {
+          "date": "2026-03-09",
+          "value": 0.04
+        },
+        {
+          "date": "2026-03-10",
+          "value": 0.04
+        },
+        {
+          "date": "2026-03-11",
+          "value": 0.03
+        },
+        {
+          "date": "2026-03-12",
+          "value": 0.04
+        }
+      ]
+    },
+    {
+      "id": "sofr-ois",
+      "name": "SOFR-OIS 스프레드",
+      "unit": "%",
+      "block": "risk",
+      "impact": "up",
+      "source": "계산치",
+      "description": "금융시장 유동성 리스크 (상승 시 위험회피 강화)",
+      "value": "0.010",
+      "trend": "down",
+      "realizedImpact": "down",
+      "history": [
+        {
+          "date": "2026-02-27",
+          "value": 0.04
+        },
+        {
+          "date": "2026-03-02",
+          "value": 0.07
+        },
+        {
+          "date": "2026-03-03",
+          "value": 0.06
+        },
+        {
+          "date": "2026-03-04",
+          "value": 0.03
+        },
+        {
+          "date": "2026-03-05",
+          "value": 0.02
+        },
+        {
+          "date": "2026-03-06",
+          "value": 0.01
+        },
+        {
+          "date": "2026-03-09",
+          "value": 0.01
+        },
+        {
+          "date": "2026-03-10",
+          "value": 0
+        },
+        {
+          "date": "2026-03-11",
+          "value": 0
+        },
+        {
+          "date": "2026-03-12",
+          "value": 0.01
+        }
+      ]
     }
   ],
   "majorRates": [
@@ -820,13 +1096,13 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 66,
-    "downProb": 34,
+    "upProb": 64,
+    "downProb": 36,
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 24.078155971499434,
-      "downScore": 11.99307954414407
+      "upScore": 28.69599416582003,
+      "downScore": 15.935366345965399
     }
   },
-  "lastUpdate": "2026. 3. 15. 오후 5:07:50"
+  "lastUpdate": "2026. 3. 15. 오후 5:28:18"
 }

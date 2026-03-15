@@ -74,6 +74,9 @@ const FRED_SERIES = [
     { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
     { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
     { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표', realtimeSymbol: '^VIX' },
+    { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '담보 유동성 지표', hidden: true },
+    { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', hidden: true },
+    { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', hidden: true },
     { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
 ];
@@ -327,7 +330,7 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 분석 가이드:
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
 2. [환율 추세] 제공된 원/달러 환율의 최근 기술적 흐름(지지/저항, 추세 지속성)을 분석에 포함하세요.
-3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요.
+3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요. 특히 TED 스프레드와 SOFR-OIS를 통해 은행간 달러 유동성 환경을 진단하세요.
 4. [펀딩·정책] 블록의 CDS 프리미엄, 가산금리, 단기외채 비중을 통해 한국의 대외 건전성과 펀딩 리스크를 심층 진단하세요.
 5. [투자 전략] 위 분석을 종합하여 일일 및 단기 관점에서의 실전 달러 투자 대응 방안(분할 매수/매도 시점, 목표가 가이드 등)을 구체적으로 제시하세요.
 
@@ -504,8 +507,13 @@ async function main() {
             displayVal = yoy.toFixed(1);
         }
 
-        indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history });
-        console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (Z:${zScore.toFixed(2)})`);
+        if (!s.hidden) {
+            indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history });
+            console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (Z:${zScore.toFixed(2)})`);
+        } else {
+            // 히든 지표도 데이터는 보유 (계산용)
+            indicators.push({ ...s, id: s.id.toLowerCase(), value: numVal, trend, realizedImpact, history, isInternal: true });
+        }
     }
 
     // API 키 누락 시 UI가 텅 비어보이지 않도록 시각적 그래프용 가상 히스토리(history) 데이터 포함
@@ -519,7 +527,9 @@ async function main() {
         'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] },
         'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '03-10', value: 32 }, { date: '03-11', value: 34 }, { date: '03-12', value: 35 }, { date: '03-13', value: 35 }] },
         'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '03-10', value: 38 }, { date: '03-11', value: 40 }, { date: '03-12', value: 42 }, { date: '03-13', value: 42 }] },
-        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q2', value: 37.8 }, { date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] }
+        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q2', value: 37.8 }, { date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] },
+        'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '03-10', value: 0.08 }, { date: '03-11', value: 0.09 }, { date: '03-12', value: 0.09 }, { date: '03-13', value: 0.09 }] },
+        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '03-10', value: 0.17 }, { date: '03-11', value: 0.18 }, { date: '03-12', value: 0.18 }, { date: '03-13', value: 0.18 }] }
     };
 
     for (const item of ECOS_SERIES) {
@@ -654,6 +664,37 @@ async function main() {
             })
         });
         console.log(`✅ [Calc] 한미 금리차: ${diff}%p (추세: ${trend})`);
+    }
+
+    // 2.3 유동성 리스크 스프레드 산출 (TED, SOFR-OIS)
+    const sofr = indicators.find(i => i.id === 'sofr');
+    const effr = indicators.find(i => i.id === 'effr');
+    const dtb3 = indicators.find(i => i.id === 'dtb3');
+
+    if (sofr && dtb3 && effr) {
+        const calculateSpread = (id, name, base, ref, desc) => {
+            const val = (base.value - ref.value).toFixed(3);
+            const prevVal = (base.history[1]?.value - ref.history[1]?.value) || val;
+            const trend = val > prevVal ? 'up' : (val < prevVal ? 'down' : 'neutral');
+            
+            let spreadWeight = 1.0;
+            if (parseFloat(val) > 0.5) spreadWeight *= 2.0; // 50bp 돌파 시 리스크 가중
+
+            blockScores['risk'].up += (trend === 'up' ? 1.5 : 0.5) * spreadWeight;
+            
+            indicators.push({
+                id, name, unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: '계산치',
+                description: desc, value: val, trend, realizedImpact: trend,
+                history: base.history.map((h, idx) => {
+                    const rh = ref.history.find(r => r.date === h.date) || ref.history[idx] || h;
+                    return { date: h.date, value: parseFloat((h.value - rh.value).toFixed(3)) };
+                })
+            });
+            console.log(`✅ [Calc] ${name}: ${val}% (추세: ${trend})`);
+        };
+
+        calculateSpread('ted-spread', 'TED 스프레드', sofr, dtb3, '은행간 신용 위험 (상승 시 달러 조달 경색)');
+        calculateSpread('sofr-ois', 'SOFR-OIS 스프레드', sofr, effr, '금융시장 유동성 리스크 (상승 시 위험회피 강화)');
     }
 
     // --- 최종 점수 정규화 및 블록 간 밸런싱 ---
