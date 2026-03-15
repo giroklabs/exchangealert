@@ -102,18 +102,28 @@ jobs:
             git commit -m "Update exchange rates (Naver 5m) - $COMMIT_TIME"
             
             # 충돌 방지 및 PAT 기반 푸시
+            PUSHED=false
             for i in 1 2 3; do
               git pull --rebase origin main || true
               if git push origin main; then
                 echo "✅ Success: Exchange rate updated."
+                PUSHED=true
                 break
               else
                 echo "⚠️ Push failed, retrying... ($i/3)"
                 sleep 5
               fi
             done
+            
+            if [ "$PUSHED" = true ]; then
+              # 배포 워크플로우 강제 트리거 (GITHUB_TOKEN 제약 회피)
+              echo "🚀 Triggering maintenance deployment..."
+              curl -X POST -H "Authorization: token ${{ secrets.TRIGGER_TOKEN || secrets.GITHUB_TOKEN }}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches \
+                -d '{"ref":"main"}' || true
+            fi
           else
             echo "No changes in exchange rates."
           fi
         fi
-
