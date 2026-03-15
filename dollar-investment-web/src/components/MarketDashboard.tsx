@@ -175,6 +175,22 @@ export function MarketDashboard() {
                                         </div>
                                     );
                                 }
+                                if (line.trim().startsWith('실전 투자 대응:')) {
+                                    return (
+                                        <div key={i} className={`my-6 p-5 rounded-2xl border-l-4 ${theme === 'dark'
+                                                ? 'bg-blue-500/10 border-blue-500 text-blue-100'
+                                                : 'bg-blue-50 border-blue-500 text-blue-900'
+                                            }`}>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span className="text-lg">🎯</span>
+                                                <span className="font-bold text-lg">실전 투자 대응 가이드</span>
+                                            </div>
+                                            <p className="text-[15px] leading-[1.8] whitespace-pre-wrap opacity-90">
+                                                {line.trim().replace('실전 투자 대응:', '').trim()}
+                                            </p>
+                                        </div>
+                                    );
+                                }
                                 return line.trim() ? (
                                     <p key={i} className={`text-[15px] leading-[1.8] font-medium tracking-tight whitespace-pre-wrap ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                                         }`}>
