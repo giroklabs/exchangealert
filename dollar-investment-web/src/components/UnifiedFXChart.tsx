@@ -164,13 +164,10 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
             `}</style>
 
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div className="flex items-center gap-2">
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${isDark ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
-                        {period === '1D' ? '실시간 5분 단위' : '일봉 기준'}
+                <div className="flex items-center gap-2 px-1">
+                    <span className={`text-[11px] font-bold ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        📊 기준 시각: {chartData.length > 0 ? chartData[chartData.length - 1].fullDate.split('+')[0].replace('T', ' ') : '-'}
                     </span>
-                    {period === '1D' && (
-                        <span className="text-[10px] text-gray-400 animate-pulse">● 실시간 추적 중</span>
-                    )}
                 </div>
 
                 <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-xl">
