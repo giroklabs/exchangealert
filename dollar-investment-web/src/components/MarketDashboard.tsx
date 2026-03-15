@@ -305,7 +305,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                     <div className={`flex items-center justify-end gap-1 text-xs font-bold mt-1 ${isImpactUp ? 'text-red-500' : isImpactDown ? 'text-blue-500' : 'text-gray-400'}`}>
                         <span>환율 영향:</span>
                         <span className="text-sm">
-                            {indicator.impact === 'up' ? '▲ 상승' : '▼ 하락'}
+                            {isImpactUp ? '▲ 상승' : isImpactDown ? '▼ 하락' : '─ 중립'}
                             {indicator.realizedImpact === 'neutral' ? ' (보합)' : ''}
                         </span>
                     </div>
