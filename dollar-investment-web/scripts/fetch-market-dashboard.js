@@ -445,9 +445,16 @@ async function main() {
         // 정밀한 추세 계산 (보합 포함)
         const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
 
+        // 1. 기본 배경 압력 (지표의 본질적인 성격 반영)
+        const baseWeight = 0.5;
+        if (s.impact === 'up') upScore += baseWeight;
+        else if (s.impact === 'down') downScore += baseWeight;
+
+        // 2. 모멘텀 점수 (최근 추세 반영)
+        const momentumWeight = 1.0;
         if (trend !== 'neutral') {
-            if (s.impact === 'up') trend === 'up' ? upScore++ : downScore++;
-            else trend === 'up' ? downScore++ : upScore++;
+            if (s.impact === 'up') trend === 'up' ? upScore += momentumWeight : downScore += momentumWeight;
+            else trend === 'up' ? downScore += momentumWeight : upScore += momentumWeight;
         }
 
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
@@ -509,9 +516,15 @@ async function main() {
             history = fallback.history;
         }
 
+        // 1. 기본 배경 압력
+        const ecosBaseWeight = 0.6;
+        if (item.impact === 'up') upScore += ecosBaseWeight;
+        else if (item.impact === 'down') downScore += ecosBaseWeight;
+
+        // 2. 모멘텀 점수
         if (trend !== 'neutral') {
-            if (item.impact === 'up') trend === 'up' ? upScore += 1.2 : downScore += 1.2;
-            else trend === 'up' ? downScore += 1.2 : upScore += 1.2;
+            if (item.impact === 'up') trend === 'up' ? upScore += 0.8 : downScore += 0.8;
+            else trend === 'up' ? downScore += 0.8 : upScore += 0.8;
         }
 
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
@@ -586,7 +599,10 @@ async function main() {
         const trend = diff > prevDiff ? 'up' : (diff < prevDiff ? 'down' : 'neutral');
 
         if (trend !== 'neutral') {
-            trend === 'up' ? upScore += 1.5 : downScore += 1.5;
+            trend === 'up' ? upScore += 1.2 : downScore += 1.2;
+        } else {
+            // 중립이어도 금리차 수준 자체가 높으면 상승 압력으로 간주 (+0.5)
+            if (parseFloat(diff) > 0.5) upScore += 0.5;
         }
 
         indicators.push({
@@ -608,9 +624,9 @@ async function main() {
         console.log(`✅ [Calc] 한미 금리차: ${diff}%p (추세: ${trend})`);
     }
 
-    // 기본 불확실성/노이즈 추가 (0% 방지)
-    let upScoreFinal = upScore + 1.0;
-    let downScoreFinal = downScore + 1.0;
+    // 노이즈 점수 (극단적 쏠림 방지)
+    let upScoreFinal = upScore + 0.5;
+    let downScoreFinal = downScore + 0.5;
 
     const total = upScoreFinal + downScoreFinal;
     const upProb = Math.round((upScoreFinal / total) * 100);
