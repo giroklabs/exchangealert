@@ -116,11 +116,14 @@ jobs:
             done
             
             if [ "$PUSHED" = true ]; then
-              # 배포 워크플로우 강제 트리거 (GITHUB_TOKEN 제약 회피)
+              # 배포 워크플로우 강제 트리거
               echo "🚀 Triggering maintenance deployment..."
-              curl -X POST -H "Authorization: token ${{ secrets.TRIGGER_TOKEN || secrets.GITHUB_TOKEN }}" \
+              TOKEN="${{ secrets.TRIGGER_TOKEN }}"
+              if [ -z "$TOKEN" ]; then TOKEN="${{ secrets.GITHUB_TOKEN }}"; fi
+              
+              curl -X POST -H "Authorization: token $TOKEN" \
                 -H "Accept: application/vnd.github.v3+json" \
-                https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches \
+                "https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches" \
                 -d '{"ref":"main"}' || true
             fi
           else

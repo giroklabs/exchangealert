@@ -12,8 +12,33 @@ function getIntradayData() {
 
     const intradayData = [];
 
+    // 0. 현재 폴더에 있는 실시간 데이터 먼저 추가 (Git 히스토리에 반영 전의 최신점)
     try {
-        // 최근 300개의 커밋 내역 가져오기 (날짜와 해시)
+        if (fs.existsSync(FILE_PATH)) {
+            const content = fs.readFileSync(FILE_PATH, 'utf8');
+            const json = JSON.parse(content);
+            const usd = json.find(item => item.cur_unit === 'USD');
+            const lastUpdate = fs.existsSync('data/last-update.txt') 
+                ? fs.readFileSync('data/last-update.txt', 'utf8').trim() 
+                : new Date().toISOString();
+            
+            if (usd) {
+                const date = new Date(lastUpdate);
+                intradayData.push({
+                    time: date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }),
+                    fullTime: lastUpdate,
+                    rate: parseFloat(usd.deal_bas_r.replace(/,/g, '')),
+                    timestamp: date.getTime(),
+                    isLive: true
+                });
+            }
+        }
+    } catch (e) {
+        console.warn('Error reading live rate:', e.message);
+    }
+
+    try {
+        // 1. 최근 300개의 커밋 내역 가져오기 (날짜와 해시)
         const log = execSync(`git log -n 300 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
         const lines = log.split('\n');
 
