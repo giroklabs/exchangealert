@@ -310,7 +310,7 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요.
 4. [펀딩·정책] 요인을 고려하여 변동성 확대 여부를 판단하세요.
 
-응답은 전문적이고 분석적인 톤으로 3~4개 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 명확히 적어주세요.`;
+응답은 전문적이고 분석적인 톤으로 3~4개 단락으로 작성하되, 마크다운 기호(##, **)나 이모지를 절대 사용하지 마세요. 마지막에 "결론: [상승/하락/보합] 우세"라고 명확히 적어주세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -638,7 +638,16 @@ async function main() {
 
     console.log('🤖 AI 시장 분석 생성 중...');
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
-    const aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
+    let aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
+
+    // 마크다운 기호 및 불필요한 특수문자 제거
+    aiAnalysis = aiAnalysis
+        .replace(/\*\*/g, '') // 볼드 제거
+        .replace(/\*/g, '')   // 이탤릭 제거
+        .replace(/###/g, '')  // 헤더 제거
+        .replace(/##/g, '')
+        .replace(/#/g, '')
+        .trim();
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
     let sentiment = '보통';
@@ -809,7 +818,7 @@ async function main() {
 
     const outputPath = path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json');
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-    fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2));
+    fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2), 'utf8');
     console.log('✨ AI 분석 및 주식 시세 포함 데이터 업데이트 완료!');
 }
 main();
