@@ -109,6 +109,7 @@ export interface MarketIndicator {
   unit: string;
   trend: 'up' | 'down' | 'neutral';
   impact: 'up' | 'down' | 'neutral'; // Impact on Exchange Rate (USD/KRW)
+  realizedImpact?: 'up' | 'down' | 'neutral'; // Current realized direction
   description: string;
   source?: string;
   history?: Array<{ date: string; value: number }>;

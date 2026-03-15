@@ -74,7 +74,7 @@ const FRED_SERIES = [
     { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
     { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
     { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표', realtimeSymbol: '^VIX' },
-    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11' },
+    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
 ];
 
@@ -450,6 +450,9 @@ async function main() {
             else trend === 'up' ? downScore++ : upScore++;
         }
 
+        const realizedImpact = trend === 'neutral' ? 'neutral' : 
+            ((s.impact === 'up' && trend === 'up') || (s.impact === 'down' && trend === 'down') ? 'up' : 'down');
+
         let displayVal = numVal.toLocaleString();
         if ((s.id === 'CPIAUCSL' || s.fredId === 'CPIAUCSL') && obs.length > 12) {
             const yoy = ((numVal / parseFloat(obs[12].value)) - 1) * 100;
@@ -461,7 +464,7 @@ async function main() {
             value: parseFloat(o.value)
         }));
 
-        indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, history });
+        indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history });
         console.log(`✅ [FRED/RT] ${s.name}: ${displayVal}`);
     }
 
@@ -511,7 +514,10 @@ async function main() {
             else trend === 'up' ? downScore += 1.2 : upScore += 1.2;
         }
 
-        indicators.push({ ...item, value: displayVal, trend, history });
+        const realizedImpact = trend === 'neutral' ? 'neutral' : 
+            ((item.impact === 'up' && trend === 'up') || (item.impact === 'down' && trend === 'down') ? 'up' : 'down');
+
+        indicators.push({ ...item, value: displayVal, trend, realizedImpact, history });
         console.log(`✅ [ECOS] ${item.name}: ${displayVal}`);
     }
 
@@ -531,6 +537,8 @@ async function main() {
         if (latest > 0) downScore += 1.5;
         else if (latest < 0) upScore += 1.5;
 
+        const realizedImpact = latest < 0 ? 'up' : (latest > 100 ? 'down' : 'neutral');
+
         indicators.push({
             id: 'foreigner-net-buy',
             name: 'KOSPI 외국인 수급동향',
@@ -541,6 +549,7 @@ async function main() {
             description: '외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용',
             value: latest.toLocaleString(),
             trend: latest >= prev ? 'up' : 'down',
+            realizedImpact,
             history: investorTrend.reverse()
         });
         console.log(`✅ [KIS] 외인 순매수: ${latest}억원`);
@@ -571,6 +580,15 @@ async function main() {
         const krVal = parseFloat(kr10y.value);
         const diff = (usVal - krVal).toFixed(2);
         
+        const prevUs = us10y.history[1]?.value || usVal;
+        const prevKr = kr10y.history[1]?.value || krVal;
+        const prevDiff = (prevUs - prevKr).toFixed(2);
+        const trend = diff > prevDiff ? 'up' : (diff < prevDiff ? 'down' : 'neutral');
+
+        if (trend !== 'neutral') {
+            trend === 'up' ? upScore += 1.5 : downScore += 1.5;
+        }
+
         indicators.push({
             id: 'rate-differential',
             name: '한·미 금리차 (10Y)',
@@ -580,13 +598,14 @@ async function main() {
             source: '계산치',
             description: '금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)',
             value: diff,
-            trend: diff > 0 ? 'up' : 'down',
+            trend,
+            realizedImpact: trend,
             history: us10y.history.map((h, idx) => {
                 const krH = kr10y.history.find(kh => kh.date === h.date) || kr10y.history[idx] || h;
                 return { date: h.date, value: parseFloat((h.value - krH.value).toFixed(2)) };
             })
         });
-        console.log(`✅ [Calc] 한미 금리차: ${diff}%p`);
+        console.log(`✅ [Calc] 한미 금리차: ${diff}%p (추세: ${trend})`);
     }
 
     const total = upScore + downScore;

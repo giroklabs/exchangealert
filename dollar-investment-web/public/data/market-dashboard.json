@@ -10,6 +10,7 @@
       "description": "Fed 금리 인상 시 달러 가치 상승으로 환율 상승",
       "value": "3.64",
       "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2025-05-01",
@@ -65,6 +66,7 @@
       "fredId": "DTWEXBGS",
       "value": "100.36",
       "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-02",
@@ -120,6 +122,7 @@
       "fredId": "GS10",
       "value": "4.28",
       "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-03",
@@ -174,6 +177,7 @@
       "realtimeSymbol": "^VIX",
       "value": "27.19",
       "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-03",
@@ -226,8 +230,10 @@
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
+      "fredId": null,
       "value": "5,487.24",
       "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-03",
@@ -282,6 +288,7 @@
       "realtimeSymbol": "CL=F",
       "value": "98.71",
       "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-03",
@@ -338,6 +345,7 @@
       "cycle": "M",
       "value": "2.50",
       "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2025-08",
@@ -382,6 +390,7 @@
       "cycle": "D",
       "value": "3.30",
       "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-01",
@@ -410,6 +419,7 @@
       "cycle": "M",
       "value": "13260",
       "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2025-08",
@@ -488,6 +498,7 @@
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
       "value": "0.98",
       "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-03",
@@ -738,13 +749,13 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 65,
-    "downProb": 35,
+    "upProb": 76,
+    "downProb": 24,
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 2.2,
+      "upScore": 3.7,
       "downScore": 1.2
     }
   },
-  "lastUpdate": "2026. 3. 15. 오후 2:05:20"
+  "lastUpdate": "2026. 3. 15. 오후 2:18:26"
 }
