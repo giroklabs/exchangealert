@@ -103,7 +103,8 @@ export interface FXInvestment {
 export interface MarketIndicator {
   id: string;
   name: string;
-  category: 'domestic' | 'international';
+  category?: 'domestic' | 'international';
+  block?: string;
   value: string | number;
   unit: string;
   trend: 'up' | 'down' | 'neutral';

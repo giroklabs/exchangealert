@@ -60,27 +60,29 @@ async function fetchFromYahooFinance(symbol) {
     });
 }
 
-// 1. 해외지표 (FRED)
+// 1. Factor Blocks 정의 (연구 자료 기반)
+const FACTOR_BLOCKS = {
+    RATES_DOLLAR: { id: 'rates-dollar', name: '금리·달러 블록', description: '캐리/글로벌 달러 사이클 요인' },
+    RISK: { id: 'risk', name: '리스크 블록', description: '리스크온/오프, 안전통화 수요' },
+    ASSETS: { id: 'assets', name: '한국 자산 블록', description: '자본유출입, 한국 위험자산 선호도' },
+    FUNDING_POLICY: { id: 'funding-policy', name: '펀딩·정책 블록', description: '유동성·신용/정책에 따른 변동성' }
+};
+
+// 2. 해외지표 (FRED)
 const FRED_SERIES = [
-    { id: 'FEDFUNDS', name: '미국 기준금리(Fed)', unit: '%', category: 'international', impact: 'up', source: 'Federal Reserve', description: 'Fed 금리 인상 시 달러 가치 상승으로 환율 상승' },
-    { id: 'PAYEMS', name: '미 비농업고용지수', unit: 'K', category: 'international', impact: 'up', source: 'BLS', description: '미국 고용 지표 호조 시 달러 선호 현상 강화' },
-    { id: 'DEXJPUS', name: '엔/달러 환율', unit: '¥', category: 'international', impact: 'up', source: 'Market', description: '엔화 약세 시 환율 상승 경향', realtimeSymbol: 'JPY=X' },
-    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', category: 'international', impact: 'up', source: 'WTI', description: '실시간 선물 가격 반영 중', realtimeSymbol: 'CL=F' },
-    { id: 'TNX', name: '미 10년물 국채금리', unit: '%', category: 'international', impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
-    { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', category: 'international', impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
-    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', category: 'domestic', impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11' },
-    { id: 'CPIAUCSL', name: '미 소비자물가(CPI)', unit: '%', category: 'international', impact: 'up', source: 'BLS', description: '미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발' },
-    { id: 'GDP', name: '미국 GDP', unit: 'B$', category: 'international', impact: 'up', source: 'BEA', description: '미국 경제 성장 호조 시 달러 가치 상승' },
-    { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', category: 'international', impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)', realtimeSymbol: '^VIX' }
+    { id: 'FEDFUNDS', name: '미국 기준금리(Fed)', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'Fed 금리 인상 시 달러 가치 상승으로 환율 상승' },
+    { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
+    { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
+    { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표', realtimeSymbol: '^VIX' },
+    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11' },
+    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
 ];
 
-// 2. 국내지표 (ECOS)
+// 3. 국내지표 (ECOS)
 const ECOS_SERIES = [
-    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '금리 인상 시 원화 강세 유도', cycle: 'M' },
-    { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '국내 소비자물가(CPI)', unit: '%', category: 'domestic', impact: 'up', source: '통계청', description: '물가 상승 시 원화 가치 하락 압력', cycle: 'M' },
-    { id: 'kr-gdp', statCode: '200Y005', item1: '10101', name: '경제성장률', unit: '%', category: 'domestic', impact: 'down', source: '한국은행', description: '경제 성장 호조 시 원화 강세 유도', cycle: 'Q' },
-    { id: 'm2-supply', statCode: '101Y001', item1: 'BBHS01', name: '통화량(M2)', unit: '조원', category: 'domestic', impact: 'up', source: '한국은행', description: '통화 팽창 시 원화 가치 하락 압력', cycle: 'M' },
-    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', category: 'domestic', impact: 'down', source: '한국은행', description: '경상수지 흑자 시 환율 하락 유도', cycle: 'M' }
+    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'M' },
+    { id: 'kr-10y', statCode: '721Y001', item1: '010200000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
+    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' }
 ];
 
 async function fetchFromFred(seriesId) {
@@ -97,6 +99,19 @@ async function fetchFromFred(seriesId) {
             });
         }).on('error', () => resolve([]));
     });
+}
+
+function summarizeByBlock(indicators) {
+    const summary = {};
+    Object.values(FACTOR_BLOCKS).forEach(block => {
+        const blockIndicators = indicators.filter(i => i.block === block.id);
+        if (blockIndicators.length > 0) {
+            summary[block.name] = blockIndicators.map(i => 
+                `- ${i.name}: ${i.value}${i.unit} (추세: ${i.trend})`
+            ).join('\n');
+        }
+    });
+    return Object.entries(summary).map(([blockName, items]) => `[${blockName}]\n${items}`).join('\n\n');
 }
 
 async function fetchFromEcos(item) {
@@ -278,14 +293,20 @@ async function fetchAiAnalysis(indicators) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
 
-    const summary = indicators.map(i => `- ${i.name}: ${i.value}${i.unit} (추세: ${i.trend}, 환율영향: ${i.impact})`).join('\n');
-    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 한국어로 분석해주세요. 특히 VIX(공포지수)와 외국인 순매수(주문흐름)의 움직임이 시장의 리스크 온/오프 심리와 환율에 미치는 영향을 중요하게 고려해 주세요.
-응답은 2~3문장의 짧고 명확한 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 적어주세요.
+    const blockSummary = summarizeByBlock(indicators);
+    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 원/달러 환율 방향성을 한국어로 심층 분석해주세요.
 
-경제 지표 현황:
-${summary}
+연구 자료에 따르면 환율 결정의 최우선 순위는 '한·미 금리차'와 '달러 인덱스'입니다. 또한 VIX(전이 위험)와 외국인 수급(자본 흐름)을 결합하여 리스크 온/오프 국면을 판단해 주세요.
 
-환율에 미치는 심리적, 거시적 요인을 분석해줘.`;
+분석 대상 지표:
+${blockSummary}
+
+분석 가이드:
+1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
+2. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요.
+3. [펀딩·정책] 요인을 고려하여 변동성 확대 여부를 판단하세요.
+
+응답은 전문적이고 분석적인 톤으로 3~4개 단락으로 작성하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 명확히 적어주세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -451,6 +472,7 @@ async function main() {
         'kr-gdp': { value: '2.4', trend: 'up', history: [{ date: '2024Q3', value: 1.4 }, { date: '2024Q4', value: 1.7 }, { date: '2025Q1', value: 2.0 }, { date: '2025Q2', value: 2.2 }, { date: '2025Q3', value: 2.3 }, { date: '2025Q4', value: 2.4 }, { date: '2026Q1', value: 2.4 }] },
         'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-08', value: 4200 }, { date: '2025-09', value: 4250 }, { date: '2025-10', value: 4300 }, { date: '2025-11', value: 4380 }, { date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
         'trade-balance': { value: '13260', trend: 'up', history: [{ date: '2025-08', value: 8000 }, { date: '2025-09', value: 9500 }, { date: '2025-10', value: 10200 }, { date: '2025-11', value: 11000 }, { date: '2025-12', value: 11800 }, { date: '2026-01', value: 12500 }, { date: '2026-02', value: 13260 }] },
+        'kr-10y': { value: '3.30', trend: 'down', history: [{ date: '2026-03-01', value: 3.5 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.3 }] },
         'foreigner-net-buy': { value: '-1250', trend: 'down', history: [{ date: '03-08', value: 500 }, { date: '03-09', value: 800 }, { date: '03-10', value: -200 }, { date: '03-11', value: -900 }, { date: '03-12', value: -1100 }, { date: '03-13', value: -1250 }] }
     };
 
@@ -513,7 +535,7 @@ async function main() {
             id: 'foreigner-net-buy',
             name: 'KOSPI 외국인 수급동향',
             unit: '억원',
-            category: 'domestic',
+            block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
             source: 'KIS 실시간',
             description: '외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용',
@@ -529,7 +551,7 @@ async function main() {
             id: 'foreigner-net-buy',
             name: 'KOSPI 외국인 수급동향 (연결대기)',
             unit: '억원',
-            category: 'domestic',
+            block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
             source: '데이터 예측',
             description: '외국인 수급은 환율의 가장 강력한 선행 지표입니다.',
@@ -538,6 +560,33 @@ async function main() {
             history: fb.history
         });
         console.log(`⚠️ [KIS] 외인 수급 fallback 데이터 적용`);
+    }
+
+    // 2.2 한·미 금리차 산출 (US 10Y - KR 10Y)
+    const us10y = indicators.find(i => i.id === 'tnx');
+    const kr10y = indicators.find(i => i.id === 'kr-10y');
+
+    if (us10y && kr10y) {
+        const usVal = parseFloat(us10y.value);
+        const krVal = parseFloat(kr10y.value);
+        const diff = (usVal - krVal).toFixed(2);
+        
+        indicators.push({
+            id: 'rate-differential',
+            name: '한·미 금리차 (10Y)',
+            unit: '%p',
+            block: FACTOR_BLOCKS.RATES_DOLLAR.id,
+            impact: 'up',
+            source: '계산치',
+            description: '금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)',
+            value: diff,
+            trend: diff > 0 ? 'up' : 'down',
+            history: us10y.history.map((h, idx) => {
+                const krH = kr10y.history.find(kh => kh.date === h.date) || kr10y.history[idx] || h;
+                return { date: h.date, value: parseFloat((h.value - krH.value).toFixed(2)) };
+            })
+        });
+        console.log(`✅ [Calc] 한미 금리차: ${diff}%p`);
     }
 
     const total = upScore + downScore;

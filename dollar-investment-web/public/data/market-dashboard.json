@@ -4,7 +4,7 @@
       "id": "fedfunds",
       "name": "미국 기준금리(Fed)",
       "unit": "%",
-      "category": "international",
+      "block": "rates-dollar",
       "impact": "up",
       "source": "Federal Reserve",
       "description": "Fed 금리 인상 시 달러 가치 상승으로 환율 상승",
@@ -54,226 +54,10 @@
       ]
     },
     {
-      "id": "payems",
-      "name": "미 비농업고용지수",
-      "unit": "K",
-      "category": "international",
-      "impact": "up",
-      "source": "BLS",
-      "description": "미국 고용 지표 호조 시 달러 선호 현상 강화",
-      "value": "158,466",
-      "trend": "down",
-      "history": [
-        {
-          "date": "2025-05-01",
-          "value": 158498
-        },
-        {
-          "date": "2025-06-01",
-          "value": 158478
-        },
-        {
-          "date": "2025-07-01",
-          "value": 158542
-        },
-        {
-          "date": "2025-08-01",
-          "value": 158472
-        },
-        {
-          "date": "2025-09-01",
-          "value": 158548
-        },
-        {
-          "date": "2025-10-01",
-          "value": 158408
-        },
-        {
-          "date": "2025-11-01",
-          "value": 158449
-        },
-        {
-          "date": "2025-12-01",
-          "value": 158432
-        },
-        {
-          "date": "2026-01-01",
-          "value": 158558
-        },
-        {
-          "date": "2026-02-01",
-          "value": 158466
-        }
-      ]
-    },
-    {
-      "id": "dexjpus",
-      "name": "엔/달러 환율",
-      "unit": "¥",
-      "category": "international",
-      "impact": "up",
-      "source": "Market",
-      "description": "엔화 약세 시 환율 상승 경향",
-      "realtimeSymbol": "JPY=X",
-      "value": "159.72",
-      "trend": "up",
-      "history": [
-        {
-          "date": "2026-03-03",
-          "value": 157.69
-        },
-        {
-          "date": "2026-03-04",
-          "value": 156.93
-        },
-        {
-          "date": "2026-03-05",
-          "value": 157.58
-        },
-        {
-          "date": "2026-03-06",
-          "value": 157.64
-        },
-        {
-          "date": "2026-03-09",
-          "value": 158.43
-        },
-        {
-          "date": "2026-03-10",
-          "value": 157.85
-        },
-        {
-          "date": "2026-03-11",
-          "value": 158.11
-        },
-        {
-          "date": "2026-03-12",
-          "value": 159.07
-        },
-        {
-          "date": "2026-03-13",
-          "value": 159.21
-        },
-        {
-          "date": "2026-03-14",
-          "value": 159.72
-        }
-      ]
-    },
-    {
-      "id": "dcoilwtico",
-      "name": "국제 유가(WTI)",
-      "unit": "$",
-      "category": "international",
-      "impact": "up",
-      "source": "WTI",
-      "description": "실시간 선물 가격 반영 중",
-      "realtimeSymbol": "CL=F",
-      "value": "98.71",
-      "trend": "neutral",
-      "history": [
-        {
-          "date": "2026-03-03",
-          "value": 74.48
-        },
-        {
-          "date": "2026-03-04",
-          "value": 74.58
-        },
-        {
-          "date": "2026-03-05",
-          "value": 80.88
-        },
-        {
-          "date": "2026-03-06",
-          "value": 90.77
-        },
-        {
-          "date": "2026-03-09",
-          "value": 94.65
-        },
-        {
-          "date": "2026-03-10",
-          "value": 83.45
-        },
-        {
-          "date": "2026-03-11",
-          "value": 87.25
-        },
-        {
-          "date": "2026-03-12",
-          "value": 95.73
-        },
-        {
-          "date": "2026-03-13",
-          "value": 98.71
-        },
-        {
-          "date": "2026-03-13",
-          "value": 98.71
-        }
-      ]
-    },
-    {
-      "id": "tnx",
-      "name": "미 10년물 국채금리",
-      "unit": "%",
-      "category": "international",
-      "impact": "up",
-      "source": "CBOE",
-      "description": "미 국채 금리 상승 시 달러 강세 유발",
-      "realtimeSymbol": "^TNX",
-      "fredId": "GS10",
-      "value": "4.28",
-      "trend": "neutral",
-      "history": [
-        {
-          "date": "2026-03-03",
-          "value": 4.06
-        },
-        {
-          "date": "2026-03-04",
-          "value": 4.08
-        },
-        {
-          "date": "2026-03-05",
-          "value": 4.15
-        },
-        {
-          "date": "2026-03-06",
-          "value": 4.13
-        },
-        {
-          "date": "2026-03-09",
-          "value": 4.14
-        },
-        {
-          "date": "2026-03-10",
-          "value": 4.14
-        },
-        {
-          "date": "2026-03-11",
-          "value": 4.21
-        },
-        {
-          "date": "2026-03-12",
-          "value": 4.27
-        },
-        {
-          "date": "2026-03-13",
-          "value": 4.28
-        },
-        {
-          "date": "2026-03-13",
-          "value": 4.28
-        }
-      ]
-    },
-    {
       "id": "dxy",
       "name": "달러 인덱스(DXY)",
       "unit": "pt",
-      "category": "international",
+      "block": "rates-dollar",
       "impact": "up",
       "source": "ICE",
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
@@ -325,10 +109,119 @@
       ]
     },
     {
+      "id": "tnx",
+      "name": "미 10년물 국채금리",
+      "unit": "%",
+      "block": "rates-dollar",
+      "impact": "up",
+      "source": "CBOE",
+      "description": "미 국채 금리 상승 시 달러 강세 유발",
+      "realtimeSymbol": "^TNX",
+      "fredId": "GS10",
+      "value": "4.28",
+      "trend": "neutral",
+      "history": [
+        {
+          "date": "2026-03-03",
+          "value": 4.06
+        },
+        {
+          "date": "2026-03-04",
+          "value": 4.08
+        },
+        {
+          "date": "2026-03-05",
+          "value": 4.15
+        },
+        {
+          "date": "2026-03-06",
+          "value": 4.13
+        },
+        {
+          "date": "2026-03-09",
+          "value": 4.14
+        },
+        {
+          "date": "2026-03-10",
+          "value": 4.14
+        },
+        {
+          "date": "2026-03-11",
+          "value": 4.21
+        },
+        {
+          "date": "2026-03-12",
+          "value": 4.27
+        },
+        {
+          "date": "2026-03-13",
+          "value": 4.28
+        },
+        {
+          "date": "2026-03-13",
+          "value": 4.28
+        }
+      ]
+    },
+    {
+      "id": "vixcls",
+      "name": "VIX 공포지수",
+      "unit": "pt",
+      "block": "risk",
+      "impact": "up",
+      "source": "CBOE",
+      "description": "시장 불안정성 및 공포 심리 지표",
+      "realtimeSymbol": "^VIX",
+      "value": "27.19",
+      "trend": "neutral",
+      "history": [
+        {
+          "date": "2026-03-03",
+          "value": 23.57
+        },
+        {
+          "date": "2026-03-04",
+          "value": 21.15
+        },
+        {
+          "date": "2026-03-05",
+          "value": 23.75
+        },
+        {
+          "date": "2026-03-06",
+          "value": 29.49
+        },
+        {
+          "date": "2026-03-09",
+          "value": 25.5
+        },
+        {
+          "date": "2026-03-10",
+          "value": 24.93
+        },
+        {
+          "date": "2026-03-11",
+          "value": 24.23
+        },
+        {
+          "date": "2026-03-12",
+          "value": 27.29
+        },
+        {
+          "date": "2026-03-13",
+          "value": 27.19
+        },
+        {
+          "date": "2026-03-13",
+          "value": 27.19
+        }
+      ]
+    },
+    {
       "id": "kospi",
       "name": "코스피 지수",
       "unit": "pt",
-      "category": "domestic",
+      "block": "assets",
       "impact": "down",
       "source": "KRX",
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
@@ -379,162 +272,56 @@
       ]
     },
     {
-      "id": "cpiaucsl",
-      "name": "미 소비자물가(CPI)",
-      "unit": "%",
-      "category": "international",
+      "id": "dcoilwtico",
+      "name": "국제 유가(WTI)",
+      "unit": "$",
+      "block": "risk",
       "impact": "up",
-      "source": "BLS",
-      "description": "미국 물가 상승 시 금리 인상 기대감으로 달러 강세 유발",
-      "value": "2.4",
-      "trend": "up",
-      "history": [
-        {
-          "date": "2025-05-01",
-          "value": 320.62
-        },
-        {
-          "date": "2025-06-01",
-          "value": 321.435
-        },
-        {
-          "date": "2025-07-01",
-          "value": 322.169
-        },
-        {
-          "date": "2025-08-01",
-          "value": 323.291
-        },
-        {
-          "date": "2025-09-01",
-          "value": 324.245
-        },
-        {
-          "date": "2025-10-01",
-          "value": null
-        },
-        {
-          "date": "2025-11-01",
-          "value": 325.063
-        },
-        {
-          "date": "2025-12-01",
-          "value": 326.031
-        },
-        {
-          "date": "2026-01-01",
-          "value": 326.588
-        },
-        {
-          "date": "2026-02-01",
-          "value": 327.46
-        }
-      ]
-    },
-    {
-      "id": "gdp",
-      "name": "미국 GDP",
-      "unit": "B$",
-      "category": "international",
-      "impact": "up",
-      "source": "BEA",
-      "description": "미국 경제 성장 호조 시 달러 가치 상승",
-      "value": "31,442.483",
-      "trend": "up",
-      "history": [
-        {
-          "date": "2023-07-01",
-          "value": 28074.846
-        },
-        {
-          "date": "2023-10-01",
-          "value": 28424.722
-        },
-        {
-          "date": "2024-01-01",
-          "value": 28708.161
-        },
-        {
-          "date": "2024-04-01",
-          "value": 29147.044
-        },
-        {
-          "date": "2024-07-01",
-          "value": 29511.664
-        },
-        {
-          "date": "2024-10-01",
-          "value": 29825.182
-        },
-        {
-          "date": "2025-01-01",
-          "value": 30042.113
-        },
-        {
-          "date": "2025-04-01",
-          "value": 30485.729
-        },
-        {
-          "date": "2025-07-01",
-          "value": 31098.027
-        },
-        {
-          "date": "2025-10-01",
-          "value": 31442.483
-        }
-      ]
-    },
-    {
-      "id": "vixcls",
-      "name": "VIX 공포지수",
-      "unit": "pt",
-      "category": "international",
-      "impact": "up",
-      "source": "CBOE",
-      "description": "시장 불안정성 및 공포 심리 지표 (상승 시 안전자산 달러 수요 증가)",
-      "realtimeSymbol": "^VIX",
-      "value": "27.19",
+      "source": "WTI",
+      "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
+      "realtimeSymbol": "CL=F",
+      "value": "98.71",
       "trend": "neutral",
       "history": [
         {
           "date": "2026-03-03",
-          "value": 23.57
+          "value": 74.48
         },
         {
           "date": "2026-03-04",
-          "value": 21.15
+          "value": 74.58
         },
         {
           "date": "2026-03-05",
-          "value": 23.75
+          "value": 80.88
         },
         {
           "date": "2026-03-06",
-          "value": 29.49
+          "value": 90.77
         },
         {
           "date": "2026-03-09",
-          "value": 25.5
+          "value": 94.65
         },
         {
           "date": "2026-03-10",
-          "value": 24.93
+          "value": 83.45
         },
         {
           "date": "2026-03-11",
-          "value": 24.23
+          "value": 87.25
         },
         {
           "date": "2026-03-12",
-          "value": 27.29
+          "value": 95.73
         },
         {
           "date": "2026-03-13",
-          "value": 27.19
+          "value": 98.71
         },
         {
           "date": "2026-03-13",
-          "value": 27.19
+          "value": 98.71
         }
       ]
     },
@@ -544,10 +331,10 @@
       "item1": "0101000",
       "name": "한국 기준금리",
       "unit": "%",
-      "category": "domestic",
+      "block": "rates-dollar",
       "impact": "down",
       "source": "한국은행",
-      "description": "금리 인상 시 원화 강세 유도",
+      "description": "미국과의 금리차 결정 요인",
       "cycle": "M",
       "value": "2.50",
       "trend": "neutral",
@@ -583,134 +370,30 @@
       ]
     },
     {
-      "id": "kr-cpi",
-      "statCode": "901Y009",
-      "item1": "0",
-      "name": "국내 소비자물가(CPI)",
+      "id": "kr-10y",
+      "statCode": "721Y001",
+      "item1": "010200000",
+      "name": "국고채 10년",
       "unit": "%",
-      "category": "domestic",
-      "impact": "up",
-      "source": "통계청",
-      "description": "물가 상승 시 원화 가치 하락 압력",
-      "cycle": "M",
-      "value": "3.1",
-      "trend": "up",
+      "block": "rates-dollar",
+      "impact": "down",
+      "source": "한국은행",
+      "description": "한미 금리차 산출용",
+      "cycle": "D",
+      "value": "3.30",
+      "trend": "down",
       "history": [
         {
-          "date": "2025-08",
+          "date": "2026-03-01",
+          "value": 3.5
+        },
+        {
+          "date": "2026-03-05",
           "value": 3.4
         },
         {
-          "date": "2025-09",
-          "value": 3.7
-        },
-        {
-          "date": "2025-10",
-          "value": 3.8
-        },
-        {
-          "date": "2025-11",
+          "date": "2026-03-10",
           "value": 3.3
-        },
-        {
-          "date": "2025-12",
-          "value": 3.2
-        },
-        {
-          "date": "2026-01",
-          "value": 2.8
-        },
-        {
-          "date": "2026-02",
-          "value": 3.1
-        }
-      ]
-    },
-    {
-      "id": "kr-gdp",
-      "statCode": "200Y005",
-      "item1": "10101",
-      "name": "경제성장률",
-      "unit": "%",
-      "category": "domestic",
-      "impact": "down",
-      "source": "한국은행",
-      "description": "경제 성장 호조 시 원화 강세 유도",
-      "cycle": "Q",
-      "value": "2.4",
-      "trend": "up",
-      "history": [
-        {
-          "date": "2024Q3",
-          "value": 1.4
-        },
-        {
-          "date": "2024Q4",
-          "value": 1.7
-        },
-        {
-          "date": "2025Q1",
-          "value": 2
-        },
-        {
-          "date": "2025Q2",
-          "value": 2.2
-        },
-        {
-          "date": "2025Q3",
-          "value": 2.3
-        },
-        {
-          "date": "2025Q4",
-          "value": 2.4
-        },
-        {
-          "date": "2026Q1",
-          "value": 2.4
-        }
-      ]
-    },
-    {
-      "id": "m2-supply",
-      "statCode": "101Y001",
-      "item1": "BBHS01",
-      "name": "통화량(M2)",
-      "unit": "조원",
-      "category": "domestic",
-      "impact": "up",
-      "source": "한국은행",
-      "description": "통화 팽창 시 원화 가치 하락 압력",
-      "cycle": "M",
-      "value": "4500",
-      "trend": "up",
-      "history": [
-        {
-          "date": "2025-08",
-          "value": 4200
-        },
-        {
-          "date": "2025-09",
-          "value": 4250
-        },
-        {
-          "date": "2025-10",
-          "value": 4300
-        },
-        {
-          "date": "2025-11",
-          "value": 4380
-        },
-        {
-          "date": "2025-12",
-          "value": 4420
-        },
-        {
-          "date": "2026-01",
-          "value": 4480
-        },
-        {
-          "date": "2026-02",
-          "value": 4500
         }
       ]
     },
@@ -720,10 +403,10 @@
       "item1": "000000",
       "name": "경상수지",
       "unit": "M$",
-      "category": "domestic",
+      "block": "funding-policy",
       "impact": "down",
       "source": "한국은행",
-      "description": "경상수지 흑자 시 환율 하락 유도",
+      "description": "수지 흑자 시 원화 강세(환율 하락) 유도",
       "cycle": "M",
       "value": "13260",
       "trend": "up",
@@ -762,7 +445,7 @@
       "id": "foreigner-net-buy",
       "name": "KOSPI 외국인 수급동향 (연결대기)",
       "unit": "억원",
-      "category": "domestic",
+      "block": "assets",
       "impact": "down",
       "source": "데이터 예측",
       "description": "외국인 수급은 환율의 가장 강력한 선행 지표입니다.",
@@ -792,6 +475,59 @@
         {
           "date": "03-13",
           "value": -1250
+        }
+      ]
+    },
+    {
+      "id": "rate-differential",
+      "name": "한·미 금리차 (10Y)",
+      "unit": "%p",
+      "block": "rates-dollar",
+      "impact": "up",
+      "source": "계산치",
+      "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
+      "value": "0.98",
+      "trend": "up",
+      "history": [
+        {
+          "date": "2026-03-03",
+          "value": 0.56
+        },
+        {
+          "date": "2026-03-04",
+          "value": 0.68
+        },
+        {
+          "date": "2026-03-05",
+          "value": 0.75
+        },
+        {
+          "date": "2026-03-06",
+          "value": 0
+        },
+        {
+          "date": "2026-03-09",
+          "value": 0
+        },
+        {
+          "date": "2026-03-10",
+          "value": 0.84
+        },
+        {
+          "date": "2026-03-11",
+          "value": 0
+        },
+        {
+          "date": "2026-03-12",
+          "value": 0
+        },
+        {
+          "date": "2026-03-13",
+          "value": 0
+        },
+        {
+          "date": "2026-03-13",
+          "value": 0
         }
       ]
     }
@@ -1006,9 +742,9 @@
     "downProb": 35,
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 6.4,
-      "downScore": 3.4000000000000004
+      "upScore": 2.2,
+      "downScore": 1.2
     }
   },
-  "lastUpdate": "2026. 3. 15. 오후 2:04:03"
+  "lastUpdate": "2026. 3. 15. 오후 2:05:20"
 }

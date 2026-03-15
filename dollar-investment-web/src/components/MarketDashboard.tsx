@@ -61,8 +61,6 @@ export function MarketDashboard() {
         );
     }
 
-    const domesticIndicators = data?.indicators.filter(i => i.category === 'domestic') || [];
-    const internationalIndicators = data?.indicators.filter(i => i.category === 'international') || [];
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
@@ -188,28 +186,58 @@ export function MarketDashboard() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* 국내 요인 섹션 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* 1. 금리·달러 블록 */}
                 <section className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xl">🇰🇷</span>
-                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>국내 요인</h2>
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xl">🏛️</span>
+                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>금리·달러 블록</h2>
                     </div>
+                    <p className="text-xs text-gray-400 mb-4 px-1">캐리 수익률 및 글로벌 달러 사이클 (환율 결정 1순위)</p>
                     <div className="grid grid-cols-1 gap-4">
-                        {domesticIndicators.map((indicator) => (
+                        {data?.indicators.filter(i => i.block === 'rates-dollar').map((indicator) => (
                             <IndicatorCard key={indicator.id} indicator={indicator} theme={theme} />
                         ))}
                     </div>
                 </section>
 
-                {/* 해외 요인 섹션 */}
+                {/* 2. 리스크 블록 */}
                 <section className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xl">🌎</span>
-                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>해외 요인</h2>
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xl">⚠️</span>
+                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>리스크 블록</h2>
                     </div>
+                    <p className="text-xs text-gray-400 mb-4 px-1">시장 공포지수 및 안전자산 선호 심리 (변동성 전이)</p>
                     <div className="grid grid-cols-1 gap-4">
-                        {internationalIndicators.map((indicator) => (
+                        {data?.indicators.filter(i => i.block === 'risk').map((indicator) => (
+                            <IndicatorCard key={indicator.id} indicator={indicator} theme={theme} />
+                        ))}
+                    </div>
+                </section>
+
+                {/* 3. 한국 자산 블록 */}
+                <section className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xl">🇰🇷</span>
+                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>한국 자산 블록</h2>
+                    </div>
+                    <p className="text-xs text-gray-400 mb-4 px-1">국내 증시 성과 및 외국인 자본 유출입 현황</p>
+                    <div className="grid grid-cols-1 gap-4">
+                        {data?.indicators.filter(i => i.block === 'assets').map((indicator) => (
+                            <IndicatorCard key={indicator.id} indicator={indicator} theme={theme} />
+                        ))}
+                    </div>
+                </section>
+
+                {/* 4. 펀딩·정책 블록 */}
+                <section className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xl">🛡️</span>
+                        <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>펀딩·정책 블록</h2>
+                    </div>
+                    <p className="text-xs text-gray-400 mb-4 px-1">실물 경제지표 및 외환 당국 개입 환경</p>
+                    <div className="grid grid-cols-1 gap-4">
+                        {data?.indicators.filter(i => i.block === 'funding-policy').map((indicator) => (
                             <IndicatorCard key={indicator.id} indicator={indicator} theme={theme} />
                         ))}
                     </div>
