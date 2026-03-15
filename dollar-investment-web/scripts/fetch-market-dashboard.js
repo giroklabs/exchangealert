@@ -339,10 +339,11 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 }, (res) => {
-                    let body = '';
-                    res.on('data', chunk => body += chunk);
+                    const chunks = [];
+                    res.on('data', chunk => chunks.push(chunk));
                     res.on('end', () => {
                         try {
+                            const body = Buffer.concat(chunks).toString('utf8');
                             const json = JSON.parse(body);
                             if (res.statusCode === 200 && json.candidates?.[0]?.content?.parts?.[0]?.text) {
                                 resolve(json.candidates[0].content.parts[0].text.trim());
@@ -392,10 +393,11 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
             const result = await new Promise((resolve, reject) => {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${fallbackModel}:generateContent?key=${GEMINI_API_KEY}`;
                 const req = https.request(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {
-                    let body = '';
-                    res.on('data', chunk => body += chunk);
+                    const chunks = [];
+                    res.on('data', chunk => chunks.push(chunk));
                     res.on('end', () => {
                         try {
+                            const body = Buffer.concat(chunks).toString('utf8');
                             const json = JSON.parse(body);
                             if (res.statusCode === 200 && json.candidates?.[0]?.content?.parts?.[0]?.text) {
                                 resolve(json.candidates[0].content.parts[0].text.trim());
@@ -640,13 +642,18 @@ async function main() {
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
     let aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
 
-    // 마크다운 기호 및 불필요한 특수문자 제거
+    // 마크다운 기호 및 깨진 글자 세밀하게 제거
     aiAnalysis = aiAnalysis
-        .replace(/\*\*/g, '') // 볼드 제거
-        .replace(/\*/g, '')   // 이탤릭 제거
-        .replace(/###/g, '')  // 헤더 제거
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/###/g, '')
         .replace(/##/g, '')
         .replace(/#/g, '')
+        .replace(/\uFFFD/g, '') // 유니코드 대체 문자 확실히 제거
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '') // 제어 문자 제거
+        .replace(/[“”]/g, '"') // 특수 따옴표 ASCII로 변경
+        .replace(/[‘’]/g, "'") // 특수 작은 따옴표 ASCII로 변경
+        .replace(/—|–/g, '-') // 특수 대시 ASCII로 변경
         .trim();
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
