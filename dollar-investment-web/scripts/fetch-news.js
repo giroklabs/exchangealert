@@ -14,9 +14,9 @@ const __dirname = path.dirname(__filename);
 // 수집할 키워드 설정
 const KEYWORDS = [
     { id: '환율', query: '환율' },
-    { id: '원+달러+환율', query: '원+달러+환율' },
-    { id: '달러+투자+외화', query: '달러+투자+외화' },
-    { id: '한국은행+금리+환율', query: '한국은행+금리+환율' },
+    { id: '원/달러', query: '원+달러+환율' },
+    { id: '달러 투자', query: '달러+투자+외화' },
+    { id: '한국은행', query: '한국은행+금리+환율' },
     { id: '외환시장', query: '외환시장' }
 ];
 
@@ -54,11 +54,13 @@ function parseRSS(xml) {
 
         // 간결한 데이터 구조 생성
         items.push({
+            id: `news-${items.length}-${link.slice(-10)}`,
             title: decodeHtmlEntities(title),
             link,
             pubDate,
             source: decodeHtmlEntities(source),
-            sourceUrl
+            sourceUrl,
+            relatedLinks: [] // 빈 배열 추가로 프론트엔드 오류 방지
         });
 
         if (items.length >= 15) break; // 키워드당 최대 15개
@@ -83,7 +85,7 @@ async function main() {
     for (const kw of KEYWORDS) {
         console.log(`📡 [${kw.id}] 뉴스 가져오는 중...`);
         const items = await fetchNews(kw.query);
-        newsData[kw.query] = items;
+        newsData[kw.id] = items;
         // 요청 간격 조절
         await new Promise(r => setTimeout(r, 200));
     }

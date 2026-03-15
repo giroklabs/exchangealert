@@ -136,15 +136,25 @@ export function ExchangeRateNews() {
             
             if (staticRes.ok) {
                 const staticData = await staticRes.json();
-                if (staticData.news && staticData.news[query]) {
-                    const parsedNews = staticData.news[query];
-                    setNews(parsedNews);
-                    setLastUpdated(new Date(staticData.lastUpdate));
+                if (staticData && staticData.news) {
+                    // [Fix] 키워드 매칭 로직 강화: label(ID) 또는 query 둘 다 대응
+                    const preset = KEYWORD_PRESETS.find(p => p.query === query);
+                    const newsList = staticData.news[preset?.label || ''] || staticData.news[query];
                     
-                    // 메모리 캐시 업데이트
-                    newsCache[query] = { data: parsedNews, timestamp: new Date(staticData.lastUpdate) };
-                    setIsLoading(false);
-                    return; // 성공 시 조기 종료
+                    if (newsList && newsList.length > 0) {
+                        // 데이터 안전성 확보 (relatedLinks 보장)
+                        const safeNews = newsList.map((n: any) => ({
+                            ...n,
+                            relatedLinks: n.relatedLinks || []
+                        }));
+                        setNews(safeNews);
+                        setLastUpdated(new Date(staticData.lastUpdate));
+                        
+                        // 메모리 캐시 업데이트
+                        newsCache[query] = { data: safeNews, timestamp: new Date(staticData.lastUpdate) };
+                        setIsLoading(false);
+                        return;
+                    }
                 }
             }
 
