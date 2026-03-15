@@ -793,6 +793,75 @@
           "value": 4510.6
         }
       ]
+    },
+    {
+      "id": "foreigner-net-buy",
+      "name": "KOSPI 외국인 수급동향",
+      "unit": "억원",
+      "category": "domestic",
+      "impact": "down",
+      "source": "KIS 실시간",
+      "description": "외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용",
+      "value": "-363",
+      "trend": "down",
+      "history": [
+        {
+          "date": "2026-02-23",
+          "value": -64
+        },
+        {
+          "date": "2026-02-24",
+          "value": 21
+        },
+        {
+          "date": "2026-02-25",
+          "value": 8
+        },
+        {
+          "date": "2026-02-26",
+          "value": -45
+        },
+        {
+          "date": "2026-02-27",
+          "value": 12
+        },
+        {
+          "date": "2026-03-03",
+          "value": 0
+        },
+        {
+          "date": "2026-03-04",
+          "value": -76
+        },
+        {
+          "date": "2026-03-05",
+          "value": 8
+        },
+        {
+          "date": "2026-03-06",
+          "value": 6
+        },
+        {
+          "date": "2026-03-09",
+          "value": -306
+        },
+        {
+          "date": "2026-03-10",
+          "value": 13
+        },
+        {
+          "date": "2026-03-11",
+          "value": 2
+        },
+        {
+          "date": "2026-03-12",
+          "value": 18
+        },
+        {
+          "date": "2026-03-13",
+          "value": -363
+        }
+      ]
     }
   ],
   "majorRates": [
@@ -841,173 +910,74 @@
   "stockPrices": [
     {
       "id": "samsung",
-      "symbol": "005930.KS",
+      "symbol": "005930",
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
       "price": 183500,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-2.34",
+      "trend": "down"
     },
     {
       "id": "hynix",
-      "symbol": "000660.KS",
+      "symbol": "000660",
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
       "price": 910000,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-2.15",
+      "trend": "down"
     },
     {
       "id": "hyundai",
-      "symbol": "005380.KS",
+      "symbol": "005380",
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
       "price": 517000,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-0.77",
+      "trend": "down"
     },
     {
       "id": "kia",
-      "symbol": "000270.KS",
+      "symbol": "000270",
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
       "price": 164300,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-1.62",
+      "trend": "down"
     },
     {
       "id": "naver",
-      "symbol": "035420.KS",
+      "symbol": "035420",
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
       "price": 223000,
-      "changePercent": "+0.00",
+      "changePercent": "+0.45",
       "trend": "up"
     },
     {
       "id": "kakao",
-      "symbol": "035720.KS",
+      "symbol": "035720",
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
       "price": 50600,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "apple",
-      "symbol": "AAPL",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "애플",
-      "enName": "Apple",
-      "price": 250.12,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "tesla",
-      "symbol": "TSLA",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "테슬라",
-      "enName": "Tesla",
-      "price": 391.2,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "nvidia",
-      "symbol": "NVDA",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "엔비디아",
-      "enName": "NVIDIA",
-      "price": 180.25,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "microsoft",
-      "symbol": "MSFT",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "마이크로소프트",
-      "enName": "Microsoft",
-      "price": 395.55,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "google",
-      "symbol": "GOOGL",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "구글",
-      "enName": "Google",
-      "price": 302.28,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "amazon",
-      "symbol": "AMZN",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "아마존",
-      "enName": "Amazon",
-      "price": 207.67,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "qqq",
-      "symbol": "QQQ",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "QQQ",
-      "enName": "Invesco QQQ Trust",
-      "price": 593.72,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "spy",
-      "symbol": "SPY",
-      "market": "overseas",
-      "excd": "NYS",
-      "name": "SPY",
-      "enName": "SPDR S&P 500 ETF",
-      "price": 662.29,
-      "changePercent": "+0.00",
-      "trend": "up"
-    },
-    {
-      "id": "schd",
-      "symbol": "SCHD",
-      "market": "overseas",
-      "excd": "NYS",
-      "name": "SCHD",
-      "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.8,
-      "changePercent": "+0.00",
+      "changePercent": "+0.40",
       "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 78,
-    "downProb": 22,
-    "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 주신 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석해드리겠습니다.\n\n미국은 기준금리, 소비자물가, GDP 등 주요 경제지표가 견조한 흐름을 보이며 달러 강세 압력을 지속하고 있습니다. 엔/달러 환율 상승 및 국제 유가 강세 또한 원/달러 환율 상승 요인으로 작용합니다.\n\nVIX 공포지수가 27.19pt로 높은 수준을 유지하며 글로벌 위험회피 심리가 확대되고 있습니다. 이는 안전자산 선호 심리를 자극하고 외국인 자금의 국내 증시 이탈 압력으로 이어져 원화 약세에 기여할 가능성이 큽니다.\n\n비록 국내 경제성장률 상승 및 일부 지표에서 원화 강세를 지지하는 요인도 있습니다. 그러나 미국과의 기준금리 격차, 국내 물가 상승 압력 및 무엇보다 고조된 글로벌 리스크 심리를 상쇄하기는 역부족입니다.\n\n결론: 상승 우세",
+    "upProb": 81,
+    "downProb": 19,
+    "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 주어진 경제 지표들을 바탕으로 향후 원/달러 환율 방향성을 분석하겠습니다.\n\n현재 VIX 공포지수가 27.19pt로 높은 수준을 유지하며 시장의 리스크 회피 심리가 강함을 보여줍니다. 이는 외국인 투자자들의 코스피 순매도 (-363억원)로 이어져 원화 약세 압력을 가중시키고 있습니다. 자본 유출 심화는 달러 강세 요인으로 작용하며 원/달러 환율 상승을 지지할 것으로 예상됩니다.\n\n미국 기준금리, 10년물 국채금리, 달러 인덱스 및 강력한 GDP 지표 등 전반적인 미국 경제의 견조함이 달러 강세를 이끌고 있습니다. 반면 한미 금리차 확대와 경상수지 악화, 고유가 부담 등 국내 취약 요인들이 원화 약세��� 추가적인 영향을 미치고 있습니다. 이러한 거시적 환경은 원/달러 환율의 상방 압력을 더욱 강화할 것입니다.\n\n결론: 상승 우세",
     "score": {
-      "upScore": 7.6000000000000005,
+      "upScore": 9.100000000000001,
       "downScore": 2.2
     }
   },
-  "lastUpdate": "2026. 3. 15. 오전 4:21:05"
+  "lastUpdate": "2026. 3. 15. AM 4:26:12"
 }
