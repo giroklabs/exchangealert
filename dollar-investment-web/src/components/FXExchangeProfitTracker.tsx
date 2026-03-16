@@ -208,19 +208,22 @@ export function FXExchangeProfitTracker() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <h3 className={`text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보유 중인 달러</h3>
-                    <div className="space-y-1 mb-3">
+                    <div className="space-y-1">
                         <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                             ${totalHoldingUsd.toLocaleString()}
                         </p>
                         <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
                             매수 원금: {Math.round(totalHoldingKrw).toLocaleString()}원
                         </p>
-                    </div>
-                    <div className="flex justify-between items-baseline border-t border-gray-100 dark:border-gray-700 pt-1 mt-1">
-                        <span className="text-xs font-bold text-gray-600 dark:text-gray-300">평균 단가:</span>
-                        <span className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                            {avgBuyRate > 0 ? avgBuyRate.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '0'}원
-                        </span>
+                        <div className="flex justify-between items-baseline border-t border-gray-100 dark:border-gray-700 pt-1 mt-1">
+                            <span className="text-xs font-bold text-gray-600 dark:text-gray-300">평균 단가:</span>
+                            <span className={`text-lg font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                {avgBuyRate > 0 ? avgBuyRate.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : '0'}원
+                            </span>
+                        </div>
+                        <div className="text-[10px] text-right text-gray-400 invisible">
+                            Spacer
+                        </div>
                     </div>
                 </div>
                 <div className={`p-6 rounded-2xl shadow-xl ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}>
@@ -377,8 +380,8 @@ export function FXExchangeProfitTracker() {
                                 <span className="absolute left-3 top-3 text-gray-400">$</span>
                                 <input
                                     type="number"
-                                    value={newInvestment.usdAmount}
-                                    onChange={(e) => setNewInvestment({ ...newInvestment, usdAmount: Number(e.target.value) })}
+                                    value={newInvestment.usdAmount || ''}
+                                    onChange={(e) => setNewInvestment({ ...newInvestment, usdAmount: e.target.value === '' ? undefined : Number(e.target.value) })}
                                     className={`w-full p-3 pl-8 rounded-xl border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'}`}
                                 />
                             </div>

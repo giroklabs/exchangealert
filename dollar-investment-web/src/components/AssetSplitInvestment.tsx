@@ -207,6 +207,11 @@ function SingleAssetManager({
                         <div className={`text-sm mt-1 font-medium ${totalRoi >= 0 ? 'text-red-500 font-bold' : 'text-blue-500 font-bold'}`}>
                             전체 수익률: {totalRoi >= 0 ? '+' : ''}{totalRoi.toFixed(2)}% ({Math.round(totalProfit).toLocaleString()}원)
                         </div>
+                        <div className={`text-[11px] mt-0.5 font-bold space-x-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                            <span>매수총액: {Math.round(totalInvested).toLocaleString()}원</span>
+                            <span>•</span>
+                            <span>평단가: {Math.round(totalInvested / activeSlots.reduce((sum, s) => sum + s.quantity, 0) || 0).toLocaleString()}원</span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex gap-2">

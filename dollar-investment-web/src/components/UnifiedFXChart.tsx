@@ -14,8 +14,10 @@ import { useTheme } from '../contexts/ThemeContext';
 import {
     fetchFXHistoryData,
     fetchFXIntradayData,
+    fetchFX6mHistoryData,
     type FXHistoryData,
-    type FXIntradayData
+    type FXIntradayData,
+    type FX6mHistoryResponse
 } from '../services/fxHistoryService';
 
 type Period = '1D' | '1W' | '1M' | '1Y' | 'ALL';
@@ -41,6 +43,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         ma20: true,
         ma60: false
     });
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -170,7 +173,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                     </span>
                 </div>
 
-                <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-xl">
+                <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-xl items-center gap-1">
                     {(['1D', '1W', '1M', '1Y', 'ALL'] as const).map((p) => (
                         <button
                             key={p}
@@ -183,8 +186,20 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                             {p === '1D' ? '1일' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
                         </button>
                     ))}
+                    <div className="w-px h-4 bg-gray-300 dark:bg-gray-700 mx-1"></div>
+                    <button
+                        onClick={() => setShowHistoryModal(true)}
+                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-500 hover:text-blue-600 hover:bg-white dark:hover:bg-gray-700`}
+                    >
+                        환율정보 📋
+                    </button>
                 </div>
             </div>
+
+            {/* 6개월 환율 히스토리 모달 */}
+            {showHistoryModal && (
+                <FXHistoryModal onClose={() => setShowHistoryModal(false)} />
+            )}
 
             {period !== '1D' && (
                 <div className="mb-6 flex flex-wrap gap-4 text-[11px] font-medium">
@@ -333,6 +348,81 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                 ) : (
                     <p>💡 <b>Tip:</b> 이동평균선은 가격 추세를 보여줍니다. 단기평균선(MA5)이 장기평균선(MA60)을 상향 돌파하면 강세 신호로 해석되기도 합니다.</p>
                 )}
+            </div>
+        </div>
+    );
+}
+
+function FXHistoryModal({ onClose }: { onClose: () => void }) {
+    const { theme } = useTheme();
+    const [history, setHistory] = useState<FX6mHistoryResponse | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const load = async () => {
+            const data = await fetchFX6mHistoryData();
+            setHistory(data);
+            setIsLoading(false);
+        };
+        load();
+    }, []);
+
+    return (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+            <div
+                className={`w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-3xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
+                onClick={e => e.stopPropagation()}
+            >
+                <div className={`p-6 border-b flex justify-between items-center ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+                    <div className="flex flex-col">
+                        <h2 className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>📅 최근 6개월 환율 일간 최고/최저</h2>
+                        <p className="text-xs text-gray-500 mt-1">데이터 업데이트: {history?.lastUpdate ? new Date(history.lastUpdate).toLocaleString() : '-'}</p>
+                    </div>
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors font-bold">✕</button>
+                </div>
+                
+                <div className="flex-1 overflow-y-auto p-0 px-1">
+                    {isLoading ? (
+                        <div className="flex justify-center items-center h-64">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        </div>
+                    ) : !history || !history.data.length ? (
+                        <div className="text-center py-20 text-gray-500">환율 이력 데이터를 불러올 수 없습니다.</div>
+                    ) : (
+                        <table className="w-full text-left border-collapse">
+                            <thead className={`sticky top-0 z-10 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                                <tr className={`border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+                                    <th className={`p-4 text-xs font-bold uppercase ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>날짜</th>
+                                    <th className={`p-4 text-xs font-bold uppercase text-red-500 text-right`}>최고가 (High)</th>
+                                    <th className={`p-4 text-xs font-bold uppercase text-blue-500 text-right`}>최저가 (Low)</th>
+                                    <th className={`p-4 text-xs font-bold uppercase ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} text-right`}>종가 (Close)</th>
+                                </tr>
+                            </thead>
+                            <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700/50' : 'divide-gray-50'}`}>
+                                {history.data.map((item) => (
+                                    <tr key={item.date} className={`${theme === 'dark' ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50/50'} transition-colors`}>
+                                        <td className={`p-4 text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                            {item.date}
+                                        </td>
+                                        <td className="p-4 text-sm font-bold text-red-400 text-right">
+                                            {item.high.toLocaleString()}원
+                                        </td>
+                                        <td className="p-4 text-sm font-bold text-blue-400 text-right">
+                                            {item.low.toLocaleString()}원
+                                        </td>
+                                        <td className={`p-4 text-sm font-bold text-right ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                                            {item.close.toLocaleString()}원
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+                
+                <div className={`p-6 border-t text-center text-[11px] text-gray-400 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+                    야후 파이낸스(Yahoo Finance) 데이터를 바탕으로 매일 오전 9시에 업데이트됩니다.
+                </div>
             </div>
         </div>
     );

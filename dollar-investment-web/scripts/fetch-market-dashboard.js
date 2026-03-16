@@ -179,22 +179,34 @@ async function fetchFromEcos(item) {
 
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
-    try {
-        // KOSPI 전체 시장 수급의 프록시(Proxy)로 KODEX 200 ETF(069500)의 외인 수급 사용
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=069500`;
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010900",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-            }
-        });
-        const data = await res.json();
-        const output = data.output || data.output1;
+    
+    const tryFetch = async (baseUrl) => {
+        try {
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=069500`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHKST01010900",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                }
+            });
+            return await res.json();
+        } catch (e) {
+            return { error: e.message };
+        }
+    };
 
+    try {
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data.error || !data.output) {
+            console.warn(`⚠️ KIS 외인수급 443 실패, 9443 시도 중...`);
+            data = await tryFetch(KIS_BASE_URL_SBARK);
+        }
+
+        const output = data.output || data.output1;
         if (output && Array.isArray(output)) {
             return output
                 .map(d => {
@@ -209,36 +221,46 @@ async function fetchMarketInvestorTrend(token) {
                 .slice(0, 14);
         }
     } catch (e) {
-        console.error("❌ KIS 외인수급 조회 에러:", e.message);
+        console.error("❌ KIS 외인수급 조회 최종 에러:", e.message);
     }
     return null;
 }
 
 async function fetchInvestorDepositsFromKIS(token) {
     if (!token) return null;
+    
+    const tryFetch = async (baseUrl) => {
+        try {
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/market-fund?fid_cond_mrkt_div_code=J&fid_input_iscd=0000`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHKST01010700",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                }
+            });
+            return await res.json();
+        } catch (e) {
+            return { error: e.message };
+        }
+    };
+
     try {
-        // 국내증시자금추이 (FHKST01010700)
-        // 파라미터: fid_cond_mrkt_div_code (J:주식), fid_input_iscd (0000:전체)
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund?fid_cond_mrkt_div_code=J&fid_input_iscd=0000`;
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010700",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-            }
-        });
-        const data = await res.json();
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data.error || (data.rt_cd !== '0' && data.rt_cd !== '00')) {
+            console.warn(`⚠️ KIS 예탁금 443 실패, 9443 시도 중...`);
+            data = await tryFetch(KIS_BASE_URL_SBARK);
+        }
         
         if (data.rt_cd !== '0' && data.rt_cd !== '00') {
-            console.error("❌ KIS 예탁금 API 응답 실패:", data.msg1 || data.message || data.error_description);
+            console.error("❌ KIS 예탁금 API 응답 최종 실패:", data.msg1 || data.message || data.error_description);
             return null;
         }
 
         const output = data.output1 || data.output;
-        
         if (output && Array.isArray(output)) {
             return output
                 .slice(0, 14)
@@ -247,13 +269,13 @@ async function fetchInvestorDepositsFromKIS(token) {
                     const depos = d.cust_depos || d.CUST_DEPOS || "0";
                     return {
                         date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: Math.round(parseFloat(depos) / 1000000) // 원 -> 억원 단위 보정 (연구 보고서 기준)
+                        value: Math.round(parseFloat(depos) / 1000000) // 원 -> 억원 단위 보정
                     };
                 })
                 .filter(d => d.date && !isNaN(d.value));
         }
     } catch (e) {
-        console.error("❌ KIS 투자자예탁금 조회 에러:", e.message);
+        console.error("❌ KIS 투자자예탁금 조회 최종 에러:", e.message);
     }
     return null;
 }

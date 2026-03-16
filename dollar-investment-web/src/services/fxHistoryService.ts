@@ -42,3 +42,26 @@ export async function fetchFXIntradayData(): Promise<FXIntradayData[]> {
         return [];
     }
 }
+
+export interface FX6mHistoryResponse {
+    lastUpdate: string;
+    data: Array<{
+        date: string;
+        high: number;
+        low: number;
+        close: number;
+    }>;
+}
+
+export async function fetchFX6mHistoryData(): Promise<FX6mHistoryResponse | null> {
+    try {
+        const timestamp = new Date().getTime();
+        const url = `/data/fx-history-6m.json?t=${timestamp}`;
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) return null;
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading 6m history data:', error);
+        return null;
+    }
+}
