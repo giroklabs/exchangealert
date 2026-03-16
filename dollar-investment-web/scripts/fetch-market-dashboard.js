@@ -207,7 +207,8 @@ async function fetchInvestorDepositsFromKIS(token) {
     if (!token) return null;
     try {
         // 국내증시자금추이 (FHKST01010700)
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund?FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD=0000`;
+        // 국내증시자금추이 (FHKST01010700)
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund?fid_cond_mrkt_div_code=J&fid_input_iscd=0000`;
         const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
@@ -226,6 +227,8 @@ async function fetchInvestorDepositsFromKIS(token) {
                     // 단위: 십억원 (보통 억~수십조 단위이므로 십억원 단위가 적절)
                     value: Math.round(parseFloat(d.cust_depos) / 10)
                 }));
+        } else {
+            console.warn("⚠️ KIS 투자자예탁금 데이터 구조 이상:", data.msg1 || data.message);
         }
     } catch (e) {
         console.error("❌ KIS 투자자예탁금 조회 에러:", e.message);
