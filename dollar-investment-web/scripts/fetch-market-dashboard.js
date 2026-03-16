@@ -16,7 +16,7 @@ const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const KIS_BASE_URL = "https://openapi.koreainvestment.com";
+const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
 
 // API 키 상태 로그
 console.log(`🔑 API 키 확인: FRED(${FRED_API_KEY ? 'O' : 'X'}), ECOS(${ECOS_API_KEY ? 'O' : 'X'}), KIS(${KIS_APP_KEY ? 'O' : 'X'}), GEMINI(${GEMINI_API_KEY ? 'O' : 'X'})`);
@@ -292,7 +292,7 @@ async function getKisAccessToken() {
     console.log("🚀 KIS 신규 토큰 발급 요청 중... (매일 갱신 필요)");
     try {
         // 토큰 발급은 표준 443 포트가 권장됨
-        const tokenUrl = "https://openapi.koreainvestment.com/oauth2/tokenP";
+        const tokenUrl = "https://openapi.koreainvestment.com:9443/oauth2/tokenP";
         const res = await fetch(tokenUrl, {
             method: 'POST',
             headers: { 
