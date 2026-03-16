@@ -39,12 +39,12 @@ jobs:
           # push 이벤트일 때는 AI 분석을 스케줄 작업으로 미루고 비용을 아낌
           SKIP_AI_ANALYSIS: ${{ github.event_name == 'push' && 'true' || 'false' }}
         run: |
-          node scripts/fetch-market-dashboard.js
+          node scripts/fetch-market-dashboard.js 2>&1 | tee script_debug.log
 
       - name: Commit and push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/data/market-dashboard.json
-          git diff --staged --quiet || git commit -m "data: 환율 지표 데이터 및 AI 분석 업데이트"
+          git add public/data/market-dashboard.json script_debug.log script_output.log || true
+          git diff --staged --quiet || git commit -m "data: 환율 지표 데이터 및 디버그 로그 업데이트"
           git push

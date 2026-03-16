@@ -16,7 +16,7 @@ const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
+const KIS_BASE_URL = "https://openapi.koreainvestment.com";
 
 // API 키 상태 로그
 console.log(`🔑 API 키 확인: FRED(${FRED_API_KEY ? 'O' : 'X'}), ECOS(${ECOS_API_KEY ? 'O' : 'X'}), KIS(${KIS_APP_KEY ? 'O' : 'X'}), GEMINI(${GEMINI_API_KEY ? 'O' : 'X'})`);
