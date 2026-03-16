@@ -187,15 +187,20 @@ async function fetchMarketInvestorTrend(token) {
             }
         });
         const data = await res.json();
-        if (data.output && Array.isArray(data.output)) {
-            return data.output
-                .filter(d => d.frgn_ntby_tr_pbmn && !isNaN(parseFloat(d.frgn_ntby_tr_pbmn)))
-                .slice(0, 14)
-                .map(d => ({
-                    date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                    // 단위: 백만원 -> 억원 변환
-                    value: Math.round(parseFloat(d.frgn_ntby_tr_pbmn) / 100)
-                }));
+        const output = data.output || data.output1;
+
+        if (output && Array.isArray(output)) {
+            return output
+                .map(d => {
+                    const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
+                    const ntby = d.frgn_ntby_tr_pbmn || d.FRGN_NTBY_TR_PBMN || "0";
+                    return {
+                        date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        value: Math.round(parseFloat(ntby) / 100) // 백만원 -> 억원
+                    };
+                })
+                .filter(d => d.date && !isNaN(d.value))
+                .slice(0, 14);
         }
     } catch (e) {
         console.error("❌ KIS 외인수급 조회 에러:", e.message);
@@ -207,7 +212,7 @@ async function fetchInvestorDepositsFromKIS(token) {
     if (!token) return null;
     try {
         // 국내증시자금추이 (FHKST01010700)
-        // 국내증시자금추이 (FHKST01010700)
+        // 파라미터: fid_cond_mrkt_div_code (J:주식), fid_input_iscd (0000:전체)
         const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund?fid_cond_mrkt_div_code=J&fid_input_iscd=0000`;
         const res = await fetch(url, {
             headers: {
@@ -219,19 +224,31 @@ async function fetchInvestorDepositsFromKIS(token) {
             }
         });
         const data = await res.json();
-        // KIS API에 따라 output 또는 output1으로 데이터가 내려옴 (FHKST01010700은 보통 output1)
+        
+        // KIS API 로그 강화 (디버깅용)
+        if (data.rt_cd !== '0') {
+            console.error("❌ KIS 예탁금 API 응답 실패:", data.msg1 || data.message);
+            return null;
+        }
+
+        // KIS API에 따라 output1 또는 output으로 데이터가 내려옴
         const output = data.output1 || data.output;
         
         if (output && Array.isArray(output)) {
+            // 필드명 보정 (대문자/소문자 대응)
             return output
                 .slice(0, 14)
-                .map(d => ({
-                    date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                    // 단위: 십억원 (보통 억~수십조 단위이므로 십억원 단위가 적절)
-                    value: Math.round(parseFloat(d.cust_depos) / 10)
-                }));
+                .map(d => {
+                    const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
+                    const depos = d.cust_depos || d.CUST_DEPOS || "0";
+                    return {
+                        date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        value: Math.round(parseFloat(depos) / 10)
+                    };
+                })
+                .filter(d => d.date && !isNaN(d.value));
         } else {
-            console.warn("⚠️ KIS 투자자예탁금 데이터 구조 미발견 (output/output1 없음):", data.msg1 || data.message || JSON.stringify(data));
+            console.warn("⚠️ KIS 예탁금 데이터 구조 미발견 (output1/output 없음). 응답 전문:", JSON.stringify(data).substring(0, 200));
         }
     } catch (e) {
         console.error("❌ KIS 투자자예탁금 조회 에러:", e.message);
