@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { fetchMarketDashboardData } from '../services/marketDashboardService';
-import { fetchAllCurrentExchangeRates } from '../services/exchangeRateService';
+import { fetchAllCurrentExchangeRates, fetchLastUpdateTime } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import { UnifiedFXChart } from './UnifiedFXChart';
@@ -19,28 +19,32 @@ export function MarketDashboard() {
                 // 1. 대시보드 기본 데이터 로드 (금리, AI 분석 등)
                 const result = await fetchMarketDashboardData();
 
-                // 2. 최신 환율 데이터 로드 (헤더와 동일한 소스 - 15분 단위)
+                // 2. 최신 환율 데이터 로드 및 시간 동기화
                 try {
-                    const currentRates = await fetchAllCurrentExchangeRates();
+                    const [currentRates, updateTime] = await Promise.all([
+                        fetchAllCurrentExchangeRates(),
+                        fetchLastUpdateTime()
+                    ]);
 
                     if (result.majorRates && result.majorRates.length > 0) {
                         const updatedMajorRates = result.majorRates.map(rate => {
-                            // 통화 코드 추출 (id에서 'usd' 등 파싱)
                             const curUnit = rate.id.split('-')[0].toUpperCase();
                             const latest = currentRates.find(r => r.cur_unit === curUnit);
-
                             if (latest) {
                                 return {
                                     ...rate,
-                                    value: latest.deal_bas_r // 헤더와 동일한 최신 수치로 덮어쓰기
+                                    value: latest.deal_bas_r
                                 };
                             }
                             return rate;
                         });
                         result.majorRates = updatedMajorRates;
                     }
+                    if (updateTime) {
+                        result.lastUpdate = updateTime;
+                    }
                 } catch (e) {
-                    console.warn('최신 환율 동기화 실패, 기존 데이터 유지:', e);
+                    console.warn('최신 환율/시간 동기화 실패:', e);
                 }
 
                 setData(result);
@@ -51,6 +55,8 @@ export function MarketDashboard() {
             }
         };
         loadData();
+        const interval = setInterval(loadData, 5 * 60 * 1000); // 5분마다 자동 갱신
+        return () => clearInterval(interval);
     }, []);
 
     if (isLoading) {

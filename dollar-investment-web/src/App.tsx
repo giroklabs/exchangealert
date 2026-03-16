@@ -39,7 +39,7 @@ function App() {
       }
     }
     fetchHeaderRate();
-    const interval = setInterval(fetchHeaderRate, 15 * 60 * 1000); // 15분
+    const interval = setInterval(fetchHeaderRate, 5 * 60 * 1000); // 5분으로 단축
     return () => clearInterval(interval);
   }, []);
 

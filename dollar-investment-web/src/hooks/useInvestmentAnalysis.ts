@@ -119,10 +119,10 @@ export function useInvestmentAnalysis(): AnalysisData {
 
     loadData();
 
-    // 15분마다 데이터 새로고침 (환율 업데이트 주기와 동일)
+    // 5분마다 데이터 새로고침
     const interval = setInterval(() => {
       loadData();
-    }, 15 * 60 * 1000);
+    }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
