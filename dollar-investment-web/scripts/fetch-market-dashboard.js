@@ -398,11 +398,10 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 분석 가이드:
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
 2. [환율 추세] 제공된 원/달러 환율의 최근 기술적 흐름(지지/저항, 추세 지속성)을 분석에 포함하세요.
-3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요. 특히 TED 스프레드와 SOFR-OIS를 통해 은행간 달러 유동성 환경을, 투자자예탁금을 통해 국내 증시 대기 자금 수위를 진단하세요.
-4. [펀딩·정책] 블록의 CDS 프리미엄, 가산금리, 단기외채 비중을 통해 한국의 대외 건전성과 펀딩 리스크를 심층 진단하세요.
-5. [투자 전략] 위 분석을 종합하여 일일 및 단기 관점에서의 실전 달러 투자 대응 방안(분할 매수/매도 시점, 목표가 가이드 등)을 구체적으로 제시하세요.
+3. [리스크] 및 [한국 자산] 블록을 통해 리스크 온/오프 국면을 진단하세요.
+4. [펀딩·정책] 및 [투자 전략]을 종합하여 실전 달러 투자 전략을 간략히 제시하세요. (목표가 가이드 포함)
 
-응답은 전문적이고 분석적인 톤으로 4~5개 단락으로 작성하되, 마크다운 기호(##, **)나 이모지를 절대 사용하지 마세요. 단락 중 하나는 반드시 "실전 투자 대응:"으로 시작하여 전략을 기술하고, 마지막에 "결론: [상승/하락/보합] 우세"라고 명확히 적어주세요.`;
+응답은 전문적이고 분석적인 톤으로 **최대한 간결하게 2~3개 단락**으로 작성하세요 (공백 포함 500자 내외). 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요. 마지막 단락은 반드시 "실전 투자 대응:"으로 시작하고, 끝에 "결론: [상승/하락/보합] 우세"라고 적어주세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -412,13 +411,12 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
     // 1. 등록된 모델 리스트 시도
     // 2026년 기준 실제 사용 가능한 모델 우선순위 목록
+    // 비용 최적화를 위해 Flash-8B 모델을 1순위로 배치 (Pro/Flash 2.0/2.5 대비 월등히 저렴)
     const modelConfigs = [
+        { ver: 'v1beta', model: 'gemini-1.5-flash-8b' },
+        { ver: 'v1beta', model: 'gemini-1.5-flash-002' },
         { ver: 'v1beta', model: 'gemini-2.0-flash' },
         { ver: 'v1beta', model: 'gemini-2.0-flash-lite' },
-        { ver: 'v1beta', model: 'gemini-2.0-flash-001' },
-        { ver: 'v1beta', model: 'gemini-2.5-pro-exp-03-25' },
-        { ver: 'v1beta', model: 'gemini-1.5-flash-002' },
-        { ver: 'v1beta', model: 'gemini-1.5-flash-8b' },
         { ver: 'v1beta', model: 'gemini-1.5-pro-002' },
     ];
 
@@ -835,7 +833,14 @@ async function main() {
 
     console.log('🤖 AI 시장 분석 생성 중...');
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
-    let aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
+    
+    let aiAnalysis = "";
+    if (process.env.SKIP_AI_ANALYSIS === 'true') {
+        console.log('⏭️ SKIP_AI_ANALYSIS 설정에 의해 AI 분석을 건너뜁니다. (비용 절감)');
+        aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(KST 09:10, 21:10)에서 확인 가능합니다. 결론: 관망 우세";
+    } else {
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
+    }
 
     // 마크다운 기호 및 깨진 글자 세밀하게 제거
     aiAnalysis = aiAnalysis
