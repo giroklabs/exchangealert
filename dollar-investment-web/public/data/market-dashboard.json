@@ -399,7 +399,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,504.78",
+      "value": "5,513.79",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -441,7 +441,7 @@
         },
         {
           "date": "2026-03-16",
-          "value": 5504.78
+          "value": 5513.79
         }
       ]
     },
@@ -454,10 +454,14 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "99.05",
+      "value": "98.71",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
+        {
+          "date": "2026-03-02",
+          "value": 71.13
+        },
         {
           "date": "2026-03-03",
           "value": 74.48
@@ -493,10 +497,6 @@
         {
           "date": "2026-03-13",
           "value": 98.71
-        },
-        {
-          "date": "2026-03-16",
-          "value": 99.05
         }
       ]
     },
@@ -936,9 +936,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,495.10",
-      "change": "-3.90",
-      "changePercent": "-0.26",
+      "value": "1,495.30",
+      "change": "-3.70",
+      "changePercent": "-0.25",
       "trend": "down"
     },
     {
@@ -947,9 +947,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.37",
-      "change": "-1.09",
-      "changePercent": "-0.12",
+      "value": "937.46",
+      "change": "-1.00",
+      "changePercent": "-0.11",
       "trend": "down"
     },
     {
@@ -957,9 +957,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,712.84",
-      "change": "+1.51",
-      "changePercent": "+0.09",
+      "value": "1,712.12",
+      "change": "+0.79",
+      "changePercent": "+0.05",
       "trend": "up"
     },
     {
@@ -967,9 +967,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.69",
-      "change": "-0.40",
-      "changePercent": "-0.18",
+      "value": "216.62",
+      "change": "-0.47",
+      "changePercent": "-0.22",
       "trend": "down"
     }
   ],
@@ -980,8 +980,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 185900,
-      "changePercent": "+1.31",
+      "price": 186300,
+      "changePercent": "+1.53",
       "trend": "up"
     },
     {
@@ -990,8 +990,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 939000,
-      "changePercent": "+3.19",
+      "price": 942000,
+      "changePercent": "+3.52",
       "trend": "up"
     },
     {
@@ -1000,8 +1000,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 503000,
-      "changePercent": "-2.71",
+      "price": 504000,
+      "changePercent": "-2.51",
       "trend": "down"
     },
     {
@@ -1010,8 +1010,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 163300,
-      "changePercent": "-0.61",
+      "price": 163700,
+      "changePercent": "-0.37",
       "trend": "down"
     },
     {
@@ -1020,8 +1020,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 218000,
-      "changePercent": "-2.24",
+      "price": 218500,
+      "changePercent": "-2.02",
       "trend": "down"
     },
     {
@@ -1030,8 +1030,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50400,
-      "changePercent": "-0.40",
+      "price": 50450,
+      "changePercent": "-0.30",
       "trend": "down"
     },
     {
@@ -1138,11 +1138,11 @@
     "sentiment": "환율 상승 우세",
     "upProb": 64,
     "downProb": 36,
-    "detailedAnalysis": "한수지입니다. 원/달러 환율은 핵심 요인들이 복합 작용하며 강한 상승 압력을 받습니다. 최우선 한미 금리차(0.83%p, 확대)에 따른 달러 캐리 매력이 압도적이며, 달러 인덱스(100.36pt, 상승)도 글로벌 달러 강세를 지지합니다. 환율은 최근 1450원대에서 1495원대로 급등, 강한 상승 추세로 1500원대 진입을 목전에 둡니다.\n\n리스크 국면은 혼재됩니다. VIX(27.19pt)는 글로벌 불확실성을 시사하나, 코스피 상승과 외국인 수급 유입은 한국 자산에 대한 선택적 리스크 온 심리를 보여줍니다. 그러나 이는 강달러 기조를 상쇄하기 역부족입니다. 경상수지 흑자폭 감소 및 외평채 가산금리 상승 또한 원화 약세 요인으로, 전반적으로 달러 강세 요인이 압도적입니다.\n\n실전 투자 대응: 달러 매수 전략이 유효하며, 단기 목표 환율은 1510~1520원 수준입니다.\n결론: 상승 우세",
+    "detailedAnalysis": "현재 한미 금리차 확대(0.83%p)와 달러 인덱스(100.36pt, up) 상승이 원/달러 환율의 핵심 상승 압력입니다. 이는 글로벌 달러 강세 및 한국 자산 캐리 매력 저하를 명확히 시사합니다. 최근 환율은 1490원대까지 상승, 1500원대 돌파를 시도하는 강한 기술적 상승 추세를 보입니다.\n\nVIX(27.19pt) 높은 전이 위험과 국제 유가 상승은 리스크 오프 심리를 강화합니다. 코스피 외국인 수급은 긍정적이나, 경상수지 둔화 및 외평채 가산금리 상승은 원화 약세 요인을 가중합니다. 주요 지표들은 전반적으로 달러 강세 및 원화 약세 국면을 지지합니다.\n\n실전 투자 대응: 원화 약세 추세가 확연하여 달러 자산 비중 확대를 권고합니다. 1470원대 후반을 지지선으로 매수 관점 접근, 1520원 수준을 1차 목표가로 설정하는 전략이 유효합니다.\n결론: 상승 우세",
     "score": {
-      "upScore": 31.17658882810348,
-      "downScore": 17.48525020043137
+      "upScore": 31.33582866857607,
+      "downScore": 17.62221537204489
     }
   },
-  "lastUpdate": "2026. 3. 16. 오전 3:56:30"
+  "lastUpdate": "2026. 3. 16. 오전 4:01:41"
 }
