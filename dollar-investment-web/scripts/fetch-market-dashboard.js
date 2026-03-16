@@ -882,17 +882,17 @@ async function main() {
             const dashboardPath = path.join(__dirname, '../public/data/market-dashboard.json');
             if (fs.existsSync(dashboardPath)) {
                 const prevData = JSON.parse(fs.readFileSync(dashboardPath, 'utf8'));
-                if (prevData.lastUpdate && prevData.forecast?.sentiment !== '보통') {
-                    const lastUpdateDate = new Date(prevData.lastUpdate.replace('오전', 'AM').replace('오후', 'PM'));
-                    const diffMin = (new Date() - lastUpdateDate) / (1000 * 60);
-                    
-                    // 마지막 업데이트로부터 50분 이내면 AI 호출 건너뜀 (기존 분석 유지)
-                    if (diffMin < 50) {
-                        console.log(`⏭️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. 1시간 주기를 위해 AI 분석을 건너뜁니다.`);
-                        aiAnalysis = prevData.forecast.aiAnalysis;
-                        sentiment = prevData.forecast.sentiment;
-                        shouldSkipAi = true;
-                    }
+                // lastAiUpdate 필드로 체크 (없으면 lastUpdate 사용)
+                const lastAiTime = prevData.forecast?.lastAiUpdate || 0;
+                const diffMin = (Date.now() - lastAiTime) / (1000 * 60);
+                
+                // 마지막 AI 분석으로부터 55분 이내면 AI 호출 건너뜀
+                if (diffMin < 55) {
+                    console.log(`⏭️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. AI 분석을 건너뛰고 기존 내용을 유지합니다.`);
+                    aiAnalysis = prevData.forecast.aiAnalysis;
+                    sentiment = prevData.forecast.sentiment;
+                    lastAiUpdate = lastAiTime; // 기존 시간 유지
+                    shouldSkipAi = true;
                 }
             }
         } catch (e) {
@@ -903,8 +903,10 @@ async function main() {
     if (shouldSkipAi && !aiAnalysis) {
         console.log('⏭️ SKIP_AI_ANALYSIS 설정에 의해 AI 분석을 건너뜁니다. (비용 절감)');
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
+        lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
         aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
+        lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
     // 마크다운 기호 및 깨진 글자 세밀하게 제거
@@ -1084,7 +1086,8 @@ async function main() {
         forecast: {
             sentiment,
             upProb, downProb,
-            detailedAnalysis: aiAnalysis,
+            aiAnalysis,
+            lastAiUpdate: lastAiUpdate || Date.now(),
             score: { upScore, downScore }
         },
         lastUpdate: new Date().toLocaleString('ko-KR')
