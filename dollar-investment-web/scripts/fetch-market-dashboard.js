@@ -207,7 +207,7 @@ async function fetchInvestorDepositsFromKIS(token) {
     if (!token) return null;
     try {
         // 국내증시자금추이 (FHKST01010700)
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund`;
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund?FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD=0000`;
         const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
