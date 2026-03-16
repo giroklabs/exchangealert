@@ -436,10 +436,10 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
     // 2026년 기준 실제 사용 가능한 모델 우선순위 목록
     // 비용 최적화를 위해 Flash-8B 모델을 1순위로 배치 (Pro/Flash 2.0/2.5 대비 월등히 저렴)
     const modelConfigs = [
+        { ver: 'v1beta', model: 'gemini-1.5-flash' },
         { ver: 'v1beta', model: 'gemini-1.5-flash-8b' },
         { ver: 'v1beta', model: 'gemini-1.5-flash-002' },
         { ver: 'v1beta', model: 'gemini-2.0-flash' },
-        { ver: 'v1beta', model: 'gemini-2.0-flash-lite' },
         { ver: 'v1beta', model: 'gemini-1.5-pro-002' },
     ];
 
@@ -873,11 +873,37 @@ async function main() {
     console.log('🤖 AI 시장 분석 생성 중...');
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
     
-    let aiAnalysis = "";
-    if (process.env.SKIP_AI_ANALYSIS === 'true') {
+    // AI 분석 주기 조절 (1시간 단위)
+    // 30분마다 데이터는 수집하지만 AI 분석은 1시간(약 50분 이상 경과 시)에 한 번만 실행
+    let shouldSkipAi = process.env.SKIP_AI_ANALYSIS === 'true';
+    
+    if (!shouldSkipAi) {
+        try {
+            const dashboardPath = path.join(__dirname, '../public/data/market-dashboard.json');
+            if (fs.existsSync(dashboardPath)) {
+                const prevData = JSON.parse(fs.readFileSync(dashboardPath, 'utf8'));
+                if (prevData.lastUpdate && prevData.forecast?.sentiment !== '보통') {
+                    const lastUpdateDate = new Date(prevData.lastUpdate.replace('오전', 'AM').replace('오후', 'PM'));
+                    const diffMin = (new Date() - lastUpdateDate) / (1000 * 60);
+                    
+                    // 마지막 업데이트로부터 50분 이내면 AI 호출 건너뜀 (기존 분석 유지)
+                    if (diffMin < 50) {
+                        console.log(`⏭️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. 1시간 주기를 위해 AI 분석을 건너뜁니다.`);
+                        aiAnalysis = prevData.forecast.aiAnalysis;
+                        sentiment = prevData.forecast.sentiment;
+                        shouldSkipAi = true;
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('⚠️ 이전 분석 데이터 로드 실패, 새로 분석을 진행합니다.');
+        }
+    }
+
+    if (shouldSkipAi && !aiAnalysis) {
         console.log('⏭️ SKIP_AI_ANALYSIS 설정에 의해 AI 분석을 건너뜁니다. (비용 절감)');
-        aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(KST 09:10, 21:10)에서 확인 가능합니다. 결론: 관망 우세";
-    } else {
+        aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
+    } else if (!shouldSkipAi) {
         aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
     }
 
