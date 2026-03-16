@@ -873,6 +873,10 @@ async function main() {
     console.log('🤖 AI 시장 분석 생성 중...');
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
     
+    let aiAnalysis = "";
+    let lastAiUpdate = null;
+    let sentiment = '보통';
+
     // AI 분석 주기 조절 (1시간 단위)
     // 30분마다 데이터는 수집하지만 AI 분석은 1시간(약 50분 이상 경과 시)에 한 번만 실행
     let shouldSkipAi = process.env.SKIP_AI_ANALYSIS === 'true';
@@ -924,7 +928,7 @@ async function main() {
         .trim();
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
-    let sentiment = '보통';
+    sentiment = '보통';
     const conclusionMatch = aiAnalysis.match(/결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
     if (conclusionMatch) {
         const res = conclusionMatch[1];
