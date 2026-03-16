@@ -187,7 +187,8 @@ async function fetchMarketInvestorTrend(token) {
                 "Authorization": `Bearer ${token}`,
                 "appkey": KIS_APP_KEY,
                 "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010900"
+                "tr_id": "FHKST01010900",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
             }
         });
         const data = await res.json();
@@ -224,7 +225,8 @@ async function fetchInvestorDepositsFromKIS(token) {
                 "Authorization": `Bearer ${token}`,
                 "appkey": KIS_APP_KEY,
                 "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010700"
+                "tr_id": "FHKST01010700",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
             }
         });
         const data = await res.json();
@@ -289,10 +291,14 @@ async function getKisAccessToken() {
     // 2. 새 토큰 발급 (파일이 없거나 만료된 경우 무조건 실행)
     console.log("🚀 KIS 신규 토큰 발급 요청 중... (매일 갱신 필요)");
     try {
-        const tokenUrl = `${KIS_BASE_URL}/oauth2/tokenP`;
+        // 토큰 발급은 표준 443 포트가 권장됨
+        const tokenUrl = "https://openapi.koreainvestment.com/oauth2/tokenP";
         const res = await fetch(tokenUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json; charset=UTF-8',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+            },
             body: JSON.stringify({
                 grant_type: "client_credentials",
                 appkey: KIS_APP_KEY,
@@ -310,10 +316,11 @@ async function getKisAccessToken() {
             }, null, 2));
             return data.access_token;
         } else {
-            console.error("❌ KIS 토큰 발급 실패 응답:", JSON.stringify(data));
+            // 에러 출력이 일반 로그에 잡히도록 console.log 사용
+            console.log("❌ KIS 토큰 발급 실패 응답:", JSON.stringify(data));
         }
     } catch (e) {
-        console.error("❌ KIS 토큰 발급 에러:", e.message);
+        console.log("❌ KIS 토큰 발급 통신 에러:", e.message);
     }
     return null;
 }
@@ -327,7 +334,8 @@ async function fetchDomesticStockFromKIS(code, token) {
                 "authorization": `Bearer ${token}`,
                 "appkey": KIS_APP_KEY,
                 "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010100"
+                "tr_id": "FHKST01010100",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
             }
         });
         const data = await res.json();
@@ -353,7 +361,8 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
                 "authorization": `Bearer ${token}`,
                 "appkey": KIS_APP_KEY,
                 "appsecret": KIS_APP_SECRET,
-                "tr_id": "HHDFS00000300"
+                "tr_id": "HHDFS00000300",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
             }
         });
         const data = await res.json();
@@ -420,7 +429,10 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
                 const url = `https://generativelanguage.googleapis.com/${config.ver}/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`;
                 const req = https.request(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+                    }
                 }, (res) => {
                     const chunks = [];
                     res.on('data', chunk => chunks.push(chunk));
@@ -453,7 +465,9 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
     try {
         const availableModels = await new Promise((resolve, reject) => {
             const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`;
-            https.get(url, (res) => {
+            https.get(url, {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36' }
+            }, (res) => {
                 let body = '';
                 res.on('data', chunk => body += chunk);
                 res.on('end', () => {
@@ -475,7 +489,13 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
             console.log(`💡 대체 모델 발견: ${fallbackModel}. 시도 중...`);
             const result = await new Promise((resolve, reject) => {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${fallbackModel}:generateContent?key=${GEMINI_API_KEY}`;
-                const req = https.request(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {
+                const req = https.request(url, { 
+                    method: 'POST', 
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+                    } 
+                }, (res) => {
                     const chunks = [];
                     res.on('data', chunk => chunks.push(chunk));
                     res.on('end', () => {
