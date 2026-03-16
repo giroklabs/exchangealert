@@ -5,8 +5,8 @@ on:
     branches:
       - main
   schedule:
-    # 30분 단위로 실행
-    - cron: '*/30 * * * *'
+    # 5분 단위로 실행
+    - cron: '*/5 * * * *'
   workflow_dispatch: # 수동 실행 가능
   repository_dispatch:
     types: [trigger-market-update] # 공유된 트리거 이름 사용
