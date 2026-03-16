@@ -203,6 +203,36 @@ async function fetchMarketInvestorTrend(token) {
     return null;
 }
 
+async function fetchInvestorDepositsFromKIS(token) {
+    if (!token) return null;
+    try {
+        // 국내증시자금추이 (FHKST01010700)
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/market-fund`;
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+                "appkey": KIS_APP_KEY,
+                "appsecret": KIS_APP_SECRET,
+                "tr_id": "FHKST01010700"
+            }
+        });
+        const data = await res.json();
+        if (data.output && Array.isArray(data.output)) {
+            return data.output
+                .slice(0, 14)
+                .map(d => ({
+                    date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                    // 단위: 십억원 (보통 억~수십조 단위이므로 십억원 단위가 적절)
+                    value: Math.round(parseFloat(d.cust_depos) / 10)
+                }));
+        }
+    } catch (e) {
+        console.error("❌ KIS 투자자예탁금 조회 에러:", e.message);
+    }
+    return null;
+}
+
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
         console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜜니다.");
@@ -330,7 +360,7 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 분석 가이드:
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
 2. [환율 추세] 제공된 원/달러 환율의 최근 기술적 흐름(지지/저항, 추세 지속성)을 분석에 포함하세요.
-3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요. 특히 TED 스프레드와 SOFR-OIS를 통해 은행간 달러 유동성 환경을 진단하세요.
+3. [리스크] 및 [한국 자산] 블록을 통해 자본 유출입 압력과 시장의 공포 수위를 평가하세요. 특히 TED 스프레드와 SOFR-OIS를 통해 은행간 달러 유동성 환경을, 투자자예탁금을 통해 국내 증시 대기 자금 수위를 진단하세요.
 4. [펀딩·정책] 블록의 CDS 프리미엄, 가산금리, 단기외채 비중을 통해 한국의 대외 건전성과 펀딩 리스크를 심층 진단하세요.
 5. [투자 전략] 위 분석을 종합하여 일일 및 단기 관점에서의 실전 달러 투자 대응 방안(분할 매수/매도 시점, 목표가 가이드 등)을 구체적으로 제시하세요.
 
@@ -624,6 +654,37 @@ async function main() {
             history: fb.history
         });
         console.log(`⚠️ [KIS] 외인 수급 fallback 데이터 적용`);
+    }
+
+    // 2.1.2 투자자예탁금 (KIS API 연동)
+    let depositTrend = null;
+    if (kisToken) {
+        depositTrend = await fetchInvestorDepositsFromKIS(kisToken);
+    }
+
+    if (depositTrend && depositTrend.length > 0) {
+        const latest = depositTrend[0].value;
+        const prev = depositTrend.length > 1 ? depositTrend[1].value : latest;
+        const trend = latest >= prev ? 'up' : 'down';
+
+        // 예탁금 증가 -> 증시 활기 -> 원화 강세(환율 하락) 요인 (-0.8)
+        if (trend === 'up') blockScores['assets'].down += 0.8;
+        else if (trend === 'down') blockScores['assets'].up += 0.8;
+
+        indicators.push({
+            id: 'investor-deposits',
+            name: '투자자예탁금',
+            unit: '십억원',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: 'KIS 실시간',
+            description: '증시 대기 자금 규모 (유동성 증가 시 환율 하락 요인)',
+            value: latest.toLocaleString(),
+            trend,
+            realizedImpact: trend === 'up' ? 'down' : 'up',
+            history: depositTrend.reverse()
+        });
+        console.log(`✅ [KIS] 투자자예탁금: ${latest}십억원`);
     }
 
     // 2.2 한·미 금리차 산출 (US 10Y - KR 10Y)

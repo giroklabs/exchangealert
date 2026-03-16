@@ -64,10 +64,30 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "100.36",
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "119.491",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
+        {
+          "date": "2026-02-23",
+          "value": 117.9395
+        },
+        {
+          "date": "2026-02-24",
+          "value": 117.9463
+        },
+        {
+          "date": "2026-02-25",
+          "value": 117.769
+        },
+        {
+          "date": "2026-02-26",
+          "value": 117.9042
+        },
+        {
+          "date": "2026-02-27",
+          "value": 117.8223
+        },
         {
           "date": "2026-03-02",
           "value": 118.667
@@ -87,26 +107,6 @@
         {
           "date": "2026-03-06",
           "value": 119.491
-        },
-        {
-          "date": "2026-03-09",
-          "value": 99.18
-        },
-        {
-          "date": "2026-03-10",
-          "value": 98.83
-        },
-        {
-          "date": "2026-03-11",
-          "value": 99.23
-        },
-        {
-          "date": "2026-03-12",
-          "value": 99.74
-        },
-        {
-          "date": "2026-03-13",
-          "value": 100.36
         }
       ]
     },
@@ -400,9 +400,13 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "value": "5,487.24",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
+        {
+          "date": "2026-02-27",
+          "value": 6244.13
+        },
         {
           "date": "2026-03-03",
           "value": 5791.91
@@ -438,10 +442,6 @@
         {
           "date": "2026-03-13",
           "value": 5487.24
-        },
-        {
-          "date": "2026-03-13",
-          "value": 5487.24
         }
       ]
     },
@@ -454,9 +454,9 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "98.71",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "98.62",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-03",
@@ -495,8 +495,8 @@
           "value": 98.71
         },
         {
-          "date": "2026-03-13",
-          "value": 98.71
+          "date": "2026-03-15",
+          "value": 98.62
         }
       ]
     },
@@ -941,8 +941,8 @@
       "name": "삼성전자",
       "enName": "Samsung Electronics",
       "price": 183500,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-2.34",
+      "trend": "down"
     },
     {
       "id": "hynix",
@@ -951,8 +951,8 @@
       "name": "SK하이닉스",
       "enName": "SK Hynix",
       "price": 910000,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-2.15",
+      "trend": "down"
     },
     {
       "id": "hyundai",
@@ -961,8 +961,8 @@
       "name": "현대차",
       "enName": "Hyundai Motor",
       "price": 517000,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-0.77",
+      "trend": "down"
     },
     {
       "id": "kia",
@@ -971,8 +971,8 @@
       "name": "기아",
       "enName": "Kia",
       "price": 164300,
-      "changePercent": "+0.00",
-      "trend": "up"
+      "changePercent": "-1.62",
+      "trend": "down"
     },
     {
       "id": "naver",
@@ -981,7 +981,7 @@
       "name": "네이버",
       "enName": "NAVER",
       "price": 223000,
-      "changePercent": "+0.00",
+      "changePercent": "+0.45",
       "trend": "up"
     },
     {
@@ -991,7 +991,7 @@
       "name": "카카오",
       "enName": "Kakao",
       "price": 50600,
-      "changePercent": "+0.00",
+      "changePercent": "+0.40",
       "trend": "up"
     },
     {
@@ -1096,13 +1096,13 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 64,
-    "downProb": 36,
+    "upProb": 58,
+    "downProb": 42,
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 28.69599416582003,
-      "downScore": 15.935366345965399
+      "upScore": 32.2274244629623,
+      "downScore": 23.428608864318928
     }
   },
-  "lastUpdate": "2026. 3. 15. 오후 5:28:18"
+  "lastUpdate": "2026. 3. 16. 오전 9:04:38"
 }
