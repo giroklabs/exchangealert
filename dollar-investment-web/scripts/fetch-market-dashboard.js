@@ -219,8 +219,11 @@ async function fetchInvestorDepositsFromKIS(token) {
             }
         });
         const data = await res.json();
-        if (data.output && Array.isArray(data.output)) {
-            return data.output
+        // KIS API에 따라 output 또는 output1으로 데이터가 내려옴 (FHKST01010700은 보통 output1)
+        const output = data.output1 || data.output;
+        
+        if (output && Array.isArray(output)) {
+            return output
                 .slice(0, 14)
                 .map(d => ({
                     date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
@@ -228,7 +231,7 @@ async function fetchInvestorDepositsFromKIS(token) {
                     value: Math.round(parseFloat(d.cust_depos) / 10)
                 }));
         } else {
-            console.warn("⚠️ KIS 투자자예탁금 데이터 구조 이상:", data.msg1 || data.message);
+            console.warn("⚠️ KIS 투자자예탁금 데이터 구조 미발견 (output/output1 없음):", data.msg1 || data.message || JSON.stringify(data));
         }
     } catch (e) {
         console.error("❌ KIS 투자자예탁금 조회 에러:", e.message);

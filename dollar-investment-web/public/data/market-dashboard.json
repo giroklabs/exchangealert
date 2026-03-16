@@ -399,7 +399,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,532.28",
+      "value": "5,513.01",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -441,7 +441,7 @@
         },
         {
           "date": "2026-03-16",
-          "value": 5532.28
+          "value": 5513.01
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "98.14",
+      "value": "97.98",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-16",
-          "value": 98.14
+          "value": 97.98
         }
       ]
     },
@@ -940,8 +940,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 186300,
-      "changePercent": "+1.53",
+      "price": 185600,
+      "changePercent": "+1.14",
       "trend": "up"
     },
     {
@@ -950,8 +950,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 941000,
-      "changePercent": "+3.41",
+      "price": 939000,
+      "changePercent": "+3.19",
       "trend": "up"
     },
     {
@@ -960,8 +960,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 507000,
-      "changePercent": "-1.93",
+      "price": 505000,
+      "changePercent": "-2.32",
       "trend": "down"
     },
     {
@@ -970,8 +970,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 163700,
-      "changePercent": "-0.37",
+      "price": 163100,
+      "changePercent": "-0.73",
       "trend": "down"
     },
     {
@@ -980,8 +980,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 220000,
-      "changePercent": "-1.35",
+      "price": 219500,
+      "changePercent": "-1.57",
       "trend": "down"
     },
     {
@@ -990,8 +990,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 51000,
-      "changePercent": "+0.79",
+      "price": 50800,
+      "changePercent": "+0.40",
       "trend": "up"
     },
     {
@@ -1096,13 +1096,13 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 55,
-    "downProb": 45,
+    "upProb": 56,
+    "downProb": 44,
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "score": {
-      "upScore": 28.678739569317397,
-      "downScore": 22.95998974928549
+      "upScore": 28.673812890249945,
+      "downScore": 22.66137489871912
     }
   },
-  "lastUpdate": "2026. 3. 16. 오전 10:22:41"
+  "lastUpdate": "2026. 3. 16. 오전 10:31:45"
 }
