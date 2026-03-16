@@ -170,8 +170,8 @@ export function MarketDashboard() {
                     </div>
 
                     <div className={`text-left space-y-4`}>
-                        {data?.forecast?.detailedAnalysis ? (
-                            data.forecast.detailedAnalysis.split('\n').map((line, i) => {
+                        {data?.forecast?.aiAnalysis ? (
+                            data.forecast.aiAnalysis.split('\n').map((line, i) => {
                                 if (line.trim().startsWith('결론:')) {
                                     return (
                                         <div key={i} className={`mt-8 p-4 rounded-xl font-bold flex items-center gap-3 ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-400 border border-yellow-400/20' : 'bg-yellow-400 text-yellow-900'

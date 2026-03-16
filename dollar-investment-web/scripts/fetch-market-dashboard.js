@@ -883,24 +883,38 @@ async function main() {
     
     if (!shouldSkipAi) {
         try {
-            const dashboardPath = path.join(__dirname, '../public/data/market-dashboard.json');
-            if (fs.existsSync(dashboardPath)) {
-                const prevData = JSON.parse(fs.readFileSync(dashboardPath, 'utf8'));
-                // lastAiUpdate 필드로 체크 (없으면 lastUpdate 사용)
-                const lastAiTime = prevData.forecast?.lastAiUpdate || 0;
+            // 여러 가능성 있는 경로 체크
+            const paths = [
+                path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json'),
+                path.join(__dirname, '..', '..', 'data', 'market-dashboard.json'),
+                path.join(process.cwd(), 'public', 'data', 'market-dashboard.json'),
+                path.join(process.cwd(), 'data', 'market-dashboard.json')
+            ];
+            
+            let prevData = null;
+            for (const p of paths) {
+                if (fs.existsSync(p)) {
+                    prevData = JSON.parse(fs.readFileSync(p, 'utf8'));
+                    console.log(`📖 기존 데이터를 찾았습니다: ${p}`);
+                    break;
+                }
+            }
+
+            if (prevData && prevData.forecast) {
+                const lastAiTime = prevData.forecast.lastAiUpdate || 0;
                 const diffMin = (Date.now() - lastAiTime) / (1000 * 60);
                 
                 // 마지막 AI 분석으로부터 55분 이내면 AI 호출 건너뜀
                 if (diffMin < 55) {
-                    console.log(`⏭️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. AI 분석을 건너뛰고 기존 내용을 유지합니다.`);
-                    aiAnalysis = prevData.forecast.aiAnalysis;
-                    sentiment = prevData.forecast.sentiment;
-                    lastAiUpdate = lastAiTime; // 기존 시간 유지
+                    console.log(`⏱️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. (1시간 간격 유지 위해 기존 분석 유지)`);
+                    aiAnalysis = prevData.forecast.aiAnalysis || prevData.forecast.detailedAnalysis || "";
+                    sentiment = prevData.forecast.sentiment || "보통";
+                    lastAiUpdate = lastAiTime; 
                     shouldSkipAi = true;
                 }
             }
         } catch (e) {
-            console.warn('⚠️ 이전 분석 데이터 로드 실패, 새로 분석을 진행합니다.');
+            console.warn('⚠️ 이전 분석 데이터 로드 시도 중 오류:', e.message);
         }
     }
 
@@ -1091,6 +1105,7 @@ async function main() {
             sentiment,
             upProb, downProb,
             aiAnalysis,
+            detailedAnalysis: aiAnalysis, // 하위 호환성 위해 유지
             lastAiUpdate: lastAiUpdate || Date.now(),
             score: { upScore, downScore }
         },

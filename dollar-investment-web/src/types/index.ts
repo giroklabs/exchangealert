@@ -146,7 +146,8 @@ export interface DashboardData {
     sentiment: string;
     upProb: number;
     downProb: number;
-    detailedAnalysis: string;
+    aiAnalysis: string;
+    lastAiUpdate?: number;
     score: { upScore: number; downScore: number };
   };
   lastUpdate: string;
