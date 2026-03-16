@@ -16,7 +16,7 @@ export interface FXIntradayData {
 export async function fetchFXHistoryData(): Promise<FXHistoryData[]> {
     try {
         const timestamp = new Date().getTime();
-        const url = `/data/fx-history.json?t=${timestamp}`;
+        const url = `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/fx-history.json?t=${timestamp}`;
 
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
@@ -32,7 +32,7 @@ export async function fetchFXHistoryData(): Promise<FXHistoryData[]> {
 export async function fetchFXIntradayData(): Promise<FXIntradayData[]> {
     try {
         const timestamp = new Date().getTime();
-        const url = `/data/fx-intraday.json?t=${timestamp}`;
+        const url = `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/fx-intraday.json?t=${timestamp}`;
 
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error('Failed to load intraday data');
@@ -56,7 +56,7 @@ export interface FX6mHistoryResponse {
 export async function fetchFX6mHistoryData(): Promise<FX6mHistoryResponse | null> {
     try {
         const timestamp = new Date().getTime();
-        const url = `/data/fx-history-6m.json?t=${timestamp}`;
+        const url = `https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/fx-history-6m.json?t=${timestamp}`;
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) return null;
         return await response.json();
