@@ -18,13 +18,13 @@ jobs:
           node-version: '20'
 
       - name: Fetch FX History
-        run: node scripts/fetch-fx-6m-history.js
+        run: node dollar-investment-web/scripts/fetch-fx-6m-history.js
 
       - name: Commit and push changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add public/data/fx-history-6m.json
+          git add dollar-investment-web/public/data/fx-history-6m.json
           git commit -m "Update FX 6-month history" || exit 0
           git push
         env:
