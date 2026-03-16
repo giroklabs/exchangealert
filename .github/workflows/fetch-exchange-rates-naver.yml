@@ -1,6 +1,8 @@
 name: Fetch Exchange Rates from Naver (5m)
 
 on:
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
   repository_dispatch:
     types: [trigger-fetch-naver]
@@ -36,7 +38,7 @@ jobs:
         
         # JSON generation with META field to ensure file change every time
         echo "[" > data/exchange-rates.json
-        echo "{\"cur_unit\":\"META\",\"fetched_at\":\"$CURRENT_TIME\"}" >> data/exchange-rates.json
+        echo "{\"result\":1,\"cur_unit\":\"META\",\"fetched_at\":\"$CURRENT_TIME\"}" >> data/exchange-rates.json
         
         CURRENCIES=(
           "USD:미국 달러:1" "JPY:일본 엔:100" "EUR:유로:1" "GBP:영국 파운드:1" "CNY:중국 위안:1"
