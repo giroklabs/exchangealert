@@ -12,7 +12,10 @@ import { UserProfile } from './components/UserProfile';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
 import { CommunityBoard } from './components/CommunityBoard';
 import { FXHistoryTimeline } from './components/FXHistoryTimeline';
-import { fetchCurrentExchangeRate, getCurrentRateValue, fetchLastUpdateTime } from './services/exchangeRateService';
+import { fetchAllCurrentExchangeRates } from './services/exchangeRateService';
+import { fetchMarketDashboardData } from './services/marketDashboardService';
+import { fetchFXIntradayData } from './services/fxHistoryService';
+import type { DashboardData } from './types';
 import logo from './assets/logo.png';
 import './App.css';
 
@@ -20,26 +23,47 @@ function App() {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [currentRateInfo, setCurrentRateInfo] = useState<{ rate: number; time: string } | null>(null);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchHeaderRate() {
-      try {
-        const [rateData, updateTime] = await Promise.all([
-          fetchCurrentExchangeRate(),
-          fetchLastUpdateTime()
-        ]);
-        if (rateData) {
-          setCurrentRateInfo({
-            rate: getCurrentRateValue(rateData),
-            time: updateTime || ''
+  const fetchGlobalData = async () => {
+    try {
+      const [intraday, dashData, currentRates] = await Promise.all([
+        fetchFXIntradayData(),
+        fetchMarketDashboardData(),
+        fetchAllCurrentExchangeRates()
+      ]);
+
+      // 1. 헤더 환율 동기화 (그래프와 소스 일치)
+      if (intraday && intraday.length > 0) {
+        const latest = intraday[intraday.length - 1];
+        setCurrentRateInfo({
+          rate: latest.rate,
+          time: latest.fullTime.split('+')[0].replace('T', ' ')
+        });
+      }
+
+      // 2. 대시보드 카드/지표 데이터 동기화
+      if (dashData) {
+        if (currentRates && dashData.majorRates) {
+          dashData.majorRates = dashData.majorRates.map((rate: any) => {
+            const curUnit = rate.id.split('-')[0].toUpperCase();
+            const latestRate = currentRates.find((r: any) => r.cur_unit === curUnit);
+            return latestRate ? { ...rate, value: latestRate.deal_bas_r } : rate;
           });
         }
-      } catch (e) {
-        console.error("Header rate fetch error:", e);
+        setDashboardData(dashData);
       }
+    } catch (e) {
+      console.error("Global data sync error:", e);
+    } finally {
+      setIsDataLoading(false);
     }
-    fetchHeaderRate();
-    const interval = setInterval(fetchHeaderRate, 5 * 60 * 1000); // 5분으로 단축
+  };
+
+  useEffect(() => {
+    fetchGlobalData();
+    const interval = setInterval(fetchGlobalData, 1 * 60 * 1000); // 1분 주기로 정밀 동기화
     return () => clearInterval(interval);
   }, []);
 
@@ -110,7 +134,7 @@ function App() {
           ) : activeTab === 'history' ? (
             <FXHistoryTimeline />
           ) : (
-            <MarketDashboard />
+            <MarketDashboard initialData={dashboardData} isLoadingExternal={isDataLoading} />
           )}
         </main>
 

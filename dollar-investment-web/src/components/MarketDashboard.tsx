@@ -6,14 +6,24 @@ import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import { UnifiedFXChart } from './UnifiedFXChart';
 
-export function MarketDashboard() {
+export function MarketDashboard({ initialData = null, isLoadingExternal = false }: { initialData?: DashboardData | null, isLoadingExternal?: boolean }) {
     const { theme } = useTheme();
-    const [data, setData] = useState<DashboardData | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState<DashboardData | null>(initialData);
+    const [isLoading, setIsLoading] = useState(!initialData);
     const [isChartExpanded, setIsChartExpanded] = useState(true);
 
     useEffect(() => {
+        if (initialData) {
+            setData(initialData);
+            setIsLoading(isLoadingExternal);
+        }
+    }, [initialData, isLoadingExternal]);
+
+    useEffect(() => {
         const loadData = async () => {
+            // App에서 데이터를 넘겨주지 않았을 때만 자체 로드
+            if (data) return;
+
             setIsLoading(true);
             try {
                 // 1. 대시보드 기본 데이터 로드 (금리, AI 분석 등)
@@ -55,8 +65,6 @@ export function MarketDashboard() {
             }
         };
         loadData();
-        const interval = setInterval(loadData, 5 * 60 * 1000); // 5분마다 자동 갱신
-        return () => clearInterval(interval);
     }, []);
 
     if (isLoading) {

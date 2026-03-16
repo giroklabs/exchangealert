@@ -62,7 +62,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
             }
         };
         loadAllData();
-        const interval = setInterval(loadAllData, 5 * 60 * 1000); // 5분마다 자동 갱신
+        const interval = setInterval(loadAllData, 1 * 60 * 1000); // 1분 주기로 정밀 동기화
         return () => clearInterval(interval);
     }, [period]);
 
