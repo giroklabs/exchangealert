@@ -16,7 +16,8 @@ const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
+const KIS_BASE_URL = "https://openapi.koreainvestment.com:443";
+const KIS_BASE_URL_SBARK = "https://openapi.koreainvestment.com:9443"; // Fallback port for some environments
 
 // API 키 상태 로그
 console.log(`🔑 API 키 확인: FRED(${FRED_API_KEY ? 'O' : 'X'}), ECOS(${ECOS_API_KEY ? 'O' : 'X'}), KIS(${KIS_APP_KEY ? 'O' : 'X'}), GEMINI(${GEMINI_API_KEY ? 'O' : 'X'})`);
@@ -231,17 +232,14 @@ async function fetchInvestorDepositsFromKIS(token) {
         });
         const data = await res.json();
         
-        // KIS API 로그 강화 (디버깅용)
-        if (data.rt_cd !== '0') {
-            console.error("❌ KIS 예탁금 API 응답 실패:", data.msg1 || data.message);
+        if (data.rt_cd !== '0' && data.rt_cd !== '00') {
+            console.error("❌ KIS 예탁금 API 응답 실패:", data.msg1 || data.message || data.error_description);
             return null;
         }
 
-        // KIS API에 따라 output1 또는 output으로 데이터가 내려옴
         const output = data.output1 || data.output;
         
         if (output && Array.isArray(output)) {
-            // 필드명 보정 (대문자/소문자 대응)
             return output
                 .slice(0, 14)
                 .map(d => {
@@ -249,12 +247,10 @@ async function fetchInvestorDepositsFromKIS(token) {
                     const depos = d.cust_depos || d.CUST_DEPOS || "0";
                     return {
                         date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: Math.round(parseFloat(depos) / 10)
+                        value: Math.round(parseFloat(depos) / 1000000) // 원 -> 억원 단위 보정 (연구 보고서 기준)
                     };
                 })
                 .filter(d => d.date && !isNaN(d.value));
-        } else {
-            console.warn("⚠️ KIS 예탁금 데이터 구조 미발견 (output1/output 없음). 응답 전문:", JSON.stringify(data).substring(0, 200));
         }
     } catch (e) {
         console.error("❌ KIS 투자자예탁금 조회 에러:", e.message);
@@ -288,39 +284,44 @@ async function getKisAccessToken() {
         console.warn("⚠️ 토큰 캐시 읽기 실패, 새로 발급합니다.");
     }
 
-    // 2. 새 토큰 발급 (파일이 없거나 만료된 경우 무조건 실행)
-    console.log("🚀 KIS 신규 토큰 발급 요청 중... (매일 갱신 필요)");
-    try {
-        // 토큰 발급은 표준 443 포트가 권장됨
-        const tokenUrl = "https://openapi.koreainvestment.com:9443/oauth2/tokenP";
-        const res = await fetch(tokenUrl, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json; charset=UTF-8',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-            },
-            body: JSON.stringify({
-                grant_type: "client_credentials",
-                appkey: KIS_APP_KEY,
-                appsecret: KIS_APP_SECRET
-            })
-        });
-        const data = await res.json();
-        
-        if (data.access_token) {
-            console.log("✅ KIS 신규 토큰 발급 성공");
-            // 토큰 저장 (발급 시간 포함)
-            fs.writeFileSync(tokenPath, JSON.stringify({
-                access_token: data.access_token,
-                issued_at: Date.now()
-            }, null, 2));
-            return data.access_token;
-        } else {
-            // 에러 출력이 일반 로그에 잡히도록 console.log 사용
-            console.log("❌ KIS 토큰 발급 실패 응답:", JSON.stringify(data));
+    // 2. 새 토큰 발급
+    console.log("🚀 KIS 신규 토큰 발급 요청 중... (443 -> 9443 시도)");
+    
+    const tryFetchToken = async (url) => {
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+                },
+                body: JSON.stringify({
+                    grant_type: "client_credentials",
+                    appkey: KIS_APP_KEY,
+                    appsecret: KIS_APP_SECRET
+                })
+            });
+            return await res.json();
+        } catch (e) {
+            return { error: e.message };
         }
-    } catch (e) {
-        console.log("❌ KIS 토큰 발급 통신 에러:", e.message);
+    };
+
+    let data = await tryFetchToken(`${KIS_BASE_URL}/oauth2/tokenP`);
+    if (!data.access_token) {
+        console.log(`⚠️ KIS 443 실패, 9443 시도 중... (${data.error || 'Unknown Error'})`);
+        data = await tryFetchToken(`${KIS_BASE_URL_SBARK}/oauth2/tokenP`);
+    }
+
+    if (data.access_token) {
+        console.log("✅ KIS 신규 토큰 발급 성공");
+        fs.writeFileSync(tokenPath, JSON.stringify({
+            access_token: data.access_token,
+            issued_at: Date.now()
+        }, null, 2));
+        return data.access_token;
+    } else {
+        console.log("❌ KIS 토큰 발급 최종 실패:", JSON.stringify(data));
     }
     return null;
 }
@@ -604,7 +605,9 @@ async function main() {
         'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] },
         'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '03-10', value: 32 }, { date: '03-11', value: 34 }, { date: '03-12', value: 35 }, { date: '03-13', value: 35 }] },
         'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '03-10', value: 38 }, { date: '03-11', value: 40 }, { date: '03-12', value: 42 }, { date: '03-13', value: 42 }] },
-        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q2', value: 37.8 }, { date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] },
+        'investor-deposits': { value: '54200', trend: 'down', history: [{ date: '03-10', value: 55100 }, { date: '03-11', value: 54800 }, { date: '03-12', value: 54500 }, { date: '03-13', value: 54200 }] },
+        'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '202512', value: 3.5 }, { date: '202601', value: 3.5 }] },
+        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] },
         'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '03-10', value: 0.08 }, { date: '03-11', value: 0.09 }, { date: '03-12', value: 0.09 }, { date: '03-13', value: 0.09 }] },
         'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '03-10', value: 0.17 }, { date: '03-11', value: 0.18 }, { date: '03-12', value: 0.18 }, { date: '03-13', value: 0.18 }] }
     };
@@ -660,14 +663,13 @@ async function main() {
     if (kisToken) {
         investorTrend = await fetchMarketInvestorTrend(kisToken);
     }
-
     if (investorTrend && investorTrend.length > 0) {
         const latest = investorTrend[0].value;
         const prev = investorTrend.length > 1 ? investorTrend[1].value : latest;
-        const trend = latest > 0 ? 'up' : 'down';
 
-        if (latest > 0) blockScores['assets'].down += 1.5;
-        else if (latest < 0) blockScores['assets'].up += 1.5;
+        // 외국인 순매수 -> 원화 강세(환율 하락) 요인 (-2.5 가중치 대폭 강화)
+        if (latest > 0) blockScores['assets'].down += 2.5;
+        else if (latest < 0) blockScores['assets'].up += 2.5;
 
         const realizedImpact = latest < 0 ? 'up' : (latest > 100 ? 'down' : 'neutral');
 
@@ -714,14 +716,14 @@ async function main() {
         const prev = depositTrend.length > 1 ? depositTrend[1].value : latest;
         const trend = latest >= prev ? 'up' : 'down';
 
-        // 예탁금 증가 -> 증시 활기 -> 원화 강세(환율 하락) 요인 (-0.8)
-        if (trend === 'up') blockScores['assets'].down += 0.8;
-        else if (trend === 'down') blockScores['assets'].up += 0.8;
+        // 예탁금 증가 -> 증시 활기 -> 원화 강세(환율 하락) 요인 (-2.0 가중치 강화)
+        if (trend === 'up') blockScores['assets'].down += 2.0;
+        else if (trend === 'down') blockScores['assets'].up += 2.0;
 
         indicators.push({
             id: 'investor-deposits',
             name: '투자자예탁금',
-            unit: '십억원',
+            unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
             source: 'KIS 실시간',
@@ -731,7 +733,22 @@ async function main() {
             realizedImpact: trend === 'up' ? 'down' : 'up',
             history: depositTrend.reverse()
         });
-        console.log(`✅ [KIS] 투자자예탁금: ${latest}십억원`);
+        console.log(`✅ [KIS] 투자자예탁금: ${latest}억원`);
+    } else {
+        const fb = fallbacks['investor-deposits'];
+        indicators.push({
+            id: 'investor-deposits',
+            name: '투자자예탁금 (연결대기)',
+            unit: '억원',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: '데이터 예측',
+            description: '증시 대기 자금은 자본 유입의 선행 지표입니다.',
+            value: fb.value,
+            trend: fb.trend,
+            history: fb.history
+        });
+        console.log(`⚠️ [KIS] 투자자예탁금 fallback 데이터 적용`);
     }
 
     // 2.2 한·미 금리차 산출 (US 10Y - KR 10Y)
@@ -858,16 +875,18 @@ async function main() {
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
     let sentiment = '보통';
-    const conclusionMatch = aiAnalysis.match(/결론\s*:\s*(상승|하락|보합)/);
+    const conclusionMatch = aiAnalysis.match(/결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
     if (conclusionMatch) {
-        if (conclusionMatch[1] === '상승') sentiment = '환율 상승 우세';
-        else if (conclusionMatch[1] === '하락') sentiment = '환율 하락 우세';
+        const res = conclusionMatch[1];
+        if (res === '상승' || res === '강세') sentiment = '환율 상승 우세';
+        else if (res === '하락' || res === '약세') sentiment = '환율 하락 우세';
         else sentiment = '보통';
     } else {
         // Fallback: 문장 말미나 결론부 근처 단어 탐색
-        if (/결론.*상승/i.test(aiAnalysis) || /상승\s*우세|상향\s*돌파/i.test(aiAnalysis)) sentiment = '환율 상승 우세';
-        else if (/결론.*하락/i.test(aiAnalysis) || /하락\s*우세|하향\s*이탈/i.test(aiAnalysis)) sentiment = '환율 하락 우세';
-        else sentiment = upProb > downProb ? '환율 상승 우세' : (downProb > upProb ? '환율 하락 우세' : '보통');
+        const lastPart = aiAnalysis.slice(-150);
+        if (/상승\s*우세|상향\s*돌파|강세\s*지속/i.test(lastPart)) sentiment = '환율 상승 우세';
+        else if (/하락\s*우세|하향\s*이탈|약세\s*전환/i.test(lastPart)) sentiment = '환율 하락 우세';
+        else sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보통');
     }
 
     // 3. 주요국 환율 정보 (환율알라미 앱 데이터 - Naver/Hana Bank)
