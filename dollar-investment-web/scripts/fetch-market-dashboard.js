@@ -15,7 +15,11 @@ const FRED_API_KEY = process.env.FRED_API_KEY || '0a8892024728a9a0fa015e609cd5d2
 const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
+
+// API 키 상태 로그
+console.log(`🔑 API 키 확인: FRED(${FRED_API_KEY ? 'O' : 'X'}), ECOS(${ECOS_API_KEY ? 'O' : 'X'}), KIS(${KIS_APP_KEY ? 'O' : 'X'}), GEMINI(${GEMINI_API_KEY ? 'O' : 'X'})`);
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
@@ -285,7 +289,8 @@ async function getKisAccessToken() {
     // 2. 새 토큰 발급 (파일이 없거나 만료된 경우 무조건 실행)
     console.log("🚀 KIS 신규 토큰 발급 요청 중... (매일 갱신 필요)");
     try {
-        const res = await fetch(`${KIS_BASE_URL}/oauth2/tokenP`, {
+        const tokenUrl = `${KIS_BASE_URL}/oauth2/tokenP`;
+        const res = await fetch(tokenUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -297,12 +302,15 @@ async function getKisAccessToken() {
         const data = await res.json();
         
         if (data.access_token) {
+            console.log("✅ KIS 신규 토큰 발급 성공");
             // 토큰 저장 (발급 시간 포함)
             fs.writeFileSync(tokenPath, JSON.stringify({
                 access_token: data.access_token,
                 issued_at: Date.now()
             }, null, 2));
             return data.access_token;
+        } else {
+            console.error("❌ KIS 토큰 발급 실패 응답:", JSON.stringify(data));
         }
     } catch (e) {
         console.error("❌ KIS 토큰 발급 에러:", e.message);
@@ -361,8 +369,6 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     }
     return null;
 }
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 async function fetchAiAnalysis(indicators, usdKrwHistory = []) {
     if (!GEMINI_API_KEY) {
