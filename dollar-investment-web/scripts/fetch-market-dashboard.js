@@ -190,9 +190,9 @@ async function fetchFromEcos(item) {
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
     
-    const tryFetch = async (baseUrl, trId) => {
+    const tryFetch = async (baseUrl, trId, iscd = "0001", div = "P") => {
         try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=P&fid_input_iscd=0000`; // P: 코스피, 0000: 전체
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${iscd}`;
             const res = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
@@ -200,14 +200,17 @@ async function fetchMarketInvestorTrend(token) {
                     "appkey": KIS_APP_KEY,
                     "appsecret": KIS_APP_SECRET,
                     "tr_id": trId,
+                    "custtype": "P",
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
                 }
             });
             const text = await res.text();
+            if (!text) return { error: "Empty response" };
             try {
                 return JSON.parse(text);
             } catch (e) {
-                return { error: "Invalid JSON", raw: text.substring(0, 100) };
+                console.warn(`⚠️ JSON Parse Error. Raw: ${text.substring(0, 50)}...`);
+                return { error: "Invalid JSON" };
             }
         } catch (e) {
             return { error: e.message };
@@ -215,28 +218,14 @@ async function fetchMarketInvestorTrend(token) {
     };
 
     try {
-        // 1. 실전(F)용 9443 시도 (가장 권장)
-        let data = await tryFetch(KIS_BASE_URL, "FHKST01010900");
+        // 1. 코스피 전체(0001) 실전용 시도
+        let data = await tryFetch(KIS_BASE_URL, "FHKST01010900", "0001", "P");
         
-        // 데이터가 없거나 에러인 경우 대표 종목(KODEX 200)으로 재시도
-        if (!data.output && !data.output1) {
-            console.warn(`⚠️ KIS 외인수급 0000 실패, 대표종목(069500)으로 시도...`);
-            const urlAlt = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=069500`;
-            const resAlt = await fetch(urlAlt, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHKST01010900",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-                }
-            });
-            data = await resAlt.json();
-        }
-        if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
-            console.warn(`⚠️ KIS 외인수급 443 실패 (Code: ${data.rt_cd || 'Error'}), 9443 시도 중...`);
-            data = await tryFetch(KIS_BASE_URL, "VHKST01010900");
+        // 데이터가 없거나 0인 경우 대표종목(069500)으로 재시도
+        let out = data.output || data.output1;
+        if (!out || out.length === 0 || parseFloat(out[0].frgn_ntby_tr_pbmn) === 0) {
+            console.warn(`⚠️ KIS 외인수급 데이터 미흡, 069500 재시도...`);
+            data = await tryFetch(KIS_BASE_URL, "FHKST01010900", "069500", "J");
         }
 
         if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
@@ -279,6 +268,7 @@ async function fetchInvestorDepositsFromKIS(token) {
                     "appkey": KIS_APP_KEY,
                     "appsecret": KIS_APP_SECRET,
                     "tr_id": trId,
+                    "custtype": "P",
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
                 }
             });
@@ -287,7 +277,8 @@ async function fetchInvestorDepositsFromKIS(token) {
             try {
                 return JSON.parse(text);
             } catch (e) {
-                return { error: "Invalid JSON", raw: text.substring(0, 100) };
+                console.warn(`⚠️ JSON Parse Error (Fund). Raw: ${text.substring(0, 50)}...`);
+                return { error: "Invalid JSON" };
             }
         } catch (e) {
             return { error: e.message };
@@ -295,12 +286,12 @@ async function fetchInvestorDepositsFromKIS(token) {
     };
 
     try {
-        // 실전용 9443 포트로만 끈질기게 시도
+        // 실전용 9443 포트로만 시도
         let data = await tryFetch(KIS_BASE_URL, "FHKST01010700");
         
         if (data.error || (data.rt_cd && data.rt_cd !== '0')) {
-            console.warn(`⚠️ KIS 예탁금 9443(F) 실패, 443(F) 재시도...`);
-            data = await tryFetch(KIS_BASE_URL_REAL, "FHKST01010700");
+            console.error("❌ KIS 예탁금 API 최종 실패:", data.msg1 || data.message || JSON.stringify(data).substring(0, 100));
+            return null;
         }
         
         if (data.rt_cd !== '0' && data.rt_cd !== '00') {
@@ -379,10 +370,6 @@ async function getKisAccessToken() {
     };
 
     let data = await tryFetchToken(`${KIS_BASE_URL}/oauth2/tokenP`);
-    if (!data.access_token) {
-        console.log(`⚠️ KIS 9443 실패, 443 시도 중... (${data.error || 'Unknown Error'})`);
-        data = await tryFetchToken(`${KIS_BASE_URL_REAL}/oauth2/tokenP`);
-    }
 
     if (data.access_token) {
         console.log("✅ KIS 신규 토큰 발급 성공");
@@ -408,6 +395,7 @@ async function fetchDomesticStockFromKIS(code, token) {
                     "appkey": KIS_APP_KEY,
                     "appsecret": KIS_APP_SECRET,
                     "tr_id": "FHKST01010100",
+                    "custtype": "P",
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
                 }
             });
@@ -452,6 +440,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
                     "appkey": KIS_APP_KEY,
                     "appsecret": KIS_APP_SECRET,
                     "tr_id": "HHDFS00000300",
+                    "custtype": "P",
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
                 }
             });
