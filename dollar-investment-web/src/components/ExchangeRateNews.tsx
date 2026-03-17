@@ -142,11 +142,12 @@ export function ExchangeRateNews() {
                     const newsList = staticData.news[preset?.label || ''] || staticData.news[query];
                     
                     if (newsList && newsList.length > 0) {
-                        // 데이터 안전성 확보 (relatedLinks 보장)
+                        // 데이터 안전성 확보 및 최신순 정렬 강제 (pubDate 기준 내림차순)
                         const safeNews = newsList.map((n: any) => ({
                             ...n,
                             relatedLinks: n.relatedLinks || []
-                        }));
+                        })).sort((a: any, b: any) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+                        
                         setNews(safeNews);
                         setLastUpdated(new Date(staticData.lastUpdate));
                         
