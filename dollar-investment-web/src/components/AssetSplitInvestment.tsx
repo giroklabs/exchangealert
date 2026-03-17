@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect } from 'react';
 
 import { fetchMarketDashboardData } from '../services/marketDashboardService';
+import { fetchFXIntradayData } from '../services/fxHistoryService';
 import type { TrackedStock } from '../types';
 
 // 단일 종목 관리자 컴포넌트
@@ -494,14 +495,28 @@ export function AssetSplitInvestment() {
         if (!userDataLoaded) return;
         setIsRefreshing(true);
         try {
-            const data = await fetchMarketDashboardData();
+            const [data, intraday] = await Promise.all([
+                fetchMarketDashboardData(),
+                fetchFXIntradayData()
+            ]);
+            
             if (data.stockPrices) {
-                setStockPrices(data.stockPrices);
+                // USD인 경우 실시간 intraday 데이터가 있다면 반영
+                const updatedStockPrices = data.stockPrices.map((s: TrackedStock) => {
+                    if (s.id === 'usd-krw' || s.symbol === 'USDKRW' || s.name === '미국 달러') {
+                        if (intraday && intraday.length > 0) {
+                            return { ...s, price: intraday[intraday.length - 1].rate };
+                        }
+                    }
+                    return s;
+                });
+                
+                setStockPrices(updatedStockPrices);
 
                 // 기존 투자 종목들의 현재가를 실시간 가격으로 자동 업데이트
                 setInvestments(prev => prev.map(inv => {
                     const searchName = inv.settings.assetName.trim().toLowerCase();
-                    const found = data.stockPrices?.find((s: any) =>
+                    const found = updatedStockPrices.find((s: TrackedStock) =>
                         s.name.toLowerCase() === searchName ||
                         s.enName.toLowerCase() === searchName ||
                         s.symbol.toLowerCase().includes(searchName) ||

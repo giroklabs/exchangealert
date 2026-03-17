@@ -10,12 +10,11 @@ import { HistoryDataTable } from './HistoryDataTable';
 import { DataSourceInfo } from './DataSourceInfo';
 // import { NotificationSettings } from './NotificationSettings';
 import { calculateGapRatio } from '../services/calculationService';
-import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 
 export function InvestmentAnalysis() {
-  const { exchangeRate, dollarIndex, weeklyAverages, signal, isLoading, error, lastUpdateTime, exchangeRateHistory } =
+  const { exchangeRate, dollarIndex, weeklyAverages, signal, isLoading, error, lastUpdateTime, exchangeRateHistory, currentRate } =
     useInvestmentAnalysis();
   const { theme } = useTheme();
   const [showCharts, setShowCharts] = useState(true);
@@ -36,7 +35,8 @@ export function InvestmentAnalysis() {
     );
   }
 
-  const currentRate = exchangeRate ? getCurrentRateValue(exchangeRate) : 0;
+  // useInvestmentAnalysis 훅에서 이미 동기화된(실시간 반영된) currentRate를 가져옴
+  // const currentRate = exchangeRate ? getCurrentRateValue(exchangeRate) : 0;
   const currentDollarIndex = dollarIndex?.current || 0;
   const currentGapRatio = calculateGapRatio(currentRate, currentDollarIndex);
 

@@ -48,6 +48,19 @@ function App() {
         if (currentRates && dashData.majorRates) {
           dashData.majorRates = dashData.majorRates.map((rate: any) => {
             const curUnit = rate.id.split('-')[0].toUpperCase();
+            
+            // USD 특수 처리: 실시간 데이터(intraday)가 있으면 그것을 최우선으로 반영 (소수점 1자리 유지)
+            if (curUnit === 'USD' && intraday && intraday.length > 0) {
+              const latest = intraday[intraday.length - 1];
+              return { 
+                ...rate, 
+                value: latest.rate.toLocaleString('ko-KR', { 
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1 
+                }) 
+              };
+            }
+
             const latestRate = currentRates.find((r: any) => r.cur_unit === curUnit);
             return latestRate ? { ...rate, value: latestRate.deal_bas_r } : rate;
           });

@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useInvestmentAnalysis } from '../hooks/useInvestmentAnalysis';
 import type { FXInvestment } from '../types';
 import { useSyncState } from '../hooks/useSyncState';
 
 export function FXExchangeProfitTracker() {
     const { theme } = useTheme();
-    const { exchangeRate } = useInvestmentAnalysis();
-    const apiRate = exchangeRate ? getCurrentRateValue(exchangeRate) : 0;
+    const { currentRate: apiRate } = useInvestmentAnalysis();
     const [manualRate, setManualRate] = useState<number | null>(null);
     const currentRate = manualRate !== null ? manualRate : apiRate;
 
