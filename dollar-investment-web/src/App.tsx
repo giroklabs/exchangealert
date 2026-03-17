@@ -7,6 +7,7 @@ import { MarketDashboard } from './components/MarketDashboard';
 import { Tabs } from './components/Tabs';
 import { ThemeToggle } from './components/ThemeToggle';
 import { useTheme } from './contexts/ThemeContext';
+import { useAuth } from './contexts/AuthContext';
 import { UserProfile } from './components/UserProfile';
 // import { BackupManager } from './components/BackupManager';
 import { ExchangeRateNews } from './components/ExchangeRateNews';
@@ -22,6 +23,7 @@ import './App.css';
 
 function App() {
   const { theme } = useTheme();
+  const { isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [currentRateInfo, setCurrentRateInfo] = useState<{ rate: number; time: string } | null>(null);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
@@ -116,20 +118,22 @@ function App() {
             )}
           </div>
           <div className="flex items-center gap-4 flex-shrink-0">
-            <button
-              onClick={() => setShowDevDashboard(true)}
-              className={`p-2.5 rounded-xl transition-all font-bold text-xs flex items-center gap-2 border ${
-                theme === 'dark' 
-                ? 'bg-gray-800 border-gray-700 text-blue-400 hover:bg-gray-700' 
-                : 'bg-white border-gray-200 text-blue-600 hover:bg-gray-50'
-              }`}
-              title="개발자 대시보드"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
-              <span className="hidden md:inline">개발자 화면</span>
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => setShowDevDashboard(true)}
+                className={`p-2.5 rounded-xl transition-all font-bold text-xs flex items-center gap-2 border ${
+                  theme === 'dark' 
+                  ? 'bg-gray-800 border-gray-700 text-blue-400 hover:bg-gray-700' 
+                  : 'bg-white border-gray-200 text-blue-600 hover:bg-gray-50'
+                }`}
+                title="개발자 대시보드"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                <span className="hidden md:inline">개발자 화면</span>
+              </button>
+            )}
             <UserProfile />
             <ThemeToggle />
           </div>

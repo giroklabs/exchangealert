@@ -11,6 +11,7 @@ interface AuthContextType {
     login: () => Promise<void>;
     logout: () => Promise<void>;
     userDataLoaded: boolean;
+    isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -19,10 +20,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [userDataLoaded, setUserDataLoaded] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    // [CRITICAL] 시스템 관리자 권한 설정 (강제 지정)
+    const DEVELOPER_EMAILS = [
+        'javachip8686@gmail.com', // 주 관리자 계정
+    ];
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
+            setIsAdmin(!!currentUser?.email && DEVELOPER_EMAILS.includes(currentUser.email));
+            
             if (currentUser) {
                 // 로그인 시 Firestore에서 데이터 가져와서 localStorage에 병합/덮어쓰기
                 try {
@@ -108,7 +117,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout: logoutUser, userDataLoaded }}>
+        <AuthContext.Provider value={{ user, loading, login, logout: logoutUser, userDataLoaded, isAdmin }}>
             {children}
         </AuthContext.Provider>
     );
