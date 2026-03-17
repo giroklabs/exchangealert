@@ -399,7 +399,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,708.12",
+      "value": "5,703.46",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -441,7 +441,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 5708.12
+          "value": 5703.46
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.87",
+      "value": "96.07",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 95.87
+          "value": 96.07
         }
       ]
     },
@@ -511,17 +511,49 @@
       "source": "한국은행",
       "description": "미국과의 금리차 결정 요인",
       "cycle": "M",
-      "value": "3.50",
+      "value": "2.5",
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "202512",
-          "value": 3.5
+          "date": "202602",
+          "value": 2.5
         },
         {
           "date": "202601",
-          "value": 3.5
+          "value": 2.5
+        },
+        {
+          "date": "202512",
+          "value": 2.5
+        },
+        {
+          "date": "202511",
+          "value": 2.5
+        },
+        {
+          "date": "202510",
+          "value": 2.5
+        },
+        {
+          "date": "202509",
+          "value": 2.5
+        },
+        {
+          "date": "202508",
+          "value": 2.5
+        },
+        {
+          "date": "202507",
+          "value": 2.5
+        },
+        {
+          "date": "202506",
+          "value": 2.5
+        },
+        {
+          "date": "202505",
+          "value": 2.5
         }
       ]
     },
@@ -565,21 +597,49 @@
       "source": "한국은행",
       "description": "수지 흑자 시 원화 강세(환율 하락) 유도",
       "cycle": "M",
-      "value": "15200",
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "13,259.1",
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
-          "date": "2025-12",
-          "value": 11800
+          "date": "202601",
+          "value": 13259.1
         },
         {
-          "date": "2026-01",
-          "value": 13500
+          "date": "202512",
+          "value": 18702.6
         },
         {
-          "date": "2026-02",
-          "value": 15200
+          "date": "202511",
+          "value": 12898
+        },
+        {
+          "date": "202510",
+          "value": 7567.6
+        },
+        {
+          "date": "202509",
+          "value": 14220.3
+        },
+        {
+          "date": "202508",
+          "value": 9848
+        },
+        {
+          "date": "202507",
+          "value": 11945.1
+        },
+        {
+          "date": "202506",
+          "value": 13968.5
+        },
+        {
+          "date": "202505",
+          "value": 9906.7
+        },
+        {
+          "date": "202504",
+          "value": 4510.6
         }
       ]
     },
@@ -901,9 +961,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,492.80",
-      "change": "-6.20",
-      "changePercent": "-0.41",
+      "value": "1,492.40",
+      "change": "-6.60",
+      "changePercent": "-0.44",
       "trend": "down"
     },
     {
@@ -912,9 +972,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.63",
-      "change": "-0.83",
-      "changePercent": "-0.09",
+      "value": "936.76",
+      "change": "-1.70",
+      "changePercent": "-0.18",
       "trend": "down"
     },
     {
@@ -922,9 +982,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,715.60",
-      "change": "+4.27",
-      "changePercent": "+0.25",
+      "value": "1,715.14",
+      "change": "+3.81",
+      "changePercent": "+0.22",
       "trend": "up"
     },
     {
@@ -932,9 +992,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.62",
-      "change": "-0.47",
-      "changePercent": "-0.22",
+      "value": "216.71",
+      "change": "-0.38",
+      "changePercent": "-0.18",
       "trend": "down"
     }
   ],
@@ -945,8 +1005,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 196800,
-      "changePercent": "+7.25",
+      "price": 196700,
+      "changePercent": "+7.19",
       "trend": "up"
     },
     {
@@ -975,8 +1035,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 169600,
-      "changePercent": "+3.23",
+      "price": 169100,
+      "changePercent": "+2.92",
       "trend": "up"
     },
     {
@@ -985,8 +1045,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 224000,
-      "changePercent": "+0.45",
+      "price": 223500,
+      "changePercent": "+0.22",
       "trend": "up"
     },
     {
@@ -995,8 +1055,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 51100,
-      "changePercent": "+0.99",
+      "price": 51000,
+      "changePercent": "+0.79",
       "trend": "up"
     },
     {
@@ -1101,15 +1161,15 @@
   ],
   "forecast": {
     "sentiment": "보통",
-    "upProb": 49,
-    "downProb": 51,
+    "upProb": 51,
+    "downProb": 49,
     "aiAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "lastAiUpdate": 1773708997693,
     "score": {
-      "upScore": 27.915132909169703,
-      "downScore": 28.89897666390035
+      "upScore": 29.023358474072303,
+      "downScore": 27.72151170534436
     }
   },
-  "lastUpdate": "2026. 3. 17. 오전 9:56:40"
+  "lastUpdate": "2026. 3. 17. AM 1:02:03"
 }
