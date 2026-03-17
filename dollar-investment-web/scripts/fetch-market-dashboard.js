@@ -190,9 +190,9 @@ async function fetchFromEcos(item) {
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
     
-    const tryFetch = async (baseUrl, trId, iscd = "0001", div = "P") => {
+    const tryFetch = async (baseUrl, trId, iscd = "0001", div = "P", path = "inquire-investor") => {
         try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${iscd}`;
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${iscd}`;
             const res = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
@@ -218,26 +218,30 @@ async function fetchMarketInvestorTrend(token) {
     };
 
     try {
-        // 1. 코스피 전체(0001) 실전용 시도
-        let data = await tryFetch(KIS_BASE_URL, "FHKST01010900", "0001", "P");
+        // 1. 코스피 전체 외국인 수급 (실시간 가집계)
+        // FID_COND_MRKT_DIV_CODE: J (주식), FID_INPUT_ISCD: 0000 (전체)
+        // Path: foreign-institution-tot
+        const marketData = await tryFetch(KIS_BASE_URL, "FHKST01010900", "0000", "J", "foreign-institution-tot");
+        let latestMarketValue = 0;
         
-        // 데이터가 없거나 유효하지 않은 경우 대표종목(069500)으로 재시도
-        let out = data.output || data.output1;
-        const checkValue = (d) => d ? (d.frgn_ntby_tr_pbmn || d.FRGN_NTBY_TR_PBMN) : null;
-        
-        if (!out || out.length === 0 || checkValue(out[0]) === undefined) {
-            console.warn(`⚠️ KIS 외인수급 데이터 미흡(필드 누락 혹은 빈 응답), 069500 재시도...`);
-            data = await tryFetch(KIS_BASE_URL, "FHKST01010900", "069500", "J");
+        if (marketData && marketData.output) {
+            const foreignerRow = marketData.output.find(r => r.invst_tp_cd === "02");
+            if (foreignerRow) {
+                latestMarketValue = Math.round(parseFloat(foreignerRow.ntby_tr_pbmn) / 100); // 백만원 -> 억원
+            }
         }
 
-        if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
-            console.error("❌ KIS 외인수급 API 최종 실패:", data.msg1 || data.message || JSON.stringify(data).substring(0, 100));
-            return null;
+        // 2. 히스토리 유지를 위해 대표 종목(KODEX 200 - 069500) 데이터 활용
+        const historyData = await tryFetch(KIS_BASE_URL, "FHKST01010900", "069500", "J", "inquire-investor");
+        
+        if (historyData.error || (historyData.rt_cd && historyData.rt_cd !== '0' && historyData.rt_cd !== '00')) {
+            // 히스토리 실패 시 당일 데이터만이라도 반환
+            return [{ date: new Date().toISOString().split('T')[0], value: latestMarketValue }];
         }
 
-        const output = data.output || data.output1;
+        const output = historyData.output || historyData.output1;
         if (output && Array.isArray(output)) {
-            return output
+            const result = output
                 .map(d => {
                     const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
                     const ntby = d.frgn_ntby_tr_pbmn || d.FRGN_NTBY_TR_PBMN || "0";
@@ -248,8 +252,15 @@ async function fetchMarketInvestorTrend(token) {
                 })
                 .filter(d => d.date && !isNaN(d.value))
                 .slice(0, 14);
-        } else {
-            console.warn("⚠️ KIS 외인수급 응답에 유효한 데이터(output)가 없습니다.");
+
+            // 첫 번째 요소(최신 데이터)를 코스피 전체 실시간 값으로 교체 (더 정확한 정보 제공)
+            if (result.length > 0 && latestMarketValue !== 0) {
+                result[0].value = latestMarketValue;
+            } else if (result.length === 0) {
+                result.push({ date: new Date().toISOString().split('T')[0], value: latestMarketValue });
+            }
+            
+            return result;
         }
     } catch (e) {
         console.error("❌ KIS 외인수급 조회 최종 에러:", e.message);
