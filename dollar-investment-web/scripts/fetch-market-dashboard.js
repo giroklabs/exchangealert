@@ -508,11 +508,10 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
     // 2026년 기준 실제 사용 가능한 모델 우선순위 목록
     // 비용 최적화를 위해 Flash-8B 모델을 1순위로 배치 (Pro/Flash 2.0/2.5 대비 월등히 저렴)
     const modelConfigs = [
-        { ver: 'v1beta', model: 'gemini-1.5-flash' },
-        { ver: 'v1beta', model: 'gemini-1.5-flash-8b' },
-        { ver: 'v1beta', model: 'gemini-1.5-flash-002' },
+        { ver: 'v1beta', model: 'gemini-2.5-flash' },
+        { ver: 'v1beta', model: 'gemini-2.0-flash-exp' },
         { ver: 'v1beta', model: 'gemini-2.0-flash' },
-        { ver: 'v1beta', model: 'gemini-1.5-pro-002' },
+        { ver: 'v1beta', model: 'gemini-1.5-flash' },
     ];
 
     for (const config of modelConfigs) {
