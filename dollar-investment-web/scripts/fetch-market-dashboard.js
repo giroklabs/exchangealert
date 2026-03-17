@@ -221,10 +221,12 @@ async function fetchMarketInvestorTrend(token) {
         // 1. 코스피 전체(0001) 실전용 시도
         let data = await tryFetch(KIS_BASE_URL, "FHKST01010900", "0001", "P");
         
-        // 데이터가 없거나 0인 경우 대표종목(069500)으로 재시도
+        // 데이터가 없거나 유효하지 않은 경우 대표종목(069500)으로 재시도
         let out = data.output || data.output1;
-        if (!out || out.length === 0 || parseFloat(out[0].frgn_ntby_tr_pbmn) === 0) {
-            console.warn(`⚠️ KIS 외인수급 데이터 미흡, 069500 재시도...`);
+        const checkValue = (d) => d ? (d.frgn_ntby_tr_pbmn || d.FRGN_NTBY_TR_PBMN) : null;
+        
+        if (!out || out.length === 0 || checkValue(out[0]) === undefined) {
+            console.warn(`⚠️ KIS 외인수급 데이터 미흡(필드 누락 혹은 빈 응답), 069500 재시도...`);
             data = await tryFetch(KIS_BASE_URL, "FHKST01010900", "069500", "J");
         }
 
