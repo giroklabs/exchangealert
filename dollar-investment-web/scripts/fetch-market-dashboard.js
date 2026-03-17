@@ -16,11 +16,17 @@ const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const KIS_BASE_URL = "https://openapi.koreainvestment.com:443";
-const KIS_BASE_URL_SBARK = "https://openapi.koreainvestment.com:9443"; // Fallback port for some environments
+const KIS_BASE_URL = "https://openapi.koreainvestment.com";
+const KIS_BASE_URL_SBARK = "https://openapi.koreainvestment.com:9443";
 
 // API 키 상태 로그
 console.log(`🔑 API 키 확인: FRED(${FRED_API_KEY ? 'O' : 'X'}), ECOS(${ECOS_API_KEY ? 'O' : 'X'}), KIS(${KIS_APP_KEY ? 'O' : 'X'}), GEMINI(${GEMINI_API_KEY ? 'O' : 'X'})`);
+
+if (!KIS_APP_KEY || !KIS_APP_SECRET) {
+    console.warn("⚠️ [Config] KIS_APP_KEY 또는 KIS_APP_SECRET이 설정되지 않았습니다. GitHub Secrets를 확인해 주세요.");
+}
+if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.");
+if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
@@ -201,9 +207,14 @@ async function fetchMarketInvestorTrend(token) {
 
     try {
         let data = await tryFetch(KIS_BASE_URL);
-        if (data.error || !data.output) {
-            console.warn(`⚠️ KIS 외인수급 443 실패, 9443 시도 중...`);
+        if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
+            console.warn(`⚠️ KIS 외인수급 443 실패 (Code: ${data.rt_cd || 'Error'}), 9443 시도 중...`);
             data = await tryFetch(KIS_BASE_URL_SBARK);
+        }
+
+        if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
+            console.error("❌ KIS 외인수급 API 최종 실패:", data.msg1 || data.message || JSON.stringify(data).substring(0, 100));
+            return null;
         }
 
         const output = data.output || data.output1;
@@ -219,6 +230,8 @@ async function fetchMarketInvestorTrend(token) {
                 })
                 .filter(d => d.date && !isNaN(d.value))
                 .slice(0, 14);
+        } else {
+            console.warn("⚠️ KIS 외인수급 응답에 유효한 데이터(output)가 없습니다.");
         }
     } catch (e) {
         console.error("❌ KIS 외인수급 조회 최종 에러:", e.message);
@@ -257,7 +270,7 @@ async function fetchInvestorDepositsFromKIS(token) {
         
         if (data.rt_cd !== '0' && data.rt_cd !== '00') {
             console.error("❌ KIS 예탁금 API 응답 최종 실패 (상태 코드):", data.rt_cd);
-            console.error("❌ 상세 메시지:", data.msg1 || data.message || "No error message provided");
+            console.error("❌ 상세 메시지:", data.msg1 || data.message || JSON.stringify(data).substring(0, 100));
             return null;
         }
 
@@ -1061,8 +1074,8 @@ async function main() {
                     console.log(`✅ [KIS] ${stock.name}: ${kisData.price}`);
                 }
 
-                // 초당 요청 제한(TPS) 방지를 위한 짧은 지연
-                await new Promise(resolve => setTimeout(resolve, 50));
+                // 초당 요청 제한(TPS) 방지를 위한 넉넉한 지연 (200ms)
+                await new Promise(resolve => setTimeout(resolve, 200));
             } catch (e) {
                 console.warn(`⚠️ KIS 주식 시세 수집 실패 (${stock.symbol}):`, e.message);
             }
