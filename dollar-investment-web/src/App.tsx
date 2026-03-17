@@ -17,6 +17,7 @@ import { DeveloperDashboard } from './components/DeveloperDashboard';
 import { fetchAllCurrentExchangeRates } from './services/exchangeRateService';
 import { fetchMarketDashboardData } from './services/marketDashboardService';
 import { fetchFXIntradayData } from './services/fxHistoryService';
+import { trackVisitor } from './services/analyticsService';
 import type { DashboardData } from './types';
 import logo from './assets/logo.png';
 import './App.css';
@@ -79,6 +80,7 @@ function App() {
   };
 
   useEffect(() => {
+    trackVisitor(); // 방문자 수 집계 (Firestore)
     fetchGlobalData();
     const interval = setInterval(fetchGlobalData, 1 * 60 * 1000); // 1분 주기로 정밀 동기화
     return () => clearInterval(interval);

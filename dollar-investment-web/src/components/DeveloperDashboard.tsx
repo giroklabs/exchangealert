@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import { getVisitorStats, getTotalVisitorCount } from '../services/analyticsService';
 import {
     AreaChart,
     Area,
@@ -15,16 +17,6 @@ interface DeveloperDashboardProps {
     onClose: () => void;
 }
 
-const visitorData = [
-    { name: 'Mon', count: 240 },
-    { name: 'Tue', count: 320 },
-    { name: 'Wed', count: 450 },
-    { name: 'Thu', count: 580 },
-    { name: 'Fri', count: 890 },
-    { name: 'Sat', count: 1200 },
-    { name: 'Sun', count: 980 },
-];
-
 const geminiUsageData = [
     { date: '03-11', cost: 0.12, requests: 45 },
     { date: '03-12', cost: 0.15, requests: 62 },
@@ -38,6 +30,35 @@ const geminiUsageData = [
 export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
+    const [visitorData, setVisitorData] = useState<{ name: string; count: number; date: string }[]>([]);
+    const [totalVisitors, setTotalVisitors] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadMetrics() {
+            try {
+                const [stats, total] = await Promise.all([
+                    getVisitorStats(7),
+                    getTotalVisitorCount()
+                ]);
+                setVisitorData(stats);
+                setTotalVisitors(total);
+            } catch (error) {
+                console.error("Failed to load metrics:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        loadMetrics();
+    }, []);
+
+    // 오늘 방문자 및 어제 대비 증가율 계산
+    const todayVisitorCount = visitorData.length > 0 ? visitorData[visitorData.length - 1].count : 0;
+    const yesterdayVisitorCount = visitorData.length > 1 ? visitorData[visitorData.length - 2].count : 0;
+    const visitorChange = yesterdayVisitorCount > 0 
+        ? ((todayVisitorCount - yesterdayVisitorCount) / yesterdayVisitorCount * 100).toFixed(1)
+        : '0';
+    const isIncrease = parseFloat(visitorChange) >= 0;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
@@ -78,9 +99,13 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
                             <p className="text-sm font-bold text-gray-500 mb-2">오늘 방문자 수</p>
-                            <h3 className={`text-4xl font-black ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>1,284</h3>
-                            <div className="flex items-center gap-2 mt-2 text-xs font-bold text-green-500">
-                                <span className="p-1 rounded bg-green-500/10">▲ 12.4%</span>
+                            <h3 className={`text-4xl font-black ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                                {isLoading ? '...' : todayVisitorCount.toLocaleString()}
+                            </h3>
+                            <div className={`flex items-center gap-2 mt-2 text-xs font-bold ${isIncrease ? 'text-green-500' : 'text-red-500'}`}>
+                                <span className={`p-1 rounded ${isIncrease ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
+                                    {isIncrease ? '▲' : '▼'} {Math.abs(parseFloat(visitorChange))}%
+                                </span>
                                 <span className="text-gray-400 font-medium">vs 어제</span>
                             </div>
                         </div>
@@ -92,11 +117,13 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                             </div>
                         </div>
                         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-                            <p className="text-sm font-bold text-gray-500 mb-2">이번 달 예상 비용</p>
-                            <h3 className={`text-4xl font-black ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>$12.45</h3>
+                            <p className="text-sm font-bold text-gray-500 mb-2">누적 방문자 수</p>
+                            <h3 className={`text-4xl font-black ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>
+                                {isLoading ? '...' : totalVisitors.toLocaleString()}
+                            </h3>
                             <div className="flex items-center gap-2 mt-2 text-xs font-bold text-gray-400">
-                                <span className="p-1 rounded bg-gray-500/10">Estimated</span>
-                                <span className="font-medium">Total: $12.45</span>
+                                <span className="p-1 rounded bg-gray-500/10">All Time</span>
+                                <span className="font-medium">Total Visitors</span>
                             </div>
                         </div>
                     </div>
