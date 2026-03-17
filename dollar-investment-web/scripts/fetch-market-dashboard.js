@@ -1180,8 +1180,8 @@ async function main() {
     fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2), 'utf8');
     console.log('✨ AI 분석 및 주식 시세 포함 데이터 업데이트 완료!');
 
-    // 5. 텔레그램 알림 발송 (새로운 분석이 수행된 경우)
-    if (!shouldSkipAi && aiAnalysis && !aiAnalysis.includes('분석 요청 실패')) {
+    // 5. 텔레그램 알림 발송 (분석 결과가 유효한 경우 항상 발송)
+    if (aiAnalysis && !aiAnalysis.includes('분석 요청 실패')) {
         await sendTelegramNotification(dashboardData.forecast, dashboardData.lastUpdate);
     }
 }
