@@ -567,6 +567,81 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
     return `AI 분석 요청 실패 내역:\n${lastError.trim()}`;
 }
 
+async function sendTelegramNotification(forecast, lastUpdate) {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+
+    if (!token || !chatId) {
+        console.warn("⚠️ [Telegram] TELEGRAM_BOT_TOKEN 또는 TELEGRAM_CHAT_ID가 설정되지 않아 알림을 건너뜁니다.");
+        return;
+    }
+
+    // 마크다운 V2 대신 기본 마크다운 사용 (이스케이프 복잡도 감소)
+    const title = forecast.sentiment === '환율 상승 우세' ? '📈 환율 상승 우세 예측' : (forecast.sentiment === '환율 하락 우세' ? '📉 환율 하락 우세 예측' : '⚖️ 시장 보합/관망 분석');
+    
+    // AI 분석 내용 중 투자 대응 부분만 강조하여 메시지 구성
+    const analysisLines = forecast.aiAnalysis.split('\n');
+    let summary = '';
+    let strategy = '';
+    
+    for (const line of analysisLines) {
+        if (line.includes('실전 투자 대응:')) strategy = line.replace('실전 투자 대응:', '').trim();
+        else if (!summary && line.length > 20) summary = line.trim();
+    }
+
+    const message = `
+🤖 *달러 인베스트 AI 시장 분석*
+━━━━━━━━━━━━━━━━━━
+${title}
+📊 *상승:* ${forecast.upProb}% | *하락:* ${forecast.downProb}%
+
+📝 *핵심 요약:*
+${summary.substring(0, 150)}${summary.length > 150 ? '...' : ''}
+
+🎯 *투자 대응 가이드:*
+${strategy.substring(0, 200)}${strategy.length > 200 ? '...' : ''}
+
+🌐 [시장 대시보드 바로가기](https://giroklabs.github.io/exchangealert/)
+━━━━━━━━━━━━━━━━━━
+⏰ 분석 시점: ${new Date().toLocaleString('ko-KR')}
+    `.trim();
+
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+    const data = JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: 'Markdown',
+        disable_web_page_preview: true
+    });
+
+    return new Promise((resolve) => {
+        const req = https.request(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(data)
+            }
+        }, (res) => {
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => {
+                const isOk = res.statusCode === 200;
+                if (isOk) console.log("✅ [Telegram] 알림 전송 완료");
+                else console.error(`❌ [Telegram] API 응답 오류 (${res.statusCode}): ${body}`);
+                resolve(isOk);
+            });
+        });
+
+        req.on('error', (e) => {
+            console.error("❌ [Telegram] 네트워크 에러:", e.message);
+            resolve(false);
+        });
+
+        req.write(data);
+        req.end();
+    });
+}
+
 async function main() {
     console.log('🚀 2026년 실시간 데이터 수집 시작...');
     const indicators = [];
@@ -1104,5 +1179,10 @@ async function main() {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2), 'utf8');
     console.log('✨ AI 분석 및 주식 시세 포함 데이터 업데이트 완료!');
+
+    // 5. 텔레그램 알림 발송 (새로운 분석이 수행된 경우)
+    if (!shouldSkipAi && aiAnalysis && !aiAnalysis.includes('분석 요청 실패')) {
+        await sendTelegramNotification(dashboardData.forecast, dashboardData.lastUpdate);
+    }
 }
 main();
