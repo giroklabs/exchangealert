@@ -1,0 +1,37 @@
+name: Fetch Google Cloud Billing
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 매시간 정각 실행
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  fetch-billing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd dollar-investment-web
+          npm install google-auth-library googleapis
+
+      - name: Fetch Billing Data
+        env:
+          GCP_BILLING_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_BILLING_SERVICE_ACCOUNT_JSON }}
+        run: |
+          cd dollar-investment-web
+          node scripts/fetch-billing.js
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add dollar-investment-web/public/data/billing.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "data: update google cloud billing info [skip ci]" && git push)

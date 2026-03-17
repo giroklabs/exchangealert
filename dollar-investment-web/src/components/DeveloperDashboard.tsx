@@ -17,32 +17,36 @@ interface DeveloperDashboardProps {
     onClose: () => void;
 }
 
-const geminiUsageData = [
-    { date: '03-11', cost: 0.12, requests: 45 },
-    { date: '03-12', cost: 0.15, requests: 62 },
-    { date: '03-13', cost: 0.28, requests: 120 },
-    { date: '03-14', cost: 0.42, requests: 185 },
-    { date: '03-15', cost: 0.38, requests: 154 },
-    { date: '03-16', cost: 0.55, requests: 210 },
-    { date: '03-17', cost: 0.15, requests: 85 }, // Today partial
-];
+interface BillingData {
+    lastUpdate: string;
+    projectId: string;
+    totalCostMonth: number;
+    history: { date: string; cost: number; requests: number }[];
+}
 
 export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [visitorData, setVisitorData] = useState<{ name: string; count: number; date: string }[]>([]);
     const [totalVisitors, setTotalVisitors] = useState(0);
+    const [billingData, setBillingData] = useState<BillingData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function loadMetrics() {
             try {
+                // billing.json 파일은 GitHub Action에 의해 생성됨
+                const billingResponse = await fetch(`${import.meta.env.BASE_URL}data/billing.json?t=${Date.now()}`).catch(() => null);
+                const billingJson = billingResponse && billingResponse.ok ? await billingResponse.json() : null;
+
                 const [stats, total] = await Promise.all([
                     getVisitorStats(7),
                     getTotalVisitorCount()
                 ]);
+                
                 setVisitorData(stats);
                 setTotalVisitors(total);
+                if (billingJson) setBillingData(billingJson);
             } catch (error) {
                 console.error("Failed to load metrics:", error);
             } finally {
@@ -110,10 +114,12 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                             </div>
                         </div>
                         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-                            <p className="text-sm font-bold text-gray-500 mb-2">Gemini API 호출</p>
-                            <h3 className={`text-4xl font-black ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>24,812</h3>
+                            <p className="text-sm font-bold text-gray-500 mb-2">Gemini 사용 비용 (당월)</p>
+                            <h3 className={`text-4xl font-black ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>
+                                ${billingData?.totalCostMonth.toFixed(2) || '0.00'}
+                            </h3>
                             <div className="flex items-center gap-2 mt-2 text-xs font-bold text-purple-500">
-                                <span className="p-1 rounded bg-purple-500/10">⚡ 100% Success</span>
+                                <span className="p-1 rounded bg-purple-500/10">⚡ Google Cloud Billing</span>
                             </div>
                         </div>
                         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
@@ -171,7 +177,7 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                             </div>
                             <div className="h-[250px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={geminiUsageData}>
+                                    <BarChart data={billingData?.history || []}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? '#374151' : '#f0f0f0'} />
                                         <XAxis dataKey="date" stroke="#9ca3af" fontSize={11} tickLine={false} axisLine={false} />
                                         <YAxis stroke="#9ca3af" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
