@@ -256,7 +256,8 @@ async function fetchInvestorDepositsFromKIS(token) {
         }
         
         if (data.rt_cd !== '0' && data.rt_cd !== '00') {
-            console.error("❌ KIS 예탁금 API 응답 최종 실패:", data.msg1 || data.message || data.error_description);
+            console.error("❌ KIS 예탁금 API 응답 최종 실패 (상태 코드):", data.rt_cd);
+            console.error("❌ 상세 메시지:", data.msg1 || data.message || "No error message provided");
             return null;
         }
 
@@ -296,8 +297,8 @@ async function getKisAccessToken() {
             const issuedAt = cached.issued_at || 0;
             const hoursPassed = (now - issuedAt) / (1000 * 60 * 60);
 
-            // 23시간 이내면 재사용
-            if (hoursPassed < 23) {
+            // 12시간 이내면 재사용 (안전하게 절반으로 단축)
+            if (hoursPassed < 12) {
                 console.log(`✅ KIS 토큰 재사용 중 (발급 후 ${Math.round(hoursPassed)}시간 경과)`);
                 return cached.access_token;
             }
