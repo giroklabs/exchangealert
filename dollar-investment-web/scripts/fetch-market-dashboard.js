@@ -255,70 +255,7 @@ async function fetchMarketInvestorTrend(token) {
     return null;
 }
 
-async function fetchInvestorDepositsFromKIS(token) {
-    if (!token) return null;
-    
-    const tryFetch = async (baseUrl, trId) => {
-        try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/market-fund?fid_cond_mrkt_div_code=J&fid_input_iscd=0000`;
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": trId,
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-                }
-            });
-            const text = await res.text();
-            if (!text) return { error: "Empty response" };
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                console.warn(`⚠️ JSON Parse Error (Fund). Raw: ${text.substring(0, 50)}...`);
-                return { error: "Invalid JSON" };
-            }
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
 
-    try {
-        // 실전용 9443 포트로만 시도
-        let data = await tryFetch(KIS_BASE_URL, "FHKST01010700");
-        
-        if (data.error || (data.rt_cd && data.rt_cd !== '0')) {
-            console.error("❌ KIS 예탁금 API 최종 실패:", data.msg1 || data.message || JSON.stringify(data).substring(0, 100));
-            return null;
-        }
-        
-        if (data.rt_cd !== '0' && data.rt_cd !== '00') {
-            console.error("❌ KIS 예탁금 API 응답 최종 실패 (상태 코드):", data.rt_cd);
-            console.error("❌ 상세 메시지:", data.msg1 || data.message || JSON.stringify(data).substring(0, 100));
-            return null;
-        }
-
-        const output = data.output1 || data.output;
-        if (output && Array.isArray(output)) {
-            return output
-                .slice(0, 14)
-                .map(d => {
-                    const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
-                    const depos = d.cust_depos || d.CUST_DEPOS || "0";
-                    return {
-                        date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: Math.round(parseFloat(depos) / 1000000) // 원 -> 억원 단위 보정
-                    };
-                })
-                .filter(d => d.date && !isNaN(d.value));
-        }
-    } catch (e) {
-        console.error("❌ KIS 투자자예탁금 조회 최종 에러:", e.message);
-    }
-    return null;
-}
 
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
@@ -698,7 +635,7 @@ async function main() {
         'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] },
         'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '03-10', value: 32 }, { date: '03-11', value: 34 }, { date: '03-12', value: 35 }, { date: '03-13', value: 35 }] },
         'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '03-10', value: 38 }, { date: '03-11', value: 40 }, { date: '03-12', value: 42 }, { date: '03-13', value: 42 }] },
-        'investor-deposits': { value: '54200', trend: 'down', history: [{ date: '03-10', value: 55100 }, { date: '03-11', value: 54800 }, { date: '03-12', value: 54500 }, { date: '03-13', value: 54200 }] },
+
         'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '202512', value: 3.5 }, { date: '202601', value: 3.5 }] },
         'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] },
         'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '03-10', value: 0.08 }, { date: '03-11', value: 0.09 }, { date: '03-12', value: 0.09 }, { date: '03-13', value: 0.09 }] },
@@ -798,51 +735,7 @@ async function main() {
         console.log(`⚠️ [KIS] 외인 수급 fallback 데이터 적용`);
     }
 
-    // 2.1.2 투자자예탁금 (KIS API 연동)
-    let depositTrend = null;
-    if (kisToken) {
-        depositTrend = await fetchInvestorDepositsFromKIS(kisToken);
-    }
 
-    if (depositTrend && depositTrend.length > 0) {
-        const latest = depositTrend[0].value;
-        const prev = depositTrend.length > 1 ? depositTrend[1].value : latest;
-        const trend = latest >= prev ? 'up' : 'down';
-
-        // 예탁금 증가 -> 증시 활기 -> 원화 강세(환율 하락) 요인 (-2.0 가중치 강화)
-        if (trend === 'up') blockScores['assets'].down += 2.0;
-        else if (trend === 'down') blockScores['assets'].up += 2.0;
-
-        indicators.push({
-            id: 'investor-deposits',
-            name: '투자자예탁금',
-            unit: '억원',
-            block: FACTOR_BLOCKS.ASSETS.id,
-            impact: 'down',
-            source: 'KIS 실시간',
-            description: '증시 대기 자금 규모 (유동성 증가 시 환율 하락 요인)',
-            value: latest.toLocaleString(),
-            trend,
-            realizedImpact: trend === 'up' ? 'down' : 'up',
-            history: depositTrend.reverse()
-        });
-        console.log(`✅ [KIS] 투자자예탁금: ${latest}억원`);
-    } else {
-        const fb = fallbacks['investor-deposits'];
-        indicators.push({
-            id: 'investor-deposits',
-            name: '투자자예탁금 (연결대기)',
-            unit: '억원',
-            block: FACTOR_BLOCKS.ASSETS.id,
-            impact: 'down',
-            source: '데이터 예측',
-            description: '증시 대기 자금은 자본 유입의 선행 지표입니다.',
-            value: fb.value,
-            trend: fb.trend,
-            history: fb.history
-        });
-        console.log(`⚠️ [KIS] 투자자예탁금 fallback 데이터 적용`);
-    }
 
     // 2.2 한·미 금리차 산출 (US 10Y - KR 10Y)
     const us10y = indicators.find(i => i.id === 'tnx');

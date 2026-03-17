@@ -291,7 +291,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                             <li>VIX 공포지수 상승 (시장 불안정성 및 달러 선호)</li>
                             <li>엔/달러 환율 상승 (엔화 약세 동조)</li>
                             <li>외국인 국내 증권투자 순매도 전환 (자본 유출)</li>
-                            <li>투자자예탁금 급감 (국내 증시 매력도 하락)</li>
+
                             <li>국제 유가 상승 및 글로벌 리스크 확산</li>
                         </ul>
                     </div>
@@ -301,7 +301,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                             <li>한국 기준금리 인상 (원화 가치 증가)</li>
                             <li>무역수지 흑자 기록 (달러 유입)</li>
                             <li>외국인 국내 증권투자 순매수 확대 (자본 유입)</li>
-                            <li>투자자예탁금 대폭 증가 (증시 대기 지연 자본)</li>
+
                             <li>국내 경제성장률(GDP) 전망 호조</li>
                             <li>미국 금리 인하 기대감 형성</li>
                         </ul>
