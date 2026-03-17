@@ -64,14 +64,10 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "120.552",
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "99.93",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-03-02",
-          "value": 118.667
-        },
         {
           "date": "2026-03-03",
           "value": 119.4341
@@ -107,6 +103,10 @@
         {
           "date": "2026-03-13",
           "value": 120.5518
+        },
+        {
+          "date": "2026-03-17",
+          "value": 99.93
         }
       ]
     },
@@ -399,7 +399,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,686.26",
+      "value": "5,678.48",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -441,7 +441,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 5686.26
+          "value": 5678.48
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.95",
+      "value": "95.77",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 95.95
+          "value": 95.77
         }
       ]
     },
@@ -961,9 +961,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,493.00",
-      "change": "-6.00",
-      "changePercent": "-0.40",
+      "value": "1,492.60",
+      "change": "-6.40",
+      "changePercent": "-0.43",
       "trend": "down"
     },
     {
@@ -972,9 +972,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.14",
-      "change": "-1.32",
-      "changePercent": "-0.14",
+      "value": "936.77",
+      "change": "-1.69",
+      "changePercent": "-0.18",
       "trend": "down"
     },
     {
@@ -982,8 +982,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,715.76",
-      "change": "+4.43",
+      "value": "1,715.74",
+      "change": "+4.41",
       "changePercent": "+0.26",
       "trend": "up"
     },
@@ -992,9 +992,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.79",
-      "change": "-0.30",
-      "changePercent": "-0.14",
+      "value": "216.75",
+      "change": "-0.34",
+      "changePercent": "-0.16",
       "trend": "down"
     }
   ],
@@ -1015,8 +1015,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 995000,
-      "changePercent": "+2.16",
+      "price": 996000,
+      "changePercent": "+2.26",
       "trend": "up"
     },
     {
@@ -1025,8 +1025,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 532000,
-      "changePercent": "+5.14",
+      "price": 531000,
+      "changePercent": "+4.94",
       "trend": "up"
     },
     {
@@ -1045,8 +1045,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 223000,
-      "changePercent": "+2.29",
+      "price": 223500,
+      "changePercent": "+2.52",
       "trend": "up"
     },
     {
@@ -1055,22 +1055,22 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50950,
-      "changePercent": "+1.49",
+      "price": 51000,
+      "changePercent": "+1.59",
       "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "보통",
-    "upProb": 51,
-    "downProb": 49,
+    "upProb": 47,
+    "downProb": 53,
     "aiAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "lastAiUpdate": 1773708997693,
     "score": {
-      "upScore": 29.017971239013548,
-      "downScore": 27.56292179913683
+      "upScore": 27.112935801163808,
+      "downScore": 30.091871717333003
     }
   },
-  "lastUpdate": "2026. 3. 17. AM 1:15:15"
+  "lastUpdate": "2026. 3. 17. AM 1:16:06"
 }
