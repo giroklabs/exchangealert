@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const OUTPUT_PATH = path.join(__dirname, '../public/data/fx-history-6m.json');
+const ROOT_OUTPUT_PATH = path.join(__dirname, '../../data/fx-history-6m.json');
 
 function fetchJson(url) {
     return new Promise((resolve, reject) => {
@@ -59,7 +60,15 @@ async function main() {
         };
 
         fs.writeFileSync(OUTPUT_PATH, JSON.stringify(finalData, null, 2));
-        console.log(`Successfully saved 6-month history to ${OUTPUT_PATH} (${history.length} days)`);
+        
+        // 루트 data 폴더에도 저장하여 외부 연동 지원
+        const rootOutputDir = path.dirname(ROOT_OUTPUT_PATH);
+        if (!fs.existsSync(rootOutputDir)) {
+            fs.mkdirSync(rootOutputDir, { recursive: true });
+        }
+        fs.writeFileSync(ROOT_OUTPUT_PATH, JSON.stringify(finalData, null, 2));
+
+        console.log(`Successfully saved 6-month history to:\n1. ${OUTPUT_PATH}\n2. ${ROOT_OUTPUT_PATH}\n(${history.length} days)`);
     } catch (error) {
         console.error('Failed to fetch FX history:', error);
         process.exit(1);
