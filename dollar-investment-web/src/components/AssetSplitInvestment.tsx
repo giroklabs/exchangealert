@@ -488,10 +488,12 @@ export function AssetSplitInvestment() {
     const { userDataLoaded } = useAuth();
     const [stockPrices, setStockPrices] = useState<TrackedStock[]>([]);
 
-    useEffect(() => {
-        if (!userDataLoaded) return; // 유저 데이터가 로드(클라우드 동기화)되기 전에는 자동 업데이트 방지
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
-        const loadDashboardData = async () => {
+    const loadDashboardData = async () => {
+        if (!userDataLoaded) return;
+        setIsRefreshing(true);
+        try {
             const data = await fetchMarketDashboardData();
             if (data.stockPrices) {
                 setStockPrices(data.stockPrices);
@@ -499,7 +501,7 @@ export function AssetSplitInvestment() {
                 // 기존 투자 종목들의 현재가를 실시간 가격으로 자동 업데이트
                 setInvestments(prev => prev.map(inv => {
                     const searchName = inv.settings.assetName.trim().toLowerCase();
-                    const found = data.stockPrices?.find(s =>
+                    const found = data.stockPrices?.find((s: any) =>
                         s.name.toLowerCase() === searchName ||
                         s.enName.toLowerCase() === searchName ||
                         s.symbol.toLowerCase().includes(searchName) ||
@@ -512,15 +514,19 @@ export function AssetSplitInvestment() {
                     return inv;
                 }));
             }
-        };
+        } catch (error) {
+            console.error('시세 업데이트 실패:', error);
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
 
-        // 초기 로드
-        loadDashboardData();
-
-        // 60초마다 주기적으로 새로고침
-        const interval = setInterval(loadDashboardData, 60000);
-
-        return () => clearInterval(interval);
+    useEffect(() => {
+        if (userDataLoaded) {
+            loadDashboardData();
+            const interval = setInterval(loadDashboardData, 60000);
+            return () => clearInterval(interval);
+        }
     }, [userDataLoaded]);
 
     // 여러 종목 상태 관리
@@ -655,9 +661,9 @@ export function AssetSplitInvestment() {
                             실시간 시세: {new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                         <button
-                            onClick={() => window.location.reload()}
-                            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center group ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
-                                }`}
+                            onClick={loadDashboardData}
+                            disabled={isRefreshing}
+                            className={`p-2 rounded-lg transition-all duration-200 flex items-center justify-center group ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} ${isRefreshing ? 'opacity-50' : ''}`}
                             title="시세 새로고침"
                         >
                             <svg
@@ -670,7 +676,7 @@ export function AssetSplitInvestment() {
                                 strokeWidth="2.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                className={`transition-transform duration-500 group-hover:rotate-180 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+                                className={`transition-transform duration-500 ${isRefreshing ? 'animate-spin' : 'group-hover:rotate-180'} ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
                             >
                                 <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
                                 <polyline points="21 3 21 8 16 8" />

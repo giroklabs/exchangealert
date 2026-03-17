@@ -44,6 +44,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         ma60: false
     });
     const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const [chartScale, setChartScale] = useState(1.0);
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -147,8 +148,8 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
 
     // 데이터 포인트 개수에 따라 동적 너비 계산 (최소 1200px 이상 확보하여 스크롤 유도)
     const dynamicWidth = period === '1D' 
-        ? Math.max(1200, chartData.length * 15) 
-        : '100%';
+        ? Math.max(800, chartData.length * 15 * chartScale) 
+        : (chartScale > 1.0 ? `${100 * chartScale}%` : '100%');
 
     return (
         <div className={`p-6 ${!isEmbedded ? `rounded-2xl shadow-xl border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}` : ''}`}>
@@ -188,6 +189,26 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                             {p === '1D' ? '1일' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
                         </button>
                     ))}
+                    <div className="w-px h-4 bg-gray-300 dark:bg-gray-700 mx-1"></div>
+                    <div className="flex items-center gap-1 bg-gray-200/50 dark:bg-gray-800/50 rounded-lg px-1">
+                        <button
+                            onClick={() => setChartScale(prev => Math.max(0.5, prev - 0.2))}
+                            className={`p-1.5 rounded-md hover:bg-white dark:hover:bg-gray-700 transition-colors ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+                            title="축소"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        <span className={`text-[10px] font-bold min-w-[24px] text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                            {Math.round(chartScale * 100)}%
+                        </span>
+                        <button
+                            onClick={() => setChartScale(prev => Math.min(3.0, prev + 0.2))}
+                            className={`p-1.5 rounded-md hover:bg-white dark:hover:bg-gray-700 transition-colors ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+                            title="확대"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
                     <div className="w-px h-4 bg-gray-300 dark:bg-gray-700 mx-1"></div>
                     <button
                         onClick={() => setShowHistoryModal(true)}

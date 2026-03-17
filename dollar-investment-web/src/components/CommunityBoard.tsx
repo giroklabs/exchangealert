@@ -361,8 +361,8 @@ export const CommunityBoard: React.FC = () => {
                             </div>
                         </div>
 
-                        <h3 className="text-xl font-bold mb-3">{post.title}</h3>
-                        <p className={`mb-4 whitespace-pre-wrap leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <h3 className="text-xl font-bold mb-3 text-left">{post.title}</h3>
+                        <p className={`mb-4 whitespace-pre-wrap leading-relaxed text-left ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                             {post.content}
                         </p>
 

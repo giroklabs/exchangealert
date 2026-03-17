@@ -8,7 +8,7 @@ import { ExchangeRateChart } from './ExchangeRateChart';
 import { DollarIndexChart } from './DollarIndexChart';
 import { HistoryDataTable } from './HistoryDataTable';
 import { DataSourceInfo } from './DataSourceInfo';
-import { NotificationSettings } from './NotificationSettings';
+// import { NotificationSettings } from './NotificationSettings';
 import { calculateGapRatio } from '../services/calculationService';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useTheme } from '../contexts/ThemeContext';
@@ -122,8 +122,8 @@ export function InvestmentAnalysis() {
         />
       )}
 
-      {/* 알림 설정 */}
-      <NotificationSettings />
+      {/* 알림 설정 (임시 숨김 처리) */}
+      {/* <NotificationSettings /> */}
 
       {/* 데이터 출처 정보 */}
       <DataSourceInfo
