@@ -399,7 +399,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,699.61",
+      "value": "5,686.26",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -441,7 +441,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 5699.61
+          "value": 5686.26
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.93",
+      "value": "95.95",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 95.93
+          "value": 95.95
         }
       ]
     },
@@ -972,8 +972,8 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.11",
-      "change": "-1.35",
+      "value": "937.14",
+      "change": "-1.32",
       "changePercent": "-0.14",
       "trend": "down"
     },
@@ -982,9 +982,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,715.61",
-      "change": "+4.28",
-      "changePercent": "+0.25",
+      "value": "1,715.76",
+      "change": "+4.43",
+      "changePercent": "+0.26",
       "trend": "up"
     },
     {
@@ -992,170 +992,71 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.76",
-      "change": "-0.33",
-      "changePercent": "-0.15",
+      "value": "216.79",
+      "change": "-0.30",
+      "changePercent": "-0.14",
       "trend": "down"
     }
   ],
   "stockPrices": [
     {
       "id": "samsung",
-      "symbol": "005930.KS",
+      "symbol": "005930",
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 196600,
-      "changePercent": "+7.14",
+      "price": 196300,
+      "changePercent": "+4.03",
       "trend": "up"
     },
     {
       "id": "hynix",
-      "symbol": "000660.KS",
+      "symbol": "000660",
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 999000,
-      "changePercent": "+9.78",
+      "price": 995000,
+      "changePercent": "+2.16",
       "trend": "up"
     },
     {
       "id": "hyundai",
-      "symbol": "005380.KS",
+      "symbol": "005380",
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 536000,
-      "changePercent": "+3.68",
+      "price": 532000,
+      "changePercent": "+5.14",
       "trend": "up"
     },
     {
       "id": "kia",
-      "symbol": "000270.KS",
+      "symbol": "000270",
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 168900,
-      "changePercent": "+2.80",
+      "price": 168000,
+      "changePercent": "+3.70",
       "trend": "up"
     },
     {
       "id": "naver",
-      "symbol": "035420.KS",
+      "symbol": "035420",
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 223250,
-      "changePercent": "+0.11",
+      "price": 223000,
+      "changePercent": "+2.29",
       "trend": "up"
     },
     {
       "id": "kakao",
-      "symbol": "035720.KS",
+      "symbol": "035720",
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 51000,
-      "changePercent": "+0.79",
-      "trend": "up"
-    },
-    {
-      "id": "apple",
-      "symbol": "AAPL",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "애플",
-      "enName": "Apple",
-      "price": 252.82,
-      "changePercent": "+1.08",
-      "trend": "up"
-    },
-    {
-      "id": "tesla",
-      "symbol": "TSLA",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "테슬라",
-      "enName": "Tesla",
-      "price": 395.56,
-      "changePercent": "+1.11",
-      "trend": "up"
-    },
-    {
-      "id": "nvidia",
-      "symbol": "NVDA",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "엔비디아",
-      "enName": "NVIDIA",
-      "price": 183.22,
-      "changePercent": "+1.65",
-      "trend": "up"
-    },
-    {
-      "id": "microsoft",
-      "symbol": "MSFT",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "마이크로소프트",
-      "enName": "Microsoft",
-      "price": 399.95,
-      "changePercent": "+1.11",
-      "trend": "up"
-    },
-    {
-      "id": "google",
-      "symbol": "GOOGL",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "구글",
-      "enName": "Google",
-      "price": 305.56,
-      "changePercent": "+1.09",
-      "trend": "up"
-    },
-    {
-      "id": "amazon",
-      "symbol": "AMZN",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "아마존",
-      "enName": "Amazon",
-      "price": 211.74,
-      "changePercent": "+1.96",
-      "trend": "up"
-    },
-    {
-      "id": "qqq",
-      "symbol": "QQQ",
-      "market": "overseas",
-      "excd": "NAS",
-      "name": "QQQ",
-      "enName": "Invesco QQQ Trust",
-      "price": 600.38,
-      "changePercent": "+1.12",
-      "trend": "up"
-    },
-    {
-      "id": "spy",
-      "symbol": "SPY",
-      "market": "overseas",
-      "excd": "NYS",
-      "name": "SPY",
-      "enName": "SPDR S&P 500 ETF",
-      "price": 669.03,
-      "changePercent": "+1.02",
-      "trend": "up"
-    },
-    {
-      "id": "schd",
-      "symbol": "SCHD",
-      "market": "overseas",
-      "excd": "NYS",
-      "name": "SCHD",
-      "enName": "Schwab US Dividend Equity ETF",
-      "price": 30.87,
-      "changePercent": "+0.23",
+      "price": 50950,
+      "changePercent": "+1.49",
       "trend": "up"
     }
   ],
@@ -1167,9 +1068,9 @@
     "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
     "lastAiUpdate": 1773708997693,
     "score": {
-      "upScore": 29.017070626737105,
-      "downScore": 27.676807821667463
+      "upScore": 29.017971239013548,
+      "downScore": 27.56292179913683
     }
   },
-  "lastUpdate": "2026. 3. 17. AM 1:08:08"
+  "lastUpdate": "2026. 3. 17. AM 1:15:15"
 }
