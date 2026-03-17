@@ -116,7 +116,7 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
                             <p className="text-sm font-bold text-gray-500 mb-2">Gemini 사용 비용 (당월)</p>
                             <h3 className={`text-4xl font-black ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>
-                                ${billingData?.totalCostMonth.toFixed(2) || '0.00'}
+                                ${billingData?.totalCostMonth ? billingData.totalCostMonth.toFixed(2) : '0.00'}
                             </h3>
                             <div className="flex items-center gap-2 mt-2 text-xs font-bold text-purple-500">
                                 <span className="p-1 rounded bg-purple-500/10">⚡ Google Cloud Billing</span>
