@@ -215,16 +215,24 @@ async function fetchMarketInvestorTrend(token) {
     };
 
     try {
-        // 1. 9443 시도 (GitHub Runner 최적화)
+        // 1. 실전(F)용 9443 시도 (가장 권장)
         let data = await tryFetch(KIS_BASE_URL, "FHKST01010900");
         
-        // 2. 실패 시 443 시도 또는 모의 시도
-        if (data.rt_cd === '7' || data.rt_cd === '9' || data.error) {
-            console.warn(`⚠️ KIS 외인수급 9443(F) 실패, 실전(F) 443 또는 모의(V) 시도...`);
-            data = await tryFetch(KIS_BASE_URL_REAL, "FHKST01010900");
-            if (data.error || (data.rt_cd && data.rt_cd !== '0')) {
-                data = await tryFetch(KIS_BASE_URL, "VHKST01010900");
-            }
+        // 데이터가 없거나 에러인 경우 대표 종목(KODEX 200)으로 재시도
+        if (!data.output && !data.output1) {
+            console.warn(`⚠️ KIS 외인수급 0000 실패, 대표종목(069500)으로 시도...`);
+            const urlAlt = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=J&fid_input_iscd=069500`;
+            const resAlt = await fetch(urlAlt, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHKST01010900",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                }
+            });
+            data = await resAlt.json();
         }
         if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
             console.warn(`⚠️ KIS 외인수급 443 실패 (Code: ${data.rt_cd || 'Error'}), 9443 시도 중...`);
@@ -274,24 +282,25 @@ async function fetchInvestorDepositsFromKIS(token) {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
                 }
             });
-            return await res.json();
+            const text = await res.text();
+            if (!text) return { error: "Empty response" };
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return { error: "Invalid JSON", raw: text.substring(0, 100) };
+            }
         } catch (e) {
             return { error: e.message };
         }
     };
 
     try {
-        // 1. 실전(F) 시도
+        // 실전용 9443 포트로만 끈질기게 시도
         let data = await tryFetch(KIS_BASE_URL, "FHKST01010700");
-
-        // 2. 실패 시 모의(V) 시도
-        if (data.rt_cd === '7' || data.rt_cd === '9' || data.error) {
-            console.warn(`⚠️ KIS 예탁금 실전(F) 실패, 모의(V) 시도...`);
-            data = await tryFetch(KIS_BASE_URL, "VHKST01010700");
-        }
-        if (data.error || (data.rt_cd !== '0' && data.rt_cd !== '00')) {
-            console.warn(`⚠️ KIS 예탁금 443 실패, 9443 재시도 중...`);
-            data = await tryFetch(KIS_BASE_URL, "VHKST01010700");
+        
+        if (data.error || (data.rt_cd && data.rt_cd !== '0')) {
+            console.warn(`⚠️ KIS 예탁금 9443(F) 실패, 443(F) 재시도...`);
+            data = await tryFetch(KIS_BASE_URL_REAL, "FHKST01010700");
         }
         
         if (data.rt_cd !== '0' && data.rt_cd !== '00') {
