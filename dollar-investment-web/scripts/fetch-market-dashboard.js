@@ -44,6 +44,10 @@ async function fetchFromYahooFinance(symbol) {
             res.on('end', () => {
                 try {
                     const json = JSON.parse(data);
+                    if (!json.chart || !json.chart.result || !json.chart.result[0]) {
+                        console.warn(`⚠️ Yahoo Finance No Result (${symbol})`);
+                        return resolve([]);
+                    }
                     const result = json.chart.result[0];
                     const timestamps = result.timestamp;
                     const closes = result.indicators.quote[0].close;
@@ -224,7 +228,7 @@ async function fetchMarketInvestorTrend(token) {
         }
         if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
             console.warn(`⚠️ KIS 외인수급 443 실패 (Code: ${data.rt_cd || 'Error'}), 9443 시도 중...`);
-            data = await tryFetch(KIS_BASE_URL_SBARK);
+            data = await tryFetch(KIS_BASE_URL, "VHKST01010900");
         }
 
         if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
@@ -286,8 +290,8 @@ async function fetchInvestorDepositsFromKIS(token) {
             data = await tryFetch(KIS_BASE_URL, "VHKST01010700");
         }
         if (data.error || (data.rt_cd !== '0' && data.rt_cd !== '00')) {
-            console.warn(`⚠️ KIS 예탁금 443 실패, 9443 시도 중...`);
-            data = await tryFetch(KIS_BASE_URL_SBARK);
+            console.warn(`⚠️ KIS 예탁금 443 실패, 9443 재시도 중...`);
+            data = await tryFetch(KIS_BASE_URL, "VHKST01010700");
         }
         
         if (data.rt_cd !== '0' && data.rt_cd !== '00') {
@@ -367,8 +371,8 @@ async function getKisAccessToken() {
 
     let data = await tryFetchToken(`${KIS_BASE_URL}/oauth2/tokenP`);
     if (!data.access_token) {
-        console.log(`⚠️ KIS 443 실패, 9443 시도 중... (${data.error || 'Unknown Error'})`);
-        data = await tryFetchToken(`${KIS_BASE_URL_SBARK}/oauth2/tokenP`);
+        console.log(`⚠️ KIS 9443 실패, 443 시도 중... (${data.error || 'Unknown Error'})`);
+        data = await tryFetchToken(`${KIS_BASE_URL_REAL}/oauth2/tokenP`);
     }
 
     if (data.access_token) {
@@ -385,19 +389,36 @@ async function getKisAccessToken() {
 }
 
 async function fetchDomesticStockFromKIS(code, token) {
-    try {
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${code}`;
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010100",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    const tryFetch = async (baseUrl) => {
+        try {
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${code}`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHKST01010100",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                }
+            });
+            const text = await res.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return { error: "Invalid JSON", raw: text.substring(0, 100) };
             }
-        });
-        const data = await res.json();
+        } catch (e) {
+            return { error: e.message };
+        }
+    };
+
+    try {
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data.error || !data.output) {
+            data = await tryFetch(KIS_BASE_URL_REAL);
+        }
+        
         if (data.output) {
             return {
                 price: parseFloat(data.output.stck_prpr),
@@ -412,19 +433,36 @@ async function fetchDomesticStockFromKIS(code, token) {
 }
 
 async function fetchOverseasStockFromKIS(excd, symbol, token) {
-    try {
-        const url = `${KIS_BASE_URL}/uapi/overseas-stock/v1/quotations/price?AUTH=&EXCD=${excd}&SYMB=${symbol}`;
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "HHDFS00000300",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    const tryFetch = async (baseUrl) => {
+        try {
+            const url = `${baseUrl}/uapi/overseas-stock/v1/quotations/price?AUTH=&EXCD=${excd}&SYMB=${symbol}`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "HHDFS00000300",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                }
+            });
+            const text = await res.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return { error: "Invalid JSON", raw: text.substring(0, 100) };
             }
-        });
-        const data = await res.json();
+        } catch (e) {
+            return { error: e.message };
+        }
+    };
+
+    try {
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data.error || !data.output) {
+            data = await tryFetch(KIS_BASE_URL_REAL);
+        }
+
         if (data.output) {
             return {
                 price: parseFloat(data.output.last),
