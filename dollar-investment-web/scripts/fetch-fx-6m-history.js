@@ -43,16 +43,25 @@ async function main() {
         const timestamps = result.timestamp;
         const quotes = result.indicators.quote[0];
 
-        const history = timestamps.map((ts, i) => {
+        const historyMap = new Map();
+        timestamps.forEach((ts, i) => {
             const date = new Date(ts * 1000).toISOString().split('T')[0];
-            return {
-                date,
-                high: quotes.high[i] ? parseFloat(quotes.high[i].toFixed(2)) : null,
-                low: quotes.low[i] ? parseFloat(quotes.low[i].toFixed(2)) : null,
-                close: quotes.close[i] ? parseFloat(quotes.close[i].toFixed(2)) : null
-            };
-        }).filter(item => item.high !== null && item.low !== null)
-          .sort((a, b) => b.date.localeCompare(a.date)); // 최신순 정렬
+            const high = quotes.high[i];
+            const low = quotes.low[i];
+            const close = quotes.close[i];
+
+            if (high !== null && low !== null && close !== null) {
+                historyMap.set(date, {
+                    date,
+                    high: parseFloat(high.toFixed(2)),
+                    low: parseFloat(low.toFixed(2)),
+                    close: parseFloat(close.toFixed(2))
+                });
+            }
+        });
+
+        const history = Array.from(historyMap.values())
+            .sort((a, b) => b.date.localeCompare(a.date));
 
         const finalData = {
             lastUpdate: new Date().toISOString(),

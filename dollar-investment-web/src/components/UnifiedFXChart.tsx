@@ -422,19 +422,19 @@ function FXHistoryModal({ onClose }: { onClose: () => void }) {
                                 </tr>
                             </thead>
                             <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700/50' : 'divide-gray-50'}`}>
-                                {history.data.map((item) => (
-                                    <tr key={item.date} className={`${theme === 'dark' ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50/50'} transition-colors`}>
+                                {history.data.map((item, idx) => (
+                                    <tr key={`${item.date}-${idx}`} className={`${theme === 'dark' ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50/50'} transition-colors`}>
                                         <td className={`p-4 text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                                             {item.date}
                                         </td>
                                         <td className="p-4 text-sm font-bold text-red-400 text-right">
-                                            {item.high.toLocaleString()}원
+                                            {item.high?.toLocaleString() ?? '-'}원
                                         </td>
                                         <td className="p-4 text-sm font-bold text-blue-400 text-right">
-                                            {item.low.toLocaleString()}원
+                                            {item.low?.toLocaleString() ?? '-'}원
                                         </td>
                                         <td className={`p-4 text-sm font-bold text-right ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                                            {item.close.toLocaleString()}원
+                                            {item.close?.toLocaleString() ?? '-'}원
                                         </td>
                                     </tr>
                                 ))}
