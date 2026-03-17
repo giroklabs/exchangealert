@@ -290,7 +290,8 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                             <li>미국 주요 경제지표(고용, CPI) 호조</li>
                             <li>VIX 공포지수 상승 (시장 불안정성 및 달러 선호)</li>
                             <li>엔/달러 환율 상승 (엔화 약세 동조)</li>
-                            <li>외국인 국내 증권투자 순매도 전환 (자본 유출)</li>
+                             <li>외국인 국내 증권투자 순매도 전환 (자본 유출)</li>
+                             <li>투자자예탁금 감소 (시장 유동성 축소)</li>
 
                             <li>국제 유가 상승 및 글로벌 리스크 확산</li>
                         </ul>
@@ -300,7 +301,8 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                         <ul className={`space-y-2 list-disc list-inside ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                             <li>한국 기준금리 인상 (원화 가치 증가)</li>
                             <li>무역수지 흑자 기록 (달러 유입)</li>
-                            <li>외국인 국내 증권투자 순매수 확대 (자본 유입)</li>
+                             <li>외국인 국내 증권투자 순매수 확대 (자본 유입)</li>
+                             <li>투자자예탁금 증가 (시장 유동성 공급)</li>
 
                             <li>국내 경제성장률(GDP) 전망 호조</li>
                             <li>미국 금리 인하 기대감 형성</li>

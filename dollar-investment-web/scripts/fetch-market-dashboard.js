@@ -99,6 +99,8 @@ const FRED_SERIES = [
 // 3. 국내지표 (ECOS)
 const ECOS_SERIES = [
     { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'M' },
+    { id: 'investor-deposits', statCode: '064Y001', item1: '0001000', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'D' },
+    { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '인플레이션 지표, 금리 정책에 영향', cycle: 'M' },
     { id: 'kr-10y', statCode: '721Y001', item1: '010200000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
     { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },
     { id: 'cds-korea', statCode: '902Y003', item1: '0000140', name: 'CDS 프리미엄', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 부도 위험 지표 (상승 시 환율 상승 압력)', cycle: 'D' },
@@ -649,6 +651,7 @@ async function main() {
         'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '03-10', value: 32 }, { date: '03-11', value: 34 }, { date: '03-12', value: 35 }, { date: '03-13', value: 35 }] },
         'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '03-10', value: 38 }, { date: '03-11', value: 40 }, { date: '03-12', value: 42 }, { date: '03-13', value: 42 }] },
 
+        'investor-deposits': { value: '55200', trend: 'up', history: [{ date: '03-10', value: 52100 }, { date: '03-11', value: 53500 }, { date: '03-12', value: 54800 }, { date: '03-13', value: 55200 }] },
         'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '202512', value: 3.5 }, { date: '202601', value: 3.5 }] },
         'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] },
         'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '03-10', value: 0.08 }, { date: '03-11', value: 0.09 }, { date: '03-12', value: 0.09 }, { date: '03-13', value: 0.09 }] },
