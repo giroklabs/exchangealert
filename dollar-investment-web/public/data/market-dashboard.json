@@ -64,10 +64,18 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.77",
+      "value": "120.552",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
+        {
+          "date": "2026-03-02",
+          "value": 118.667
+        },
+        {
+          "date": "2026-03-03",
+          "value": 119.4341
+        },
         {
           "date": "2026-03-04",
           "value": 119.0705
@@ -99,14 +107,6 @@
         {
           "date": "2026-03-13",
           "value": 120.5518
-        },
-        {
-          "date": "2026-03-16",
-          "value": 99.71
-        },
-        {
-          "date": "2026-03-17",
-          "value": 99.77
         }
       ]
     },
@@ -120,9 +120,9 @@
       "description": "미 국채 금리 상승 시 달러 강세 유발",
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
-      "value": "4.22",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "4.21",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-04",
@@ -162,7 +162,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 4.22
+          "value": 4.21
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "22.84",
+      "value": "22.71",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 22.84
+          "value": 22.71
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.11",
+      "value": "95.13",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 95.11
+          "value": 95.13
         }
       ]
     },
@@ -902,7 +902,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.77",
+      "value": "0.76",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -1063,9 +1063,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,489.80",
-      "change": "-9.20",
-      "changePercent": "-0.61",
+      "value": "1,490.20",
+      "change": "-8.80",
+      "changePercent": "-0.59",
       "trend": "down"
     },
     {
@@ -1074,9 +1074,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "937.01",
-      "change": "-1.45",
-      "changePercent": "-0.15",
+      "value": "937.11",
+      "change": "-1.35",
+      "changePercent": "-0.14",
       "trend": "down"
     },
     {
@@ -1084,9 +1084,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,715.58",
-      "change": "+4.25",
-      "changePercent": "+0.25",
+      "value": "1,716.71",
+      "change": "+5.38",
+      "changePercent": "+0.31",
       "trend": "up"
     },
     {
@@ -1094,9 +1094,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.42",
-      "change": "-0.67",
-      "changePercent": "-0.31",
+      "value": "216.49",
+      "change": "-0.60",
+      "changePercent": "-0.28",
       "trend": "down"
     }
   ],
@@ -1164,15 +1164,15 @@
   ],
   "forecast": {
     "sentiment": "환율 하락 우세",
-    "upProb": 51,
-    "downProb": 49,
+    "upProb": 50,
+    "downProb": 50,
     "aiAnalysis": "달러 인덱스 하락과 한미 금리차 축소는 글로벌 달러 약세 및 달러 자산의 캐리 매력 감소를 나타냅니다. VIX 공포지수 하락과 코스피 지수 상승, 외국인 순매수는 '리스크 온' 국면으로 원화 강세 요인입니다. 반면 국제 유가 상승, 경상수지 악화는 원화 약세 압력을 높이며 환율의 하방 경직성을 강화합니다.\n\n실전 투자 대응: 달러 약세 및 리스크 온 흐름에 기반한 원/달러 환율의 완만한 하락이 예상됩니다. 경상수지 악화와 유가 상승이 하방을 제한할 것이므로, 1450원선 이하 진입 시 분할 매수, 1500원 이상 돌파 시 단기 매도 후 관망 전략을 권합니다.\n결론: 하락 우세",
     "detailedAnalysis": "달러 인덱스 하락과 한미 금리차 축소는 글로벌 달러 약세 및 달러 자산의 캐리 매력 감소를 나타냅니다. VIX 공포지수 하락과 코스피 지수 상승, 외국인 순매수는 '리스크 온' 국면으로 원화 강세 요인입니다. 반면 국제 유가 상승, 경상수지 악화는 원화 약세 압력을 높이며 환율의 하방 경직성을 강화합니다.\n\n실전 투자 대응: 달러 약세 및 리스크 온 흐름에 기반한 원/달러 환율의 완만한 하락이 예상됩니다. 경상수지 악화와 유가 상승이 하방을 제한할 것이므로, 1450원선 이하 진입 시 분할 매수, 1500원 이상 돌파 시 단기 매도 후 관망 전략을 권합니다.\n결론: 하락 우세",
     "lastAiUpdate": 1773750395626,
     "score": {
-      "upScore": 33.18643780951739,
-      "downScore": 31.399357798247365
+      "upScore": 33.16509164137308,
+      "downScore": 33.63907946524884
     }
   },
-  "lastUpdate": "2026. 3. 17. PM 12:47:44"
+  "lastUpdate": "2026. 3. 17. PM 12:53:29"
 }
