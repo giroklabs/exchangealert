@@ -33,12 +33,12 @@ function SingleAssetManager({
     const searchAndApplyPrice = (name: string) => {
         if (!name) return;
 
-        const searchName = name.trim().toLowerCase();
+        const searchName = name.trim().toLowerCase().replace(/\s/g, '');
         const found = stockPrices.find(s =>
-            s.name.toLowerCase() === searchName ||
-            s.enName.toLowerCase() === searchName ||
-            s.symbol.toLowerCase().includes(searchName) ||
-            s.id.toLowerCase() === searchName
+            s.name.toLowerCase().replace(/\s/g, '') === searchName ||
+            s.enName.toLowerCase().replace(/\s/g, '') === searchName ||
+            s.symbol.toLowerCase().replace(/\s/g, '').includes(searchName) ||
+            s.id.toLowerCase().replace(/\s/g, '') === searchName
         );
 
         if (found) {
@@ -500,9 +500,28 @@ export function AssetSplitInvestment() {
                 fetchFXIntradayData()
             ]);
             
+            let allPrices: TrackedStock[] = [];
+            
+            if (data.majorRates) {
+                const ratesAsStocks: TrackedStock[] = data.majorRates.map((r: any) => ({
+                    id: r.id,
+                    symbol: r.symbol || r.id,
+                    name: r.name,
+                    enName: r.name,
+                    price: parseFloat(String(r.value).replace(/,/g, '')),
+                    changePercent: r.changePercent,
+                    trend: r.trend
+                }));
+                allPrices = [...allPrices, ...ratesAsStocks];
+            }
+
             if (data.stockPrices) {
+                allPrices = [...allPrices, ...data.stockPrices];
+            }
+            
+            if (allPrices.length > 0) {
                 // USD인 경우 실시간 intraday 데이터가 있다면 반영
-                const updatedStockPrices = data.stockPrices.map((s: TrackedStock) => {
+                const updatedStockPrices = allPrices.map((s: TrackedStock) => {
                     if (s.id === 'usd-krw' || s.symbol === 'USDKRW' || s.name === '미국 달러') {
                         if (intraday && intraday.length > 0) {
                             return { ...s, price: intraday[intraday.length - 1].rate };
@@ -515,12 +534,12 @@ export function AssetSplitInvestment() {
 
                 // 기존 투자 종목들의 현재가를 실시간 가격으로 자동 업데이트
                 setInvestments(prev => prev.map(inv => {
-                    const searchName = inv.settings.assetName.trim().toLowerCase();
+                    const searchName = inv.settings.assetName.trim().toLowerCase().replace(/\s/g, '');
                     const found = updatedStockPrices.find((s: TrackedStock) =>
-                        s.name.toLowerCase() === searchName ||
-                        s.enName.toLowerCase() === searchName ||
-                        s.symbol.toLowerCase().includes(searchName) ||
-                        s.id.toLowerCase() === searchName
+                        s.name.toLowerCase().replace(/\s/g, '') === searchName ||
+                        s.enName.toLowerCase().replace(/\s/g, '') === searchName ||
+                        s.symbol.toLowerCase().replace(/\s/g, '').includes(searchName) ||
+                        s.id.toLowerCase().replace(/\s/g, '') === searchName
                     );
 
                     if (found && inv.lastPrice !== found.price) {
