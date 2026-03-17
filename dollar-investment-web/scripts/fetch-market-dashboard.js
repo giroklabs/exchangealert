@@ -977,12 +977,20 @@ async function main() {
                 const diffMin = (Date.now() - lastAiTime) / (1000 * 60);
                 
                 // 마지막 AI 분석으로부터 55분 이내면 AI 호출 건너뜀
-                if (diffMin < 55) {
+                // 단, 이전 분석 결과가 '키 설정 오류' 관련 메시지라면 캐시를 무시하고 새로 시도
+                const isErrorMessage = prevData.forecast.aiAnalysis && 
+                                     (prevData.forecast.aiAnalysis.includes("API 키가 설정되지 않아") || 
+                                      prevData.forecast.aiAnalysis.includes("분석 요청 실패"));
+
+                if (diffMin < 55 && !isErrorMessage) {
                     console.log(`⏱️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. (1시간 간격 유지 위해 기존 분석 유지)`);
                     aiAnalysis = prevData.forecast.aiAnalysis || prevData.forecast.detailedAnalysis || "";
                     sentiment = prevData.forecast.sentiment || "보통";
                     lastAiUpdate = lastAiTime; 
                     shouldSkipAi = true;
+                } else if (isErrorMessage) {
+                    console.log(`🔄 이전 분석에 오류가 발견되어 캐시를 무시하고 AI 분석을 재시도합니다.`);
+                    shouldSkipAi = false;
                 }
             }
         } catch (e) {
