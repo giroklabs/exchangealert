@@ -8,51 +8,10 @@
       "impact": "up",
       "source": "Federal Reserve",
       "description": "Fed 금리 인상 시 달러 가치 상승으로 환율 상승",
-      "value": "3.64",
+      "value": "0",
       "trend": "neutral",
       "realizedImpact": "neutral",
-      "history": [
-        {
-          "date": "2025-05-01",
-          "value": 4.33
-        },
-        {
-          "date": "2025-06-01",
-          "value": 4.33
-        },
-        {
-          "date": "2025-07-01",
-          "value": 4.33
-        },
-        {
-          "date": "2025-08-01",
-          "value": 4.33
-        },
-        {
-          "date": "2025-09-01",
-          "value": 4.22
-        },
-        {
-          "date": "2025-10-01",
-          "value": 4.09
-        },
-        {
-          "date": "2025-11-01",
-          "value": 3.88
-        },
-        {
-          "date": "2025-12-01",
-          "value": 3.72
-        },
-        {
-          "date": "2026-01-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-02-01",
-          "value": 3.64
-        }
-      ]
+      "history": []
     },
     {
       "id": "dxy",
@@ -64,49 +23,49 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "120.552",
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "99.97",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-02",
-          "value": 118.667
-        },
-        {
           "date": "2026-03-03",
-          "value": 119.4341
+          "value": 99.05
         },
         {
           "date": "2026-03-04",
-          "value": 119.0705
+          "value": 98.77
         },
         {
           "date": "2026-03-05",
-          "value": 119.5683
+          "value": 99.32
         },
         {
           "date": "2026-03-06",
-          "value": 119.491
+          "value": 98.99
         },
         {
           "date": "2026-03-09",
-          "value": 119.5151
+          "value": 99.18
         },
         {
           "date": "2026-03-10",
-          "value": 118.7255
+          "value": 98.83
         },
         {
           "date": "2026-03-11",
-          "value": 119.2885
+          "value": 99.23
         },
         {
           "date": "2026-03-12",
-          "value": 119.8227
+          "value": 99.74
         },
         {
           "date": "2026-03-13",
-          "value": 120.5518
+          "value": 100.36
+        },
+        {
+          "date": "2026-03-16",
+          "value": 99.97
         }
       ]
     },
@@ -175,7 +134,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "22.49",
+      "value": "22.45",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +176,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 22.49
+          "value": 22.45
         }
       ]
     },
@@ -342,51 +301,10 @@
       "source": "Fed",
       "description": "무위험 단기 금리",
       "hidden": true,
-      "value": 3.61,
+      "value": 0,
       "trend": "neutral",
       "realizedImpact": "neutral",
-      "history": [
-        {
-          "date": "2026-03-02",
-          "value": 3.61
-        },
-        {
-          "date": "2026-03-03",
-          "value": 3.6
-        },
-        {
-          "date": "2026-03-04",
-          "value": 3.6
-        },
-        {
-          "date": "2026-03-05",
-          "value": 3.59
-        },
-        {
-          "date": "2026-03-06",
-          "value": 3.58
-        },
-        {
-          "date": "2026-03-09",
-          "value": 3.61
-        },
-        {
-          "date": "2026-03-10",
-          "value": 3.6
-        },
-        {
-          "date": "2026-03-11",
-          "value": 3.61
-        },
-        {
-          "date": "2026-03-12",
-          "value": 3.61
-        },
-        {
-          "date": "2026-03-13",
-          "value": 3.61
-        }
-      ],
+      "history": [],
       "isInternal": true
     },
     {
@@ -454,7 +372,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.29",
+      "value": "95.25",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -496,7 +414,7 @@
         },
         {
           "date": "2026-03-17",
-          "value": 95.29
+          "value": 95.25
         }
       ]
     },
@@ -956,49 +874,49 @@
       "impact": "up",
       "source": "계산치",
       "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
-      "value": "0.090",
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "3.700",
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-03",
-          "value": 0.1
+          "value": 0
         },
         {
           "date": "2026-03-04",
-          "value": 0.07
+          "value": 0
         },
         {
           "date": "2026-03-05",
-          "value": 0.07
+          "value": 0
         },
         {
           "date": "2026-03-06",
-          "value": 0.07
+          "value": 0
         },
         {
           "date": "2026-03-09",
-          "value": 0.04
+          "value": 0
         },
         {
           "date": "2026-03-10",
-          "value": 0.04
+          "value": 0
         },
         {
           "date": "2026-03-11",
-          "value": 0.03
+          "value": 0
         },
         {
           "date": "2026-03-12",
-          "value": 0.04
+          "value": 0
         },
         {
           "date": "2026-03-13",
-          "value": 0.04
+          "value": 0
         },
         {
           "date": "2026-03-16",
-          "value": 0.09
+          "value": 0
         }
       ]
     },
@@ -1063,9 +981,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,487.80",
-      "change": "-11.20",
-      "changePercent": "-0.75",
+      "value": "1,487.40",
+      "change": "-11.60",
+      "changePercent": "-0.77",
       "trend": "down"
     },
     {
@@ -1074,9 +992,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "935.43",
-      "change": "-3.03",
-      "changePercent": "-0.32",
+      "value": "935.18",
+      "change": "-3.28",
+      "changePercent": "-0.35",
       "trend": "down"
     },
     {
@@ -1084,9 +1002,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,716.40",
-      "change": "+5.07",
-      "changePercent": "+0.30",
+      "value": "1,715.72",
+      "change": "+4.39",
+      "changePercent": "+0.26",
       "trend": "up"
     },
     {
@@ -1094,9 +1012,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.14",
-      "change": "-0.95",
-      "changePercent": "-0.44",
+      "value": "216.08",
+      "change": "-1.01",
+      "changePercent": "-0.47",
       "trend": "down"
     }
   ],
@@ -1164,15 +1082,15 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 49,
-    "downProb": 51,
+    "upProb": 45,
+    "downProb": 55,
     "aiAnalysis": "한미 금리차(10Y 0.75%p)에 따른 달러 캐리 매력 우위와 달러 인덱스(120.552pt, 상승 추세)의 압도적 강세는 원/달러 환율의 상방 압력을 지속하는 핵심 요인입니다. 최근 환율은 1460원대 중반 지지력을 확인 후 1500원대 돌파를 지속적으로 시도하며 고점을 높이는 기술적 흐름을 보입니다.\n\nVIX 하락과 외국인 코스피 순매수 증가는 단기 리스크 온 시그널로 해석되나, 국제 유가 상승 및 단기 자금시장 스프레드 확대는 잠재적 리스크 오프 요인입니다. 경상수지 감소와 외평채 가산금리 상승 또한 원화 약세 요인으로 작용합니다. 최우선 요인인 금리차와 달러 인덱스의 강한 상승 압력을 고려할 때, 원/달러 환율은 상방 가능성이 높습니다.\n\n실전 투자 대응: 1500원대 돌파 시도에 무게를 두며, 목표가는 1520원~1530원 수준으로 설정할 수 있습니다. 1460원 지지선 하향 이탈 시 재검토 필요합니다.\n결론: 상승 우세",
     "detailedAnalysis": "한미 금리차(10Y 0.75%p)에 따른 달러 캐리 매력 우위와 달러 인덱스(120.552pt, 상승 추세)의 압도적 강세는 원/달러 환율의 상방 압력을 지속하는 핵심 요인입니다. 최근 환율은 1460원대 중반 지지력을 확인 후 1500원대 돌파를 지속적으로 시도하며 고점을 높이는 기술적 흐름을 보입니다.\n\nVIX 하락과 외국인 코스피 순매수 증가는 단기 리스크 온 시그널로 해석되나, 국제 유가 상승 및 단기 자금시장 스프레드 확대는 잠재적 리스크 오프 요인입니다. 경상수지 감소와 외평채 가산금리 상승 또한 원화 약세 요인으로 작용합니다. 최우선 요인인 금리차와 달러 인덱스의 강한 상승 압력을 고려할 때, 원/달러 환율은 상방 가능성이 높습니다.\n\n실전 투자 대응: 1500원대 돌파 시도에 무게를 두며, 목표가는 1520원~1530원 수준으로 설정할 수 있습니다. 1460원 지지선 하향 이탈 시 재검토 필요합니다.\n결론: 상승 우세",
     "lastAiUpdate": 1773775572826,
     "score": {
-      "upScore": 32.429573064744446,
-      "downScore": 33.55843124911544
+      "upScore": 28.707203266897924,
+      "downScore": 35.288721617758526
     }
   },
-  "lastUpdate": "2026. 3. 17. PM 8:00:47"
+  "lastUpdate": "2026. 3. 17. PM 8:02:49"
 }
