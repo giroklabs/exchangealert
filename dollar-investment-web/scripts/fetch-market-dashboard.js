@@ -16,8 +16,8 @@ const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const KIS_BASE_URL = "https://openapi.koreainvestment.com";
-const KIS_BASE_URL_SBARK = "https://openapi.koreainvestment.com:9443";
+const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
+const KIS_BASE_URL_REAL = "https://openapi.koreainvestment.com:443";
 
 // API 키 상태 로그
 console.log(`🔑 API 키 확인: FRED(${FRED_API_KEY ? 'O' : 'X'}), ECOS(${ECOS_API_KEY ? 'O' : 'X'}), KIS(${KIS_APP_KEY ? 'O' : 'X'}), GEMINI(${GEMINI_API_KEY ? 'O' : 'X'})`);
@@ -188,7 +188,7 @@ async function fetchMarketInvestorTrend(token) {
     
     const tryFetch = async (baseUrl, trId) => {
         try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=V&fid_input_iscd=0000`; // V: 시장, 0000: 코스피
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-investor?fid_cond_mrkt_div_code=P&fid_input_iscd=0000`; // P: 코스피, 0000: 전체
             const res = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
@@ -199,20 +199,28 @@ async function fetchMarketInvestorTrend(token) {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
                 }
             });
-            return await res.json();
+            const text = await res.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return { error: "Invalid JSON", raw: text.substring(0, 100) };
+            }
         } catch (e) {
             return { error: e.message };
         }
     };
 
     try {
-        // 1. 실전(F) 시도
+        // 1. 9443 시도 (GitHub Runner 최적화)
         let data = await tryFetch(KIS_BASE_URL, "FHKST01010900");
         
-        // 2. 실패 시 모의(V) 시도
+        // 2. 실패 시 443 시도 또는 모의 시도
         if (data.rt_cd === '7' || data.rt_cd === '9' || data.error) {
-            console.warn(`⚠️ KIS 외인수급 실전(F) 실패, 모의(V) 시도...`);
-            data = await tryFetch(KIS_BASE_URL, "VHKST01010900");
+            console.warn(`⚠️ KIS 외인수급 9443(F) 실패, 실전(F) 443 또는 모의(V) 시도...`);
+            data = await tryFetch(KIS_BASE_URL_REAL, "FHKST01010900");
+            if (data.error || (data.rt_cd && data.rt_cd !== '0')) {
+                data = await tryFetch(KIS_BASE_URL, "VHKST01010900");
+            }
         }
         if (data.error || (data.rt_cd && data.rt_cd !== '0' && data.rt_cd !== '00')) {
             console.warn(`⚠️ KIS 외인수급 443 실패 (Code: ${data.rt_cd || 'Error'}), 9443 시도 중...`);
