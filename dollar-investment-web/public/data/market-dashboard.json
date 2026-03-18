@@ -64,14 +64,10 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "120.552",
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "99.89",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-03-02",
-          "value": 118.667
-        },
         {
           "date": "2026-03-03",
           "value": 119.4341
@@ -107,6 +103,10 @@
         {
           "date": "2026-03-13",
           "value": 120.5518
+        },
+        {
+          "date": "2026-03-16",
+          "value": 99.89
         }
       ]
     },
@@ -399,7 +399,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,804.23",
+      "value": "5,805.24",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -441,7 +441,7 @@
         },
         {
           "date": "2026-03-18",
-          "value": 5804.23
+          "value": 5805.24
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "94.77",
+      "value": "94.87",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-18",
-          "value": 94.77
+          "value": 94.87
         }
       ]
     },
@@ -1063,7 +1063,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,487.30",
+      "value": "1,487.70",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1074,7 +1074,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "935.94",
+      "value": "935.57",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1084,7 +1084,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,715.89",
+      "value": "1,716.21",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1094,7 +1094,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.06",
+      "value": "216.13",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1107,8 +1107,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 202000,
-      "changePercent": "+4.18",
+      "price": 203750,
+      "changePercent": "+5.08",
       "trend": "up"
     },
     {
@@ -1117,8 +1117,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 999000,
-      "changePercent": "+2.99",
+      "price": 1005000,
+      "changePercent": "+3.61",
       "trend": "up"
     },
     {
@@ -1127,8 +1127,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 534000,
-      "changePercent": "+2.30",
+      "price": 535000,
+      "changePercent": "+2.49",
       "trend": "up"
     },
     {
@@ -1137,8 +1137,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 170900,
-      "changePercent": "+2.15",
+      "price": 171400,
+      "changePercent": "+2.45",
       "trend": "up"
     },
     {
@@ -1147,8 +1147,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 225500,
-      "changePercent": "+0.67",
+      "price": 226500,
+      "changePercent": "+1.12",
       "trend": "up"
     },
     {
@@ -1157,22 +1157,22 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 51500,
-      "changePercent": "+0.39",
+      "price": 51700,
+      "changePercent": "+0.78",
       "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 50,
-    "downProb": 50,
+    "upProb": 46,
+    "downProb": 54,
     "aiAnalysis": "한수지입니다. 한미 10년물 금리차가 0.75%p로 미국 우위인 점은 달러 캐리 매력을 높이지만, 달러 인덱스 하락 추세는 글로벌 달러 강세 압력을 완화하며 상충하는 모습입니다. 원/달러 환율은 1500원 돌파 시도 후 1480원대에서 고변동성을 보이며, 1500원 저항과 단기 고점 인식을 시사합니다. VIX 하락 및 코스피 상승은 표면적 리스크 온이나, 국제 유가 상승 및 신용 스프레드 확대는 잠재적 리스크 오프 전환 가능성을 내포합니다. 특히 KOSPI 외국인 수급 부진과 경상수지 악화, 외평채 가산금리 상승은 원화 약세 압력을 강화합니다.\n\n실전 투자 대응: 달러 인덱스 약세에도 불구하고 높은 한미 금리차와 경상수지, 외국인 수급 악화가 원화 약세 압력을 우세하게 이끌고 있습니다. 1500원 저항 확인 후 단기 조정이 나타났으나, 재차 상승 압력이 예상됩니다. 1500원 이상에서 분할 매도를 고려하며, 1470원 지지 여부 확인 후 재매수 관점을 유지합니다. 결론: 상승 우세",
     "detailedAnalysis": "한수지입니다. 한미 10년물 금리차가 0.75%p로 미국 우위인 점은 달러 캐리 매력을 높이지만, 달러 인덱스 하락 추세는 글로벌 달러 강세 압력을 완화하며 상충하는 모습입니다. 원/달러 환율은 1500원 돌파 시도 후 1480원대에서 고변동성을 보이며, 1500원 저항과 단기 고점 인식을 시사합니다. VIX 하락 및 코스피 상승은 표면적 리스크 온이나, 국제 유가 상승 및 신용 스프레드 확대는 잠재적 리스크 오프 전환 가능성을 내포합니다. 특히 KOSPI 외국인 수급 부진과 경상수지 악화, 외평채 가산금리 상승은 원화 약세 압력을 강화합니다.\n\n실전 투자 대응: 달러 인덱스 약세에도 불구하고 높은 한미 금리차와 경상수지, 외국인 수급 악화가 원화 약세 압력을 우세하게 이끌고 있습니다. 1500원 저항 확인 후 단기 조정이 나타났으나, 재차 상승 압력이 예상됩니다. 1500원 이상에서 분할 매도를 고려하며, 1470원 지지 여부 확인 후 재매수 관점을 유지합니다. 결론: 상승 우세",
     "lastAiUpdate": 1773793278823,
     "score": {
-      "upScore": 32.40115365713764,
-      "downScore": 32.8119895908439
+      "upScore": 30.070158586353568,
+      "downScore": 35.65402812432358
     }
   },
-  "lastUpdate": "2026. 3. 18. AM 12:33:06"
+  "lastUpdate": "2026. 3. 18. AM 12:37:46"
 }
