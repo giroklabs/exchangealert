@@ -99,12 +99,12 @@ const FRED_SERIES = [
 // 3. 국내지표 (ECOS)
 const ECOS_SERIES = [
     { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'M' },
-    { id: 'investor-deposits', statCode: '064Y001', item1: '0001000', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'D' },
+    { id: 'investor-deposits', statCode: '318Y001', item1: '1000000', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'D' },
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '인플레이션 지표, 금리 정책에 영향', cycle: 'M' },
-    { id: 'kr-10y', statCode: '721Y001', item1: '010200000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
+    { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
     { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },
-    { id: 'cds-korea', statCode: '902Y003', item1: '0000140', name: 'CDS 프리미엄', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 부도 위험 지표 (상승 시 환율 상승 압력)', cycle: 'D' },
-    { id: 'sovereign-spread', statCode: '902Y003', item1: '0000147', name: '외평채 가산금리', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 신용 가산금리 (상승 시 자본 유출 위험)', cycle: 'D' },
+    { id: 'cds-korea', statCode: '902Y006', item1: 'KR', name: 'CDS 프리미엄', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 부도 위험 지표 (상승 시 환율 상승 압력)', cycle: 'M' },
+    { id: 'sovereign-spread', statCode: '902Y003', item1: '0000147', name: '외평채 가산금리', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 신용 가산금리 (상승 시 자본 유출 위험)', cycle: 'M' },
     { id: 'short-debt-ratio', statCode: '731Y003', item1: '0000002', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '외환보유액 대비 단기외채 비중 (상승 시 건전성 악화)', cycle: 'Q' }
 ];
 
@@ -185,7 +185,7 @@ async function fetchFromEcos(item) {
             end = todayStr.substring(0, 6);
         }
 
-        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/15/${item.statCode}/${item.cycle}/${start}/${end}/${item.item1}`;
+        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/100/${item.statCode}/${item.cycle}/${start}/${end}/${item.item1}`;
 
         https.get(url, (res) => {
             let data = '';
@@ -196,15 +196,17 @@ async function fetchFromEcos(item) {
                     if (json.StatisticSearch && json.StatisticSearch.row) {
                         resolve(json.StatisticSearch.row.reverse());
                     } else {
-                        if (json.RESULT && json.RESULT.MESSAGE) {
-                            console.warn(`ℹ️ [ECOS-API] ${item.name}: ${json.RESULT.MESSAGE}`);
-                        }
+                        const maskedUrl = url.replace(ECOS_API_KEY, '{ECOS_API_KEY}');
+                        console.warn(`ℹ️ [ECOS-API] ${item.name} 데이터 없음: ${json.RESULT?.MESSAGE || '알 수 없는 이유'}`);
+                        console.warn(`🔗 요청 URL: ${maskedUrl}`);
                         resolve(null);
                     }
-                } catch (e) { resolve(null); }
+                } catch (e) { 
+                    resolve(null); 
+                }
             });
         }).on('error', (e) => {
-            console.error(`❌ [ECOS-Network] ${item.name}: ${e.message}`);
+            console.error(`❌ [ECOS-Network] ${item.name} 에러: ${e.message}`);
             resolve(null);
         });
     });
