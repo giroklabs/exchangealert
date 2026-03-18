@@ -161,10 +161,13 @@ async function fetchFromEcos(item) {
         const currentYear = today.getFullYear();
         let start, end;
 
-        // 2026년 실시간 대응을 위해 현재 날짜 기준으로 동적 설정
+        // ECOS는 주기에 따라 날짜 형식이 다름
         if (item.cycle === 'Q') {
-            start = `${currentYear - 2}1`;
-            end = `${currentYear}4`;
+            start = `${currentYear - 2}Q1`;
+            end = `${currentYear}Q4`;
+        } else if (item.cycle === 'D') {
+            start = `${currentYear - 1}0101`;
+            end = `${currentYear}1231`;
         } else {
             start = `${currentYear - 1}01`;
             end = `${currentYear}12`;
@@ -728,15 +731,15 @@ async function main() {
         'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
         'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
-        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '03-10', value: -200 }, { date: '03-11', value: 100 }, { date: '03-12', value: 400 }, { date: '03-13', value: 520 }] },
-        'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '03-10', value: 32 }, { date: '03-11', value: 34 }, { date: '03-12', value: 35 }, { date: '03-13', value: 35 }] },
-        'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '03-10', value: 38 }, { date: '03-11', value: 40 }, { date: '03-12', value: 42 }, { date: '03-13', value: 42 }] },
+        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
+        'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '2026-03-10', value: 32 }, { date: '2026-03-11', value: 34 }, { date: '2026-03-12', value: 35 }, { date: '2026-03-13', value: 35 }] },
+        'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '2026-03-10', value: 38 }, { date: '2026-03-11', value: 40 }, { date: '2026-03-12', value: 42 }, { date: '2026-03-13', value: 42 }] },
 
-        'investor-deposits': { value: '55200', trend: 'up', history: [{ date: '03-10', value: 52100 }, { date: '03-11', value: 53500 }, { date: '03-12', value: 54800 }, { date: '03-13', value: 55200 }] },
-        'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '202512', value: 3.5 }, { date: '202601', value: 3.5 }] },
-        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025Q3', value: 38.2 }, { date: '2025Q4', value: 38.4 }] },
-        'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '03-10', value: 0.08 }, { date: '03-11', value: 0.09 }, { date: '03-12', value: 0.09 }, { date: '03-13', value: 0.09 }] },
-        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '03-10', value: 0.17 }, { date: '03-11', value: 0.18 }, { date: '03-12', value: 0.18 }, { date: '03-13', value: 0.18 }] }
+        'investor-deposits': { value: '55200', trend: 'up', history: [{ date: '2026-03-10', value: 52100 }, { date: '2026-03-11', value: 53500 }, { date: '2026-03-12', value: 54800 }, { date: '2026-03-13', value: 55200 }] },
+        'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '2025-12-01', value: 3.5 }, { date: '2026-01-01', value: 3.5 }] },
+        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025-09-30', value: 38.2 }, { date: '2025-12-31', value: 38.4 }] },
+        'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.08 }, { date: '2026-03-11', value: 0.09 }, { date: '2026-03-12', value: 0.09 }, { date: '2026-03-13', value: 0.09 }] },
+        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] }
     };
 
     for (const item of ECOS_SERIES) {
@@ -870,10 +873,10 @@ async function main() {
             trend,
             realizedImpact: trend,
             history: us10y.history.map((h, idx) => {
-                // 날짜 형식 통일 (YYYY-MM-DD -> YYYYMMDD) 하여 비교
+                // 날짜 형식 통일하여 비교하되, 해당 날짜 이하인 데이터 중 가장 최신 것을 선택
                 const norm = (d) => d.replace(/-/g, '');
                 const targetDate = norm(h.date);
-                const krH = kr10y.history.find(kh => norm(kh.date) <= targetDate) || kr10y.history[0];
+                const krH = [...kr10y.history].reverse().find(kh => norm(kh.date) <= targetDate) || kr10y.history[0];
                 return { date: h.date, value: parseFloat((h.value - krH.value).toFixed(2)) };
             })
         });
