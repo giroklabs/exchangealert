@@ -164,15 +164,25 @@ async function fetchFromEcos(item) {
         const pad = (n) => String(n).padStart(2, '0');
         const todayStr = `${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}`;
 
+        // ECOS 주기별 정확한 날짜 규격 적용
         if (item.cycle === 'Q') {
-            start = `${currentYear - 2}1`; // YYYY1, YYYY2 형식
-            end = `${currentYear}4`;
+            start = `${currentYear - 2}Q1`; // YYYYQ1 형식
+            end = `${currentYear}Q4`;
         } else if (item.cycle === 'D') {
-            start = `${currentYear - 1}0101`;
-            end = todayStr; // 오늘 날짜로 종료일 제한
+            // 최신 15개를 가져오기 위해 시작일을 오늘 기준 60일 전으로 설정 (충분한 시계열 확보)
+            const sixtyDaysAgo = new Date(today);
+            sixtyDaysAgo.setDate(today.getDate() - 60);
+            start = `${sixtyDaysAgo.getFullYear()}${pad(sixtyDaysAgo.getMonth() + 1)}${pad(sixtyDaysAgo.getDate())}`;
+            end = todayStr;
+        } else if (item.cycle === 'M') {
+            // 최근 15개월 데이터를 위해 시작일을 15개월 전으로 설정
+            const fifteenMonthsAgo = new Date(today);
+            fifteenMonthsAgo.setMonth(today.getMonth() - 15);
+            start = `${fifteenMonthsAgo.getFullYear()}${pad(fifteenMonthsAgo.getMonth() + 1)}`;
+            end = todayStr.substring(0, 6);
         } else {
             start = `${currentYear - 1}01`;
-            end = todayStr.substring(0, 6); // YYYYMM
+            end = todayStr.substring(0, 6);
         }
 
         const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/15/${item.statCode}/${item.cycle}/${start}/${end}/${item.item1}`;
