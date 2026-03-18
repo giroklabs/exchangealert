@@ -520,7 +520,7 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
                         if (res.statusCode === 200 && json.models) {
                             const validModels = json.models.filter(m => m.supportedGenerationMethods?.includes('generateContent'));
                             resolve(validModels.map(m => m.name.replace('models/', '')));
-                        } else {
+        } else {
                             resolve([]);
                         }
                     } catch (e) { resolve([]); }
@@ -533,12 +533,12 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
             console.log(`💡 대체 모델 발견: ${fallbackModel}. 시도 중...`);
             const result = await new Promise((resolve, reject) => {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${fallbackModel}:generateContent?key=${GEMINI_API_KEY}`;
-                const req = https.request(url, { 
-                    method: 'POST', 
-                    headers: { 
+                const req = https.request(url, {
+                    method: 'POST',
+                    headers: {
                         'Content-Type': 'application/json',
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-                    } 
+                    }
                 }, (res) => {
                     const chunks = [];
                     res.on('data', chunk => chunks.push(chunk));
@@ -589,6 +589,11 @@ async function sendTelegramNotification(forecast, lastUpdate) {
         else if (!summary && line.length > 20) summary = line.trim();
     }
 
+    // 사이트의 AI 분석 시점과 일치하도록 포맷팅
+    const analysisTime = forecast.lastAiUpdate 
+        ? new Date(forecast.lastAiUpdate).toLocaleString('ko-KR') 
+        : new Date().toLocaleString('ko-KR');
+
     const message = `
 🤖 *달러 인베스트 AI 시장 분석*
 ━━━━━━━━━━━━━━━━━━
@@ -596,14 +601,14 @@ ${title}
 📊 *상승:* ${forecast.upProb}% | *하락:* ${forecast.downProb}%
 
 📝 *핵심 요약:*
-${summary.substring(0, 150)}${summary.length > 150 ? '...' : ''}
+${summary}
 
 🎯 *투자 대응 가이드:*
-${strategy.substring(0, 200)}${strategy.length > 200 ? '...' : ''}
+${strategy}
 
 🌐 [시장 대시보드 바로가기](https://giroklabs.github.io/exchangealert/)
 ━━━━━━━━━━━━━━━━━━
-⏰ 분석 시점: ${new Date().toLocaleString('ko-KR')}
+⏰ 분석 시점: ${analysisTime}
     `.trim();
 
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
@@ -707,7 +712,8 @@ async function main() {
 
         if (!s.hidden) {
             indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history });
-            console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (Z:${zScore.toFixed(2)})`);
+            const latestDate = obs.length > 0 ? obs[0].date : 'N/A';
+            console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)})`);
         } else {
             // 히든 지표도 데이터는 보유 (계산용)
             indicators.push({ ...s, id: s.id.toLowerCase(), value: numVal, trend, realizedImpact, history, isInternal: true });
@@ -774,7 +780,10 @@ async function main() {
             ((item.impact === 'up' && trend === 'up') || (item.impact === 'down' && trend === 'down') ? 'up' : 'down');
 
         indicators.push({ ...item, value: displayVal, trend, realizedImpact, history });
-        console.log(`✅ [ECOS] ${item.name}: ${displayVal} (Z:${zScore.toFixed(2)})`);
+        const latestDate = history.length > 0 ? history[0].date : 'N/A';
+        const statusIcon = rows && rows.length > 0 ? '✅' : '⚠️';
+        const dataSource = rows && rows.length > 0 ? 'ECOS' : 'Fallback';
+        console.log(`${statusIcon} [${dataSource}] ${item.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)})`);
     }
 
 
@@ -861,7 +870,10 @@ async function main() {
             trend,
             realizedImpact: trend,
             history: us10y.history.map((h, idx) => {
-                const krH = kr10y.history.find(kh => kh.date === h.date) || kr10y.history[idx] || h;
+                // 날짜 형식 통일 (YYYY-MM-DD -> YYYYMMDD) 하여 비교
+                const norm = (d) => d.replace(/-/g, '');
+                const targetDate = norm(h.date);
+                const krH = kr10y.history.find(kh => norm(kh.date) <= targetDate) || kr10y.history[0];
                 return { date: h.date, value: parseFloat((h.value - krH.value).toFixed(2)) };
             })
         });
@@ -888,7 +900,7 @@ async function main() {
                 id, name, unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: '계산치',
                 description: desc, value: val, trend, realizedImpact: trend,
                 history: base.history.map((h, idx) => {
-                    const rh = ref.history.find(r => r.date === h.date) || ref.history[idx] || h;
+                    const rh = ref.history.find(r => r.date <= h.date) || ref.history[0];
                     return { date: h.date, value: parseFloat((h.value - rh.value).toFixed(3)) };
                 })
             });
