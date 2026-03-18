@@ -161,16 +161,18 @@ async function fetchFromEcos(item) {
         const currentYear = today.getFullYear();
         let start, end;
 
-        // ECOS는 주기에 따라 날짜 형식이 다름
+        const pad = (n) => String(n).padStart(2, '0');
+        const todayStr = `${today.getFullYear()}${pad(today.getMonth() + 1)}${pad(today.getDate())}`;
+
         if (item.cycle === 'Q') {
-            start = `${currentYear - 2}Q1`;
-            end = `${currentYear}Q4`;
+            start = `${currentYear - 2}1`; // YYYY1, YYYY2 형식
+            end = `${currentYear}4`;
         } else if (item.cycle === 'D') {
             start = `${currentYear - 1}0101`;
-            end = `${currentYear}1231`;
+            end = todayStr; // 오늘 날짜로 종료일 제한
         } else {
             start = `${currentYear - 1}01`;
-            end = `${currentYear}12`;
+            end = todayStr.substring(0, 6); // YYYYMM
         }
 
         const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/15/${item.statCode}/${item.cycle}/${start}/${end}/${item.item1}`;
@@ -184,11 +186,17 @@ async function fetchFromEcos(item) {
                     if (json.StatisticSearch && json.StatisticSearch.row) {
                         resolve(json.StatisticSearch.row.reverse());
                     } else {
+                        if (json.RESULT && json.RESULT.MESSAGE) {
+                            console.warn(`ℹ️ [ECOS-API] ${item.name}: ${json.RESULT.MESSAGE}`);
+                        }
                         resolve(null);
                     }
                 } catch (e) { resolve(null); }
             });
-        }).on('error', () => resolve(null));
+        }).on('error', (e) => {
+            console.error(`❌ [ECOS-Network] ${item.name}: ${e.message}`);
+            resolve(null);
+        });
     });
 }
 
