@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.81",
+      "value": "99.69",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 99.81
+          "value": 99.69
         }
       ]
     },
@@ -120,7 +120,7 @@
       "description": "미 국채 금리 상승 시 달러 강세 유발",
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
-      "value": "4.27",
+      "value": "4.28",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -162,7 +162,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 4.27
+          "value": 4.28
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "26.11",
+      "value": "26.3",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 26.11
+          "value": 26.3
         }
       ]
     },
@@ -509,7 +509,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "96.94",
+      "value": "96.61",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -551,7 +551,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 96.94
+          "value": 96.61
         }
       ]
     },
@@ -1027,7 +1027,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.58",
+      "value": "0.59",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -1069,7 +1069,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 0.58
+          "value": 0.59
         }
       ]
     },
@@ -1188,7 +1188,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,495.80",
+      "value": "1,495.90",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1199,7 +1199,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "945.09",
+      "value": "945.19",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1209,7 +1209,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,722.71",
+      "value": "1,722.75",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1219,7 +1219,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.85",
+      "value": "216.89",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1312,8 +1312,8 @@
     "detailedAnalysis": "안녕하십니까, 금융 분석가 한수지입니다. 제공된 자료를 바탕으로 향후 원/달러 환율 방향성을 심층 분석해 드립니다.\n\n한·미 10년물 금리차가 0.57%p로 확대되며 원화 캐리 매력이 저하되고 있습니다. 이는 원화 약세의 주요 동인입니다. 달러 인덱스는 하락 추세이나, VIX 공포지수 상승(25.72pt)과 코스피 외국인 순매도(-39억원)가 명확한 리스크 오프 국면을 시사하며 원화 약세 압력을 강화하고 있습니다. 국제 유가 상승 또한 국내 물가 및 경상수지에 부담을 주고 있습니다.\n\n경상수지 하락과 단기외채 비중 증가는 대외 건전성 우려를 높이고 있으며, 코스피 지수 하락은 외국인 자금 이탈을 가속화할 수 있습니다. 기술적 분석으로는 단기 이동평균선(MA5, MA20, MA60)이 정배열을 형성하며 강한 상승 모멘텀을 보이고 있습니다. 현재 환율(1495.68원)은 볼린저밴드 상단 및 핵심 저항선(1508원)에 근접하여 일시적 저항을 받을 수 있으나, 복합적인 약세 요인으로 추가 상승 가능성을 열어두어야 합니다.\n\n실전 투자 대응: 다수의 원화 약세 요인이 동시다발적으로 발현되어 단기 조정 후 재차 상승할 가능성이 높습니다. 1508원대 저항선 돌파 시 1520원 이상까지 추가 상승 여력이 있으며, 현 시점은 달러 비중 확대를 고려할 시점입니다.\n\n결론: 상승 우세",
     "lastAiUpdate": 1773930980038,
     "score": {
-      "upScore": 42.25803392581664,
-      "downScore": 39.59055944810591
+      "upScore": 42.40405412681891,
+      "downScore": 39.598446599754084
     }
   },
   "technicals": {
@@ -1354,5 +1354,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 19. PM 2:43:04"
+  "lastUpdate": "2026. 3. 19. PM 2:48:05"
 }
