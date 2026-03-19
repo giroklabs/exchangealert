@@ -13,6 +13,10 @@ jobs:
     permissions:
       contents: write  # last-alert-rate.json 업데이트용
 
+    defaults:
+      run:
+        working-directory: dollar-investment-web
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,6 +26,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: dollar-investment-web/package-lock.json
 
       - name: Install dependencies
         run: npm ci
