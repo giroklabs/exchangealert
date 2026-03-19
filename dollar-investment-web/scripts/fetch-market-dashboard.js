@@ -142,6 +142,66 @@ function getFreshnessMultiplier(cycle) {
     return 1.0;
 }
 
+// --- 기술적 지표 계산 유틸리티 ---
+// 입력: closes = [최신, ..., 과거] 순서의 종가 배열
+
+function calculateRSI(closes, period = 14) {
+    if (!closes || closes.length < period + 1) return null;
+    // RSI 계산용: 과거→최신 순으로 변환
+    const prices = [...closes].reverse();
+    let gains = 0, losses = 0;
+    for (let i = 1; i <= period; i++) {
+        const diff = prices[prices.length - i] - prices[prices.length - i - 1];
+        if (diff > 0) gains += diff;
+        else losses += Math.abs(diff);
+    }
+    const avgGain = gains / period;
+    const avgLoss = losses / period;
+    if (avgLoss === 0) return 100;
+    const rs = avgGain / avgLoss;
+    return parseFloat((100 - (100 / (1 + rs))).toFixed(1));
+}
+
+function calculateMA(closes, period) {
+    if (!closes || closes.length < period) return null;
+    const slice = closes.slice(0, period); // 최신 N개
+    return parseFloat((slice.reduce((a, b) => a + b, 0) / period).toFixed(2));
+}
+
+function calculateBB(closes, period = 20) {
+    const ma = calculateMA(closes, period);
+    if (ma === null) return null;
+    const slice = closes.slice(0, period);
+    const variance = slice.reduce((a, b) => a + Math.pow(b - ma, 2), 0) / period;
+    const std = Math.sqrt(variance);
+    return {
+        upper: parseFloat((ma + 2 * std).toFixed(2)),
+        mid: parseFloat(ma.toFixed(2)),
+        lower: parseFloat((ma - 2 * std).toFixed(2)),
+        bandwidth: parseFloat(((4 * std / ma) * 100).toFixed(2)) // %
+    };
+}
+
+function calculateMomentum(closes) {
+    // 변화율: (현재 - N일 전) / N일 전 × 100
+    const pct = (n) => closes.length > n
+        ? parseFloat(((closes[0] - closes[n]) / closes[n] * 100).toFixed(2))
+        : null;
+    return { d1: pct(1), d5: pct(5), d20: pct(20) };
+}
+
+function detectKeyLevels(historyData) {
+    // historyData: [{date, high, low, close}] 최신→과거 순
+    // 최근 60일 기준 고점/저점으로 지지/저항 산출
+    const recent = historyData.slice(0, 60);
+    if (!recent || recent.length === 0) return { support: null, resistance: null };
+    const highs = recent.map(d => d.high).filter(Boolean);
+    const lows = recent.map(d => d.low).filter(Boolean);
+    const resistance = parseFloat(Math.max(...highs).toFixed(2));
+    const support = parseFloat(Math.min(...lows).toFixed(2));
+    return { support, resistance };
+}
+
 function summarizeByBlock(indicators) {
     const summary = {};
     Object.values(FACTOR_BLOCKS).forEach(block => {
@@ -502,25 +562,42 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = []) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
 
     const blockSummary = summarizeByBlock(indicators);
+
+    // 기술적 지표 섹션 생성
+    let techSection = '';
+    if (technicals) {
+        const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels } = technicals;
+        const rsiSignal = rsi14 > 70 ? '과매수 주의' : (rsi14 < 30 ? '과매도 반등 가능' : '중립');
+        const maSignal = ma5 && ma20 ? (ma5 > ma20 ? '단기 상승 모멘텀' : '단기 하락 모멘텀') : '';
+        techSection = `
+기술적 환율 지표 (USD/KRW):
+- RSI(14일): ${rsi14} → ${rsiSignal}
+- 이동평균: MA5=${ma5}원, MA20=${ma20}원, MA60=${ma60}원 (${maSignal})
+- 볼린저밴드: 상단=${bb?.upper}원 / 중단=${bb?.mid}원 / 하단=${bb?.lower}원 (밴드폭=${bb?.bandwidth}%)
+- 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
+- 핵심 레벨: 60일 지지=${keyLevels?.support}원, 저항=${keyLevels?.resistance}원`;
+    }
+
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 원/달러 환율 방향성을 한국어로 심층 분석해주세요.
 
 연구 자료에 따르면 환율 결정의 최우선 순위는 '한·미 금리차'와 '달러 인덱스'입니다. 또한 VIX(전이 위험)와 외국인 수급(자본 흐름)을 결합하여 리스크 온/오프 국면을 판단해 주세요.
 
 분석 대상 지표:
 ${blockSummary}
+${techSection}
 
 원/달러 환율 최근 추세 (최신순):
 ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
 분석 가이드:
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
-2. [환율 추세] 제공된 원/달러 환율의 최근 기술적 흐름(지지/저항, 추세 지속성)을 분석에 포함하세요.
+2. [기술적 분석] RSI, 이동평균, 볼린저밴드, 지지/저항을 활용해 단기 환율의 과매수/과매도 및 추세 지속성을 판단하세요.
 3. [리스크] 및 [한국 자산] 블록을 통해 리스크 온/오프 국면을 진단하세요.
 4. [펀딩·정책] 및 [투자 전략]을 종합하여 실전 달러 투자 전략을 간략히 제시하세요. (목표가 가이드 포함)
 
@@ -1043,7 +1120,33 @@ async function main() {
 
     console.log('🤖 AI 시장 분석 생성 중...');
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
-    
+
+    // --- 기술적 지표 계산 (fx-history-6m.json 활용) ---
+    let technicals = null;
+    try {
+        const fxHistPath = path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json');
+        const altFxHistPath = path.join(process.cwd(), 'public', 'data', 'fx-history-6m.json');
+        const fxHistFile = fs.existsSync(fxHistPath) ? fxHistPath : (fs.existsSync(altFxHistPath) ? altFxHistPath : null);
+        if (fxHistFile) {
+            const fxHist = JSON.parse(fs.readFileSync(fxHistFile, 'utf8'));
+            const closes = fxHist.data.map(d => d.close); // 최신→과거 순
+            const rsi14    = calculateRSI(closes);
+            const ma5      = calculateMA(closes, 5);
+            const ma20     = calculateMA(closes, 20);
+            const ma60     = calculateMA(closes, 60);
+            const bb       = calculateBB(closes, 20);
+            const momentum = calculateMomentum(closes);
+            const levels   = detectKeyLevels(fxHist.data);
+            technicals = { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels: levels };
+            console.log(`📐 [Tech] RSI14=${rsi14}, MA5=${ma5}, MA20=${ma20}, MA60=${ma60}`);
+            console.log(`📐 [Tech] BB(상단=${bb?.upper}, 하단=${bb?.lower}), 지지=${levels.support}, 저항=${levels.resistance}`);
+            console.log(`📐 [Tech] 모멘텀: 1일=${momentum.d1}%, 5일=${momentum.d5}%, 20일=${momentum.d20}%`);
+        }
+    } catch (techErr) {
+        console.warn('⚠️ 기술적 지표 계산 실패 (비치명적):', techErr.message);
+    }
+
+
     let aiAnalysis = "";
     let lastAiUpdate = null;
     let sentiment = '보통';
@@ -1102,7 +1205,7 @@ async function main() {
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
         lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory);
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals);
         lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
@@ -1276,6 +1379,51 @@ async function main() {
         }
     }
 
+    // --- 2단계: 타임프레임별 예측 확률 계산 ---
+    // d1(1일): 기술적 지표 70% + 실시간 거시 30%
+    // d5(5일): 기술적 30% + 거시 70%
+    // d20(20일): 기술적 10% + ECOS 거시 90%
+    let timeframes = null;
+    try {
+        const ratesBlock = blockScores['rates-dollar'];
+        const riskBlock  = blockScores['risk'];
+        const assetsBlock = blockScores['assets'];
+        const fundBlock  = blockScores['funding-policy'];
+
+        // 기술적 점수: RSI 50 기준 편차, 모멘텀 방향 반영
+        let techUp = 0, techDown = 0;
+        if (technicals) {
+            const { rsi14, momentum } = technicals;
+            if (rsi14 !== null) {
+                if (rsi14 > 60) techUp += (rsi14 - 50) / 50;
+                else if (rsi14 < 40) techDown += (50 - rsi14) / 50;
+            }
+            if (momentum?.d5 !== null) {
+                if (momentum.d5 > 0) techUp += Math.abs(momentum.d5) * 0.5;
+                else techDown += Math.abs(momentum.d5) * 0.5;
+            }
+        }
+        const macroUp   = (Math.log1p(ratesBlock.up + riskBlock.up) + Math.log1p(assetsBlock.up)) * 3;
+        const macroDown = (Math.log1p(ratesBlock.down + riskBlock.down) + Math.log1p(assetsBlock.down)) * 3;
+        const ecosUp    = Math.log1p(fundBlock.up) * 5;
+        const ecosDown  = Math.log1p(fundBlock.down) * 5;
+
+        const calcProb = (tU, tD, mU, mD, eU, eD, w) => {
+            const u = tU * w.tech + mU * w.macro + eU * w.ecos + 0.3;
+            const d = tD * w.tech + mD * w.macro + eD * w.ecos + 0.3;
+            return { upProb: Math.round((u / (u + d)) * 100), downProb: Math.round((d / (u + d)) * 100) };
+        };
+
+        timeframes = {
+            d1:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.7, macro: 0.3, ecos: 0.0 }), basis: '기술적지표+실시간거시' },
+            d5:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.3, macro: 0.7, ecos: 0.0 }), basis: '거시지표+수급중심' },
+            d20: { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.1, macro: 0.45, ecos: 0.45 }), basis: 'ECOS+경상·외환중심' }
+        };
+        console.log(`📊 [Timeframe] 1일: 상승${timeframes.d1.upProb}% | 5일: 상승${timeframes.d5.upProb}% | 20일: 상승${timeframes.d20.upProb}%`);
+    } catch (tfErr) {
+        console.warn('⚠️ 타임프레임 예측 계산 실패 (비치명적):', tfErr.message);
+    }
+
     const dashboardData = {
         indicators,
         majorRates,
@@ -1283,11 +1431,13 @@ async function main() {
         forecast: {
             sentiment,
             upProb, downProb,
+            timeframes,
             aiAnalysis,
             detailedAnalysis: aiAnalysis, // 하위 호환성 위해 유지
             lastAiUpdate: lastAiUpdate || Date.now(),
             score: { upScore, downScore }
         },
+        technicals,
         lastUpdate: new Date().toLocaleString('ko-KR')
     };
 
@@ -1295,6 +1445,64 @@ async function main() {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify(dashboardData, null, 2), 'utf8');
     console.log('✨ AI 분석 및 주식 시세 포함 데이터 업데이트 완료!');
+
+    // --- 3단계: 예측 이력 저장 (prediction-history.json) ---
+    try {
+        const predHistPath = path.join(__dirname, '..', 'public', 'data', 'prediction-history.json');
+        let predHist = { records: [] };
+        if (fs.existsSync(predHistPath)) {
+            predHist = JSON.parse(fs.readFileSync(predHistPath, 'utf8'));
+        }
+        const todayStr = new Date().toISOString().split('T')[0];
+        const currentRate = closes => closes && closes.length > 0 ? closes[0] : null;
+
+        // 전일 레코드에 실제 종가 채우기
+        const prevRecord = predHist.records.find(r => r.date !== todayStr && r.actual_next_close === null);
+        if (prevRecord) {
+            const fxHistFile2 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json'))
+                ? path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json')
+                : path.join(process.cwd(), 'public', 'data', 'fx-history-6m.json');
+            if (fs.existsSync(fxHistFile2)) {
+                const fxH = JSON.parse(fs.readFileSync(fxHistFile2, 'utf8'));
+                const todayClose = fxH.data[0]?.close || null;
+                if (todayClose) {
+                    prevRecord.actual_next_close = todayClose;
+                    const predicted_up = prevRecord.predicted?.d1_up > 50;
+                    const actual_up = todayClose > prevRecord.rateAtPrediction;
+                    prevRecord.hit_d1 = predicted_up === actual_up;
+                    console.log(`📈 [PredHist] 전일 적중률 업데이트: ${prevRecord.date} → hit_d1=${prevRecord.hit_d1}`);
+                }
+            }
+        }
+
+        // 오늘 레코드 추가 (이미 없으면)
+        if (!predHist.records.find(r => r.date === todayStr)) {
+            const fxHistFile3 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json'))
+                ? path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json')
+                : path.join(process.cwd(), 'public', 'data', 'fx-history-6m.json');
+            const todayRate = fs.existsSync(fxHistFile3)
+                ? JSON.parse(fs.readFileSync(fxHistFile3, 'utf8')).data[0]?.close
+                : null;
+            predHist.records.push({
+                date: todayStr,
+                predicted: {
+                    d1_up: timeframes?.d1?.upProb || upProb,
+                    d5_up: timeframes?.d5?.upProb || upProb,
+                    d20_up: timeframes?.d20?.upProb || upProb,
+                    overall_up: upProb
+                },
+                actual_next_close: null,
+                hit_d1: null,
+                rateAtPrediction: todayRate
+            });
+        }
+        // 최대 90일치만 보관
+        predHist.records = predHist.records.slice(-90);
+        fs.writeFileSync(predHistPath, JSON.stringify(predHist, null, 2), 'utf8');
+        console.log(`✅ [PredHist] 예측 이력 저장 완료 (총 ${predHist.records.length}건)`);
+    } catch (phErr) {
+        console.warn('⚠️ 예측 이력 저장 실패 (비치명적):', phErr.message);
+    }
 
     // 5. 텔레그램 알림 발송 (새로운 분석이 수행된 경우)
     if (!shouldSkipAi && aiAnalysis && !aiAnalysis.includes('분석 요청 실패')) {
