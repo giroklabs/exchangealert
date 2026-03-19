@@ -851,7 +851,7 @@ async function main() {
                 if (item.transform === 'wonToEok') v = Math.round(v / 100000000);
                 else if (item.transform === 'thousandUsdToEokUsd') v = Math.round(v / 100000);
                 return { date: r.TIME, value: v };
-            });
+            }).reverse();
         } else {
             const fallback = fallbacks[item.id];
             val = parseFloat(String(fallback.value).replace(/,/g, ''));
