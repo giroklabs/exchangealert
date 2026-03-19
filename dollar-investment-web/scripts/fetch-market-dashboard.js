@@ -810,7 +810,7 @@ async function main() {
         'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
         'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
-        'bamlh0a0hym2': { value: '310', trend: 'up', history: [{ date: '2026-03-10', value: 290 }, { date: '2026-03-11', value: 295 }, { date: '2026-03-12', value: 305 }, { date: '2026-03-13', value: 310 }] },
+        'bamlh0a0hym2': { value: '3.10', trend: 'up', history: [{ date: '2026-03-10', value: 2.90 }, { date: '2026-03-11', value: 2.95 }, { date: '2026-03-12', value: 3.05 }, { date: '2026-03-13', value: 3.10 }] },
         'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
 
         'investor-deposits': { value: '555786', trend: 'up', history: [{ date: '202501', value: 555786 }, { date: '202502', value: 560529 }, { date: '202503', value: 584743 }] },
