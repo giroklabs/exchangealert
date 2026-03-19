@@ -99,13 +99,13 @@ const FRED_SERIES = [
 // 3. 국내지표 (ECOS)
 const ECOS_SERIES = [
     { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'M' },
-    { id: 'investor-deposits', statCode: '318Y001', item1: '1000000', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'D' },
+    { id: 'investor-deposits', statCode: '901Y056', item1: 'S23A', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'M', transform: 'wonToEok' },
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '인플레이션 지표, 금리 정책에 영향', cycle: 'M' },
     { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
     { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },
     { id: 'cds-korea', statCode: '902Y006', item1: 'KR', name: 'CDS 프리미엄', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 부도 위험 지표 (상승 시 환율 상승 압력)', cycle: 'M' },
-    { id: 'sovereign-spread', statCode: '902Y003', item1: '0000147', name: '외평채 가산금리', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 신용 가산금리 (상승 시 자본 유출 위험)', cycle: 'M' },
-    { id: 'short-debt-ratio', statCode: '731Y003', item1: '0000002', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '외환보유액 대비 단기외채 비중 (상승 시 건전성 악화)', cycle: 'Q' }
+    { id: 'fx-reserves', statCode: '732Y001', item1: '99', name: '외환보유액', unit: '억$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '외환 방어 능력 (증가 시 원화 안정)', cycle: 'M', transform: 'thousandUsdToEokUsd' },
+    { id: 'short-debt-ratio', statCode: '311Y004', item1: 'A500000', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '대외채무 대비 단기외채 비중 (상승 시 건전성 악화)', cycle: 'Q', customFetch: 'shortDebtRatio' }
 ];
 
 async function fetchFromFred(seriesId) {
@@ -210,6 +210,58 @@ async function fetchFromEcos(item) {
             resolve(null);
         });
     });
+}
+
+// 단기외채 비중 전용 fetch: 단기(A500000) / 총계(A000000)를 각각 가져와 비중(%) 산출
+async function fetchShortDebtRatio() {
+    if (!ECOS_API_KEY) return null;
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const start = `${currentYear - 2}Q1`;
+    const end = `${currentYear}Q4`;
+
+    const fetchItem = (itemCode) => new Promise((resolve) => {
+        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/100/311Y004/Q/${start}/${end}/${itemCode}`;
+        https.get(url, (res) => {
+            let data = '';
+            res.on('data', (chunk) => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    if (json.StatisticSearch && json.StatisticSearch.row) {
+                        resolve(json.StatisticSearch.row);
+                    } else { resolve(null); }
+                } catch (e) { resolve(null); }
+            });
+        }).on('error', () => resolve(null));
+    });
+
+    try {
+        const [shortRows, totalRows] = await Promise.all([
+            fetchItem('A500000'),  // 1.단기
+            fetchItem('A000000')   // 대외채무 총계
+        ]);
+
+        if (!shortRows || !totalRows || shortRows.length === 0 || totalRows.length === 0) return null;
+
+        // 같은 분기의 단기/총계를 매칭하여 비중(%) 계산
+        const result = shortRows.map(sr => {
+            const tr = totalRows.find(t => t.TIME === sr.TIME);
+            if (!tr) return null;
+            const shortVal = parseFloat(sr.DATA_VALUE);
+            const totalVal = parseFloat(tr.DATA_VALUE);
+            if (isNaN(shortVal) || isNaN(totalVal) || totalVal === 0) return null;
+            return {
+                TIME: sr.TIME,
+                DATA_VALUE: ((shortVal / totalVal) * 100).toFixed(1)
+            };
+        }).filter(Boolean);
+
+        return result.length > 0 ? result.reverse() : null;
+    } catch (e) {
+        console.error('❌ [ECOS] 단기외채 비중 계산 에러:', e.message);
+        return null;
+    }
 }
 
 async function fetchMarketInvestorTrend(token) {
@@ -612,10 +664,11 @@ async function sendTelegramNotification(forecast, lastUpdate) {
         else if (!summary && line.length > 20) summary = line.trim();
     }
 
-    // 사이트의 AI 분석 시점과 일치하도록 포맷팅
+    // 사이트의 AI 분석 시점과 일치하도록 포맷팅 (GitHub Actions는 UTC이므로 KST 명시 필수)
+    const kstOptions = { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: true };
     const analysisTime = forecast.lastAiUpdate 
-        ? new Date(forecast.lastAiUpdate).toLocaleString('ko-KR') 
-        : new Date().toLocaleString('ko-KR');
+        ? new Date(forecast.lastAiUpdate).toLocaleTimeString('ko-KR', kstOptions)
+        : new Date().toLocaleTimeString('ko-KR', kstOptions);
 
     const message = `
 🤖 *달러 인베스트 AI 시장 분석*
@@ -753,24 +806,47 @@ async function main() {
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
         'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
         'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '2026-03-10', value: 32 }, { date: '2026-03-11', value: 34 }, { date: '2026-03-12', value: 35 }, { date: '2026-03-13', value: 35 }] },
-        'sovereign-spread': { value: '42', trend: 'up', history: [{ date: '2026-03-10', value: 38 }, { date: '2026-03-11', value: 40 }, { date: '2026-03-12', value: 42 }, { date: '2026-03-13', value: 42 }] },
+        'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
 
-        'investor-deposits': { value: '55200', trend: 'up', history: [{ date: '2026-03-10', value: 52100 }, { date: '2026-03-11', value: 53500 }, { date: '2026-03-12', value: 54800 }, { date: '2026-03-13', value: 55200 }] },
+        'investor-deposits': { value: '555786', trend: 'up', history: [{ date: '202501', value: 555786 }, { date: '202502', value: 560529 }, { date: '202503', value: 584743 }] },
         'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '2025-12-01', value: 3.5 }, { date: '2026-01-01', value: 3.5 }] },
-        'short-debt-ratio': { value: '38.4', trend: 'neutral', history: [{ date: '2025-09-30', value: 38.2 }, { date: '2025-12-31', value: 38.4 }] },
+        'short-debt-ratio': { value: '23.3', trend: 'up', history: [{ date: '2025Q2', value: 22.7 }, { date: '2025Q3', value: 21.9 }, { date: '2025Q4', value: 23.3 }] },
         'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.08 }, { date: '2026-03-11', value: 0.09 }, { date: '2026-03-12', value: 0.09 }, { date: '2026-03-13', value: 0.09 }] },
         'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] }
     };
 
     for (const item of ECOS_SERIES) {
-        const rows = await fetchFromEcos(item);
+        // 단기외채 비중은 커스텀 fetch 사용 (두 항목을 나눠서 비중 계산)
+        const rows = item.customFetch === 'shortDebtRatio' 
+            ? await fetchShortDebtRatio() 
+            : await fetchFromEcos(item);
         let val, trend, displayVal, history;
 
         if (rows && rows.length > 0) {
             val = parseFloat(String(rows[0].DATA_VALUE).replace(/,/g, ''));
-            trend = rows.length > 1 ? (val > parseFloat(rows[1].DATA_VALUE) ? 'up' : (val < parseFloat(rows[1].DATA_VALUE) ? 'down' : 'neutral')) : 'neutral';
+
+            // 단위 변환 처리
+            if (item.transform === 'wonToEok') {
+                // 원 → 억원 변환 (1억 = 100,000,000)
+                val = Math.round(val / 100000000);
+            } else if (item.transform === 'thousandUsdToEokUsd') {
+                // 천달러 → 억달러 변환 (1억 = 100,000 천)
+                val = Math.round(val / 100000);
+            }
+
+            trend = rows.length > 1 ? (() => {
+                let prevVal = parseFloat(String(rows[1].DATA_VALUE).replace(/,/g, ''));
+                if (item.transform === 'wonToEok') prevVal = Math.round(prevVal / 100000000);
+                else if (item.transform === 'thousandUsdToEokUsd') prevVal = Math.round(prevVal / 100000);
+                return val > prevVal ? 'up' : (val < prevVal ? 'down' : 'neutral');
+            })() : 'neutral';
             displayVal = val.toLocaleString();
-            history = rows.slice(0, 10).map(r => ({ date: r.TIME, value: parseFloat(r.DATA_VALUE) }));
+            history = rows.slice(0, 10).map(r => {
+                let v = parseFloat(String(r.DATA_VALUE).replace(/,/g, ''));
+                if (item.transform === 'wonToEok') v = Math.round(v / 100000000);
+                else if (item.transform === 'thousandUsdToEokUsd') v = Math.round(v / 100000);
+                return { date: r.TIME, value: v };
+            });
         } else {
             const fallback = fallbacks[item.id];
             val = parseFloat(String(fallback.value).replace(/,/g, ''));
@@ -787,7 +863,8 @@ async function main() {
 
         // 임계값(Threshold) 기반 특수 가중치
         if (item.id === 'cds-korea' && val > 40) finalWeight *= 1.5; // CDS 40bp 돌파 시 리스크 가중
-        if (item.id === 'short-debt-ratio' && val > 40) finalWeight *= 1.3; // 단기외채 40% 돌파 시 가중
+        if (item.id === 'short-debt-ratio' && val > 25) finalWeight *= 1.3; // 단기외채 비중 25%(대외채무 대비) 돌파 시 가중
+        if (item.id === 'fx-reserves' && val < 3500) finalWeight *= 1.5; // 외환보유액 3500억$ 이하 시 리스크 가중
 
         if (item.impact === 'up') {
             blockScores[item.block].up += 0.6 * finalWeight;
