@@ -1,0 +1,41 @@
+name: FX Spike Alert
+
+on:
+  schedule:
+    # 평일 KST 09:00~18:00 (UTC 00:00~09:00) 에 5분마다 실행
+    # 주말 제외: 월~금 (0,6=일,토 제외)
+    - cron: '*/5 0-9 * * 1-5'
+  workflow_dispatch: # 수동 트리거 가능
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # last-alert-rate.json 업데이트용
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run FX Spike Alert
+        run: node scripts/alert-fx-spike.js
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Commit last-alert-rate.json (if updated)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/last-alert-rate.json || true
+          git diff --staged --quiet || git commit -m "chore: update last-alert-rate [skip ci]"
+          git push || true
