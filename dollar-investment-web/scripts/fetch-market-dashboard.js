@@ -202,7 +202,74 @@ function detectKeyLevels(historyData) {
     return { support, resistance };
 }
 
+// --- 4단계: 백테스팅 통계 ---
+function calcStreak(evaluated) {
+    if (!evaluated || evaluated.length === 0) return '이력 없음';
+    const last = evaluated[evaluated.length - 1];
+    let count = 0;
+    const target = last.hit_d1;
+    for (let i = evaluated.length - 1; i >= 0; i--) {
+        if (evaluated[i].hit_d1 === target) count++;
+        else break;
+    }
+    return target ? `연속 ${count}회 적중` : `연속 ${count}회 미적중`;
+}
+
+function calcBacktestSummary(records) {
+    if (!records || records.length === 0) return null;
+    const evaluated = records.filter(r => r.hit_d1 !== null);
+    if (evaluated.length === 0) return null;
+    const hitRate = Math.round((evaluated.filter(r => r.hit_d1).length / evaluated.length) * 100);
+    const last5 = evaluated.slice(-5);
+    const recentHitRate = Math.round((last5.filter(r => r.hit_d1).length / last5.length) * 100);
+    return {
+        total: evaluated.length,
+        hitRate,
+        recentHitRate,
+        streak: calcStreak(evaluated)
+    };
+}
+
+// --- 5단계: 복합 신호 감지 (Compound Signal Index) ---
+function detectCompoundSignals(indicators) {
+    const signals = [];
+    const get = (id) => indicators.find(i => i.id.toLowerCase() === id.toLowerCase());
+    const val = (id) => { const s = get(id); return s ? parseFloat(String(s.value).replace(/,/g, '')) : null; };
+    const trend = (id) => { const s = get(id); return s ? s.trend : null; };
+
+    const vix       = val('vixcls');
+    const dxy       = val('dxy');
+    const hySpread  = val('bamlh0a0hym2'); // %
+    const foreigner = trend('foreigner-net-buy');
+    const rateDiff  = trend('rate-differential');
+    const dxyTrend  = trend('dxy');
+    const vixTrend  = trend('vixcls');
+
+    // 시나리오 1: 달러 패닉 (DXY 상승 + VIX 상승 동시)
+    if (dxyTrend === 'up' && vixTrend === 'up') {
+        signals.push({ type: 'DOLLAR_PANIC', up: 2.5, down: 0, block: 'risk', desc: '달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속' });
+    }
+
+    // 시나리오 2: 신용위기 (하이일드 4% 돌파 + VIX 30 초과 동시)
+    if (hySpread !== null && vix !== null && hySpread > 4.0 && vix > 30) {
+        signals.push({ type: 'CREDIT_CRISIS', up: 3.0, down: 0, block: 'risk', desc: `신용위기 (HY스프레드${hySpread}%+VIX${vix})` });
+    }
+
+    // 시나리오 3: 자본 유출 복합 (한미 금리차 확대 + 외인 순매도)
+    if (rateDiff === 'up' && foreigner === 'down') {
+        signals.push({ type: 'CAPITAL_OUTFLOW', up: 2.0, down: 0, block: 'assets', desc: '자본유출 (금리차확대+외인매도 동시)' });
+    }
+
+    // 시나리오 4: 안전자산 역전 (VIX 급등 + DXY 하락 → 일부 위험자산 복귀 신호)
+    if (vixTrend === 'up' && dxyTrend === 'down' && vix !== null && vix > 25) {
+        signals.push({ type: 'RISK_DIVERGE', up: 0, down: 1.5, block: 'risk', desc: `위험/달러 분리 (VIX↑+DXY↓): 일시적 반등 가능성` });
+    }
+
+    return signals;
+}
+
 function summarizeByBlock(indicators) {
+
     const summary = {};
     Object.values(FACTOR_BLOCKS).forEach(block => {
         const blockIndicators = indicators.filter(i => i.block === block.id);
@@ -562,7 +629,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -582,6 +649,26 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 - 볼린저밴드: 상단=${bb?.upper}원 / 중단=${bb?.mid}원 / 하단=${bb?.lower}원 (밴드폭=${bb?.bandwidth}%)
 - 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
 - 핵심 레벨: 60일 지지=${keyLevels?.support}원, 저항=${keyLevels?.resistance}원`;
+
+        // 복합 신호 섹션 추가
+        const { compoundSignals } = technicals;
+        if (compoundSignals && compoundSignals.length > 0) {
+            techSection += `\n\n⚡ 복합 위험 신호 (동시 발생):`;
+            compoundSignals.forEach(s => { techSection += `\n- [${s.type}] ${s.desc}`; });
+        }
+    }
+
+    // 백테스팅 성과 섹션 생성
+    let backtestSection = '';
+    if (backtest) {
+        const confidence = backtest.hitRate >= 65 ? '높음' : (backtest.hitRate >= 50 ? '보통' : '낮음 - 판단 자제 권장');
+        backtestSection = `
+[예측 성과 이력 - 최근 ${backtest.total}일 기준]
+- 1일 예측 적중률: ${backtest.hitRate}% (최근5일: ${backtest.recentHitRate}%) → 신뢰도: ${confidence}
+- 현재 흐름: ${backtest.streak}`;
+        if (backtest.hitRate < 55) {
+            backtestSection += `\n⚠️ 적중률이 낮으므로 단정적 방향 제시보다 다양한 시나리오와 리스크를 함께 제시하세요.`;
+        }
     }
 
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 원/달러 환율 방향성을 한국어로 심층 분석해주세요.
@@ -591,6 +678,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 분석 대상 지표:
 ${blockSummary}
 ${techSection}
+${backtestSection}
 
 원/달러 환율 최근 추세 (최신순):
 ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
@@ -598,7 +686,7 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 분석 가이드:
 1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
 2. [기술적 분석] RSI, 이동평균, 볼린저밴드, 지지/저항을 활용해 단기 환율의 과매수/과매도 및 추세 지속성을 판단하세요.
-3. [리스크] 및 [한국 자산] 블록을 통해 리스크 온/오프 국면을 진단하세요.
+3. [복합 신호] 동시 발생한 위험 신호가 있다면 이를 반드시 강조하세요.
 4. [펀딩·정책] 및 [투자 전략]을 종합하여 실전 달러 투자 전략을 간략히 제시하세요. (목표가 가이드 포함)
 
 응답은 전문적이고 분석적인 톤으로 **최대한 간결하게 2~3개 단락**으로 작성하세요 (공백 포함 500자 내외). 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요. 마지막 단락은 반드시 "실전 투자 대응:"으로 시작하고, 끝에 "결론: [상승/하락/보합] 우세"라고 적어주세요.`;
@@ -1110,6 +1198,41 @@ async function main() {
         console.log(`📊 [Block] ${blockId}: Up:${dampenedUp.toFixed(1)}, Down:${dampenedDown.toFixed(1)}`);
     });
 
+    // --- 5단계: 복합 신호 적용 (블록 점수 최종 적용 후) ---
+    const compoundSignals = detectCompoundSignals(indicators);
+    if (compoundSignals.length > 0) {
+        compoundSignals.forEach(sig => {
+            if (sig.up > 0) {
+                blockScores[sig.block].up += sig.up;
+                upScore += Math.log1p(sig.up) * 3; // 로그 감쇠 적용
+            }
+            if (sig.down > 0) {
+                blockScores[sig.block].down += sig.down;
+                downScore += Math.log1p(sig.down) * 3;
+            }
+            console.log(`⚡ [Compound] ${sig.type}: up+${sig.up}/down+${sig.down} → ${sig.desc}`);
+        });
+    } else {
+        console.log(`⚡ [Compound] 활성 복합 신호 없음`);
+    }
+
+    // --- 4단계: 백테스팅 통계 로드 ---
+    let backtest = null;
+    try {
+        const predHistPath = path.join(__dirname, '..', 'public', 'data', 'prediction-history.json');
+        const altPath = path.join(process.cwd(), 'public', 'data', 'prediction-history.json');
+        const predFile = fs.existsSync(predHistPath) ? predHistPath : (fs.existsSync(altPath) ? altPath : null);
+        if (predFile) {
+            const predHist = JSON.parse(fs.readFileSync(predFile, 'utf8'));
+            backtest = calcBacktestSummary(predHist.records || []);
+            if (backtest) {
+                console.log(`📈 [Backtest] 총 ${backtest.total}일 | 적중률 ${backtest.hitRate}% | 최근5일 ${backtest.recentHitRate}% | ${backtest.streak}`);
+            }
+        }
+    } catch (btErr) {
+        console.warn('⚠️ 백테스팅 통계 로드 실패 (비치명적):', btErr.message);
+    }
+
     // 노이즈 점수 (극단적 쏠림 방지)
     let upScoreFinal = upScore + 0.5;
     let downScoreFinal = downScore + 0.5;
@@ -1119,6 +1242,7 @@ async function main() {
     const downProb = 100 - upProb;
 
     console.log('🤖 AI 시장 분석 생성 중...');
+
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
 
     // --- 기술적 지표 계산 (fx-history-6m.json 활용) ---
@@ -1205,7 +1329,7 @@ async function main() {
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
         lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals);
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest);
         lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
@@ -1437,7 +1561,8 @@ async function main() {
             lastAiUpdate: lastAiUpdate || Date.now(),
             score: { upScore, downScore }
         },
-        technicals,
+        technicals: technicals ? { ...technicals, compoundSignals } : null,
+        backtest,
         lastUpdate: new Date().toLocaleString('ko-KR')
     };
 
