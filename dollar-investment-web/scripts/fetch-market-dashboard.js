@@ -89,6 +89,7 @@ const FRED_SERIES = [
     { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
     { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
     { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표', realtimeSymbol: '^VIX' },
+    { id: 'BAMLH0A0HYM2', name: '미국 하이일드 스프레드', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'ICE BofA', description: '글로벌 신용 리스크 온/오프 지표 (상승 시 신흥국 자본 이탈 → 환율 상승)', fredId: 'BAMLH0A0HYM2' },
     { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '담보 유동성 지표', hidden: true },
     { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', hidden: true },
     { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', hidden: true },
@@ -103,7 +104,7 @@ const ECOS_SERIES = [
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '인플레이션 지표, 금리 정책에 영향', cycle: 'M' },
     { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
     { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },
-    { id: 'cds-korea', statCode: '902Y006', item1: 'KR', name: 'CDS 프리미엄', unit: 'bp', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '국가 부도 위험 지표 (상승 시 환율 상승 압력)', cycle: 'M' },
+
     { id: 'fx-reserves', statCode: '732Y001', item1: '99', name: '외환보유액', unit: '억$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '외환 방어 능력 (증가 시 원화 안정)', cycle: 'M', transform: 'thousandUsdToEokUsd' },
     { id: 'short-debt-ratio', statCode: '311Y004', item1: 'A500000', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '대외채무 대비 단기외채 비중 (상승 시 건전성 악화)', cycle: 'Q', customFetch: 'shortDebtRatio' }
 ];
@@ -765,7 +766,11 @@ async function main() {
         
         // 변동 강도 반영 (Z-Score가 클수록 점수 가중)
         const volatilityWeight = Math.min(Math.abs(zScore), 2.0); // 최대 2배까지만
-        const finalWeight = (1.0 + volatilityWeight) * freshness;
+        let finalWeight = (1.0 + volatilityWeight) * freshness;
+
+        // 임계값(Threshold) 기반 특수 가중치 (FRED 지표)
+        if (s.id === 'BAMLH0A0HYM2' && numVal > 4.0) finalWeight *= 1.5; // 하이일드 400bp(4.0%) 돌파 시 글로벌 위기 가중
+        if (s.id === 'VIXCLS' && numVal > 30) finalWeight *= 1.3; // VIX 30 돌파 시 공포 장세 가중
 
         if (s.impact === 'up') {
             blockScores[s.block].up += 0.5 * finalWeight;
@@ -805,7 +810,7 @@ async function main() {
         'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
         'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
-        'cds-korea': { value: '35', trend: 'neutral', history: [{ date: '2026-03-10', value: 32 }, { date: '2026-03-11', value: 34 }, { date: '2026-03-12', value: 35 }, { date: '2026-03-13', value: 35 }] },
+        'bamlh0a0hym2': { value: '310', trend: 'up', history: [{ date: '2026-03-10', value: 290 }, { date: '2026-03-11', value: 295 }, { date: '2026-03-12', value: 305 }, { date: '2026-03-13', value: 310 }] },
         'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
 
         'investor-deposits': { value: '555786', trend: 'up', history: [{ date: '202501', value: 555786 }, { date: '202502', value: 560529 }, { date: '202503', value: 584743 }] },
@@ -862,7 +867,6 @@ async function main() {
         let finalWeight = (1.0 + volatilityWeight) * freshness;
 
         // 임계값(Threshold) 기반 특수 가중치
-        if (item.id === 'cds-korea' && val > 40) finalWeight *= 1.5; // CDS 40bp 돌파 시 리스크 가중
         if (item.id === 'short-debt-ratio' && val > 25) finalWeight *= 1.3; // 단기외채 비중 25%(대외채무 대비) 돌파 시 가중
         if (item.id === 'fx-reserves' && val < 3500) finalWeight *= 1.5; // 외환보유액 3500억$ 이하 시 리스크 가중
 
