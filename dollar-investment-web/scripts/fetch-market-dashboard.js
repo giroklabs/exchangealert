@@ -258,7 +258,7 @@ async function fetchShortDebtRatio() {
             };
         }).filter(Boolean);
 
-        return result.length > 0 ? result.reverse() : null;
+        return result.length > 0 ? result : null;
     } catch (e) {
         console.error('❌ [ECOS] 단기외채 비중 계산 에러:', e.message);
         return null;
