@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "100.2",
+      "value": "100.17",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 100.2
+          "value": 100.17
         }
       ]
     },
@@ -454,7 +454,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "98.96",
+      "value": "98.51",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -496,7 +496,7 @@
         },
         {
           "date": "2026-03-19",
-          "value": 98.96
+          "value": 98.51
         }
       ]
     },
@@ -559,34 +559,59 @@
     },
     {
       "id": "investor-deposits",
-      "statCode": "318Y001",
-      "item1": "1000000",
+      "statCode": "901Y056",
+      "item1": "S23A",
       "name": "투자자예탁금",
       "unit": "억원",
       "block": "assets",
       "impact": "down",
       "source": "한국은행",
       "description": "증시 대기 자금, 증가 시 증시 상승 기대",
-      "cycle": "D",
-      "value": "55200",
+      "cycle": "M",
+      "transform": "wonToEok",
+      "value": "1,187,488",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-10",
-          "value": 52100
+          "date": "202602",
+          "value": 1187488
         },
         {
-          "date": "2026-03-11",
-          "value": 53500
+          "date": "202601",
+          "value": 1060325
         },
         {
-          "date": "2026-03-12",
-          "value": 54800
+          "date": "202512",
+          "value": 878291
         },
         {
-          "date": "2026-03-13",
-          "value": 55200
+          "date": "202511",
+          "value": 779120
+        },
+        {
+          "date": "202510",
+          "value": 854569
+        },
+        {
+          "date": "202509",
+          "value": 764474
+        },
+        {
+          "date": "202508",
+          "value": 662992
+        },
+        {
+          "date": "202507",
+          "value": 686852
+        },
+        {
+          "date": "202506",
+          "value": 689724
+        },
+        {
+          "date": "202505",
+          "value": 572972
         }
       ]
     },
@@ -819,60 +844,110 @@
       ]
     },
     {
-      "id": "sovereign-spread",
-      "statCode": "902Y003",
-      "item1": "0000147",
-      "name": "외평채 가산금리",
-      "unit": "bp",
+      "id": "fx-reserves",
+      "statCode": "732Y001",
+      "item1": "99",
+      "name": "외환보유액",
+      "unit": "억$",
       "block": "funding-policy",
-      "impact": "up",
+      "impact": "down",
       "source": "한국은행",
-      "description": "국가 신용 가산금리 (상승 시 자본 유출 위험)",
+      "description": "외환 방어 능력 (증가 시 원화 안정)",
       "cycle": "M",
-      "value": "42",
+      "transform": "thousandUsdToEokUsd",
+      "value": "4,276",
       "trend": "up",
-      "realizedImpact": "up",
+      "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-10",
-          "value": 38
+          "date": "202602",
+          "value": 4276
         },
         {
-          "date": "2026-03-11",
-          "value": 40
+          "date": "202601",
+          "value": 4259
         },
         {
-          "date": "2026-03-12",
-          "value": 42
+          "date": "202512",
+          "value": 4281
         },
         {
-          "date": "2026-03-13",
-          "value": 42
+          "date": "202511",
+          "value": 4307
+        },
+        {
+          "date": "202510",
+          "value": 4288
+        },
+        {
+          "date": "202509",
+          "value": 4220
+        },
+        {
+          "date": "202508",
+          "value": 4163
+        },
+        {
+          "date": "202507",
+          "value": 4113
+        },
+        {
+          "date": "202506",
+          "value": 4102
+        },
+        {
+          "date": "202505",
+          "value": 4046
         }
       ]
     },
     {
       "id": "short-debt-ratio",
-      "statCode": "731Y003",
-      "item1": "0000002",
+      "statCode": "311Y004",
+      "item1": "A500000",
       "name": "단기외채 비중",
       "unit": "%",
       "block": "funding-policy",
       "impact": "up",
       "source": "한국은행",
-      "description": "외환보유액 대비 단기외채 비중 (상승 시 건전성 악화)",
+      "description": "대외채무 대비 단기외채 비중 (상승 시 건전성 악화)",
       "cycle": "Q",
-      "value": "38.4",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "customFetch": "shortDebtRatio",
+      "value": "23.3",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
-          "date": "2025-09-30",
-          "value": 38.2
+          "date": "2025Q4",
+          "value": 23.3
         },
         {
-          "date": "2025-12-31",
-          "value": 38.4
+          "date": "2025Q3",
+          "value": 21.9
+        },
+        {
+          "date": "2025Q2",
+          "value": 22.7
+        },
+        {
+          "date": "2025Q1",
+          "value": 21.9
+        },
+        {
+          "date": "2024Q4",
+          "value": 21.8
+        },
+        {
+          "date": "2024Q3",
+          "value": 22.5
+        },
+        {
+          "date": "2024Q2",
+          "value": 21.3
+        },
+        {
+          "date": "2024Q1",
+          "value": 21
         }
       ]
     },
@@ -1159,8 +1234,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 200500,
-      "changePercent": "-3.84",
+      "price": 202000,
+      "changePercent": "-3.12",
       "trend": "down"
     },
     {
@@ -1169,8 +1244,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1015000,
-      "changePercent": "-3.88",
+      "price": 1019000,
+      "changePercent": "-3.50",
       "trend": "down"
     },
     {
@@ -1179,8 +1254,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 526000,
-      "changePercent": "-3.49",
+      "price": 529000,
+      "changePercent": "-2.94",
       "trend": "down"
     },
     {
@@ -1189,8 +1264,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 171100,
-      "changePercent": "-2.28",
+      "price": 172600,
+      "changePercent": "-1.43",
       "trend": "down"
     },
     {
@@ -1209,22 +1284,22 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50000,
-      "changePercent": "-2.91",
+      "price": 50200,
+      "changePercent": "-2.52",
       "trend": "down"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 53,
-    "downProb": 47,
+    "upProb": 51,
+    "downProb": 49,
     "aiAnalysis": "현재 1506원대에서 강한 상승 추세가 이어지는 원/달러 환율은 주요 상승 요인들이 중첩되며 추가 강세가 예상됩니다. 최우선 고려 요인인 한미 금리차는 미국 기준금리가 한국보다 1.14%p 높고, 미 10년물 국채금리와 한국 국고채 10년 금리차 역시 0.65%p로 확대되는 추세입니다. 이는 달러 자산의 캐리 매력을 크게 높이며, 달러 인덱스도 상승 추세를 보여 글로벌 달러 강세 사이클이 견고함을 시사합니다.\n\n동시에, VIX 공포지수가 25.09pt로 급등하고 외국인 코스피 수급이 부진한 것은 명확한 리스크 오프 국면 진입을 알립니다. 이는 원화 자산 회피를 가속화하는 요인입니다. 최근 환율은 1500원대 재돌파 이후 1506원까지 고점을 높이며 상승 추세가 견고하며, 1470원대 지지력은 약화되고 상단 저항선은 뚫리는 모습입니다. 경상수지 둔화와 외평채 가산금리 상승은 원화의 대외 취약성을 더해 상승 압력을 가중시킵니다.\n\n실전 투자 대응: 강세가 우세한 현 국면에서는 달러 매수 포지션을 유지하며 추가 상승에 대비하는 전략이 유효합니다. 단기적으로는 1520원, 중기적으로는 1550원까지도 상단을 열어두고 환율 추이를 관찰해야 합니다.\n결론: 상승 우세",
     "detailedAnalysis": "현재 1506원대에서 강한 상승 추세가 이어지는 원/달러 환율은 주요 상승 요인들이 중첩되며 추가 강세가 예상됩니다. 최우선 고려 요인인 한미 금리차는 미국 기준금리가 한국보다 1.14%p 높고, 미 10년물 국채금리와 한국 국고채 10년 금리차 역시 0.65%p로 확대되는 추세입니다. 이는 달러 자산의 캐리 매력을 크게 높이며, 달러 인덱스도 상승 추세를 보여 글로벌 달러 강세 사이클이 견고함을 시사합니다.\n\n동시에, VIX 공포지수가 25.09pt로 급등하고 외국인 코스피 수급이 부진한 것은 명확한 리스크 오프 국면 진입을 알립니다. 이는 원화 자산 회피를 가속화하는 요인입니다. 최근 환율은 1500원대 재돌파 이후 1506원까지 고점을 높이며 상승 추세가 견고하며, 1470원대 지지력은 약화되고 상단 저항선은 뚫리는 모습입니다. 경상수지 둔화와 외평채 가산금리 상승은 원화의 대외 취약성을 더해 상승 압력을 가중시킵니다.\n\n실전 투자 대응: 강세가 우세한 현 국면에서는 달러 매수 포지션을 유지하며 추가 상승에 대비하는 전략이 유효합니다. 단기적으로는 1520원, 중기적으로는 1550원까지도 상단을 열어두고 환율 추이를 관찰해야 합니다.\n결론: 상승 우세",
     "lastAiUpdate": 1773877872755,
     "score": {
-      "upScore": 32.055154033602484,
-      "downScore": 28.285727224461453
+      "upScore": 32.395063582808945,
+      "downScore": 30.99046375289349
     }
   },
-  "lastUpdate": "2026. 3. 19. AM 12:12:56"
+  "lastUpdate": "2026. 3. 19. AM 12:19:42"
 }
