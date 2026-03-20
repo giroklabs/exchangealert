@@ -135,10 +135,13 @@ function buildNewsMessage(sections, lastUpdate) {
     for (const section of sections) {
         msg += `*${section.label}*\n`;
         for (const article of section.articles) {
+            // 제목 내 대괄호가 링크 문법을 깨뜨리는 것 방지 (소괄호로 교체)
+            let title = article.title.replace(/\[/g, '(').replace(/\]/g, ')');
+
             // 제목이 너무 길면 60자 자르기
-            const title = article.title.length > 60
-                ? article.title.slice(0, 58) + '…'
-                : article.title;
+            if (title.length > 60) {
+                title = title.slice(0, 58) + '…';
+            }
             const source = article.source ? ` — ${article.source}` : '';
             msg += `• [${title}](${article.link})${source}\n`;
         }
