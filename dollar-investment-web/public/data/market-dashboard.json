@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "24.74",
+      "value": "25.07",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-20",
-          "value": 24.74
+          "value": 25.07
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.51",
+      "value": "95.05",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-20",
-          "value": 95.51
+          "value": 95.05
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,499.70",
+      "value": "1,499.80",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "944.04",
+      "value": "944.07",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,733.20",
+      "value": "1,733.02",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "한미 금리차 확대와 달러 인덱스 상승은 달러의 캐리 매력을 높이며 강세 사이클을 지속시키고 있습니다. VIX 상승과 외국인 순매도는 리스크 오프 국면 진입 신호이며, 원화 약세 압력을 가중시키는 동시 위험 신호입니다. 기술적으로도 이동평균선 정배열과 상승 모멘텀으로 1500원대 지지력이 확보되었고, 1506.25원 저항선 돌파 시 추가 상승 여력이 큽니다. 한국 소비자물가 상승, 경상수지 둔화도 원화 약세 요인입니다.\n\n실전 투자 대응: 달러 강세 및 리스크 오프 심리 속 환율 추가 상승 가능성이 높은 국면입니다. 1500원대 지지 확인 후 매수 관점을 유지하며 1차 목표가 1520원, 2차 1540원을 설정합니다. MA20(1466원) 이탈 시 보수적 접근이 필요합니다.\n결론: 상승 우세",
     "lastAiUpdate": 1774013801196,
     "score": {
-      "upScore": 43.24768029147501,
-      "downScore": 38.59013945695988
+      "upScore": 43.21044495172755,
+      "downScore": 38.52593571854354
     }
   },
   "technicals": {
@@ -1351,5 +1351,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 20. PM 1:47:48"
+  "lastUpdate": "2026. 3. 20. PM 1:52:48"
 }
