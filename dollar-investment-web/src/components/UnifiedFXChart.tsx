@@ -148,7 +148,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
 
     // 데이터 포인트 개수에 따라 동적 너비 계산 (최소 1200px 이상 확보하여 스크롤 유도)
     const dynamicWidth = period === '1D' 
-        ? Math.max(800, chartData.length * 15 * chartScale) 
+        ? `max(100%, ${Math.max(800, chartData.length * 15 * chartScale)}px)`
         : (chartScale > 1.0 ? `${100 * chartScale}%` : '100%');
 
     return (

@@ -116,7 +116,7 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                         <div className={`p-6 rounded-[2rem] border ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
                             <p className="text-sm font-bold text-gray-500 mb-2">Gemini 사용 비용 (당월)</p>
                             <h3 className={`text-4xl font-black ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>
-                                ${billingData?.totalCostMonth ? billingData.totalCostMonth.toFixed(2) : '0.00'}
+                                 {billingData?.totalCostMonth !== undefined ? `$${billingData.totalCostMonth.toFixed(2)}` : '$0.00'}
                             </h3>
                             <div className="flex items-center gap-2 mt-2 text-xs font-bold text-purple-500">
                                 <span className="p-1 rounded bg-purple-500/10">⚡ Google Cloud Billing</span>
@@ -204,7 +204,7 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                         <div className="flex items-center gap-3">
                             <span className="flex h-3 w-3 rounded-full bg-green-500 animate-pulse"></span>
                             <span className={`text-sm font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>시스템 정상 작동 중</span>
-                            <span className="text-xs text-gray-500 ml-auto">Last update: {new Date().toLocaleTimeString()}</span>
+                            <span className="text-xs text-gray-500 ml-auto">Last update: {billingData?.lastUpdate ? new Date(billingData.lastUpdate).toLocaleString('ko-KR') : 'Loading...'}</span>
                         </div>
                     </div>
                 </div>

@@ -42,7 +42,7 @@ export async function trackVisitor() {
 
         localStorage.setItem(visitorStorageKey, 'true');
     } catch (error) {
-        console.error('Visitor tracking failed:', error);
+        console.error('❌ Visitor tracking failed:', error);
     }
 }
 
@@ -70,7 +70,7 @@ export async function getVisitorStats(days: number = 7) {
         
         return stats.reverse(); // 시간순 정렬
     } catch (error) {
-        console.error('Failed to fetch visitor stats:', error);
+        console.error('❌ Failed to fetch visitor stats:', error);
         return [];
     }
 }

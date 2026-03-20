@@ -89,10 +89,10 @@ const FRED_SERIES = [
     { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
     { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
     { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표', realtimeSymbol: '^VIX' },
-    { id: 'BAMLH0A0HYM2', name: '미국 하이일드 스프레드', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'ICE BofA', description: '글로벌 신용 리스크 온/오프 지표 (상승 시 신흥국 자본 이탈 → 환율 상승)', fredId: 'BAMLH0A0HYM2' },
-    { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '담보 유동성 지표', hidden: true },
-    { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', hidden: true },
-    { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', hidden: true },
+    { id: 'BAMLH0A0HYM2', name: '미국 하이일드 스프레드', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'ICE BofA', description: '글로벌 신용 리스크 온/오프 지표', fredId: 'BAMLH0A0HYM2' },
+    { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '담보 유동성 지표', fredId: 'SOFR' },
+    { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', fredId: 'EFFR' },
+    { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', fredId: 'DTB3' },
     { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
 ];
@@ -918,12 +918,26 @@ async function main() {
             }
         }
 
-        const val = obs.length > 0 ? obs[0].value : '0';
-        const numVal = parseFloat(val.replace(/,/g, ''));
-        const prevVal = obs.length > 1 ? parseFloat(obs[1].value.replace(/,/g, '')) : numVal;
+        // FRED 데이터 클리닝 (특히 '.' 으로 들어오는 누락 데이터 필터링)
+        const cleanedObs = obs
+            .filter(o => o.value && o.value !== '.' && !isNaN(parseFloat(o.value)))
+            .map(o => ({ date: o.date, value: parseFloat(o.value) }));
+
+        if (cleanedObs.length === 0 && fallbacks[s.id.toLowerCase()]) {
+            const fb = fallbacks[s.id.toLowerCase()];
+            const val = parseFloat(String(fb.value).replace(/,/g, ''));
+            const history = fb.history || [];
+            if (!s.hidden) indicators.push({ ...s, id: s.id.toLowerCase(), value: fb.value, trend: fb.trend, realizedImpact: fb.trend, history });
+            console.log(`⚠️ [FRED-Fallback] ${s.name} 데이터 누락으로 폴백 대체`);
+            continue;
+        }
+
+        const currentPoint = cleanedObs.length > 0 ? cleanedObs[0] : { value: 0 };
+        const numVal = currentPoint.value;
+        const prevVal = cleanedObs.length > 1 ? cleanedObs[1].value : numVal;
         const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
 
-        const history = obs.slice(0, 10).reverse().map(o => ({ date: o.date, value: parseFloat(o.value) }));
+        const history = cleanedObs.slice(0, 10).reverse();
         
         // --- 고도화 로직 적용 ---
         const zScore = calculateZScore(numVal, history);
@@ -982,7 +996,10 @@ async function main() {
         'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '2025-12-01', value: 3.5 }, { date: '2026-01-01', value: 3.5 }] },
         'short-debt-ratio': { value: '23.3', trend: 'up', history: [{ date: '2025Q2', value: 22.7 }, { date: '2025Q3', value: 21.9 }, { date: '2025Q4', value: 23.3 }] },
         'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.08 }, { date: '2026-03-11', value: 0.09 }, { date: '2026-03-12', value: 0.09 }, { date: '2026-03-13', value: 0.09 }] },
-        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] }
+        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] },
+        'sofr': { value: '5.31', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.31 }, { date: '2026-03-11', value: 5.31 }, { date: '2026-03-12', value: 5.31 }, { date: '2026-03-13', value: 5.31 }] },
+        'effr': { value: '5.33', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.33 }, { date: '2026-03-11', value: 5.33 }, { date: '2026-03-12', value: 5.33 }, { date: '2026-03-13', value: 5.33 }] },
+        'dtb3': { value: '5.25', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.24 }, { date: '2026-03-11', value: 5.25 }, { date: '2026-03-12', value: 5.25 }, { date: '2026-03-13', value: 5.25 }] }
     };
 
     for (const item of ECOS_SERIES) {
@@ -1273,7 +1290,7 @@ async function main() {
 
     let aiAnalysis = "";
     let lastAiUpdate = null;
-    let sentiment = '보통';
+    let sentiment = '보합';
 
     // AI 분석 주기 조절 (1시간 단위)
     // 30분마다 데이터는 수집하지만 AI 분석은 1시간(약 50분 이상 경과 시)에 한 번만 실행
@@ -1348,7 +1365,7 @@ async function main() {
         .trim();
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
-    sentiment = '보통';
+    sentiment = '보합';
     const conclusionMatch = aiAnalysis.match(/결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
     if (conclusionMatch) {
         const res = conclusionMatch[1];
@@ -1360,7 +1377,7 @@ async function main() {
         const lastPart = aiAnalysis.slice(-150);
         if (/상승\s*우세|상향\s*돌파|강세\s*지속/i.test(lastPart)) sentiment = '환율 상승 우세';
         else if (/하락\s*우세|하향\s*이탈|약세\s*전환/i.test(lastPart)) sentiment = '환율 하락 우세';
-        else sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보통');
+        else sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보합');
     }
 
     // 3. 주요국 환율 정보 (환율알라미 앱 데이터 - Naver/Hana Bank)

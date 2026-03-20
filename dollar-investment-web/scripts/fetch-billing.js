@@ -32,7 +32,7 @@ async function fetchBillingStats() {
         const projectId = credentials.project_id;
         const monitoring = new monitoring_v3.Monitoring({ auth: authClient });
 
-        console.log(`📊 프로젝트 [${projectId}]의 비용 지표 조회 중...`);
+        console.log(`📊 프로젝트 [${projectId}]의 지표 조회 시작 (StartTime: ${startTime})`);
 
         // Cloud Monitoring API를 통해 billing/total_cost 지표 조회
         // 참고: 이 지표는 BigQuery 결제 내보내기가 활성화되지 않아도 수집될 수 있는 기본 지표입니다.
@@ -91,6 +91,7 @@ async function fetchBillingStats() {
 
     } catch (error) {
         console.error('❌ 결제 데이터 수집 실패:', error.message);
+        if (error.stack) console.log('DEBUG:', error.stack);
         
         // 실패 시에도 앱이 깨지지 않도록 기본값 저장
         const fallback = {
