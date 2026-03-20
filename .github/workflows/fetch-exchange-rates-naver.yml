@@ -103,13 +103,20 @@ jobs:
           done
           
           if [ "$PUSHED" = true ]; then
-            echo "🚀 Triggering Deploy..."
+            echo "🚀 Triggering Deploy and FX Alert..."
             TOKEN="${{ secrets.TRIGGER_TOKEN }}"
             if [ -z "$TOKEN" ]; then TOKEN="${{ secrets.GITHUB_TOKEN }}"; fi
             
+            # 1. 사이트 배포 트리거
             curl -X POST -H "Authorization: token $TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches" \
               -d '{"ref":"main"}' || true
+
+            # 2. 환율 급변동 알림 트리거 (추가)
+            curl -X POST -H "Authorization: token $TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${{ github.repository }}/dispatches" \
+              -d '{"event_type":"trigger-fx-alert"}' || true
           fi
         fi

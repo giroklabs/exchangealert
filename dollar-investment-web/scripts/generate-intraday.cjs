@@ -43,16 +43,15 @@ function getIntradayData() {
 
     // 1. Git 히스토리 읽기
     try {
-        const log = execSync(`git log -n 500 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
-        const lines = log.split('\n');
-
         const now = new Date();
-        const isWeekend = now.getDay() === 0 || now.getDay() === 6;
-        // 주말에는 96시간(4일)까지 넉넉하게 조회
-        const maxAge = isWeekend ? 96 * 60 * 60 * 1000 : 36 * 60 * 60 * 1000;
+        const maxAge = 8 * 24 * 60 * 60 * 1000; // 7일전 데이터를 커버하기 위해 8일(192시간) 조회
         
         console.log(`🕒 Current Time: ${now.toISOString()}`);
         console.log(`🕒 Lookback Period: ${maxAge / (60*60*1000)} hours`);
+
+        // 커밋 로그를 충분히 가져옴 (8일 * 24시간 * 12회/시간 = 약 2304)
+        const log = execSync(`git log -n 3000 --pretty=format:"%H|%ai" -- ${FILE_PATH}`, { encoding: 'utf8' });
+        const lines = log.split('\n');
         console.log(`🔍 Total Git Commits to check: ${lines.length}`);
 
         for (const line of lines) {
@@ -92,13 +91,14 @@ function getIntradayData() {
     intradayData.sort((a, b) => a.timestamp - b.timestamp);
     
     const uniqueData = [];
-    const seenTimes = new Set();
+    const seenFullTimes = new Set();
     // 최신 데이터를 우선하기 위해 역순으로 처리
     for (let i = intradayData.length - 1; i >= 0; i--) {
-        const key = intradayData[i].time;
-        if (!seenTimes.has(key)) {
+        // 날짜와 시/분까지 포함하여 고유성 체크
+        const uniqueKey = intradayData[i].fullTime.split('+')[0].trim(); 
+        if (!seenFullTimes.has(uniqueKey)) {
             uniqueData.unshift(intradayData[i]);
-            seenTimes.add(key);
+            seenFullTimes.add(uniqueKey);
         }
     }
 

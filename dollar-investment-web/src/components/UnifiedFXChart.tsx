@@ -71,17 +71,35 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
     useEffect(() => {
         if (!isLoading && period === '1D' && scrollContainerRef.current) {
             const container = scrollContainerRef.current;
-            container.scrollLeft = container.scrollWidth;
+            
+            const performScroll = () => {
+                if (container) {
+                    container.scrollLeft = container.scrollWidth;
+                }
+            };
+
+            // 차트 렌더링 완료 후 너비 계산이 끝날 수 있도록 처리
+            performScroll();
+            const timeoutId = setTimeout(performScroll, 300); // 300ms 지연 후 재시도
+            return () => clearTimeout(timeoutId);
         }
     }, [isLoading, period, intradayData]);
 
     const chartData = useMemo<ChartDataItem[]>(() => {
         if (period === '1D') {
-            return intradayData.map(d => ({
-                label: d.time,
-                rate: d.rate,
-                fullDate: d.fullTime
-            }));
+            return intradayData.map((d, index) => {
+                const dateObj = new Date(d.timestamp);
+                const prevDateObj = index > 0 ? new Date(intradayData[index - 1].timestamp) : null;
+                const isNewDay = !prevDateObj || dateObj.getDate() !== prevDateObj.getDate();
+                
+                return {
+                    label: isNewDay 
+                        ? `${dateObj.getMonth() + 1}/${dateObj.getDate()} ${d.time}`
+                        : d.time,
+                    rate: d.rate,
+                    fullDate: d.fullTime
+                };
+            });
         }
 
         if (!historyData.length) return [];
@@ -146,9 +164,9 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         );
     }
 
-    // 데이터 포인트 개수에 따라 동적 너비 계산 (최소 1200px 이상 확보하여 스크롤 유도)
+    // 데이터 포인트 개수에 따라 동적 너비 계산
     const dynamicWidth = period === '1D' 
-        ? `max(100%, ${Math.max(800, chartData.length * 15 * chartScale)}px)`
+        ? `max(100%, ${Math.max(800, chartData.length * 10 * chartScale)}px)` // 7일 데이터이므로 밀도를 약간 낮춤 (15px -> 10px)
         : (chartScale > 1.0 ? `${100 * chartScale}%` : '100%');
 
     return (
@@ -186,7 +204,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                                 : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                         >
-                            {p === '1D' ? '1일' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
+                            {p === '1D' ? '실시간(7일)' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
                         </button>
                     ))}
                     <div className="w-px h-4 bg-gray-300 dark:bg-gray-700 mx-1"></div>
@@ -367,7 +385,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
 
             <div className={`mt-6 p-4 rounded-xl text-[11px] leading-relaxed italic ${isDark ? 'bg-gray-900/50 text-gray-500' : 'bg-gray-50 text-gray-400'}`}>
                 {period === '1D' ? (
-                    <p>📍 <b>Tip:</b> 그래프를 좌우로 드래그하여 과거 데이터를 확인할 수 있습니다. 가장 오른쪽이 최신 데이터입니다.</p>
+                    <p>📍 <b>Tip:</b> 최근 7일간의 실시간 환율 변화를 보여줍니다. 그래프를 좌우로 드래그하여 과거 데이터를 확인할 수 있습니다.</p>
                 ) : (
                     <p>💡 <b>Tip:</b> 이동평균선은 가격 추세를 보여줍니다. 단기평균선(MA5)이 장기평균선(MA60)을 상향 돌파하면 강세 신호로 해석되기도 합니다.</p>
                 )}

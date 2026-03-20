@@ -1,6 +1,6 @@
 /**
  * 환율 급변동 알림 스크립트
- * USD/KRW 환율이 직전 기준 대비 1% 초과 변동 시 차트 이미지와 함께 텔레그램 발송
+ * USD/KRW 환율이 직전 기준 대비 0.5% 초과 변동 시 차트 이미지와 함께 텔레그램 발송
  *
  * 사용법:
  *   TELEGRAM_BOT_TOKEN=xxx TELEGRAM_CHAT_ID=yyy node scripts/alert-fx-spike.js
@@ -24,7 +24,7 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 /** 알림 트리거 임계값 (%) */
-const SPIKE_THRESHOLD = 1.0;
+const SPIKE_THRESHOLD = 0.5;
 
 /** 동일 방향 반복 알림 방지 쿨다운 (분) */
 const COOLDOWN_MINUTES = 30;
