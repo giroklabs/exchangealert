@@ -41,14 +41,71 @@ const FX_HISTORY_FILE = path.join(__dirname, '..', 'public', 'data', 'fx-history
  * fx-history-6m.json 에서 가장 최신 종가를 읽어 현재 환율로 사용
  * 파일이 없으면 Naver Finance API 직접 호출
  */
+/**
+ * 실시간 환율 조회 (Yahoo/Naver 우선, 로컬 히스토리 보조)
+ */
 async function getCurrentRate() {
-    // 1차: 로컬 히스토리 파일
+    // 1차: Yahoo Finance Realtime (JSON 기반으로 정확함)
+    console.log('🌐 Yahoo Finance에서 실시간 환율 조회 중...');
+    const yahooRate = await new Promise((resolve) => {
+        // USDKRW=X의 최근 1분 데이터를 가져옴
+        const url = 'https://query1.finance.yahoo.com/v8/finance/chart/USDKRW=X?interval=1m&range=1d';
+        const options = { headers: { 'User-Agent': 'Mozilla/5.0' } };
+        https.get(url, options, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    const result = json.chart?.result?.[0];
+                    if (result?.meta?.regularMarketPrice) {
+                        resolve({
+                            rate: parseFloat(result.meta.regularMarketPrice.toFixed(2)),
+                            source: 'yahoo'
+                        });
+                        return;
+                    }
+                    resolve(null);
+                } catch { resolve(null); }
+            });
+        }).on('error', () => resolve(null));
+    });
+
+    if (yahooRate) {
+        console.log(`✅ Yahoo 실시간 조회 성공: ${yahooRate.rate}`);
+        return { ...yahooRate, date: new Date().toISOString().split('T')[0] };
+    }
+
+    // 2차: Naver Finance API (HTML 파싱)
+    console.log('🌐 Naver Finance API에서 환율 조회 중...');
+    const naverRate = await new Promise((resolve) => {
+        const url = 'https://finance.naver.com/marketindex/exchangeDetail.naver?marketindexCd=FX_USDKRW';
+        const options = { headers: { 'User-Agent': 'Mozilla/5.0' } };
+        https.get(url, options, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+                const match = data.match(/class="[^"]*point_today[^"]*"[^>]*>.*?<em>([\d,]+\.?\d*)<\/em>/s);
+                if (match) {
+                    const rate = parseFloat(match[1].replace(/,/g, ''));
+                    resolve({ rate, source: 'naver' });
+                } else { resolve(null); }
+            });
+        }).on('error', () => resolve(null));
+    });
+
+    if (naverRate) {
+        console.log(`✅ Naver 실시간 조회 성공: ${naverRate.rate}`);
+        return { ...naverRate, date: new Date().toISOString().split('T')[0] };
+    }
+
+    // 3차: 로컬 히스토리 파일 (최후의 수단)
     if (fs.existsSync(FX_HISTORY_FILE)) {
         try {
             const history = JSON.parse(fs.readFileSync(FX_HISTORY_FILE, 'utf8'));
             const latest = history.data?.[0];
             if (latest?.close) {
-                console.log(`📂 fx-history-6m.json 에서 현재 환율 읽기: ${latest.close}`);
+                console.log(`📂 [Fallback] 로컬 히스토리 사용: ${latest.close}`);
                 return {
                     rate: parseFloat(latest.close),
                     date: latest.date || new Date().toISOString().split('T')[0],
@@ -56,40 +113,11 @@ async function getCurrentRate() {
                 };
             }
         } catch (e) {
-            console.warn('⚠️ fx-history-6m.json 읽기 실패:', e.message);
+            console.warn('⚠️ 히스토리 읽기 실패:', e.message);
         }
     }
 
-    // 2차: Naver Finance API (USD/KRW 현재가)
-    console.log('🌐 Naver Finance API에서 환율 조회 중...');
-    return new Promise((resolve) => {
-        const url = 'https://finance.naver.com/marketindex/exchangeDetail.naver?marketindexCd=FX_USDKRW';
-        const options = {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-        };
-
-        https.get(url, options, (res) => {
-            let data = '';
-            res.on('data', (chunk) => data += chunk);
-            res.on('end', () => {
-                // 현재가 파싱 (예: <dd class="point_today"><em>1,380.50</em>)
-                const match = data.match(/class="[^"]*point_today[^"]*"[^>]*>.*?<em>([\d,]+\.?\d*)<\/em>/s);
-                if (match) {
-                    const rate = parseFloat(match[1].replace(/,/g, ''));
-                    console.log(`✅ Naver에서 환율 조회 성공: ${rate}`);
-                    resolve({ rate, date: new Date().toISOString().split('T')[0], source: 'naver' });
-                } else {
-                    console.error('❌ Naver 환율 파싱 실패');
-                    resolve(null);
-                }
-            });
-        }).on('error', (e) => {
-            console.error('❌ Naver API 네트워크 에러:', e.message);
-            resolve(null);
-        });
-    });
+    return null;
 }
 
 /**
