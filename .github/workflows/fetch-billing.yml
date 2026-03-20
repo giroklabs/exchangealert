@@ -34,4 +34,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add dollar-investment-web/public/data/billing.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "data: update google cloud billing info [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "data: update google cloud billing info [skip ci]" && git pull --rebase origin main && git push origin main)
