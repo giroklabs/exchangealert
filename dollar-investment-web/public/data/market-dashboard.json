@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "25.18",
+      "value": "25.19",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-20",
-          "value": 25.18
+          "value": 25.19
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "95.81",
+      "value": "95.57",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-20",
-          "value": 95.81
+          "value": 95.57
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,499.30",
+      "value": "1,498.60",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "944.65",
+      "value": "944.45",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,733.19",
+      "value": "1,732.68",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.58",
+      "value": "217.51",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "한미 금리차 확대는 달러 캐리 매력을 강화하나, 달러 인덱스 하락은 글로벌 달러 약세 추세입니다. VIX 상승과 외국인 순매도로 확인되는 리스크 오프 국면은 안전자산 선호 심리를 자극, 원화 약세 압력을 가중합니다. 코스피 하락과 외국인 자금 유출도 원화 매도세를 심화시킵니다.\n\n경상수지 악화와 단기외채 증가는 원화 구조적 취약성을 부각하며, 국내 물가 상승은 긴축 부담을 시사합니다. 기술적으로 강한 단기 상승 모멘텀 지속 및 1506.25원 저항선 근접입니다. 복합적으로 한미 금리차 확대 및 리스크 오프가 동시 발생, 환율 상방 압력이 강합니다.\n\n실전 투자 대응: 주요 저항선 돌파 시 1530원까지 추가 상승 여력을 고려한 달러 매수 전략이 유효합니다. 단기 조정을 활용한 분할 매수 관점으로, 1470원 지지 여부를 확인하세요.\n결론: 상승 우세",
     "lastAiUpdate": 1774002972110,
     "score": {
-      "upScore": 41.15724913558454,
-      "downScore": 43.07614732094159
+      "upScore": 41.13581780579734,
+      "downScore": 43.05207792300405
     }
   },
   "technicals": {
@@ -1351,5 +1351,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 20. AM 11:02:50"
+  "lastUpdate": "2026. 3. 20. AM 11:07:44"
 }
