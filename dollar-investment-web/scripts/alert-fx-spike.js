@@ -24,10 +24,10 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 /** 알림 트리거 임계값 (%) */
-const SPIKE_THRESHOLD = 0.0;
+const SPIKE_THRESHOLD = 0.5;
 
 /** 동일 방향 반복 알림 방지 쿨다운 (분) */
-const COOLDOWN_MINUTES = 0;
+const COOLDOWN_MINUTES = 30;
 
 /** 기준 환율 저장 파일 경로 */
 const LAST_ALERT_FILE = path.join(__dirname, '..', 'public', 'data', 'last-alert-rate.json');
