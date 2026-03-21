@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
 import { InvestmentAnalysis } from './components/InvestmentAnalysis';
 import { SevenSplitInvestment } from './components/SevenSplitInvestment';
@@ -101,22 +100,6 @@ function App() {
     // { id: 'about', label: '소개' }, // 임시 숨김 처리
   ];
 
-  const activeTabIndex = tabs.findIndex(t => t.id === activeTab);
-  
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      if (activeTabIndex < tabs.length - 1) {
-        setActiveTab(tabs[activeTabIndex + 1].id);
-      }
-    },
-    onSwipedRight: () => {
-      if (activeTabIndex > 0) {
-        setActiveTab(tabs[activeTabIndex - 1].id);
-      }
-    },
-    preventScrollOnSwipe: true,
-    trackMouse: false
-  });
 
   return (
     <div className={`min-h-screen transition-colors duration-500 ${theme === 'dark' ? 'bg-[#0a0a0c] text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
@@ -172,15 +155,15 @@ function App() {
       </div>
 
       {/* 본문 */}
-      <div className="max-w-6xl mx-auto px-4 pb-24 md:pb-0" {...swipeHandlers}>
+      <div className="max-w-6xl mx-auto px-4 pb-24 md:pb-0">
         <main className="relative min-h-[60vh] overflow-x-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
             >
               {activeTab === 'analysis' ? (
                 <InvestmentAnalysis />
