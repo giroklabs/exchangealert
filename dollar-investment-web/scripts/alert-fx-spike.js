@@ -25,6 +25,11 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 /** 알림 트리거 임계값 (%) */
 const SPIKE_THRESHOLD = 0.5;
+const DXY_THRESHOLD = 0.5;
+const YIELD_DIFF_THRESHOLD = 0.1;
+const FNB_THRESHOLD = -5000;
+const VIX_THRESHOLD = 10;
+const VIX_ABSOLUTE_THRESHOLD = 25;
 
 /** 동일 방향 반복 알림 방지 쿨다운 (분) */
 const COOLDOWN_MINUTES = 30;
@@ -141,6 +146,45 @@ function getRecentHistory(days = 30) {
 
 // ─────────────── 기준 환율 파일 관리 ───────────────
 
+async function getYahooData(ticker) {
+    return await new Promise((resolve) => {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1m&range=1d`;
+        const options = { headers: { 'User-Agent': 'Mozilla/5.0' } };
+        https.get(url, options, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    const result = json.chart?.result?.[0];
+                    if (result?.meta?.regularMarketPrice) {
+                        resolve(parseFloat(result.meta.regularMarketPrice.toFixed(4)));
+                        return;
+                    }
+                    resolve(null);
+                } catch { resolve(null); }
+            });
+        }).on('error', () => resolve(null));
+    });
+}
+
+function getMarketDashboardData() {
+    const dashboardPath = path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json');
+    if (!fs.existsSync(dashboardPath)) return null;
+    try {
+        const json = JSON.parse(fs.readFileSync(dashboardPath, 'utf8'));
+        const fnbObj = json.indicators?.find(i => i.id === 'foreigner-net-buy');
+        const kr10yObj = json.indicators?.find(i => i.id === 'kr-10y');
+        
+        return {
+            fnb: fnbObj ? parseFloat(fnbObj.value.toString().replace(/,/g, '')) : null,
+            kr10y: kr10yObj ? parseFloat(kr10yObj.value) : null
+        };
+    } catch { return null; }
+}
+
+// ─────────────── 기준 상태 관리 ───────────────
+
 function loadLastAlertInfo() {
     if (!fs.existsSync(LAST_ALERT_FILE)) {
         return { rate: null, lastAlertAt: null };
@@ -152,13 +196,16 @@ function loadLastAlertInfo() {
     }
 }
 
-function saveLastAlertInfo(rate, alertAt) {
+function saveLastAlertInfo(state, alertAt) {
     const dir = path.dirname(LAST_ALERT_FILE);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(LAST_ALERT_FILE, JSON.stringify({
-        rate,
-        lastAlertAt: alertAt
-    }, null, 2), 'utf8');
+    
+    // state가 단일 숫자(예전 버전)일 경우 대비
+    const data = typeof state === 'object' && state !== null 
+                 ? { ...state, lastAlertAt: alertAt } 
+                 : { rate: state, lastAlertAt: alertAt };
+                 
+    fs.writeFileSync(LAST_ALERT_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
 // ─────────────── 차트 생성 ───────────────
@@ -330,14 +377,12 @@ async function sendTelegramPhoto(imageBuffer, caption) {
 
 // ─────────────── 메시지 포맷 ───────────────
 
-function buildCaption(currentRate, baseRate, changePct, changeAbs) {
-    const isUp = changePct > 0;
-    const dirEmoji = isUp ? '📈' : '📉';
-    const dirText = isUp ? '상승' : '하락';
-    const sign = isUp ? '+' : '';
-
-    const now = new Date();
-    const kstTime = now.toLocaleString('ko-KR', {
+function buildCaption(currentRate, baseRate, triggers, state) {
+    const changeAbs = currentRate - baseRate;
+    const changePct = (changeAbs / baseRate) * 100;
+    const sign = changePct > 0 ? '+' : '';
+    
+    const kstTime = new Date().toLocaleString('ko-KR', {
         timeZone: 'Asia/Seoul',
         year: 'numeric',
         month: '2-digit',
@@ -347,13 +392,19 @@ function buildCaption(currentRate, baseRate, changePct, changeAbs) {
         hour12: false
     });
 
-    return `🚨 *환율 급변동 감지!*
-━━━━━━━━━━━━━━━━
-${dirEmoji} *방향:* ${dirText} (${sign}${changePct.toFixed(2)}%)
-💲 *현재:* ${currentRate.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}원
-📌 *직전 기준:* ${baseRate.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}원
-🔢 *변동폭:* ${sign}${changeAbs.toFixed(2)}원
-━━━━━━━━━━━━━━━━
+    const triggerLines = triggers.map(t => `- ${t}`).join('\n');
+
+    return `🚨 *매크로 핵심 지표 급변동 감지!*
+━━━━━━━━━━━━━━━━━━━━
+${triggerLines}
+
+[현재 참고 지표]
+💲 원/달러: ${state.rate.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}원 (${sign}${changePct.toFixed(2)}%)
+💵 DXY 인덱스: ${state.dxy || '-'}
+📉 한미 금리차: ${state.yieldDiff !== null ? state.yieldDiff.toFixed(2) + '%p' : '-'}
+🏢 외인 순매수: ${state.fnb !== null ? state.fnb + '억원' : '-'}
+😨 VIX 공포지수: ${state.vix || '-'}
+━━━━━━━━━━━━━━━━━━━━
 ⏰ ${kstTime} KST
 🌐 [대시보드 바로가기](https://giroklabs.github.io/exchangealert/)`;
 }
@@ -361,38 +412,87 @@ ${dirEmoji} *방향:* ${dirText} (${sign}${changePct.toFixed(2)}%)
 // ─────────────── 메인 ───────────────
 
 async function main() {
-    console.log('🚀 환율 급변동 알림 스크립트 시작...');
+    console.log('🚀 환율 및 매크로 지표 급변동 알림 스크립트 시작...');
     console.log(`- Telegram 봇: ${TELEGRAM_TOKEN ? '✅' : '❌ 미설정'}`);
     console.log(`- Chat ID: ${TELEGRAM_CHAT_ID ? '✅' : '❌ 미설정'}`);
 
-    // 1. 현재 환율 조회
+    // 1. 현재 모든 지표 데이터 조회
     const current = await getCurrentRate();
     if (!current) {
         console.error('❌ 현재 환율 조회 실패. 종료합니다.');
-        process.exit(0); // 실패해도 워크플로 성공 처리
+        process.exit(0);
     }
-    console.log(`📊 현재 환율: ${current.rate}원 (소스: ${current.source})`);
+    
+    const dxy = await getYahooData('DX-Y.NYB');
+    const vix = await getYahooData('^VIX');
+    const us10y = await getYahooData('^TNX');
+    const dashboardData = getMarketDashboardData();
 
-    // 2. 직전 기준 환율 로드
+    const currentState = {
+        rate: current.rate,
+        dxy: dxy,
+        vix: vix,
+        yieldDiff: (us10y !== null && dashboardData?.kr10y !== null && dashboardData?.kr10y !== undefined) ? us10y - dashboardData.kr10y : null,
+        fnb: dashboardData?.fnb
+    };
+
+    console.log(`📊 현재 지표 -> USDKRW: ${currentState.rate}, DXY: ${currentState.dxy}, VIX: ${currentState.vix}, 금리차: ${currentState.yieldDiff?.toFixed(2)}%p, 외인순매수: ${currentState.fnb}억`);
+
+    // 2. 직전 기준 지표 로드
     const lastInfo = loadLastAlertInfo();
 
     // 최초 실행 시 기준값 설정 후 종료
     if (!lastInfo.rate) {
-        console.log(`📝 최초 실행 - 현재 환율(${current.rate})을 기준으로 저장합니다.`);
-        saveLastAlertInfo(current.rate, null);
+        console.log(`📝 최초 실행 - 현재 상태를 기준으로 저장합니다.`);
+        saveLastAlertInfo(currentState, null);
         return;
     }
 
-    const baseRate = lastInfo.rate;
+    const triggers = [];
 
-    // 3. 변동률 계산
-    const changeAbs = current.rate - baseRate;
-    const changePct = (changeAbs / baseRate) * 100;
-    console.log(`📉 직전 기준: ${baseRate}원 | 변동: ${changePct.toFixed(3)}% (${changeAbs >= 0 ? '+' : ''}${changeAbs.toFixed(2)}원)`);
+    // USD/KRW Trigger (0.5%)
+    const rateChangeAbs = currentState.rate - lastInfo.rate;
+    const rateChangePct = (rateChangeAbs / lastInfo.rate) * 100;
+    if (Math.abs(rateChangePct) >= SPIKE_THRESHOLD) {
+        triggers.push(`💲 원/달러 환율 (${rateChangePct > 0 ? '+' : ''}${rateChangePct.toFixed(2)}%) 👉 ${currentState.rate}원`);
+    }
 
-    // 4. 임계값 미만이면 종료
-    if (Math.abs(changePct) < SPIKE_THRESHOLD) {
-        console.log(`✅ 변동률 ${Math.abs(changePct).toFixed(3)}% < 임계값 ${SPIKE_THRESHOLD}% — 알림 대상 아님`);
+    // DXY Trigger (0.5%)
+    if (currentState.dxy && lastInfo.dxy) {
+        const dxyChange = ((currentState.dxy - lastInfo.dxy) / lastInfo.dxy) * 100;
+        if (Math.abs(dxyChange) >= DXY_THRESHOLD) {
+            triggers.push(`💵 달러 인덱스 (${dxyChange > 0 ? '+' : ''}${dxyChange.toFixed(2)}%) 👉 ${currentState.dxy.toFixed(2)}`);
+        }
+    }
+
+    // Yield Differential Trigger (0.1%p = 10bp)
+    if (currentState.yieldDiff !== null && lastInfo.yieldDiff !== null) {
+        const diffChange = currentState.yieldDiff - lastInfo.yieldDiff;
+        if (Math.abs(diffChange) >= YIELD_DIFF_THRESHOLD) {
+            triggers.push(`📉 한미 금리차 (${diffChange > 0 ? '+' : ''}${diffChange.toFixed(3)}%p) 👉 ${currentState.yieldDiff.toFixed(2)}%p`);
+        }
+    }
+
+    // Foreigner Net Buy Trigger (Crossing -5000 threshold)
+    if (currentState.fnb !== null && lastInfo.fnb !== null) {
+        if (currentState.fnb <= FNB_THRESHOLD && lastInfo.fnb > FNB_THRESHOLD) {
+            triggers.push(`🚨 외국인 코스피 대규모 순매도 발생 👉 ${currentState.fnb}억원`);
+        }
+    }
+
+    // VIX Trigger (Absolute > 25, or 10% change)
+    if (currentState.vix && lastInfo.vix) {
+        const vixChange = ((currentState.vix - lastInfo.vix) / lastInfo.vix) * 100;
+        if (currentState.vix >= VIX_ABSOLUTE_THRESHOLD && lastInfo.vix < VIX_ABSOLUTE_THRESHOLD) {
+            triggers.push(`😨 VIX 공포지수 ${VIX_ABSOLUTE_THRESHOLD} 돌파! 👉 ${currentState.vix.toFixed(2)}`);
+        } else if (Math.abs(vixChange) >= VIX_THRESHOLD) {
+            triggers.push(`😨 VIX 공포지수 급변동 (${vixChange > 0 ? '+' : ''}${vixChange.toFixed(1)}%) 👉 ${currentState.vix.toFixed(2)}`);
+        }
+    }
+
+    // 4. 임계값 조건 불만족 시 종료
+    if (triggers.length === 0) {
+        console.log(`✅ 트리거된 복합 지표 없음 — 알림 대상 아님`);
         return;
     }
 
@@ -405,22 +505,23 @@ async function main() {
         }
     }
 
-    console.log(`🚨 급변동 감지! ${changePct.toFixed(3)}% 변동 — 알림 발송 시작`);
+    console.log(`🚨 급변동 감지! 알림 발송 시작 (트리거: ${triggers.length}건)`);
+    triggers.forEach(t => console.log(`   ${t}`));
 
-    // 6. 차트 생성
+    // 6. 차트 생성 (USD/KRW 기준 선 차트를 유지. 직관적 상황 파악용)
     console.log('📊 차트 이미지 생성 중...');
     const history = getRecentHistory(30);
-    const chartBuffer = await generateChart(history, current.rate, baseRate, changePct);
+    const chartBuffer = await generateChart(history, currentState.rate, lastInfo.rate, rateChangePct);
     console.log(`✅ 차트 생성 완료 (${Math.round(chartBuffer.length / 1024)}KB)`);
 
     // 7. 텔레그램 전송
-    const caption = buildCaption(current.rate, baseRate, changePct, changeAbs);
+    const caption = buildCaption(currentState.rate, lastInfo.rate, triggers, currentState);
     const success = await sendTelegramPhoto(chartBuffer, caption);
 
-    // 8. 성공 시 기준 환율 업데이트
+    // 8. 성공 시 기준 지표 전체 업데이트 상태 저장
     if (success) {
-        saveLastAlertInfo(current.rate, new Date().toISOString());
-        console.log(`📝 기준 환율 업데이트: ${baseRate} → ${current.rate}`);
+        saveLastAlertInfo(currentState, new Date().toISOString());
+        console.log(`📝 모든 모니터링 기준 지표 업데이트 완료.`);
     }
 
     console.log('🏁 스크립트 완료');
