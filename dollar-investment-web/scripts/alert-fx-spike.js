@@ -24,10 +24,10 @@ const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 /** 알림 트리거 임계값 (%) */
-const SPIKE_THRESHOLD = 0.5;
+const SPIKE_THRESHOLD = 0.0;
 
 /** 동일 방향 반복 알림 방지 쿨다운 (분) */
-const COOLDOWN_MINUTES = 30;
+const COOLDOWN_MINUTES = 0;
 
 /** 기준 환율 저장 파일 경로 */
 const LAST_ALERT_FILE = path.join(__dirname, '..', 'public', 'data', 'last-alert-rate.json');
@@ -229,22 +229,22 @@ async function generateChart(history, currentRate, baseRate, changePct) {
             plugins: {
                 legend: {
                     display: true,
-                    labels: { color: '#cccccc', font: { size: 12 } }
+                    labels: { color: '#cccccc', font: { size: 12, family: "'NanumGothic', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" } }
                 },
                 title: {
                     display: true,
                     text: `USD/KRW 환율 추이 (최근 ${history.length}일)`,
                     color: '#ffffff',
-                    font: { size: 16, weight: 'bold' }
+                    font: { size: 16, weight: 'bold', family: "'NanumGothic', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" }
                 }
             },
             scales: {
                 x: {
-                    ticks: { color: '#aaaaaa', maxRotation: 45, font: { size: 10 } },
+                    ticks: { color: '#aaaaaa', maxRotation: 45, font: { size: 10, family: "'NanumGothic', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" } },
                     grid: { color: 'rgba(255,255,255,0.05)' }
                 },
                 y: {
-                    ticks: { color: '#aaaaaa', font: { size: 11 } },
+                    ticks: { color: '#aaaaaa', font: { size: 11, family: "'NanumGothic', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" } },
                     grid: { color: 'rgba(255,255,255,0.08)' }
                 }
             }

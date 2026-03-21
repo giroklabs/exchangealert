@@ -29,6 +29,7 @@ interface ChartDataItem {
     ma20?: number | null;
     ma60?: number | null;
     fullDate: string;
+    timestamp?: number;
 }
 
 export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean }) {
@@ -85,19 +86,42 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         }
     }, [isLoading, period, intradayData]);
 
+    const customTicks = useMemo(() => {
+        if (period !== '1D' || !intradayData.length) return undefined;
+        
+        const containerWidth = Math.max(800, intradayData.length * 10 * chartScale);
+        const tickGap = 50; 
+        const maxTicks = Math.floor(containerWidth / tickGap);
+        const step = Math.max(1, Math.floor(intradayData.length / maxTicks));
+        
+        const ticks = [];
+        let lastDate = -1;
+        let lastTickIndex = -100;
+
+        for (let i = 0; i < intradayData.length; i++) {
+            const d = intradayData[i];
+            const day = new Date(d.timestamp).getDate();
+            
+            if (day !== lastDate) {
+                ticks.push(d.timestamp);
+                lastDate = day;
+                lastTickIndex = i;
+            } else if (i - lastTickIndex >= step) {
+                ticks.push(d.timestamp);
+                lastTickIndex = i;
+            }
+        }
+        return ticks;
+    }, [intradayData, period, chartScale]);
+
     const chartData = useMemo<ChartDataItem[]>(() => {
         if (period === '1D') {
-            return intradayData.map((d, index) => {
-                const dateObj = new Date(d.timestamp);
-                const prevDateObj = index > 0 ? new Date(intradayData[index - 1].timestamp) : null;
-                const isNewDay = !prevDateObj || dateObj.getDate() !== prevDateObj.getDate();
-                
+            return intradayData.map((d) => {
                 return {
-                    label: isNewDay 
-                        ? `${dateObj.getMonth() + 1}/${dateObj.getDate()} ${d.time}`
-                        : d.time,
+                    label: d.time,
                     rate: d.rate,
-                    fullDate: d.fullTime
+                    fullDate: d.fullTime,
+                    timestamp: d.timestamp
                 };
             });
         }
@@ -204,7 +228,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                                 : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                 }`}
                         >
-                            {p === '1D' ? '실시간(7일)' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
+                            {p === '1D' ? '1일' : p === '1W' ? '1주' : p === '1M' ? '1개월' : p === '1Y' ? '1년' : '전체'}
                         </button>
                     ))}
                     <div className="w-px h-4 bg-gray-300 dark:bg-gray-700 mx-1"></div>
@@ -290,12 +314,20 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
                                 <XAxis
-                                    dataKey="label"
+                                    dataKey="timestamp"
+                                    ticks={customTicks}
+                                    tickFormatter={(val) => {
+                                        const dObj = new Date(val);
+                                        const day = dObj.getDate();
+                                        const isFirstOfDay = intradayData.find(d => new Date(d.timestamp).getDate() === day)?.timestamp === val;
+                                        if (isFirstOfDay) return `${dObj.getMonth() + 1}/${day}`;
+                                        const item = intradayData.find(d => d.timestamp === val);
+                                        return item ? item.time : `${dObj.getHours()}:${dObj.getMinutes()}`;
+                                    }}
                                     stroke={textColor}
                                     fontSize={11}
                                     tickLine={false}
                                     axisLine={false}
-                                    minTickGap={30}
                                 />
                                 <YAxis
                                     domain={[yMin, yMax]}
@@ -314,6 +346,10 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                                         borderRadius: '12px',
                                         boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                                         color: isDark ? '#ffffff' : '#000000'
+                                    }}
+                                    labelFormatter={(val) => {
+                                        const dItem = chartData.find(d => d.timestamp === val);
+                                        return dItem ? dItem.fullDate : val;
                                     }}
                                     formatter={(value: number) => [`${value.toLocaleString()} 원`, '환율']}
                                     labelStyle={{ color: textColor, marginBottom: '4px' }}
@@ -337,7 +373,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                                     fontSize={11}
                                     tickLine={false}
                                     axisLine={false}
-                                    minTickGap={30}
+                                    minTickGap={40}
                                 />
                                 <YAxis
                                     domain={[yMin, yMax]}

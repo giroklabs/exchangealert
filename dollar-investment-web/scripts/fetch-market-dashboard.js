@@ -891,6 +891,29 @@ ${strategy}
 
 async function main() {
     console.log('🚀 2026년 실시간 데이터 수집 시작...');
+
+    // API 키 누락 시 UI가 텅 비어보이지 않도록 시각적 그래프용 가상 히스토리(history) 데이터 포함
+    const fallbacks = {
+        'bok-rate': { value: '2.50', trend: 'neutral', history: [{ date: '2025-08', value: 2.5 }, { date: '2025-09', value: 2.5 }, { date: '2025-10', value: 2.5 }, { date: '2025-11', value: 2.5 }, { date: '2025-12', value: 2.5 }, { date: '2026-01', value: 2.5 }, { date: '2026-02', value: 2.5 }] },
+        'kr-cpi': { value: '2.8', trend: 'down', history: [{ date: '2025-12', value: 3.2 }, { date: '2026-01', value: 3.1 }, { date: '2026-02', value: 2.9 }, { date: '2026-03', value: 2.8 }] },
+        'kr-gdp': { value: '2.6', trend: 'up', history: [{ date: '2024Q4', value: 1.7 }, { date: '2025Q1', value: 2.0 }, { date: '2025Q2', value: 2.3 }, { date: '2026Q1', value: 2.6 }] },
+        'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
+        'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
+        'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
+        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
+        'bamlh0a0hym2': { value: '3.10', trend: 'up', history: [{ date: '2026-03-10', value: 2.90 }, { date: '2026-03-11', value: 2.95 }, { date: '2026-03-12', value: 3.05 }, { date: '2026-03-13', value: 3.10 }] },
+        'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
+
+        'investor-deposits': { value: '555786', trend: 'up', history: [{ date: '202501', value: 555786 }, { date: '202502', value: 560529 }, { date: '202503', value: 584743 }] },
+        'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '2025-12-01', value: 3.5 }, { date: '2026-01-01', value: 3.5 }] },
+        'short-debt-ratio': { value: '23.3', trend: 'up', history: [{ date: '2025Q2', value: 22.7 }, { date: '2025Q3', value: 21.9 }, { date: '2025Q4', value: 23.3 }] },
+        'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.08 }, { date: '2026-03-11', value: 0.09 }, { date: '2026-03-12', value: 0.09 }, { date: '2026-03-13', value: 0.09 }] },
+        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] },
+        'sofr': { value: '5.31', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.31 }, { date: '2026-03-11', value: 5.31 }, { date: '2026-03-12', value: 5.31 }, { date: '2026-03-13', value: 5.31 }] },
+        'effr': { value: '5.33', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.33 }, { date: '2026-03-11', value: 5.33 }, { date: '2026-03-12', value: 5.33 }, { date: '2026-03-13', value: 5.33 }] },
+        'dtb3': { value: '5.25', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.24 }, { date: '2026-03-11', value: 5.25 }, { date: '2026-03-12', value: 5.25 }, { date: '2026-03-13', value: 5.25 }] }
+    };
+
     const indicators = [];
     const kisToken = await getKisAccessToken();
     // 블록별 점수 합산용 (정규화용)
@@ -980,27 +1003,6 @@ async function main() {
         }
     }
 
-    // API 키 누락 시 UI가 텅 비어보이지 않도록 시각적 그래프용 가상 히스토리(history) 데이터 포함
-    const fallbacks = {
-        'bok-rate': { value: '2.50', trend: 'neutral', history: [{ date: '2025-08', value: 2.5 }, { date: '2025-09', value: 2.5 }, { date: '2025-10', value: 2.5 }, { date: '2025-11', value: 2.5 }, { date: '2025-12', value: 2.5 }, { date: '2026-01', value: 2.5 }, { date: '2026-02', value: 2.5 }] },
-        'kr-cpi': { value: '2.8', trend: 'down', history: [{ date: '2025-12', value: 3.2 }, { date: '2026-01', value: 3.1 }, { date: '2026-02', value: 2.9 }, { date: '2026-03', value: 2.8 }] },
-        'kr-gdp': { value: '2.6', trend: 'up', history: [{ date: '2024Q4', value: 1.7 }, { date: '2025Q1', value: 2.0 }, { date: '2025Q2', value: 2.3 }, { date: '2026Q1', value: 2.6 }] },
-        'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
-        'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
-        'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
-        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
-        'bamlh0a0hym2': { value: '3.10', trend: 'up', history: [{ date: '2026-03-10', value: 2.90 }, { date: '2026-03-11', value: 2.95 }, { date: '2026-03-12', value: 3.05 }, { date: '2026-03-13', value: 3.10 }] },
-        'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
-
-        'investor-deposits': { value: '555786', trend: 'up', history: [{ date: '202501', value: 555786 }, { date: '202502', value: 560529 }, { date: '202503', value: 584743 }] },
-        'bok-rate': { value: '3.50', trend: 'neutral', history: [{ date: '2025-12-01', value: 3.5 }, { date: '2026-01-01', value: 3.5 }] },
-        'short-debt-ratio': { value: '23.3', trend: 'up', history: [{ date: '2025Q2', value: 22.7 }, { date: '2025Q3', value: 21.9 }, { date: '2025Q4', value: 23.3 }] },
-        'ted-spread': { value: '0.09', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.08 }, { date: '2026-03-11', value: 0.09 }, { date: '2026-03-12', value: 0.09 }, { date: '2026-03-13', value: 0.09 }] },
-        'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] },
-        'sofr': { value: '5.31', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.31 }, { date: '2026-03-11', value: 5.31 }, { date: '2026-03-12', value: 5.31 }, { date: '2026-03-13', value: 5.31 }] },
-        'effr': { value: '5.33', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.33 }, { date: '2026-03-11', value: 5.33 }, { date: '2026-03-12', value: 5.33 }, { date: '2026-03-13', value: 5.33 }] },
-        'dtb3': { value: '5.25', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.24 }, { date: '2026-03-11', value: 5.25 }, { date: '2026-03-12', value: 5.25 }, { date: '2026-03-13', value: 5.25 }] }
-    };
 
     for (const item of ECOS_SERIES) {
         // 단기외채 비중은 커스텀 fetch 사용 (두 항목을 나눠서 비중 계산)
