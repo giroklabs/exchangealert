@@ -188,10 +188,11 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         );
     }
 
-    // 데이터 포인트 개수에 따라 동적 너비 계산
-    const dynamicWidth = period === '1D' 
-        ? `max(100%, ${Math.max(800, chartData.length * 10 * chartScale)}px)` // 7일 데이터이므로 밀도를 약간 낮춤 (15px -> 10px)
-        : (chartScale > 1.0 ? `${100 * chartScale}%` : '100%');
+    // 데이터 포인트 개수에 따라 동적 너비 설정을 분리 (CSS max 버그 방지)
+    const dynamicWidth = chartScale > 1.0 ? `${100 * chartScale}%` : '100%';
+    const dynamicMinWidth = period === '1D' 
+        ? `${Math.max(800, chartData.length * 10 * chartScale)}px` 
+        : undefined;
 
     return (
         <div className={`p-6 ${!isEmbedded ? `rounded-2xl shadow-xl border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}` : ''}`}>
@@ -304,7 +305,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                 onTouchStart={(e) => e.stopPropagation()}
                 onTouchMove={(e) => e.stopPropagation()}
             >
-                <div style={{ width: dynamicWidth, height: '100%', minHeight: '300px' }}>
+                <div style={{ width: dynamicWidth, minWidth: dynamicMinWidth, height: '100%', minHeight: '300px' }}>
                     <ResponsiveContainer width="100%" height="100%">
                         {period === '1D' ? (
                             <AreaChart data={chartData} margin={{ top: 10, right: 50, left: 0, bottom: 0 }}>
