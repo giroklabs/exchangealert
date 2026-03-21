@@ -121,29 +121,29 @@ function App() {
   return (
     <div className={`min-h-screen transition-colors duration-500 ${theme === 'dark' ? 'bg-[#0a0a0c] text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
       {/* 헤더 */}
-      <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-8">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+      <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-8 w-full">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8 w-full">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full md:w-auto">
-            <div onClick={() => window.location.reload()} className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
-              <img src={logo} alt="로장보로" className="w-8 h-8 md:w-10 md:h-10 rounded-xl shadow-sm" />
-              <h1 className={`text-xl md:text-2xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+            <div onClick={() => window.location.reload()} className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+              <img src={logo} alt="로장보로" className="w-8 h-8 md:w-10 md:h-10 rounded-xl shadow-sm flex-shrink-0" />
+              <h1 className={`text-xl md:text-2xl font-black tracking-tight whitespace-nowrap flex-shrink-0 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 달러 인베스트
               </h1>
             </div>
             {currentRateInfo && (
-              <div className={`text-xs md:text-sm font-bold flex items-center mt-1 sm:mt-0 pt-0 sm:pt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                <span className={`text-sm md:text-base mr-1 ${theme === 'dark' ? 'text-yellow-400' : 'text-blue-600'}`}>
+              <div className={`text-xs md:text-sm font-bold flex items-center pt-1 sm:pt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                <span className={`text-sm md:text-base mr-1 whitespace-nowrap ${theme === 'dark' ? 'text-yellow-400' : 'text-blue-600'}`}>
                   원/달러 {currentRateInfo.rate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
                 </span>
-                <span className="text-[10px] md:text-xs font-medium whitespace-nowrap">({currentRateInfo.time})</span>
+                <span className="text-xs font-medium whitespace-nowrap">({currentRateInfo.time})</span>
               </div>
             )}
           </div>
-          <div className="flex items-center gap-3 flex-shrink-0 self-end md:self-auto -mt-10 sm:-mt-12 md:mt-0">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
             {isAdmin && (
               <button
                 onClick={() => setShowDevDashboard(true)}
-                className={`p-2 rounded-xl transition-all font-bold text-xs flex items-center gap-1.5 border ${
+                className={`p-2 rounded-xl transition-all font-bold text-xs flex items-center gap-1.5 border flex-shrink-0 ${
                   theme === 'dark' 
                   ? 'bg-gray-800 border-gray-700 text-blue-400 hover:bg-gray-700' 
                   : 'bg-white border-gray-200 text-blue-600 hover:bg-gray-50'
@@ -153,11 +153,11 @@ function App() {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
-                <span className="hidden md:inline">개발자 화면</span>
+                <span className="hidden sm:inline">개발자 화면</span>
               </button>
             )}
-            <UserProfile />
-            <ThemeToggle />
+            <div className="flex-shrink-0"><UserProfile /></div>
+            <div className="flex-shrink-0"><ThemeToggle /></div>
           </div>
         </header>
       </div>

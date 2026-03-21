@@ -301,11 +301,13 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
             <div 
                 ref={scrollContainerRef}
                 className="h-[350px] w-full overflow-x-auto overflow-y-hidden chart-scrollbar"
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
             >
                 <div style={{ width: dynamicWidth, height: '100%', minHeight: '300px' }}>
                     <ResponsiveContainer width="100%" height="100%">
                         {period === '1D' ? (
-                            <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                            <AreaChart data={chartData} margin={{ top: 10, right: 50, left: 0, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorRateUni" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor={accentColor} stopOpacity={0.2} />
@@ -365,7 +367,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
                                 />
                             </AreaChart>
                         ) : (
-                            <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                            <LineChart data={chartData} margin={{ top: 10, right: 50, left: 0, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
                                 <XAxis
                                     dataKey="label"
