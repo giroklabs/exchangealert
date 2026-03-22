@@ -64,10 +64,14 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.5",
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "99.65",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
+        {
+          "date": "2026-03-09",
+          "value": 119.5151
+        },
         {
           "date": "2026-03-10",
           "value": 118.7255
@@ -103,10 +107,6 @@
         {
           "date": "2026-03-20",
           "value": 99.65
-        },
-        {
-          "date": "2026-03-20",
-          "value": 99.5
         }
       ]
     },
@@ -1286,22 +1286,22 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 52,
-    "downProb": 48,
+    "upProb": 54,
+    "downProb": 46,
     "timeframes": {
       "d1": {
-        "upProb": 76,
-        "downProb": 24,
+        "upProb": 77,
+        "downProb": 23,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 61,
-        "downProb": 39,
+        "upProb": 62,
+        "downProb": 38,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 51,
-        "downProb": 49,
+        "upProb": 52,
+        "downProb": 48,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 스토캐스틱의 극심한 과매수(98.4%)로 단기 조정 압력이 크지만, MACD 양수, 외국인 순매도, VIX 상승이 상방 모멘텀을 유지시키고 있습니다. DXY 하락에도 불구하고 내일은 변동성 속 소폭 하락 또는 보합 가능성이 높습니다.\n\n주간 추세는 20일 이동평균선이 보여주듯 상승 우세합니다. 한미 금리차 확대, 경상수지 악화, 단기 외채 증가 등 거시 요인들이 원화 약세를 지지합니다. 기술적 과열과 VIX, 하이일드 스프레드 확대의 복합 신호는 단기 급변동 또는 조정을 경고하지만, 전반적인 달러 강세 기조는 이어질 것입니다.\n\n실전 투자 대응: 단기 조정 시 1490원 초반 매수, 1500원 중후반 매도. 추천 진입 시간은 09:00~11:00, 14:00~16:00. 결론: 상승 우세",
     "lastAiUpdate": 1774149086113,
     "score": {
-      "upScore": 38.06409049765398,
-      "downScore": 34.95613530057524
+      "upScore": 39.4763437523891,
+      "downScore": 33.26469252922259
     }
   },
   "technicals": {
@@ -1352,5 +1352,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 22. AM 3:57:40"
+  "lastUpdate": "2026. 3. 22. AM 4:02:52"
 }
