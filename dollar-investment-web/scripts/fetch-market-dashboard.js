@@ -145,6 +145,47 @@ function getFreshnessMultiplier(cycle) {
 // --- 기술적 지표 계산 유틸리티 ---
 // 입력: closes = [최신, ..., 과거] 순서의 종가 배열
 
+function calculateMACD(closes) {
+    if (!closes || closes.length < 35) return null;
+    const prices = [...closes].reverse(); // 과거->최신
+    const ema = (data, p) => {
+        let k = 2 / (p + 1);
+        let emaArray = [data[0]];
+        for (let i = 1; i < data.length; i++) {
+            emaArray.push(data[i] * k + emaArray[i - 1] * (1 - k));
+        }
+        return emaArray;
+    };
+    const ema12 = ema(prices, 12);
+    const ema26 = ema(prices, 26);
+    const macdLine = [];
+    for(let i=0; i<prices.length; i++) {
+        macdLine.push(ema12[i] - ema26[i]);
+    }
+    const signalLine = ema(macdLine, 9);
+    
+    const latestMacd = parseFloat(macdLine[macdLine.length - 1].toFixed(2));
+    const latestSignal = parseFloat(signalLine[signalLine.length - 1].toFixed(2));
+    return { macd: latestMacd, signal: latestSignal, hist: parseFloat((latestMacd - latestSignal).toFixed(2)) };
+}
+
+function calculateStochastic(historyData, period = 14) {
+    if (!historyData || historyData.length < period) return null;
+    // historyData는 최신->과거 순서
+    const recent = historyData.slice(0, period);
+    const currentClose = recent[0].close;
+    const highs = recent.map(d => parseFloat(d.high)).filter(h => !isNaN(h));
+    const lows = recent.map(d => parseFloat(d.low)).filter(l => !isNaN(l));
+    
+    if (highs.length === 0 || lows.length === 0) return null;
+    const highestHigh = Math.max(...highs);
+    const lowestLow = Math.min(...lows);
+    
+    if (highestHigh === lowestLow) return { k: 50 };
+    const fastK = ((currentClose - lowestLow) / (highestHigh - lowestLow)) * 100;
+    return { k: parseFloat(fastK.toFixed(1)) };
+}
+
 function calculateRSI(closes, period = 14) {
     if (!closes || closes.length < period + 1) return null;
     // RSI 계산용: 과거→최신 순으로 변환
@@ -645,6 +686,8 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         techSection = `
 기술적 환율 지표 (USD/KRW):
 - RSI(14일): ${rsi14} → ${rsiSignal}
+- MACD: MACD=${technicals.macd?.macd || 'N/A'}, Signal=${technicals.macd?.signal || 'N/A'}, Hist=${technicals.macd?.hist || 'N/A'}
+- Stochastic(14): %K=${technicals.stochastic?.k || 'N/A'}%
 - 이동평균: MA5=${ma5}원, MA20=${ma20}원, MA60=${ma60}원 (${maSignal})
 - 볼린저밴드: 상단=${bb?.upper}원 / 중단=${bb?.mid}원 / 하단=${bb?.lower}원 (밴드폭=${bb?.bandwidth}%)
 - 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
@@ -673,7 +716,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 원/달러 환율 방향성을 한국어로 심층 분석해주세요.
 
-연구 자료에 따르면 환율 결정의 최우선 순위는 '한·미 금리차'와 '달러 인덱스'입니다. 또한 VIX(전이 위험)와 외국인 수급(자본 흐름)을 결합하여 리스크 온/오프 국면을 판단해 주세요.
+연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다.
 
 분석 대상 지표:
 ${blockSummary}
@@ -684,12 +727,11 @@ ${backtestSection}
 ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
 분석 가이드:
-1. [금리·달러] 블록을 통해 캐리 매력도와 글로벌 달러 사이클의 방향성을 진단하세요.
-2. [기술적 분석] RSI, 이동평균, 볼린저밴드, 지지/저항을 활용해 단기 환율의 과매수/과매도 및 추세 지속성을 판단하세요.
-3. [복합 신호] 동시 발생한 위험 신호가 있다면 이를 반드시 강조하세요.
-4. [펀딩·정책] 및 [투자 전략]을 종합하여 실전 달러 투자 전략을 간략히 제시하세요. (목표가 가이드 포함)
-
-응답은 전문적이고 분석적인 톤으로 **최대한 간결하게 2~3개 단락**으로 작성하세요 (공백 포함 500자 내외). 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요. 마지막 단락은 반드시 "실전 투자 대응:"으로 시작하고, 끝에 "결론: [상승/하락/보합] 우세"라고 적어주세요.`;
+1. [단기(1D) 예측]: 철저히 기술적 지표(MACD 역전 여부, Stochastic), 당일 외국인 수급 강도, 실시간 DXY 변화율에 압도적인 가중치를 부여하여 내일의 환율 방향(상승/하락)을 직설적으로 적어주세요.
+2. [주간(1W) 예측]: 이번 주 예정된 매크로 펀더멘털(물가, 금리, 무역수지) 및 MA20 추세를 결합하여 주간 관점의 추세를 제시하세요.
+3. [위험 신호]: 동시 발생한 위험 신호(복합 신호)가 있다면 즉시 이를 경고하세요.
+4. 응답은 지표 나열을 자제하고 오직 결론 위주의 **간결한 2~3개 단락 (500자 이내)**로 작성하세요. 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요.
+5. 마지막 문장은 반드시 "실전 투자 대응: [한줄 대응전략 요약]. 결론: [상승/하락/보합] 우세" 포맷을 엄격하게 지켜주세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -1280,8 +1322,11 @@ async function main() {
             const bb       = calculateBB(closes, 20);
             const momentum = calculateMomentum(closes);
             const levels   = detectKeyLevels(fxHist.data);
-            technicals = { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels: levels };
+            const macd     = calculateMACD(closes);
+            const stochastic = calculateStochastic(fxHist.data, 14);
+            technicals = { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels: levels, macd, stochastic };
             console.log(`📐 [Tech] RSI14=${rsi14}, MA5=${ma5}, MA20=${ma20}, MA60=${ma60}`);
+            console.log(`📐 [Tech] MACD=${macd?.hist}, Stochastic=%K ${stochastic?.k}%`);
             console.log(`📐 [Tech] BB(상단=${bb?.upper}, 하단=${bb?.lower}), 지지=${levels.support}, 저항=${levels.resistance}`);
             console.log(`📐 [Tech] 모멘텀: 1일=${momentum.d1}%, 5일=${momentum.d5}%, 20일=${momentum.d20}%`);
         }
@@ -1533,10 +1578,10 @@ async function main() {
         const assetsBlock = blockScores['assets'];
         const fundBlock  = blockScores['funding-policy'];
 
-        // 기술적 점수: RSI 50 기준 편차, 모멘텀 방향 반영
+        // 기술적 점수: 초단기 지표(MACD, Stochastic) 가중 추가
         let techUp = 0, techDown = 0;
         if (technicals) {
-            const { rsi14, momentum } = technicals;
+            const { rsi14, momentum, macd, stochastic } = technicals;
             if (rsi14 !== null) {
                 if (rsi14 > 60) techUp += (rsi14 - 50) / 50;
                 else if (rsi14 < 40) techDown += (50 - rsi14) / 50;
@@ -1544,6 +1589,16 @@ async function main() {
             if (momentum?.d5 !== null) {
                 if (momentum.d5 > 0) techUp += Math.abs(momentum.d5) * 0.5;
                 else techDown += Math.abs(momentum.d5) * 0.5;
+            }
+            // MACD 히스토그램 반영 (초단기 추세강도)
+            if (macd?.hist !== undefined && macd.hist !== null) {
+                if (macd.hist > 0) techUp += Math.abs(macd.hist) * 2.0; 
+                else techDown += Math.abs(macd.hist) * 2.0;
+            }
+            // Stochastic %K 반영 (과매도 반전 매수, 과매수 반전 매도)
+            if (stochastic?.k !== undefined && stochastic.k !== null) {
+                if (stochastic.k < 20) techUp += ((20 - stochastic.k) / 20) * 1.5; // 침체권 바닥 지지 반등
+                else if (stochastic.k > 80) techDown += ((stochastic.k - 80) / 20) * 1.5; // 과열권 천장 저항 하락
             }
         }
         const macroUp   = (Math.log1p(ratesBlock.up + riskBlock.up) + Math.log1p(assetsBlock.up)) * 3;
@@ -1558,8 +1613,8 @@ async function main() {
         };
 
         timeframes = {
-            d1:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.7, macro: 0.3, ecos: 0.0 }), basis: '기술적지표+실시간거시' },
-            d5:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.3, macro: 0.7, ecos: 0.0 }), basis: '거시지표+수급중심' },
+            d1:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.85, macro: 0.15, ecos: 0.0 }), basis: '초단기 기술적지표(MACD/Stoch)+실시간거시강조' },
+            d5:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.4, macro: 0.6, ecos: 0.0 }), basis: '모멘텀+수급·달러사이클중심' },
             d20: { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.1, macro: 0.45, ecos: 0.45 }), basis: 'ECOS+경상·외환중심' }
         };
         console.log(`📊 [Timeframe] 1일: 상승${timeframes.d1.upProb}% | 5일: 상승${timeframes.d5.upProb}% | 20일: 상승${timeframes.d20.upProb}%`);

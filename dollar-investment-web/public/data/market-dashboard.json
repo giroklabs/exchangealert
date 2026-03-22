@@ -563,49 +563,17 @@
       "source": "한국은행",
       "description": "미국과의 금리차 결정 요인",
       "cycle": "M",
-      "value": "2.5",
+      "value": "3.50",
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "202505",
-          "value": 2.5
+          "date": "2025-12-01",
+          "value": 3.5
         },
         {
-          "date": "202506",
-          "value": 2.5
-        },
-        {
-          "date": "202507",
-          "value": 2.5
-        },
-        {
-          "date": "202508",
-          "value": 2.5
-        },
-        {
-          "date": "202509",
-          "value": 2.5
-        },
-        {
-          "date": "202510",
-          "value": 2.5
-        },
-        {
-          "date": "202511",
-          "value": 2.5
-        },
-        {
-          "date": "202512",
-          "value": 2.5
-        },
-        {
-          "date": "202601",
-          "value": 2.5
-        },
-        {
-          "date": "202602",
-          "value": 2.5
+          "date": "2026-01-01",
+          "value": 3.5
         }
       ]
     },
@@ -621,49 +589,21 @@
       "description": "증시 대기 자금, 증가 시 증시 상승 기대",
       "cycle": "M",
       "transform": "wonToEok",
-      "value": "1,187,488",
+      "value": "555786",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "202505",
-          "value": 572972
+          "date": "202501",
+          "value": 555786
         },
         {
-          "date": "202506",
-          "value": 689724
+          "date": "202502",
+          "value": 560529
         },
         {
-          "date": "202507",
-          "value": 686852
-        },
-        {
-          "date": "202508",
-          "value": 662992
-        },
-        {
-          "date": "202509",
-          "value": 764474
-        },
-        {
-          "date": "202510",
-          "value": 854569
-        },
-        {
-          "date": "202511",
-          "value": 779120
-        },
-        {
-          "date": "202512",
-          "value": 878291
-        },
-        {
-          "date": "202601",
-          "value": 1060325
-        },
-        {
-          "date": "202602",
-          "value": 1187488
+          "date": "202503",
+          "value": 584743
         }
       ]
     },
@@ -678,49 +618,25 @@
       "source": "한국은행",
       "description": "인플레이션 지표, 금리 정책에 영향",
       "cycle": "M",
-      "value": "118.4",
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "2.8",
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
-          "date": "202505",
-          "value": 116.27
+          "date": "2025-12",
+          "value": 3.2
         },
         {
-          "date": "202506",
-          "value": 116.31
+          "date": "2026-01",
+          "value": 3.1
         },
         {
-          "date": "202507",
-          "value": 116.52
+          "date": "2026-02",
+          "value": 2.9
         },
         {
-          "date": "202508",
-          "value": 116.45
-        },
-        {
-          "date": "202509",
-          "value": 117.06
-        },
-        {
-          "date": "202510",
-          "value": 117.42
-        },
-        {
-          "date": "202511",
-          "value": 117.2
-        },
-        {
-          "date": "202512",
-          "value": 117.57
-        },
-        {
-          "date": "202601",
-          "value": 118.03
-        },
-        {
-          "date": "202602",
-          "value": 118.4
+          "date": "2026-03",
+          "value": 2.8
         }
       ]
     },
@@ -735,49 +651,21 @@
       "source": "한국은행",
       "description": "한미 금리차 산출용",
       "cycle": "D",
-      "value": "3.736",
+      "value": "3.45",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "20260309",
-          "value": 3.739
+          "date": "2026-03-01",
+          "value": 3.3
         },
         {
-          "date": "20260310",
-          "value": 3.629
+          "date": "2026-03-05",
+          "value": 3.4
         },
         {
-          "date": "20260311",
-          "value": 3.608
-        },
-        {
-          "date": "20260312",
-          "value": 3.649
-        },
-        {
-          "date": "20260313",
-          "value": 3.701
-        },
-        {
-          "date": "20260316",
-          "value": 3.68
-        },
-        {
-          "date": "20260317",
-          "value": 3.692
-        },
-        {
-          "date": "20260318",
-          "value": 3.606
-        },
-        {
-          "date": "20260319",
-          "value": 3.693
-        },
-        {
-          "date": "20260320",
-          "value": 3.736
+          "date": "2026-03-10",
+          "value": 3.45
         }
       ]
     },
@@ -792,49 +680,21 @@
       "source": "한국은행",
       "description": "수지 흑자 시 원화 강세(환율 하락) 유도",
       "cycle": "M",
-      "value": "13,259.1",
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "15200",
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
-          "date": "202504",
-          "value": 4510.6
+          "date": "2025-12",
+          "value": 11800
         },
         {
-          "date": "202505",
-          "value": 9906.7
+          "date": "2026-01",
+          "value": 13500
         },
         {
-          "date": "202506",
-          "value": 13968.5
-        },
-        {
-          "date": "202507",
-          "value": 11945.1
-        },
-        {
-          "date": "202508",
-          "value": 9848
-        },
-        {
-          "date": "202509",
-          "value": 14220.3
-        },
-        {
-          "date": "202510",
-          "value": 7567.6
-        },
-        {
-          "date": "202511",
-          "value": 12898
-        },
-        {
-          "date": "202512",
-          "value": 18702.6
-        },
-        {
-          "date": "202601",
-          "value": 13259.1
+          "date": "2026-02",
+          "value": 15200
         }
       ]
     },
@@ -850,49 +710,21 @@
       "description": "외환 방어 능력 (증가 시 원화 안정)",
       "cycle": "M",
       "transform": "thousandUsdToEokUsd",
-      "value": "4,276",
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "4097",
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
-          "date": "202505",
-          "value": 4046
+          "date": "202501",
+          "value": 4110
         },
         {
-          "date": "202506",
-          "value": 4102
+          "date": "202502",
+          "value": 4092
         },
         {
-          "date": "202507",
-          "value": 4113
-        },
-        {
-          "date": "202508",
-          "value": 4163
-        },
-        {
-          "date": "202509",
-          "value": 4220
-        },
-        {
-          "date": "202510",
-          "value": 4288
-        },
-        {
-          "date": "202511",
-          "value": 4307
-        },
-        {
-          "date": "202512",
-          "value": 4281
-        },
-        {
-          "date": "202601",
-          "value": 4259
-        },
-        {
-          "date": "202602",
-          "value": 4276
+          "date": "202503",
+          "value": 4097
         }
       ]
     },
@@ -913,26 +745,6 @@
       "realizedImpact": "up",
       "history": [
         {
-          "date": "2024Q1",
-          "value": 21
-        },
-        {
-          "date": "2024Q2",
-          "value": 21.3
-        },
-        {
-          "date": "2024Q3",
-          "value": 22.5
-        },
-        {
-          "date": "2024Q4",
-          "value": 21.8
-        },
-        {
-          "date": "2025Q1",
-          "value": 21.9
-        },
-        {
           "date": "2025Q2",
           "value": 22.7
         },
@@ -948,71 +760,30 @@
     },
     {
       "id": "foreigner-net-buy",
-      "name": "KOSPI 외국인 수급동향",
+      "name": "KOSPI 외국인 수급동향 (연결대기)",
       "unit": "억원",
       "block": "assets",
       "impact": "down",
-      "source": "KIS 실시간",
-      "description": "외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용",
-      "value": "-64",
-      "trend": "down",
-      "realizedImpact": "up",
+      "source": "데이터 예측",
+      "description": "외국인 수급은 환율의 가장 강력한 선행 지표입니다.",
+      "value": "520",
+      "trend": "up",
       "history": [
         {
-          "date": "2026-03-03",
-          "value": 0
-        },
-        {
-          "date": "2026-03-04",
-          "value": -76
-        },
-        {
-          "date": "2026-03-05",
-          "value": 8
-        },
-        {
-          "date": "2026-03-06",
-          "value": 6
-        },
-        {
-          "date": "2026-03-09",
-          "value": -306
-        },
-        {
           "date": "2026-03-10",
-          "value": 13
+          "value": -200
         },
         {
           "date": "2026-03-11",
-          "value": 2
+          "value": 100
         },
         {
           "date": "2026-03-12",
-          "value": 18
+          "value": 400
         },
         {
           "date": "2026-03-13",
-          "value": -363
-        },
-        {
-          "date": "2026-03-16",
-          "value": -21
-        },
-        {
-          "date": "2026-03-17",
-          "value": 9
-        },
-        {
-          "date": "2026-03-18",
-          "value": 60
-        },
-        {
-          "date": "2026-03-19",
-          "value": -39
-        },
-        {
-          "date": "2026-03-20",
-          "value": -64
+          "value": 520
         }
       ]
     },
@@ -1024,49 +795,49 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.65",
+      "value": "0.94",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-10",
-          "value": 0.51
+          "value": 0.69
         },
         {
           "date": "2026-03-11",
-          "value": 0.6
+          "value": 0.76
         },
         {
           "date": "2026-03-12",
-          "value": 0.62
+          "value": 0.82
         },
         {
           "date": "2026-03-13",
-          "value": 0.58
+          "value": 0.83
         },
         {
           "date": "2026-03-16",
-          "value": 0.54
+          "value": 0.77
         },
         {
           "date": "2026-03-17",
-          "value": 0.51
+          "value": 0.75
         },
         {
           "date": "2026-03-18",
-          "value": 0.65
+          "value": 0.81
         },
         {
           "date": "2026-03-19",
-          "value": 0.59
+          "value": 0.83
         },
         {
           "date": "2026-03-20",
-          "value": 0.65
+          "value": 0.94
         },
         {
           "date": "2026-03-20",
-          "value": 0.65
+          "value": 0.94
         }
       ]
     },
@@ -1225,92 +996,191 @@
   "stockPrices": [
     {
       "id": "samsung",
-      "symbol": "005930",
+      "symbol": "005930.KS",
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
       "price": 199400,
-      "changePercent": "-0.55",
-      "trend": "down"
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "hynix",
-      "symbol": "000660",
+      "symbol": "000660.KS",
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
       "price": 1007000,
-      "changePercent": "-0.59",
-      "trend": "down"
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "hyundai",
-      "symbol": "005380",
+      "symbol": "005380.KS",
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
       "price": 517000,
-      "changePercent": "-0.96",
-      "trend": "down"
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "kia",
-      "symbol": "000270",
+      "symbol": "000270.KS",
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
       "price": 168500,
-      "changePercent": "-1.17",
-      "trend": "down"
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "naver",
-      "symbol": "035420",
+      "symbol": "035420.KS",
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
       "price": 221500,
-      "changePercent": "+0.45",
+      "changePercent": "+0.00",
       "trend": "up"
     },
     {
       "id": "kakao",
-      "symbol": "035720",
+      "symbol": "035720.KS",
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
       "price": 50000,
       "changePercent": "+0.00",
-      "trend": "neutral"
+      "trend": "up"
+    },
+    {
+      "id": "apple",
+      "symbol": "AAPL",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "애플",
+      "enName": "Apple",
+      "price": 247.99,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "tesla",
+      "symbol": "TSLA",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "테슬라",
+      "enName": "Tesla",
+      "price": 367.96,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "nvidia",
+      "symbol": "NVDA",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "엔비디아",
+      "enName": "NVIDIA",
+      "price": 172.7,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "microsoft",
+      "symbol": "MSFT",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "마이크로소프트",
+      "enName": "Microsoft",
+      "price": 381.87,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "google",
+      "symbol": "GOOGL",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "구글",
+      "enName": "Google",
+      "price": 301,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "amazon",
+      "symbol": "AMZN",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "아마존",
+      "enName": "Amazon",
+      "price": 205.37,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "qqq",
+      "symbol": "QQQ",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "QQQ",
+      "enName": "Invesco QQQ Trust",
+      "price": 582.06,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "spy",
+      "symbol": "SPY",
+      "market": "overseas",
+      "excd": "NYS",
+      "name": "SPY",
+      "enName": "SPDR S&P 500 ETF",
+      "price": 648.57,
+      "changePercent": "+0.00",
+      "trend": "up"
+    },
+    {
+      "id": "schd",
+      "symbol": "SCHD",
+      "market": "overseas",
+      "excd": "NYS",
+      "name": "SCHD",
+      "enName": "Schwab US Dividend Equity ETF",
+      "price": 30.39,
+      "changePercent": "+0.00",
+      "trend": "up"
     }
   ],
   "forecast": {
-    "sentiment": "환율 상승 우세",
-    "upProb": 52,
-    "downProb": 48,
+    "sentiment": "보합",
+    "upProb": 49,
+    "downProb": 51,
     "timeframes": {
       "d1": {
-        "upProb": 58,
-        "downProb": 42,
-        "basis": "기술적지표+실시간거시"
+        "upProb": 77,
+        "downProb": 23,
+        "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 54,
-        "downProb": 46,
-        "basis": "거시지표+수급중심"
+        "upProb": 58,
+        "downProb": 42,
+        "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 49,
-        "downProb": 51,
+        "upProb": 48,
+        "downProb": 52,
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "한수지입니다. 현재 원/달러 환율은 한미 10년물 금리차(0.65%p) 확대로 달러 캐리 매력이 강화되어 상승 압력이 높습니다. 달러 인덱스(99.5pt) 하락은 글로벌 달러 약세를 시사하나, VIX가 중립임에도 미국 하이일드 스프레드 상승, 코스피 외국인 순매도(-64억원), 경상수지 악화, 단기외채 비중 증가는 명확한 리스크 오프 국면을 나타내며 원화 약세를 부추깁니다. 이는 금리차 확대와 함께 원/달러 상승의 강력한 동력으로 작용합니다.\n\n기술적으로 원/달러 환율은 단기 상승 모멘텀이 매우 강하며, 이동평균선들이 정배열을 이루고 현재 1504.83원으로 핵심 저항선(1506.38원) 돌파를 시도 중입니다. 펀딩·정책 측면에서는 소비자물가 상승과 경상수지 악화가 원화 약세 압력을 더하지만, 충분한 외환보유액(4,276억$)은 당국의 방어 여력을 확보하고 있습니다. 단기외채 비중 상승은 대외 취약성 요인이나, 전반적으로 상방 압력이 우세한 상황입니다.\n\n실전 투자 대응: 현 상황은 한미 금리차 확대와 대내외 리스크 오프 심리가 결합하여 원/달러 환율의 상방 압력을 지속시킬 것입니다. 기술적 저항선 돌파 시도 역시 이러한 추세를 뒷받침합니다. 단기적으로 1500원대 중반 저항선 돌파 여부를 주시하며, 1520원대까지의 상승 여지를 열어두는 달러 투자 전략이 유효합니다. 다만, 외환 당국의 미세조정 가능성에 대한 경계는 필요합니다.\n결론: 상승 우세",
-    "detailedAnalysis": "한수지입니다. 현재 원/달러 환율은 한미 10년물 금리차(0.65%p) 확대로 달러 캐리 매력이 강화되어 상승 압력이 높습니다. 달러 인덱스(99.5pt) 하락은 글로벌 달러 약세를 시사하나, VIX가 중립임에도 미국 하이일드 스프레드 상승, 코스피 외국인 순매도(-64억원), 경상수지 악화, 단기외채 비중 증가는 명확한 리스크 오프 국면을 나타내며 원화 약세를 부추깁니다. 이는 금리차 확대와 함께 원/달러 상승의 강력한 동력으로 작용합니다.\n\n기술적으로 원/달러 환율은 단기 상승 모멘텀이 매우 강하며, 이동평균선들이 정배열을 이루고 현재 1504.83원으로 핵심 저항선(1506.38원) 돌파를 시도 중입니다. 펀딩·정책 측면에서는 소비자물가 상승과 경상수지 악화가 원화 약세 압력을 더하지만, 충분한 외환보유액(4,276억$)은 당국의 방어 여력을 확보하고 있습니다. 단기외채 비중 상승은 대외 취약성 요인이나, 전반적으로 상방 압력이 우세한 상황입니다.\n\n실전 투자 대응: 현 상황은 한미 금리차 확대와 대내외 리스크 오프 심리가 결합하여 원/달러 환율의 상방 압력을 지속시킬 것입니다. 기술적 저항선 돌파 시도 역시 이러한 추세를 뒷받침합니다. 단기적으로 1500원대 중반 저항선 돌파 여부를 주시하며, 1520원대까지의 상승 여지를 열어두는 달러 투자 전략이 유효합니다. 다만, 외환 당국의 미세조정 가능성에 대한 경계는 필요합니다.\n결론: 상승 우세",
-    "lastAiUpdate": 1774134982830,
+    "aiAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
+    "detailedAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.",
+    "lastAiUpdate": 1774138617167,
     "score": {
-      "upScore": 38.06409049765398,
-      "downScore": 34.95613530057524
+      "upScore": 26.268185031766865,
+      "downScore": 27.353434220029655
     }
   },
   "technicals": {
@@ -1333,16 +1203,16 @@
       "support": 1411.53,
       "resistance": 1506.38
     },
-    "compoundSignals": [
-      {
-        "type": "CAPITAL_OUTFLOW",
-        "up": 2,
-        "down": 0,
-        "block": "assets",
-        "desc": "자본유출 (금리차확대+외인매도 동시)"
-      }
-    ]
+    "macd": {
+      "macd": 12.84,
+      "signal": 8.72,
+      "hist": 4.12
+    },
+    "stochastic": {
+      "k": 98.4
+    },
+    "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 22. AM 12:12:46"
+  "lastUpdate": "2026. 3. 22. 오전 9:16:59"
 }
