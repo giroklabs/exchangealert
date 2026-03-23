@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.53",
+      "value": "99.56",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-22",
-          "value": 99.53
+          "value": 99.56
         }
       ]
     },
@@ -506,9 +506,9 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "98.09",
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "98.64",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-10",
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-22",
-          "value": 98.09
+          "value": 98.64
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,504.50",
+      "value": "1,503.50",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "945.39",
+      "value": "944.85",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,739.58",
+      "value": "1,737.97",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.92",
+      "value": "217.85",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1229,8 +1229,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 190900,
-      "changePercent": "-4.26",
+      "price": 189000,
+      "changePercent": "-5.22",
       "trend": "down"
     },
     {
@@ -1239,8 +1239,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 955000,
-      "changePercent": "-5.16",
+      "price": 945000,
+      "changePercent": "-6.16",
       "trend": "down"
     },
     {
@@ -1249,8 +1249,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 499000,
-      "changePercent": "-3.48",
+      "price": 497500,
+      "changePercent": "-3.77",
       "trend": "down"
     },
     {
@@ -1259,8 +1259,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 163000,
-      "changePercent": "-3.26",
+      "price": 161900,
+      "changePercent": "-3.92",
       "trend": "down"
     },
     {
@@ -1269,8 +1269,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 214500,
-      "changePercent": "-3.16",
+      "price": 213000,
+      "changePercent": "-3.84",
       "trend": "down"
     },
     {
@@ -1279,29 +1279,29 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 48700,
-      "changePercent": "-2.60",
+      "price": 48300,
+      "changePercent": "-3.40",
       "trend": "down"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 44,
-    "downProb": 56,
+    "upProb": 47,
+    "downProb": 53,
     "timeframes": {
       "d1": {
-        "upProb": 74,
-        "downProb": 26,
+        "upProb": 75,
+        "downProb": 25,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 52,
-        "downProb": 48,
+        "upProb": 53,
+        "downProb": 47,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 43,
-        "downProb": 57,
+        "upProb": 44,
+        "downProb": 56,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "단기적으로 원/달러 환율은 스토캐스틱의 극심한 과매수 상태와 하락 추세인 달러인덱스의 영향을 받아 하락 압력이 강합니다. 특히 1506원대 저항선 도달 후 기술적 과열에 따른 차익실현 매물이 출회되며 단기 조정 가능성이 높습니다. 그러나 MACD는 여전히 상승 모멘텀을 유지하고 있어 급격한 추세 전환보다는 숨 고르기 장세가 예상됩니다.\n\n주간 관점에서 환율은 이동평균선 20일 추세가 여전히 상승세를 나타내고 있어 전반적인 상승 기조는 유지될 것으로 보입니다. 다만 경상수지 악화와 확대되는 한미 금리차는 원화에 대한 하방 압력으로 작용할 수 있습니다. 미국 하이일드 스프레드의 상승 추세는 글로벌 위험 선호 심리 위축을 반영하여 언제든 달러 강세를 재점화시킬 수 있는 잠재적 위험 신호로 인지해야 합니다.\n\n종합하면 원/달러 환율은 단기적인 기술적 과열 해소를 위한 조정을 거친 후, 중장기적 펀더멘털 및 잔존 리스크 요인에 의해 다시 상승을 시도할 것으로 판단됩니다. 실전 투자 대응: 1490원대 진입 시 09:00~15:30 중 매수하여 1510원 목표로 설정하고, 1505원 돌파 실패 시 15:30~17:00에 1495원 목표로 매도 대응. 결론: 상승 우세",
     "lastAiUpdate": 1774221082054,
     "score": {
-      "upScore": 28.49658208134065,
-      "downScore": 36.915333637309416
+      "upScore": 29.479771169785447,
+      "downScore": 33.58393156356284
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. AM 12:03:15"
+  "lastUpdate": "2026. 3. 23. AM 12:08:01"
 }
