@@ -64,9 +64,9 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.64",
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "99.68",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-10",
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 99.64
+          "value": 99.68
         }
       ]
     },
@@ -451,7 +451,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,439.71",
+      "value": "5,442.35",
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -493,7 +493,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 5439.71
+          "value": 5442.35
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "99.19",
+      "value": "99.16",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 99.19
+          "value": 99.16
         }
       ]
     },
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "945.52",
+      "value": "945.76",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,740.59",
+      "value": "1,740.75",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.00",
+      "value": "218.02",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1229,8 +1229,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 187900,
-      "changePercent": "-5.77",
+      "price": 187800,
+      "changePercent": "-5.82",
       "trend": "down"
     },
     {
@@ -1239,8 +1239,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 940000,
-      "changePercent": "-6.65",
+      "price": 938000,
+      "changePercent": "-6.85",
       "trend": "down"
     },
     {
@@ -1249,8 +1249,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 488500,
-      "changePercent": "-5.51",
+      "price": 488000,
+      "changePercent": "-5.61",
       "trend": "down"
     },
     {
@@ -1259,8 +1259,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 162100,
-      "changePercent": "-3.80",
+      "price": 162300,
+      "changePercent": "-3.68",
       "trend": "down"
     },
     {
@@ -1279,29 +1279,29 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 47550,
-      "changePercent": "-4.90",
+      "price": 47500,
+      "changePercent": "-5.00",
       "trend": "down"
     }
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 53,
-    "downProb": 47,
+    "upProb": 55,
+    "downProb": 45,
     "timeframes": {
       "d1": {
-        "upProb": 74,
-        "downProb": 26,
+        "upProb": 75,
+        "downProb": 25,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 59,
-        "downProb": 41,
+        "upProb": 61,
+        "downProb": 39,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 50,
-        "downProb": 50,
+        "upProb": 51,
+        "downProb": 49,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 Stochastic 97.5% 과매수, 1511.38원 저항선 근접으로 내일(1D) 조정 압력이 우세합니다. MACD 모멘텀 유지에도 외국인 수급과 DXY 변화율이 변동성을 키울 수 있습니다. 주간(1W)으로는 한국 물가 상승, 경상수지 악화, 고유가, 한미 금리차 확대 펀더멘털 및 MA20 상승 추세가 원화 약세를 지지합니다. VIX, 하이일드 스프레드 상승, 코스피 하락, 단기외채 증가는 복합 위험 신호로, 조정 후 상승 재진입이 유력합니다.\n\n실전 투자 대응: 내일 09:00~11:00 사이 1500~1503원 지지 확인 후 매수, 1515원 돌파 시 1525원 목표로 추가 매수 고려. 결론: 상승 우세.",
     "lastAiUpdate": 1774239112585,
     "score": {
-      "upScore": 36.23373793487144,
-      "downScore": 31.86547746173008
+      "upScore": 37.45879115308481,
+      "downScore": 30.175671132879184
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. AM 4:38:03"
+  "lastUpdate": "2026. 3. 23. AM 4:42:59"
 }
