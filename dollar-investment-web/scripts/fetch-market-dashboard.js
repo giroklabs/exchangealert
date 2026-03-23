@@ -880,7 +880,7 @@ async function sendTelegramNotification(forecast, lastUpdate) {
 
     const message = `
 🤖 *달러 인베스트 AI 시장 분석*
-━━━━━━━━━━━━━━━━━━
+
 ${title}
 📊 *상승:* ${forecast.upProb}% | *하락:* ${forecast.downProb}%
 
@@ -891,7 +891,7 @@ ${summary}
 ${strategy}
 
 🌐 [시장 대시보드 바로가기](https://giroklabs.github.io/exchangealert/)
-━━━━━━━━━━━━━━━━━━
+
 ⏰ 분석 시점: ${analysisTime}
     `.trim();
 
