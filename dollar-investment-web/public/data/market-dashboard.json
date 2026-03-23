@@ -86,23 +86,23 @@
         },
         {
           "date": "2026-03-16",
-          "value": 99.71
+          "value": 120.097
         },
         {
           "date": "2026-03-17",
-          "value": 99.58
+          "value": 119.8328
         },
         {
           "date": "2026-03-18",
-          "value": 100.09
+          "value": 119.9276
         },
         {
           "date": "2026-03-19",
-          "value": 99.23
+          "value": 120.1802
         },
         {
           "date": "2026-03-20",
-          "value": 99.65
+          "value": 120.2757
         },
         {
           "date": "2026-03-23",
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "26.32",
+      "value": "26.39",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 26.32
+          "value": 26.39
         }
       ]
     },
@@ -395,14 +395,10 @@
       "source": "Fed",
       "description": "무위험 단기 금리",
       "fredId": "DTB3",
-      "value": "3.62",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "3.63",
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-03-06",
-          "value": 3.58
-        },
         {
           "date": "2026-03-09",
           "value": 3.61
@@ -438,6 +434,10 @@
         {
           "date": "2026-03-19",
           "value": 3.62
+        },
+        {
+          "date": "2026-03-20",
+          "value": 3.63
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "88.8",
+      "value": "88.61",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 88.8
+          "value": 88.61
         }
       ]
     },
@@ -1078,49 +1078,49 @@
       "impact": "up",
       "source": "계산치",
       "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
-      "value": "0.000",
+      "value": "-0.010",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-09",
-          "value": 0.07
+          "value": 0.04
         },
         {
           "date": "2026-03-10",
-          "value": 0.06
+          "value": 0.03
         },
         {
           "date": "2026-03-11",
-          "value": 0.06
+          "value": 0.03
         },
         {
           "date": "2026-03-12",
-          "value": 0.07
+          "value": 0.04
         },
         {
           "date": "2026-03-13",
-          "value": 0.07
+          "value": 0.04
         },
         {
           "date": "2026-03-16",
-          "value": 0.12
+          "value": 0.09
         },
         {
           "date": "2026-03-17",
-          "value": 0.07
+          "value": 0.04
         },
         {
           "date": "2026-03-18",
-          "value": 0.04
+          "value": 0.01
         },
         {
           "date": "2026-03-19",
-          "value": 0.04
+          "value": 0.01
         },
         {
           "date": "2026-03-20",
-          "value": 0.04
+          "value": 0.01
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,487.30",
+      "value": "1,487.00",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "938.86",
+      "value": "938.61",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,727.57",
+      "value": "1,726.93",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.00",
+      "value": "215.95",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1286,17 +1286,17 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 42,
-    "downProb": 58,
+    "upProb": 41,
+    "downProb": 59,
     "timeframes": {
       "d1": {
-        "upProb": 70,
-        "downProb": 30,
+        "upProb": 69,
+        "downProb": 31,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 51,
-        "downProb": 49,
+        "upProb": 50,
+        "downProb": 50,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 단기적으로 하락 압력을 받을 것으로 예상됩니다. 스토캐스틱 지표가 97.5%로 과매수 구간에 진입하여 기술적 조정 가능성이 높으며, 달러 인덱스(DXY)의 하락 추세와 코스피 외국인 순매수 유입 또한 원화 강세 요인으로 작용합니다. 다만, MACD 히스토그램이 여전히 양수값을 유지하고 있어 하락폭은 제한적일 수 있습니다.\n\n주간 단위에서는 단기 이동평균선(MA5, MA20, MA60)의 정배열 유지와 단기 상승 모멘텀이 이어지고 있어 하방 경직성을 보일 것으로 판단됩니다. 금리·달러 블록에서 달러 인덱스와 미 10년물 국채금리 하락은 달러 약세 요인이지만, 국내 소비자물가 상승, 경상수지 악화, 코스피 지수 하락 추세는 원화 약세 압력으로 작용하며 상쇄될 것입니다. 특히, 경상수지 감소와 단기외채 비중 증가는 원화의 구조적 취약성을 높이는 위험 신호로, 글로벌 위험지표 개선에도 불구하고 코스피가 하락하는 점은 국내 자산에 대한 우려를 반영합니다.\n\n실전 투자 대응: 금일 09:00~15:30 중 1480원 부근에서 매수 관점으로 접근, 1475원 이탈 시 손절. 결론: 상승 우세",
     "lastAiUpdate": 1774296987450,
     "score": {
-      "upScore": 31.426422764918073,
-      "downScore": 43.14853309332362
+      "upScore": 32.11720577158853,
+      "downScore": 45.65660328434768
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. PM 8:18:11"
+  "lastUpdate": "2026. 3. 23. PM 8:24:30"
 }
