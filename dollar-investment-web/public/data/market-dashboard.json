@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.11",
+      "value": "99.12",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 99.11
+          "value": 99.12
         }
       ]
     },
@@ -1224,16 +1224,6 @@
   ],
   "stockPrices": [
     {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 186300,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
       "id": "hynix",
       "symbol": "000660",
       "market": "domestic",
@@ -1344,5 +1334,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. PM 9:58:41"
+  "lastUpdate": "2026. 3. 23. PM 10:03:13"
 }
