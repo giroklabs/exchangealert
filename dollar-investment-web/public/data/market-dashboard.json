@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.75",
+      "value": "99.83",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 99.75
+          "value": 99.83
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "31",
+      "value": "30.68",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 31
+          "value": 30.68
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "101.53",
+      "value": "101.4",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 101.53
+          "value": 101.4
         }
       ]
     },
@@ -735,14 +735,10 @@
       "source": "한국은행",
       "description": "한미 금리차 산출용",
       "cycle": "D",
-      "value": "3.736",
+      "value": "3.879",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "20260309",
-          "value": 3.739
-        },
         {
           "date": "20260310",
           "value": 3.629
@@ -778,6 +774,10 @@
         {
           "date": "20260320",
           "value": 3.736
+        },
+        {
+          "date": "20260323",
+          "value": 3.879
         }
       ]
     },
@@ -1024,9 +1024,9 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.65",
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "0.51",
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-10",
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,513.00",
+      "value": "1,514.10",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "948.29",
+      "value": "948.92",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,744.34",
+      "value": "1,745.45",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.92",
+      "value": "219.05",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1286,22 +1286,22 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 57,
-    "downProb": 43,
+    "upProb": 55,
+    "downProb": 45,
     "timeframes": {
       "d1": {
-        "upProb": 74,
-        "downProb": 26,
+        "upProb": 73,
+        "downProb": 27,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 60,
-        "downProb": 40,
+        "upProb": 58,
+        "downProb": 42,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 51,
-        "downProb": 49,
+        "upProb": 50,
+        "downProb": 50,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "달러인덱스의 강세, VIX 상승에 따른 위험회피 심리 확산, 그리고 1511.38원 저항선 돌파는 단기 상방 압력을 강화합니다. MACD 히스토그램은 긍정적 모멘텀을 지지하지만, Stochastic의 극심한 과매수 영역 진입은 단기 고점 경계심을 높입니다. 외국인 순매수는 미미합니다. 그러나 글로벌 위험회피와 한국 경제 펀더멘털 악화(경상수지 하락, 국제유가 상승, 단기외채 증가)가 복합적인 위험 신호로 원화 약세 압력을 가중합니다.\n\n주간 단위에서는 미국의 높은 금리 유지와 강달러 기조, 그리고 국내 인플레이션 압력 및 경상수지 악화 등 매크로 펀더멘털이 원화 약세를 지지합니다. MA20 추세 또한 단기 상승 모멘텀을 명확히 보여주며, 이는 원/달러 환율의 추가적인 상승 여력이 있음을 시사합니다.\n\n실전 투자 대응: 단기적 조정 시 1500원대 초반 매수, 1520원 이상 도달 시 매도를 고려합니다. 변동성 확대 시 오전 09:00~10:00 사이 신중한 대응이 필요합니다. 결론: 상승 우세",
     "lastAiUpdate": 1774249889052,
     "score": {
-      "upScore": 43.4939164819073,
-      "downScore": 32.20717771091931
+      "upScore": 42.00799299364025,
+      "downScore": 34.23685049917023
     }
   },
   "technicals": {
@@ -1352,5 +1352,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. AM 7:57:51"
+  "lastUpdate": "2026. 3. 23. AM 8:07:52"
 }
