@@ -70,39 +70,39 @@
       "history": [
         {
           "date": "2026-03-10",
-          "value": 118.7255
+          "value": 98.83
         },
         {
           "date": "2026-03-11",
-          "value": 119.2885
+          "value": 99.23
         },
         {
           "date": "2026-03-12",
-          "value": 119.8227
+          "value": 99.74
         },
         {
           "date": "2026-03-13",
-          "value": 120.5518
+          "value": 100.36
         },
         {
           "date": "2026-03-16",
-          "value": 120.097
+          "value": 99.71
         },
         {
           "date": "2026-03-17",
-          "value": 119.8328
+          "value": 99.58
         },
         {
           "date": "2026-03-18",
-          "value": 119.9276
+          "value": 100.09
         },
         {
           "date": "2026-03-19",
-          "value": 120.1802
+          "value": 99.23
         },
         {
           "date": "2026-03-20",
-          "value": 120.2757
+          "value": 99.65
         },
         {
           "date": "2026-03-23",
@@ -230,49 +230,25 @@
       "source": "ICE BofA",
       "description": "글로벌 신용 리스크 온/오프 지표",
       "fredId": "BAMLH0A0HYM2",
-      "value": "3.24",
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "3.10",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
-          "date": "2026-03-09",
-          "value": 3.19
-        },
-        {
           "date": "2026-03-10",
-          "value": 3.06
+          "value": 2.9
         },
         {
           "date": "2026-03-11",
-          "value": 3.09
+          "value": 2.95
         },
         {
           "date": "2026-03-12",
-          "value": 3.17
+          "value": 3.05
         },
         {
           "date": "2026-03-13",
-          "value": 3.28
-        },
-        {
-          "date": "2026-03-16",
-          "value": 3.27
-        },
-        {
-          "date": "2026-03-17",
-          "value": 3.22
-        },
-        {
-          "date": "2026-03-18",
-          "value": 3.2
-        },
-        {
-          "date": "2026-03-19",
-          "value": 3.27
-        },
-        {
-          "date": "2026-03-20",
-          "value": 3.24
+          "value": 3.1
         }
       ]
     },
@@ -285,49 +261,25 @@
       "source": "NY Fed",
       "description": "담보 유동성 지표",
       "fredId": "SOFR",
-      "value": "3.62",
+      "value": "5.31",
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-03-09",
-          "value": 3.65
-        },
-        {
           "date": "2026-03-10",
-          "value": 3.64
+          "value": 5.31
         },
         {
           "date": "2026-03-11",
-          "value": 3.64
+          "value": 5.31
         },
         {
           "date": "2026-03-12",
-          "value": 3.65
+          "value": 5.31
         },
         {
           "date": "2026-03-13",
-          "value": 3.65
-        },
-        {
-          "date": "2026-03-16",
-          "value": 3.7
-        },
-        {
-          "date": "2026-03-17",
-          "value": 3.65
-        },
-        {
-          "date": "2026-03-18",
-          "value": 3.62
-        },
-        {
-          "date": "2026-03-19",
-          "value": 3.62
-        },
-        {
-          "date": "2026-03-20",
-          "value": 3.62
+          "value": 5.31
         }
       ]
     },
@@ -340,49 +292,25 @@
       "source": "Fed",
       "description": "무담보 유동성 지표",
       "fredId": "EFFR",
-      "value": "3.64",
+      "value": "5.33",
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-03-09",
-          "value": 3.64
-        },
-        {
           "date": "2026-03-10",
-          "value": 3.64
+          "value": 5.33
         },
         {
           "date": "2026-03-11",
-          "value": 3.64
+          "value": 5.33
         },
         {
           "date": "2026-03-12",
-          "value": 3.64
+          "value": 5.33
         },
         {
           "date": "2026-03-13",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-16",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-17",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-18",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-19",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-20",
-          "value": 3.64
+          "value": 5.33
         }
       ]
     },
@@ -506,29 +434,29 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "89.06",
+      "value": "88.79",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-10",
-          "value": 83.71
+          "value": 83.45
         },
         {
           "date": "2026-03-11",
-          "value": 86.8
+          "value": 87.25
         },
         {
           "date": "2026-03-12",
-          "value": 95.61
+          "value": 95.73
         },
         {
           "date": "2026-03-13",
-          "value": 98.48
+          "value": 98.71
         },
         {
           "date": "2026-03-16",
-          "value": 93.39
+          "value": 93.5
         },
         {
           "date": "2026-03-17",
@@ -548,7 +476,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 89.06
+          "value": 88.79
         }
       ]
     },
@@ -1078,49 +1006,25 @@
       "impact": "up",
       "source": "계산치",
       "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
-      "value": "-0.010",
+      "value": "1.680",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-09",
-          "value": 0.04
-        },
-        {
           "date": "2026-03-10",
-          "value": 0.03
+          "value": 1.7
         },
         {
           "date": "2026-03-11",
-          "value": 0.03
+          "value": 1.7
         },
         {
           "date": "2026-03-12",
-          "value": 0.04
+          "value": 1.7
         },
         {
           "date": "2026-03-13",
-          "value": 0.04
-        },
-        {
-          "date": "2026-03-16",
-          "value": 0.09
-        },
-        {
-          "date": "2026-03-17",
-          "value": 0.04
-        },
-        {
-          "date": "2026-03-18",
-          "value": 0.01
-        },
-        {
-          "date": "2026-03-19",
-          "value": 0.01
-        },
-        {
-          "date": "2026-03-20",
-          "value": 0.01
+          "value": 1.7
         }
       ]
     },
@@ -1133,47 +1037,23 @@
       "source": "계산치",
       "description": "금융시장 유동성 리스크 (상승 시 위험회피 강화)",
       "value": "-0.020",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
-          "date": "2026-03-09",
-          "value": 0.01
-        },
-        {
           "date": "2026-03-10",
-          "value": 0
+          "value": -0.02
         },
         {
           "date": "2026-03-11",
-          "value": 0
+          "value": -0.02
         },
         {
           "date": "2026-03-12",
-          "value": 0.01
+          "value": -0.02
         },
         {
           "date": "2026-03-13",
-          "value": 0.01
-        },
-        {
-          "date": "2026-03-16",
-          "value": 0.06
-        },
-        {
-          "date": "2026-03-17",
-          "value": 0.01
-        },
-        {
-          "date": "2026-03-18",
-          "value": -0.02
-        },
-        {
-          "date": "2026-03-19",
-          "value": -0.02
-        },
-        {
-          "date": "2026-03-20",
           "value": -0.02
         }
       ]
@@ -1196,7 +1076,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "940.58",
+      "value": "941.02",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1086,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,729.91",
+      "value": "1,729.83",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1096,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.32",
+      "value": "216.34",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1295,13 +1175,13 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 52,
-        "downProb": 48,
+        "upProb": 51,
+        "downProb": 49,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 44,
+        "downProb": 56,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1189,8 @@
     "detailedAnalysis": "원/달러 환율은 초단기적으로 스토캐스틱 지표의 극심한 과매수와 하락 추세의 DXY 및 VIX 지수 영향으로 일시적인 되돌림이 나타날 가능성이 높습니다. 그러나 MACD의 강한 상승 모멘텀과 KOSPI 외국인 수급 부진이 하락 폭을 제한하며 지지력을 확보할 것입니다. 주간 관점에서는 MA20의 지속적인 상승 추세에 힘입어 상방 압력을 유지하나, 국내 경상수지 악화와 단기외채 비중 증가는 원화의 구조적 취약성을 심화시키는 복합 위험 신호로 작용합니다. 이는 글로벌 달러 약세에도 불구하고 환율 하단을 지지하며 상승 변동성을 키울 수 있습니다.\n\n실전 투자 대응: 단기 조정 시 1488원 부근 매수, 1502원 목표 매도 전략을 오전 09:00~11:00에 추천합니다. 결론: 상승 우세",
     "lastAiUpdate": 1774307794817,
     "score": {
-      "upScore": 32.036254971932514,
-      "downScore": 43.62914444406529
+      "upScore": 29.998843037214932,
+      "downScore": 42.371294948633874
     }
   },
   "technicals": {
@@ -1344,5 +1224,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. PM 11:28:08"
+  "lastUpdate": "2026. 3. 23. PM 11:32:48"
 }
