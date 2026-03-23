@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.75",
+      "value": "99.7",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 99.75
+          "value": 99.7
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "30.07",
+      "value": "30.13",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 30.07
+          "value": 30.13
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "100.12",
+      "value": "100.23",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-23",
-          "value": 100.12
+          "value": 100.23
         }
       ]
     },
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "947.35",
+      "value": "947.60",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,743.53",
+      "value": "1,743.65",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.56",
+      "value": "218.63",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,7 +1309,7 @@
     "detailedAnalysis": "원/달러 환율은 Stochastic 지표상 극심한 과매수 상태로 내일 단기 하락 압력이 우세합니다. 하지만 DXY 상승, VIX 및 미국 하이일드 스프레드 동반 상승으로 달러 강세가 지지되며, MACD 상승 모멘텀과 외국인 코스피 순매수는 하방 경직성을 강화합니다. 환율이 핵심 저항 레벨에 근접해 단기 변동성은 확대될 것입니다.\n\n주간 관점에서는 DXY 상승, 고유가, 경상수지 악화, 단기외채 증가 등 펀더멘털 원화 약세 요인이 중첩되어 달러 강세 압력이 지속될 전망입니다. MA20 상승세가 중장기 상승 추세를 견고히 뒷받침합니다. 실전 투자 대응: 내일 환율은 1500원 초반 단기 조정 시 1495원 지지 확인 후 재매수, 주중 1515원 돌파 시 1520원까지 상방 매수 대응 권장. 추천 진입 시간: 09:00~10:00 (조정 매도), 14:00~16:00 (반등 매수). 결론: 상승 우세",
     "lastAiUpdate": 1774253811683,
     "score": {
-      "upScore": 41.92848324723942,
+      "upScore": 41.9416653665475,
       "downScore": 34.23685049917023
     }
   },
@@ -1352,5 +1352,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 23. AM 8:32:55"
+  "lastUpdate": "2026. 3. 23. AM 8:38:27"
 }
