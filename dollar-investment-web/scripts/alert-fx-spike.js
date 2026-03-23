@@ -492,7 +492,8 @@ async function main() {
 
     // 4. 임계값 조건 불만족 시 종료
     if (triggers.length === 0) {
-        console.log(`✅ 트리거된 복합 지표 없음 — 알림 대상 아님`);
+        console.log(`✅ 설정된 임계값(환율 ${SPIKE_THRESHOLD}%)을 초과한 지표 없음 — 알림 대상 아님`);
+        console.log(`💡 참고: 환율 변동률은 기준가(${lastInfo.rate}원) 대비 ${(Math.abs(rateChangePct)).toFixed(3)}% 로 확인되었습니다.`);
         return;
     }
 
