@@ -394,17 +394,25 @@ function buildCaption(currentRate, baseRate, triggers, state) {
 
     const triggerLines = triggers.map(t => `- ${t}`).join('\n');
 
+    const sourceMap = {
+        'yahoo': 'Yahoo Finance',
+        'naver': 'Naver Finance',
+        'local': 'Local History'
+    };
+    const sourceLabel = sourceMap[state.source] || state.source || 'Unknown';
+
     return `🚨 *매크로 핵심 지표 급변동 감지!*
-━━━━━━━━━━━━━━━━━━━━
+
 ${triggerLines}
 
 [현재 참고 지표]
 💲 원/달러: ${state.rate.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}원 (${sign}${changePct.toFixed(2)}%)
+(출처: ${sourceLabel})
 💵 DXY 인덱스: ${state.dxy || '-'}
 📉 한미 금리차: ${state.yieldDiff !== null ? state.yieldDiff.toFixed(2) + '%p' : '-'}
 🏢 외인 순매수: ${state.fnb !== null ? state.fnb + '억원' : '-'}
 😨 VIX 공포지수: ${state.vix || '-'}
-━━━━━━━━━━━━━━━━━━━━
+
 ⏰ ${kstTime} KST
 🌐 [대시보드 바로가기](https://giroklabs.github.io/exchangealert/)`;
 }
@@ -430,6 +438,7 @@ async function main() {
 
     const currentState = {
         rate: current.rate,
+        source: current.source,
         dxy: dxy,
         vix: vix,
         yieldDiff: (us10y !== null && dashboardData?.kr10y !== null && dashboardData?.kr10y !== undefined) ? us10y - dashboardData.kr10y : null,
