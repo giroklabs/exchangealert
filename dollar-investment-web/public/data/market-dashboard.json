@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "25.9",
+      "value": "26.09",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-24",
-          "value": 25.9
+          "value": 26.09
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "90.4",
+      "value": "90.6",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-24",
-          "value": 90.4
+          "value": 90.6
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,492.30",
+      "value": "1,493.70",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "941.19",
+      "value": "941.99",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,731.89",
+      "value": "1,732.69",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.68",
+      "value": "216.86",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1290,8 +1290,8 @@
     "downProb": 54,
     "timeframes": {
       "d1": {
-        "upProb": 74,
-        "downProb": 26,
+        "upProb": 73,
+        "downProb": 27,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "DXY 상승세와 KOSPI 외국인 순매도는 원/달러 환율의 단기 상승 압력을 높입니다. MACD 히스토그램은 양의 모멘텀을 유지하나, Stochastic 과매수는 단기 숨고르기를 시사합니다. 그러나 MA20 우상향과 DXY 강세 기조는 주간 상승 모멘텀을 강화할 것입니다. 한국의 경상수지 악화와 단기외채 비중 증가는 원화 약세 압력을 구조적으로 심화시킵니다.\n\n복합적인 위험 신호로 DXY 강세, 경상수지 악화, 단기외채 증가, 외국인 순매도가 원화 약세를 가속합니다. VIX는 하락 추세이나 26pt는 여전히 높아, 시장 불안 재고조 시 환율 급등 가능성을 내포합니다.\n\n실전 투자 대응: 단기 조정 시 1485원 부근 매수 관점 유효하며, 1500원 돌파 시 1515원을 1차 매도 목표가로 설정합니다. 주요 진입 시간대는 한국 외환시장 개장 직후인 09:00~10:00 사이, 또는 미국 시장 움직임이 반영되는 15:00~17:00 사이가 적합합니다. 결론: 상승 우세.",
     "lastAiUpdate": 1774336587621,
     "score": {
-      "upScore": 35.0733834504512,
-      "downScore": 40.75569961493305
+      "upScore": 35.06703629860799,
+      "downScore": 40.81830032660376
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 24. AM 7:32:55"
+  "lastUpdate": "2026. 3. 24. AM 7:37:48"
 }
