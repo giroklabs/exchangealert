@@ -1,0 +1,53 @@
+name: Telegram Remote Control
+
+on:
+  repository_dispatch:
+    types: [telegram_cmd_snap, telegram_cmd_ask]
+
+jobs:
+  handle-remote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      # 1단계: 마켓 데이터 최신 갱신 (데이터 누락 방지)
+      - name: Fetch Latest Market Data
+        run: node scripts/fetch-market-dashboard.js
+        env:
+          KIS_API_KEY: ${{ secrets.KIS_API_KEY }}
+          KIS_API_SECRET: ${{ secrets.KIS_API_SECRET }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          KIS_ACCOUNT: ${{ secrets.KIS_ACCOUNT }}
+
+      # 2단계: 리모컨 명령 실행 (GEMINI_API_KEY 명시적 주입)
+      - name: Run Remote Command
+        run: |
+          if [ "${{ github.event.action }}" == "telegram_cmd_snap" ]; then
+            node scripts/telegram-handler.js snap
+          elif [ "${{ github.event.action }}" == "telegram_cmd_ask" ]; then
+            node scripts/telegram-handler.js ask "현재 시장의 핵심 리스크와 대응 전략을 요약해줘."
+          fi
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          MY_PRIVATE_CHAT_ID: ${{ secrets.MY_PRIVATE_CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # 3단계: 결과 저장 후 푸시
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/*.json
+          git commit -m "chore: auto-update via telegram remote [skip ci]" || echo "No changes to commit"
+          git push || echo "Push failed, but continuing"
