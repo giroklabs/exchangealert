@@ -64,14 +64,10 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.3",
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "99.32",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-03-10",
-          "value": 118.7255
-        },
         {
           "date": "2026-03-11",
           "value": 119.2885
@@ -105,8 +101,12 @@
           "value": 120.2757
         },
         {
+          "date": "2026-03-23",
+          "value": 98.95
+        },
+        {
           "date": "2026-03-24",
-          "value": 99.3
+          "value": 99.32
         }
       ]
     },
@@ -121,13 +121,9 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "value": "4.33",
-      "trend": "down",
-      "realizedImpact": "down",
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-03-10",
-          "value": 4.14
-        },
         {
           "date": "2026-03-11",
           "value": 4.21
@@ -163,6 +159,10 @@
         {
           "date": "2026-03-23",
           "value": 4.33
+        },
+        {
+          "date": "2026-03-23",
+          "value": 4.33
         }
       ]
     },
@@ -176,13 +176,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "value": "26.15",
-      "trend": "down",
-      "realizedImpact": "down",
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-03-10",
-          "value": 24.93
-        },
         {
           "date": "2026-03-11",
           "value": 24.23
@@ -214,6 +210,10 @@
         {
           "date": "2026-03-20",
           "value": 26.78
+        },
+        {
+          "date": "2026-03-23",
+          "value": 26.15
         },
         {
           "date": "2026-03-23",
@@ -451,14 +451,10 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,498.36",
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "5,487.17",
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-03-10",
-          "value": 5532.59
-        },
         {
           "date": "2026-03-11",
           "value": 5609.95
@@ -492,8 +488,12 @@
           "value": 5781.2
         },
         {
+          "date": "2026-03-23",
+          "value": 5405.75
+        },
+        {
           "date": "2026-03-24",
-          "value": 5498.36
+          "value": 5487.17
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "90.97",
+      "value": "91.15",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-24",
-          "value": 90.97
+          "value": 91.15
         }
       ]
     },
@@ -1029,10 +1029,6 @@
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-10",
-          "value": 0.51
-        },
-        {
           "date": "2026-03-11",
           "value": 0.6
         },
@@ -1063,6 +1059,10 @@
         {
           "date": "2026-03-20",
           "value": 0.65
+        },
+        {
+          "date": "2026-03-23",
+          "value": 0.45
         },
         {
           "date": "2026-03-23",
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,497.90",
+      "value": "1,498.50",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "945.21",
+      "value": "945.43",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,736.22",
+      "value": "1,736.91",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.34",
+      "value": "217.45",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1229,8 +1229,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 189500,
-      "changePercent": "+1.72",
+      "price": 188800,
+      "changePercent": "+1.34",
       "trend": "up"
     },
     {
@@ -1239,8 +1239,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 960000,
-      "changePercent": "+2.89",
+      "price": 958000,
+      "changePercent": "+2.68",
       "trend": "up"
     },
     {
@@ -1249,8 +1249,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 493000,
-      "changePercent": "+1.65",
+      "price": 491500,
+      "changePercent": "+1.34",
       "trend": "up"
     },
     {
@@ -1259,8 +1259,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 157500,
-      "changePercent": "-2.60",
+      "price": 157200,
+      "changePercent": "-2.78",
       "trend": "down"
     },
     {
@@ -1269,8 +1269,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 212500,
-      "changePercent": "+1.67",
+      "price": 213000,
+      "changePercent": "+1.91",
       "trend": "up"
     },
     {
@@ -1279,29 +1279,29 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 48000,
-      "changePercent": "+2.35",
+      "price": 47950,
+      "changePercent": "+2.24",
       "trend": "up"
     }
   ],
   "forecast": {
     "sentiment": "환율 하락 우세",
-    "upProb": 42,
-    "downProb": 58,
+    "upProb": 40,
+    "downProb": 60,
     "timeframes": {
       "d1": {
-        "upProb": 70,
-        "downProb": 30,
+        "upProb": 69,
+        "downProb": 31,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 51,
-        "downProb": 49,
+        "upProb": 47,
+        "downProb": 53,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 41,
+        "downProb": 59,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "단기 원/달러 환율은 Stochastic 과매수 및 볼린저밴드 상단 근접에 따른 조정 압력이 높습니다. DXY 하락과 VIX 지수 안정화는 원화 강세를 지지하나, 외국인 수급 약화는 하락폭을 제한합니다. 따라서 내일 환율은 단기 과매수 해소와 달러 약세 기조로 소폭 하락할 것입니다.\n\n주간 관점에서는 DXY 및 VIX 하락이 위험선호 회복을 이끌며 원화 강세를 지지합니다. 그러나 한국 경상수지 둔화와 단기외채 비중 증가는 원화의 추가 강세를 제한하며 환율의 하방 경직성을 높이는 위험 신호입니다. 현재 환율은 MA20 상승 추세 위에 있지만 단기 고점 부담으로 상방이 제한된 등락 후 약보합세가 예상됩니다.\n\n실전 투자 대응: 매도 목표가 1502원, 매수 목표가 1488원으로 설정하며, 오전 09:00~11:00 사이 1500원대 재진입 시 매도, 1490원선 하회 시 매수를 추천합니다. 결론: 하락 우세",
     "lastAiUpdate": 1774314995783,
     "score": {
-      "upScore": 31.117087285980276,
-      "downScore": 43.18287084056148
+      "upScore": 27.349185165853566,
+      "downScore": 41.32715051542347
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 24. AM 1:28:02"
+  "lastUpdate": "2026. 3. 24. AM 1:32:59"
 }
