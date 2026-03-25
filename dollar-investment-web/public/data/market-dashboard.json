@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.24",
+      "value": "99.26",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 99.24
+          "value": 99.26
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "25.33",
+      "value": "25.42",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 25.33
+          "value": 25.42
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "87.49",
+      "value": "87.66",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 87.49
+          "value": 87.66
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,499.40",
+      "value": "1,499.30",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "944.41",
+      "value": "944.57",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,740.05",
+      "value": "1,740.39",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.25",
+      "value": "217.29",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 달러 인덱스 하락 추세, VIX 공포지수 하락, 그리고 스토캐스틱 지표의 강한 과매수 신호로 인해 단기적으로는 하락 압력을 받을 것으로 예상됩니다. KOSPI 외국인 수급은 순매도 상태이나 그 강도가 약화되는 추세는 긍정적으로 작용할 것입니다.\n\n그러나 주간 단위로 보면 한국의 경상수지 악화와 단기외채 비중 증가는 원화의 구조적 취약성을 심화시키는 복합적인 위험 신호입니다. 이동평균선(MA5 > MA20 > MA60)과 MACD 양의 히스토그램이 보여주는 단기 상승 모멘텀 역시 유지될 것으로 판단됩니다. 따라서 글로벌 달러 약세 흐름에도 불구하고 원/달러 환율의 전반적인 상승 압력은 지속될 가능성이 높습니다.\n\n실전 투자 대응: 1495원선 하회 시 10:00~12:00 사이 단기 매도 후 1485원 부근에서 재매수를 고려합니다. 결론: 상승 우세",
     "lastAiUpdate": 1774426918185,
     "score": {
-      "upScore": 31.14306089012055,
-      "downScore": 40.878483488507094
+      "upScore": 31.111098078724257,
+      "downScore": 40.8243989057893
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 25. AM 9:03:00"
+  "lastUpdate": "2026. 3. 25. AM 9:07:57"
 }
