@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.64",
+      "value": "99.65",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 99.64
+          "value": 99.65
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "25.39",
+      "value": "25.33",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 25.39
+          "value": 25.33
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "91.26",
+      "value": "91.25",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 91.26
+          "value": 91.25
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,504.40",
+      "value": "1,506.10",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "943.26",
+      "value": "944.29",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,738.94",
+      "value": "1,740.60",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.90",
+      "value": "218.14",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1230,8 +1230,8 @@
       "name": "삼성전자",
       "enName": "Samsung Electronics",
       "price": 189000,
-      "changePercent": "-0.37",
-      "trend": "down"
+      "changePercent": "+0.00",
+      "trend": "neutral"
     },
     {
       "id": "hynix",
@@ -1240,8 +1240,8 @@
       "name": "SK하이닉스",
       "enName": "SK Hynix",
       "price": 995000,
-      "changePercent": "+0.91",
-      "trend": "up"
+      "changePercent": "+0.00",
+      "trend": "neutral"
     },
     {
       "id": "hyundai",
@@ -1250,8 +1250,8 @@
       "name": "현대차",
       "enName": "Hyundai Motor",
       "price": 501000,
-      "changePercent": "+1.83",
-      "trend": "up"
+      "changePercent": "+0.00",
+      "trend": "neutral"
     },
     {
       "id": "kia",
@@ -1270,8 +1270,8 @@
       "name": "네이버",
       "enName": "NAVER",
       "price": 215500,
-      "changePercent": "+0.94",
-      "trend": "up"
+      "changePercent": "+0.00",
+      "trend": "neutral"
     },
     {
       "id": "kakao",
@@ -1280,8 +1280,8 @@
       "name": "카카오",
       "enName": "Kakao",
       "price": 49050,
-      "changePercent": "+1.76",
-      "trend": "up"
+      "changePercent": "+0.00",
+      "trend": "neutral"
     }
   ],
   "forecast": {
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 초단기적으로 하락 압력이 우세합니다. DXY 강세와 외국인 순매도가 상방 압력을 지지하나, Stochastic 과매수 및 1517원 저항선 근접, 단기 모멘텀 둔화는 상승폭을 제한, 조정 가능성을 높입니다.\n\n주간 관점은 달러 강세가 우위를 점합니다. 미 금리 우위, DXY 상승, 한국 경상수지 둔화가 원화 약세 요인이며, MA20 상승 추세가 상방 압력을 지지합니다. VIX 하락과 코스피 상승은 급격한 원화 하락을 제어합니다. 경상수지 둔화와 단기외채 비중 증가는 주시할 복합 위험 신호입니다.\n\n실전 투자 대응: 단기 조정 시 1490원 지지 확인 후 매수, 반등 시 1510원 매도 전략을 추천하며, 09:00~11:00 초기 및 14:00 이후 종가 관리에 주목합니다. 결론: 상승 우세",
     "lastAiUpdate": 1774470115170,
     "score": {
-      "upScore": 33.813402317412994,
-      "downScore": 38.77772862851449
+      "upScore": 33.825178159281975,
+      "downScore": 38.811692614906804
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 25. PM 8:27:46"
+  "lastUpdate": "2026. 3. 25. PM 8:32:56"
 }
