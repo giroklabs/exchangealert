@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.6",
+      "value": "99.52",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 99.6
+          "value": 99.52
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "26.04",
+      "value": "25.96",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 26.04
+          "value": 25.96
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "90.14",
+      "value": "89.77",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 90.14
+          "value": 89.77
         }
       ]
     },
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "942.40",
+      "value": "942.46",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,735.73",
+      "value": "1,735.88",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.36",
+      "value": "217.37",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 최근 1500원대를 돌파하며 이동평균선과 MACD 지표 모두 강한 상승 모멘텀을 나타냅니다. 달러 인덱스(DXY)의 상승 추세가 지속되고 외국인 순매도가 미미해 단기 하락 압력은 제한적입니다. 스토캐스틱 지표가 과매수권에 근접하나, 전반적으로 추가 상승 가능성이 높은 흐름입니다.\n\n주간 관점에서는 DXY 강세와 한국의 경상수지 악화, 단기외채 비중 증가가 원화 약세 압력을 강화합니다. 한미 10년물 금리차 축소에도 불구하고 국내 펀더멘털 불안과 소비자물가 상승 우려가 겹쳐 환율의 상방 압력이 지속될 전망입니다. VIX 하락으로 시장 전반의 공포는 다소 완화되었으나, DXY 강세와 국내 대외 건전성 지표 악화는 복합적인 위험 신호입니다.\n\n실전 투자 대응: 1498원 선에서 매수 진입 후 1515원 목표로 분할 매도를 고려하며, 주요 저항선인 1517원 돌파 여부를 주시합니다. 매수 진입은 한국 외환시장 개장 직후인 09:00~10:00 사이 혹은 오후 14:00~16:00 사이의 일시적 눌림목을 활용하는 것이 유리합니다. 결론: 상승 우세",
     "lastAiUpdate": 1774455697130,
     "score": {
-      "upScore": 33.89983423900806,
-      "downScore": 39.16437010252017
+      "upScore": 33.918648387532514,
+      "downScore": 39.19540210838456
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 25. PM 4:33:03"
+  "lastUpdate": "2026. 3. 25. PM 4:37:57"
 }
