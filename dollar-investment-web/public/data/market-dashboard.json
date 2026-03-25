@@ -451,7 +451,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,653.52",
+      "value": "5,648.94",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -493,7 +493,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 5653.52
+          "value": 5648.94
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "88.79",
+      "value": "88.95",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 88.79
+          "value": 88.95
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,498.40",
+      "value": "1,498.10",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "943.58",
+      "value": "943.33",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,738.67",
+      "value": "1,738.32",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.33",
+      "value": "217.30",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1229,8 +1229,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 191500,
-      "changePercent": "+0.95",
+      "price": 191800,
+      "changePercent": "+1.11",
       "trend": "up"
     },
     {
@@ -1239,8 +1239,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1001000,
-      "changePercent": "+1.52",
+      "price": 1003000,
+      "changePercent": "+1.72",
       "trend": "up"
     },
     {
@@ -1269,8 +1269,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 215000,
-      "changePercent": "+0.70",
+      "price": 215500,
+      "changePercent": "+0.94",
       "trend": "up"
     },
     {
@@ -1279,8 +1279,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 48950,
-      "changePercent": "+1.56",
+      "price": 49150,
+      "changePercent": "+1.97",
       "trend": "up"
     }
   ],
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "초단기적으로 원/달러 환율은 MACD의 상승 모멘텀이 유효하나 스토캐스틱이 과매수권 진입 직전으로 상승 탄력이 둔화될 수 있습니다. DXY의 하락 추세와 코스피 외국인 수급의 긍정적 흐름은 원화 강세 압력을 가해 환율 하락에 힘을 실을 것입니다. 따라서 내일 환율은 소폭 하락할 것으로 예상됩니다.\n\n주간 단위에서는 MA20 상승 추세에도 불구하고 DXY 하락, 한미 금리차 축소, 한국 증시 강세 등 거시적 펀더멘털이 원화 강세 압력을 강화할 것입니다. 한국 소비자물가 상승도 통화 긴축 기대감으로 원화 강세에 기여하며, 경상수지 및 단기외채 비중은 하방 경직성을 제공하지만, 전반적으로 주간 환율은 하락 압력을 받을 것입니다.\n\n현재 VIX 공포지수 26.95pt와 상승 중인 단기외채 비중은 시장의 잠재적 불안정성과 대외 취약성 확대를 나타내는 복합 위험 신호입니다.\n\n실전 투자 대응: 목표 매도가는 1500원 초반 (1501~1503원)으로 설정하며, 오전 9시 30분에서 10시 30분 사이 외환시장 개장 초반의 변동성을 활용하여 매도 포지션을 고려합니다. 결론: 하락 우세",
     "lastAiUpdate": 1774408618866,
     "score": {
-      "upScore": 26.91520677357873,
-      "downScore": 38.8328038563825
+      "upScore": 26.903467722881803,
+      "downScore": 38.76367487810972
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 25. AM 3:48:01"
+  "lastUpdate": "2026. 3. 25. AM 3:53:04"
 }
