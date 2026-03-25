@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.27",
+      "value": "99.23",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 99.27
+          "value": 99.23
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "25.37",
+      "value": "25.35",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 25.37
+          "value": 25.35
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "86.86",
+      "value": "86.7",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 86.86
+          "value": 86.7
         }
       ]
     },
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "942.65",
+      "value": "942.74",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,738.07",
+      "value": "1,738.00",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.05",
+      "value": "217.07",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "초단기적으로 MACD 상승 모멘텀은 유효하나, Stochastic 과매수권 진입은 단기 조정 압력을 예고한다. DXY 하락 추세에도 불구, 국내 외국인 수급은 아직 미약해 내일 환율은 1500원 저항선을 확인하며 소폭 하락할 것으로 보인다. 주간 관점에서 DXY 및 VIX 하락은 위험선호를 회복시켜 원화 강세를 지지하고, 코스피 상승세도 긍정적이다. 경상수지 악화와 단기외채 증가는 약세 압력이지만, MA20 상승 추세와 전반적인 거시 지표는 환율의 안정적 하락에 무게를 싣는다.\n\n현재 스토캐스틱 과매수권 진입 및 볼린저밴드 상단 근접은 단기 과열 신호로, 급격한 조정 가능성을 경고한다. 동시에 경상수지 악화와 단기외채 비중 증가는 원화의 대외 취약성을 높이는 복합적 위험 신호로, 예상치 못한 대외 충격 발생 시 환율 변동성 확대 가능성이 있다.\n\n실전 투자 대응: 1500원 상향 돌파 실패 시 1490원 매도, 1480원 지지 확인 시 1485원 매수. 진입 시간대는 09:00~10:30 또는 15:00~16:00 추천. 결론: 하락 우세",
     "lastAiUpdate": 1774437720194,
     "score": {
-      "upScore": 31.17022633870389,
-      "downScore": 40.92560370622253
+      "upScore": 31.18517108500261,
+      "downScore": 40.949844641237725
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 25. AM 11:32:53"
+  "lastUpdate": "2026. 3. 25. AM 11:37:48"
 }
