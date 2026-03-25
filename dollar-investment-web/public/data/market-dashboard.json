@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.27",
+      "value": "99.25",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 99.27
+          "value": 99.25
         }
       ]
     },
@@ -451,7 +451,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,690.63",
+      "value": "5,692.75",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -493,7 +493,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 5690.63
+          "value": 5692.75
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "88.28",
+      "value": "88.18",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-25",
-          "value": 88.28
+          "value": 88.18
         }
       ]
     },
@@ -1229,8 +1229,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 193400,
-      "changePercent": "+1.95",
+      "price": 193100,
+      "changePercent": "+1.79",
       "trend": "up"
     },
     {
@@ -1239,8 +1239,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1022500,
-      "changePercent": "+3.70",
+      "price": 1022000,
+      "changePercent": "+3.65",
       "trend": "up"
     },
     {
@@ -1249,8 +1249,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 501000,
-      "changePercent": "+1.83",
+      "price": 501500,
+      "changePercent": "+1.93",
       "trend": "up"
     },
     {
@@ -1259,8 +1259,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 160400,
-      "changePercent": "+1.58",
+      "price": 160300,
+      "changePercent": "+1.52",
       "trend": "up"
     },
     {
@@ -1279,8 +1279,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 49200,
-      "changePercent": "+2.07",
+      "price": 49250,
+      "changePercent": "+2.18",
       "trend": "up"
     }
   ],
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "환율의 단기 상승 모멘텀은 MACD와 이동평균에서 확인되나, 달러 인덱스(DXY) 하락 추세와 코스피 외국인 수급 개선은 원화 강세를 지지하며 Stochastic 과매수권 진입을 앞두고 있어 단기 조정 압력이 높습니다. 주간 단위에서는 국제 유가 하락, 미국 하이일드 스프레드 축소 등 전반적인 리스크 완화가 위험 선호 심리를 강화하며 글로벌 달러 약세 기조에 힘입어 원/달러 환율의 하방 압력이 더욱 커질 전망입니다. 다만, 한국의 높은 소비자물가, 경상수지 악화, 단기외채 비중 증가는 잠재적 원화 약세 위험 신호로 작용할 수 있습니다.\n\n실전 투자 대응: 현재 환율 수준(1494원대)에서 1500원 상향 돌파 시 1510원 부근 매도 후 1480원대 이하 재매수 전략을 권고합니다. 09:00~15:30 한국 외환시장 정규 거래시간 중 외국인 수급과 DXY 흐름을 주시하며 1495원 이상 재상승 시 매도 진입을 고려, 목표가는 1485원~1475원입니다. 결론: 하락 우세",
     "lastAiUpdate": 1774405006853,
     "score": {
-      "upScore": 26.951003854846757,
-      "downScore": 39.24756103157445
+      "upScore": 26.95818119297061,
+      "downScore": 39.281167620525196
     }
   },
   "technicals": {
@@ -1344,5 +1344,5 @@
     "compoundSignals": []
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 25. AM 2:48:07"
+  "lastUpdate": "2026. 3. 25. AM 2:50:30"
 }
