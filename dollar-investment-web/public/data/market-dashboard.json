@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "28.13",
+      "value": "28.15",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-26",
-          "value": 28.13
+          "value": 28.15
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "94.24",
+      "value": "94.29",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-26",
-          "value": 94.24
+          "value": 94.29
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,509.20",
+      "value": "1,510.20",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "944.34",
+      "value": "944.97",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,739.20",
+      "value": "1,740.20",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.02",
+      "value": "218.17",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1309,7 +1309,7 @@
     "detailedAnalysis": "원/달러 환율은 초단기적으로 Stochastic 과매수로 조정 압력이 예상되나, DXY 및 VIX 강세로 하락폭은 제한적입니다. 주간 관점에서는 한국 물가 상승, 경상수지 악화, 유가 강세, 한미 금리차 확대 등 매크로 펀더멘털 악화와 MA20 상승 추세가 원화 약세 및 환율 상승 압력을 지속시킬 것입니다.\n\n현재 VIX, DXY, 유가 동시 상승은 위험회피 심리를 극대화하며, 코스피 하락 및 경상수지 악화가 원화에 강력한 복합 하방 압력을 가합니다. 이러한 전반적인 환경은 달러 강세 및 원화 약세 흐름을 확고히 합니다.\n\n실전 투자 대응: 단기 조정 시 1495원 지지 확인 후 09:30~11:00, 14:00~16:00 매수, 목표가는 1515원 이상으로 설정. 결론: 상승 우세.",
     "lastAiUpdate": 1774552917550,
     "score": {
-      "upScore": 42.17709850658258,
+      "upScore": 42.172119657651585,
       "downScore": 35.843596031236345
     }
   },
@@ -1352,5 +1352,5 @@
     ]
   },
   "backtest": null,
-  "lastUpdate": "2026. 3. 26. PM 7:48:16"
+  "lastUpdate": "2026. 3. 26. PM 7:53:08"
 }
