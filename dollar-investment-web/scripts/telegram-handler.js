@@ -1,5 +1,5 @@
 /**
- * 텔레그램 리모컨 핸들러 (Remote Control Handler) - 키 로드 로직 완벽 버전
+ * 텔레그램 리모컨 핸들러 (Remote Control Handler) - 실시간 시각 주입 버전
  */
 
 import fs from 'fs';
@@ -11,13 +11,13 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// .env 수동 파싱 (기존 환경 변수를 덮어쓰지 않도록 함)
+// .env 수동 파싱
 const envPath = path.join(__dirname, '..', '.env');
 const envConfig = {};
 if (fs.existsSync(envPath)) {
     try {
         const envContent = fs.readFileSync(envPath, 'utf8');
-        envContent.split('\n').forEach(line => {
+        envContent.split('\n').filter(Boolean).forEach(line => {
             const [key, ...value] = line.split('=');
             if (key && value.length > 0) {
                 envConfig[key.trim()] = value.join('=').trim().replace(/^["']|["']$/g, '');
@@ -37,7 +37,7 @@ function getRemoteControlMarkup() {
     return {
         inline_keyboard: [
           [{ text: "📸 실시간 스냅샷", callback_data: "cmd_snap" }, { text: "🤖 AI 한수지 상담", callback_data: "cmd_ask" }],
-          [{ text: "🔄 지표 즉시 갱신", url: "https://github.com/giroklabs/exchangealert/actions/workflows/fetch-market-dashboard.yml" }, { text: "🌐 대시보드", url: "https://giroklabs.github.io/exchangealert/" }]
+          [{ text: "🔄 지표 즉시 갱신", url: "https://github.com/giroklabs/exchangealert/actions/workflows/fetch-market-dashboard.yml" }, { text: "�� 대시보드", url: "https://giroklabs.github.io/exchangealert/" }]
         ]
     };
 }
@@ -91,7 +91,10 @@ async function askAI(question = "") {
     let context = "";
     if (fs.existsSync(DASHBOARD_FILE)) context = "지표 요약: " + getDashboardSummary();
     
-    const prompt = "금융 분석가 한수지로서 전문적이고 친절하게 답변하세요. " + (question || "현재 시장 요약해줘") + "\n\n" + context;
+    // 핵심 수정: 현재 서울 시각 명시적 주입
+    const now = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+    const prompt = "현재 서울 시간: " + now + "\n금융 분석가 한수지로서 전문적이고 친절하게 답변하세요. 현재 시각이 장 중인지, 장 마감 후인지, 주말인지를 고려하여 실시간성 있는 분석을 제공하세요.\n질문: " + (question || "현재 시장 요약해줘") + "\n\n" + context;
+    
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY;
 
     return new Promise(resolve => {
