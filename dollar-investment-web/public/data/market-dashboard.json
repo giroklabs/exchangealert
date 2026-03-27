@@ -451,7 +451,7 @@
       "description": "국내 시장 악화 시 원화 약세(환율 상승) 유도",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "value": "5,418.82",
+      "value": "5,419.93",
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -493,7 +493,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 5418.82
+          "value": 5419.93
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "93.87",
+      "value": "94.05",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 93.87
+          "value": 94.05
         }
       ]
     },
@@ -954,7 +954,7 @@
       "impact": "down",
       "source": "KIS 실시간",
       "description": "외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용",
-      "value": "0",
+      "value": "5",
       "trend": "down",
       "realizedImpact": "neutral",
       "history": [
@@ -1012,7 +1012,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 0
+          "value": 5
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,508.70",
+      "value": "1,509.40",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "945.12",
+      "value": "945.47",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,740.89",
+      "value": "1,741.35",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.06",
+      "value": "218.15",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1286,22 +1286,22 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 50,
-    "downProb": 50,
+    "upProb": 49,
+    "downProb": 51,
     "timeframes": {
       "d1": {
-        "upProb": 66,
-        "downProb": 34,
+        "upProb": 65,
+        "downProb": 35,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 55,
-        "downProb": 45,
+        "upProb": 53,
+        "downProb": 47,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 49,
-        "downProb": 51,
+        "upProb": 48,
+        "downProb": 52,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 MACD와 이동평균선의 강한 상승 모멘텀, 외국인 자금 유출 압력으로 단기 상승 추세가 예상됩니다. DXY 하락에도 VIX 급등에 따른 위험 회피 심리가 원화 약세 압력을 강화하고 있습니다. 주간 단위로는 한국의 인플레이션 압력, 확대되는 한미 금리차, 경상수지 둔화 등 매크로 펀더멘털 악화가 환율 상승 흐름을 지지할 것입니다.\n\n코스피는 MACD 매도 신호, 이동평균선 역배열 등 기술적 지표상 강한 하락 모멘텀이 확인됩니다. 외국인 순매도 지속과 원/달러 환율 상승은 추가 하락 압력으로 작용하며, 주간 전망 역시 VIX 급등에 따른 시장 불확실성 확대로 위험자산 회피 심리가 우세할 것입니다. 투자자 예탁금 증가에도 불구하고 전반적인 매크로 환경과 수급 악화가 주간 하락 추세를 이끌 것으로 판단됩니다.\n\n현재 VIX 공포지수 급등(27.44pt), 한미 금리차 확대(0.55%p), 경상수지 둔화는 핵심 위험 신호입니다. 이는 복합적으로 외국인 자금 이탈을 가속화하고 원화 약세 및 코스피 하락을 부추기는 요인으로 작용하고 있습니다. 단기외채 비중 증가 또한 잠재적 리스크로, 전반적인 위험 회피 심리 강화가 환율 상승과 코스피 하락을 주도할 것입니다.\n\n환율 대응: 1518원 저항선 돌파 시 추가 상승 가능성에 대비, 단기적으로 1490원 지지 확인 후 매수 고려. 환율 결론: 상승 우세. 코스피 대응: 5200선 지지 여부를 확인하며, 반등 시 외국인 수급 개선 여부 확인 후 분할 매수. 코스피 결론: 하락 우세.",
     "lastAiUpdate": 1774592190444,
     "score": {
-      "upScore": 40.08600348797988,
-      "downScore": 39.55029960936453
+      "upScore": 40.06109046801058,
+      "downScore": 41.477220168434116
     }
   },
   "technicals": {
@@ -1360,34 +1360,34 @@
   },
   "kospiTechnicals": {
     "rsi14": 54.3,
-    "ma5": 5495.92,
-    "ma20": 5595.13,
-    "ma60": 5232.66,
+    "ma5": 5496.45,
+    "ma20": 5595.26,
+    "ma60": 5232.71,
     "bb": {
-      "upper": 6066.48,
-      "mid": 5595.13,
-      "lower": 5123.78,
-      "bandwidth": 16.85
+      "upper": 6066.41,
+      "mid": 5595.26,
+      "lower": 5124.11,
+      "bandwidth": 16.84
     },
     "momentum": {
-      "d1": -0.79,
-      "d5": -6.3,
-      "d20": -14.11
+      "d1": -0.74,
+      "d5": -6.25,
+      "d20": -14.07
     },
     "keyLevels": {
       "support": 4116.53,
       "resistance": 6347.41
     },
     "macd": {
-      "macd": 29.7,
-      "signal": 76.27,
-      "hist": -46.57
+      "macd": 29.91,
+      "signal": 76.32,
+      "hist": -46.41
     },
     "stochastic": {
-      "k": 27.6
+      "k": 28
     }
   },
   "kospiSentiment": "코스피 하락 우세",
   "backtest": null,
-  "lastUpdate": "2026. 3. 27. AM 6:33:08"
+  "lastUpdate": "2026. 3. 27. AM 6:37:53"
 }
