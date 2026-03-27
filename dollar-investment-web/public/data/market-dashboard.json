@@ -64,9 +64,9 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "99.87",
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "99.91",
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-16",
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 99.87
+          "value": 99.91
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "28.89",
+      "value": "28.77",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 28.89
+          "value": 28.77
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "97.26",
+      "value": "97.48",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 97.26
+          "value": 97.48
         }
       ]
     },
@@ -1286,22 +1286,22 @@
   ],
   "forecast": {
     "sentiment": "환율 상승 우세",
-    "upProb": 47,
-    "downProb": 53,
+    "upProb": 53,
+    "downProb": 47,
     "timeframes": {
       "d1": {
-        "upProb": 64,
-        "downProb": 36,
+        "upProb": 65,
+        "downProb": 35,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 51,
-        "downProb": 49,
+        "upProb": 53,
+        "downProb": 47,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 46,
-        "downProb": 54,
+        "upProb": 47,
+        "downProb": 53,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1309,8 +1309,8 @@
     "detailedAnalysis": "원/달러 환율은 달러 인덱스 강세, 외국인 순매도 압력, 기술적 지표상 상승 모멘텀 유지로 내일도 상승 압력을 받을 것입니다. Stochastic 과매수권 진입은 단기 급등 피로도를 시사하나 전반적 상승세는 유효합니다. 주간 단위로는 미국의 높은 금리 유지 및 한미 금리차 확대, 경상수지 둔화, VIX 상승 등 매크로 요인이 복합 작용하며 환율의 상방 압력이 지속될 것입니다.\n\n코스피는 기술적 지표들이 강한 하락 모멘텀을 나타내고 있으며, 외국인 매도세와 원/달러 환율 상승 압력이 부담으로 작용하여 내일도 하락세를 이어갈 가능성이 높습니다. 주간 단위로는 높은 VIX 지수가 시사하는 시장 불안정성, 불안정한 외국인 수급, 금리 및 유가 상승 등 매크로 악화로 하방 압력이 심화될 것입니다. 투자자 예탁금 증가는 시장 방어에 역부족입니다.\n\n현재 가장 강력한 복합 위험 신호는 VIX 공포지수와 달러 인덱스(DXY)의 동반 급등입니다. 이는 글로벌 유동성 위축과 안전자산 선호 심리 확대를 의미하며, 원/달러 환율의 추가 급등과 코스피의 가파른 하락을 동시에 유발할 수 있습니다. 미국 하이일드 스프레드 확대와 국제 유가 상승은 이러한 위험을 더욱 고조시키므로 국내 금융시장에 대한 전반적 경계심이 필요합니다.\n\n환율 대응: 1517원 저항선 돌파 여부를 주시하며, 단기 조정 시 1500원 지지 확인 후 매수 포지션 고려. 환율 결론: 상승 우세. 코스피 대응: 5500pt 상향 돌파 실패 시 매도 관점 유지, 5100pt 지지 여부 확인 전까지 보수적 접근. 코스피 결론: 하락 우세.",
     "lastAiUpdate": 1774623713392,
     "score": {
-      "upScore": 34.73694548994268,
-      "downScore": 39.08902480226567
+      "upScore": 40.45981819749747,
+      "downScore": 35.32984994301623
     }
   },
   "technicals": {
@@ -1343,11 +1343,11 @@
     },
     "compoundSignals": [
       {
-        "type": "RISK_DIVERGE",
-        "up": 0,
-        "down": 1.5,
+        "type": "DOLLAR_PANIC",
+        "up": 2.5,
+        "down": 0,
         "block": "risk",
-        "desc": "위험/달러 분리 (VIX↑+DXY↓): 일시적 반등 가능성"
+        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
       }
     ]
   },
@@ -1382,5 +1382,5 @@
   },
   "kospiSentiment": "코스피 하락 우세",
   "backtest": null,
-  "lastUpdate": "2026. 3. 27. PM 3:48:00"
+  "lastUpdate": "2026. 3. 27. PM 3:52:53"
 }
