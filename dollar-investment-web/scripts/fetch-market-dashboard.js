@@ -670,7 +670,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -701,6 +701,24 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         }
     }
 
+    // 코스피 기술적 지표 섹션 생성
+    let kospiTechSection = '';
+    if (kospiTechnicals) {
+        const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels, macd, stochastic } = kospiTechnicals;
+        const rsiSignal = rsi14 > 70 ? '과매수 주의' : (rsi14 < 30 ? '과매도 반등 가능' : '중립');
+        const maSignal = ma5 && ma20 ? (ma5 > ma20 ? '단기 상승 모멘텀' : '단기 하락 모멘텀') : '';
+        kospiTechSection = `
+
+기술적 코스피(KOSPI) 지표:
+- RSI(14일): ${rsi14} → ${rsiSignal}
+- MACD: MACD=${macd?.macd || 'N/A'}, Signal=${macd?.signal || 'N/A'}, Hist=${macd?.hist || 'N/A'}
+- Stochastic(14): %K=${stochastic?.k || 'N/A'}%
+- 이동평균: MA5=${ma5}pt, MA20=${ma20}pt, MA60=${ma60}pt (${maSignal})
+- 볼린저밴드: 상단=${bb?.upper}pt / 중단=${bb?.mid}pt / 하단=${bb?.lower}pt (밴드폭=${bb?.bandwidth}%)
+- 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
+- 핵심 레벨: 60일 지지=${keyLevels?.support}pt, 저항=${keyLevels?.resistance}pt`;
+    }
+
     // 백테스팅 성과 섹션 생성
     let backtestSection = '';
     if (backtest) {
@@ -714,24 +732,33 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         }
     }
 
-    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 원/달러 환율 방향성을 한국어로 심층 분석해주세요. 단, "안녕하십니까, 금융 분석가 한수지입니다." 등 인사말이나 소개 멘트는 절대 포함하지 말고 곧바로 본문 분석부터 시작하세요.
+    const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 (1) 원/달러 환율과 (2) 코스피(KOSPI) 지수의 방향성을 한국어로 심층 분석해주세요. 단, 인사말이나 소개 멘트는 절대 포함하지 말고 곧바로 본문 분석부터 시작하세요.
 
-연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다.
+연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다. 코스피는 외국인 수급, VIX, 원/달러 환율, 미국 증시 동조화, 투자자 예탁금에 의해 주도됩니다.
 
 분석 대상 지표:
 ${blockSummary}
 ${techSection}
+${kospiTechSection}
 ${backtestSection}
 
 원/달러 환율 최근 추세 (최신순):
 ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
 분석 가이드:
-1. [단기(1D) 예측]: 철저히 기술적 지표(MACD 역전 여부, Stochastic), 당일 외국인 수급 강도, 실시간 DXY 변화율에 압도적인 가중치를 부여하여 내일의 환율 방향(상승/하락)을 직설적으로 적어주세요.
-2. [주간(1W) 예측]: 이번 주 예정된 매크로 펀더멘털(물가, 금리, 무역수지) 및 MA20 추세를 결합하여 주간 관점의 추세를 제시하세요.
-3. [위험 신호]: 동시 발생한 위험 신호(복합 신호)가 있다면 즉시 이를 경고하세요.
-4. 응답은 지표 나열을 자제하고 오직 결론 위주의 **간결한 2~3개 단락 (500자 이내)**로 작성하세요. 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요.
-5. 마지막 문장은 반드시 "실전 투자 대응: [구체적 매수/매도 목표가 및 추천 진입 시간대(한국 외환시장 정규 거래시간인 09:00~익일 02:00 내에서 작성)를 포함한 대응전략]. 결론: [상승/하락/보합] 우세" 포맷을 엄격하게 지켜주세요.`;
+[파트A: 원/달러 환율 예측]
+1. [환율 단기(1D)]: 기술적 지표(MACD, Stochastic), 외국인 수급 강도, DXY 변화율 기반으로 내일의 환율 방향(상승/하락)을 직설적으로.
+2. [환율 주간(1W)]: 매크로 펀더멘털(물가, 금리, 무역수지) 및 MA20 추세 결합.
+
+[파트B: 코스피(KOSPI) 예측]
+3. [코스피 단기(1D)]: 코스피 기술적 지표(RSI, MACD, Stochastic), 외국인 순매수 방향, 원/달러 환율과의 역상관관계, 미국 증시(S&P500/나스닥) 영향을 기반으로 내일 코스피 방향(상승/하락)을 직설적으로.
+4. [코스피 주간(1W)]: 투자자 예탁금 추세, VIX 레벨, 수급 흐름을 기반으로 주간 코스피 추세.
+
+[파트C: 공통]
+5. [위험 신호]: 환율·코스피 공통으로 영향을 미치는 복합 위험 신호(VIX 급등 + DXY 급등 등)가 있다면 즉시 경고.
+6. 응답은 지표 나열을 자제하고 결론 위주의 간결한 3~4개 단락 (700자 이내)로 작성. 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요.
+7. 마지막 문장은 반드시 다음 포맷을 엄격하게 지켜주세요:
+"환율 대응: [구체적 환율 매수/매도 목표가 및 대응전략]. 환율 결론: [상승/하락/보합] 우세. 코스피 대응: [구체적 코스피 매수/매도 포인트 및 대응전략]. 코스피 결론: [상승/하락/보합] 우세"`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -1306,6 +1333,49 @@ async function main() {
 
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
 
+    // --- 코스피 6개월 히스토리 자동 수집 (기술적 지표 계산용) ---
+    try {
+        console.log('📈 코스피(^KS11) 6개월 히스토리 수집 중...');
+        const kospiUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=6mo&interval=1d';
+        const kospiRaw = await new Promise((resolve, reject) => {
+            https.get(kospiUrl, {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
+            }, (res) => {
+                let data = '';
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => {
+                    try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+                });
+            }).on('error', reject);
+        });
+        if (kospiRaw.chart?.result?.[0]) {
+            const kResult = kospiRaw.chart.result[0];
+            const kTimestamps = kResult.timestamp;
+            const kQuotes = kResult.indicators.quote[0];
+            const kHistoryMap = new Map();
+            kTimestamps.forEach((ts, i) => {
+                const date = new Date(ts * 1000).toISOString().split('T')[0];
+                if (kQuotes.high[i] !== null && kQuotes.low[i] !== null && kQuotes.close[i] !== null) {
+                    kHistoryMap.set(date, {
+                        date,
+                        open: parseFloat(kQuotes.open[i]?.toFixed(2) || '0'),
+                        high: parseFloat(kQuotes.high[i].toFixed(2)),
+                        low: parseFloat(kQuotes.low[i].toFixed(2)),
+                        close: parseFloat(kQuotes.close[i].toFixed(2)),
+                        volume: kQuotes.volume[i] || 0
+                    });
+                }
+            });
+            const kHistory = Array.from(kHistoryMap.values()).sort((a, b) => b.date.localeCompare(a.date));
+            const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
+            fs.mkdirSync(path.dirname(kospiHistPath), { recursive: true });
+            fs.writeFileSync(kospiHistPath, JSON.stringify({ symbol: '^KS11', name: 'KOSPI', lastUpdate: new Date().toISOString(), data: kHistory }, null, 2));
+            console.log(`✅ 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
+        }
+    } catch (kospiHistErr) {
+        console.warn('⚠️ 코스피 히스토리 수집 실패 (비치명적):', kospiHistErr.message);
+    }
+
     // --- 기술적 지표 계산 (fx-history-6m.json 활용) ---
     let technicals = null;
     try {
@@ -1332,6 +1402,36 @@ async function main() {
         }
     } catch (techErr) {
         console.warn('⚠️ 기술적 지표 계산 실패 (비치명적):', techErr.message);
+    }
+
+    // --- 코스피 기술적 지표 계산 (kospi-history-6m.json 활용) ---
+    let kospiTechnicals = null;
+    try {
+        const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
+        const altKospiHistPath = path.join(process.cwd(), 'public', 'data', 'kospi-history-6m.json');
+        const kospiHistFile = fs.existsSync(kospiHistPath) ? kospiHistPath : (fs.existsSync(altKospiHistPath) ? altKospiHistPath : null);
+        if (kospiHistFile) {
+            const kospiHist = JSON.parse(fs.readFileSync(kospiHistFile, 'utf8'));
+            const kCloses = kospiHist.data.map(d => d.close); // 최신→과거 순
+            const kRsi14    = calculateRSI(kCloses);
+            const kMa5      = calculateMA(kCloses, 5);
+            const kMa20     = calculateMA(kCloses, 20);
+            const kMa60     = calculateMA(kCloses, 60);
+            const kBb       = calculateBB(kCloses, 20);
+            const kMomentum = calculateMomentum(kCloses);
+            const kLevels   = detectKeyLevels(kospiHist.data);
+            const kMacd     = calculateMACD(kCloses);
+            const kStochastic = calculateStochastic(kospiHist.data, 14);
+            kospiTechnicals = { rsi14: kRsi14, ma5: kMa5, ma20: kMa20, ma60: kMa60, bb: kBb, momentum: kMomentum, keyLevels: kLevels, macd: kMacd, stochastic: kStochastic };
+            console.log(`📐 [KOSPI Tech] RSI14=${kRsi14}, MA5=${kMa5}, MA20=${kMa20}, MA60=${kMa60}`);
+            console.log(`📐 [KOSPI Tech] MACD=${kMacd?.hist}, Stochastic=%K ${kStochastic?.k}%`);
+            console.log(`📐 [KOSPI Tech] BB(상단=${kBb?.upper}, 하단=${kBb?.lower}), 지지=${kLevels.support}, 저항=${kLevels.resistance}`);
+            console.log(`📐 [KOSPI Tech] 모멘텀: 1일=${kMomentum.d1}%, 5일=${kMomentum.d5}%, 20일=${kMomentum.d20}%`);
+        } else {
+            console.log('📐 [KOSPI Tech] kospi-history-6m.json 파일 없음 (fetch-kospi-history.js 실행 필요)');
+        }
+    } catch (kospiTechErr) {
+        console.warn('⚠️ 코스피 기술적 지표 계산 실패 (비치명적):', kospiTechErr.message);
     }
 
 
@@ -1393,7 +1493,7 @@ async function main() {
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
         lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest);
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals);
         lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
@@ -1413,19 +1513,38 @@ async function main() {
 
     // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
     sentiment = '보합';
-    const conclusionMatch = aiAnalysis.match(/결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
+    const conclusionMatch = aiAnalysis.match(/환율\s*결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
     if (conclusionMatch) {
         const res = conclusionMatch[1];
         if (res === '상승' || res === '강세') sentiment = '환율 상승 우세';
         else if (res === '하락' || res === '약세') sentiment = '환율 하락 우세';
         else sentiment = '보통';
     } else {
-        // Fallback: 문장 말미나 결론부 근처 단어 탐색
-        const lastPart = aiAnalysis.slice(-150);
-        if (/상승\s*우세|상향\s*돌파|강세\s*지속/i.test(lastPart)) sentiment = '환율 상승 우세';
-        else if (/하락\s*우세|하향\s*이탈|약세\s*전환/i.test(lastPart)) sentiment = '환율 하락 우세';
-        else sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보합');
+        // 기존 방식 Fallback
+        const oldMatch = aiAnalysis.match(/결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
+        if (oldMatch) {
+            const res = oldMatch[1];
+            if (res === '상승' || res === '강세') sentiment = '환율 상승 우세';
+            else if (res === '하락' || res === '약세') sentiment = '환율 하락 우세';
+            else sentiment = '보통';
+        } else {
+            const lastPart = aiAnalysis.slice(-300);
+            if (/상승\s*우세|상향\s*돌파|강세\s*지속/i.test(lastPart)) sentiment = '환율 상승 우세';
+            else if (/하락\s*우세|하향\s*이탈|약세\s*전환/i.test(lastPart)) sentiment = '환율 하락 우세';
+            else sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보합');
+        }
     }
+
+    // 코스피 감성 추출: '코스피 결론: 상승/하락/보합' 패턴 파싱
+    let kospiSentiment = '보합';
+    const kospiConclusionMatch = aiAnalysis.match(/코스피\s*결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
+    if (kospiConclusionMatch) {
+        const kRes = kospiConclusionMatch[1];
+        if (kRes === '상승' || kRes === '강세') kospiSentiment = '코스피 상승 우세';
+        else if (kRes === '하락' || kRes === '약세') kospiSentiment = '코스피 하락 우세';
+        else kospiSentiment = '보합';
+    }
+    console.log(`📊 [Sentiment] 환율: ${sentiment} | 코스피: ${kospiSentiment}`);
 
     // 3. 주요국 환율 정보 (환율알라미 앱 데이터 - Naver/Hana Bank)
     const majorRates = [];
@@ -1636,6 +1755,8 @@ async function main() {
             score: { upScore, downScore }
         },
         technicals: technicals ? { ...technicals, compoundSignals } : null,
+        kospiTechnicals: kospiTechnicals || null,
+        kospiSentiment,
         backtest,
         lastUpdate: new Date().toLocaleString('ko-KR')
     };
