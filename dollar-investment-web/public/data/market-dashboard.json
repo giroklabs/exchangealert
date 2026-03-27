@@ -64,7 +64,7 @@
       "description": "달러의 상대적 가치 (환율의 핵심 나침반)",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "value": "100.18",
+      "value": "100.14",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -106,7 +106,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 100.18
+          "value": 100.14
         }
       ]
     },
@@ -175,7 +175,7 @@
       "source": "CBOE",
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
-      "value": "30.23",
+      "value": "30.32",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -217,7 +217,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 30.23
+          "value": 30.32
         }
       ]
     },
@@ -506,7 +506,7 @@
       "source": "WTI",
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
-      "value": "98.37",
+      "value": "98.44",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -548,7 +548,7 @@
         },
         {
           "date": "2026-03-27",
-          "value": 98.37
+          "value": 98.44
         }
       ]
     },
@@ -1185,7 +1185,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,513.10",
+      "value": "1,513.30",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1196,7 +1196,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "943.71",
+      "value": "943.43",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1206,7 +1206,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,742.03",
+      "value": "1,742.11",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1216,7 +1216,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.65",
+      "value": "218.67",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1251,6 +1251,16 @@
       "enName": "Hyundai Motor",
       "price": 495000,
       "changePercent": "+1.02",
+      "trend": "up"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 155800,
+      "changePercent": "+0.71",
       "trend": "up"
     },
     {
@@ -1299,7 +1309,7 @@
     "detailedAnalysis": "원/달러 환율은 단기 및 주간 모두 강한 상승 압력을 받을 것입니다. DXY 상승 추세와 VIX 급등은 위험 회피 심리를 강화하며 달러 강세를 유발합니다. 기술적 지표인 MACD 히스토그램과 이동평균선은 단기 상승 모멘텀을 명확히 보여주고, MA20선 위 견고한 흐름은 추가 상승 여력을 시사합니다. 국내 물가 상승과 경상수지 악화, 외국인 수급 약화도 원화 약세 요인입니다.\n\n코스피 지수는 단기 및 주간 단위로 하방 압력이 지속될 전망입니다. VIX 급등은 투자 심리를 위축시키고, 원/달러 환율 상승은 외국인 자금 이탈을 가속화하며 코스피에 악영향을 미칩니다. MACD 히스토그램 하락세와 이동평균선 역배열은 단기 하락 모멘텀 강화를 확인시켜 줍니다. 예탁금 증가에도 불구하고 현재 시장 불안정성은 상쇄하기 어려워 보입니다.\n\nVIX 공포지수 급등과 DXY 상승의 동반 발생은 글로벌 위험 자산 기피 심리를 보여주는 복합적 위험 신호입니다. 이는 환율 상승과 코스피 하락 압력을 동시에 증폭시키므로, 시장 전반에 대한 경계심을 높여야 합니다.\n환율 대응: 1515원 돌파 시 추가 상승 관점에서 매수 포지션 유지. 1495원 하향 이탈 시 매도 또는 관망. 환율 결론: 상승 우세. 코스피 대응: 5400pt 하회 시 매도 포지션 강화. 5500pt 회복 시 보수적 관망. 코스피 결론: 하락 우세.",
     "lastAiUpdate": 1774634239920,
     "score": {
-      "upScore": 41.19581964115253,
+      "upScore": 41.2076429660276,
       "downScore": 33.93033064541645
     }
   },
@@ -1372,5 +1382,5 @@
   },
   "kospiSentiment": "코스피 하락 우세",
   "backtest": null,
-  "lastUpdate": "2026. 3. 27. PM 5:59:11"
+  "lastUpdate": "2026. 3. 27. PM 6:03:19"
 }
