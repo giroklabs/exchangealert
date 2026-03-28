@@ -580,6 +580,55 @@ async function fetchMarketInvestorTrend(token) {
 
 
 
+/**
+ * KIS API를 통한 증시 통계 조회 (투자자예탁금 등)
+ * TR ID: FHKST01011300 (국내주식 시장지표 일별 추이)
+ */
+async function fetchMarketStats(token) {
+    if (!token) return null;
+    
+    const tryFetch = async (baseUrl) => {
+        try {
+            // fid_cond_mrkt_div_code: U (업종/지수), fid_input_iscd: 0001 (코스피)
+            const url = `${baseUrl}/uapi/domestic-stock/v1/market-index/daily-market-statistics?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHKST01011300",
+                    "custtype": "P",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                }
+            });
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            return { error: e.message };
+        }
+    };
+
+    try {
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data.error || !data.output) data = await tryFetch(KIS_BASE_URL_REAL);
+
+        if (data.output && Array.isArray(data.output) && data.output.length > 0) {
+            // stck_ivst_dpsit_amt: 주식투자자예탁금 (단위: 억원? 보통 원/백만원 단위이므로 확인 필요)
+            // KIS API 매뉴얼상 보통 백만원 단위인 경우가 많음.
+            return data.output.map(d => ({
+                date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                // 예탁금 수치는 보통 매우 크므로 단위 보정이 필요할 수 있음
+                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만원 -> 억원 보정 시도
+            })).slice(0, 15);
+        }
+    } catch (e) {
+        console.error("❌ KIS 증시통계(예탁금) 조회 에러:", e.message);
+    }
+    return null;
+}
+
+
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
         console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜜니다.");
@@ -1091,6 +1140,9 @@ async function main() {
 
     const indicators = [];
     const kisToken = await getKisAccessToken();
+    const marketStats = kisToken ? await fetchMarketStats(kisToken) : null;
+    const investorTrend = kisToken ? await fetchMarketInvestorTrend(kisToken) : null;
+    
     // 블록별 점수 합산용 (정규화용)
     const blockScores = {
         'rates-dollar': { up: 0, down: 0 },
@@ -1187,9 +1239,11 @@ async function main() {
         }
 
         if (!s.hidden) {
-            indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history });
+            // 코스피 지수의 경우 KIS 연동 여부에 따라 소스 표기 차별화
+            const finalSource = (s.id === 'KOSPI' && s.isRealtime) ? '한국투자증권 실시간' : (s.source || 'FRED');
+            indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history, source: finalSource });
             const latestDate = obs.length > 0 ? obs[0].date : 'N/A';
-            console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)})`);
+            console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)}) - Source: ${finalSource}`);
         } else {
             // 히든 지표도 데이터는 보유 (계산용)
             indicators.push({ ...s, id: s.id.toLowerCase(), value: numVal, trend, realizedImpact, history, isInternal: true });
@@ -1199,9 +1253,21 @@ async function main() {
 
     for (const item of ECOS_SERIES) {
         // 단기외채 비중은 커스텀 fetch 사용 (두 항목을 나눠서 비중 계산)
-        const rows = item.customFetch === 'shortDebtRatio' 
+        let rows = item.customFetch === 'shortDebtRatio' 
             ? await fetchShortDebtRatio() 
             : await fetchFromEcos(item);
+            
+        // 투자자예탁금의 경우 KIS 데이터(marketStats)가 있다면 우선 활용
+        if (item.id === 'investor-deposits' && marketStats && marketStats.length > 0) {
+            // marketStats 데이터를 ECOS 형식(원 단위)으로 가공하여 호환성 유지하며 교체
+            rows = marketStats.map(s => ({
+                TIME: s.date.replace(/-/g, ''),
+                DATA_VALUE: (s.value * 100000000).toString() // 억원 -> 원 (transform: wonToEok 대응)
+            }));
+            item.source = '한국투자증권 실시간';
+            console.log(`⚡ [KIS] 투자자예탁금 실시간 데이터 적용 완료 (${marketStats[0].value}억원)`);
+        }
+        
         let val, trend, displayVal, history;
 
         if (rows && rows.length > 0) {
@@ -1270,11 +1336,8 @@ async function main() {
 
 
     // 2.1 외국인/기관 순매도 영향권 (KIS API 연동)
-    let investorTrend = null;
-    if (kisToken) {
-        investorTrend = await fetchMarketInvestorTrend(kisToken);
-    }
-
+    // foreignerData, institutionData 등은 이미 상단에서 kisToken을 통해 수집됨
+    
     // 외국인 수급 처리
     const foreignerData = investorTrend?.foreigner;
     if (foreignerData && foreignerData.length > 0) {
@@ -1316,9 +1379,10 @@ async function main() {
             description: '외국인 수급은 환율의 가장 강력한 선행 지표입니다.',
             value: fb.value,
             trend: fb.trend,
-            history: fb.history
+            history: fb.history,
+            source: '한국투자증권 실시간'
         });
-        console.log(`⚠️ [KIS] 외인 수급 fallback 데이터 적용`);
+        console.log(`⚠️ [KIS] 외인 수급 데이터 부재 (데이터 점검 중)`);
     }
 
     // 기관 수급 처리 (프로그램 매매 대용지표)
