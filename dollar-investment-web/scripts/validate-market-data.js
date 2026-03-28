@@ -73,8 +73,8 @@ async function validateMarketData() {
         // 히스토리 날짜 일치 여부 확인 (최근 3개 샘플링)
         for (let i = 0; i < Math.min(3, rateCut.history.length); i++) {
             const h = rateCut.history[i];
-            const gh = gs1.history.find(g => g.date <= h.date) || gs1.history[0];
-            const eh = effr.history.find(e => e.date <= h.date) || effr.history[0];
+            const gh = [...gs1.history].reverse().find(g => g.date <= h.date) || gs1.history[0];
+            const eh = [...effr.history].reverse().find(e => e.date <= h.date) || effr.history[0];
             const calc = parseFloat((gh.value - eh.value).toFixed(3));
             if (Math.abs(calc - h.value) > 0.01) {
                 errors.push(`[rate-cut-expectation] 히스토리 매칭 오류 (${h.date} 시점)`);
