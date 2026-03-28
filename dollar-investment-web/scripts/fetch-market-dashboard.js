@@ -594,7 +594,18 @@ async function fetchMarketStats(token) {
     const tryFetch = async (baseUrl) => {
         try {
             // 공식 엔드포인트: /uapi/domestic-stock/v1/quotations/mktfunds
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/mktfunds`;
+            const now = new Date();
+            const past = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // 30일 전
+            
+            const formatDate = (d) => {
+                return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+            };
+            
+            const startDate = formatDate(past);
+            const endDate = formatDate(now);
+            
+            // 필수 쿼리 파라미터 추가
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/mktfunds?fid_cond_mrkt_div_code=J&fid_input_iscd=0000&fid_input_date_1=${startDate}&fid_input_date_2=${endDate}`;
             
             const res = await fetch(url, {
                 headers: {
