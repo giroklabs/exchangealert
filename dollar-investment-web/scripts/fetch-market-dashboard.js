@@ -1195,38 +1195,42 @@ async function sendTelegramNotification(forecast, lastUpdate) {
     const title = forecast.sentiment === '환율 상승 우세' ? '📈 환율 상승 우세 예측' : (forecast.sentiment === '환율 하락 우세' ? '📉 환율 하락 우세 예측' : '⚖️ 환율 보합/관망 분석');
     const kTitle = (forecast.kospiSentiment || '보합') === '코스피 상승 우세' ? '📈 코스피 상승 우세 예측' : ((forecast.kospiSentiment || '보합') === '코스피 하락 우세' ? '📉 코스피 하락 우세 예측' : '⚖️ 코스피 보합/관망 분석');
     
-    // AI 분석 내용 중 투자 대응 부분과 핵심 내용을 세밀하게 추출
+    // AI 분석 내용 중 파트별 요약과 투자 대응 추출
     const analysisLines = forecast.aiAnalysis.split('\n');
-    let summary = '';
+    let fxSummary = '';
+    let kSummary = '';
     let strategy = '';
+    let currentPart = '';
     let captureStrategy = false;
     
     for (const line of analysisLines) {
         const trimmed = line.trim();
-        if (trimmed.startsWith('실전 투자 대응:')) {
-            captureStrategy = true;
-            continue;
-        }
+        if (trimmed.includes('[파트A:')) { currentPart = 'A'; continue; }
+        if (trimmed.includes('[파트B:')) { currentPart = 'B'; continue; }
+        if (trimmed.startsWith('실전 투자 대응:')) { captureStrategy = true; continue; }
         
+        // 투자 대응 - 환율 및 코스피 항목 모두 캡처
         if (captureStrategy) {
             if (trimmed.startsWith('- ')) {
                 strategy += trimmed + '\n';
-            } else if (trimmed.length > 0 && strategy.length > 0) {
-                // 전략 섹션이 끝남 (다음 섹션이나 빈 줄)
+            } else if (trimmed.length === 0 && strategy.includes('코스피')) {
+                // 코스피 항목까지 다 읽었으면 중단
                 captureStrategy = false;
             }
         }
 
-        // 요약 추출 (전략 섹션이 아니고 결론이 아닌 첫 번째 긴 문장)
-        if (!summary && trimmed.length > 30 && !trimmed.startsWith('[') && !captureStrategy && !trimmed.startsWith('- ')) {
-            summary = trimmed;
+        // 요약 추출 (각 파트별 첫 긴 문장)
+        if (!captureStrategy && trimmed.length > 50 && !trimmed.startsWith('[')) {
+            if (currentPart === 'A' && !fxSummary) fxSummary = trimmed;
+            if (currentPart === 'B' && !kSummary) kSummary = trimmed;
         }
     }
 
     // 마크다운 V1 bold (*text*) 형식으로 변환 (Gemini는 **text** 사용)
     const formatForTelegram = (text) => text.replace(/\*\*/g, '*').trim();
-    const finalSummary = formatForTelegram(summary);
     const finalStrategy = formatForTelegram(strategy);
+    const finalFxSum = formatForTelegram(fxSummary);
+    const finalKSum = formatForTelegram(kSummary);
 
     const kstOptions = { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: true };
     const analysisTime = forecast.lastAiUpdate 
@@ -1236,17 +1240,16 @@ async function sendTelegramNotification(forecast, lastUpdate) {
     const message = `
 🤖 *달러 인베스트 AI 시장 분석*
 
-${title}
-${kTitle}
+${title} / ${kTitle}
 
 📝 *핵심 요약:*
-${finalSummary || '분석 내용을 확인하세요.'}
+• *환율:* ${finalFxSum || '분석 참조'}
+• *코스피:* ${finalKSum || '분석 참조'}
 
 🎯 *투자 대응 가이드:*
 ${finalStrategy || '사이트에서 상세 내용을 확인하세요.'}
 
 🌐 [시장 대시보드 바로가기](https://giroklabs.github.io/exchangealert/)
-
 ⏰ 분석 시점: ${analysisTime}
     `.trim();
 
@@ -1759,21 +1762,26 @@ async function main() {
         const dfedtaru = indicators.find(i => i.id === 'dfedtaru' && i.isInternal);
         const dfedtarl = indicators.find(i => i.id === 'dfedtarl' && i.isInternal);
 
-        if (effr && gs1) {
-            const effrVal = parseFloat(String(effr.value).replace(/,/g, ''));
+        if (effr && gs1 && dfedtaru && dfedtarl) {
             const gs1Val = parseFloat(String(gs1.value).replace(/,/g, ''));
-            const cutExpectation = parseFloat((gs1Val - effrVal).toFixed(3)); // 음수 = 인하 기대
+            const upperBound = parseFloat(String(dfedtaru.value).replace(/,/g, ''));
+            const lowerBound = parseFloat(String(dfedtarl.value).replace(/,/g, ''));
+            const targetMid = (upperBound + lowerBound) / 2;
+            
+            // 스프레드 산출: 타겟 중간값 - 시장금리 (양수 = 인하 기대, 음수 = 인상 기대)
+            const cutExpectation = parseFloat((targetMid - gs1Val).toFixed(3)); 
+            const cutsCount = (cutExpectation / 0.25).toFixed(1); // 25bp 단위 횟수
 
-            // 금리 인하 기대가 강하면 (-0.3% 이하) 코스피 상승 요인
-            if (cutExpectation < -0.3) {
-                kospiScores.up += Math.abs(cutExpectation) * 4; // 인하 기대폭 비례 가중치
-                console.log(`📉 [금리기대] EFFR-GS1 스프레드: ${cutExpectation}% → 금리인하 기대 강화 → 코스피 상승 압력 +${(Math.abs(cutExpectation)*4).toFixed(1)}`);
-            } else if (cutExpectation > 0.2) {
-                // 금리 인상 기대 or 현 수준 유지 → 코스피 하락 압력
-                kospiScores.down += cutExpectation * 3;
-                console.log(`📈 [금리기대] EFFR-GS1 스프레드: ${cutExpectation}% → 금리인상/유지 기대 → 코스피 하락 압력 -${(cutExpectation*3).toFixed(1)}`);
+            // 금리 인하 기대가 강하면 (+0.6% 이상 혹은 2회 이상 인하 기대) 코스피 상승 요인
+            if (cutExpectation > 0.5) {
+                kospiScores.up += cutExpectation * 4; 
+                console.log(`📉 [금리기대] 인하 기대: ${cutsCount}회 (${cutExpectation}%p) → 코스피 상승 압력 +${(cutExpectation*4).toFixed(1)}`);
+            } else if (cutExpectation < -0.3) {
+                // 금리 인상 기대 → 코스피 하락 압력
+                kospiScores.down += Math.abs(cutExpectation) * 3;
+                console.log(`📈 [금리기대] 인상 기대: ${Math.abs(cutsCount)}회 (${cutExpectation}%p) → 코스피 하락 압력 -${(Math.abs(cutExpectation)*3).toFixed(1)}`);
             } else {
-                console.log(`➡️ [금리기대] EFFR-GS1 스프레드: ${cutExpectation}% → 중립 (금리 동결 기대)`);
+                console.log(`➡️ [금리기대] 시장 기대: ${cutsCount}회 인하/인상 (${cutExpectation}%p) → 중립 (동결 기대)`);
             }
 
             // Fed 목표 범위와 실제 EFFR 비교 (하단에 가까울수록 dovish)
@@ -1787,25 +1795,27 @@ async function main() {
                 }
             }
 
-            // 히스토리 산출 (EFFR - GS1)
-            const spreadHistory = effr.history.map(h => {
-                // 과거 데이터 매칭 시 가장 가까운 과거 시점의 GS1 값을 찾음 (역순 탐색)
-                const gh = [...gs1.history].reverse().find(g => g.date <= h.date) || gs1.history[0];
-                return { date: h.date, value: parseFloat((gh.value - h.value).toFixed(3)) };
+            // 히스토리 산출 (TargetMid - GS1)
+            const spreadHistory = gs1.history.map(h => {
+                // 과거 타겟 상하단 찾기 (역순 탐색)
+                const uh = [...dfedtaru.history].reverse().find(u => u.date <= h.date) || dfedtaru.history[0];
+                const lh = [...dfedtarl.history].reverse().find(l => l.date <= h.date) || dfedtarl.history[0];
+                const tm = (uh.value + lh.value) / 2;
+                return { date: h.date, value: parseFloat((tm - h.value).toFixed(3)) };
             });
 
             // 금리 기대 지표 대시보드 추가
             indicators.push({
                 id: 'rate-cut-expectation',
-                name: '금리 인하 기대 스프레드',
-                unit: '%p',
+                name: '금리 인하 기대 횟수',
+                unit: '회',
                 block: FACTOR_BLOCKS.RATES_DOLLAR.id,
-                impact: 'down',
-                source: 'FRED(GS1-EFFR)',
-                description: '시장 내재 금리 인하 기대 (음수 확대 시 코스피 호재)',
-                value: cutExpectation.toFixed(3),
-                trend: cutExpectation < 0 ? 'down' : 'up',
-                realizedImpact: cutExpectation < -0.2 ? 'down' : (cutExpectation > 0.1 ? 'up' : 'neutral'),
+                impact: 'up',
+                source: 'FRED(Target-GS1)',
+                description: '시장 내재 연내 기준금리 인하(양수)/인상(음수) 기대 횟수 (25bp 단위)',
+                value: cutsCount,
+                trend: cutExpectation > 0 ? 'up' : 'down',
+                realizedImpact: cutExpectation > 0.3 ? 'up' : (cutExpectation < -0.2 ? 'down' : 'neutral'),
                 history: spreadHistory
             });
             console.log(`✅ [Calc] 금리인하 기대: ${cutExpectation}%p`);

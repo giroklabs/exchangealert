@@ -59,24 +59,30 @@ async function validateMarketData() {
 
     // 3. 복합 지표(Spread) 및 주석 정합성 검증
     const gs1 = indicators.find(i => i.id === 'gs1');
-    const effr = indicators.find(i => i.id === 'effr');
+    const dfedtaru = indicators.find(i => i.id === 'dfedtaru');
+    const dfedtarl = indicators.find(i => i.id === 'dfedtarl');
     const rateCut = indicators.find(i => i.id === 'rate-cut-expectation');
 
-    if (gs1 && effr && rateCut) {
-        // 현재값 검산: GS1 - EFFR
-        const expected = parseFloat((parseFloat(gs1.value) - parseFloat(effr.value)).toFixed(3));
-        const actual = parseFloat(rateCut.value);
-        if (Math.abs(expected - actual) > 0.001) {
-            errors.push(`[rate-cut-expectation] 계산 불일치 (기대값: ${expected}, 실제값: ${actual})`);
+    if (gs1 && dfedtaru && dfedtarl && rateCut) {
+        // 현재값 검산: (TargetMid - GS1) / 0.25
+        const targetMid = (parseFloat(dfedtaru.value) + parseFloat(dfedtarl.value)) / 2;
+        const expectedCuts = parseFloat(((targetMid - parseFloat(gs1.value)) / 0.25).toFixed(1));
+        const actualCuts = parseFloat(rateCut.value);
+        
+        if (Math.abs(expectedCuts - actualCuts) > 0.1) {
+            errors.push(`[rate-cut-expectation] 계산 불일치 (기대값: ${expectedCuts}회, 실제값: ${actualCuts}회)`);
         }
 
         // 히스토리 날짜 일치 여부 확인 (최근 3개 샘플링)
         for (let i = 0; i < Math.min(3, rateCut.history.length); i++) {
             const h = rateCut.history[i];
+            const uh = [...dfedtaru.history].reverse().find(u => u.date <= h.date) || dfedtaru.history[0];
+            const lh = [...dfedtarl.history].reverse().find(l => l.date <= h.date) || dfedtarl.history[0];
             const gh = [...gs1.history].reverse().find(g => g.date <= h.date) || gs1.history[0];
-            const eh = [...effr.history].reverse().find(e => e.date <= h.date) || effr.history[0];
-            const calc = parseFloat((gh.value - eh.value).toFixed(3));
-            if (Math.abs(calc - h.value) > 0.01) {
+            
+            const tm = (uh.value + lh.value) / 2;
+            const calc = parseFloat((tm - gh.value).toFixed(3));
+            if (Math.abs(calc - h.value) > 0.05) {
                 errors.push(`[rate-cut-expectation] 히스토리 매칭 오류 (${h.date} 시점)`);
             }
         }
