@@ -1108,14 +1108,16 @@ async function main() {
         if (s.realtimeSymbol) {
             const rtObs = await fetchFromYahooFinance(s.realtimeSymbol);
             if (rtObs && rtObs.length > 0) {
-                if (!obs.length) {
-                    obs = rtObs;
-                } else {
-                    const latestFredDate = obs[0].date;
-                    const newerObs = rtObs.filter(r => r.date > latestFredDate);
-                    obs = [...newerObs, ...obs];
+                const latestFredDate = obs.length > 0 ? obs[0].date : '0000-00-00';
+                // 야후 데이터가 FRED보다 최신이거나 같으면 보정 (중복분 제외하고 최신치만 업데이트)
+                const newerObs = rtObs.filter(r => r.date >= latestFredDate);
+                
+                if (newerObs.length > 0) {
+                    obs = [...newerObs, ...obs.filter(o => o.date < newerObs[newerObs.length-1].date)];
+                    s.isRealtime = true;
+                    s.source = 'Yahoo Finance 실시간';
+                    console.log(`⚡ [Realtime] ${s.name} 보정 완료 (${rtObs[0].value}) - 소스: ${s.source}`);
                 }
-                console.log(`⚡ [Realtime] ${s.name} 보정 완료 (${rtObs[0].value})`);
             }
         }
 

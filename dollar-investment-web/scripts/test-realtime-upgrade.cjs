@@ -8,16 +8,8 @@ const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
-        const options = {
-            hostname: 'query1.finance.yahoo.com',
-            port: 443,
-            path: `/v8/finance/chart/${symbol}?interval=1d&range=5d`,
-            method: 'GET',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-            }
-        };
-        https.get(options, (res) => {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d`;
+        https.get(url, (res) => {
             let data = '';
             res.on('data', (chunk) => data += chunk);
             res.on('end', () => {
