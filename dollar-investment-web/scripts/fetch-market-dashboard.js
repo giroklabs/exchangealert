@@ -1985,11 +1985,6 @@ async function main() {
                         .sort((a, b) => b.date.localeCompare(a.date));
 
                     if (kHistory.length > 0) {
-                        fs.writeFileSync(kospiHistPath, JSON.stringify({
-                            symbol: 'KOSPI', name: '코스피', source: 'KIS',
-                            lastUpdate: new Date().toISOString(), data: kHistory
-                        }, null, 2));
-                        console.log(`  ✅ KIS API 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
                         const kospiIdx = indicators.findIndex(i => i.id === 'kospi');
                         if (kospiIdx !== -1) {
                             const latestKVal = kHistory[0].close;
@@ -1999,7 +1994,19 @@ async function main() {
                             console.log(`✅ [KIS] KOSPI 지수 동기화 완료: ${latestKVal}pt`);
                         }
                         
-                        kospiHistorySaved = true;
+                        // MA60(60일선) 예측을 위한 히스토리는 최소 60~65일 이상 필요함
+                        // KIS API가 제한(예: 50일)에 걸릴 경우 히스토리는 Yahoo 폴백을 활용
+                        if (kHistory.length >= 65) {
+                            fs.writeFileSync(kospiHistPath, JSON.stringify({
+                                symbol: 'KOSPI', name: '코스피', source: 'KIS',
+                                lastUpdate: new Date().toISOString(), data: kHistory
+                            }, null, 2));
+                            console.log(`  ✅ KIS API 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
+                            kospiHistorySaved = true; // 통과
+                        } else {
+                            console.log(`  ⚠️ KIS 데이터 부족: ${kHistory.length}일치. 기술적지표(MA60) 계산을 위해 Yahoo Finance 폴백 연동 개시`);
+                            // kospiHistorySaved를 false로 남겨두어 아래 백업 로직이 가동되게 함.
+                        }
                     }
                 } else {
                     console.log('  ⚠️ KIS API 응답에 코스피 데이터 없음, Yahoo Finance 폴백 시도...');
