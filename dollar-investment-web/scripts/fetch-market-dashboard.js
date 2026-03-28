@@ -636,6 +636,50 @@ async function fetchMarketStats(token) {
 }
 
 
+/**
+ * 금융투자협회(FreeSIS)를 통한 투자자예탁금 데이터 스크래핑
+ */
+async function fetchFromFreeSIS() {
+    try {
+        const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+        // 3개월치 데이터 요청
+        const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0].replace(/-/g, '');
+        
+        const payload = {
+            dmSearch: {
+                tmpV40: "1000000",
+                tmpV41: "1",
+                tmpV1: "D",
+                tmpV45: threeMonthsAgo,
+                tmpV46: today,
+                OBJ_NM: "STATSCU0100000060BO"
+            }
+        };
+
+        const res = await fetch("https://freesis.kofia.or.kr/meta/getMetaDataList.do", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await res.json();
+        if (data.ds1 && Array.isArray(data.ds1)) {
+            // TMPV1: 날짜(2024/04/26), TMPV2: 예탁금(111,579,004 - 백만원 단위)
+            return data.ds1.map(row => ({
+                date: row.TMPV1.replace(/\//g, '-'),
+                value: Math.round(parseFloat(row.TMPV2.replace(/,/g, '')) / 100) // 백만 -> 억원 보정
+            })).sort((a,b) => b.date.localeCompare(a.date));
+        }
+    } catch (e) {
+        console.warn("ℹ️ [FreeSIS] 데이터 수집 실패:", e.message);
+    }
+    return null;
+}
+
+
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
         console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜜니다.");
@@ -1151,6 +1195,7 @@ async function main() {
     const investorTrend = kisToken ? await fetchMarketInvestorTrend(kisToken) : null;
     const programTrading = kisToken ? await fetchProgramTrading(kisToken) : null;
     const bondRates = kisToken ? await fetchBondRates(kisToken) : null;
+    const freesisDeposits = await fetchFromFreeSIS();
     
     // 블록별 점수 합산용 (정규화용)
     const blockScores = {
@@ -1265,14 +1310,23 @@ async function main() {
             ? await fetchShortDebtRatio() 
             : await fetchFromEcos(item);
             
-        // 투자자예탁금의 경우 KIS 데이터(marketStats.deposits)가 있다면 우선 활용
-        if (item.id === 'investor-deposits' && marketStats?.deposits && marketStats.deposits.length > 0) {
-            rows = marketStats.deposits.map(s => ({
-                TIME: s.date.replace(/-/g, ''),
-                DATA_VALUE: (s.value * 100000000).toString() // 억원 -> 원
-            }));
-            item.source = '한국투자증권 실시간';
-            console.log(`⚡ [KIS] 투자자예탁금 실시간 데이터 적용 완료 (${marketStats.deposits[0].value}억원)`);
+        // 투자자예탁금 데이터 우선순위: 1. FreeSIS(금투협), 2. KIS 실시간, 3. ECOS(폴백)
+        if (item.id === 'investor-deposits') {
+            if (freesisDeposits && freesisDeposits.length > 0) {
+                rows = freesisDeposits.map(s => ({
+                    TIME: s.date.replace(/-/g, ''),
+                    DATA_VALUE: (s.value * 100000000).toString() 
+                }));
+                item.source = '금융투자협회 실시간';
+                console.log(`⚡ [FreeSIS] 투자자예탁금 적용 완료 (${freesisDeposits[0].value}억원)`);
+            } else if (marketStats?.deposits && marketStats.deposits.length > 0) {
+                rows = marketStats.deposits.map(s => ({
+                    TIME: s.date.replace(/-/g, ''),
+                    DATA_VALUE: (s.value * 100000000).toString() 
+                }));
+                item.source = '한국투자증권 실시간';
+                console.log(`⚡ [KIS] 투자자예탁금 실시간 적용 완료 (${marketStats.deposits[0].value}억원)`);
+            }
         }
         
         let val, trend, displayVal, history;
@@ -1791,7 +1845,7 @@ async function main() {
                             const latestKVal = kHistory[0].close;
                             indicators[kospiIdx].value = latestKVal.toLocaleString();
                             indicators[kospiIdx].source = '한국투자증권 실시간'; // 통일된 소스 명칭 사용
-                            indicators[kospiIdx].history = kHistory.map(h => ({ date: h.date, value: h.close })).slice(0, 15);
+                            indicators[kospiIdx].history = kHistory.map(h => ({ date: h.date, value: h.close })).slice(0, 15).reverse();
                             console.log(`✅ [KIS] KOSPI 지수 동기화 완료: ${latestKVal}pt`);
                         }
                         
