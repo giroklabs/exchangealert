@@ -609,6 +609,10 @@ async function fetchMarketStats(token) {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                 }
             });
+            if (!res.ok) {
+                const text = await res.text();
+                return { error: `HTTP ${res.status}: ${text.substring(0, 100)}` };
+            }
             const data = await res.json();
             return data;
         } catch (e) {
@@ -676,8 +680,8 @@ async function fetchFromFreeSIS() {
         if (data.ds1 && Array.isArray(data.ds1)) {
             // TMPV1: 날짜(2024/04/26), TMPV2: 예탁금(111,579,004 - 백만원 단위)
             return data.ds1.map(row => ({
-                date: row.TMPV1.replace(/\//g, '-'),
-                value: Math.round(parseFloat(row.TMPV2.replace(/,/g, '')) / 100) // 백만 -> 억원 보정
+                date: (row.TMPV1 || "").replace(/\//g, '-'),
+                value: Math.round(parseFloat(String(row.TMPV2 || "0").replace(/,/g, '')) / 100)
             })).sort((a,b) => b.date.localeCompare(a.date));
         }
     } catch (e) {
@@ -705,6 +709,10 @@ async function fetchProgramTrading(token) {
                 "User-Agent": "Mozilla/5.0"
             }
         });
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
+        }
         const data = await res.json();
         if (data.output && Array.isArray(data.output) && data.output.length > 0) {
             const latest = data.output[0];
@@ -742,6 +750,10 @@ async function fetchBondRates(token) {
                 "User-Agent": "Mozilla/5.0"
             }
         });
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
+        }
         const data = await res.json();
         if (data.output && Array.isArray(data.output)) {
             const cd = data.output.find(r => r.bcdt_code === "Y0112");
