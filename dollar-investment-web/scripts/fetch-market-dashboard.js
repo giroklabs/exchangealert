@@ -2173,40 +2173,35 @@ async function main() {
         .replace(/—|–/g, '-') // 특수 대시 ASCII로 변경
         .trim();
 
-    // 정교한 감성 추출: '결론: 상승/하락' 포맷을 먼저 찾고, 없으면 Rule-based 보조 탐색
+    // --- [결합] 방향성 판정 로직 (AI 정성 분석 최우선) ---
     sentiment = '보합';
-    const conclusionMatch = aiAnalysis.match(/환율\s*결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
-    if (conclusionMatch) {
-        const res = conclusionMatch[1];
+    kospiSentiment = '보합';
+
+    // 1. 환율(FX) 방향성 추출 (- 환율: ... 결론: 상승 우세)
+    const fxPattern = /-\s*환율[:\s].*\(결론:\s*(상승|하락|보합|강세|약세)/i;
+    const fxMatch = aiAnalysis.match(fxPattern);
+    if (fxMatch) {
+        const res = fxMatch[1];
         if (res === '상승' || res === '강세') sentiment = '환율 상승 우세';
         else if (res === '하락' || res === '약세') sentiment = '환율 하락 우세';
-        else sentiment = '보통';
     } else {
-        // 기존 방식 Fallback
-        const oldMatch = aiAnalysis.match(/결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
-        if (oldMatch) {
-            const res = oldMatch[1];
-            if (res === '상승' || res === '강세') sentiment = '환율 상승 우세';
-            else if (res === '하락' || res === '약세') sentiment = '환율 하락 우세';
-            else sentiment = '보통';
-        } else {
-            const lastPart = aiAnalysis.slice(-300);
-            if (/상승\s*우세|상향\s*돌파|강세\s*지속/i.test(lastPart)) sentiment = '환율 상승 우세';
-            else if (/하락\s*우세|하향\s*이탈|약세\s*전환/i.test(lastPart)) sentiment = '환율 하락 우세';
-            else sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보합');
-        }
+        // Fallback: 기존 확률 기반
+        sentiment = upProb > 55 ? '환율 상승 우세' : (downProb > 55 ? '환율 하락 우세' : '보합');
     }
 
-    // 코스피 감성 추출: '코스피 결론: 상승/하락/보합' 패턴 파싱
-    let kospiSentiment = '보합';
-    const kospiConclusionMatch = aiAnalysis.match(/코스피\s*결론\s*[:：]?\s*(상승|하락|보합|강세|약세)/);
-    if (kospiConclusionMatch) {
-        const kRes = kospiConclusionMatch[1];
-        if (kRes === '상승' || kRes === '강세') kospiSentiment = '코스피 상승 우세';
-        else if (kRes === '하락' || kRes === '약세') kospiSentiment = '코스피 하락 우세';
-        else kospiSentiment = '보합';
+    // 2. 코스피(KOSPI) 방향성 추출 (- 코스피: ... 결론: 하락 우세)
+    const kospiPattern = /-\s*코스피[:\s].*\(결론:\s*(상승|하락|보합|강세|약세)/i;
+    const kospiMatch = aiAnalysis.match(kospiPattern);
+    if (kospiMatch) {
+        const res = kospiMatch[1];
+        if (res === '상승' || res === '강세') kospiSentiment = '코스피 상승 우세';
+        else if (res === '하락' || res === '약세') kospiSentiment = '코스피 하락 우세';
+    } else {
+        // Fallback: 기존 확률 기반
+        kospiSentiment = kospiUpProb > 55 ? '코스피 상승 우세' : (kospiDownProb > 55 ? '코스피 하락 우세' : '보합');
     }
-    console.log(`📊 [Sentiment] 환율: ${sentiment} | 코스피: ${kospiSentiment}`);
+
+    console.log(`📊 [Sentiment Sync] 환율: ${sentiment} | 코스피: ${kospiSentiment} (AI 정성 분석 결론 기준)`);
 
     // 3. 주요국 환율 정보 (환율알라미 앱 데이터 - Naver/Hana Bank)
     const majorRates = [];
