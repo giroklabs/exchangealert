@@ -644,12 +644,15 @@ async function fetchMarketStats(token) {
         }
 
         if (data?.output && Array.isArray(data.output) && data.output.length > 0) {
-            const deposits = data.output.map(d => ({
+            // KIS API가 과거 날짜부터 오름차순으로 응답할 수 있으므로, 내림차순(최신순)으로 정렬 보장
+            const sortedOutput = data.output.sort((a, b) => (b.bsop_date || "").localeCompare(a.bsop_date || ""));
+            
+            const deposits = sortedOutput.map(d => ({
                 date: (d.bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
                 value: Math.round(parseFloat(d.cust_dpmn_amt || "0")) // 이미 억원 단위임
             })).slice(0, 15);
 
-            const creditMargin = data.output.map(d => ({
+            const creditMargin = sortedOutput.map(d => ({
                 date: (d.bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
                 value: Math.round(parseFloat(d.crdt_loan_rmnd || "0")) // 이미 억원 단위임
             })).slice(0, 15);
