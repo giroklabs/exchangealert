@@ -126,38 +126,76 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                         </div>
 
                         <div className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <span className={`text-lg font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>🤖 AI 종합 예측</span>
-                                <span className={`text-2xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
-                                    {data?.forecast?.sentiment || '분석 중...'}
-                                </span>
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+                            {/* 환율 예측 섹션 */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <span className={`text-lg font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>💱 환율 방향 예측</span>
+                                    <span className={`text-2xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
+                                        {data?.forecast?.sentiment || '분석 중...'}
+                                    </span>
+                                </div>
+
+                                <div className="relative pt-1">
+                                    <div className="flex mb-2 items-center justify-between font-bold text-xs uppercase">
+                                        <span className="text-blue-500 font-bold text-xs">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
+                                        <span className="text-red-500 font-bold text-xs">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
+                                    </div>
+                                    <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                                        <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400 transition-all duration-1000"></div>
+                                        <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400 transition-all duration-1000"></div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="relative pt-1">
-                                <div className="flex mb-2 items-center justify-between font-bold text-xs uppercase">
-                                    <span className="text-blue-500 font-bold text-xs">▼ 하락 요인 ({data?.forecast?.downProb}%)</span>
-                                    <span className="text-red-500 font-bold text-xs">▲ 상승 요인 ({data?.forecast?.upProb}%)</span>
+                            {/* 코스피 예측 섹션 (신규) */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <span className={`text-lg font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>📈 KOSPI 방향 예측</span>
+                                    <span className={`text-2xl font-black ${data?.forecast?.kospiUpProb && data.forecast.kospiUpProb > 55 ? 'text-red-500' : data?.forecast?.kospiUpProb && data.forecast.kospiUpProb < 45 ? 'text-blue-500' : 'text-gray-500'}`}>
+                                        {data?.forecast?.kospiUpProb ? (data.forecast.kospiUpProb > 55 ? '상승 우세' : data.forecast.kospiUpProb < 45 ? '하락 우세' : '보합세') : '분석 중...'}
+                                    </span>
                                 </div>
-                                <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                    <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400 transition-all duration-1000"></div>
-                                    <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400 transition-all duration-1000"></div>
+
+                                <div className="relative pt-1">
+                                    <div className="flex mb-2 items-center justify-between font-bold text-xs uppercase">
+                                        <span className="text-blue-500 font-bold text-xs">▼ 하락 요인 ({data?.forecast?.kospiDownProb || 50}%)</span>
+                                        <span className="text-red-500 font-bold text-xs">▲ 상승 요인 ({data?.forecast?.kospiUpProb || 50}%)</span>
+                                    </div>
+                                    <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                                        <div style={{ width: `${data?.forecast?.kospiDownProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400 transition-all duration-1000"></div>
+                                        <div style={{ width: `${data?.forecast?.kospiUpProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400 transition-all duration-1000"></div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
 
-                    <div className={`hidden lg:flex w-48 h-48 items-center justify-center rounded-full border-8 relative overflow-hidden transition-colors duration-500 ${data?.forecast?.sentiment === '환율 상승 우세' ? 'border-red-100 dark:border-red-900/20' : data?.forecast?.sentiment === '환율 하락 우세' ? 'border-blue-100 dark:border-blue-900/20' : 'border-gray-100 dark:border-gray-700'}`}>
-                        {/* Down (Blue) layer */}
-                        <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
-                        {/* Up (Red) layer */}
-                        <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
-                        
-                        <div className="z-10 text-center">
-                            <div className="text-sm font-bold text-gray-400">종합 점수</div>
-                            <div className={`text-4xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-600 dark:text-red-400' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}>
-                                {Math.max(data?.forecast?.upProb || 0, data?.forecast?.downProb || 0)}%
+                    <div className="hidden lg:flex gap-4">
+                        <div className={`w-32 h-32 items-center justify-center rounded-full border-8 relative overflow-hidden transition-colors duration-500 ${data?.forecast?.sentiment === '환율 상승 우세' ? 'border-red-100 dark:border-red-900/20' : data?.forecast?.sentiment === '환율 하락 우세' ? 'border-blue-100 dark:border-blue-900/20' : 'border-gray-100 dark:border-gray-700'}`}>
+                            <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
+                            <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
+                            <div className="z-10 text-center">
+                                <div className="text-[10px] font-bold text-gray-400">환율점수</div>
+                                <div className={`text-xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-600 dark:text-red-400' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}>
+                                    {Math.max(data?.forecast?.upProb || 0, data?.forecast?.downProb || 0)}%
+                                </div>
                             </div>
                         </div>
+
+                        {data?.forecast?.kospiUpProb !== undefined && (
+                            <div className={`w-32 h-32 items-center justify-center rounded-full border-8 relative overflow-hidden transition-colors duration-500 ${data.forecast.kospiUpProb > 55 ? 'border-red-100 dark:border-red-900/20' : data.forecast.kospiUpProb < 45 ? 'border-blue-100 dark:border-blue-900/20' : 'border-gray-100 dark:border-gray-700'}`}>
+                                <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data.forecast.kospiDownProb || 0}%`, opacity: 0.3 }}></div>
+                                <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data.forecast.kospiUpProb || 0}%`, opacity: 0.3 }}></div>
+                                <div className="z-10 text-center">
+                                    <div className="text-[10px] font-bold text-gray-400">코스피점수</div>
+                                    <div className={`text-xl font-black ${data.forecast.kospiUpProb > 55 ? 'text-red-600 dark:text-red-400' : data.forecast.kospiUpProb < 45 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}>
+                                        {Math.max(data.forecast.kospiUpProb, data.forecast.kospiDownProb || 0)}%
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -184,39 +222,79 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
 
                     <div className={`text-left space-y-4`}>
                         {data?.forecast?.aiAnalysis ? (
-                            data.forecast.aiAnalysis.split('\n').map((line, i) => {
-                                if (line.trim().startsWith('결론:')) {
-                                    return (
-                                        <div key={i} className={`mt-8 p-4 rounded-xl font-bold flex items-center gap-3 ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-400 border border-yellow-400/20' : 'bg-yellow-400 text-yellow-900'
-                                            }`}>
-                                            <span className="text-xl">💡</span>
-                                            <span>{line.trim()}</span>
-                                        </div>
-                                    );
-                                }
-                                if (line.trim().startsWith('실전 투자 대응:')) {
-                                    return (
-                                        <div key={i} className={`my-6 p-5 rounded-2xl border-l-4 ${theme === 'dark'
-                                                ? 'bg-blue-500/10 border-blue-500 text-blue-100'
-                                                : 'bg-blue-50 border-blue-500 text-blue-900'
-                                            }`}>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-lg">🎯</span>
-                                                <span className="font-bold text-lg">실전 투자 대응 가이드</span>
+                            (() => {
+                                const renderLineWithBold = (text: string) => {
+                                    const parts = text.split(/(\*\*.*?\*\*)/g);
+                                    return parts.map((part, index) => {
+                                        if (part.startsWith('**') && part.endsWith('**')) {
+                                            return <strong key={index} className="font-black text-yellow-600 dark:text-yellow-400">{part.slice(2, -2)}</strong>;
+                                        }
+                                        return part;
+                                    });
+                                };
+
+                                return data.forecast.aiAnalysis.split('\n').map((line, i) => {
+                                    const trimmedLine = line.trim();
+                                    if (!trimmedLine) return <div key={i} className="h-2"></div>;
+
+                                    // 섹션 헤더 처리 [파트A: ...]
+                                    if (trimmedLine.startsWith('[파트') || (trimmedLine.startsWith('[') && trimmedLine.endsWith(']'))) {
+                                        return (
+                                            <div key={i} className="mt-8 mb-4">
+                                                <h4 className={`text-lg font-black flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                                    <span className="w-1.5 h-6 bg-yellow-500 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></span>
+                                                    {trimmedLine.replace(/[\[\]]/g, '')}
+                                                </h4>
                                             </div>
-                                            <p className="text-[15px] leading-[1.8] whitespace-pre-wrap opacity-90">
-                                                {line.trim().replace('실전 투자 대응:', '').trim()}
-                                            </p>
-                                        </div>
-                                    );
-                                }
-                                return line.trim() ? (
-                                    <p key={i} className={`text-[15px] leading-[1.8] font-medium tracking-tight whitespace-pre-wrap ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                                        );
+                                    }
+
+                                    // 실전 투자 대응 섹션 헤더
+                                    if (trimmedLine.startsWith('실전 투자 대응:')) {
+                                        return (
+                                            <div key={i} className={`mt-10 mb-6 p-4 rounded-xl flex items-center gap-3 ${theme === 'dark' ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-100 text-blue-900'
+                                                }`}>
+                                                <span className="text-2xl">🎯</span>
+                                                <span className="font-black text-lg tracking-tight">실전 투자 대응 가이드</span>
+                                            </div>
+                                        );
+                                    }
+
+                                    // 목록 항목 처리 (- 환율:, - 코스피:)
+                                    if (trimmedLine.startsWith('- ')) {
+                                        return (
+                                            <div key={i} className={`ml-1 mb-4 p-5 rounded-2xl flex items-start gap-4 transition-all hover:shadow-lg ${
+                                                theme === 'dark' ? 'bg-gray-800/80 text-gray-200 border border-gray-700/50' : 'bg-white text-gray-800 shadow-sm border border-gray-100'
+                                            }`}>
+                                                <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 shrink-0 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+                                                <p className="text-[15px] leading-[1.6] font-medium">
+                                                    {renderLineWithBold(trimmedLine.slice(2))}
+                                                </p>
+                                            </div>
+                                        );
+                                    }
+
+                                    // 하위 호환성 (결론:, 환율 대응:, 코스피 대응: 등으로 시작하는 경우 강조)
+                                    if (trimmedLine.startsWith('결론:') || trimmedLine.startsWith('환율 대응:') || trimmedLine.startsWith('코스피 대응:')) {
+                                        return (
+                                            <div key={i} className={`mt-4 p-5 rounded-2xl font-bold flex items-center gap-4 border ${
+                                                theme === 'dark' ? 'bg-yellow-900/20 text-yellow-400 border-yellow-800/30' : 'bg-yellow-100 text-yellow-900 border-yellow-200/50'
+                                            }`}>
+                                                <span className="text-xl">💡</span>
+                                                <span className="leading-relaxed">{renderLineWithBold(trimmedLine)}</span>
+                                            </div>
+                                        );
+                                    }
+
+                                    return (
+                                        <p key={i} className={`text-[15px] leading-[1.8] font-medium tracking-tight whitespace-pre-wrap mb-4 px-1 ${
+                                            theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                                         }`}>
-                                        {line.trim()}
-                                    </p>
-                                ) : <div key={i} className="h-2"></div>;
-                            })
+                                            {renderLineWithBold(trimmedLine)}
+                                        </p>
+                                    );
+                                });
+                            })()
                         ) : (
                             <p className="text-gray-400 italic">분석 데이터를 불러오는 중입니다...</p>
                         )}
@@ -345,7 +423,7 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                         {indicator.value}{indicator.unit}
                     </div>
                     <div className={`flex items-center justify-end gap-1 text-xs font-bold mt-1 ${isImpactUp ? 'text-red-500' : isImpactDown ? 'text-blue-500' : 'text-gray-400'}`}>
-                        <span>환율 영향:</span>
+                        <span>시장 영향:</span>
                         <span className="text-sm">
                             {(indicator.realizedImpact === 'up' || isImpactUp) ? '▲ 상승' : (indicator.realizedImpact === 'down' || isImpactDown) ? '▼ 하락' : '─ 중립'}
                             {indicator.realizedImpact === 'neutral' ? ' (보합)' : ''}

@@ -146,9 +146,11 @@ export interface DashboardData {
     sentiment: string;
     upProb: number;
     downProb: number;
+    kospiUpProb?: number;
+    kospiDownProb?: number;
     aiAnalysis: string;
     lastAiUpdate?: number;
-    score: { upScore: number; downScore: number };
+    score: { upScore: number; downScore: number; kospiScore?: { up: number; down: number } };
   };
   lastUpdate: string;
 }

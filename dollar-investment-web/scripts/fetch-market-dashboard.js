@@ -94,7 +94,12 @@ const FRED_SERIES = [
     { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', fredId: 'EFFR' },
     { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', fredId: 'DTB3' },
     { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
+    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업황 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
+    // --- 금리 기대 산출용 (hidden: AI 분석 내부 계산용, 대시보드 미표시) ---
+    { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치 (EFFR-GS1 스프레드로 금리인하 기대 산출)', fredId: 'GS1', hidden: true },
+    { id: 'DFEDTARU', name: 'Fed 기준금리 목표 상단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표범위 상단', fredId: 'DFEDTARU', hidden: true },
+    { id: 'DFEDTARL', name: 'Fed 기준금리 목표 하단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표범위 하단', fredId: 'DFEDTARL', hidden: true },
 ];
 
 // 3. 국내지표 (ECOS)
@@ -126,6 +131,33 @@ async function fetchFromFred(seriesId) {
 }
 
 // --- 모델 고도화 유틸리티 ---
+// --- 파생상품 만기일 감지 (KOSPI200 선물/옵션 만기: 매월 두 번째 목요일) ---
+function getKospi200ExpiryInfo(date = new Date()) {
+    const year = date.getFullYear();
+    const month = date.getMonth(); // 0-indexed
+    // 해당 월 두 번째 목요일 계산
+    let count = 0;
+    let expiryDate = null;
+    for (let d = 1; d <= 31; d++) {
+        const dt = new Date(year, month, d);
+        if (dt.getMonth() !== month) break;
+        if (dt.getDay() === 4) { // 목요일(4)
+            count++;
+            if (count === 2) { expiryDate = dt; break; }
+        }
+    }
+    if (!expiryDate) return { isExpiryWeek: false, isExpiryDay: false, daysToExpiry: 99, isQuarterly: false };
+
+    const diffMs = expiryDate.getTime() - date.getTime();
+    const daysToExpiry = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    const isExpiryDay = daysToExpiry === 0;
+    const isExpiryWeek = daysToExpiry >= 0 && daysToExpiry <= 3;
+    // 분기 만기 (3/6/9/12월): 선물 만기로 볼륨 급증
+    const isQuarterly = [2, 5, 8, 11].includes(month);
+
+    return { isExpiryWeek, isExpiryDay, daysToExpiry: Math.max(0, daysToExpiry), isQuarterly, expiryDate };
+}
+
 function calculateZScore(value, history) {
     if (!history || history.length < 5) return 0;
     const values = history.map(h => h.value);
@@ -258,16 +290,32 @@ function calcStreak(evaluated) {
 
 function calcBacktestSummary(records) {
     if (!records || records.length === 0) return null;
+
+    // USD/KRW 적중률
     const evaluated = records.filter(r => r.hit_d1 !== null);
     if (evaluated.length === 0) return null;
     const hitRate = Math.round((evaluated.filter(r => r.hit_d1).length / evaluated.length) * 100);
     const last5 = evaluated.slice(-5);
     const recentHitRate = Math.round((last5.filter(r => r.hit_d1).length / last5.length) * 100);
+
+    // KOSPI 적중률
+    const kospiEvaluated = records.filter(r => r.kospi_hit_d1 !== null && r.kospi_hit_d1 !== undefined);
+    const kospiHitRate = kospiEvaluated.length > 0
+        ? Math.round((kospiEvaluated.filter(r => r.kospi_hit_d1).length / kospiEvaluated.length) * 100)
+        : null;
+    const kospiRecent5 = kospiEvaluated.slice(-5);
+    const kospiRecentHitRate = kospiRecent5.length > 0
+        ? Math.round((kospiRecent5.filter(r => r.kospi_hit_d1).length / kospiRecent5.length) * 100)
+        : null;
+
     return {
         total: evaluated.length,
         hitRate,
         recentHitRate,
-        streak: calcStreak(evaluated)
+        streak: calcStreak(evaluated),
+        kospiHitRate,
+        kospiRecentHitRate,
+        kospiTotal: kospiEvaluated.length
     };
 }
 
@@ -464,17 +512,17 @@ async function fetchMarketInvestorTrend(token) {
     };
 
     try {
-        // 1. 코스피 전체 외국인 수급 (실시간 가집계)
-        // FID_COND_MRKT_DIV_CODE: J (주식), FID_INPUT_ISCD: 0000 (전체)
-        // Path: foreign-institution-tot
+        // 1. 코스피 전체 외국인+기관 수급 (실시간 가집계) - foreign-institution-tot
         const marketData = await tryFetch(KIS_BASE_URL, "FHKST01010900", "0000", "J", "foreign-institution-tot");
-        let latestMarketValue = 0;
+        let latestForeignValue = 0;
+        let latestInstitutionValue = 0;
         
         if (marketData && marketData.output) {
             const foreignerRow = marketData.output.find(r => r.invst_tp_cd === "02");
-            if (foreignerRow) {
-                latestMarketValue = Math.round(parseFloat(foreignerRow.ntby_tr_pbmn) / 100); // 백만원 -> 억원
-            }
+            const institutionRow = marketData.output.find(r => r.invst_tp_cd === "01");
+            if (foreignerRow) latestForeignValue = Math.round(parseFloat(foreignerRow.ntby_tr_pbmn) / 100); // 백만원 -> 억원
+            if (institutionRow) latestInstitutionValue = Math.round(parseFloat(institutionRow.ntby_tr_pbmn) / 100);
+            if (institutionRow) console.log(`✅ [KIS] KOSPI 기관 수급: ${latestInstitutionValue}억원`);
         }
 
         // 2. 히스토리 유지를 위해 대표 종목(KODEX 200 - 069500) 데이터 활용
@@ -482,12 +530,15 @@ async function fetchMarketInvestorTrend(token) {
         
         if (historyData.error || (historyData.rt_cd && historyData.rt_cd !== '0' && historyData.rt_cd !== '00')) {
             // 히스토리 실패 시 당일 데이터만이라도 반환
-            return [{ date: new Date().toISOString().split('T')[0], value: latestMarketValue }];
+            return {
+                foreigner: [{ date: new Date().toISOString().split('T')[0], value: latestForeignValue }],
+                institution: [{ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue }]
+            };
         }
 
         const output = historyData.output || historyData.output1;
         if (output && Array.isArray(output)) {
-            const result = output
+            const foreignResult = output
                 .map(d => {
                     const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
                     const ntby = d.frgn_ntby_tr_pbmn || d.FRGN_NTBY_TR_PBMN || "0";
@@ -499,17 +550,30 @@ async function fetchMarketInvestorTrend(token) {
                 .filter(d => d.date && !isNaN(d.value))
                 .slice(0, 14);
 
-            // 첫 번째 요소(최신 데이터)를 코스피 전체 실시간 값으로 교체 (더 정확한 정보 제공)
-            if (result.length > 0 && latestMarketValue !== 0) {
-                result[0].value = latestMarketValue;
-            } else if (result.length === 0) {
-                result.push({ date: new Date().toISOString().split('T')[0], value: latestMarketValue });
-            }
+            const institutionResult = output
+                .map(d => {
+                    const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
+                    // 기관 순매수: orgn_ntby_tr_pbmn
+                    const ntby = d.orgn_ntby_tr_pbmn || d.ORGN_NTBY_TR_PBMN || "0";
+                    return {
+                        date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                        value: Math.round(parseFloat(ntby) / 100)
+                    };
+                })
+                .filter(d => d.date && !isNaN(d.value))
+                .slice(0, 14);
+
+            // 최신 값을 실시간 코스피 전체 값으로 교체 (더 정확한 정보 제공)
+            if (foreignResult.length > 0 && latestForeignValue !== 0) foreignResult[0].value = latestForeignValue;
+            else if (foreignResult.length === 0) foreignResult.push({ date: new Date().toISOString().split('T')[0], value: latestForeignValue });
             
-            return result;
+            if (institutionResult.length > 0 && latestInstitutionValue !== 0) institutionResult[0].value = latestInstitutionValue;
+            else if (institutionResult.length === 0) institutionResult.push({ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue });
+            
+            return { foreigner: foreignResult, institution: institutionResult };
         }
     } catch (e) {
-        console.error("❌ KIS 외인수급 조회 최종 에러:", e.message);
+        console.error("❌ KIS 외인/기관 수급 조회 최종 에러:", e.message);
     }
     return null;
 }
@@ -670,7 +734,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -717,24 +781,36 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 - 볼린저밴드: 상단=${bb?.upper}pt / 중단=${bb?.mid}pt / 하단=${bb?.lower}pt (밴드폭=${bb?.bandwidth}%)
 - 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
 - 핵심 레벨: 60일 지지=${keyLevels?.support}pt, 저항=${keyLevels?.resistance}pt`;
+        
+        // 만기일 정보 추가
+        const expiryInfo = getKospi200ExpiryInfo(new Date());
+        if (expiryInfo.isExpiryWeek) {
+            kospiTechSection += `\n- 📅 파생상품 만기운용: ${expiryInfo.isQuarterly ? '분기 선물' : '월간 옵션'} 만기 주간 (D-${expiryInfo.daysToExpiry}) → 변동성 확대 주의`;
+        }
     }
 
     // 백테스팅 성과 섹션 생성
     let backtestSection = '';
     if (backtest) {
-        const confidence = backtest.hitRate >= 65 ? '높음' : (backtest.hitRate >= 50 ? '보통' : '낮음 - 판단 자제 권장');
+        const fxConfidence = backtest.hitRate >= 65 ? '높음' : (backtest.hitRate >= 50 ? '보통' : '낮음');
+        const kospiConf = backtest.kospiHitRate !== null ? (backtest.kospiHitRate >= 65 ? '높음' : (backtest.kospiHitRate >= 50 ? '보통' : '낮음')) : 'N/A';
         backtestSection = `
 [예측 성과 이력 - 최근 ${backtest.total}일 기준]
-- 1일 예측 적중률: ${backtest.hitRate}% (최근5일: ${backtest.recentHitRate}%) → 신뢰도: ${confidence}
+- 환율 1일 적중률: ${backtest.hitRate}% (최근5일: ${backtest.recentHitRate}%) → 신뢰도: ${fxConfidence}
+- 코스피 1일 적중률: ${backtest.kospiHitRate ?? 'N/A'}% (최근5일: ${backtest.kospiRecentHitRate ?? 'N/A'}%) → 신뢰도: ${kospiConf} [${backtest.kospiTotal}일 데이터]
 - 현재 흐름: ${backtest.streak}`;
-        if (backtest.hitRate < 55) {
-            backtestSection += `\n⚠️ 적중률이 낮으므로 단정적 방향 제시보다 다양한 시나리오와 리스크를 함께 제시하세요.`;
+        if (backtest.hitRate < 55 || (backtest.kospiHitRate !== null && backtest.kospiHitRate < 55)) {
+            backtestSection += `\n⚠️ 적중률이 낮은 항목은 단정적 방향 제시보다 다양한 시나리오와 리스크(Tail Risk)를 함께 제시하세요.`;
         }
     }
 
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 (1) 원/달러 환율과 (2) 코스피(KOSPI) 지수의 방향성을 한국어로 심층 분석해주세요. 단, 인사말이나 소개 멘트는 절대 포함하지 말고 곧바로 본문 분석부터 시작하세요.
 
-연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다. 코스피는 외국인 수급, VIX, 원/달러 환율, 미국 증시 동조화, 투자자 예탁금에 의해 주도됩니다.
+연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다. 코스피는 외국인 및 기관 수급(프로그램 매매), VIX, 원/달러 환율, 미국 필라델피아 반도체지수(SOX), 금리 인하 기대(EFFR-GS1 스프레드), 국제 유가(WTI), 투자자 예탁금에 의해 주도됩니다.
+
+컴퓨팅 모델에 의한 정량적 예측치:
+- 원/달러 환율: 상승 확률 ${upProb}%, 하락 확률 ${downProb}%
+- 코스피 지수: 상승 확률 ${kospiUpProb}%, 하락 확률 ${kospiDownProb}% (근거: SOX 지수, 금리인하 기대치, 기관/외인 수급 가중치 적용)
 
 분석 대상 지표:
 ${blockSummary}
@@ -746,19 +822,22 @@ ${backtestSection}
 ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
 분석 가이드:
-[파트A: 원/달러 환율 예측]
-1. [환율 단기(1D)]: 기술적 지표(MACD, Stochastic), 외국인 수급 강도, DXY 변화율 기반으로 내일의 환율 방향(상승/하락)을 직설적으로.
-2. [환율 주간(1W)]: 매크로 펀더멘털(물가, 금리, 무역수지) 및 MA20 추세 결합.
+1. 각 섹션은 반드시 다음의 헤더로 시작하여 명확히 구분하세요:
+   [파트A: 원/달러 환율 분석]
+   [파트B: 코스피(KOSPI) 분석]
+   [파트C: 시장 종합 및 위험 신호]
 
-[파트B: 코스피(KOSPI) 예측]
-3. [코스피 단기(1D)]: 코스피 기술적 지표(RSI, MACD, Stochastic), 외국인 순매수 방향, 원/달러 환율과의 역상관관계, 미국 증시(S&P500/나스닥) 영향을 기반으로 내일 코스피 방향(상승/하락)을 직설적으로.
-4. [코스피 주간(1W)]: 투자자 예탁금 추세, VIX 레벨, 수급 흐름을 기반으로 주간 코스피 추세.
+2. [원/달러 환율 분석]: 기술적 지표(MACD, Stochastic), 외국인 수급, DXY, 매크로 펀더멘털을 결합하여 단기(1D) 및 주간(1W) 방향성을 제시하세요.
+3. [코스피 분석]: 기술적 지표, 외국인/기관 순매수, 환율 상관관계, **미 국채 1년물 기반 금리 인하 기대(EFFR-GS1)**, **국제 유가(WTI)에 따른 기업이익 압박**, 미국 증시(SOX) 영향을 종합하여 추세를 제시하세요. **파생상품 만기 주간**인 경우 관련 변동성 확대를 반드시 언급하세요.
+4. [시장 종합 및 위험 신호]: 복합 위험 신호(VIX, DXY, 신용 스프레드 등) 및 거시 경제적 변수(금리 기대 변화 등)를 종합하여 시장 전체의 분위기를 요약하세요.
 
-[파트C: 공통]
-5. [위험 신호]: 환율·코스피 공통으로 영향을 미치는 복합 위험 신호(VIX 급등 + DXY 급등 등)가 있다면 즉시 경고.
-6. 응답은 지표 나열을 자제하고 결론 위주의 간결한 3~4개 단락 (700자 이내)로 작성. 마크다운 기호(##, **)나 이모지는 절대 사용하지 마세요.
-7. 마지막 문장은 반드시 다음 포맷을 엄격하게 지켜주세요:
-"환율 대응: [구체적 환율 매수/매도 목표가 및 대응전략]. 환율 결론: [상승/하락/보합] 우세. 코스피 대응: [구체적 코스피 매수/매도 포인트 및 대응전략]. 코스피 결론: [상승/하락/보합] 우세"`;
+5. 응답은 지표 나열을 자제하고 결론 위주의 간결한 문장으로 작성하세요.
+6. **핵심 키워드나 수치는 볼드체(**텍스트**)를 사용하여 강조**해도 좋습니다. 단, # 이나 ## 같은 헤더 기호는 사용하지 마세요.
+7. 마지막에는 다음 포맷의 '실전 투자 대응' 섹션을 반드시 포함해야 합니다:
+
+실전 투자 대응:
+- 환율: [구체적 환율 매수/매도 목표가 및 대응전력]. (결론: [상승/하락/보합] 우세)
+- 코스피: [구체적 코스피 매수/매도 포인트 및 대응전력]. (결론: [상승/하락/보합] 우세)`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -889,15 +968,38 @@ async function sendTelegramNotification(forecast, lastUpdate) {
     // 마크다운 V2 대신 기본 마크다운 사용 (이스케이프 복잡도 감소)
     const title = forecast.sentiment === '환율 상승 우세' ? '📈 환율 상승 우세 예측' : (forecast.sentiment === '환율 하락 우세' ? '📉 환율 하락 우세 예측' : '⚖️ 시장 보합/관망 분석');
     
-    // AI 분석 내용 중 투자 대응 부분만 강조하여 메시지 구성
+    // AI 분석 내용 중 투자 대응 부분과 핵심 내용을 세밀하게 추출
     const analysisLines = forecast.aiAnalysis.split('\n');
     let summary = '';
     let strategy = '';
+    let captureStrategy = false;
     
     for (const line of analysisLines) {
-        if (line.includes('실전 투자 대응:')) strategy = line.replace('실전 투자 대응:', '').trim();
-        else if (!summary && line.length > 20) summary = line.trim();
+        const trimmed = line.trim();
+        if (trimmed.startsWith('실전 투자 대응:')) {
+            captureStrategy = true;
+            continue;
+        }
+        
+        if (captureStrategy) {
+            if (trimmed.startsWith('- ')) {
+                strategy += trimmed + '\n';
+            } else if (trimmed.length > 0 && strategy.length > 0) {
+                // 전략 섹션이 끝남 (다음 섹션이나 빈 줄)
+                captureStrategy = false;
+            }
+        }
+
+        // 요약 추출 (전략 섹션이 아니고 결론이 아닌 첫 번째 긴 문장)
+        if (!summary && trimmed.length > 30 && !trimmed.startsWith('[') && !captureStrategy && !trimmed.startsWith('- ')) {
+            summary = trimmed;
+        }
     }
+
+    // 마크다운 V1 bold (*text*) 형식으로 변환 (Gemini는 **text** 사용)
+    const formatForTelegram = (text) => text.replace(/\*\*/g, '*').trim();
+    const finalSummary = formatForTelegram(summary);
+    const finalStrategy = formatForTelegram(strategy);
 
     // 사이트의 AI 분석 시점과 일치하도록 포맷팅 (GitHub Actions는 UTC이므로 KST 명시 필수)
     const kstOptions = { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: true };
@@ -912,10 +1014,10 @@ ${title}
 📊 *상승:* ${forecast.upProb}% | *하락:* ${forecast.downProb}%
 
 📝 *핵심 요약:*
-${summary}
+${finalSummary || '분석 내용을 확인하세요.'}
 
 🎯 *투자 대응 가이드:*
-${strategy}
+${finalStrategy || '사이트에서 상세 내용을 확인하세요.'}
 
 🌐 [시장 대시보드 바로가기](https://giroklabs.github.io/exchangealert/)
 
@@ -980,7 +1082,11 @@ async function main() {
         'sofr-ois': { value: '0.18', trend: 'neutral', history: [{ date: '2026-03-10', value: 0.17 }, { date: '2026-03-11', value: 0.18 }, { date: '2026-03-12', value: 0.18 }, { date: '2026-03-13', value: 0.18 }] },
         'sofr': { value: '5.31', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.31 }, { date: '2026-03-11', value: 5.31 }, { date: '2026-03-12', value: 5.31 }, { date: '2026-03-13', value: 5.31 }] },
         'effr': { value: '5.33', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.33 }, { date: '2026-03-11', value: 5.33 }, { date: '2026-03-12', value: 5.33 }, { date: '2026-03-13', value: 5.33 }] },
-        'dtb3': { value: '5.25', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.24 }, { date: '2026-03-11', value: 5.25 }, { date: '2026-03-12', value: 5.25 }, { date: '2026-03-13', value: 5.25 }] }
+        'dtb3': { value: '5.24', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.24 }, { date: '2026-03-11', value: 5.24 }, { date: '2026-03-12', value: 5.24 }, { date: '2026-03-13', value: 5.24 }] },
+        // --- Phase 3 전용 폴백 ---
+        'gs1': { value: '4.80', trend: 'down', history: [{ date: '2026-03-10', value: 4.90 }, { date: '2026-03-20', value: 4.80 }] },
+        'dfedtaru': { value: '5.50', trend: 'neutral', history: [] },
+        'dfedtarl': { value: '5.25', trend: 'neutral', history: [] }
     };
 
     const indicators = [];
@@ -992,6 +1098,9 @@ async function main() {
         'assets': { up: 0, down: 0 },
         'funding-policy': { up: 0, down: 0 }
     };
+
+    // --- 코스피 전용 점수 모델 (KOSPI 전용 지표 가중치) ---
+    const kospiScores = { up: 0, down: 0 };
 
     for (const s of FRED_SERIES) {
         let obs = await fetchFromFred(s.fredId || s.id);
@@ -1051,6 +1160,19 @@ async function main() {
             blockScores[s.block].down += 0.5 * finalWeight;
             if (trend === 'up') blockScores[s.block].down += 1.0 * finalWeight;
             else if (trend === 'down') blockScores[s.block].up += 1.0 * finalWeight;
+        }
+
+        // KOSPI 전용 점수 반영 (역상관관계 지표들)
+        if (['DXY', 'FEDFUNDS', 'TNX', 'VIXCLS', 'BAMLH0A0HYM2'].includes(s.id)) {
+            // 이 지표들이 오르면(up) 코스피는 하락(down) 압력
+            if (trend === 'up') kospiScores.down += 1.2 * finalWeight;
+            else if (trend === 'down') kospiScores.up += 0.8 * finalWeight;
+        }
+        
+        // KOSPI 직접 상관 지표 (SOX)
+        if (s.id === 'SOX') {
+            if (trend === 'up') kospiScores.up += 2.5 * finalWeight; // 반도체 상승 -> 코스피 강력 상승
+            else if (trend === 'down') kospiScores.down += 2.0 * finalWeight;
         }
 
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
@@ -1145,21 +1267,27 @@ async function main() {
 
 
 
-    // 2.1 외국인 순매도 영향권 (KIS API 연동)
+    // 2.1 외국인/기관 순매도 영향권 (KIS API 연동)
     let investorTrend = null;
     if (kisToken) {
         investorTrend = await fetchMarketInvestorTrend(kisToken);
     }
-    if (investorTrend && investorTrend.length > 0) {
-        const latest = investorTrend[0].value;
-        const prev = investorTrend.length > 1 ? investorTrend[1].value : latest;
 
-        // 외국인 순매수 -> 원화 강세(환율 하락) 요인 (-2.5 가중치 대폭 강화)
-        if (latest > 0) blockScores['assets'].down += 2.5;
-        else if (latest < 0) blockScores['assets'].up += 2.5;
+    // 외국인 수급 처리
+    const foreignerData = investorTrend?.foreigner;
+    if (foreignerData && foreignerData.length > 0) {
+        const latest = foreignerData[0].value;
+        const prev = foreignerData.length > 1 ? foreignerData[1].value : latest;
+
+        if (latest > 0) {
+            blockScores['assets'].down += 2.5;
+            kospiScores.up += 3.0;
+        } else if (latest < 0) {
+            blockScores['assets'].up += 2.5;
+            kospiScores.down += 3.0;
+        }
 
         const realizedImpact = latest < 0 ? 'up' : (latest > 100 ? 'down' : 'neutral');
-
         indicators.push({
             id: 'foreigner-net-buy',
             name: 'KOSPI 외국인 수급동향',
@@ -1171,11 +1299,10 @@ async function main() {
             value: latest.toLocaleString(),
             trend: latest >= prev ? 'up' : 'down',
             realizedImpact,
-            history: investorTrend.reverse()
+            history: [...foreignerData].reverse()
         });
         console.log(`✅ [KIS] 외인 순매수: ${latest}억원`);
     } else {
-        // Fallback 시각화
         const fb = fallbacks['foreigner-net-buy'];
         indicators.push({
             id: 'foreigner-net-buy',
@@ -1192,6 +1319,35 @@ async function main() {
         console.log(`⚠️ [KIS] 외인 수급 fallback 데이터 적용`);
     }
 
+    // 기관 수급 처리 (프로그램 매매 대용지표)
+    const institutionData = investorTrend?.institution;
+    if (institutionData && institutionData.length > 0) {
+        const latest = institutionData[0].value;
+        const prev = institutionData.length > 1 ? institutionData[1].value : latest;
+
+        // 기관 순매수 → 코스피 상승 요인 (2.5 가중치)
+        if (latest > 0) {
+            kospiScores.up += 2.5;
+        } else if (latest < 0) {
+            kospiScores.down += 2.5;
+        }
+
+        const realizedImpact = latest > 0 ? 'down' : (latest < 0 ? 'up' : 'neutral');
+        indicators.push({
+            id: 'institution-net-buy',
+            name: 'KOSPI 기관 수급동향',
+            unit: '억원',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: 'KIS 실시간',
+            description: '기관 순매수는 프로그램 매매를 포함한 국내 수급의 핵심 지표',
+            value: latest.toLocaleString(),
+            trend: latest >= prev ? 'up' : 'down',
+            realizedImpact,
+            history: [...institutionData].reverse()
+        });
+        console.log(`✅ [KIS] 기관 순매수: ${latest}억원`);
+    }
 
 
     // 2.2 한·미 금리차 산출 (US 10Y - KR 10Y)
@@ -1268,6 +1424,92 @@ async function main() {
         calculateSpread('sofr-ois', 'SOFR-OIS 스프레드', sofr, effr, '금융시장 유동성 리스크 (상승 시 위험회피 강화)');
     }
 
+    // --- [신규] 금리 인하 기대 스프레드 산출 (EFFR - GS1: 양수=인상기대, 음수=인하기대) ---
+    {
+        const effr = indicators.find(i => i.id === 'effr');
+        const gs1 = indicators.find(i => i.id === 'gs1' && i.isInternal);
+        const dfedtaru = indicators.find(i => i.id === 'dfedtaru' && i.isInternal);
+        const dfedtarl = indicators.find(i => i.id === 'dfedtarl' && i.isInternal);
+
+        if (effr && gs1) {
+            const effrVal = parseFloat(String(effr.value).replace(/,/g, ''));
+            const gs1Val = parseFloat(String(gs1.value).replace(/,/g, ''));
+            const cutExpectation = parseFloat((gs1Val - effrVal).toFixed(3)); // 음수 = 인하 기대
+
+            // 금리 인하 기대가 강하면 (-0.3% 이하) 코스피 상승 요인
+            if (cutExpectation < -0.3) {
+                kospiScores.up += Math.abs(cutExpectation) * 4; // 인하 기대폭 비례 가중치
+                console.log(`📉 [금리기대] EFFR-GS1 스프레드: ${cutExpectation}% → 금리인하 기대 강화 → 코스피 상승 압력 +${(Math.abs(cutExpectation)*4).toFixed(1)}`);
+            } else if (cutExpectation > 0.2) {
+                // 금리 인상 기대 or 현 수준 유지 → 코스피 하락 압력
+                kospiScores.down += cutExpectation * 3;
+                console.log(`📈 [금리기대] EFFR-GS1 스프레드: ${cutExpectation}% → 금리인상/유지 기대 → 코스피 하락 압력 -${(cutExpectation*3).toFixed(1)}`);
+            } else {
+                console.log(`➡️ [금리기대] EFFR-GS1 스프레드: ${cutExpectation}% → 중립 (금리 동결 기대)`);
+            }
+
+            // Fed 목표 범위와 실제 EFFR 비교 (하단에 가까울수록 dovish)
+            if (dfedtaru && dfedtarl) {
+                const upperBound = parseFloat(String(dfedtaru.value).replace(/,/g, ''));
+                const lowerBound = parseFloat(String(dfedtarl.value).replace(/,/g, ''));
+                const midTarget = (upperBound + lowerBound) / 2;
+                const targetGap = parseFloat((effrVal - midTarget).toFixed(3));
+                if (Math.abs(targetGap) > 0.05) {
+                    console.log(`⚖️ [금리기대] EFFR vs 목표 중앙(${midTarget}%): 괴리 ${targetGap}%`);
+                }
+            }
+
+            // 금리 기대 지표 대시보드 추가
+            indicators.push({
+                id: 'rate-cut-expectation',
+                name: '금리 인하 기대 스프레드',
+                unit: '%p',
+                block: FACTOR_BLOCKS.RATES_DOLLAR.id,
+                impact: 'down',
+                source: 'FRED(EFFR-GS1)',
+                description: '시장 내재 금리 인하 기대 (음수 확대 시 코스피 호재)',
+                value: cutExpectation.toFixed(3),
+                trend: cutExpectation < 0 ? 'down' : 'up',
+                realizedImpact: cutExpectation < -0.2 ? 'down' : (cutExpectation > 0.1 ? 'up' : 'neutral'),
+                history: []
+            });
+            console.log(`✅ [Calc] 금리인하 기대: ${cutExpectation}%p`);
+        }
+    }
+
+    // --- [신규] WTI → 코스피 직접 연결 (에너지 비용 → 기업이익 영향) ---
+    {
+        const wti = indicators.find(i => i.id === 'dcoilwtico');
+        if (wti) {
+            const wtiTrend = wti.trend;
+            const wtiVal = parseFloat(String(wti.value).replace(/,/g, ''));
+            // 유가 상승 → 수입 비용 증가 → 기업이익 압박 → 코스피 하락 요인
+            if (wtiTrend === 'up') {
+                const wtiWeight = wtiVal > 90 ? 1.5 : 1.0; // $90 초과 시 추가 가중
+                kospiScores.down += 1.2 * wtiWeight;
+                console.log(`🛢️ [WTI→KOSPI] 유가 상승(${wtiVal}$) → 코스피 하락 압력 -${(1.2*wtiWeight).toFixed(1)}`);
+            } else {
+                console.log(`🛢️ [WTI→KOSPI] 유가 보합(${wtiVal}$) → 영향 중립`);
+            }
+        }
+    }
+
+    // --- [신규] 파생상품 만기 변동성 감지 ---
+    {
+        const expiryInfo = getKospi200ExpiryInfo(new Date());
+        if (expiryInfo.isExpiryWeek) {
+            const label = expiryInfo.isQuarterly ? '분기 선물 만기' : '월간 옵션 만기';
+            const volatilityBoost = expiryInfo.isQuarterly ? 2.5 : 1.5;
+            // 만기 주간: 양방향 변동성 확대 → 기존 방향에 가중치 (방향 자체는 기존 모멘텀 따름)
+            if (kospiScores.up > kospiScores.down) {
+                kospiScores.up += volatilityBoost;
+            } else {
+                kospiScores.down += volatilityBoost;
+            }
+            console.log(`📅 [만기주간] ${label} D-${expiryInfo.daysToExpiry} (${expiryInfo.isQuarterly ? '분기' : '월간'}) → 변동성 가중치 +${volatilityBoost}`);
+        }
+    }
+
     // --- 최종 점수 정규화 및 블록 간 밸런싱 ---
     let upScore = 0;
     let downScore = 0;
@@ -1329,48 +1571,121 @@ async function main() {
     const upProb = Math.round((upScoreFinal / total) * 100);
     const downProb = 100 - upProb;
 
+    // --- KOSPI 점수 정규화 및 확률 산출 ---
+    const kUp = kospiScores.up > 0 ? Math.log1p(kospiScores.up) * 8 : 0;
+    const kDown = kospiScores.down > 0 ? Math.log1p(kospiScores.down) * 8 : 0;
+    const kTotal = kUp + kDown;
+    const kospiUpProb = kTotal > 0 ? Math.round((kUp / kTotal) * 100) : 50;
+    const kospiDownProb = 100 - kospiUpProb;
+    console.log(`📊 [KOSPI Score] Up:${kUp.toFixed(1)}, Down:${kDown.toFixed(1)} → Up Prob: ${kospiUpProb}%`);
+
     console.log('🤖 AI 시장 분석 생성 중...');
 
     const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
 
-    // --- 코스피 6개월 히스토리 자동 수집 (기술적 지표 계산용) ---
+    // --- 코스피 히스토리 자동 수집 (KIS API 우선, Yahoo Finance 폴백) ---
     try {
-        console.log('📈 코스피(^KS11) 6개월 히스토리 수집 중...');
-        const kospiUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=6mo&interval=1d';
-        const kospiRaw = await new Promise((resolve, reject) => {
-            https.get(kospiUrl, {
-                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-            }, (res) => {
-                let data = '';
-                res.on('data', chunk => data += chunk);
-                res.on('end', () => {
-                    try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+        console.log('📈 코스피(KOSPI) 히스토리 수집 중...');
+        const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
+        fs.mkdirSync(path.dirname(kospiHistPath), { recursive: true });
+        let kospiHistorySaved = false;
+
+        // 1순위: KIS API (국내지수 일봉 조회)
+        if (kisToken) {
+            try {
+                console.log('  → KIS API로 코스피 일봉 조회 시도...');
+                const today = new Date();
+                const sixMonthsAgo = new Date(today);
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                const endDate = today.toISOString().split('T')[0].replace(/-/g, '');
+                const startDate = sixMonthsAgo.toISOString().split('T')[0].replace(/-/g, '');
+
+                const kisUrl = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${startDate}&fid_input_date_2=${endDate}&fid_period_div_code=D`;
+                const kisRes = await fetch(kisUrl, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "authorization": `Bearer ${kisToken}`,
+                        "appkey": KIS_APP_KEY,
+                        "appsecret": KIS_APP_SECRET,
+                        "tr_id": "FHKUP03500100",
+                        "custtype": "P",
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    }
                 });
-            }).on('error', reject);
-        });
-        if (kospiRaw.chart?.result?.[0]) {
-            const kResult = kospiRaw.chart.result[0];
-            const kTimestamps = kResult.timestamp;
-            const kQuotes = kResult.indicators.quote[0];
-            const kHistoryMap = new Map();
-            kTimestamps.forEach((ts, i) => {
-                const date = new Date(ts * 1000).toISOString().split('T')[0];
-                if (kQuotes.high[i] !== null && kQuotes.low[i] !== null && kQuotes.close[i] !== null) {
-                    kHistoryMap.set(date, {
-                        date,
-                        open: parseFloat(kQuotes.open[i]?.toFixed(2) || '0'),
-                        high: parseFloat(kQuotes.high[i].toFixed(2)),
-                        low: parseFloat(kQuotes.low[i].toFixed(2)),
-                        close: parseFloat(kQuotes.close[i].toFixed(2)),
-                        volume: kQuotes.volume[i] || 0
-                    });
+                const kisData = await kisRes.json();
+
+                if (kisData.output2 && kisData.output2.length > 0) {
+                    const kHistory = kisData.output2
+                        .filter(d => d.stck_bsop_date && d.bstp_nmix_prpr)
+                        .map(d => ({
+                            date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                            open: parseFloat(d.bstp_nmix_oprc) || 0,
+                            high: parseFloat(d.bstp_nmix_hgpr) || 0,
+                            low: parseFloat(d.bstp_nmix_lwpr) || 0,
+                            close: parseFloat(d.bstp_nmix_prpr) || 0,
+                            volume: parseInt(d.acml_vol) || 0
+                        }))
+                        .sort((a, b) => b.date.localeCompare(a.date));
+
+                    if (kHistory.length > 0) {
+                        fs.writeFileSync(kospiHistPath, JSON.stringify({
+                            symbol: 'KOSPI', name: '코스피', source: 'KIS',
+                            lastUpdate: new Date().toISOString(), data: kHistory
+                        }, null, 2));
+                        console.log(`  ✅ KIS API 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
+                        kospiHistorySaved = true;
+                    }
+                } else {
+                    console.log('  ⚠️ KIS API 응답에 코스피 데이터 없음, Yahoo Finance 폴백 시도...');
                 }
+            } catch (kisErr) {
+                console.warn('  ⚠️ KIS API 코스피 조회 실패:', kisErr.message, '→ Yahoo Finance 폴백');
+            }
+        }
+
+        // 2순위: Yahoo Finance (KIS 실패 시 폴백)
+        if (!kospiHistorySaved) {
+            console.log('  → Yahoo Finance 폴백으로 코스피 히스토리 수집...');
+            const kospiUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=6mo&interval=1d';
+            const kospiRaw = await new Promise((resolve, reject) => {
+                const req = https.get(kospiUrl, {
+                    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+                    timeout: 10000
+                }, (res) => {
+                    let data = '';
+                    res.on('data', chunk => data += chunk);
+                    res.on('end', () => {
+                        try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+                    });
+                });
+                req.on('error', reject);
+                req.on('timeout', () => { req.destroy(); reject(new Error('Yahoo Finance 타임아웃')); });
             });
-            const kHistory = Array.from(kHistoryMap.values()).sort((a, b) => b.date.localeCompare(a.date));
-            const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
-            fs.mkdirSync(path.dirname(kospiHistPath), { recursive: true });
-            fs.writeFileSync(kospiHistPath, JSON.stringify({ symbol: '^KS11', name: 'KOSPI', lastUpdate: new Date().toISOString(), data: kHistory }, null, 2));
-            console.log(`✅ 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
+            if (kospiRaw.chart?.result?.[0]) {
+                const kResult = kospiRaw.chart.result[0];
+                const kTimestamps = kResult.timestamp;
+                const kQuotes = kResult.indicators.quote[0];
+                const kHistoryMap = new Map();
+                kTimestamps.forEach((ts, i) => {
+                    const date = new Date(ts * 1000).toISOString().split('T')[0];
+                    if (kQuotes.high[i] !== null && kQuotes.low[i] !== null && kQuotes.close[i] !== null) {
+                        kHistoryMap.set(date, {
+                            date,
+                            open: parseFloat(kQuotes.open[i]?.toFixed(2) || '0'),
+                            high: parseFloat(kQuotes.high[i].toFixed(2)),
+                            low: parseFloat(kQuotes.low[i].toFixed(2)),
+                            close: parseFloat(kQuotes.close[i].toFixed(2)),
+                            volume: kQuotes.volume[i] || 0
+                        });
+                    }
+                });
+                const kHistory = Array.from(kHistoryMap.values()).sort((a, b) => b.date.localeCompare(a.date));
+                fs.writeFileSync(kospiHistPath, JSON.stringify({
+                    symbol: '^KS11', name: 'KOSPI', source: 'Yahoo',
+                    lastUpdate: new Date().toISOString(), data: kHistory
+                }, null, 2));
+                console.log(`  ✅ Yahoo Finance 코스피 히스토리 저장 완료 (${kHistory.length}일치)`);
+            }
         }
     } catch (kospiHistErr) {
         console.warn('⚠️ 코스피 히스토리 수집 실패 (비치명적):', kospiHistErr.message);
@@ -1493,17 +1808,14 @@ async function main() {
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
         lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals);
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb);
         lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
-    // 마크다운 기호 및 깨진 글자 세밀하게 제거
+    // 마크다운 기호 및 깨진 글자 세밀하게 제거 (단, ** 강조와 [헤더]는 유지하여 프론트엔드에서 활용)
     aiAnalysis = aiAnalysis
-        .replace(/\*\*/g, '')
-        .replace(/\*/g, '')
-        .replace(/###/g, '')
-        .replace(/##/g, '')
-        .replace(/#/g, '')
+        .replace(/###|##|#/g, '') // 헤더 기호 제거 (#, ##, ###)
+        .replace(/(?<!\*)\*(?!\*)/g, '') // 단일 별표(*)만 제거 (기울임 방지, ** 강조 유지)
         .replace(/\uFFFD/g, '') // 유니코드 대체 문자 확실히 제거
         .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '') // 제어 문자 제거
         .replace(/[“”]/g, '"') // 특수 따옴표 ASCII로 변경
@@ -1748,11 +2060,12 @@ async function main() {
         forecast: {
             sentiment,
             upProb, downProb,
+            kospiUpProb, kospiDownProb,
             timeframes,
             aiAnalysis,
             detailedAnalysis: aiAnalysis, // 하위 호환성 위해 유지
             lastAiUpdate: lastAiUpdate || Date.now(),
-            score: { upScore, downScore }
+            score: { upScore, downScore, kospiUpScore: kUp, kospiDownScore: kDown }
         },
         technicals: technicals ? { ...technicals, compoundSignals } : null,
         kospiTechnicals: kospiTechnicals || null,
@@ -1776,7 +2089,7 @@ async function main() {
         const todayStr = new Date().toISOString().split('T')[0];
         const currentRate = closes => closes && closes.length > 0 ? closes[0] : null;
 
-        // 전일 레코드에 실제 종가 채우기
+        // 전일 레코드에 실제 종가 채우기 (환율 + 코스피)
         const prevRecord = predHist.records.find(r => r.date !== todayStr && r.actual_next_close === null);
         if (prevRecord) {
             const fxHistFile2 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json'))
@@ -1793,6 +2106,22 @@ async function main() {
                     console.log(`📈 [PredHist] 전일 적중률 업데이트: ${prevRecord.date} → hit_d1=${prevRecord.hit_d1}`);
                 }
             }
+
+            // 코스피 적중률 업데이트
+            const kospiHistFile2 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json'))
+                ? path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json')
+                : path.join(process.cwd(), 'public', 'data', 'kospi-history-6m.json');
+            if (prevRecord.kospi_predicted_up !== null && prevRecord.kospi_predicted_up !== undefined && fs.existsSync(kospiHistFile2)) {
+                const kospiH = JSON.parse(fs.readFileSync(kospiHistFile2, 'utf8'));
+                const todayKospiClose = kospiH.data[0]?.close || null;
+                if (todayKospiClose && prevRecord.kospiAtPrediction) {
+                    prevRecord.kospi_actual_next_close = todayKospiClose;
+                    const kospi_pred_up = prevRecord.kospi_predicted_up > 50;
+                    const kospi_actual_up = todayKospiClose > prevRecord.kospiAtPrediction;
+                    prevRecord.kospi_hit_d1 = kospi_pred_up === kospi_actual_up;
+                    console.log(`📊 [PredHist] 코스피 적중률 업데이트: ${prevRecord.date} → kospi_hit_d1=${prevRecord.kospi_hit_d1}`);
+                }
+            }
         }
 
         // 오늘 레코드 추가 (이미 없으면)
@@ -1802,6 +2131,13 @@ async function main() {
                 : path.join(process.cwd(), 'public', 'data', 'fx-history-6m.json');
             const todayRate = fs.existsSync(fxHistFile3)
                 ? JSON.parse(fs.readFileSync(fxHistFile3, 'utf8')).data[0]?.close
+                : null;
+            // 코스피 현재 지수 저장
+            const kospiHistFile3 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json'))
+                ? path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json')
+                : path.join(process.cwd(), 'public', 'data', 'kospi-history-6m.json');
+            const todayKospi = fs.existsSync(kospiHistFile3)
+                ? JSON.parse(fs.readFileSync(kospiHistFile3, 'utf8')).data[0]?.close
                 : null;
             predHist.records.push({
                 date: todayStr,
@@ -1813,7 +2149,11 @@ async function main() {
                 },
                 actual_next_close: null,
                 hit_d1: null,
-                rateAtPrediction: todayRate
+                rateAtPrediction: todayRate,
+                kospi_predicted_up: kospiUpProb,
+                kospi_actual_next_close: null,
+                kospi_hit_d1: null,
+                kospiAtPrediction: todayKospi
             });
         }
         // 최대 90일치만 보관
