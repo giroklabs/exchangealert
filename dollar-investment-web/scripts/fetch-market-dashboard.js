@@ -2144,50 +2144,56 @@ async function main() {
         shouldSkipAi = true;
     }
     
-    if (!shouldSkipAi) {
-        try {
-            const paths = [
-                path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json'),
-                path.join(__dirname, '..', '..', 'data', 'market-dashboard.json'),
-                path.join(process.cwd(), 'public', 'data', 'market-dashboard.json'),
-                path.join(process.cwd(), 'data', 'market-dashboard.json')
-            ];
-            
-            let prevData = null;
-            for (const p of paths) {
-                if (fs.existsSync(p)) {
-                    prevData = JSON.parse(fs.readFileSync(p, 'utf8'));
-                    break;
-                }
+    // 휴지기 상태라도 기존에 남은 정상적인 과거 분석 내용이 있다면 초기화하지 않고 유지
+    try {
+        const paths = [
+            path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json'),
+            path.join(__dirname, '..', '..', 'data', 'market-dashboard.json'),
+            path.join(process.cwd(), 'public', 'data', 'market-dashboard.json'),
+            path.join(process.cwd(), 'data', 'market-dashboard.json')
+        ];
+        
+        let prevData = null;
+        for (const p of paths) {
+            if (fs.existsSync(p)) {
+                prevData = JSON.parse(fs.readFileSync(p, 'utf8'));
+                break;
             }
+        }
 
-            if (prevData && prevData.forecast) {
-                const lastAiTime = prevData.forecast.lastAiUpdate || 0;
-                const diffMin = (Date.now() - lastAiTime) / (1000 * 60);
-                
-                // 설정된 주기가 아직 돌아오지 않았으면 건너뜀 (단, Sunday 등 minInterval 0인 경우 통과)
+        if (prevData && prevData.forecast) {
+            const lastAiTime = prevData.forecast.lastAiUpdate || 0;
+            const diffMin = (Date.now() - lastAiTime) / (1000 * 60);
+            const prevAiAnalysis = prevData.forecast.aiAnalysis || prevData.forecast.detailedAnalysis || "";
+            
+            // 이전 분석 결과가 오류 메시지라면 즉시 재시도
+            const isErrorMessage = prevAiAnalysis.includes("API 키가 설정되지 않아") || prevAiAnalysis.includes("분석 요청 실패");
+
+            if (isErrorMessage) {
+                console.log(`🔄 이전 분석 오류가 감지되어 (휴지기 여부 무관하게) 재분석을 시도합니다.`);
+                shouldSkipAi = false;
+            } else if (shouldSkipAi) {
+                // 이미 스킵하기로 결정된 상태(휴지기, SKIP env)면 기존 텍스트 및 점수 그대로 복구
+                aiAnalysis = prevAiAnalysis;
+                sentiment = prevData.forecast.sentiment || "보통";
+                kospiSentiment = prevData.forecast.kospiSentiment || "보합";
+                lastAiUpdate = lastAiTime; 
+            } else {
+                // 활성 시간대라면 설정된 주기 충족 여부 체크
                 const isTooSoon = minInterval > 0 && diffMin < minInterval;
 
-                // 이전 분석 결과가 오류 메시지라면 즉시 재시도
-                const isErrorMessage = prevData.forecast.aiAnalysis && 
-                                     (prevData.forecast.aiAnalysis.includes("API 키가 설정되지 않아") || 
-                                      prevData.forecast.aiAnalysis.includes("분석 요청 실패"));
-
-                if (isTooSoon && !isErrorMessage) {
+                if (isTooSoon) {
                     console.log(`⏱️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. (설정 간격 ${minInterval}분 미달로 기존 정보 유지)`);
-                    aiAnalysis = prevData.forecast.aiAnalysis || prevData.forecast.detailedAnalysis || "";
+                    aiAnalysis = prevAiAnalysis;
                     sentiment = prevData.forecast.sentiment || "보통";
                     kospiSentiment = prevData.forecast.kospiSentiment || "보합";
                     lastAiUpdate = lastAiTime; 
                     shouldSkipAi = true;
-                } else if (isErrorMessage) {
-                    console.log(`🔄 이전 분석 오류가 감지되어 재분석을 시도합니다.`);
-                    shouldSkipAi = false;
                 }
             }
-        } catch (e) {
-            console.warn('⚠️ 이전 분석 데이터 로드 실패:', e.message);
         }
+    } catch (e) {
+        console.warn('⚠️ 이전 분석 데이터 로드 실패 (기본값 사용됨):', e.message);
     }
 
     if (shouldSkipAi && !aiAnalysis) {
