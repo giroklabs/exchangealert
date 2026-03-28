@@ -172,31 +172,6 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                         </div>
                     </div>
 
-                    <div className="hidden lg:flex gap-4">
-                        <div className={`w-32 h-32 items-center justify-center rounded-full border-8 relative overflow-hidden transition-colors duration-500 ${data?.forecast?.sentiment === '환율 상승 우세' ? 'border-red-100 dark:border-red-900/20' : data?.forecast?.sentiment === '환율 하락 우세' ? 'border-blue-100 dark:border-blue-900/20' : 'border-gray-100 dark:border-gray-700'}`}>
-                            <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.downProb || 0}%`, opacity: 0.3 }}></div>
-                            <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data?.forecast?.upProb || 0}%`, opacity: 0.3 }}></div>
-                            <div className="z-10 text-center">
-                                <div className="text-[10px] font-bold text-gray-400">환율점수</div>
-                                <div className={`text-xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-600 dark:text-red-400' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}>
-                                    {Math.max(data?.forecast?.upProb || 0, data?.forecast?.downProb || 0)}%
-                                </div>
-                            </div>
-                        </div>
-
-                        {data?.forecast?.kospiUpProb !== undefined && (
-                            <div className={`w-32 h-32 items-center justify-center rounded-full border-8 relative overflow-hidden transition-colors duration-500 ${data.forecast.kospiUpProb > 55 ? 'border-red-100 dark:border-red-900/20' : data.forecast.kospiUpProb < 45 ? 'border-blue-100 dark:border-blue-900/20' : 'border-gray-100 dark:border-gray-700'}`}>
-                                <div className={`absolute bottom-0 w-full bg-blue-500 transition-all duration-1000`} style={{ height: `${data.forecast.kospiDownProb || 0}%`, opacity: 0.3 }}></div>
-                                <div className={`absolute top-0 w-full bg-red-500 transition-all duration-1000`} style={{ height: `${data.forecast.kospiUpProb || 0}%`, opacity: 0.3 }}></div>
-                                <div className="z-10 text-center">
-                                    <div className="text-[10px] font-bold text-gray-400">코스피점수</div>
-                                    <div className={`text-xl font-black ${data.forecast.kospiUpProb > 55 ? 'text-red-600 dark:text-red-400' : data.forecast.kospiUpProb < 45 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}>
-                                        {Math.max(data.forecast.kospiUpProb, data.forecast.kospiDownProb || 0)}%
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
                 </div>
 
                 {/* Gemini AI 심층 시장 분석 영역 */}
