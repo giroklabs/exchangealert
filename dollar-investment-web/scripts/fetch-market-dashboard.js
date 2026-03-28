@@ -2110,13 +2110,42 @@ async function main() {
     let sentiment = '보합';
     let kospiSentiment = '보합';
 
-    // AI 분석 주기 조절 (1시간 단위)
-    // 30분마다 데이터는 수집하지만 AI 분석은 1시간(약 50분 이상 경과 시)에 한 번만 실행
+    // --- [신규] 시장 시간대별 지능형 AI 분석 스케줄링 ---
+    const getMinInterval = () => {
+        const now = new Date();
+        const kstDate = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // KST (UTC+9)
+        const day = kstDate.getUTCDay(); // 0(일)-6(토)
+        const hour = kstDate.getUTCHours();
+        const minute = kstDate.getUTCMinutes();
+        const timeVal = hour + minute / 60;
+
+        // 1. 토요일: 전면 중단
+        if (day === 6) return -1; 
+
+        // 2. 일요일: 23:00 정기 알림 1회만 허용 (월요일 개장 준비)
+        if (day === 0) return (hour === 23) ? 0 : -1;
+
+        // 3. 평일 (월-금)
+        // 02:00 ~ 07:30: 휴지기 (중단)
+        if (timeVal >= 2 && timeVal < 7.5) return -1;
+
+        // 22:00 ~ 02:00: 글로벌 시장 (2시간 간격)
+        if (hour >= 22 || hour < 2) return 115; 
+
+        // 07:30 ~ 22:00: 활성 시장 (1시간 간격: 07:30 ~ 16:00, 16:00 ~ 22:00)
+        return 55;
+    };
+
     let shouldSkipAi = process.env.SKIP_AI_ANALYSIS === 'true';
+    const minInterval = getMinInterval();
+
+    if (minInterval === -1 && !shouldSkipAi) {
+        console.log(`💤 KST ${new Date(new Date().getTime() + (9 * 60 * 60 * 1000)).getUTCHours()}시: AI 분석 휴지기입니다.`);
+        shouldSkipAi = true;
+    }
     
     if (!shouldSkipAi) {
         try {
-            // 여러 가능성 있는 경로 체크
             const paths = [
                 path.join(__dirname, '..', 'public', 'data', 'market-dashboard.json'),
                 path.join(__dirname, '..', '..', 'data', 'market-dashboard.json'),
@@ -2128,7 +2157,6 @@ async function main() {
             for (const p of paths) {
                 if (fs.existsSync(p)) {
                     prevData = JSON.parse(fs.readFileSync(p, 'utf8'));
-                    console.log(`📖 기존 데이터를 찾았습니다: ${p}`);
                     break;
                 }
             }
@@ -2137,25 +2165,28 @@ async function main() {
                 const lastAiTime = prevData.forecast.lastAiUpdate || 0;
                 const diffMin = (Date.now() - lastAiTime) / (1000 * 60);
                 
-                // 마지막 AI 분석으로부터 55분 이내면 AI 호출 건너뜀
-                // 단, 이전 분석 결과가 '키 설정 오류' 관련 메시지라면 캐시를 무시하고 새로 시도
+                // 설정된 주기가 아직 돌아오지 않았으면 건너뜀 (단, Sunday 등 minInterval 0인 경우 통과)
+                const isTooSoon = minInterval > 0 && diffMin < minInterval;
+
+                // 이전 분석 결과가 오류 메시지라면 즉시 재시도
                 const isErrorMessage = prevData.forecast.aiAnalysis && 
                                      (prevData.forecast.aiAnalysis.includes("API 키가 설정되지 않아") || 
                                       prevData.forecast.aiAnalysis.includes("분석 요청 실패"));
 
-                if (diffMin < 55 && !isErrorMessage) {
-                    console.log(`⏱️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. (1시간 간격 유지 위해 기존 분석 유지)`);
+                if (isTooSoon && !isErrorMessage) {
+                    console.log(`⏱️ 마지막 AI 분석 이후 ${Math.round(diffMin)}분 경과. (설정 간격 ${minInterval}분 미달로 기존 정보 유지)`);
                     aiAnalysis = prevData.forecast.aiAnalysis || prevData.forecast.detailedAnalysis || "";
                     sentiment = prevData.forecast.sentiment || "보통";
+                    kospiSentiment = prevData.forecast.kospiSentiment || "보합";
                     lastAiUpdate = lastAiTime; 
                     shouldSkipAi = true;
                 } else if (isErrorMessage) {
-                    console.log(`🔄 이전 분석에 오류가 발견되어 캐시를 무시하고 AI 분석을 재시도합니다.`);
+                    console.log(`🔄 이전 분석 오류가 감지되어 재분석을 시도합니다.`);
                     shouldSkipAi = false;
                 }
             }
         } catch (e) {
-            console.warn('⚠️ 이전 분석 데이터 로드 시도 중 오류:', e.message);
+            console.warn('⚠️ 이전 분석 데이터 로드 실패:', e.message);
         }
     }
 
