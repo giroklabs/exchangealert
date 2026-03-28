@@ -697,14 +697,14 @@ async function fetchFromFreeSIS() {
 async function fetchProgramTrading(token) {
     if (!token) return null;
     try {
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/program-trading-time-comprehensive?fid_cond_mrkt_div_code=J&fid_input_iscd=0001`;
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/comp-program-trade-today?fid_cond_mrkt_div_code=J&fid_input_iscd=0001`;
         const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${token}`,
                 "appkey": KIS_APP_KEY,
                 "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010114",
+                "tr_id": "FHPPG04600101",
                 "custtype": "P",
                 "User-Agent": "Mozilla/5.0"
             }
@@ -738,14 +738,14 @@ async function fetchProgramTrading(token) {
 async function fetchBondRates(token) {
     if (!token) return null;
     try {
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/bond-rates-comprehensive?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/comp-interest?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
         const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${token}`,
                 "appkey": KIS_APP_KEY,
                 "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01011550",
+                "tr_id": "FHPST07020000",
                 "custtype": "P",
                 "User-Agent": "Mozilla/5.0"
             }
