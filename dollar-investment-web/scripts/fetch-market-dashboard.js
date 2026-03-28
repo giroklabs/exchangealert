@@ -1633,6 +1633,14 @@ async function main() {
                             lastUpdate: new Date().toISOString(), data: kHistory
                         }, null, 2));
                         console.log(`  ✅ KIS API 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
+                        const kospiIdx = indicators.findIndex(i => i.id === 'kospi');
+                        if (kospiIdx !== -1) {
+                            indicators[kospiIdx].value = latestVal.toLocaleString();
+                            indicators[kospiIdx].source = 'KIS 실시간';
+                            indicators[kospiIdx].history = sortedHistory;
+                            console.log(`✅ [KIS] KOSPI 지수 동기화 완료: ${latestVal}pt`);
+                        }
+                        
                         kospiHistorySaved = true;
                     }
                 } else {
