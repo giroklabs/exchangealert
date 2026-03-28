@@ -484,7 +484,7 @@ async function fetchShortDebtRatio() {
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
     
-    const tryFetch = async (baseUrl, trId, iscd = "0001", div = "P", path = "inquire-investor") => {
+    const tryFetch = async (baseUrl, trId, iscd = "0001", div = "U", path = "inquire-daily-indexinvestor") => {
         try {
             const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${iscd}`;
             const res = await fetch(url, {
@@ -512,17 +512,16 @@ async function fetchMarketInvestorTrend(token) {
     };
 
     try {
-        // 1. 코스피 전체 외국인+기관 수급 (실시간 가집계) - foreign-institution-tot
-        const marketData = await tryFetch(KIS_BASE_URL, "FHKST01010900", "0000", "J", "foreign-institution-tot");
+        // 1. 코스피 지수에 대한 일별 투자자 수입 (FHKUP90101000) - inquire-daily-indexinvestor
+        const marketData = await tryFetch(KIS_BASE_URL, "FHKUP90101000", "0001", "U", "inquire-daily-indexinvestor");
         let latestForeignValue = 0;
         let latestInstitutionValue = 0;
         
-        if (marketData && marketData.output) {
-            const foreignerRow = marketData.output.find(r => r.invst_tp_cd === "02");
-            const institutionRow = marketData.output.find(r => r.invst_tp_cd === "01");
-            if (foreignerRow) latestForeignValue = Math.round(parseFloat(foreignerRow.ntby_tr_pbmn) / 100); // 백만원 -> 억원
-            if (institutionRow) latestInstitutionValue = Math.round(parseFloat(institutionRow.ntby_tr_pbmn) / 100);
-            if (institutionRow) console.log(`✅ [KIS] KOSPI 기관 수급: ${latestInstitutionValue}억원`);
+        if (marketData && marketData.output && Array.isArray(marketData.output) && marketData.output.length > 0) {
+            const latest = marketData.output[0];
+            latestForeignValue = Math.round(parseFloat(latest.frgn_ntby_tr_pbmn || "0") / 100); // 백만원 -> 억원
+            latestInstitutionValue = Math.round(parseFloat(latest.orgn_ntby_tr_pbmn || "0") / 100);
+            if (latestInstitutionValue !== 0) console.log(`✅ [KIS] KOSPI 기관 수급: ${latestInstitutionValue}억원`);
         } else {
             const errMsg = marketData?.error || marketData?.msg1 || '응답 없음';
             console.warn(`ℹ️ [KIS-MarketData] 응답 데이터 없음: ${errMsg} (rt_cd: ${marketData?.rt_cd})`);
@@ -597,7 +596,7 @@ async function fetchMarketStats(token) {
             
             // fid_cond_mrkt_div_code: U (업종/지수), fid_input_iscd: 0001 (코스피)
             // 조회 기간과 주기(D: 일별)가 필수 파라미터인 경우가 많음
-            const url = `${baseUrl}/uapi/domestic-stock/v1/market-index/daily-market-statistics?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${monthAgo}&fid_input_date_2=${today}&fid_period_div_code=D`;
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/market-statistics-daily?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${monthAgo}&fid_input_date_2=${today}&fid_period_div_code=D`;
             
             const res = await fetch(url, {
                 headers: {
