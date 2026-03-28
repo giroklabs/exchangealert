@@ -2142,7 +2142,7 @@ async function main() {
 
         // 1. 토요일: 정기 중단 (사용자 요청으로 일회성 강제 실행 허용)
         // if (day === 6) return -1; 
-        if (day === 6) return 115; 
+        if (day === 6) return 0; // 간격 체크 무시하고 즉시 실행
 
         // 2. 일요일: 23:00 정기 알림 1회만 허용 (월요일 개장 준비)
         if (day === 0) return (hour === 23) ? 0 : -1;
@@ -2151,11 +2151,11 @@ async function main() {
         // 02:00 ~ 07:30: 휴지기 (중단)
         if (timeVal >= 2 && timeVal < 7.5) return -1;
 
-        // 22:00 ~ 02:00: 글로벌 시장 (2시간 간격)
-        if (hour >= 22 || hour < 2) return 115; 
+        // 22:00 ~ 02:00: 글로벌 시장 (2시간 간격) - 일시적으로 0으로 변경하여 즉시 분석 유도
+        if (hour >= 22 || hour < 2) return 0; 
 
         // 07:30 ~ 22:00: 활성 시장 (1시간 간격: 07:30 ~ 16:00, 16:00 ~ 22:00)
-        return 55;
+        return 0; // 모든 구간에서 즉시 실행되도록 일시 수정
     };
 
     let shouldSkipAi = process.env.SKIP_AI_ANALYSIS === 'true';
