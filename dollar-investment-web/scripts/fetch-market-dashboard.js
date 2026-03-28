@@ -97,7 +97,7 @@ const FRED_SERIES = [
     { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업황 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
     // --- 금리 기대 산출용 (hidden: AI 분석 내부 계산용, 대시보드 미표시) ---
-    { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치 (EFFR-GS1 스프레드로 금리인하 기대 산출)', fredId: 'GS1', hidden: true },
+    { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치 (GS1-EFFR 스프레드로 금리인하 기대 산출)', fredId: 'DGS1', hidden: true },
     { id: 'DFEDTARU', name: 'Fed 기준금리 목표 상단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표범위 상단', fredId: 'DFEDTARU', hidden: true },
     { id: 'DFEDTARL', name: 'Fed 기준금리 목표 하단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표범위 하단', fredId: 'DFEDTARL', hidden: true },
 ];
@@ -586,7 +586,7 @@ async function fetchMarketInvestorTrend(token) {
 
 /**
  * KIS API를 통한 증시 통계 조회 (예탁금, 신용융자 등)
- * TR ID: FHKST01010193 (증시자금종합)
+ * TR ID: FHKST649100C0 (국내 증시자금 종합 [국내주식-193])
  */
 async function fetchMarketStats(token) {
     if (!token) return null;
@@ -602,7 +602,7 @@ async function fetchMarketStats(token) {
                     "authorization": `Bearer ${token}`,
                     "appkey": KIS_APP_KEY,
                     "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHKST01010193",
+                    "tr_id": "FHKST649100C0",
                     "custtype": "P",
                     "User-Agent": "Mozilla/5.0"
                 }
@@ -624,31 +624,29 @@ async function fetchMarketStats(token) {
     };
 
     try {
-        // 1. 기본 실전 서버(9443) 시도
         let data = await tryFetch(KIS_BASE_URL);
 
-        // 2. 실패 시 포트 443(기본)으로 우회 시도 (GitHub Actions 네트워크 특성상 9443 차단 대비)
         if (data?.error) {
             const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
-            console.log(`ℹ️ [KIS-MarketStats] ${data.error} → 포트 443으로 우회 시도...`);
+            console.log(`ℹ️ [KIS-MarketStats] ${data.error} → 포토 443 우회 시도...`);
             data = await tryFetch(fallbackUrl);
         }
 
         if (data?.output && Array.isArray(data.output) && data.output.length > 0) {
             const deposits = data.output.map(d => ({
-                date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만 -> 억 보정
+                date: (d.bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                value: Math.round(parseFloat(d.cust_dpmn_amt || "0")) // 이미 억원 단위임
             })).slice(0, 15);
 
             const creditMargin = data.output.map(d => ({
-                date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.crdt_loan_rmnd || "0") / 100) // 백만 -> 억 보정
+                date: (d.bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                value: Math.round(parseFloat(d.crdt_loan_rmnd || "0")) // 이미 억원 단위임
             })).slice(0, 15);
 
             return { deposits, creditMargin };
         } else {
-            const errMsg = data?.error || data?.msg1 || '응답 없음';
-            console.warn(`ℹ️ [KIS-MarketStats] 최종 응답 데이터 없음: ${errMsg}`);
+            const errMsg = data?.error || data?.msg1 || '응답 데이터 형식 오류';
+            console.warn(`ℹ️ [KIS-MarketStats] 데이터 수집 실패: ${errMsg}`);
         }
     } catch (e) {
         console.error("❌ KIS 증시통계 최종 에러:", e.message);
@@ -1194,7 +1192,8 @@ async function sendTelegramNotification(forecast, lastUpdate) {
     }
 
     // 마크다운 V2 대신 기본 마크다운 사용 (이스케이프 복잡도 감소)
-    const title = forecast.sentiment === '환율 상승 우세' ? '📈 환율 상승 우세 예측' : (forecast.sentiment === '환율 하락 우세' ? '📉 환율 하락 우세 예측' : '⚖️ 시장 보합/관망 분석');
+    const title = forecast.sentiment === '환율 상승 우세' ? '📈 환율 상승 우세 예측' : (forecast.sentiment === '환율 하락 우세' ? '📉 환율 하락 우세 예측' : '⚖️ 환율 보합/관망 분석');
+    const kTitle = (forecast.kospiSentiment || '보합') === '코스피 상승 우세' ? '📈 코스피 상승 우세 예측' : ((forecast.kospiSentiment || '보합') === '코스피 하락 우세' ? '📉 코스피 하락 우세 예측' : '⚖️ 코스피 보합/관망 분석');
     
     // AI 분석 내용 중 투자 대응 부분과 핵심 내용을 세밀하게 추출
     const analysisLines = forecast.aiAnalysis.split('\n');
@@ -1229,7 +1228,6 @@ async function sendTelegramNotification(forecast, lastUpdate) {
     const finalSummary = formatForTelegram(summary);
     const finalStrategy = formatForTelegram(strategy);
 
-    // 사이트의 AI 분석 시점과 일치하도록 포맷팅 (GitHub Actions는 UTC이므로 KST 명시 필수)
     const kstOptions = { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: true };
     const analysisTime = forecast.lastAiUpdate 
         ? new Date(forecast.lastAiUpdate).toLocaleTimeString('ko-KR', kstOptions)
@@ -1239,7 +1237,7 @@ async function sendTelegramNotification(forecast, lastUpdate) {
 🤖 *달러 인베스트 AI 시장 분석*
 
 ${title}
-📊 *상승:* ${forecast.upProb}% | *하락:* ${forecast.downProb}%
+${kTitle}
 
 📝 *핵심 요약:*
 ${finalSummary || '분석 내용을 확인하세요.'}
@@ -1742,7 +1740,8 @@ async function main() {
                 id, name, unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: '계산치',
                 description: desc, value: val, trend, realizedImpact: trend,
                 history: base.history.map((h, idx) => {
-                    const rh = ref.history.find(r => r.date <= h.date) || ref.history[0];
+                    // 역순 탐색으로 가장 가까운 시점의 참조 데이터를 찾음
+                    const rh = [...ref.history].reverse().find(r => r.date <= h.date) || ref.history[0];
                     return { date: h.date, value: parseFloat((h.value - rh.value).toFixed(3)) };
                 })
             });
@@ -1753,7 +1752,7 @@ async function main() {
         calculateSpread('sofr-ois', 'SOFR-OIS 스프레드', sofr, effr, '금융시장 유동성 리스크 (상승 시 위험회피 강화)');
     }
 
-    // --- [신규] 금리 인하 기대 스프레드 산출 (EFFR - GS1: 양수=인상기대, 음수=인하기대) ---
+    // --- [신규] 금리 인하 기대 스프레드 산출 (GS1 - EFFR: 음수=인하기대, 양수=인상/유지기대) ---
     {
         const effr = indicators.find(i => i.id === 'effr');
         const gs1 = indicators.find(i => i.id === 'gs1' && i.isInternal);
@@ -1790,7 +1789,8 @@ async function main() {
 
             // 히스토리 산출 (EFFR - GS1)
             const spreadHistory = effr.history.map(h => {
-                const gh = gs1.history.find(g => g.date <= h.date) || gs1.history[0];
+                // 과거 데이터 매칭 시 가장 가까운 과거 시점의 GS1 값을 찾음 (역순 탐색)
+                const gh = [...gs1.history].reverse().find(g => g.date <= h.date) || gs1.history[0];
                 return { date: h.date, value: parseFloat((gh.value - h.value).toFixed(3)) };
             });
 
@@ -1801,7 +1801,7 @@ async function main() {
                 unit: '%p',
                 block: FACTOR_BLOCKS.RATES_DOLLAR.id,
                 impact: 'down',
-                source: 'FRED(EFFR-GS1)',
+                source: 'FRED(GS1-EFFR)',
                 description: '시장 내재 금리 인하 기대 (음수 확대 시 코스피 호재)',
                 value: cutExpectation.toFixed(3),
                 trend: cutExpectation < 0 ? 'down' : 'up',
@@ -2403,6 +2403,7 @@ async function main() {
         stockPrices,
         forecast: {
             sentiment,
+            kospiSentiment,
             upProb, downProb,
             kospiUpProb, kospiDownProb,
             timeframes,
@@ -2497,7 +2498,8 @@ async function main() {
                 kospi_predicted_up: kospiUpProb,
                 kospi_actual_next_close: null,
                 kospi_hit_d1: null,
-                kospiAtPrediction: todayKospi
+                kospiAtPrediction: todayKospi,
+                aiAnalysis: aiAnalysis || null
             });
         }
         // 최대 90일치만 보관

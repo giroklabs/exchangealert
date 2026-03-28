@@ -57,6 +57,12 @@ jobs:
           node dollar-investment-web/scripts/fetch-market-dashboard.js
           echo "✅ Data fetch process completed."
 
+      - name: Validate Market Data
+        if: success()
+        run: |
+          echo "🔍 Validating data integrity..."
+          node dollar-investment-web/scripts/validate-market-data.js
+
       - name: Commit and push
         if: always()
         run: |
