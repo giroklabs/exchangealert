@@ -1763,6 +1763,7 @@ async function main() {
         const dfedtarl = indicators.find(i => i.id === 'dfedtarl' && i.isInternal);
 
         if (effr && gs1 && dfedtaru && dfedtarl) {
+            const effrVal = parseFloat(String(effr.value).replace(/,/g, ''));
             const gs1Val = parseFloat(String(gs1.value).replace(/,/g, ''));
             const upperBound = parseFloat(String(dfedtaru.value).replace(/,/g, ''));
             const lowerBound = parseFloat(String(dfedtarl.value).replace(/,/g, ''));
@@ -1785,14 +1786,9 @@ async function main() {
             }
 
             // Fed 목표 범위와 실제 EFFR 비교 (하단에 가까울수록 dovish)
-            if (dfedtaru && dfedtarl) {
-                const upperBound = parseFloat(String(dfedtaru.value).replace(/,/g, ''));
-                const lowerBound = parseFloat(String(dfedtarl.value).replace(/,/g, ''));
-                const midTarget = (upperBound + lowerBound) / 2;
-                const targetGap = parseFloat((effrVal - midTarget).toFixed(3));
-                if (Math.abs(targetGap) > 0.05) {
-                    console.log(`⚖️ [금리기대] EFFR vs 목표 중앙(${midTarget}%): 괴리 ${targetGap}%`);
-                }
+            const targetGap = parseFloat((effrVal - targetMid).toFixed(3));
+            if (Math.abs(targetGap) > 0.05) {
+                console.log(`⚖️ [금리기대] EFFR vs 목표 중앙(${targetMid}%): 괴리 ${targetGap}%`);
             }
 
             // 히스토리 산출 (TargetMid - GS1)
