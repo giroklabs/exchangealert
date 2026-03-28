@@ -1459,6 +1459,12 @@ async function main() {
                 }
             }
 
+            // 히스토리 산출 (EFFR - GS1)
+            const spreadHistory = effr.history.map(h => {
+                const gh = gs1.history.find(g => g.date <= h.date) || gs1.history[0];
+                return { date: h.date, value: parseFloat((gh.value - h.value).toFixed(3)) };
+            });
+
             // 금리 기대 지표 대시보드 추가
             indicators.push({
                 id: 'rate-cut-expectation',
@@ -1471,7 +1477,7 @@ async function main() {
                 value: cutExpectation.toFixed(3),
                 trend: cutExpectation < 0 ? 'down' : 'up',
                 realizedImpact: cutExpectation < -0.2 ? 'down' : (cutExpectation > 0.1 ? 'up' : 'neutral'),
-                history: []
+                history: spreadHistory
             });
             console.log(`✅ [Calc] 금리인하 기대: ${cutExpectation}%p`);
         }
