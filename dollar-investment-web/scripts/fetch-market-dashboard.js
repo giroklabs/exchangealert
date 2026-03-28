@@ -523,6 +523,8 @@ async function fetchMarketInvestorTrend(token) {
             if (foreignerRow) latestForeignValue = Math.round(parseFloat(foreignerRow.ntby_tr_pbmn) / 100); // 백만원 -> 억원
             if (institutionRow) latestInstitutionValue = Math.round(parseFloat(institutionRow.ntby_tr_pbmn) / 100);
             if (institutionRow) console.log(`✅ [KIS] KOSPI 기관 수급: ${latestInstitutionValue}억원`);
+        } else {
+            console.warn(`ℹ️ [KIS-MarketData] 응답 데이터 없음: ${marketData?.msg1 || '응답 없음'} (rt_cd: ${marketData?.rt_cd})`);
         }
 
         // 2. 히스토리 유지를 위해 대표 종목(KODEX 200 - 069500) 데이터 활용
@@ -621,6 +623,8 @@ async function fetchMarketStats(token) {
                 // 예탁금 수치는 보통 매우 크므로 단위 보정이 필요할 수 있음
                 value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만원 -> 억원 보정 시도
             })).slice(0, 15);
+        } else {
+            console.warn(`ℹ️ [KIS-MarketStats] 응답 데이터 없음: ${data?.msg1 || '응답 없음'} (rt_cd: ${data?.rt_cd})`);
         }
     } catch (e) {
         console.error("❌ KIS 증시통계(예탁금) 조회 에러:", e.message);
@@ -1707,10 +1711,11 @@ async function main() {
                         console.log(`  ✅ KIS API 코스피 히스토리 저장 완료 (${kHistory.length}일치, 최신: ${kHistory[0]?.date} → ${kHistory[0]?.close}pt)`);
                         const kospiIdx = indicators.findIndex(i => i.id === 'kospi');
                         if (kospiIdx !== -1) {
-                            indicators[kospiIdx].value = latestVal.toLocaleString();
-                            indicators[kospiIdx].source = 'KIS 실시간';
-                            indicators[kospiIdx].history = sortedHistory;
-                            console.log(`✅ [KIS] KOSPI 지수 동기화 완료: ${latestVal}pt`);
+                            const latestKVal = kHistory[0].close;
+                            indicators[kospiIdx].value = latestKVal.toLocaleString();
+                            indicators[kospiIdx].source = '한국투자증권 실시간'; // 통일된 소스 명칭 사용
+                            indicators[kospiIdx].history = kHistory.slice(0, 15);
+                            console.log(`✅ [KIS] KOSPI 지수 동기화 완료: ${latestKVal}pt`);
                         }
                         
                         kospiHistorySaved = true;
