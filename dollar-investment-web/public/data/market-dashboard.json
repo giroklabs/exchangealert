@@ -1200,6 +1200,79 @@
       ]
     },
     {
+      "id": "credit-margin",
+      "name": "신용융자잔고",
+      "unit": "억원",
+      "block": "risk",
+      "impact": "up",
+      "source": "한국투자증권 실시간",
+      "description": "개인 투자자의 부채 이용 주식 매수 규모, 급증 시 시장 과열 및 반대매매 리스크",
+      "value": "323,685",
+      "trend": "up",
+      "history": [
+        {
+          "date": "2026-02-03",
+          "value": 305398
+        },
+        {
+          "date": "2026-02-04",
+          "value": 309352
+        },
+        {
+          "date": "2026-02-05",
+          "value": 307868
+        },
+        {
+          "date": "2026-02-06",
+          "value": 310995
+        },
+        {
+          "date": "2026-02-09",
+          "value": 316077
+        },
+        {
+          "date": "2026-02-10",
+          "value": 315607
+        },
+        {
+          "date": "2026-02-11",
+          "value": 313180
+        },
+        {
+          "date": "2026-02-12",
+          "value": 314664
+        },
+        {
+          "date": "2026-02-13",
+          "value": 314767
+        },
+        {
+          "date": "2026-02-19",
+          "value": 315932
+        },
+        {
+          "date": "2026-02-20",
+          "value": 316384
+        },
+        {
+          "date": "2026-02-23",
+          "value": 317123
+        },
+        {
+          "date": "2026-02-24",
+          "value": 319602
+        },
+        {
+          "date": "2026-02-25",
+          "value": 321340
+        },
+        {
+          "date": "2026-02-26",
+          "value": 323685
+        }
+      ]
+    },
+    {
       "id": "foreigner-net-buy",
       "name": "KOSPI 외국인 수급동향",
       "unit": "억원",
@@ -1666,8 +1739,8 @@
     "kospiSentiment": "코스피 하락 우세",
     "upProb": 62,
     "downProb": 38,
-    "kospiUpProb": 30,
-    "kospiDownProb": 70,
+    "kospiUpProb": 29,
+    "kospiDownProb": 71,
     "timeframes": {
       "d1": {
         "upProb": 69,
@@ -1689,10 +1762,10 @@
     "detailedAnalysis": "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세",
     "lastAiUpdate": 1774707197381,
     "score": {
-      "upScore": 52.75171310049802,
+      "upScore": 53.117353316799424,
       "downScore": 32.650061747113625,
       "kospiUpScore": 11.090354888959125,
-      "kospiDownScore": 26.106988623433953
+      "kospiDownScore": 26.696844326178514
     }
   },
   "technicals": {
@@ -1779,5 +1852,5 @@
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 3. 28. PM 2:18:42"
+  "lastUpdate": "2026. 3. 28. PM 2:24:56"
 }
