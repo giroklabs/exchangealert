@@ -1149,6 +1149,8 @@ async function main() {
     const kisToken = await getKisAccessToken();
     const marketStats = kisToken ? await fetchMarketStats(kisToken) : null;
     const investorTrend = kisToken ? await fetchMarketInvestorTrend(kisToken) : null;
+    const programTrading = kisToken ? await fetchProgramTrading(kisToken) : null;
+    const bondRates = kisToken ? await fetchBondRates(kisToken) : null;
     
     // 블록별 점수 합산용 (정규화용)
     const blockScores = {
@@ -1158,8 +1160,7 @@ async function main() {
         'funding-policy': { up: 0, down: 0 }
     };
 
-    // --- 코스피 전용 점수 모델 (KOSPI 전용 지표 가중치) ---
-    const kospiScores = { up: 0, down: 0 };
+    const kospiScores = { up: 0, down: 0 }; // 코스피 상승요인 점수
 
     for (const s of FRED_SERIES) {
         let obs = await fetchFromFred(s.fredId || s.id);
@@ -1264,15 +1265,14 @@ async function main() {
             ? await fetchShortDebtRatio() 
             : await fetchFromEcos(item);
             
-        // 투자자예탁금의 경우 KIS 데이터(marketStats)가 있다면 우선 활용
-        if (item.id === 'investor-deposits' && marketStats && marketStats.length > 0) {
-            // marketStats 데이터를 ECOS 형식(원 단위)으로 가공하여 호환성 유지하며 교체
-            rows = marketStats.map(s => ({
+        // 투자자예탁금의 경우 KIS 데이터(marketStats.deposits)가 있다면 우선 활용
+        if (item.id === 'investor-deposits' && marketStats?.deposits && marketStats.deposits.length > 0) {
+            rows = marketStats.deposits.map(s => ({
                 TIME: s.date.replace(/-/g, ''),
-                DATA_VALUE: (s.value * 100000000).toString() // 억원 -> 원 (transform: wonToEok 대응)
+                DATA_VALUE: (s.value * 100000000).toString() // 억원 -> 원
             }));
             item.source = '한국투자증권 실시간';
-            console.log(`⚡ [KIS] 투자자예탁금 실시간 데이터 적용 완료 (${marketStats[0].value}억원)`);
+            console.log(`⚡ [KIS] 투자자예탁금 실시간 데이터 적용 완료 (${marketStats.deposits[0].value}억원)`);
         }
         
         let val, trend, displayVal, history;
@@ -1338,6 +1338,80 @@ async function main() {
         const statusIcon = rows && rows.length > 0 ? '✅' : '⚠️';
         const dataSource = rows && rows.length > 0 ? 'ECOS' : 'Fallback';
         console.log(`${statusIcon} [${dataSource}] ${item.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)})`);
+    }
+
+    // --- 신규 KIS 지표: 신용융자잔고 ---
+    if (marketStats?.creditMargin && marketStats.creditMargin.length > 0) {
+        const latest = marketStats.creditMargin[0].value;
+        const prev = marketStats.creditMargin.length > 1 ? marketStats.creditMargin[1].value : latest;
+        const trend = latest >= prev ? 'up' : 'down';
+        
+        // 신용융자 증가 -> 리스크 증가 (+1.5), 코스피 하락 요인 (-2.0)
+        if (trend === 'up') {
+            blockScores['risk'].up += 1.5;
+            kospiScores.down += 2.0;
+        }
+
+        indicators.push({
+            id: 'credit-margin',
+            name: '신용융자잔고',
+            unit: '억원',
+            block: 'risk',
+            impact: 'up',
+            source: '한국투자증권 실시간',
+            description: '개인 투자자의 부채 이용 주식 매수 규모, 급증 시 시장 과열 및 반대매매 리스크',
+            value: latest.toLocaleString(),
+            trend,
+            history: [...marketStats.creditMargin].reverse()
+        });
+        console.log(`⚡ [KIS] 신용융자잔고: ${latest}억원`);
+    }
+
+    // --- 신규 KIS 지표: 프로그램 매매 ---
+    if (programTrading) {
+        const trend = programTrading.value >= 0 ? 'up' : 'down';
+        // 비차익 순매수 -> 코스피 상승 (+3.0), 환율 하락 압력 (-1.5)
+        if (programTrading.value > 0) {
+            kospiScores.up += 3.0;
+            blockScores['assets'].down += 1.5;
+        } else if (programTrading.value < 0) {
+            kospiScores.down += 2.0;
+            blockScores['assets'].up += 1.0;
+        }
+
+        indicators.push({
+            id: 'program-trading',
+            name: '프로그램 매매(비차익)',
+            unit: '억원',
+            block: 'assets',
+            impact: 'down',
+            source: '한국투자증권 실시간',
+            description: '기관/외국인의 바스켓 매매 동향, 시장의 실질적 수급 강도',
+            value: programTrading.value.toLocaleString(),
+            trend,
+            history: programTrading.history
+        });
+        console.log(`⚡ [KIS] 프로그램 매매(비차익): ${programTrading.value}억원`);
+    }
+
+    // --- 신규 KIS 지표: 단기 금리 (CD) ---
+    if (bondRates && bondRates.cd) {
+        // CD 금리 상승 -> 원화 금리 매력 상승 -> 환율 하락 요인 (-1.0)
+        blockScores['rates-dollar'].down += 1.0;
+
+        indicators.push({
+            id: 'cd-rate',
+            name: 'CD 금리 (91일)',
+            unit: '%',
+            block: 'rates-dollar',
+            impact: 'down',
+            source: '한국투자증권 실시간',
+            description: '시중 은행간 단기 자금 금리, 국내 유동성 지표',
+            value: bondRates.cd.toFixed(2),
+            trend: 'neutral',
+            history: [] // 실시간 값만 사용
+        });
+        console.log(`⚡ [KIS] CD 금리: ${bondRates.cd}%`);
     }
 
 
