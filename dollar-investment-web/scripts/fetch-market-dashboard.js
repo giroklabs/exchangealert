@@ -483,10 +483,10 @@ async function fetchShortDebtRatio() {
 
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
-    
-    const tryFetch = async (baseUrl, trId, iscd = "0001", div = "U", path = "inquire-daily-indexinvestor") => {
+
+    const executeFetch = async (baseUrl, trId, symbol, div, path) => {
         try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${iscd}`;
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${symbol}`;
             const res = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
@@ -495,7 +495,7 @@ async function fetchMarketInvestorTrend(token) {
                     "appsecret": KIS_APP_SECRET,
                     "tr_id": trId,
                     "custtype": "P",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                    "User-Agent": "Mozilla/5.0"
                 }
             });
             const text = await res.text();
@@ -503,7 +503,6 @@ async function fetchMarketInvestorTrend(token) {
             try {
                 return JSON.parse(text);
             } catch (e) {
-                console.warn(`⚠️ JSON Parse Error. Raw: ${text.substring(0, 50)}...`);
                 return { error: "Invalid JSON" };
             }
         } catch (e) {
@@ -511,24 +510,27 @@ async function fetchMarketInvestorTrend(token) {
         }
     };
 
+    const tryFetch = async (trId, symbol, div, path) => {
+        let result = await executeFetch(KIS_BASE_URL, trId, symbol, div, path);
+        if (result.error || (result.rt_cd && result.rt_cd !== "0")) {
+            const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
+            result = await executeFetch(fallbackUrl, trId, symbol, div, path);
+        }
+        return result;
+    };
+
     try {
-        // 1. 코스피 지수에 대한 일별 투자자 수입 (FHKUP90101000) - inquire-daily-indexinvestor
-        const marketData = await tryFetch(KIS_BASE_URL, "FHKUP90101000", "0001", "U", "inquire-daily-indexinvestor");
+        const marketData = await tryFetch("FHKUP90101000", "0001", "U", "inquire-daily-indexinvestor");
         let latestForeignValue = 0;
         let latestInstitutionValue = 0;
         
         if (marketData && marketData.output && Array.isArray(marketData.output) && marketData.output.length > 0) {
             const latest = marketData.output[0];
-            latestForeignValue = Math.round(parseFloat(latest.frgn_ntby_tr_pbmn || "0") / 100); // 백만원 -> 억원
+            latestForeignValue = Math.round(parseFloat(latest.frgn_ntby_tr_pbmn || "0") / 100); 
             latestInstitutionValue = Math.round(parseFloat(latest.orgn_ntby_tr_pbmn || "0") / 100);
-            if (latestInstitutionValue !== 0) console.log(`✅ [KIS] KOSPI 기관 수급: ${latestInstitutionValue}억원`);
-        } else {
-            const errMsg = marketData?.error || marketData?.msg1 || '응답 없음';
-            console.warn(`ℹ️ [KIS-MarketData] 응답 데이터 없음: ${errMsg} (rt_cd: ${marketData?.rt_cd})`);
         }
 
-        // 2. 히스토리 유지를 위해 대표 종목(KODEX 200 - 069500) 데이터 활용
-        const historyData = await tryFetch(KIS_BASE_URL, "FHKST01010900", "069500", "J", "inquire-investor");
+        const historyData = await tryFetch("FHKST01010900", "069500", "J", "inquire-investor");
         
         if (historyData.error || (historyData.rt_cd && historyData.rt_cd !== '0' && historyData.rt_cd !== '00')) {
             // 히스토리 실패 시 당일 데이터만이라도 반환
@@ -583,20 +585,16 @@ async function fetchMarketInvestorTrend(token) {
 
 
 /**
- * KIS API를 통한 증시 통계 조회 (투자자예탁금 등)
- * TR ID: FHKST01011300 (국내주식 시장지표 일별 추이)
+ * KIS API를 통한 증시 통계 조회 (예탁금, 신용융자 등)
+ * TR ID: FHKST01010193 (증시자금종합)
  */
 async function fetchMarketStats(token) {
     if (!token) return null;
-    
+
     const tryFetch = async (baseUrl) => {
         try {
-            const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
-            const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0].replace(/-/g, '');
-            
-            // fid_cond_mrkt_div_code: U (업종/지수), fid_input_iscd: 0001 (코스피)
-            // 조회 기간과 주기(D: 일별)가 필수 파라미터인 경우가 많음
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/market-statistics-daily?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${monthAgo}&fid_input_date_2=${today}&fid_period_div_code=D`;
+            // 공식 엔드포인트: /uapi/domestic-stock/v1/quotations/mktfunds
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/mktfunds`;
             
             const res = await fetch(url, {
                 headers: {
@@ -604,16 +602,21 @@ async function fetchMarketStats(token) {
                     "authorization": `Bearer ${token}`,
                     "appkey": KIS_APP_KEY,
                     "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHKST01011300",
+                    "tr_id": "FHKST01010193",
                     "custtype": "P",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    "User-Agent": "Mozilla/5.0"
                 }
             });
+
             if (!res.ok) {
                 const text = await res.text();
-                return { error: `HTTP ${res.status}: ${text.substring(0, 100)}` };
+                return { error: `HTTP ${res.status}: ${text.substring(0, 50)}` };
             }
+
             const data = await res.json();
+            if (data.rt_cd !== "0") {
+                return { error: `API-Error ${data.rt_cd}: ${data.msg1}` };
+            }
             return data;
         } catch (e) {
             return { error: e.message };
@@ -621,27 +624,34 @@ async function fetchMarketStats(token) {
     };
 
     try {
+        // 1. 기본 실전 서버(9443) 시도
         let data = await tryFetch(KIS_BASE_URL);
-        if (data.error || !data.output) data = await tryFetch(KIS_BASE_URL_REAL);
 
-        if (data.output && Array.isArray(data.output) && data.output.length > 0) {
+        // 2. 실패 시 포트 443(기본)으로 우회 시도 (GitHub Actions 네트워크 특성상 9443 차단 대비)
+        if (data?.error) {
+            const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
+            console.log(`ℹ️ [KIS-MarketStats] ${data.error} → 포트 443으로 우회 시도...`);
+            data = await tryFetch(fallbackUrl);
+        }
+
+        if (data?.output && Array.isArray(data.output) && data.output.length > 0) {
             const deposits = data.output.map(d => ({
                 date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100)
+                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만 -> 억 보정
             })).slice(0, 15);
 
             const creditMargin = data.output.map(d => ({
                 date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.crdt_loan_rmnd || "0") / 100)
+                value: Math.round(parseFloat(d.crdt_loan_rmnd || "0") / 100) // 백만 -> 억 보정
             })).slice(0, 15);
 
             return { deposits, creditMargin };
         } else {
             const errMsg = data?.error || data?.msg1 || '응답 없음';
-            console.warn(`ℹ️ [KIS-MarketStats] 응답 데이터 없음: ${errMsg} (rt_cd: ${data?.rt_cd})`);
+            console.warn(`ℹ️ [KIS-MarketStats] 최종 응답 데이터 없음: ${errMsg}`);
         }
     } catch (e) {
-        console.error("❌ KIS 증시통계(예탁금) 조회 에러:", e.message);
+        console.error("❌ KIS 증시통계 최종 에러:", e.message);
     }
     return null;
 }
@@ -696,25 +706,39 @@ async function fetchFromFreeSIS() {
  */
 async function fetchProgramTrading(token) {
     if (!token) return null;
-    try {
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/comp-program-trade-today?fid_cond_mrkt_div_code=J&fid_input_iscd=0001`;
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHPPG04600101",
-                "custtype": "P",
-                "User-Agent": "Mozilla/5.0"
+
+    const tryFetch = async (baseUrl) => {
+        try {
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/comp-program-trade-today?fid_cond_mrkt_div_code=J&fid_input_iscd=0001`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHPPG04600101",
+                    "custtype": "P",
+                    "User-Agent": "Mozilla/5.0"
+                }
+            });
+            if (!res.ok) {
+                const text = await res.text();
+                return { error: `HTTP ${res.status}: ${text.substring(0, 50)}` };
             }
-        });
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            return { error: e.message };
         }
-        const data = await res.json();
-        if (data.output && Array.isArray(data.output) && data.output.length > 0) {
+    };
+
+    try {
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data?.error) {
+            data = await tryFetch(KIS_BASE_URL.replace(/:9443$/, ""));
+        }
+
+        if (data?.output && Array.isArray(data.output) && data.output.length > 0) {
             const latest = data.output[0];
             const netBuy = Math.round(parseFloat(latest.nabt_smtn_ntby_tr_pbmn) / 100); 
             return {
@@ -737,25 +761,39 @@ async function fetchProgramTrading(token) {
  */
 async function fetchBondRates(token) {
     if (!token) return null;
-    try {
-        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/comp-interest?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHPST07020000",
-                "custtype": "P",
-                "User-Agent": "Mozilla/5.0"
+
+    const tryFetch = async (baseUrl) => {
+        try {
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/comp-interest?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
+            const res = await fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHPST07020000",
+                    "custtype": "P",
+                    "User-Agent": "Mozilla/5.0"
+                }
+            });
+            if (!res.ok) {
+                const text = await res.text();
+                return { error: `HTTP ${res.status}: ${text.substring(0, 50)}` };
             }
-        });
-        if (!res.ok) {
-            const text = await res.text();
-            throw new Error(`HTTP ${res.status}: ${text.substring(0, 100)}`);
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            return { error: e.message };
         }
-        const data = await res.json();
-        if (data.output && Array.isArray(data.output)) {
+    };
+
+    try {
+        let data = await tryFetch(KIS_BASE_URL);
+        if (data?.error) {
+            data = await tryFetch(KIS_BASE_URL.replace(/:9443$/, ""));
+        }
+
+        if (data?.output && Array.isArray(data.output)) {
             const cd = data.output.find(r => r.bcdt_code === "Y0112");
             const cp = data.output.find(r => r.bcdt_code === "Y0113");
             return {
