@@ -1234,16 +1234,6 @@
       "trend": "down"
     },
     {
-      "id": "hynix",
-      "symbol": "000660",
-      "market": "domestic",
-      "name": "SK하이닉스",
-      "enName": "SK Hynix",
-      "price": 922000,
-      "changePercent": "-1.18",
-      "trend": "down"
-    },
-    {
       "id": "hyundai",
       "symbol": "005380",
       "market": "domestic",
@@ -1261,6 +1251,26 @@
       "enName": "Kia",
       "price": 155800,
       "changePercent": "+0.71",
+      "trend": "up"
+    },
+    {
+      "id": "naver",
+      "symbol": "035420",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 212500,
+      "changePercent": "+0.47",
+      "trend": "up"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 48800,
+      "changePercent": "+0.31",
       "trend": "up"
     }
   ],
@@ -1369,5 +1379,5 @@
   },
   "kospiSentiment": "코스피 하락 우세",
   "backtest": null,
-  "lastUpdate": "2026. 3. 28. AM 2:33:14"
+  "lastUpdate": "2026. 3. 28. AM 2:38:07"
 }
