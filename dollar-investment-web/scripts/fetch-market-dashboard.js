@@ -2140,8 +2140,9 @@ async function main() {
         const minute = kstDate.getUTCMinutes();
         const timeVal = hour + minute / 60;
 
-        // 1. 토요일: 전면 중단
-        if (day === 6) return -1; 
+        // 1. 토요일: 정기 중단 (사용자 요청으로 일회성 강제 실행 허용)
+        // if (day === 6) return -1; 
+        if (day === 6) return 115; 
 
         // 2. 일요일: 23:00 정기 알림 1회만 허용 (월요일 개장 준비)
         if (day === 0) return (hour === 23) ? 0 : -1;
