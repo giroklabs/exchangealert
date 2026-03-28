@@ -1486,7 +1486,48 @@
       "value": "-0.160",
       "trend": "down",
       "realizedImpact": "neutral",
-      "history": []
+      "history": [
+        {
+          "date": "2026-03-13",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-16",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-17",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-18",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-19",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-20",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-23",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-24",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-25",
+          "value": 0.45
+        },
+        {
+          "date": "2026-03-26",
+          "value": 0.45
+        }
+      ]
     }
   ],
   "majorRates": [
@@ -1676,7 +1717,7 @@
     "rsi14": 54.9,
     "ma5": 5500.24,
     "ma20": 5596.21,
-    "ma60": null,
+    "ma60": 5233.02,
     "bb": {
       "upper": 6066.02,
       "mid": 5596.21,
@@ -1689,13 +1730,13 @@
       "d20": -13.77
     },
     "keyLevels": {
-      "support": 4641.58,
+      "support": 4116.53,
       "resistance": 6347.41
     },
     "macd": {
-      "macd": 22.32,
-      "signal": 63.36,
-      "hist": -41.04
+      "macd": 31.43,
+      "signal": 76.62,
+      "hist": -45.19
     },
     "stochastic": {
       "k": 30.6
@@ -1711,5 +1752,5 @@
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 3. 28. AM 4:44:23"
+  "lastUpdate": "2026. 3. 28. AM 4:53:02"
 }
