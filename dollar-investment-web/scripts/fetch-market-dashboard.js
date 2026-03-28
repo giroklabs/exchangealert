@@ -524,7 +524,8 @@ async function fetchMarketInvestorTrend(token) {
             if (institutionRow) latestInstitutionValue = Math.round(parseFloat(institutionRow.ntby_tr_pbmn) / 100);
             if (institutionRow) console.log(`✅ [KIS] KOSPI 기관 수급: ${latestInstitutionValue}억원`);
         } else {
-            console.warn(`ℹ️ [KIS-MarketData] 응답 데이터 없음: ${marketData?.msg1 || '응답 없음'} (rt_cd: ${marketData?.rt_cd})`);
+            const errMsg = marketData?.error || marketData?.msg1 || '응답 없음';
+            console.warn(`ℹ️ [KIS-MarketData] 응답 데이터 없음: ${errMsg} (rt_cd: ${marketData?.rt_cd})`);
         }
 
         // 2. 히스토리 유지를 위해 대표 종목(KODEX 200 - 069500) 데이터 활용
@@ -591,8 +592,13 @@ async function fetchMarketStats(token) {
     
     const tryFetch = async (baseUrl) => {
         try {
+            const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+            const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0].replace(/-/g, '');
+            
             // fid_cond_mrkt_div_code: U (업종/지수), fid_input_iscd: 0001 (코스피)
-            const url = `${baseUrl}/uapi/domestic-stock/v1/market-index/daily-market-statistics?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
+            // 조회 기간과 주기(D: 일별)가 필수 파라미터인 경우가 많음
+            const url = `${baseUrl}/uapi/domestic-stock/v1/market-index/daily-market-statistics?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${monthAgo}&fid_input_date_2=${today}&fid_period_div_code=D`;
+            
             const res = await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
@@ -616,15 +622,13 @@ async function fetchMarketStats(token) {
         if (data.error || !data.output) data = await tryFetch(KIS_BASE_URL_REAL);
 
         if (data.output && Array.isArray(data.output) && data.output.length > 0) {
-            // stck_ivst_dpsit_amt: 주식투자자예탁금 (단위: 억원? 보통 원/백만원 단위이므로 확인 필요)
-            // KIS API 매뉴얼상 보통 백만원 단위인 경우가 많음.
             return data.output.map(d => ({
                 date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                // 예탁금 수치는 보통 매우 크므로 단위 보정이 필요할 수 있음
-                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만원 -> 억원 보정 시도
+                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만원 -> 억원 보정
             })).slice(0, 15);
         } else {
-            console.warn(`ℹ️ [KIS-MarketStats] 응답 데이터 없음: ${data?.msg1 || '응답 없음'} (rt_cd: ${data?.rt_cd})`);
+            const errMsg = data?.error || data?.msg1 || '응답 없음';
+            console.warn(`ℹ️ [KIS-MarketStats] 응답 데이터 없음: ${errMsg} (rt_cd: ${data?.rt_cd})`);
         }
     } catch (e) {
         console.error("❌ KIS 증시통계(예탁금) 조회 에러:", e.message);
