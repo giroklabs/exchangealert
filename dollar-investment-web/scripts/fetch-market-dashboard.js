@@ -621,10 +621,17 @@ async function fetchMarketStats(token) {
         if (data.error || !data.output) data = await tryFetch(KIS_BASE_URL_REAL);
 
         if (data.output && Array.isArray(data.output) && data.output.length > 0) {
-            return data.output.map(d => ({
+            const deposits = data.output.map(d => ({
                 date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100) // 백만원 -> 억원 보정
+                value: Math.round(parseFloat(d.stck_ivst_dpsit_amt) / 100)
             })).slice(0, 15);
+
+            const creditMargin = data.output.map(d => ({
+                date: d.stck_bsop_date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                value: Math.round(parseFloat(d.crdt_loan_rmnd || "0") / 100)
+            })).slice(0, 15);
+
+            return { deposits, creditMargin };
         } else {
             const errMsg = data?.error || data?.msg1 || '응답 없음';
             console.warn(`ℹ️ [KIS-MarketStats] 응답 데이터 없음: ${errMsg} (rt_cd: ${data?.rt_cd})`);
@@ -675,6 +682,77 @@ async function fetchFromFreeSIS() {
         }
     } catch (e) {
         console.warn("ℹ️ [FreeSIS] 데이터 수집 실패:", e.message);
+    }
+    return null;
+}
+
+/**
+ * KIS API를 통한 프로그램 매매 현황 조회
+ * TR ID: FHKST01010114
+ */
+async function fetchProgramTrading(token) {
+    if (!token) return null;
+    try {
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/program-trading-time-comprehensive?fid_cond_mrkt_div_code=J&fid_input_iscd=0001`;
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`,
+                "appkey": KIS_APP_KEY,
+                "appsecret": KIS_APP_SECRET,
+                "tr_id": "FHKST01010114",
+                "custtype": "P",
+                "User-Agent": "Mozilla/5.0"
+            }
+        });
+        const data = await res.json();
+        if (data.output && Array.isArray(data.output) && data.output.length > 0) {
+            const latest = data.output[0];
+            const netBuy = Math.round(parseFloat(latest.nabt_smtn_ntby_tr_pbmn) / 100); 
+            return {
+                value: netBuy,
+                history: data.output.map(d => ({
+                    date: d.bsop_hour.substring(0, 4), 
+                    value: Math.round(parseFloat(d.nabt_smtn_ntby_tr_pbmn) / 100)
+                })).slice(0, 10).reverse()
+            };
+        }
+    } catch (e) {
+        console.error("❌ KIS 프로그램 매매 조회 실패:", e.message);
+    }
+    return null;
+}
+
+/**
+ * KIS API를 통한 국내 금리 종합 조회
+ * TR ID: FHKST01011550
+ */
+async function fetchBondRates(token) {
+    if (!token) return null;
+    try {
+        const url = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/bond-rates-comprehensive?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${token}`,
+                "appkey": KIS_APP_KEY,
+                "appsecret": KIS_APP_SECRET,
+                "tr_id": "FHKST01011550",
+                "custtype": "P",
+                "User-Agent": "Mozilla/5.0"
+            }
+        });
+        const data = await res.json();
+        if (data.output && Array.isArray(data.output)) {
+            const cd = data.output.find(r => r.bcdt_code === "Y0112");
+            const cp = data.output.find(r => r.bcdt_code === "Y0113");
+            return {
+                cd: cd ? parseFloat(cd.bond_mnrt_prpr) : null,
+                cp: cp ? parseFloat(cp.bond_mnrt_prpr) : null
+            };
+        }
+    } catch (e) {
+        console.error("❌ KIS 금리 종합 조회 실패:", e.message);
     }
     return null;
 }
