@@ -2103,6 +2103,7 @@ async function main() {
     let aiAnalysis = "";
     let lastAiUpdate = null;
     let sentiment = '보합';
+    let kospiSentiment = '보합';
 
     // AI 분석 주기 조절 (1시간 단위)
     // 30분마다 데이터는 수집하지만 AI 분석은 1시간(약 50분 이상 경과 시)에 한 번만 실행
