@@ -1718,7 +1718,7 @@ async function main() {
                             const latestKVal = kHistory[0].close;
                             indicators[kospiIdx].value = latestKVal.toLocaleString();
                             indicators[kospiIdx].source = '한국투자증권 실시간'; // 통일된 소스 명칭 사용
-                            indicators[kospiIdx].history = kHistory.slice(0, 15);
+                            indicators[kospiIdx].history = kHistory.map(h => ({ date: h.date, value: h.close })).slice(0, 15);
                             console.log(`✅ [KIS] KOSPI 지수 동기화 완료: ${latestKVal}pt`);
                         }
                         
