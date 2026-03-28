@@ -960,7 +960,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = []) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -1044,8 +1044,11 @@ ${techSection}
 ${kospiTechSection}
 ${backtestSection}
 
-원/달러 환율 최근 추세 (최신순):
-${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
+원/달러 환율 최근 30일 추세 (최신순):
+${usdKrwHistory.slice(0, 30).map(h => `${h.date}: ${h.value}원`).join('\n')}
+
+코스피(KOSPI) 최근 30일 추세 (최신순):
+${kospiHistory.slice(0, 30).map(h => `${h.date}: ${h.value}pt`).join('\n')}
 
 분석 가이드:
 1. 각 섹션은 반드시 다음의 헤더로 시작하여 명확히 구분하세요:
@@ -1053,9 +1056,11 @@ ${usdKrwHistory.slice(0, 10).map(h => `${h.date}: ${h.value}원`).join('\n')}
    [파트B: 코스피(KOSPI) 분석]
    [파트C: 시장 종합 및 위험 신호]
 
-2. [원/달러 환율 분석]: 기술적 지표(MACD, Stochastic), 외국인 수급, DXY, 매크로 펀더멘털을 결합하여 단기(1D) 및 주간(1W) 방향성을 제시하세요.
-3. [코스피 분석]: 기술적 지표, 외국인/기관 순매수, 환율 상관관계, **미 국채 1년물 기반 금리 인하 기대(EFFR-GS1)**, **국제 유가(WTI)에 따른 기업이익 압박**, 미국 증시(SOX) 영향을 종합하여 추세를 제시하세요. **파생상품 만기 주간**인 경우 관련 변동성 확대를 반드시 언급하세요.
-4. [시장 종합 및 위험 신호]: 복합 위험 신호(VIX, DXY, 신용 스프레드 등) 및 거시 경제적 변수(금리 기대 변화 등)를 종합하여 시장 전체의 분위기를 요약하세요.
+2. [원/달러 환율 분석]: 제공된 30일간의 가격 추세를 바탕으로 현재의 위치가 장기적 추세 전환점(Structural Break)인지, 단순 기술적 반등인지 분석하세요. 기술적 지표(MACD, Stochastic), 외국인 수급, DXY, 매크로 펀더멘털을 결합하여 단기(1D) 및 주간(1W) 방향성을 제시하세요.
+
+3. [코스피 분석]: 제공된 30일간의 지수 흐름을 환율 추세와 대조하여 '환율 상승 시 외인 이탈'과 같은 시장 간 상관관계(Correlation)를 심층 분석하세요. 기술적 지표, 외국인/기관 순매수, **미 국채 1년물 기반 금리 인하 기대(Target-GS1)**, **국제 유가(WTI)에 따른 기업이익 압박**, 미국 증시(SOX) 영향을 종합하여 추세를 제시하세요. **파생상품 만기 주간**인 경우 관련 변동성 확대를 반드시 언급하세요.
+
+4. [시장 종합 및 위험 신호]: 두 시장의 30일 시계열을 바탕으로 거시적 리스크가 전이되고 있는지(Contagion) 평가하세요. 복합 위험 신호(VIX, DXY, 신용 스프레드 등) 및 거시 경제적 변수(금리 기대 변화 등)를 종합하여 시장 전체의 분위기를 요약하세요.
 
 5. 응답은 지표 나열을 자제하고 결론 위주의 간결한 문장으로 작성하세요.
 6. **핵심 키워드나 수치는 볼드체(**텍스트**)를 사용하여 강조**해도 좋습니다. 단, # 이나 ## 같은 헤더 기호는 사용하지 마세요.
@@ -2159,7 +2164,17 @@ async function main() {
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
         lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb);
+        // 코스피 히스토리 로드 (AI 전달용)
+        let kospiHistoryForAi = [];
+        try {
+            const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
+            if (fs.existsSync(kospiHistPath)) {
+                const kh = JSON.parse(fs.readFileSync(kospiHistPath, 'utf8'));
+                kospiHistoryForAi = kh.data || [];
+            }
+        } catch (e) {}
+
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi);
         lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
