@@ -595,17 +595,14 @@ async function fetchMarketStats(token) {
         try {
             // 공식 엔드포인트: /uapi/domestic-stock/v1/quotations/mktfunds
             const now = new Date();
-            const past = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000); // 60일 전으로 확대 (3월 데이터 누락 방지)
-            
             const formatDate = (d) => {
                 return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
             };
-            
-            const startDate = formatDate(past);
             const endDate = formatDate(now);
             
-            // 필수 쿼리 파라미터 추가 (&fid_period_div_code=D 추가)
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/mktfunds?fid_cond_mrkt_div_code=J&fid_input_iscd=0000&fid_input_date_1=${startDate}&fid_input_date_2=${endDate}&fid_period_div_code=D`;
+            // KIS FHKST649100C0(증시자금종합) API는 fid_input_date_1 을 기준일(최신일)로 하여 과거 N일치를 한 번에 내려줍니다.
+            // 60일 전으로 강제 지정했던 과거 로직을 버리고 오늘을 기준으로 하도록 원복합니다.
+            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/mktfunds?fid_cond_mrkt_div_code=J&fid_input_iscd=0000&fid_input_date_1=${endDate}`;
             
             const res = await fetch(url, {
                 headers: {
