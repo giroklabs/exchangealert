@@ -1,7 +1,7 @@
 :root {
-  --primary-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  --accent-yellow: #fbbf24;
-  --soft-yellow: rgba(251, 191, 36, 0.03);
+  --primary-gradient: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+  --accent-yellow: #facc15;
+  --soft-yellow: rgba(250, 204, 21, 0.04);
   --light-bg: #ffffff;
   --card-bg: #ffffff;
   --secondary-bg: #f8fafc;
@@ -22,7 +22,7 @@
   position: absolute;
   width: 1000px;
   height: 1000px;
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.05) 0%, rgba(251, 191, 36, 0) 70%);
+  background: radial-gradient(circle, rgba(250, 204, 21, 0.07) 0%, rgba(250, 204, 21, 0) 70%);
   filter: blur(120px);
   z-index: -1;
   pointer-events: none;
@@ -38,8 +38,8 @@
   display: inline-flex;
   align-items: center;
   padding: 8px 20px;
-  background: rgba(251, 191, 36, 0.08); /* 연한 노란 배경 */
-  color: #d97706; /* 조금 진한 오렌지/옐로우 텍스트로 가독성 확보 */
+  background: rgba(250, 204, 21, 0.12); /* Brighter soft yellow */
+  color: #854d0e; /* Deep brownish yellow for readability */
   border-radius: 99px;
   font-size: 13px;
   font-weight: 800;
@@ -97,8 +97,8 @@
 
 .btn-primary:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 25px 50px -12px rgba(251, 191, 36, 0.5);
-  background: #fcd34d;
+  box-shadow: 0 25px 50px -12px rgba(250, 204, 21, 0.5);
+  background: #fde047; /* Yellow-300 for hover */
 }
 
 .btn-secondary {
@@ -128,7 +128,7 @@
 .section-label {
   font-size: 14px;
   font-weight: 800;
-  color: #d97706;
+  color: #a16207; /* Clear mustard yellow */
   text-transform: uppercase;
   letter-spacing: 0.25em;
   margin-bottom: 20px;
@@ -176,7 +176,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 32px;
-  background: rgba(251, 191, 36, 0.05); /* 연한 노란 레이어 */
+  background: rgba(250, 204, 21, 0.07); /* Brighter icon backdrop */
   font-size: 32px;
 }
 
