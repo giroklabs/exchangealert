@@ -1051,6 +1051,33 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 ⚠️ (절댓값 0.5 이상은 '매우 강한 상관관계'입니다. 상관계수가 높은 지표의 현재 방향성에 최우선 가중치를 부여하여 추론하세요.)`;
     }
 
+    // 최신 주요 뉴스 헤드라인 섹션 생성
+    let newsSection = '';
+    try {
+        let actualNewsPath = path.join(process.cwd(), 'dollar-investment-web', 'public', 'data', 'news.json');
+        if (!fs.existsSync(actualNewsPath)) actualNewsPath = path.join(process.cwd(), 'public', 'data', 'news.json');
+
+        if (fs.existsSync(actualNewsPath)) {
+            const newsData = JSON.parse(fs.readFileSync(actualNewsPath, 'utf8'));
+            const targetCategories = ['환율', '코스피', '한국은행', '달러 투자'];
+            const headlines = [];
+            
+            for (const cat of targetCategories) {
+                if (newsData?.news?.[cat] && newsData.news[cat].length > 0) {
+                    const topNews = newsData.news[cat].slice(0, 2); // 카테고리당 가장 중요한 기사 2건
+                    topNews.forEach((item) => {
+                        headlines.push(`- [${cat}] ${item.title}`);
+                    });
+                }
+            }
+            if (headlines.length > 0) {
+                newsSection = `\n[최신 시장 헤드라인 뉴스 (상황 추론 및 내러티브 파악용)]\n${headlines.join('\n')}`;
+            }
+        }
+    } catch(e) {
+        console.warn('⚠️ news.json 로드 실패. 뉴스 헤드라인 주입 없이 분석을 진행합니다.', e.message);
+    }
+
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 (1) 원/달러 환율과 (2) 코스피(KOSPI) 지수의 방향성을 한국어로 심층 분석해주세요. 단, 인사말이나 소개 멘트는 절대 포함하지 말고 곧바로 본문 분석부터 시작하세요.
 
 연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다. 코스피는 외국인 및 기관 수급(프로그램 매매), VIX, 원/달러 환율, 미국 필라델피아 반도체지수(SOX), 금리 인하 기대(EFFR-GS1 스프레드), 국제 유가(WTI), 투자자 예탁금에 의해 주도됩니다.
@@ -1062,6 +1089,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 분석 대상 지표:
 ${blockSummary}
 ${corrSection}
+${newsSection}
 ${techSection}
 ${kospiTechSection}
 ${backtestSection}
