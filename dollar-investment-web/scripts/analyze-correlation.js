@@ -22,8 +22,8 @@ function calculatePearsonCorrelation(x, y) {
     return numerator / denominator;
 }
 
-// --- Yahoo Finance 과거 데이터 조회 (최근 70영업일 확보를 위해 4개월치 로드) ---
-async function fetchYahooHistory(symbol, range = '4mo') {
+// --- Yahoo Finance 과거 데이터 조회 (최근 120영업일 확보를 위해 6개월치 로드) ---
+async function fetchYahooHistory(symbol, range = '6mo') {
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=${range}`;
     try {
         const res = await fetch(url);
@@ -51,7 +51,7 @@ async function fetchYahooHistory(symbol, range = '4mo') {
 
 // --- 메인 상관관계 분석 함수 ---
 async function runCorrelationAnalysis() {
-    console.log('🚀 대시보드 변수간 상관관계 분석 모델(70일) 구동 시작...\n');
+    console.log('🚀 대시보드 변수간 상관관계 분석 모델(120일) 구동 시작...\n');
 
     // 분석 대상 심볼 정의
     const targets = {
@@ -70,14 +70,14 @@ async function runCorrelationAnalysis() {
     const allData = {};
 
     // 1. 모든 데이터 병렬 Fetch
-    console.log('📊 글로벌 금융 API 과거 데이터 수집 중 (최근 70일 매칭용)...');
+    console.log('📊 글로벌 금융 API 과거 데이터 수집 중 (최근 120일 매칭용)...');
     const allSymbols = [...Object.values(targets), ...Object.values(variables)];
     
     await Promise.all(allSymbols.map(async (item) => {
         allData[item.name] = await fetchYahooHistory(item.symbol);
     }));
 
-    // 2. 정확히 70일 (최근 70개 교집합 영업일) 추출 및 날짜 정렬
+    // 2. 정확히 120일 (최근 120개 교집합 영업일) 추출 및 날짜 정렬
     // 환율(USDKRW)을 기준으로 삼고, 다른 지표들의 날짜 교집합을 구합니다.
     const baseHistory = allData['원/달러 환율'];
     if (!baseHistory || baseHistory.length === 0) {
@@ -85,7 +85,7 @@ async function runCorrelationAnalysis() {
         return;
     }
 
-    // 뒤에서 70개의 타겟 일자만 슬라이싱
+    // 뒤에서 120개의 타겟 일자만 슬라이싱
     let alignedDates = baseHistory.map(d => d.date);
     
     // 교집합 구축
@@ -94,9 +94,9 @@ async function runCorrelationAnalysis() {
         alignedDates = alignedDates.filter(d => availableDates.includes(d));
     });
 
-    // 최신 날짜 순으로 정렬 후 상위 70영업일(약 3.5개월)만 자름
+    // 최신 날짜 순으로 정렬 후 상위 120영업일(약 6개월)만 자름
     alignedDates.sort((a, b) => b.localeCompare(a));
-    alignedDates = alignedDates.slice(0, 70).reverse(); // 계산을 위해 마지막엔 과거 -> 최신순으로 정렬
+    alignedDates = alignedDates.slice(0, 120).reverse(); // 계산을 위해 마지막엔 과거 -> 최신순으로 정렬
 
     console.log(`\n✅ 교집합 영업일 매칭 완료: 총 ${alignedDates.length}일 (기간: ${alignedDates[0]} ~ ${alignedDates[alignedDates.length - 1]})`);
 
@@ -164,7 +164,7 @@ async function runCorrelationAnalysis() {
     // 5. JSON 파일로 저장 (Dynamic Scoring 모델 연동용)
     const correlationData = {
         updatedAt: new Date().toISOString(),
-        periodDays: 70,
+        periodDays: 120,
         dateRange: { start: alignedDates[0], end: alignedDates[alignedDates.length - 1] },
         usdkrw: {},
         kospi: {}

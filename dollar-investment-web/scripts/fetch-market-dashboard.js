@@ -1048,7 +1048,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     let corrSection = '';
     if (correlations && correlations.usdkrw && correlations.kospi) {
         corrSection = `
-[동적 상관관계 분석 (최근 70일 피어슨 상관계수)]
+[동적 상관관계 분석 (최근 120일 피어슨 상관계수)]
 - 원/달러 환율 연동도: 달러인덱스(${correlations.usdkrw.dxy}), 국제유가(${correlations.usdkrw.wti}), 미10년물금리(${correlations.usdkrw.tnx}), 필라델피아반도체(${correlations.usdkrw.sox})
 - 코스피 지수 연동도: 필라델피아반도체(${correlations.kospi.sox}), 국제유가(${correlations.kospi.wti}), 환율(${correlations.kospi.usdkrw}), 미10년물금리(${correlations.kospi.tnx})
 ⚠️ (절댓값 0.5 이상은 '매우 강한 상관관계'입니다. 상관계수가 높은 지표의 현재 방향성에 최우선 가중치를 부여하여 추론하세요.)`;
