@@ -1280,14 +1280,10 @@
       "impact": "down",
       "source": "KIS 실시간",
       "description": "외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용",
-      "value": "5",
+      "value": "0",
       "trend": "down",
       "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-03-10",
-          "value": 13
-        },
         {
           "date": "2026-03-11",
           "value": 2
@@ -1339,6 +1335,10 @@
         {
           "date": "2026-03-27",
           "value": 5
+        },
+        {
+          "date": "2026-03-30",
+          "value": 0
         }
       ]
     },
@@ -1350,14 +1350,10 @@
       "impact": "down",
       "source": "KIS 실시간",
       "description": "기관 순매수는 프로그램 매매를 포함한 국내 수급의 핵심 지표",
-      "value": "-691",
+      "value": "0",
       "trend": "up",
-      "realizedImpact": "up",
+      "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-03-10",
-          "value": 442
-        },
         {
           "date": "2026-03-11",
           "value": 208
@@ -1409,6 +1405,10 @@
         {
           "date": "2026-03-27",
           "value": -691
+        },
+        {
+          "date": "2026-03-30",
+          "value": 0
         }
       ]
     },
@@ -1737,24 +1737,24 @@
   "forecast": {
     "sentiment": "환율 상승 우세",
     "kospiSentiment": "코스피 하락 우세",
-    "upProb": 63,
-    "downProb": 37,
-    "kospiUpProb": 28,
-    "kospiDownProb": 72,
+    "upProb": 64,
+    "downProb": 36,
+    "kospiUpProb": 0,
+    "kospiDownProb": 100,
     "timeframes": {
       "d1": {
-        "upProb": 69,
-        "downProb": 31,
+        "upProb": 70,
+        "downProb": 30,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 62,
-        "downProb": 38,
+        "upProb": 63,
+        "downProb": 37,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 54,
-        "downProb": 46,
+        "upProb": 55,
+        "downProb": 45,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1763,9 +1763,9 @@
     "lastAiUpdate": 1774801131661,
     "score": {
       "upScore": 55.89811754543341,
-      "downScore": 33.10583783083416,
-      "kospiUpScore": 11.090354888959125,
-      "kospiDownScore": 28.500620706525446
+      "downScore": 31.635536397894985,
+      "kospiUpScore": 0,
+      "kospiDownScore": 27.91218859799468
     }
   },
   "technicals": {
@@ -1852,5 +1852,5 @@
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 3. 29. PM 8:33:11"
+  "lastUpdate": "2026. 3. 29. PM 8:43:13"
 }
