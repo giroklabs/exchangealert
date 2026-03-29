@@ -113,7 +113,13 @@ function App() {
       <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-8 w-full">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8 w-full">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full md:w-auto">
-            <div onClick={() => window.location.reload()} className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+            <div 
+              onClick={() => { 
+                setActiveTab('dashboard'); 
+                fetchGlobalData(); 
+              }} 
+              className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+            >
               <img src={logo} alt="로장보로" className="w-8 h-8 md:w-10 md:h-10 rounded-xl shadow-sm flex-shrink-0" />
               <h1 className={`text-xl md:text-2xl font-black tracking-tight whitespace-nowrap flex-shrink-0 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 달러 인베스트
