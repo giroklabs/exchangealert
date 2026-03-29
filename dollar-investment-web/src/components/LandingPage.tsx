@@ -25,9 +25,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
 
   return (
     <div className="landing-container">
-      {/* Background Decor (Modern Yellow Glow) */}
-      <div className="bg-glow" style={{ top: '-10%;', left: '-10%', background: 'radial-gradient(circle, rgba(250, 204, 21, 0.08) 0%, rgba(250, 204, 21, 0) 70%)' }} />
-      <div className="bg-glow" style={{ bottom: '15%', right: '-5%', background: 'radial-gradient(circle, rgba(250, 204, 21, 0.06) 0%, rgba(250, 204, 21, 0) 70%)' }} />
+      {/* Background Decor (Gold Glow) */}
+      <div className="bg-glow" style={{ top: '-10%;', left: '-10%', background: 'radial-gradient(circle, rgba(251, 191, 36, 0.08) 0%, rgba(251, 191, 36, 0) 70%)' }} />
+      <div className="bg-glow" style={{ bottom: '15%', right: '-5%', background: 'radial-gradient(circle, rgba(251, 191, 36, 0.06) 0%, rgba(251, 191, 36, 0) 70%)' }} />
 
       {/* Hero Section */}
       <section className="hero-section">
