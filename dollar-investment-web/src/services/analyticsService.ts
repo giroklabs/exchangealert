@@ -3,7 +3,8 @@ import { doc, setDoc, updateDoc, increment, getDoc, collection, query, orderBy, 
 
 export async function trackVisitor() {
     try {
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         const visitorStorageKey = `visitor_counted_${today}`;
         
         // 오늘 이미 집계된 경우 중복 집계 방지 (로컬 스토리지 기준)
@@ -41,6 +42,7 @@ export async function trackVisitor() {
         }
 
         localStorage.setItem(visitorStorageKey, 'true');
+        console.log(`✅ Visitor tracked for ${today}`);
     } catch (error) {
         console.error('❌ Visitor tracking failed:', error);
     }

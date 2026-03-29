@@ -44,6 +44,7 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
                     getTotalVisitorCount()
                 ]);
                 
+                console.log('📊 Loaded Analytics Stats:', stats);
                 setVisitorData(stats);
                 setTotalVisitors(total);
                 if (billingJson) setBillingData(billingJson);
@@ -56,8 +57,11 @@ export function DeveloperDashboard({ onClose }: DeveloperDashboardProps) {
         loadMetrics();
     }, []);
 
-    // 오늘 방문자 및 어제 대비 증가율 계산
-    const todayVisitorCount = visitorData.length > 0 ? visitorData[visitorData.length - 1].count : 0;
+    // 오늘 방문자 및 어제 대비 증가율 계산 (정확한 오늘 날짜 기준)
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const todayData = visitorData.find(v => v.date === todayStr);
+    const todayVisitorCount = todayData ? todayData.count : 0;
     const yesterdayVisitorCount = visitorData.length > 1 ? visitorData[visitorData.length - 2].count : 0;
     const visitorChange = yesterdayVisitorCount > 0 
         ? ((todayVisitorCount - yesterdayVisitorCount) / yesterdayVisitorCount * 100).toFixed(1)
