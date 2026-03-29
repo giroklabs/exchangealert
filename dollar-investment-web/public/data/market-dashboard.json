@@ -398,25 +398,49 @@
       "source": "Fed",
       "description": "무위험 단기 금리",
       "fredId": "DTB3",
-      "value": "5.24",
+      "value": "3.63",
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-03-10",
-          "value": 5.24
-        },
-        {
-          "date": "2026-03-11",
-          "value": 5.24
-        },
-        {
-          "date": "2026-03-12",
-          "value": 5.24
-        },
-        {
           "date": "2026-03-13",
-          "value": 5.24
+          "value": 3.61
+        },
+        {
+          "date": "2026-03-16",
+          "value": 3.61
+        },
+        {
+          "date": "2026-03-17",
+          "value": 3.61
+        },
+        {
+          "date": "2026-03-18",
+          "value": 3.62
+        },
+        {
+          "date": "2026-03-19",
+          "value": 3.62
+        },
+        {
+          "date": "2026-03-20",
+          "value": 3.63
+        },
+        {
+          "date": "2026-03-23",
+          "value": 3.63
+        },
+        {
+          "date": "2026-03-24",
+          "value": 3.63
+        },
+        {
+          "date": "2026-03-25",
+          "value": 3.63
+        },
+        {
+          "date": "2026-03-26",
+          "value": 3.63
         }
       ]
     },
@@ -1450,49 +1474,49 @@
       "impact": "up",
       "source": "계산치",
       "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
-      "value": "-1.590",
+      "value": "0.020",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2026-03-13",
-          "value": -1.59
+          "value": 0.04
         },
         {
           "date": "2026-03-16",
-          "value": -1.54
+          "value": 0.09
         },
         {
           "date": "2026-03-17",
-          "value": -1.59
+          "value": 0.04
         },
         {
           "date": "2026-03-18",
-          "value": -1.62
+          "value": 0
         },
         {
           "date": "2026-03-19",
-          "value": -1.62
+          "value": 0
         },
         {
           "date": "2026-03-20",
-          "value": -1.62
+          "value": -0.01
         },
         {
           "date": "2026-03-23",
-          "value": -1.62
+          "value": -0.01
         },
         {
           "date": "2026-03-24",
-          "value": -1.61
+          "value": 0
         },
         {
           "date": "2026-03-25",
-          "value": -1.6
+          "value": 0.01
         },
         {
           "date": "2026-03-26",
-          "value": -1.59
+          "value": 0.02
         }
       ]
     },
@@ -1713,24 +1737,24 @@
   "forecast": {
     "sentiment": "환율 상승 우세",
     "kospiSentiment": "코스피 하락 우세",
-    "upProb": 65,
-    "downProb": 35,
+    "upProb": 63,
+    "downProb": 37,
     "kospiUpProb": 28,
     "kospiDownProb": 72,
     "timeframes": {
       "d1": {
-        "upProb": 70,
-        "downProb": 30,
+        "upProb": 69,
+        "downProb": 31,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 63,
-        "downProb": 37,
+        "upProb": 62,
+        "downProb": 38,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 55,
-        "downProb": 45,
+        "upProb": 54,
+        "downProb": 46,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -1739,7 +1763,7 @@
     "lastAiUpdate": 1774793814704,
     "score": {
       "upScore": 55.89811754543341,
-      "downScore": 29.27710867081675,
+      "downScore": 33.10583783083416,
       "kospiUpScore": 11.090354888959125,
       "kospiDownScore": 28.500620706525446
     }
@@ -1828,5 +1852,5 @@
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 3. 29. PM 3:08:07"
+  "lastUpdate": "2026. 3. 29. PM 3:13:09"
 }
