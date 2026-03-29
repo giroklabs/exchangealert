@@ -974,7 +974,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = []) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = [], correlations = null) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -1044,6 +1044,16 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         }
     }
 
+    // 동적 상관관계 섹션 생성
+    let corrSection = '';
+    if (correlations && correlations.usdkrw && correlations.kospi) {
+        corrSection = `
+[동적 상관관계 분석 (최근 70일 피어슨 상관계수)]
+- 원/달러 환율 연동도: 달러인덱스(${correlations.usdkrw.dxy}), 국제유가(${correlations.usdkrw.wti}), 미10년물금리(${correlations.usdkrw.tnx}), 필라델피아반도체(${correlations.usdkrw.sox})
+- 코스피 지수 연동도: 필라델피아반도체(${correlations.kospi.sox}), 국제유가(${correlations.kospi.wti}), 환율(${correlations.kospi.usdkrw}), 미10년물금리(${correlations.kospi.tnx})
+⚠️ (절댓값 0.5 이상은 '매우 강한 상관관계'입니다. 상관계수가 높은 지표의 현재 방향성에 최우선 가중치를 부여하여 추론하세요.)`;
+    }
+
     const prompt = `당신은 한수지(금융 분석가)입니다. 다음 4대 핵심 요인(Block)을 바탕으로 향후 (1) 원/달러 환율과 (2) 코스피(KOSPI) 지수의 방향성을 한국어로 심층 분석해주세요. 단, 인사말이나 소개 멘트는 절대 포함하지 말고 곧바로 본문 분석부터 시작하세요.
 
 연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다. 코스피는 외국인 및 기관 수급(프로그램 매매), VIX, 원/달러 환율, 미국 필라델피아 반도체지수(SOX), 금리 인하 기대(EFFR-GS1 스프레드), 국제 유가(WTI), 투자자 예탁금에 의해 주도됩니다.
@@ -1054,6 +1064,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 
 분석 대상 지표:
 ${blockSummary}
+${corrSection}
 ${techSection}
 ${kospiTechSection}
 ${backtestSection}
@@ -1355,6 +1366,35 @@ async function main() {
 
     const kospiScores = { up: 0, down: 0 }; // 코스피 상승요인 점수
 
+    // 🌟 동적 상관관계 데이터 로드 (Dynamic Scoring 적용용)
+    let correlations = null;
+    try {
+        let actualCorrPath = path.join(process.cwd(), 'dollar-investment-web', 'public', 'data', 'correlations.json');
+        if (!fs.existsSync(actualCorrPath)) actualCorrPath = path.join(process.cwd(), 'public', 'data', 'correlations.json');
+
+        if (fs.existsSync(actualCorrPath)) {
+            correlations = JSON.parse(fs.readFileSync(actualCorrPath, 'utf8'));
+            console.log('🔗 [Dynamic Model] correlations.json 성공적으로 로드 완료. (동적 가중치 작동중)');
+        }
+    } catch(e) {
+        console.warn('⚠️ correlations.json 로드 실패. 기존 패턴 가중치로 롤백합니다.');
+    }
+
+    // 상관계수 가중치 매핑 유틸 함수
+    const getCorrelationWeight = (id, target = 'usdkrw') => {
+        if (!correlations) return 1.0;
+        const keyMap = {
+            'DXY': 'dxy', 'TNX': 'tnx', 'VIXCLS': 'vix', 'SOX': 'sox', 'DCOILWTICO': 'wti',
+            'KOSPI': 'kospi'
+        };
+        const key = keyMap[id];
+        if (key && correlations[target] && typeof correlations[target][key] === 'number') {
+            const corr = correlations[target][key];
+            return 1.0 + Math.abs(corr); // 상관계수에 비례하여 가중치 1.0x ~ 2.0x 앰플리파이
+        }
+        return 1.0;
+    };
+
     for (const s of FRED_SERIES) {
         let obs = await fetchFromFred(s.fredId || s.id);
 
@@ -1399,9 +1439,15 @@ async function main() {
         const zScore = calculateZScore(numVal, history);
         const freshness = getFreshnessMultiplier(s.realtimeSymbol ? 'realtime' : 'D');
         
+        // 🌟 상관계수 기반 동적 가중치 산출
+        const dynamicWeight = getCorrelationWeight(s.id, 'usdkrw'); // 환율용
+        const kospiDynamicWeight = getCorrelationWeight(s.id, 'kospi'); // 코스피용
+        
         // 변동 강도 반영 (Z-Score가 클수록 점수 가중)
         const volatilityWeight = Math.min(Math.abs(zScore), 2.0); // 최대 2배까지만
-        let finalWeight = (1.0 + volatilityWeight) * freshness;
+        
+        // 최종 가중치 산출 시 동적 상관계수 가중치(dynamicWeight)를 곱합
+        let finalWeight = (1.0 + volatilityWeight) * freshness * dynamicWeight;
 
         // 임계값(Threshold) 기반 특수 가중치 (FRED 지표)
         if (s.id === 'BAMLH0A0HYM2' && numVal > 4.0) finalWeight *= 1.5; // 하이일드 400bp(4.0%) 돌파 시 글로벌 위기 가중
@@ -1417,17 +1463,18 @@ async function main() {
             else if (trend === 'down') blockScores[s.block].up += 1.0 * finalWeight;
         }
 
-        // KOSPI 전용 점수 반영 (역상관관계 지표들)
+        // KOSPI 전용 점수 반영 (동적 상관계수 가중치 사용)
         if (['DXY', 'FEDFUNDS', 'TNX', 'VIXCLS', 'BAMLH0A0HYM2'].includes(s.id)) {
-            // 이 지표들이 오르면(up) 코스피는 하락(down) 압력
-            if (trend === 'up') kospiScores.down += 1.2 * finalWeight;
-            else if (trend === 'down') kospiScores.up += 0.8 * finalWeight;
+            const kWeight = (1.0 + volatilityWeight) * freshness * kospiDynamicWeight;
+            if (trend === 'up') kospiScores.down += 1.2 * kWeight;
+            else if (trend === 'down') kospiScores.up += 0.8 * kWeight;
         }
         
         // KOSPI 직접 상관 지표 (SOX)
         if (s.id === 'SOX') {
-            if (trend === 'up') kospiScores.up += 2.5 * finalWeight; // 반도체 상승 -> 코스피 강력 상승
-            else if (trend === 'down') kospiScores.down += 2.0 * finalWeight;
+            const kWeight = (1.0 + volatilityWeight) * freshness * kospiDynamicWeight;
+            if (trend === 'up') kospiScores.up += 2.5 * kWeight; // 반도체 상승 -> 코스피 강력 상승
+            else if (trend === 'down') kospiScores.down += 2.0 * kWeight;
         }
 
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
@@ -2232,7 +2279,7 @@ async function main() {
             }
         } catch (e) {}
 
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi);
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi, correlations);
         lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
     }
 
