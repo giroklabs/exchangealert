@@ -27,19 +27,14 @@ async function fetchBillingStats() {
             credentials,
             scopes: ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/monitoring.read'],
         });
-
         const authClient = await auth.getClient();
         const projectId = credentials.project_id;
-        const clientEmail = credentials.client_email;
         const monitoring = new monitoring_v3.Monitoring({ auth: authClient });
 
-        // Cloud Monitoring API를 통해 billing/total_cost 지표 조회
-        // 참고: 이 지표는 BigQuery 결제 내보내기가 활성화되지 않아도 수집될 수 있는 기본 지표입니다.
         const now = new Date();
         const startTime = new Date(now.getFullYear(), now.getMonth(), 1).toISOString(); // 이번 달 1일부터
         const endTime = now.toISOString();
 
-        console.log(`🔑 인증 계정: ${clientEmail}`);
         console.log(`📊 프로젝트 [${projectId}]의 지표 조회 시작 (StartTime: ${startTime})`);
 
         const response = await monitoring.projects.timeSeries.list({
