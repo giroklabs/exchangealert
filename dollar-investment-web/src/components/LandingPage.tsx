@@ -97,16 +97,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             { title: '자산 분배 트래커', desc: '환차익과 투자 가중치를 자동으로 계산해 자산 현황을 시각화합니다.', icon: BarChart3 },
             { title: '글로벌 경제 캘린더', desc: '주요국의 금리 결정과 경제 지표 발표 일정을 실시간으로 수집합니다.', icon: Calendar },
             { title: '뉴스 인텔리전스', desc: '수백 개의 뉴스 소스에서 환율에 직접적인 영향을 주는 키워드만 선별합니다.', icon: Search },
-            { title: '텔레그램 채널 [달러인베스트]', desc: '주요 지표와 시황 분석 결과를 텔레그램 알림으로 실시간 전송합니다.', icon: Send }
-          ].map((feature, idx) => (
-             <div key={idx} className="feature-card group cursor-default">
-               <div className="icon-box group-hover:bg-amber-500/10 transition-colors duration-500">
-                 <feature.icon className="w-8 h-8 text-slate-800" strokeWidth={1.5} />
-               </div>
-               <h3 className="feature-name">{feature.title}</h3>
-               <p className="feature-desc">{feature.desc}</p>
-             </div>
-          ))}
+            { title: '텔레그램 채널 [달러인베스트]', desc: '주요 지표와 시황 분석 결과를 텔레그램 알림으로 실시간 전송합니다.', icon: Send, link: 'https://t.me/dollar_invest_pro' }
+          ].map((feature, idx) => {
+            const isClickable = 'link' in feature;
+            const CardTag = isClickable ? 'a' : 'div';
+            
+            return (
+              <CardTag 
+                key={idx} 
+                href={isClickable ? feature.link : undefined}
+                target={isClickable ? "_blank" : undefined}
+                rel={isClickable ? "noopener noreferrer" : undefined}
+                className={`feature-card group ${isClickable ? 'cursor-pointer hover:border-amber-400 no-underline' : 'cursor-default'}`}
+              >
+                <div className="icon-box group-hover:bg-amber-500/10 transition-colors duration-500">
+                  <feature.icon className="w-8 h-8 text-slate-800" strokeWidth={1.5} />
+                </div>
+                <h3 className="feature-name">{feature.title}</h3>
+                <p className="feature-desc">{feature.desc}</p>
+              </CardTag>
+            );
+          })}
         </div>
       </section>
 
