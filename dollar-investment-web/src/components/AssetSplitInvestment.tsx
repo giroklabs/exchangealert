@@ -3,7 +3,7 @@ import type { AssetInvestment, AssetSplitSettings } from '../types';
 import { useSyncState } from '../hooks/useSyncState';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect } from 'react';
-import { BarChart3, ShoppingCart, RotateCcw, Trash2, Edit2, Plus, RefreshCw, Activity } from 'lucide-react';
+import { BarChart3, ShoppingCart, RotateCcw, Trash2, Edit2, Plus, Activity } from 'lucide-react';
 
 import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchFXIntradayData } from '../services/fxHistoryService';

@@ -4,7 +4,7 @@ import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchAllCurrentExchangeRates, fetchLastUpdateTime } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { TrendingUp, Target, Activity, ShieldCheck, AlertCircle, Compass, ClipboardList, Globe } from 'lucide-react';
+import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, ClipboardList, Globe } from 'lucide-react';
 import { UnifiedFXChart } from './UnifiedFXChart';
 
 export function MarketDashboard({ initialData = null, isLoadingExternal = false }: { initialData?: DashboardData | null, isLoadingExternal?: boolean }) {
