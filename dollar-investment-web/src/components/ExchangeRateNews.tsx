@@ -12,11 +12,13 @@ interface NewsItem {
 }
 
 const KEYWORD_PRESETS = [
+    { label: '전체', query: '전체' },
     { label: '환율', query: '환율' },
     { label: '원/달러', query: '원+달러+환율' },
     { label: '달러 투자', query: '달러+투자+외화' },
     { label: '한국은행', query: '한국은행+금리+환율' },
     { label: '외환시장', query: '외환시장' },
+    { label: '코스피', query: '코스피+증시' },
 ];
 
 const PROXY = 'https://api.allorigins.win/raw?url=';
@@ -137,9 +139,22 @@ export function ExchangeRateNews() {
             if (staticRes.ok) {
                 const staticData = await staticRes.json();
                 if (staticData && staticData.news) {
-                    // [Fix] 키워드 매칭 로직 강화: label(ID) 또는 query 둘 다 대응
-                    const preset = KEYWORD_PRESETS.find(p => p.query === query);
-                    const newsList = staticData.news[preset?.label || ''] || staticData.news[query];
+                    let newsList: any[] = [];
+                    // [Feature] '전체' 탭 클릭 시 모든 카테고리 기사를 모아 중복 제거
+                    if (query === '전체') {
+                        const allItems = Object.values(staticData.news).flat() as any[];
+                        const uniqueMap = new Map();
+                        allItems.forEach(item => {
+                            if (!uniqueMap.has(item.link)) {
+                                uniqueMap.set(item.link, item);
+                            }
+                        });
+                        newsList = Array.from(uniqueMap.values());
+                    } else {
+                        // [Fix] 키워드 매칭 로직 강화: label(ID) 또는 query 둘 다 대응
+                        const preset = KEYWORD_PRESETS.find(p => p.query === query);
+                        newsList = staticData.news[preset?.label || ''] || staticData.news[query] || [];
+                    }
                     
                     if (newsList && newsList.length > 0) {
                         // 데이터 안전성 확보 및 최신순 정렬 강제 (pubDate 기준 내림차순)
@@ -161,7 +176,8 @@ export function ExchangeRateNews() {
 
             // 2순위: 정적 파일이 없거나 해당 키워드 데이터가 없는 경우 기존 실시간 RSS 방식 사용 (Fallback)
             console.log(`📡 [Fallback] 실시간 RSS 수집 중... (${query})`);
-            const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ko&gl=KR&ceid=KR:ko`;
+            const rssSearchQuery = query === '전체' ? '환율 OR 코스피 OR 증시' : query;
+            const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(rssSearchQuery)}&hl=ko&gl=KR&ceid=KR:ko`;
             const response = await fetch(`${PROXY}${encodeURIComponent(rssUrl)}`);
             if (!response.ok) throw new Error('뉴스를 불러오지 못했습니다.');
             

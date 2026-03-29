@@ -17,7 +17,8 @@ const KEYWORDS = [
     { id: '원/달러', query: '원+달러+환율' },
     { id: '달러 투자', query: '달러+투자+외화' },
     { id: '한국은행', query: '한국은행+금리+환율' },
-    { id: '외환시장', query: '외환시장' }
+    { id: '외환시장', query: '외환시장' },
+    { id: '코스피', query: '코스피+증시' }
 ];
 
 async function fetchNews(query) {
