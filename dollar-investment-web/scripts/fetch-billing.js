@@ -30,6 +30,7 @@ async function fetchBillingStats() {
 
         const authClient = await auth.getClient();
         const projectId = credentials.project_id;
+        const clientEmail = credentials.client_email;
         const monitoring = new monitoring_v3.Monitoring({ auth: authClient });
 
         // Cloud Monitoring API를 통해 billing/total_cost 지표 조회
@@ -38,6 +39,7 @@ async function fetchBillingStats() {
         const startTime = new Date(now.getFullYear(), now.getMonth(), 1).toISOString(); // 이번 달 1일부터
         const endTime = now.toISOString();
 
+        console.log(`🔑 인증 계정: ${clientEmail}`);
         console.log(`📊 프로젝트 [${projectId}]의 지표 조회 시작 (StartTime: ${startTime})`);
 
         const response = await monitoring.projects.timeSeries.list({
