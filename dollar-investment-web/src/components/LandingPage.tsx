@@ -18,6 +18,11 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
+  // 화면 진입 시 최상단으로 스크롤 초기화
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="landing-container">
       {/* Background Decor (Gold Glow) */}
