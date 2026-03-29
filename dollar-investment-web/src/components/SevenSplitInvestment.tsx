@@ -3,6 +3,7 @@ import type { SevenSplitSettings, SevenSplitSlot } from '../types';
 import { getCurrentRateValue } from '../services/exchangeRateService';
 import { useInvestmentAnalysis } from '../hooks/useInvestmentAnalysis';
 import { useSyncState } from '../hooks/useSyncState';
+import { Settings, ShoppingCart, Lightbulb, Edit2, RotateCcw } from 'lucide-react';
 
 export function SevenSplitInvestment() {
     const { theme } = useTheme();
@@ -158,14 +159,16 @@ export function SevenSplitInvestment() {
             {/* 설정 섹션 */}
             <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-                        ⚙️ 투자 설정
+                    <h2 className={`text-xl font-bold flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
+                        <Settings className="w-5 h-5 text-slate-400" />
+                        <span>투자 설정</span>
                     </h2>
                     <button
                         onClick={handleReset}
-                        className="px-4 py-2 text-sm font-bold rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        className="px-4 py-2 text-sm font-bold flex items-center gap-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors"
                     >
-                        초기화
+                        <RotateCcw className="w-4 h-4" />
+                        <span>초기화</span>
                     </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -364,9 +367,10 @@ export function SevenSplitInvestment() {
                                                         <span className="text-xs text-gray-500">현재 수익률</span>
                                                         <button
                                                             onClick={() => handleEditStart(slot)}
-                                                            className="text-[10px] text-blue-500 hover:underline text-left"
+                                                            className="text-[10px] text-blue-500 hover:underline flex items-center gap-1"
                                                         >
-                                                            데이터 수정 ✏️
+                                                            <span>데이터 수정</span>
+                                                            <Edit2 className="w-2.5 h-2.5" />
                                                         </button>
                                                     </div>
                                                     <span className={`text-lg font-black ${roi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
@@ -406,12 +410,13 @@ export function SevenSplitInvestment() {
                                         <button
                                             onClick={() => handleBuy(slot.number)}
                                             disabled={!canBuy}
-                                            className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
+                                            className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${canBuy
                                                 ? (isRecommendBuy ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20' : 'bg-yellow-200 text-gray-700 hover:bg-yellow-300 shadow-md')
                                                 : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                 }`}
                                         >
-                                            {canBuy ? (isRecommendBuy ? '🛒 매수 실행' : '🛒 임의 매수') : '매수 대기'}
+                                            <ShoppingCart className="w-5 h-5" />
+                                            {canBuy ? (isRecommendBuy ? '매수 실행' : '임의 매수') : '매수 대기'}
                                         </button>
                                     </>
                                 )}
@@ -424,7 +429,8 @@ export function SevenSplitInvestment() {
             {/* 전략 가이드 */}
             <div className={`p-6 rounded-2xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
                 <h3 className={`font-bold mb-4 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-                    💡 스플릿 투자 원칙
+                    <Lightbulb className="w-5 h-5 text-slate-400" />
+                    <span>스플릿 투자 원칙</span>
                 </h3>
                 <ul className={`space-y-2 text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                     <li>• <strong>손절은 없다</strong>: 환율이 하락하면 다음 슬롯에서 추가 매수합니다.</li>

@@ -3,6 +3,7 @@ import type { AssetInvestment, AssetSplitSettings } from '../types';
 import { useSyncState } from '../hooks/useSyncState';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect } from 'react';
+import { BarChart3, ShoppingCart, RotateCcw, Trash2, Edit2, Plus, RefreshCw, Activity } from 'lucide-react';
 
 import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchFXIntradayData } from '../services/fxHistoryService';
@@ -196,7 +197,7 @@ function SingleAssetManager({
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6 border-dashed border-gray-200">
                 <div className="flex items-center gap-4">
                     <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-yellow-900/30' : 'bg-yellow-50'}`}>
-                        <span className="text-2xl">📊</span>
+                        <BarChart3 className="w-6 h-6 text-slate-400" />
                     </div>
                     <div>
                         <input
@@ -218,15 +219,17 @@ function SingleAssetManager({
                 <div className="flex gap-2">
                     <button
                         onClick={handleReset}
-                        className="px-4 py-2 text-sm font-bold rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        className="px-4 py-2 text-sm font-bold flex items-center gap-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 transition-colors"
                     >
-                        데이터 리셋
+                        <RotateCcw className="w-4 h-4" />
+                        <span>리셋</span>
                     </button>
                     <button
                         onClick={onDelete}
-                        className="px-4 py-2 text-sm font-bold rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 transition-colors"
+                        className="px-4 py-2 text-sm font-bold flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 transition-colors"
                     >
-                        종목 삭제
+                        <Trash2 className="w-4 h-4" />
+                        <span>종목 삭제</span>
                     </button>
                 </div>
             </div>
@@ -422,9 +425,10 @@ function SingleAssetManager({
                                                         <span className="text-xs text-gray-500">현재 수익률</span>
                                                         <button
                                                             onClick={() => handleEditStart(slot)}
-                                                            className="text-[10px] text-blue-500 hover:underline text-left"
+                                                            className="text-[10px] text-blue-500 hover:underline flex items-center gap-1"
                                                         >
-                                                            데이터 수정 ✏️
+                                                            <span>데이터 수정</span>
+                                                            <Edit2 className="w-2.5 h-2.5" />
                                                         </button>
                                                     </div>
                                                     <span className={`text-lg font-black ${slotRoi >= 0 ? 'text-red-500' : 'text-blue-500'}`}>
@@ -464,14 +468,15 @@ function SingleAssetManager({
                                         <button
                                             onClick={() => handleBuy(slot.number)}
                                             disabled={!canBuy}
-                                            className={`w-full py-3 rounded-xl font-bold transition-all ${canBuy
+                                            className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${canBuy
                                                 ? (isRecommendBuy
                                                     ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500 shadow-lg shadow-yellow-400/20'
                                                     : 'bg-yellow-200 text-gray-700 hover:bg-yellow-300 shadow-md')
                                                 : 'bg-gray-100 dark:bg-gray-700 text-gray-300 cursor-not-allowed'
                                                 }`}
                                         >
-                                            {canBuy ? (isRecommendBuy ? '🛒 매수 실행' : '🛒 임의 매수') : '매수 대기'}
+                                            <ShoppingCart className="w-5 h-5" />
+                                            {canBuy ? (isRecommendBuy ? '매수 실행' : '임의 매수') : '매수 대기'}
                                         </button>
                                     </>
                                 )}
@@ -722,7 +727,8 @@ export function AssetSplitInvestment() {
                     onClick={addInvestment}
                     className="flex shrink-0 items-center justify-center gap-2 px-6 py-2.5 bg-yellow-400 text-gray-900 rounded-xl text-sm font-bold hover:bg-yellow-500 transition-colors shadow-md"
                 >
-                    ➕ 새 종목 추가하기
+                    <Plus className="w-4 h-4" />
+                    <span>새 종목 추가하기</span>
                 </button>
             </div>
 
@@ -730,7 +736,7 @@ export function AssetSplitInvestment() {
             <div className="space-y-16 pb-20">
                 {investments.length === 0 ? (
                     <div className="flex flex-col items-center justify-center p-20 border-4 border-dashed border-gray-200 rounded-3xl opacity-50">
-                        <span className="text-6xl mb-6">🏜️</span>
+                        <Activity className="w-16 h-16 mb-4 text-gray-300" />
                         <p className="text-xl font-bold text-gray-400">운영 중인 종목이 없습니다</p>
                     </div>
                 ) : (

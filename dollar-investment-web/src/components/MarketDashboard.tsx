@@ -4,6 +4,7 @@ import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchAllCurrentExchangeRates, fetchLastUpdateTime } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { TrendingUp, Target, Activity, ShieldCheck, AlertCircle, Compass, ClipboardList, Globe } from 'lucide-react';
 import { UnifiedFXChart } from './UnifiedFXChart';
 
 export function MarketDashboard({ initialData = null, isLoadingExternal = false }: { initialData?: DashboardData | null, isLoadingExternal?: boolean }) {
@@ -115,8 +116,8 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                         }`}
                 >
                     <div className="flex items-center gap-2">
-                        <span>📈</span>
-                        <span>원/달러 환율 실시간 통합 분석</span>
+                        <TrendingUp className="w-5 h-5 text-slate-400" />
+                        <span>환율 그래프</span>
                     </div>
                     <div className="flex items-center gap-3">
                         <span className={`transform transition-transform duration-300 ${isChartExpanded ? 'rotate-180' : ''}`}>▼</span>
@@ -134,15 +135,15 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1 w-full space-y-4">
                         <div className="flex items-center gap-3">
-                            <span className="text-3xl">🎯</span>
-                            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>실시간 원/달러 환율 예측 모델</h3>
+                            <Target className="w-6 h-6 text-slate-400" />
+                            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>환율/코스피 예측모델</h3>
                         </div>
 
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
                             {/* 환율 예측 */}
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4">
-                                    <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>💱 환율 방향 예측</span>
+                                    <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>환율 방향 예측</span>
                                     <span className={`text-2xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
                                         {data?.forecast?.sentiment || '분석 중...'}
                                     </span>
@@ -158,7 +159,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                             {/* 코스피 예측 */}
                             <div className="space-y-4">
                                 <div className="flex items-center gap-4">
-                                    <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>📈 KOSPI 방향 예측</span>
+                                    <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>KOSPI 방향 예측</span>
                                     <span className={`text-2xl font-black ${data?.forecast?.kospiUpProb && data.forecast.kospiUpProb > 55 ? 'text-red-500' : data?.forecast?.kospiUpProb && data.forecast.kospiUpProb < 45 ? 'text-blue-500' : 'text-gray-500'}`}>
                                         {data?.forecast?.kospiUpProb ? (data.forecast.kospiUpProb > 55 ? '상승 우세' : data.forecast.kospiUpProb < 45 ? '하락 우세' : '보합세') : '분석 중...'}
                                     </span>
@@ -215,7 +216,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                 if (trimmedLine.startsWith('실전 투자 대응:')) {
                                     return (
                                         <div key={i} className={`mt-10 mb-6 p-4 rounded-xl flex items-center gap-3 ${theme === 'dark' ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-100 text-blue-900'}`}>
-                                            <span className="text-2xl">🎯</span>
+                                            <Target className="w-6 h-6 text-slate-400" />
                                             <span className="font-black text-lg">실전 투자 대응 가이드</span>
                                         </div>
                                     );
@@ -249,7 +250,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                             onClick={() => setIsHistoryOpen(!isHistoryOpen)}
                             className={`flex items-center gap-2 text-sm font-bold transition-all px-4 py-2 rounded-xl ${theme === 'dark' ? 'text-yellow-400 hover:bg-yellow-400/10' : 'text-yellow-700 hover:bg-yellow-100'}`}
                         >
-                            <span className="text-xl">📋</span>
+                            <ClipboardList className="w-5 h-5 text-slate-400" />
                             <span>{isHistoryOpen ? '과거 분석 기록 닫기' : 'Gemini 심층 분석 과거 이력 보기'}</span>
                             <span className={`ml-1 transform transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`}>▼</span>
                         </button>
@@ -301,10 +302,11 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                 {/* 블록별 섹션 */}
                 {['rates-dollar', 'risk', 'assets', 'funding-policy'].map((blockId) => (
                     <section key={blockId} className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                        <div className="flex items-center gap-2 mb-4">
-                            <span className="text-xl">
-                                {blockId === 'rates-dollar' ? '🏛️' : blockId === 'risk' ? '⚠️' : blockId === 'assets' ? '🇰🇷' : '🛡️'}
-                            </span>
+                        <div className="flex items-center gap-3 mb-4">
+                            {blockId === 'rates-dollar' ? <Globe className="w-5 h-5 text-slate-400" /> : 
+                             blockId === 'risk' ? <AlertCircle className="w-5 h-5 text-slate-400" /> : 
+                             blockId === 'assets' ? <Compass className="w-5 h-5 text-slate-400" /> : 
+                             <ShieldCheck className="w-5 h-5 text-slate-400" />}
                             <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                                 {blockId === 'rates-dollar' ? '금리·달러 블록' : blockId === 'risk' ? '리스크 블록' : blockId === 'assets' ? '한국 자산 블록' : '펀딩·정책 블록'}
                             </h2>
