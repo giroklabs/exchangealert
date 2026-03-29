@@ -16,6 +16,7 @@ import { ExchangeRateNews } from './components/ExchangeRateNews';
 import { CommunityBoard } from './components/CommunityBoard';
 import { FXHistoryTimeline } from './components/FXHistoryTimeline';
 import { DeveloperDashboard } from './components/DeveloperDashboard';
+import { LandingPage } from './components/LandingPage';
 import { fetchAllCurrentExchangeRates } from './services/exchangeRateService';
 import { fetchMarketDashboardData } from './services/marketDashboardService';
 import { fetchFXIntradayData } from './services/fxHistoryService';
@@ -32,6 +33,7 @@ function App() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [showDevDashboard, setShowDevDashboard] = useState(false);
+  const [showLanding, setShowLanding] = useState(true); // 로컬 테스트용: 기본값 true
 
   const fetchGlobalData = async () => {
     try {
@@ -100,6 +102,10 @@ function App() {
     // { id: 'about', label: '소개' }, // 임시 숨김 처리
   ];
 
+
+  if (showLanding) {
+    return <LandingPage onStart={() => setShowLanding(false)} />;
+  }
 
   return (
     <div className={`min-h-screen transition-colors duration-500 ${theme === 'dark' ? 'bg-[#0a0a0c] text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
@@ -186,8 +192,18 @@ function App() {
           </AnimatePresence>
         </main>
 
-        <footer className={`mt-20 py-10 border-t ${theme === 'dark' ? 'border-gray-800 text-gray-500' : 'border-gray-100 text-gray-400'} text-center text-xs`}>
-          © 2026 GirokLabs. All rights reserved.
+        <footer className={`mt-20 py-10 border-t ${theme === 'dark' ? 'border-gray-800 text-gray-500' : 'border-gray-100 text-gray-400'} text-center text-xs flex flex-col items-center gap-3`}>
+          <p>© 2026 GirokLabs. All rights reserved.</p>
+          <button 
+            onClick={() => setShowLanding(true)}
+            className={`px-3 py-1 rounded-full border transition-all ${
+              theme === 'dark' 
+                ? 'border-gray-700 hover:border-amber-400/50 hover:text-amber-400' 
+                : 'border-gray-200 hover:border-amber-400 hover:text-amber-600'
+            }`}
+          >
+            사이트소개
+          </button>
         </footer>
         {/* <BackupManager /> */}
       </div>
