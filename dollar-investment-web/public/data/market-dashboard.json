@@ -588,7 +588,7 @@
       "description": "원자재 가격 상승 시 인플레이션 및 달러 수요 자극",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "104.99",
+      "value": "105.18",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -630,7 +630,7 @@
         },
         {
           "date": "2026-03-30",
-          "value": 104.99
+          "value": 105.18
         }
       ]
     },
@@ -1635,7 +1635,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,516.90",
+      "value": "1,517.10",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1646,7 +1646,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "949.81",
+      "value": "949.94",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1656,7 +1656,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,738.14",
+      "value": "1,738.52",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1666,13 +1666,23 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "219.31",
+      "value": "219.35",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
     }
   ],
   "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 176300,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
     {
       "id": "hynix",
       "symbol": "000660",
@@ -1827,5 +1837,5 @@
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 3. 30. PM 8:38:20"
+  "lastUpdate": "2026. 3. 30. PM 8:43:14"
 }
