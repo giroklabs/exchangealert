@@ -29,6 +29,23 @@
       "type": "market_close",
       "sentiment": "강세",
       "aiBrief": "기관 +2.4조원 역대급 순매수와 중동 리스크 완화로 코스피 5,440선 탈환. 외국인도 순매수 전환하며 강력한 반등 장세 시현."
+    },
+    {
+      "date": "2026-04-02",
+      "predicted": {
+        "d1_up": 65,
+        "d5_up": 49,
+        "d20_up": 46,
+        "overall_up": 48
+      },
+      "actual_next_close": null,
+      "hit_d1": null,
+      "rateAtPrediction": 1506.98,
+      "kospi_predicted_up": 63,
+      "kospi_actual_next_close": null,
+      "kospi_hit_d1": null,
+      "kospiAtPrediction": 5052.46,
+      "aiAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다."
     }
   ]
 }

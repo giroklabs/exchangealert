@@ -502,6 +502,64 @@ async function fetchShortDebtRatio() {
     }
 }
 
+// --- KIS 전용 안정화 통신 유틸리티 (v13 fetch-fallback) ---
+async function kisRequest(method, path, headers, params = null) {
+    const execute = async (baseUrl) => {
+        const isGet = method.toUpperCase() === 'GET';
+        const urlObj = new URL(`${baseUrl}${path}`);
+        let fullUrl = urlObj.toString();
+        
+        if (isGet && params) {
+            const query = Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
+            fullUrl += (fullUrl.includes('?') ? '&' : '?') + query;
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12초 타임아웃
+
+        try {
+            const fetchOptions = {
+                method: method.toUpperCase(),
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                    ...headers
+                },
+                signal: controller.signal
+            };
+
+            if (!isGet && params) {
+                fetchOptions.body = JSON.stringify(params);
+            }
+
+            const res = await fetch(fullUrl, fetchOptions);
+            clearTimeout(timeoutId);
+
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            clearTimeout(timeoutId);
+            return { error: e.name === 'AbortError' ? 'Request Timeout' : (e.message || 'Unknown Error') };
+        }
+    };
+
+    // 1차 시도: 9443 (실전투자 기본 포트)
+    let result = await execute(KIS_BASE_URL);
+
+    // 2차 시도: 9443 장애 또는 차단 시 443(표준 포트)으로 즉시 우회
+    // GitHub Actions 등 특정 환경에서 9443 포트가 차단되는 문제 해결
+    if (result.error || (result.rt_cd && result.rt_cd !== '0')) {
+        const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
+        if (fallbackUrl !== KIS_BASE_URL) {
+            const errDetail = result.error || `rt_cd:${result.rt_cd}`;
+            console.log(`ℹ️ [KIS-Net] 9443 장애(${errDetail}) → 443 포트 우회 시도...`);
+            result = await execute(fallbackUrl);
+        }
+    }
+    return result;
+}
+
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
 
@@ -514,74 +572,51 @@ async function fetchMarketInvestorTrend(token) {
         return day >= 1 && day <= 5 && timeVal >= 900 && timeVal <= 1540;
     };
 
-    const tryFetch = async (trId, params, path) => {
-        const execute = async (baseUrl) => {
-            try {
-                const query = Object.entries(params).map(([k, v]) => `${k.toLowerCase()}=${v}`).join('&');
-                const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?${query}`;
-                const res = await fetch(url, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
-                        "appkey": KIS_APP_KEY,
-                        "appsecret": KIS_APP_SECRET,
-                        "tr_id": trId,
-                        "custtype": "P",
-                        "User-Agent": "Mozilla/5.0"
-                    }
-                });
-                return await res.json();
-            } catch (e) {
-                return { error: e.message };
-            }
-        };
-
-        let result = await execute(KIS_BASE_URL);
-        if (result.error || (result.rt_cd && result.rt_cd !== "0")) {
-            const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
-            result = await execute(fallbackUrl);
-        }
-        return result;
-    };
+    let foreignerResult = [];
+    let institutionResult = [];
+    let status = 'Error';
+    let subState = null;
+    let realtimeMsg = "";
 
     try {
-        // v9 Final: 사용자 마스터 가이드 기반 (FHKST01010400 + inquire-investor-trend)
-        const marketData = await tryFetch("FHKST01010400", {
-            fid_cond_mrkt_div_code: "J", // KOSPI
-            fid_input_iscd: "0001",      // 코스피 지수
-        }, "inquire-investor-trend");
+        // [수정] 정품 규역: FHKST01010400 (투자자별 매매동향)
+        // 코스피 지점(0001)의 수급 현황을 정확하게 가져오는 엔드포인트와 경로(inquire-investor) 사용
+        const marketData = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-investor", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FHKST01010400",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "J", // KOSPI
+            FID_INPUT_ISCD: "0001",      // 코스피 지점 코드
+            FID_INPUT_DATE: todayStr.replace(/-/g, '') // YYYYMMDD
+        });
 
-        let foreignerResult = [];
-        let institutionResult = [];
-        let status = 'Error';
-        let subState = null;
-        let realtimeMsg = "";
-
-        // KIS 수급 TR은 output1 배열을 사용하며 백만원(pbmn) 단위임
-        if (marketData && marketData.rt_cd === '0' && (marketData.msg1 || "").includes('정상처리')) {
-            const output1 = marketData.output1 || [];
-            if (output1.length > 0) {
+        if (marketData && marketData.rt_cd === '0') {
+            const dataList = marketData.output1 || marketData.output || [];
+            if (dataList.length > 0) {
                 const extractBuy = (val) => {
                     const v = parseFloat(val);
-                    // 백만원 단위 -> 억 단위 (100백만 = 1억), 0.1억 정밀도 유지
+                    // pbmn: 백만원 -> 100으로 나눠서 억원(0.1억 정밀도)으로 치환
                     return isNaN(v) ? null : parseFloat((v / 100).toFixed(1));
                 };
 
-                foreignerResult = output1.map(d => ({
-                    date: (d.stck_bsop_date || d.STCK_BSOP_DATE || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                    value: extractBuy(d.frgn_ntby_pbmn || d.FRGN_NTBY_PBMN)
+                foreignerResult = dataList.map(d => ({
+                    date: (d.stck_bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                    value: extractBuy(d.frgn_ntby_pbmn || d.frgn_ntby_tr_pbmn)
                 })).filter(d => d.date && d.value !== null).slice(0, 14);
 
-                institutionResult = output1.map(d => ({
-                    date: (d.stck_bsop_date || d.STCK_BSOP_DATE || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                    value: extractBuy(d.orgn_ntby_pbmn || d.ORGN_NTBY_PBMN)
+                institutionResult = dataList.map(d => ({
+                    date: (d.stck_bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                    value: extractBuy(d.orgn_ntby_pbmn || d.orgn_ntby_tr_pbmn)
                 })).filter(d => d.date && d.value !== null).slice(0, 14);
 
                 status = 'Confirmed';
                 const latestF = foreignerResult[0]?.value || 0;
                 const latestI = institutionResult[0]?.value || 0;
 
-                // 장중 데이터 0 또는 빈 값 처리 (사용자 가이드: 장중 0은 정상)
+                // 장중 0은 정상 상태 (Aggregating 처리)
                 if (latestF === 0 && latestI === 0 && isMarketOpen()) {
                     status = 'Aggregating';
                     subState = 'Initial'; 
@@ -599,6 +634,78 @@ async function fetchMarketInvestorTrend(token) {
     } catch (e) {
         console.error("❌ KIS 수급 트렌드 최종 에러:", e.message);
     }
+    return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: "Exception" };
+}
+
+/**
+ * KIS API: 국내기관_외국인 매매종목 가집계 (FHPTJ04400000)
+ * 장중 실시간 추정치 (09:30, 10:00, 11:20, 13:20, 14:30 입력)
+ */
+async function fetchStockProvisionalTrend(token, iscd = "005930") {
+    if (!token) return null;
+    try {
+        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/foreign-institution-total", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FHPTJ04400000",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "J",
+            FID_INPUT_ISCD: iscd
+        });
+
+        if (data && data.rt_cd === '0' && data.output2 && data.output2.length > 0) {
+            const latest = data.output2[0];
+            return {
+                foreignerQty: parseInt(latest.frgn_fake_ntby_qty),
+                institutionQty: parseInt(latest.orgn_fake_ntby_qty),
+                sumQty: parseInt(latest.sum_fake_ntby_qty),
+                timeGb: latest.bsop_hour_gb, // 1~5
+                history: data.output2.map(h => ({
+                    timeGb: h.bsop_hour_gb,
+                    foreigner: parseInt(h.frgn_fake_ntby_qty),
+                    institution: parseInt(h.orgn_fake_ntby_qty)
+                })).reverse()
+            };
+        }
+    } catch (e) {
+        console.error(`❌ KIS 종목 가집계 조회 에러 (${iscd}):`, e.message);
+    }
+    return null;
+}
+
+/**
+ * KIS API: 주식현재가 투자자 (FHKST01010900)
+ * 종목별 확정치 (장 종료 후 제공)
+ */
+async function fetchStockInvestorTrend(token, iscd = "005930") {
+    if (!token) return null;
+    try {
+        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-investor", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FHKST01010900",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "J",
+            FID_INPUT_ISCD: iscd
+        });
+
+        if (data && data.rt_cd === '0' && data.output && data.output.length > 0) {
+            return data.output.map(d => ({
+                date: (d.stck_bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                foreigner: parseInt(d.frgn_ntby_qty),
+                institution: parseInt(d.orgn_ntby_qty),
+                individual: parseInt(d.indv_ntby_qty),
+                foreignerAmount: Math.round(parseInt(d.frgn_ntby_tr_pbmn) / 100), // 백만원 -> 억원
+                institutionAmount: Math.round(parseInt(d.orgn_ntby_tr_pbmn) / 100)
+            })).slice(0, 14);
+        }
+    } catch (e) {
+        console.error(`❌ KIS 종목 투자자 조회 에러 (${iscd}):`, e.message);
+    }
     return null;
 }
 
@@ -611,76 +718,41 @@ async function fetchMarketInvestorTrend(token) {
 async function fetchMarketStats(token) {
     if (!token) return null;
 
-    const tryFetch = async (baseUrl) => {
-        try {
-            // 공식 엔드포인트: /uapi/domestic-stock/v1/quotations/mktfunds
-            const now = new Date();
-            const formatDate = (d) => {
-                return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-            };
-            const endDate = formatDate(now);
-            
-            // KIS FHKST649100C0(증시자금종합) API는 fid_input_date_1 을 기준일(최신일)로 하여 과거 N일치를 한 번에 내려줍니다.
-            // 60일 전으로 강제 지정했던 과거 로직을 버리고 오늘을 기준으로 하도록 원복합니다.
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/mktfunds?fid_cond_mrkt_div_code=J&fid_input_iscd=0000&fid_input_date_1=${endDate}`;
-            
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHKST649100C0",
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0"
-                }
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                return { error: `HTTP ${res.status}: ${text.substring(0, 50)}` };
-            }
-
-            const data = await res.json();
-            if (data.rt_cd !== "0") {
-                return { error: `API-Error ${data.rt_cd}: ${data.msg1}` };
-            }
-            return data;
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
-
     try {
-        let data = await tryFetch(KIS_BASE_URL);
-
-        if (data?.error) {
-            const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
-            console.log(`ℹ️ [KIS-MarketStats] ${data.error} → 포토 443 우회 시도...`);
-            data = await tryFetch(fallbackUrl);
-        }
+        const endDate = todayStr.replace(/-/g, '');
+        
+        // v12 정품 규역: FHKST649100C0 (증시자금종합)
+        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/mktfunds", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FHKST649100C0",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "J", 
+            FID_INPUT_ISCD: "0000",
+            FID_INPUT_DATE_1: endDate
+        });
 
         if (data?.output && Array.isArray(data.output) && data.output.length > 0) {
-            // KIS API가 과거 날짜부터 오름차순으로 응답할 수 있으므로, 내림차순(최신순)으로 정렬 보장
+            // 최신순 정렬
             const sortedOutput = data.output.sort((a, b) => (b.bsop_date || "").localeCompare(a.bsop_date || ""));
             
             const deposits = sortedOutput.map(d => ({
                 date: (d.bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.cust_dpmn_amt || "0")) // 이미 억원 단위임
-            })).slice(0, 15);
+                // pbmn: 백만원 -> 100으로 나눠서 억원(0.1억 정밀도) 치환
+                value: Math.round(parseFloat(d.cst_marg_amt || d.CST_MARG_AMT || 0) / 100)
+            })).filter(d => d.date);
 
             const creditMargin = sortedOutput.map(d => ({
                 date: (d.bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: Math.round(parseFloat(d.crdt_loan_rmnd || "0")) // 이미 억원 단위임
-            })).slice(0, 15);
+                value: Math.round(parseFloat(d.marg_cncl_amt || d.MARG_CNCL_AMT || 0) / 100)
+            })).filter(d => d.date);
 
             return { deposits, creditMargin };
-        } else {
-            const errMsg = data?.error || data?.msg1 || '응답 데이터 형식 오류';
-            console.warn(`ℹ️ [KIS-MarketStats] 데이터 수집 실패: ${errMsg}`);
         }
     } catch (e) {
-        console.error("❌ KIS 증시통계 최종 에러:", e.message);
+        console.error('❌ KIS 증시자금 수집 에러:', e.message);
     }
     return null;
 }
@@ -738,39 +810,21 @@ async function fetchFromFreeSIS() {
 async function fetchProgramTrading(token) {
     if (!token) return null;
 
-    const tryFetch = async (baseUrl) => {
-        try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/comp-program-trade-today?fid_cond_mrkt_div_code=J&fid_input_iscd=0001`;
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHPPG04600101",
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0"
-                }
-            });
-            if (!res.ok) {
-                const text = await res.text();
-                return { error: `HTTP ${res.status}: ${text.substring(0, 50)}` };
-            }
-            const data = await res.json();
-            return data;
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
-
     try {
-        let data = await tryFetch(KIS_BASE_URL);
-        if (data?.error) {
-            data = await tryFetch(KIS_BASE_URL.replace(/:9443$/, ""));
-        }
+        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/program-trading", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FNGST01010400",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "J",
+            FID_INPUT_ISCD: "0001"
+        });
 
         if (data?.output && Array.isArray(data.output) && data.output.length > 0) {
             const latest = data.output[0];
+            // 백만원(pbmn) -> 억원 변환
             const netBuy = Math.round(parseFloat(latest.nabt_smtn_ntby_tr_pbmn) / 100); 
             return {
                 value: netBuy,
@@ -793,36 +847,17 @@ async function fetchProgramTrading(token) {
 async function fetchBondRates(token) {
     if (!token) return null;
 
-    const tryFetch = async (baseUrl) => {
-        try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/comp-interest?fid_cond_mrkt_div_code=U&fid_input_iscd=0001`;
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHPST07020000",
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0"
-                }
-            });
-            if (!res.ok) {
-                const text = await res.text();
-                return { error: `HTTP ${res.status}: ${text.substring(0, 50)}` };
-            }
-            const data = await res.json();
-            return data;
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
-
     try {
-        let data = await tryFetch(KIS_BASE_URL);
-        if (data?.error) {
-            data = await tryFetch(KIS_BASE_URL.replace(/:9443$/, ""));
-        }
+        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/comp-interest", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FHPST07020000",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "U",
+            FID_INPUT_ISCD: "0001"
+        });
 
         if (data?.output && Array.isArray(data.output)) {
             const cd = data.output.find(r => r.bcdt_code === "Y0112");
@@ -841,13 +876,13 @@ async function fetchBondRates(token) {
 
 async function getKisAccessToken() {
     if (!KIS_APP_KEY || !KIS_APP_SECRET) {
-        console.warn("⚠️ KIS API 키가 없습니다. KIS 연동을 건너뜜니다.");
+        console.warn("⚠️ [Auth] KIS API 키가 소스코드에 로드되지 않았습니다. (process.env 확인 필요)");
         return null;
     }
 
     const tokenPath = path.join(__dirname, '..', '.kis-token.json');
     
-    // 1. 캐시된 토큰 확인
+    // 1. 캐시된 토큰 확인 (12시간 유효)
     try {
         if (fs.existsSync(tokenPath)) {
             const cached = JSON.parse(fs.readFileSync(tokenPath, 'utf8'));
@@ -855,7 +890,6 @@ async function getKisAccessToken() {
             const issuedAt = cached.issued_at || 0;
             const hoursPassed = (now - issuedAt) / (1000 * 60 * 60);
 
-            // 12시간 이내면 재사용 (안전하게 절반으로 단축)
             if (hoursPassed < 12) {
                 console.log(`✅ KIS 토큰 재사용 중 (발급 후 ${Math.round(hoursPassed)}시간 경과)`);
                 return cached.access_token;
@@ -865,75 +899,44 @@ async function getKisAccessToken() {
         console.warn("⚠️ 토큰 캐시 읽기 실패, 새로 발급합니다.");
     }
 
-    // 2. 새 토큰 발급
-    console.log("🚀 KIS 신규 토큰 발급 요청 중... (443 -> 9443 시도)");
-    
-    const tryFetchToken = async (url) => {
-        try {
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
-                },
-                body: JSON.stringify({
-                    grant_type: "client_credentials",
-                    appkey: KIS_APP_KEY,
-                    appsecret: KIS_APP_SECRET
-                })
-            });
-            return await res.json();
-        } catch (e) {
-            return { error: e.message };
+    try {
+        // 2. v12.1 Stable: https.request 기반 토큰 신규 발급
+        console.log("🚀 KIS 신규 토큰 발급 시도 중...");
+        const tokenRes = await kisRequest("POST", "/oauth2/tokenP", {}, {
+            grant_type: "client_credentials",
+            appkey: KIS_APP_KEY,
+            appsecret: KIS_APP_SECRET
+        });
+
+        if (tokenRes.access_token) {
+            console.log("✅ KIS 토큰 신규 발급 성공");
+            fs.writeFileSync(tokenPath, JSON.stringify({
+                access_token: tokenRes.access_token,
+                issued_at: Date.now()
+            }, null, 2));
+            return tokenRes.access_token;
+        } else {
+            console.error("❌ KIS 토큰 발급 최종 실패:", JSON.stringify(tokenRes));
+            return null;
         }
-    };
-
-    let data = await tryFetchToken(`${KIS_BASE_URL}/oauth2/tokenP`);
-
-    if (data.access_token) {
-        console.log("✅ KIS 신규 토큰 발급 성공");
-        fs.writeFileSync(tokenPath, JSON.stringify({
-            access_token: data.access_token,
-            issued_at: Date.now()
-        }, null, 2));
-        return data.access_token;
-    } else {
-        console.log("❌ KIS 토큰 발급 최종 실패:", JSON.stringify(data));
+    } catch (e) {
+        console.error("❌ KIS 토큰 발급 에러:", e.message);
+        return null;
     }
-    return null;
 }
 
 async function fetchDomesticStockFromKIS(code, token) {
-    const tryFetch = async (baseUrl) => {
-        try {
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/inquire-price?fid_cond_mrkt_div_code=J&fid_input_iscd=${code}`;
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": "FHKST01010100",
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-                }
-            });
-            const text = await res.text();
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                return { error: "Invalid JSON", raw: text.substring(0, 100) };
-            }
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
-
     try {
-        let data = await tryFetch(KIS_BASE_URL);
-        if (data.error || !data.output) {
-            data = await tryFetch(KIS_BASE_URL_REAL);
-        }
+        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-price", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "FHKST01010100",
+            "custtype": "P"
+        }, {
+            FID_COND_MRKT_DIV_CODE: "J",
+            FID_INPUT_ISCD: code
+        });
         
         if (data.output) {
             return {
@@ -949,36 +952,17 @@ async function fetchDomesticStockFromKIS(code, token) {
 }
 
 async function fetchOverseasStockFromKIS(excd, symbol, token) {
-    const tryFetch = async (baseUrl) => {
-        try {
-            const url = `${baseUrl}/uapi/overseas-stock/v1/quotations/price?AUTH=&EXCD=${excd}&SYMB=${symbol}`;
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": "HHDFS00000300",
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-                }
-            });
-            const text = await res.text();
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                return { error: "Invalid JSON", raw: text.substring(0, 100) };
-            }
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
-
     try {
-        let data = await tryFetch(KIS_BASE_URL);
-        if (data.error || !data.output) {
-            data = await tryFetch(KIS_BASE_URL_REAL);
-        }
+        const data = await kisRequest("GET", "/uapi/overseas-stock/v1/quotations/price", {
+            "Authorization": `Bearer ${token}`,
+            "appkey": KIS_APP_KEY,
+            "appsecret": KIS_APP_SECRET,
+            "tr_id": "HHDFS00000300",
+            "custtype": "P"
+        }, {
+            EXCD: excd,
+            SYMB: symbol
+        });
 
         if (data.output) {
             return {
@@ -1120,7 +1104,7 @@ ${backtestSection}
 ${usdKrwHistory.slice(0, 30).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
 코스피(KOSPI) 최근 30일 추세 (최신순):
-${kospiHistory.slice(0, 30).map(h => `${h.date}: ${h.value}pt`).join('\n')}
+${kospiHistory.slice(0, 30).map(h => `${h.value}pt`).join('\n')}
 
 분석 가이드 (심층 추론 필수):
 1. 각 섹션은 반드시 다음의 헤더로 시작하여 명확히 구분하세요:
@@ -1399,6 +1383,8 @@ async function main() {
     const kisToken = await getKisAccessToken();
     const marketStats = kisToken ? await fetchMarketStats(kisToken) : null;
     const investorTrend = kisToken ? await fetchMarketInvestorTrend(kisToken) : null;
+    const samsungProvisional = kisToken ? await fetchStockProvisionalTrend(kisToken, "005930") : null;
+    const samsungInvestor = kisToken ? await fetchStockInvestorTrend(kisToken, "005930") : null;
     const programTrading = kisToken ? await fetchProgramTrading(kisToken) : null;
     const bondRates = kisToken ? await fetchBondRates(kisToken) : null;
     const freesisDeposits = await fetchFromFreeSIS();
@@ -1751,6 +1737,34 @@ async function main() {
     const investorSubState = investorTrend?.subState;
     const investorRealtimeMsg = investorTrend?.realtimeMsg || "";
 
+    // 🌟 [추가] 삼성전자 가집계 데이터 반영 (장중 모니터링 최적화)
+    if (samsungProvisional) {
+        const { foreignerQty, institutionQty, timeGb } = samsungProvisional;
+        const timeMap = { '1': '09:30', '2': '11:20', '3': '13:20', '4': '14:30', '5': '15:30+' };
+        const timeStr = timeMap[timeGb] || '집계중';
+        
+        indicators.push({
+            id: 'samsung-provisional',
+            name: `삼성전자 수급 가집계 (${timeStr})`,
+            unit: '주',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: 'KIS 장중 가집계',
+            description: `장중 주요 기관 수급 추정치 (현재 ${timeStr} 기준)`,
+            value: `외:${(foreignerQty/10000).toFixed(1)}만 / 기:${(institutionQty/10000).toFixed(1)}만`,
+            trend: (foreignerQty + institutionQty) > 0 ? 'up' : 'down',
+            history: samsungProvisional.history.map(h => ({
+                date: timeMap[h.timeGb] || h.timeGb,
+                value: h.foreigner + h.institution
+            }))
+        });
+        console.log(`⚡ [KIS] 삼성전자 가집계(${timeStr}): 외인 ${foreignerQty}, 기관 ${institutionQty}`);
+        
+        // 가집계가 강하면 코스피 점수에 가중치 부여
+        if (foreignerQty > 500000) kospiScores.up += 2.0;
+        else if (foreignerQty < -500000) kospiScores.down += 2.0;
+    }
+
     // 외국인 수급
     const foreignerData = investorTrend?.foreigner;
     if (foreignerData && foreignerData.length > 0) {
@@ -1790,7 +1804,7 @@ async function main() {
         const fb = fallbacks['foreigner-net-buy'];
         indicators.push({
             id: 'foreigner-net-buy',
-            name: 'KOSPI 외국인 수급동향 (연결대기)',
+            name: 'KOSPI 외국인 수급동향',
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
@@ -1840,7 +1854,7 @@ async function main() {
     } else {
         indicators.push({
             id: 'institution-net-buy',
-            name: 'KOSPI 기관 수급동향 (연결대기)',
+            name: 'KOSPI 기관 수급동향',
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
@@ -1852,6 +1866,26 @@ async function main() {
             history: []
         });
         console.log(`⚠️ [KIS] 기관 수급 데이터 부재`);
+    }
+
+    // 🌟 [추가] 삼성전자 확정 수급 (FHKST01010900) - 히스토리용
+    if (samsungInvestor && samsungInvestor.length > 0) {
+        const latestVal = samsungInvestor[0].foreignerAmount + samsungInvestor[0].institutionAmount;
+        indicators.push({
+            id: 'samsung-investor-amount',
+            name: '삼성전자 외인/기관 합계 (확정)',
+            unit: '억원',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: 'KIS 종목별투자자',
+            description: '삼성전자 일별 외국인/기관 순매수 대금 합계',
+            value: latestVal > 0 ? `+${latestVal.toLocaleString()}` : latestVal.toLocaleString(),
+            trend: latestVal > 0 ? 'up' : 'down',
+            history: samsungInvestor.map(d => ({
+                date: d.date,
+                value: d.foreignerAmount + d.institutionAmount
+            })).reverse()
+        });
     }
 
 
@@ -2117,19 +2151,18 @@ async function main() {
                     return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }).replace(/-/g, '');
                 })();
 
-                const kisUrl = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${startDate}&fid_input_date_2=${endDate}&fid_period_div_code=D`;
-                const kisRes = await fetch(kisUrl, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "authorization": `Bearer ${kisToken}`,
-                        "appkey": KIS_APP_KEY,
-                        "appsecret": KIS_APP_SECRET,
-                        "tr_id": "FHKUP03500100",
-                        "custtype": "P",
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                    }
+// v13 Stable: kisRequest 통합 호출 (9443 -> 443 자동우회)
+                const kisData = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice", {
+                    "tr_id": "FHKUP03500100",
+                    "custtype": "P",
+                    "authorization": `Bearer ${kisToken}`
+                }, {
+                    FID_COND_MRKT_DIV_CODE: "U",
+                    FID_INPUT_ISCD: "0001",
+                    FID_INPUT_DATE_1: startDate,
+                    FID_INPUT_DATE_2: endDate,
+                    FID_PERIOD_DIV_CODE: "D"
                 });
-                const kisData = await kisRes.json();
 
                 if (kisData.output2 && kisData.output2.length > 0) {
                     const kHistory = kisData.output2
