@@ -505,6 +505,16 @@ async function fetchShortDebtRatio() {
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
 
+    // 장중 여부 판별 (KST 09:00 - 15:40)
+    const isMarketOpen = () => {
+        const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+        const hour = now.getHours();
+        const min = now.getMinutes();
+        const day = now.getDay();
+        const timeVal = hour * 100 + min;
+        return day >= 1 && day <= 5 && timeVal >= 900 && timeVal <= 1540;
+    };
+
     const executeFetch = async (baseUrl, trId, symbol, div, path) => {
         try {
             const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?fid_cond_mrkt_div_code=${div}&fid_input_iscd=${symbol}`;
@@ -544,23 +554,40 @@ async function fetchMarketInvestorTrend(token) {
         const marketData = await tryFetch("FHKUP90101000", "0001", "U", "inquire-daily-indexinvestor");
         let latestForeignValue = null;
         let latestInstitutionValue = null;
+        
+        // v7: 상태 판정용 변수
+        let status = 'Confirmed';
+        let subState = null;
 
         // 실시간 값 추출을 위한 헬퍼 (지수 TR용)
         const extractIndexNetBuy = (out, prefix) => {
-            // 지수(FHKUP) 응답 필드: _tr_ 없음 (frgn_ntby_pbmn)
             const field = `${prefix}_ntby_pbmn`;
             const val = out[field] || out[field.toUpperCase()];
-            return val !== undefined ? Math.round(parseFloat(val) / 100) : null;
+            // v7: 0.1억(천만원) 단위까지 보존 (toFixed)
+            return val !== undefined ? parseFloat((parseFloat(val) / 100).toFixed(1)) : null;
         };
 
         if (marketData && marketData.output && Array.isArray(marketData.output) && marketData.output.length > 0) {
             const latest = marketData.output[0];
-            latestForeignValue = extractIndexNetBuy(latest, 'frgn');
-            latestInstitutionValue = extractIndexNetBuy(latest, 'orgn');
+            const msg1 = marketData.msg1 || "";
             
-            if (latestForeignValue === null || latestInstitutionValue === null) {
-                console.warn("⚠️ KOSPI 지수 수급 필드 매핑 실패. 응답 필드:", Object.keys(latest).join(", "));
+            // v7: msg1 및 rt_cd 이중 검증
+            if (marketData.rt_cd === '0' && msg1.includes('정상처리')) {
+                latestForeignValue = extractIndexNetBuy(latest, 'frgn');
+                latestInstitutionValue = extractIndexNetBuy(latest, 'orgn');
+
+                if (latestForeignValue === 0 && latestInstitutionValue === 0 && isMarketOpen()) {
+                    status = 'Aggregating';
+                    subState = 'Initial'; 
+                } else if (isMarketOpen()) {
+                    status = 'Aggregating';
+                }
+            } else if (marketData.rt_cd === '0') {
+                status = 'InvalidResponse';
+                console.warn(`⚠️ [KIS] 규격 불일치 응답 감지: ${msg1}`);
             }
+        } else if (marketData.rt_cd !== '0') {
+            status = 'Error';
         }
 
         const historyData = await tryFetch("FHKST01010900", "069500", "J", "inquire-investor");
@@ -568,65 +595,49 @@ async function fetchMarketInvestorTrend(token) {
         if (historyData.error || (historyData.rt_cd && historyData.rt_cd !== '0' && historyData.rt_cd !== '00')) {
             return {
                 foreigner: [{ date: todayStr, value: latestForeignValue || 0 }],
-                institution: [{ date: todayStr, value: latestInstitutionValue || 0 }]
+                institution: [{ date: todayStr, value: latestInstitutionValue || 0 }],
+                status, subState
             };
         }
 
         const output = historyData.output || historyData.output1;
         if (output && Array.isArray(output)) {
-            // 종목용 추출 헬퍼 (FHKST는 _tr_ 포함)
             const extractStockNetBuy = (d, prefix) => {
                 const field = `${prefix}_ntby_tr_pbmn`;
                 const val = d[field] || d[field.toUpperCase()];
-                return val !== undefined ? Math.round(parseFloat(val) / 100) : null;
+                return val !== undefined ? parseFloat((parseFloat(val) / 100).toFixed(1)) : null;
             };
 
             const foreignResult = output
                 .map(d => {
                     const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
                     const val = extractStockNetBuy(d, 'frgn');
-                    return {
-                        date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: val
-                    };
+                    return { date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'), value: val };
                 })
-                .filter(d => d.date && d.value !== null)
-                .slice(0, 14);
+                .filter(d => d.date && d.value !== null).slice(0, 14);
 
             const institutionResult = output
                 .map(d => {
                     const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
                     const val = extractStockNetBuy(d, 'orgn');
-                    return {
-                        date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: val
-                    };
+                    return { date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'), value: val };
                 })
-                .filter(d => d.date && d.value !== null)
-                .slice(0, 14);
+                .filter(d => d.date && d.value !== null).slice(0, 14);
 
-            // 실시간 값이 null이 아닐 경우(0 포함) 무조건 최신값으로 업데이트
-            if (foreignResult.length > 0 && latestForeignValue !== null) {
-                if (foreignResult[0].date === todayStr) {
-                    foreignResult[0].value = latestForeignValue;
-                } else {
-                    foreignResult.unshift({ date: todayStr, value: latestForeignValue });
+            // 실시간 업데이트 (Deduplicate 및 덮어쓰기 로직)
+            const applyLatest = (res, val) => {
+                if (res.length > 0 && val !== null) {
+                    if (res[0].date === todayStr) res[0].value = val;
+                    else res.unshift({ date: todayStr, value: val });
+                } else if (res.length === 0 && val !== null) {
+                    res.push({ date: todayStr, value: val });
                 }
-            } else if (foreignResult.length === 0 && latestForeignValue !== null) {
-                foreignResult.push({ date: todayStr, value: latestForeignValue });
-            }
+            };
+
+            applyLatest(foreignResult, latestForeignValue);
+            applyLatest(institutionResult, latestInstitutionValue);
             
-            if (institutionResult.length > 0 && latestInstitutionValue !== null) {
-                if (institutionResult[0].date === todayStr) {
-                    institutionResult[0].value = latestInstitutionValue;
-                } else {
-                    institutionResult.unshift({ date: todayStr, value: latestInstitutionValue });
-                }
-            } else if (institutionResult.length === 0 && latestInstitutionValue !== null) {
-                institutionResult.push({ date: todayStr, value: latestInstitutionValue });
-            }
-            
-            return { foreigner: foreignResult, institution: institutionResult };
+            return { foreigner: foreignResult, institution: institutionResult, status, subState };
         }
     } catch (e) {
         console.error("❌ KIS 외인/기관 수급 조회 최종 에러:", e.message);
@@ -1778,7 +1789,11 @@ async function main() {
     // 2.1 외국인/기관 순매도 영향권 (KIS API 연동)
     // foreignerData, institutionData 등은 이미 상단에서 kisToken을 통해 수집됨
     
-    // 외국인 수급 처리
+    // 외국인 및 기관 수급 처리 (v7 마스터 설계 적용)
+    const investorStatus = investorTrend?.status || 'Confirmed';
+    const investorSubState = investorTrend?.subState;
+
+    // 외국인 수급
     const foreignerData = investorTrend?.foreigner;
     if (foreignerData && foreignerData.length > 0) {
         const latest = foreignerData[0].value;
@@ -1793,26 +1808,25 @@ async function main() {
         }
 
         const realizedImpact = latest < 0 ? 'up' : (latest > 100 ? 'down' : 'neutral');
+        const uiName = investorStatus === 'Aggregating' ? 'KOSPI 외국인 수급 (집계 중)' : 
+                       (investorStatus === 'InvalidResponse' ? 'KOSPI 외국인 수급 (점검 중)' : 'KOSPI 외국인 수급동향');
+
         indicators.push({
             id: 'foreigner-net-buy',
-            name: 'KOSPI 외국인 수급동향',
+            name: uiName,
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
             source: 'KIS 실시간',
+            status: investorStatus,
+            subState: investorSubState,
             description: '외국인 순매도 시 원화 약세(환율 상승) 요인으로 작용',
             value: latest.toLocaleString(),
             trend: latest >= prev ? 'up' : 'down',
             realizedImpact,
-            history: (() => {
-                const h = [...foreignerData].reverse();
-                if (h.length > 0 && h[h.length-1].date !== todayStr) {
-                    h.push({ date: todayStr, value: latest });
-                }
-                return h;
-            })()
+            history: [...foreignerData].reverse()
         });
-        console.log(`✅ [KIS] 외인 순매수: ${latest}억원`);
+        console.log(`✅ [KIS] 외인 순매수: ${latest}억원 (${investorStatus})`);
     } else {
         const fb = fallbacks['foreigner-net-buy'];
         indicators.push({
@@ -1822,22 +1836,21 @@ async function main() {
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
             source: '데이터 예측',
+            status: 'Error',
             description: '외국인 수급은 환율의 가장 강력한 선행 지표입니다.',
             value: fb.value,
             trend: fb.trend,
-            history: fb.history,
-            source: '한국투자증권 실시간'
+            history: fb.history
         });
         console.log(`⚠️ [KIS] 외인 수급 데이터 부재 (데이터 점검 중)`);
     }
 
-    // 기관 수급 처리 (프로그램 매매 대용지표)
+    // 기관 수급 처리 (v7 보정: else 블록 추가로 증발 방지)
     const institutionData = investorTrend?.institution;
     if (institutionData && institutionData.length > 0) {
         const latest = institutionData[0].value;
         const prev = institutionData.length > 1 ? institutionData[1].value : latest;
 
-        // 기관 순매수 → 코스피 상승 요인 (2.5 가중치)
         if (latest > 0) {
             kospiScores.up += 2.5;
         } else if (latest < 0) {
@@ -1845,26 +1858,41 @@ async function main() {
         }
 
         const realizedImpact = latest > 0 ? 'down' : (latest < 0 ? 'up' : 'neutral');
+        const uiName = investorStatus === 'Aggregating' ? 'KOSPI 기관 수급 (집계 중)' : 
+                       (investorStatus === 'InvalidResponse' ? 'KOSPI 기관 수급 (점검 중)' : 'KOSPI 기관 수급동향');
+
         indicators.push({
             id: 'institution-net-buy',
-            name: 'KOSPI 기관 수급동향',
+            name: uiName,
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
             source: 'KIS 실시간',
+            status: investorStatus,
+            subState: investorSubState,
             description: '기관 순매수는 프로그램 매매를 포함한 국내 수급의 핵심 지표',
             value: latest.toLocaleString(),
             trend: latest >= prev ? 'up' : 'down',
             realizedImpact,
-            history: (() => {
-                const h = [...institutionData].reverse();
-                if (h.length > 0 && h[h.length-1].date !== todayStr) {
-                    h.push({ date: todayStr, value: latest });
-                }
-                return h;
-            })()
+            history: [...institutionData].reverse()
         });
-        console.log(`✅ [KIS] 기관 순매수: ${latest}억원`);
+        console.log(`✅ [KIS] 기관 순매수: ${latest}억원 (${investorStatus})`);
+    } else {
+        // v7: 기관 수급 데이터 부재 시 폴백 (증발 방지)
+        indicators.push({
+            id: 'institution-net-buy',
+            name: 'KOSPI 기관 수급동향 (연결대기)',
+            unit: '억원',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: '데이터 점검 중',
+            status: 'Error',
+            description: '기관 수급은 프로그램 매매의 핵심 지표입니다.',
+            value: '0',
+            trend: 'neutral',
+            history: []
+        });
+        console.log(`⚠️ [KIS] 기관 수급 데이터 부재 (데이터 점검 중)`);
     }
 
 
