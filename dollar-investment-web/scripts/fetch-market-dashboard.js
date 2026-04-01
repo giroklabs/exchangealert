@@ -28,6 +28,8 @@ if (!KIS_APP_KEY || !KIS_APP_SECRET) {
 if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.");
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
+const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
         // Yahoo Finance Chart API (v8) - 15일치 데이터 요청
@@ -56,8 +58,10 @@ async function fetchFromYahooFinance(symbol) {
                     const observations = [];
                     for (let i = 0; i < timestamps.length; i++) {
                         if (closes[i] !== null) {
+                            // 야후 타임스탬프는 UTC이므로 KST로 변환하여 날짜 추출
+                            const date = new Date(timestamps[i] * 1000).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
                             observations.push({
-                                date: new Date(timestamps[i] * 1000).toISOString().split('T')[0],
+                                date: date,
                                 value: closes[i].toFixed(2)
                             });
                         }
@@ -546,8 +550,8 @@ async function fetchMarketInvestorTrend(token) {
         
         if (historyData.error || (historyData.rt_cd && historyData.rt_cd !== '0' && historyData.rt_cd !== '00')) {
             return {
-                foreigner: [{ date: new Date().toISOString().split('T')[0], value: latestForeignValue || 0 }],
-                institution: [{ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue || 0 }]
+                foreigner: [{ date: todayStr, value: latestForeignValue || 0 }],
+                institution: [{ date: todayStr, value: latestInstitutionValue || 0 }]
             };
         }
 
@@ -586,15 +590,23 @@ async function fetchMarketInvestorTrend(token) {
 
             // 실시간 값이 null이 아닐 경우(0 포함) 무조건 최신값으로 업데이트
             if (foreignResult.length > 0 && latestForeignValue !== null) {
-                foreignResult[0].value = latestForeignValue;
+                if (foreignResult[0].date === todayStr) {
+                    foreignResult[0].value = latestForeignValue;
+                } else {
+                    foreignResult.unshift({ date: todayStr, value: latestForeignValue });
+                }
             } else if (foreignResult.length === 0 && latestForeignValue !== null) {
-                foreignResult.push({ date: new Date().toISOString().split('T')[0], value: latestForeignValue });
+                foreignResult.push({ date: todayStr, value: latestForeignValue });
             }
             
             if (institutionResult.length > 0 && latestInstitutionValue !== null) {
-                institutionResult[0].value = latestInstitutionValue;
+                if (institutionResult[0].date === todayStr) {
+                    institutionResult[0].value = latestInstitutionValue;
+                } else {
+                    institutionResult.unshift({ date: todayStr, value: latestInstitutionValue });
+                }
             } else if (institutionResult.length === 0 && latestInstitutionValue !== null) {
-                institutionResult.push({ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue });
+                institutionResult.push({ date: todayStr, value: latestInstitutionValue });
             }
             
             return { foreigner: foreignResult, institution: institutionResult };
@@ -694,9 +706,11 @@ async function fetchMarketStats(token) {
  */
 async function fetchFromFreeSIS() {
     try {
-        const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+        const today = todayStr.replace(/-/g, '');
         // 3개월치 데이터 요청
-        const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0].replace(/-/g, '');
+        const threeMonthsAgoRaw = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }));
+        threeMonthsAgoRaw.setDate(threeMonthsAgoRaw.getDate() - 90);
+        const threeMonthsAgo = threeMonthsAgoRaw.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }).replace(/-/g, '');
         
         const payload = {
             dmSearch: {
@@ -1455,6 +1469,10 @@ async function main() {
                 
                 if (newerObs.length > 0) {
                     obs = [...newerObs, ...obs.filter(o => o.date < newerObs[newerObs.length-1].date)];
+                    // 만약 야후 데이터에도 오늘(todayStr)이 없다면 강제로 추가 (장중 보정)
+                    if (obs[0].date !== todayStr && rtObs[0]) {
+                        obs.unshift({ date: todayStr, value: rtObs[0].value });
+                    }
                     s.isRealtime = true;
                     s.source = 'Yahoo Finance 실시간';
                     console.log(`⚡ [Realtime] ${s.name} 보정 완료 (${rtObs[0].value}) - 소스: ${s.source}`);
@@ -1482,6 +1500,12 @@ async function main() {
         const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
 
         const history = cleanedObs.slice(0, 10).reverse();
+        
+        // --- 오늘 날짜(todayStr) 보장 로직 (히스토리 배열 끝점 확인) ---
+        if (history.length > 0 && history[history.length-1].date !== todayStr && s.isRealtime) {
+            history.push({ date: todayStr, value: numVal });
+            if (history.length > 10) history.shift();
+        }
         
         // --- 고도화 로직 적용 ---
         const zScore = calculateZScore(numVal, history);
@@ -1593,12 +1617,25 @@ async function main() {
                 return val > prevVal ? 'up' : (val < prevVal ? 'down' : 'neutral');
             })() : 'neutral';
             displayVal = val.toLocaleString();
+            // ECOS 데이터 히스토리 매핑 및 날짜 포맷 정문화 (YYYYMMDD -> YYYY-MM-DD)
             history = rows.slice(0, 10).map(r => {
                 let v = parseFloat(String(r.DATA_VALUE).replace(/,/g, ''));
                 if (item.transform === 'wonToEok') v = Math.round(v / 100000000);
                 else if (item.transform === 'thousandUsdToEokUsd') v = Math.round(v / 100000);
-                return { date: r.TIME, value: v };
+                
+                let dateStr = r.TIME;
+                if (dateStr.length === 8) dateStr = dateStr.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                else if (dateStr.length === 6) dateStr = dateStr.replace(/(\d{4})(\d{2})/, '$1-$2');
+                
+                return { date: dateStr, value: v };
             }).reverse();
+
+            // 실시간 보정치가 있는 경우(예: 예탁금) 오늘 날짜 노드 보장
+            if (history.length > 0 && history[history.length-1].date !== todayStr) {
+                // 오늘 데이터가 이미 있다면 업데이트, 없으면 추가
+                history.push({ date: todayStr, value: val });
+                if (history.length > 30) history.shift();
+            }
         } else {
             const fallback = fallbacks[item.id];
             val = parseFloat(String(fallback.value).replace(/,/g, ''));
@@ -1742,7 +1779,13 @@ async function main() {
             value: latest.toLocaleString(),
             trend: latest >= prev ? 'up' : 'down',
             realizedImpact,
-            history: [...foreignerData].reverse()
+            history: (() => {
+                const h = [...foreignerData].reverse();
+                if (h.length > 0 && h[h.length-1].date !== todayStr) {
+                    h.push({ date: todayStr, value: latest });
+                }
+                return h;
+            })()
         });
         console.log(`✅ [KIS] 외인 순매수: ${latest}억원`);
     } else {
@@ -1788,7 +1831,13 @@ async function main() {
             value: latest.toLocaleString(),
             trend: latest >= prev ? 'up' : 'down',
             realizedImpact,
-            history: [...institutionData].reverse()
+            history: (() => {
+                const h = [...institutionData].reverse();
+                if (h.length > 0 && h[h.length-1].date !== todayStr) {
+                    h.push({ date: todayStr, value: latest });
+                }
+                return h;
+            })()
         });
         console.log(`✅ [KIS] 기관 순매수: ${latest}억원`);
     }
@@ -2049,11 +2098,12 @@ async function main() {
         if (kisToken) {
             try {
                 console.log('  → KIS API로 코스피 일봉 조회 시도...');
-                const today = new Date();
-                const sixMonthsAgo = new Date(today);
-                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-                const endDate = today.toISOString().split('T')[0].replace(/-/g, '');
-                const startDate = sixMonthsAgo.toISOString().split('T')[0].replace(/-/g, '');
+                const endDate = todayStr.replace(/-/g, '');
+                const startDate = (() => {
+                    const d = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }));
+                    d.setMonth(d.getMonth() - 6);
+                    return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }).replace(/-/g, '');
+                })();
 
                 const kisUrl = `${KIS_BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice?fid_cond_mrkt_div_code=U&fid_input_iscd=0001&fid_input_date_1=${startDate}&fid_input_date_2=${endDate}&fid_period_div_code=D`;
                 const kisRes = await fetch(kisUrl, {
@@ -2138,7 +2188,7 @@ async function main() {
                 const kQuotes = kResult.indicators.quote[0];
                 const kHistoryMap = new Map();
                 kTimestamps.forEach((ts, i) => {
-                    const date = new Date(ts * 1000).toISOString().split('T')[0];
+                    const date = new Date(ts * 1000).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
                     if (kQuotes.high[i] !== null && kQuotes.low[i] !== null && kQuotes.close[i] !== null) {
                         kHistoryMap.set(date, {
                             date,
@@ -2388,9 +2438,9 @@ async function main() {
         const currentRates = JSON.parse(fs.readFileSync(currentDataPath, 'utf8'));
 
         // 전일 데이터 로드 (변동량 계산용)
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yDateStr = yesterday.toISOString().split('T')[0];
+        const yesterdayRaw = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }));
+        yesterdayRaw.setDate(yesterdayRaw.getDate() - 1);
+        const yDateStr = yesterdayRaw.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
         const yesterdayDataPath = path.join(__dirname, '..', '..', 'data', 'daily', `exchange-rates-${yDateStr}.json`);
 
         let yesterdayRates = [];
@@ -2398,8 +2448,8 @@ async function main() {
             yesterdayRates = JSON.parse(fs.readFileSync(yesterdayDataPath, 'utf8'));
         } else {
             // 어제가 없으면 그저께 시도 (주말 등 대비)
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yDateStr2 = yesterday.toISOString().split('T')[0];
+            yesterdayRaw.setDate(yesterdayRaw.getDate() - 1);
+            const yDateStr2 = yesterdayRaw.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
             const yesterdayDataPath2 = path.join(__dirname, '..', '..', 'data', 'daily', `exchange-rates-${yDateStr2}.json`);
             if (fs.existsSync(yesterdayDataPath2)) {
                 yesterdayRates = JSON.parse(fs.readFileSync(yesterdayDataPath2, 'utf8'));
@@ -2602,7 +2652,7 @@ async function main() {
         if (fs.existsSync(predHistPath)) {
             predHist = JSON.parse(fs.readFileSync(predHistPath, 'utf8'));
         }
-        const todayStr = new Date().toISOString().split('T')[0];
+        const todayStrHist = todayStr;
         const currentRate = closes => closes && closes.length > 0 ? closes[0] : null;
 
         // 전일 레코드에 실제 종가 채우기 (환율 + 코스피)
