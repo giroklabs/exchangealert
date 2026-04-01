@@ -1,0 +1,48 @@
+name: KRX Night Futures Morning Briefing
+
+on:
+  schedule:
+    # 45 22 * * 0-4 = 평일(월~금) 오전 07:45 (UTC 22:45)
+    - cron: '45 22 * * 0-4'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '실행 모드 (live/mock)'
+        required: true
+        default: 'live'
+
+jobs:
+  night-futures-briefing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Fetch Night Futures & Send Briefing
+        run: node scripts/fetch-night-futures.js
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          MY_PRIVATE_CHAT_ID: ${{ secrets.MY_PRIVATE_CHAT_ID }}
+
+      - name: Commit & Push Prediction History
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/prediction-history.json || echo "No history update"
+          git commit -m "chore: update prediction history [skip ci]" || echo "No changes to commit"
+          git push || echo "Push failed, but continuing"

@@ -8,12 +8,15 @@ import path from 'path';
 import https from 'https';
 import { fileURLToPath } from 'url';
 
+// 환경 변수 및 공통 모듈 로드
+import { loadEnv } from './lib/kis-auth.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+loadEnv(path.join(__dirname, '..'));
+console.log(`🔍 [KIS 실계좌 키 점검] Key Exist: ${!!process.env.KIS_APP_KEY}, Path: ${path.join(__dirname, '..', '.env')}`);
 
 const OUTPUT_PATH = path.join(__dirname, '../public/data/kospi-history-6m.json');
 
-// 환경 변수 로드
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;
 const KIS_BASE_URL = "https://openapi.koreainvestment.com:9443";
@@ -72,6 +75,8 @@ async function fetchFromKIS(token) {
                 close: parseFloat(d.bstp_nmix_prpr) || 0,
                 volume: parseInt(d.acml_vol) || 0
             })).sort((a, b) => b.date.localeCompare(a.date));
+        } else {
+            console.error('  → ❌ KIS API 응답 오류:', data.msg1 || JSON.stringify(data));
         }
     } catch (e) {
         console.error('❌ KIS API 호출 에러:', e.message);
