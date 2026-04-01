@@ -514,132 +514,90 @@ async function fetchMarketInvestorTrend(token) {
         return day >= 1 && day <= 5 && timeVal >= 900 && timeVal <= 1540;
     };
 
-    const executeFetch = async (baseUrl, trId, params, path) => {
-        try {
-            const query = Object.entries(params).map(([k, v]) => `${k.toLowerCase()}=${v}`).join('&');
-            const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?${query}`;
-            const res = await fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                    "appkey": KIS_APP_KEY,
-                    "appsecret": KIS_APP_SECRET,
-                    "tr_id": trId,
-                    "custtype": "P",
-                    "User-Agent": "Mozilla/5.0"
-                }
-            });
-            const text = await res.text();
-            if (!text) return { error: "Empty response" };
-            return JSON.parse(text);
-        } catch (e) {
-            return { error: e.message };
-        }
-    };
-
     const tryFetch = async (trId, params, path) => {
-        let result = await executeFetch(KIS_BASE_URL, trId, params, path);
+        const execute = async (baseUrl) => {
+            try {
+                const query = Object.entries(params).map(([k, v]) => `${k.toLowerCase()}=${v}`).join('&');
+                const url = `${baseUrl}/uapi/domestic-stock/v1/quotations/${path}?${query}`;
+                const res = await fetch(url, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                        "appkey": KIS_APP_KEY,
+                        "appsecret": KIS_APP_SECRET,
+                        "tr_id": trId,
+                        "custtype": "P",
+                        "User-Agent": "Mozilla/5.0"
+                    }
+                });
+                return await res.json();
+            } catch (e) {
+                return { error: e.message };
+            }
+        };
+
+        let result = await execute(KIS_BASE_URL);
         if (result.error || (result.rt_cd && result.rt_cd !== "0")) {
             const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
-            result = await executeFetch(fallbackUrl, trId, params, path);
+            result = await execute(fallbackUrl);
         }
         return result;
     };
 
     try {
-        // v7 Refined: 지수 수급 (업종별 투자자 매매동향) - 공식 규격 FHKUP01010200
-        const marketData = await tryFetch("FHKUP01010200", {
-            fid_cond_mrkt_div_code: "U",
-            fid_input_iscd: "0001" // KOSPI
-        }, "inquire-investor");
+        // v9 Final: 사용자 마스터 가이드 기반 (FHKST01010400 + inquire-investor-trend)
+        const marketData = await tryFetch("FHKST01010400", {
+            fid_cond_mrkt_div_code: "J", // KOSPI
+            fid_input_iscd: "0001",      // 코스피 지수
+        }, "inquire-investor-trend");
 
-        let latestForeignValue = null;
-        let latestInstitutionValue = null;
-        let realtimeSuccess = false;
+        let foreignerResult = [];
+        let institutionResult = [];
+        let status = 'Error';
+        let subState = null;
         let realtimeMsg = "";
 
+        // KIS 수급 TR은 output1 배열을 사용하며 백만원(pbmn) 단위임
         if (marketData && marketData.rt_cd === '0' && (marketData.msg1 || "").includes('정상처리')) {
-            const output = marketData.output || [];
-            if (output.length > 0) {
-                const latest = output[0];
-                const extractBuy = (val) => val !== undefined ? parseFloat((parseFloat(val) / 10).toFixed(1)) : null;
-                latestForeignValue = extractBuy(latest.frgn_ntby_pbmn || latest.FRGN_NTBY_PBMN);
-                latestInstitutionValue = extractBuy(latest.orgn_ntby_pbmn || latest.ORGN_NTBY_PBMN);
-                realtimeSuccess = true;
+            const output1 = marketData.output1 || [];
+            if (output1.length > 0) {
+                const extractBuy = (val) => {
+                    const v = parseFloat(val);
+                    // 백만원 단위 -> 억 단위 (100백만 = 1억), 0.1억 정밀도 유지
+                    return isNaN(v) ? null : parseFloat((v / 100).toFixed(1));
+                };
+
+                foreignerResult = output1.map(d => ({
+                    date: (d.stck_bsop_date || d.STCK_BSOP_DATE || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                    value: extractBuy(d.frgn_ntby_pbmn || d.FRGN_NTBY_PBMN)
+                })).filter(d => d.date && d.value !== null).slice(0, 14);
+
+                institutionResult = output1.map(d => ({
+                    date: (d.stck_bsop_date || d.STCK_BSOP_DATE || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+                    value: extractBuy(d.orgn_ntby_pbmn || d.ORGN_NTBY_PBMN)
+                })).filter(d => d.date && d.value !== null).slice(0, 14);
+
+                status = 'Confirmed';
+                const latestF = foreignerResult[0]?.value || 0;
+                const latestI = institutionResult[0]?.value || 0;
+
+                // 장중 데이터 0 또는 빈 값 처리 (사용자 가이드: 장중 0은 정상)
+                if (latestF === 0 && latestI === 0 && isMarketOpen()) {
+                    status = 'Aggregating';
+                    subState = 'Initial'; 
+                } else if (isMarketOpen()) {
+                    status = 'Aggregating';
+                }
             }
         } else {
             const errDetail = marketData?.error ? `NetError: ${marketData.error}` : `rt_cd:${marketData?.rt_cd}, msg:${marketData?.msg1}`;
             realtimeMsg = `FAIL(${errDetail})`;
-            console.warn(`⚠️ [KIS] 지수 수급(Realtime) 실패: ${realtimeMsg}`);
+            console.warn(`⚠️ [KIS] 수급 트렌드 조회 실패: ${realtimeMsg}`);
         }
 
-        // v7 Refined: 종목 수급 히스토리 (KODEX 200 Proxy) - 공식 규격 FHKST01010400
-        const historyData = await tryFetch("FHKST01010400", {
-            fid_cond_mrkt_div_code: "J",
-            fid_input_iscd: "069500", // KODEX 200
-            fid_org_adjs_prc: "0",
-            fid_period_div_code: "D"
-        }, "inquire-investor");
-
-        let historySuccess = false;
-        let foreignResult = [];
-        let institutionResult = [];
-
-        if (historyData && historyData.rt_cd === '0' && (historyData.msg1 || "").includes('정상처리')) {
-            const output = historyData.output || [];
-            const extractStockBuy = (d, prefix) => {
-                const field = `${prefix}_ntby_tr_pbmn`;
-                const val = d[field] || d[field.toUpperCase()];
-                return val !== undefined ? parseFloat((parseFloat(val) / 100).toFixed(1)) : null;
-            };
-
-            foreignResult = output.map(d => ({
-                date: (d.stck_bsop_date || d.STCK_BSOP_DATE || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: extractStockBuy(d, 'frgn')
-            })).filter(d => d.date && d.value !== null).slice(0, 14);
-
-            institutionResult = output.map(d => ({
-                date: (d.stck_bsop_date || d.STCK_BSOP_DATE || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                value: extractStockBuy(d, 'orgn')
-            })).filter(d => d.date && d.value !== null).slice(0, 14);
-
-            historySuccess = true;
-        } else {
-            const histErr = historyData?.error ? `NetError: ${historyData.error}` : `rt_cd:${historyData?.rt_cd}, msg:${historyData?.msg1}`;
-            console.warn(`⚠️ [KIS] 수급 히스토리(History) 실패: ${histErr}`);
-        }
-
-        // 상태판정: Confirmed / Partial / Aggregating / Error
-        let status = 'Error';
-        let subState = null;
-
-        if (realtimeSuccess && historySuccess) status = 'Confirmed';
-        else if (realtimeSuccess || historySuccess) status = 'Partial';
-
-        if (status !== 'Error') {
-            if (latestForeignValue === 0 && latestInstitutionValue === 0 && isMarketOpen()) {
-                status = 'Aggregating';
-                subState = 'Initial'; 
-            } else if (isMarketOpen()) {
-                status = 'Aggregating';
-            }
-
-            // 실시간 값 업데이트
-            const apply = (res, val) => {
-                if (res.length > 0 && val !== null) {
-                    if (res[0].date === todayStr) res[0].value = val;
-                    else res.unshift({ date: todayStr, value: val });
-                } else if (res.length === 0 && val !== null) {
-                    res.push({ date: todayStr, value: val });
-                }
-            };
-            apply(foreignResult, latestForeignValue);
-            apply(institutionResult, latestInstitutionValue);
-        }
-
-        return { foreigner: foreignResult, institution: institutionResult, status, subState, realtimeMsg };
+        return { foreigner: foreignerResult, institution: institutionResult, status, subState, realtimeMsg };
     } catch (e) {
-        console.error("❌ KIS 수급 조회 최종 에러:", e.message);
+        console.error("❌ KIS 수급 트렌드 최종 에러:", e.message);
     }
     return null;
 }
