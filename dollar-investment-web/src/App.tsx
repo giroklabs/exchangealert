@@ -111,8 +111,8 @@ function App() {
     <div className={`min-h-screen transition-colors duration-500 ${theme === 'dark' ? 'bg-[#0a0a0c] text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
       {/* 헤더 */}
       <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-8 w-full">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8 w-full">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full md:w-auto">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6 md:mb-8 w-full">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 w-full md:w-auto">
             <div 
               onClick={() => { 
                 setActiveTab('dashboard'); 
@@ -126,11 +126,11 @@ function App() {
               </h1>
             </div>
             {currentRateInfo && (
-              <div className={`text-xs md:text-sm font-bold flex items-center pt-1 sm:pt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                <span className={`text-sm md:text-base mr-1 whitespace-nowrap ${theme === 'dark' ? 'text-yellow-400' : 'text-blue-600'}`}>
+              <div className={`text-xs md:text-sm font-bold flex items-center flex-wrap gap-x-2 pt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                <span className={`text-sm md:text-base whitespace-nowrap ${theme === 'dark' ? 'text-yellow-400' : 'text-blue-600'}`}>
                   원/달러 {currentRateInfo.rate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}원
                 </span>
-                <span className="text-xs font-medium whitespace-nowrap">({currentRateInfo.time})</span>
+                <span className="text-[10px] md:text-xs font-medium whitespace-nowrap opacity-80">({currentRateInfo.time})</span>
               </div>
             )}
           </div>
