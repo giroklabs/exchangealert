@@ -12,6 +12,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
     const [data, setData] = useState<DashboardData | null>(initialData);
     const [isLoading, setIsLoading] = useState(!initialData);
     const [isChartExpanded, setIsChartExpanded] = useState(true);
+    const [isPredictionExpanded, setIsPredictionExpanded] = useState(true);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const [historyData, setHistoryData] = useState<any[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -131,169 +132,182 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
             </div>
 
             {/* 시장 향방 예측 섹션 */}
-            <div className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                    <div className="flex-1 w-full space-y-4">
-                        <div className="flex items-center gap-3">
-                            <Target className="w-6 h-6 text-slate-400" />
-                            <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>환율/코스피 예측모델</h3>
-                        </div>
+            <div className={`rounded-2xl shadow-xl border overflow-hidden transition-all duration-300 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                <button
+                    onClick={() => setIsPredictionExpanded(!isPredictionExpanded)}
+                    className={`w-full px-6 py-4 flex items-center justify-between font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${theme === 'dark' ? 'text-white border-b border-gray-700' : 'text-gray-800 border-b border-gray-100'
+                        }`}
+                >
+                    <div className="flex items-center gap-3">
+                        <Target className="w-6 h-6 text-slate-400" />
+                        <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>환율/코스피 예측모델</h3>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className={`transform transition-transform duration-300 ${isPredictionExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    </div>
+                </button>
 
-                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-                            {/* 환율 예측 */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>환율 방향 예측</span>
-                                    <span className={`text-2xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
-                                        {data?.forecast?.sentiment || '분석 중...'}
-                                    </span>
-                                </div>
-                                <div className="relative pt-1">
-                                    <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                        <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400"></div>
-                                        <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400"></div>
+                <div className={`transition-all duration-500 ease-in-out ${isPredictionExpanded ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                    <div className="p-6">
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+                            <div className="flex-1 w-full space-y-4">
+                                <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+                                    {/* 환율 예측 */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>환율 방향 예측</span>
+                                            <span className={`text-2xl font-black ${data?.forecast?.sentiment === '환율 상승 우세' ? 'text-red-500' : data?.forecast?.sentiment === '환율 하락 우세' ? 'text-blue-500' : 'text-gray-500'}`}>
+                                                {data?.forecast?.sentiment || '분석 중...'}
+                                            </span>
+                                        </div>
+                                        <div className="relative pt-1">
+                                            <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                                                <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400"></div>
+                                                <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 코스피 예측 */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>KOSPI 방향 예측</span>
+                                            <span className={`text-2xl font-black ${data?.forecast?.kospiUpProb && data.forecast.kospiUpProb > 55 ? 'text-red-500' : data?.forecast?.kospiUpProb && data.forecast.kospiUpProb < 45 ? 'text-blue-500' : 'text-gray-500'}`}>
+                                                {data?.forecast?.kospiUpProb ? (data.forecast.kospiUpProb > 55 ? '상승 우세' : data.forecast.kospiUpProb < 45 ? '하락 우세' : '보합세') : '분석 중...'}
+                                            </span>
+                                        </div>
+                                        <div className="relative pt-1">
+                                            <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                                                <div style={{ width: `${data?.forecast?.kospiDownProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400"></div>
+                                                <div style={{ width: `${data?.forecast?.kospiUpProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* 코스피 예측 */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <span className={`text-lg font-bold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>KOSPI 방향 예측</span>
-                                    <span className={`text-2xl font-black ${data?.forecast?.kospiUpProb && data.forecast.kospiUpProb > 55 ? 'text-red-500' : data?.forecast?.kospiUpProb && data.forecast.kospiUpProb < 45 ? 'text-blue-500' : 'text-gray-500'}`}>
-                                        {data?.forecast?.kospiUpProb ? (data.forecast.kospiUpProb > 55 ? '상승 우세' : data.forecast.kospiUpProb < 45 ? '하락 우세' : '보합세') : '분석 중...'}
-                                    </span>
+                        {/* Gemini AI 심층 시장 분석 영역 */}
+                        <div className={`mt-8 p-8 rounded-2xl border-l-4 shadow-sm transition-all duration-300 ${theme === 'dark'
+                            ? 'bg-yellow-900/10 border-l-yellow-600 border-gray-700'
+                            : 'bg-yellow-50/30 border-l-yellow-500 border-yellow-100/50'
+                            }`}>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
                                 </div>
-                                <div className="relative pt-1">
-                                    <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                        <div style={{ width: `${data?.forecast?.kospiDownProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400"></div>
-                                        <div style={{ width: `${data?.forecast?.kospiUpProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400"></div>
-                                    </div>
-                                </div>
+                                <h3 className={`text-xl font-black flex items-center gap-3 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-900'}`}>
+                                    Gemini AI 심층 시장 분석
+                                    {data?.forecast?.lastAiUpdate && (
+                                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-500/80' : 'bg-yellow-100/50 text-yellow-700/70'}`}>
+                                            분석 기준: {new Date(data.forecast.lastAiUpdate).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    )}
+                                </h3>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Gemini AI 심층 시장 분석 영역 */}
-                <div className={`mt-8 p-8 rounded-2xl border-l-4 shadow-sm transition-all duration-300 ${theme === 'dark'
-                    ? 'bg-yellow-900/10 border-l-yellow-600 border-gray-700'
-                    : 'bg-yellow-50/30 border-l-yellow-500 border-yellow-100/50'
-                    }`}>
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        </div>
-                        <h3 className={`text-xl font-black flex items-center gap-3 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-900'}`}>
-                            Gemini AI 심층 시장 분석
-                            {data?.forecast?.lastAiUpdate && (
-                                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-500/80' : 'bg-yellow-100/50 text-yellow-700/70'}`}>
-                                    분석 기준: {new Date(data.forecast.lastAiUpdate).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
-                                </span>
-                            )}
-                        </h3>
-                    </div>
+                            <div className="text-left space-y-4">
+                                {data?.forecast?.aiAnalysis ? (
+                                    data.forecast.aiAnalysis.split('\n').map((line, i) => {
+                                        const trimmedLine = line.trim();
+                                        if (!trimmedLine) return <div key={i} className="h-2"></div>;
 
-                    <div className="text-left space-y-4">
-                        {data?.forecast?.aiAnalysis ? (
-                            data.forecast.aiAnalysis.split('\n').map((line, i) => {
-                                const trimmedLine = line.trim();
-                                if (!trimmedLine) return <div key={i} className="h-2"></div>;
+                                        if (trimmedLine.startsWith('[파트') || (trimmedLine.startsWith('[') && trimmedLine.endsWith(']'))) {
+                                            return (
+                                                <div key={i} className="mt-8 mb-4">
+                                                    <h4 className={`text-lg font-black flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                                        <span className="w-1.5 h-6 bg-yellow-500 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></span>
+                                                        {trimmedLine.replace(/[\[\]]/g, '')}
+                                                    </h4>
+                                                </div>
+                                            );
+                                        }
 
-                                if (trimmedLine.startsWith('[파트') || (trimmedLine.startsWith('[') && trimmedLine.endsWith(']'))) {
-                                    return (
-                                        <div key={i} className="mt-8 mb-4">
-                                            <h4 className={`text-lg font-black flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                                <span className="w-1.5 h-6 bg-yellow-500 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)]"></span>
-                                                {trimmedLine.replace(/[\[\]]/g, '')}
-                                            </h4>
-                                        </div>
-                                    );
-                                }
+                                        if (trimmedLine.startsWith('실전 투자 대응:')) {
+                                            return (
+                                                <div key={i} className={`mt-10 mb-6 p-4 rounded-xl flex items-center gap-3 ${theme === 'dark' ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-100 text-blue-900'}`}>
+                                                    <Target className="w-6 h-6 text-slate-400" />
+                                                    <span className="font-black text-lg">실전 투자 대응 가이드</span>
+                                                </div>
+                                            );
+                                        }
 
-                                if (trimmedLine.startsWith('실전 투자 대응:')) {
-                                    return (
-                                        <div key={i} className={`mt-10 mb-6 p-4 rounded-xl flex items-center gap-3 ${theme === 'dark' ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-100 text-blue-900'}`}>
-                                            <Target className="w-6 h-6 text-slate-400" />
-                                            <span className="font-black text-lg">실전 투자 대응 가이드</span>
-                                        </div>
-                                    );
-                                }
+                                        if (trimmedLine.startsWith('- ')) {
+                                            return (
+                                                <div key={i} className={`ml-1 mb-4 p-5 rounded-2xl flex items-start gap-4 transition-all hover:shadow-lg ${theme === 'dark' ? 'bg-gray-800/80 text-gray-200 border border-gray-700/50' : 'bg-white text-gray-800 shadow-sm border border-gray-100'}`}>
+                                                    <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
+                                                    <p className="text-[15px] leading-[1.6] font-medium">
+                                                        {renderLineWithBold(trimmedLine.slice(2))}
+                                                    </p>
+                                                </div>
+                                            );
+                                        }
 
-                                if (trimmedLine.startsWith('- ')) {
-                                    return (
-                                        <div key={i} className={`ml-1 mb-4 p-5 rounded-2xl flex items-start gap-4 transition-all hover:shadow-lg ${theme === 'dark' ? 'bg-gray-800/80 text-gray-200 border border-gray-700/50' : 'bg-white text-gray-800 shadow-sm border border-gray-100'}`}>
-                                            <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
-                                            <p className="text-[15px] leading-[1.6] font-medium">
-                                                {renderLineWithBold(trimmedLine.slice(2))}
+                                        return (
+                                            <p key={i} className={`text-[15px] leading-[1.8] font-medium tracking-tight whitespace-pre-wrap mb-4 px-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                {renderLineWithBold(trimmedLine)}
                                             </p>
-                                        </div>
-                                    );
-                                }
-
-                                return (
-                                    <p key={i} className={`text-[15px] leading-[1.8] font-medium tracking-tight whitespace-pre-wrap mb-4 px-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                                        {renderLineWithBold(trimmedLine)}
-                                    </p>
-                                );
-                            })
-                        ) : (
-                            <p className="text-gray-400 italic">분석 데이터를 불러오는 중입니다...</p>
-                        )}
-                    </div>
-
-                    {/* 과거 분석 기록 보기 영역 */}
-                    <div className="mt-8 pt-6 border-t border-yellow-200/30 dark:border-gray-700/50">
-                        <button
-                            onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-                            className={`flex items-center gap-2 text-sm font-bold transition-all px-4 py-2 rounded-xl ${theme === 'dark' ? 'text-yellow-400 hover:bg-yellow-400/10' : 'text-yellow-700 hover:bg-yellow-100'}`}
-                        >
-                            <ClipboardList className="w-5 h-5 text-slate-400" />
-                            <span>{isHistoryOpen ? '과거 분석 기록 닫기' : 'Gemini 심층 분석 과거 이력 보기'}</span>
-                            <span className={`ml-1 transform transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`}>▼</span>
-                        </button>
-
-                        {isHistoryOpen && (
-                            <div className="mt-6 space-y-4 animate-in slide-in-from-top-4 duration-300 text-left">
-                                {isLoadingHistory ? (
-                                    <div className="flex items-center gap-2 text-sm text-gray-500 italic p-4">
-                                        <div className="animate-spin h-4 w-4 border-2 border-yellow-500 border-t-transparent rounded-full"></div>
-                                        이전 분석 기록을 불러오는 중...
-                                    </div>
-                                ) : historyData.length > 0 ? (
-                                    historyData.map((record, idx) => (
-                                        <div key={idx} className={`p-6 rounded-2xl border transition-all ${theme === 'dark' ? 'bg-gray-900/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h5 className={`font-bold ${theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700'}`}>
-                                                    📅 {record.date} AI 시장 분석 리포트
-                                                </h5>
-                                                {record.predicted?.overall_up !== undefined && (
-                                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${record.predicted.overall_up > 50 ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
-                                                        {record.predicted.overall_up > 50 ? '상승 우세' : '하락 우세'} ({record.predicted.overall_up}%)
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <div className="text-sm leading-relaxed space-y-3 opacity-90">
-                                                {record.aiAnalysis ? record.aiAnalysis.split('\n').map((l: string, i: number) => {
-                                                    const tl = l.trim();
-                                                    if (!tl) return <div key={i} className="h-1"></div>;
-                                                    if (tl.startsWith('[') || tl.startsWith('실전')) {
-                                                        return <div key={i} className="font-bold text-gray-900 dark:text-white mt-4 mb-2">{tl}</div>;
-                                                    }
-                                                    return <p key={i} className={tl.startsWith('- ') ? 'ml-2 border-l-2 border-gray-200 dark:border-gray-700 pl-3 py-1 mb-2' : 'mb-2'}>
-                                                        {renderLineWithBold(tl)}
-                                                    </p>;
-                                                }) : <p className="text-gray-400 italic">분석 텍스트가 저장되지 않은 날짜입니다.</p>}
-                                            </div>
-                                        </div>
-                                    ))
+                                        );
+                                    })
                                 ) : (
-                                    <div className="text-center py-10 text-gray-400 italic">저장된 분석 기록이 없습니다.</div>
+                                    <p className="text-gray-400 italic">분석 데이터를 불러오는 중입니다...</p>
                                 )}
                             </div>
-                        )}
+
+                            {/* 과거 분석 기록 보기 영역 */}
+                            <div className="mt-8 pt-6 border-t border-yellow-200/30 dark:border-gray-700/50">
+                                <button
+                                    onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+                                    className={`flex items-center gap-2 text-sm font-bold transition-all px-4 py-2 rounded-xl ${theme === 'dark' ? 'text-yellow-400 hover:bg-yellow-400/10' : 'text-yellow-700 hover:bg-yellow-100'}`}
+                                >
+                                    <ClipboardList className="w-5 h-5 text-slate-400" />
+                                    <span>{isHistoryOpen ? '과거 분석 기록 닫기' : 'Gemini 심층 분석 과거 이력 보기'}</span>
+                                    <span className={`ml-1 transform transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`}>▼</span>
+                                </button>
+
+                                {isHistoryOpen && (
+                                    <div className="mt-6 space-y-4 animate-in slide-in-from-top-4 duration-300 text-left">
+                                        {isLoadingHistory ? (
+                                            <div className="flex items-center gap-2 text-sm text-gray-500 italic p-4">
+                                                <div className="animate-spin h-4 w-4 border-2 border-yellow-500 border-t-transparent rounded-full"></div>
+                                                이전 분석 기록을 불러오는 중...
+                                            </div>
+                                        ) : historyData.length > 0 ? (
+                                            historyData.map((record, idx) => (
+                                                <div key={idx} className={`p-6 rounded-2xl border transition-all ${theme === 'dark' ? 'bg-gray-900/40 border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <h5 className={`font-bold ${theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700'}`}>
+                                                            📅 {record.date} AI 시장 분석 리포트
+                                                        </h5>
+                                                        {record.predicted?.overall_up !== undefined && (
+                                                            <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${record.predicted.overall_up > 50 ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
+                                                                {record.predicted.overall_up > 50 ? '상승 우세' : '하락 우세'} ({record.predicted.overall_up}%)
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="text-sm leading-relaxed space-y-3 opacity-90">
+                                                        {record.aiAnalysis ? record.aiAnalysis.split('\n').map((l: string, i: number) => {
+                                                            const tl = l.trim();
+                                                            if (!tl) return <div key={i} className="h-1"></div>;
+                                                            if (tl.startsWith('[') || tl.startsWith('실전')) {
+                                                                return <div key={i} className="font-bold text-gray-900 dark:text-white mt-4 mb-2">{tl}</div>;
+                                                            }
+                                                            return <p key={i} className={tl.startsWith('- ') ? 'ml-2 border-l-2 border-gray-200 dark:border-gray-700 pl-3 py-1 mb-2' : 'mb-2'}>
+                                                                {renderLineWithBold(tl)}
+                                                            </p>;
+                                                        }) : <p className="text-gray-400 italic">분석 텍스트가 저장되지 않은 날짜입니다.</p>}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="text-center py-10 text-gray-400 italic">저장된 분석 기록이 없습니다.</div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
