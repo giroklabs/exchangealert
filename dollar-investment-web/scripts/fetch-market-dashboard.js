@@ -1502,7 +1502,9 @@ async function main() {
         const history = cleanedObs.slice(0, 10).reverse();
         
         // --- 오늘 날짜(todayStr) 보장 로직 (히스토리 배열 끝점 확인) ---
-        if (history.length > 0 && history[history.length-1].date !== todayStr && s.isRealtime) {
+        // 미국 기준금리(Fed)는 정책 유효성을 위해 실시간 심볼이 없어도 오늘 노드를 보장함
+        const shouldForceToday = s.isRealtime || s.id === 'FEDFUNDS';
+        if (history.length > 0 && history[history.length-1].date !== todayStr && shouldForceToday) {
             history.push({ date: todayStr, value: numVal });
             if (history.length > 10) history.shift();
         }
@@ -1630,8 +1632,8 @@ async function main() {
                 return { date: dateStr, value: v };
             }).reverse();
 
-            // 실시간 보정치가 있는 예탁금 또는 일일 지표(D)인 경우에만 오늘 날짜 노드 보장
-            const isDailyOrRealtime = item.id === 'investor-deposits' || item.cycle === 'D';
+            // 실시간 보정치가 있는 예탁금, 일일 지표(D) 또는 정책 금리(한국 기준금리)인 경우에만 오늘 날짜 노드 보장
+            const isDailyOrRealtime = item.id === 'investor-deposits' || item.id === 'bok-rate' || item.cycle === 'D';
             if (isDailyOrRealtime && history.length > 0 && history[history.length-1].date !== todayStr) {
                 // 오늘 데이터가 이미 있다면 업데이트, 없으면 추가
                 history.push({ date: todayStr, value: val });
