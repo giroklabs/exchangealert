@@ -521,58 +521,78 @@ async function fetchMarketInvestorTrend(token) {
 
     try {
         const marketData = await tryFetch("FHKUP90101000", "0001", "U", "inquire-daily-indexinvestor");
-        let latestForeignValue = 0;
-        let latestInstitutionValue = 0;
-        
+        // 실시간 값 추출을 위한 헬퍼 (지수 TR용)
+        const extractIndexNetBuy = (out, prefix) => {
+            // 지수(FHKUP) 응답 필드: _tr_ 없음 (frgn_ntby_pbmn)
+            const field = `${prefix}_ntby_pbmn`;
+            const val = out[field] || out[field.toUpperCase()];
+            return val !== undefined ? Math.round(parseFloat(val) / 100) : null;
+        };
+
         if (marketData && marketData.output && Array.isArray(marketData.output) && marketData.output.length > 0) {
             const latest = marketData.output[0];
-            latestForeignValue = Math.round(parseFloat(latest.frgn_ntby_tr_pbmn || "0") / 100); 
-            latestInstitutionValue = Math.round(parseFloat(latest.orgn_ntby_tr_pbmn || "0") / 100);
+            latestForeignValue = extractIndexNetBuy(latest, 'frgn');
+            latestInstitutionValue = extractIndexNetBuy(latest, 'orgn');
+            
+            if (latestForeignValue === null || latestInstitutionValue === null) {
+                console.warn("⚠️ KOSPI 지수 수급 필드 매핑 실패. 응답 필드:", Object.keys(latest).join(", "));
+            }
         }
 
         const historyData = await tryFetch("FHKST01010900", "069500", "J", "inquire-investor");
         
         if (historyData.error || (historyData.rt_cd && historyData.rt_cd !== '0' && historyData.rt_cd !== '00')) {
-            // 히스토리 실패 시 당일 데이터만이라도 반환
             return {
-                foreigner: [{ date: new Date().toISOString().split('T')[0], value: latestForeignValue }],
-                institution: [{ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue }]
+                foreigner: [{ date: new Date().toISOString().split('T')[0], value: latestForeignValue || 0 }],
+                institution: [{ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue || 0 }]
             };
         }
 
         const output = historyData.output || historyData.output1;
         if (output && Array.isArray(output)) {
+            // 종목용 추출 헬퍼 (FHKST는 _tr_ 포함)
+            const extractStockNetBuy = (d, prefix) => {
+                const field = `${prefix}_ntby_tr_pbmn`;
+                const val = d[field] || d[field.toUpperCase()];
+                return val !== undefined ? Math.round(parseFloat(val) / 100) : null;
+            };
+
             const foreignResult = output
                 .map(d => {
                     const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
-                    const ntby = d.frgn_ntby_tr_pbmn || d.FRGN_NTBY_TR_PBMN || "0";
+                    const val = extractStockNetBuy(d, 'frgn');
                     return {
                         date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: Math.round(parseFloat(ntby) / 100) // 백만원 -> 억원
+                        value: val
                     };
                 })
-                .filter(d => d.date && !isNaN(d.value))
+                .filter(d => d.date && d.value !== null)
                 .slice(0, 14);
 
             const institutionResult = output
                 .map(d => {
                     const date = d.stck_bsop_date || d.STCK_BSOP_DATE || "";
-                    // 기관 순매수: orgn_ntby_tr_pbmn
-                    const ntby = d.orgn_ntby_tr_pbmn || d.ORGN_NTBY_TR_PBMN || "0";
+                    const val = extractStockNetBuy(d, 'orgn');
                     return {
                         date: date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                        value: Math.round(parseFloat(ntby) / 100)
+                        value: val
                     };
                 })
-                .filter(d => d.date && !isNaN(d.value))
+                .filter(d => d.date && d.value !== null)
                 .slice(0, 14);
 
-            // 최신 값을 실시간 코스피 전체 값으로 교체 (더 정확한 정보 제공)
-            if (foreignResult.length > 0 && latestForeignValue !== 0) foreignResult[0].value = latestForeignValue;
-            else if (foreignResult.length === 0) foreignResult.push({ date: new Date().toISOString().split('T')[0], value: latestForeignValue });
+            // 실시간 값이 null이 아닐 경우(0 포함) 무조건 최신값으로 업데이트
+            if (foreignResult.length > 0 && latestForeignValue !== null) {
+                foreignResult[0].value = latestForeignValue;
+            } else if (foreignResult.length === 0 && latestForeignValue !== null) {
+                foreignResult.push({ date: new Date().toISOString().split('T')[0], value: latestForeignValue });
+            }
             
-            if (institutionResult.length > 0 && latestInstitutionValue !== 0) institutionResult[0].value = latestInstitutionValue;
-            else if (institutionResult.length === 0) institutionResult.push({ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue });
+            if (institutionResult.length > 0 && latestInstitutionValue !== null) {
+                institutionResult[0].value = latestInstitutionValue;
+            } else if (institutionResult.length === 0 && latestInstitutionValue !== null) {
+                institutionResult.push({ date: new Date().toISOString().split('T')[0], value: latestInstitutionValue });
+            }
             
             return { foreigner: foreignResult, institution: institutionResult };
         }
