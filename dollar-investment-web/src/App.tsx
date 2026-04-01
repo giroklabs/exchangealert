@@ -120,7 +120,7 @@ function App() {
               }} 
               className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity cursor-pointer"
             >
-              <img src={logo} alt="로장보로" className="w-8 h-8 md:w-10 md:h-10 rounded-xl shadow-sm flex-shrink-0" />
+              <img src={logo} alt="달러 인베스트 로고" className="w-8 h-8 md:w-10 md:h-10 rounded-xl shadow-sm flex-shrink-0" />
               <h1 className={`text-xl md:text-2xl font-black tracking-tight whitespace-nowrap flex-shrink-0 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 달러 인베스트
               </h1>
