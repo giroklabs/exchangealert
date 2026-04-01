@@ -521,6 +521,9 @@ async function fetchMarketInvestorTrend(token) {
 
     try {
         const marketData = await tryFetch("FHKUP90101000", "0001", "U", "inquire-daily-indexinvestor");
+        let latestForeignValue = null;
+        let latestInstitutionValue = null;
+
         // 실시간 값 추출을 위한 헬퍼 (지수 TR용)
         const extractIndexNetBuy = (out, prefix) => {
             // 지수(FHKUP) 응답 필드: _tr_ 없음 (frgn_ntby_pbmn)
