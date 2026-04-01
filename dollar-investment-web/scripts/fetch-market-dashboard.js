@@ -568,7 +568,8 @@ async function fetchMarketInvestorTrend(token) {
                 realtimeSuccess = true;
             }
         } else {
-            realtimeMsg = `FAIL(rt_cd:${marketData?.rt_cd}, msg:${marketData?.msg1})`;
+            const errDetail = marketData?.error ? `NetError: ${marketData.error}` : `rt_cd:${marketData?.rt_cd}, msg:${marketData?.msg1}`;
+            realtimeMsg = `FAIL(${errDetail})`;
             console.warn(`⚠️ [KIS] 지수 수급(Realtime) 실패: ${realtimeMsg}`);
         }
 
@@ -604,7 +605,8 @@ async function fetchMarketInvestorTrend(token) {
 
             historySuccess = true;
         } else {
-            console.warn(`⚠️ [KIS] 수급 히스토리(History) 실패: rt_cd:${historyData?.rt_cd}, msg:${historyData?.msg1}`);
+            const histErr = historyData?.error ? `NetError: ${historyData.error}` : `rt_cd:${historyData?.rt_cd}, msg:${historyData?.msg1}`;
+            console.warn(`⚠️ [KIS] 수급 히스토리(History) 실패: ${histErr}`);
         }
 
         // 상태판정: Confirmed / Partial / Aggregating / Error
