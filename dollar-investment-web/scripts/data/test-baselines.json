@@ -1,0 +1,53 @@
+{
+  "test_cases": [
+    {
+      "id": "CASE_NORMAL_UP",
+      "description": "정상적인 소폭 상승 시나리오",
+      "date": "2026-03-20",
+      "regClose": 350.00,
+      "nightClose": 352.50,
+      "expected": {
+        "premium": 0.71,
+        "trend": "상승",
+        "level": "강"
+      }
+    },
+    {
+      "id": "CASE_NORMAL_DOWN",
+      "description": "정상적인 소폭 하락 시나리오",
+      "date": "2026-03-21",
+      "regClose": 350.00,
+      "nightClose": 348.25,
+      "expected": {
+        "premium": -0.50,
+        "trend": "하락",
+        "level": "강"
+      }
+    },
+    {
+      "id": "CASE_STABLE",
+      "description": "보합권 (변동 미미)",
+      "date": "2026-03-22",
+      "regClose": 350.00,
+      "nightClose": 350.15,
+      "expected": {
+        "premium": 0.04,
+        "trend": "보합",
+        "level": "약"
+      }
+    },
+    {
+      "id": "CASE_HIGH_VOLATILITY",
+      "description": "급변동 시나리오 (폭등)",
+      "date": "2026-03-23",
+      "regClose": 350.00,
+      "nightClose": 358.50,
+      "expected": {
+        "premium": 2.43,
+        "trend": "상승",
+        "level": "강"
+      }
+    }
+  ],
+  "tolerance": 0.01
+}
