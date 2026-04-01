@@ -455,7 +455,7 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "5,407.46",
+      "value": "5,410.58",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -517,7 +517,7 @@
         },
         {
           "date": "2026-04-01",
-          "value": 5407.46
+          "value": 5410.58
         }
       ]
     },
@@ -1635,7 +1635,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,510.10",
+      "value": "1,509.70",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1646,7 +1646,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "950.86",
+      "value": "950.30",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1656,7 +1656,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,745.75",
+      "value": "1,745.29",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1666,7 +1666,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "219.23",
+      "value": "219.17",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -1679,8 +1679,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 185300,
-      "changePercent": "+10.83",
+      "price": 185350,
+      "changePercent": "+10.86",
       "trend": "up"
     },
     {
@@ -1709,8 +1709,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 153900,
-      "changePercent": "+5.99",
+      "price": 154300,
+      "changePercent": "+6.27",
       "trend": "up"
     },
     {
@@ -1729,8 +1729,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 47650,
-      "changePercent": "+4.04",
+      "price": 47700,
+      "changePercent": "+4.15",
       "trend": "up"
     }
   ],
@@ -1763,7 +1763,7 @@
     "lastAiUpdate": 1775014937370,
     "score": {
       "upScore": 35.10531708129645,
-      "downScore": 44.108566637126756,
+      "downScore": 44.084431528566355,
       "kospiUpScore": 22.4132031269249,
       "kospiDownScore": 13.371786426828423
     }
@@ -1799,43 +1799,43 @@
     "compoundSignals": []
   },
   "kospiTechnicals": {
-    "rsi14": 46.2,
-    "ma5": 5327.76,
-    "ma20": 5526.71,
-    "ma60": 5285.94,
+    "rsi14": 46.3,
+    "ma5": 5328.49,
+    "ma20": 5526.89,
+    "ma60": 5286,
     "bb": {
-      "upper": 5908.38,
-      "mid": 5526.71,
-      "lower": 5145.04,
-      "bandwidth": 13.81
+      "upper": 5908.34,
+      "mid": 5526.89,
+      "lower": 5145.44,
+      "bandwidth": 13.8
     },
     "momentum": {
-      "d1": 7.07,
-      "d5": -4.12,
-      "d20": 6.21
+      "d1": 7.14,
+      "d5": -4.06,
+      "d20": 6.28
     },
     "keyLevels": {
       "support": 4216.68,
       "resistance": 6347.41
     },
     "macd": {
-      "macd": -34.24,
-      "signal": 27.78,
-      "hist": -62.02
+      "macd": -33.95,
+      "signal": 27.84,
+      "hist": -61.79
     },
     "stochastic": {
-      "k": 40.5
+      "k": 40.9
     }
   },
   "kospiSentiment": "코스피 상승 우세",
   "backtest": {
-    "total": 1,
+    "total": 4,
     "hitRate": 0,
     "recentHitRate": 0,
-    "streak": "연속 1회 미적중",
+    "streak": "연속 3회 미적중",
     "kospiHitRate": null,
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 4. 1. AM 4:03:31"
+  "lastUpdate": "2026. 4. 1. AM 4:08:38"
 }
