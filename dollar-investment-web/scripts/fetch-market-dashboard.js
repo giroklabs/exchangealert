@@ -29,6 +29,7 @@ if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.")
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX']; // 마감 후 업데이트되는 미국 지표
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
@@ -58,14 +59,30 @@ async function fetchFromYahooFinance(symbol) {
                     const observations = [];
                     for (let i = 0; i < timestamps.length; i++) {
                         if (closes[i] !== null) {
-                            // 야후 타임스탬프는 UTC이므로 KST로 변환하여 날짜 추출
-                            const date = new Date(timestamps[i] * 1000).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+                            // 미국 마감 지표(^SOX, ^TNX 등)는 UTC 기준 원본 날짜를 보존하여 거래일 불일치 방지
+                            // 그 외 실시간 지표(VIX 등)는 기존 KST(Asia/Seoul) 기준 유지
+                            const isSettled = US_SETTLED_SYMBOLS.includes(symbol);
+                            const date = isSettled 
+                                ? new Date(timestamps[i] * 1000).toISOString().split('T')[0]
+                                : new Date(timestamps[i] * 1000).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+                            
                             observations.push({
                                 date: date,
                                 value: closes[i].toFixed(2)
                             });
                         }
                     }
+                    // 🌟 미국 마감 지표(^SOX, ^TNX 등) 전용: 중복 노드 제거 (수평선 방지)
+                    // 야후 API가 장 오픈 전 전일 종가와 동일한 날짜 노드를 미리 생성하는 경우 이를 제거함
+                    if (US_SETTLED_SYMBOLS.includes(symbol) && observations.length >= 2) {
+                        const latest = observations[observations.length - 1];
+                        const secondLatest = observations[observations.length - 2];
+                        if (latest.value === secondLatest.value) {
+                            observations.pop();
+                            console.log(`♻️ [Deduplicate] ${symbol}의 중복 마감 노드(${latest.date}) 제거됨`);
+                        }
+                    }
+
                     resolve(observations.reverse()); // 최신순으로 반환
                 } catch (e) {
                     console.error(`❌ Yahoo Finance Parse Error (${symbol}):`, e.message);
@@ -1470,7 +1487,9 @@ async function main() {
                 if (newerObs.length > 0) {
                     obs = [...newerObs, ...obs.filter(o => o.date < newerObs[newerObs.length-1].date)];
                     // 만약 야후 데이터에도 오늘(todayStr)이 없다면 강제로 추가 (장중 보정)
-                    if (obs[0].date !== todayStr && rtObs[0]) {
+                    // 단, 미국 마감 지표(US_SETTLED_SYMBOLS)는 강제 추가에서 제외하여 수평선 방지
+                    const isUsSettled = s.realtimeSymbol && US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
+                    if (obs[0].date !== todayStr && rtObs[0] && !isUsSettled) {
                         obs.unshift({ date: todayStr, value: rtObs[0].value });
                     }
                     s.isRealtime = true;
@@ -1503,7 +1522,10 @@ async function main() {
         
         // --- 오늘 날짜(todayStr) 보장 로직 (히스토리 배열 끝점 확인) ---
         // 미국 기준금리(Fed)는 정책 유효성을 위해 실시간 심볼이 없어도 오늘 노드를 보장함
-        const shouldForceToday = s.isRealtime || s.id === 'FEDFUNDS';
+        // 단, 미국 마감 지표(US_SETTLED_SYMBOLS)는 강제 노드 생성 대상에서 제외하여 수평선 방지
+        const isUsSettled = s.realtimeSymbol && US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
+        const shouldForceToday = (s.isRealtime && !isUsSettled);
+        
         if (history.length > 0 && history[history.length-1].date !== todayStr && shouldForceToday) {
             history.push({ date: todayStr, value: numVal });
             if (history.length > 10) history.shift();
