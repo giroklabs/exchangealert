@@ -1630,8 +1630,9 @@ async function main() {
                 return { date: dateStr, value: v };
             }).reverse();
 
-            // 실시간 보정치가 있는 경우(예: 예탁금) 오늘 날짜 노드 보장
-            if (history.length > 0 && history[history.length-1].date !== todayStr) {
+            // 실시간 보정치가 있는 예탁금 또는 일일 지표(D)인 경우에만 오늘 날짜 노드 보장
+            const isDailyOrRealtime = item.id === 'investor-deposits' || item.cycle === 'D';
+            if (isDailyOrRealtime && history.length > 0 && history[history.length-1].date !== todayStr) {
                 // 오늘 데이터가 이미 있다면 업데이트, 없으면 추가
                 history.push({ date: todayStr, value: val });
                 if (history.length > 30) history.shift();
