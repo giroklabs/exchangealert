@@ -510,15 +510,19 @@ async function kisRequest(method, path, headers, params = null) {
         let fullUrl = urlObj.toString();
         
         if (isGet && params) {
-            const query = Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
+            const query = Object.entries(params)
+                .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
             fullUrl += (fullUrl.includes('?') ? '&' : '?') + query;
         }
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12초 타임아웃
-
-        try {
-            const fetchOptions = {
+        return new Promise((resolve) => {
+            const targetUrl = new URL(fullUrl);
+            const body = (!isGet && params) ? JSON.stringify(params) : null;
+            
+            const reqOptions = {
+                hostname: targetUrl.hostname,
+                port: targetUrl.port || 443,
+                path: targetUrl.pathname + targetUrl.search,
                 method: method.toUpperCase(),
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
@@ -526,115 +530,102 @@ async function kisRequest(method, path, headers, params = null) {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
                     ...headers
                 },
-                signal: controller.signal
+                timeout: 15000 // 15초 타임아웃
             };
 
-            if (!isGet && params) {
-                fetchOptions.body = JSON.stringify(params);
+            if (body) {
+                reqOptions.headers['Content-Length'] = Buffer.byteLength(body);
             }
 
-            const res = await fetch(fullUrl, fetchOptions);
-            clearTimeout(timeoutId);
+            const req = https.request(reqOptions, (res) => {
+                let data = '';
+                res.setEncoding('utf8');
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => {
+                    try {
+                        if (!data) {
+                            resolve({ error: `Empty Response (HTTP ${res.statusCode})` });
+                            return;
+                        }
+                        resolve(JSON.parse(data));
+                    } catch (e) {
+                        resolve({ error: `JSON Parse Error: ${e.message}`, raw: data });
+                    }
+                });
+            });
 
-            const data = await res.json();
-            return data;
-        } catch (e) {
-            clearTimeout(timeoutId);
-            return { error: e.name === 'AbortError' ? 'Request Timeout' : (e.message || 'Unknown Error') };
-        }
+            req.on('error', e => resolve({ error: `Network Error: ${e.message}` }));
+            req.on('timeout', () => {
+                req.destroy();
+                resolve({ error: 'Request Timeout' });
+            });
+
+            if (body) req.write(body);
+            req.end();
+        });
     };
 
     // 1차 시도: 9443 (실전투자 기본 포트)
     let result = await execute(KIS_BASE_URL);
 
-    // 2차 시도: 9443 장애 또는 차단 시 443(표준 포트)으로 즉시 우회
-    // GitHub Actions 등 특정 환경에서 9443 포트가 차단되는 문제 해결
-    if (result.error || (result.rt_cd && result.rt_cd !== '0')) {
-        const fallbackUrl = KIS_BASE_URL.replace(/:9443$/, "");
-        if (fallbackUrl !== KIS_BASE_URL) {
-            const errDetail = result.error || `rt_cd:${result.rt_cd}`;
-            console.log(`ℹ️ [KIS-Net] 9443 장애(${errDetail}) → 443 포트 우회 시도...`);
-            result = await execute(fallbackUrl);
-        }
+    // 문제 발생 시 443 포트로 우회 (보고서 가이드 준수)
+    const isFailed = result.error || (result.rt_cd && result.rt_cd !== '0');
+    if (isFailed) {
+        const fallbackBase = KIS_BASE_URL.replace(/:9443$/, ":443") || 'https://openapi.koreainvestment.com:443';
+        const errDetail = result.error || `rt_cd:${result.rt_cd}`;
+        console.log(`ℹ️ [KIS-Net] 우회 시도 (사유:${errDetail}) → ${fallbackBase}`);
+        result = await execute(fallbackBase);
     }
     return result;
 }
 
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
-
-    const isMarketOpen = () => {
-        const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
-        const hour = now.getHours();
-        const min = now.getMinutes();
-        const day = now.getDay();
-        const timeVal = hour * 100 + min;
-        return day >= 1 && day <= 5 && timeVal >= 900 && timeVal <= 1540;
-    };
-
-    let foreignerResult = [];
-    let institutionResult = [];
-    let status = 'Error';
-    let subState = null;
-    let realtimeMsg = "";
-
     try {
-        // [수정] 정품 규역: FHKST01010400 (투자자별 매매동향)
-        // 코스피 지점(0001)의 수급 현황을 정확하게 가져오는 엔드포인트와 경로(inquire-investor) 사용
-        const marketData = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-investor", {
-            "Authorization": `Bearer ${token}`,
-            "appkey": KIS_APP_KEY,
-            "appsecret": KIS_APP_SECRET,
-            "tr_id": "FHKST01010400",
-            "custtype": "P"
-        }, {
-            FID_COND_MRKT_DIV_CODE: "J", // KOSPI
-            FID_INPUT_ISCD: "0001",      // 코스피 지점 코드
-            FID_INPUT_DATE: todayStr.replace(/-/g, '') // YYYYMMDD
-        });
-
-        if (marketData && marketData.rt_cd === '0') {
-            const dataList = marketData.output1 || marketData.output || [];
-            if (dataList.length > 0) {
-                const extractBuy = (val) => {
-                    const v = parseFloat(val);
-                    // pbmn: 백만원 -> 100으로 나눠서 억원(0.1억 정밀도)으로 치환
-                    return isNaN(v) ? null : parseFloat((v / 100).toFixed(1));
-                };
-
-                foreignerResult = dataList.map(d => ({
-                    date: (d.stck_bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                    value: extractBuy(d.frgn_ntby_pbmn || d.frgn_ntby_tr_pbmn)
-                })).filter(d => d.date && d.value !== null).slice(0, 14);
-
-                institutionResult = dataList.map(d => ({
-                    date: (d.stck_bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                    value: extractBuy(d.orgn_ntby_pbmn || d.orgn_ntby_tr_pbmn)
-                })).filter(d => d.date && d.value !== null).slice(0, 14);
-
-                status = 'Confirmed';
-                const latestF = foreignerResult[0]?.value || 0;
-                const latestI = institutionResult[0]?.value || 0;
-
-                // 장중 0은 정상 상태 (Aggregating 처리)
-                if (latestF === 0 && latestI === 0 && isMarketOpen()) {
-                    status = 'Aggregating';
-                    subState = 'Initial'; 
-                } else if (isMarketOpen()) {
-                    status = 'Aggregating';
-                }
+        const data = await kisRequest(
+            'GET',
+            '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market', 
+            {
+                'Authorization': `Bearer ${token}`,
+                'appkey': KIS_APP_KEY,
+                'appsecret': KIS_APP_SECRET,
+                'tr_id': 'FHPTJ04030000',
+                'custtype': 'P'
+            },
+            {
+                fid_input_iscd: 'KSP',       // [가이드] 소문자 키 및 시장 코드 KSP
+                fid_input_iscd_2: '0001'     // [가이드] 소문자 키
             }
-        } else {
-            const errDetail = marketData?.error ? `NetError: ${marketData.error}` : `rt_cd:${marketData?.rt_cd}, msg:${marketData?.msg1}`;
-            realtimeMsg = `FAIL(${errDetail})`;
-            console.warn(`⚠️ [KIS] 수급 트렌드 조회 실패: ${realtimeMsg}`);
-        }
+        );
 
-        return { foreigner: foreignerResult, institution: institutionResult, status, subState, realtimeMsg };
-    } catch (e) {
-        console.error("❌ KIS 수급 트렌드 최종 에러:", e.message);
+        if (data && data.rt_cd === '0' && data.output && data.output.length > 0) {
+            const d = data.output[0];      // 시장별 API는 배열의 첫 번째가 당일 누계
+            const toEok = v => {
+                const val = parseInt(v || '0');
+                return isNaN(val) ? 0 : Math.round(val / 100); // 백만원 -> 억원 변환
+            };
+
+            const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+            
+            return {
+                foreigner:   [{ date: today, value: toEok(d.frgn_ntby_tr_pbmn) }],
+                institution: [{ date: today, value: toEok(d.orgn_ntby_tr_pbmn) }],
+                individual:  [{ date: today, value: toEok(d.prsn_ntby_tr_pbmn) }],
+                detailed: {
+                    pension: toEok(d.fund_ntby_tr_pbmn),   // 연기금
+                    financial: toEok(d.scrt_ntby_tr_pbmn), // 금융투자
+                    investment: toEok(d.ivtr_ntby_tr_pbmn)  // 투신
+                },
+                status: 'Confirmed', subState: null, realtimeMsg: ''
+            };
+        } else {
+            const msg = data?.error || data?.msg1 || "Unknown Error";
+            console.warn(`⚠️ [KIS] 시장별 수급 조회 실패: ${msg}`);
+        }
+    } catch(e) {
+        console.error('❌ KIS 시장별 수급 에러:', e.message);
     }
-    return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: "Exception" };
+    return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: 'Exception' };
 }
 
 /**
@@ -1765,107 +1756,85 @@ async function main() {
         else if (foreignerQty < -500000) kospiScores.down += 2.0;
     }
 
-    // 외국인 수급
-    const foreignerData = investorTrend?.foreigner;
-    if (foreignerData && foreignerData.length > 0) {
-        const latest = foreignerData[0].value;
-        const prev = (foreignerData.length > 1 ? foreignerData[1].value : latest) || latest;
+    // 🌟 [최종 하이브리드] 시장 전체 실시간 수급(0403) + 삼성전자 가집계(0440)
+    const invStatus = investorTrend?.status || 'Confirmed';
 
-        if (latest > 0) {
-            blockScores['assets'].down += 2.5;
-            kospiScores.up += 3.0;
-        } else if (latest < 0) {
-            blockScores['assets'].up += 2.5;
-            kospiScores.down += 3.0;
-        }
-
+    // 1. 시장 전체 외국인 수급 (보고서 5. 필드명 준수)
+    const foreignerTrend = investorTrend?.foreigner;
+    if (foreignerTrend && foreignerTrend.length > 0) {
+        const latest = foreignerTrend[0].value;
         const realizedImpact = latest < 0 ? 'up' : (latest > 100 ? 'down' : 'neutral');
-        const uiName = investorStatus === 'Aggregating' ? 'KOSPI 외국인 수급 (집계 중)' : 
-                       (investorStatus === 'Partial' ? 'KOSPI 외국인 수급 (가집계)' : 
-                       (investorStatus === 'InvalidResponse' ? 'KOSPI 외국인 수급 (점검 중)' : 'KOSPI 외국인 수급동향'));
-
+        
         indicators.push({
-            id: 'foreigner-net-buy',
-            name: uiName,
+            id: 'foreigner-net-buy-market',
+            name: 'KOSPI 외국인 (실시간)',
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: 'KIS 실시간',
-            status: investorStatus,
-            subState: investorSubState,
-            description: `외국인 수급${investorStatus === 'Partial' ? ' (부분 수집됨)' : ''}: 순매도 시 원화 약세 요인`,
+            source: 'KIS [0403]',
+            status: invStatus,
+            description: `KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)`,
             value: (latest || 0).toLocaleString(),
-            trend: latest >= prev ? 'up' : 'down',
+            trend: latest >= 0 ? 'up' : 'down',
             realizedImpact,
-            history: [...foreignerData].reverse()
+            history: foreignerTrend.map(d => ({ date: d.date, value: d.value }))
         });
-        console.log(`✅ [KIS] 외인 순매수: ${latest}억원 (${investorStatus}) ${investorRealtimeMsg}`);
-    } else {
-        const fb = fallbacks['foreigner-net-buy'];
-        indicators.push({
-            id: 'foreigner-net-buy',
-            name: 'KOSPI 외국인 수급동향',
-            unit: '억원',
-            block: FACTOR_BLOCKS.ASSETS.id,
-            impact: 'down',
-            source: '데이터 예측',
-            status: 'Error',
-            description: '외국인 수급 데이터 확인 중입니다.',
-            value: fb.value,
-            trend: fb.trend,
-            history: fb.history
-        });
-        console.log(`⚠️ [KIS] 외인 수급 데이터 부재 ${investorRealtimeMsg}`);
+
+        // 점수 반영
+        if (latest > 300) kospiScores.up += 3.0;
+        else if (latest < -300) kospiScores.down += 3.0;
     }
 
-    // 기관 수급 처리
-    const institutionData = investorTrend?.institution;
-    if (institutionData && institutionData.length > 0) {
-        const latest = institutionData[0].value;
-        const prev = (institutionData.length > 1 ? institutionData[1].value : latest) || latest;
-
-        if (latest > 0) {
-            kospiScores.up += 2.5;
-        } else if (latest < 0) {
-            kospiScores.down += 2.5;
+    // 2. 시장 전체 기관 수급 (세부 내역 포함)
+    const institutionTrend = investorTrend?.institution;
+    if (institutionTrend && institutionTrend.length > 0) {
+        const latest = institutionTrend[0].value;
+        const det = investorTrend.detailed;
+        let detailTxt = "";
+        if (det) {
+            detailTxt = ` (연기금:${det.pension > 0 ? '+' : ''}${det.pension}, 투신:${det.investment > 0 ? '+' : ''}${det.investment}, 금투:${det.financial > 0 ? '+' : ''}${det.financial})`;
         }
 
-        const realizedImpact = latest > 0 ? 'down' : (latest < 0 ? 'up' : 'neutral');
-        const uiName = investorStatus === 'Aggregating' ? 'KOSPI 기관 수급 (집계 중)' : 
-                       (investorStatus === 'Partial' ? 'KOSPI 기관 수급 (가집계)' : 
-                       (investorStatus === 'InvalidResponse' ? 'KOSPI 기관 수급 (점검 중)' : 'KOSPI 기관 수급동향'));
-
         indicators.push({
-            id: 'institution-net-buy',
-            name: uiName,
+            id: 'institution-net-buy-market',
+            name: 'KOSPI 기관 (실시간)',
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: 'KIS 실시간',
-            status: investorStatus,
-            subState: investorSubState,
-            description: `기관 수급${investorStatus === 'Partial' ? ' (부분 수집됨)' : ''}: 프로그램 매매 포함 핵심 지표`,
+            source: 'KIS [0403]',
+            status: invStatus,
+            description: `KOSPI 시장 전체 기관 실시간 누적 순매수 대금${detailTxt}`,
             value: (latest || 0).toLocaleString(),
-            trend: latest >= prev ? 'up' : 'down',
-            realizedImpact,
-            history: [...institutionData].reverse()
+            trend: latest >= 0 ? 'up' : 'down',
+            history: institutionTrend.map(d => ({ date: d.date, value: d.value }))
         });
-        console.log(`✅ [KIS] 기관 순매수: ${latest}억원 (${investorStatus})`);
-    } else {
+
+        if (latest > 200) kospiScores.up += 2.0;
+        else if (latest < -200) kospiScores.down += 2.0;
+    }
+
+    // 🌟 [추가] 삼성전자 가집계 데이터 반영 (v15.0 - 교차 검증용)
+    if (samsungProvisional) {
+        const { foreignerQty, institutionQty, timeGb, signal, signalType } = samsungProvisional;
+        const timeMap = { '1': '09:30', '2': '11:20', '3': '13:20', '4': '14:30', '5': '15:30+' };
+        const timeStr = timeMap[timeGb] || '집계중';
+        
         indicators.push({
-            id: 'institution-net-buy',
-            name: 'KOSPI 기관 수급동향',
-            unit: '억원',
+            id: 'samsung-provisional',
+            name: `삼전 가집계 (${timeStr})`,
+            unit: '주',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: '데이터 점검 중',
-            status: 'Error',
-            description: '기관 수급 데이터 확인 중입니다.',
-            value: '0',
-            trend: 'neutral',
-            history: []
+            source: 'KIS [0440]',
+            description: `삼성전자 종목별 실시간 수입/수급 가집계 신호: ${signal}`,
+            value: `외:${(foreignerQty/10000).toFixed(1)}만 / 기:${(institutionQty/10000).toFixed(1)}만`,
+            trend: signalType,
+            realizedImpact: signalType === 'up' ? 'down' : (signalType === 'down' ? 'up' : 'neutral'),
+            history: samsungProvisional.history.map(h => ({
+                date: timeMap[h.timeGb] || h.timeGb,
+                value: h.foreigner + h.institution
+            }))
         });
-        console.log(`⚠️ [KIS] 기관 수급 데이터 부재`);
     }
 
     // 🌟 [추가] 삼성전자 확정 수급 (FHKST01010900) - 히스토리용
