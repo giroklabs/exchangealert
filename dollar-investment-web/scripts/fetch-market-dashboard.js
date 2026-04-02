@@ -436,11 +436,76 @@ async function fetchFromEcos(item) {
                     } else {
                         const maskedUrl = url.replace(ECOS_API_KEY, '{ECOS_API_KEY}');
                         console.warn(`ℹ️ [ECOS-API] ${item.name} 데이터 없음: ${json.RESULT?.MESSAGE || '알 수 없는 이유'}`);
-                        cons// --- KIS 전용 안정화 통신 유틸리티 (v15.2 https-request 기반) ---
+                        console.warn(`🔗 요청 URL: ${maskedUrl}`);
+                        resolve(null);
+                    }
+                } catch (e) { 
+                    resolve(null); 
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`❌ [ECOS-Network] ${item.name} 에러: ${e.message}`);
+            resolve(null);
+        });
+    });
+}
+
+// 단기외채 비중 전용 fetch: 단기(A500000) / 총계(A000000)를 각각 가져와 비중(%) 산출
+async function fetchShortDebtRatio() {
+    if (!ECOS_API_KEY) return null;
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const start = `${currentYear - 2}Q1`;
+    const end = `${currentYear}Q4`;
+
+    const fetchItem = (itemCode) => new Promise((resolve) => {
+        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/100/311Y004/Q/${start}/${end}/${itemCode}`;
+        https.get(url, (res) => {
+            let data = '';
+            res.on('data', (chunk) => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    if (json.StatisticSearch && json.StatisticSearch.row) {
+                        resolve(json.StatisticSearch.row);
+                    } else { resolve(null); }
+                } catch (e) { resolve(null); }
+            });
+        }).on('error', () => resolve(null));
+    });
+
+    try {
+        const [shortRows, totalRows] = await Promise.all([
+            fetchItem('A500000'),  // 1.단기
+            fetchItem('A000000')   // 대외채무 총계
+        ]);
+
+        if (!shortRows || !totalRows || shortRows.length === 0 || totalRows.length === 0) return null;
+
+        // 같은 분기의 단기/총계를 매칭하여 비중(%) 계산
+        const result = shortRows.map(sr => {
+            const tr = totalRows.find(t => t.TIME === sr.TIME);
+            if (!tr) return null;
+            const shortVal = parseFloat(sr.DATA_VALUE);
+            const totalVal = parseFloat(tr.DATA_VALUE);
+            if (isNaN(shortVal) || isNaN(totalVal) || totalVal === 0) return null;
+            return {
+                TIME: sr.TIME,
+                DATA_VALUE: ((shortVal / totalVal) * 100).toFixed(1)
+            };
+        }).filter(Boolean);
+
+        return result.length > 0 ? result.reverse() : null;
+    } catch (e) {
+        console.error('❌ [ECOS] 단기외채 비중 계산 에러:', e.message);
+        return null;
+    }
+}
+
+// --- KIS 전용 안정화 통신 유틸리티 (v15.2 https-request 기반) ---
 async function kisRequest(method, path, headers, params = null) {
     const execute = async (baseUrl) => {
         const isGet = method.toUpperCase() === 'GET';
-        // [체크] baseUrl 끝에 /가 있고 path 시작에 /가 있으면 중복 제거
         const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
         const cleanPath = path.startsWith('/') ? path : `/${path}`;
         const urlObj = new URL(`${cleanBase}${cleanPath}`);
