@@ -147,7 +147,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                     </div>
                 </button>
 
-                <div className={`transition-all duration-500 ease-in-out ${isPredictionExpanded ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                <div className={`transition-all duration-500 ease-in-out ${isPredictionExpanded ? 'max-h-[8000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                     <div className="p-6">
                         <div className="flex flex-col md:flex-row items-center gap-8">
                             <div className="flex-1 w-full space-y-4">

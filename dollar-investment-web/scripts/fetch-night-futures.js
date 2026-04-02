@@ -92,34 +92,101 @@ async function generateAiBriefing(data) {
     });
 }
 
+/**
+ * Yahoo Finance에서 실시간 시세 수집
+ */
+async function fetchFromYahooFinance(symbol) {
+    return new Promise((resolve) => {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`;
+        const options = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        };
+
+        https.get(url, options, (res) => {
+            let data = '';
+            res.on('data', (chunk) => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    const result = json.chart?.result?.[0];
+                    if (!result) return resolve(null);
+                    
+                    const meta = result.meta;
+                    const indicators = result.indicators.quote[0];
+                    const closes = indicators.close;
+                    
+                    // 유효한 마지막 종가 찾기
+                    let lastPrice = meta.regularMarketPrice;
+                    for (let i = closes.length - 1; i >= 0; i--) {
+                        if (closes[i] !== null) {
+                            lastPrice = closes[i];
+                            break;
+                        }
+                    }
+
+                    resolve({
+                        price: lastPrice,
+                        prevClose: meta.previousClose,
+                        change: ((lastPrice - meta.previousClose) / meta.previousClose * 100).toFixed(2)
+                    });
+                } catch (e) {
+                    console.error(`❌ Yahoo Finance Error (${symbol}):`, e.message);
+                    resolve(null);
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`❌ Yahoo Finance Network Error (${symbol}):`, e.message);
+            resolve(null);
+        });
+    });
+}
+
 async function main() {
-    console.log("🚀 야간 선물 모닝 브리핑 수집 시작...");
+    console.log("🚀 야간 선물(ETN 대체) 모닝 브리핑 수집 시작...");
 
     try {
-        if (!KIS_APP_KEY || !GEMINI_API_KEY || !TELEGRAM_TOKEN) {
+        if (!GEMINI_API_KEY || !TELEGRAM_TOKEN) {
             throw new Error("필수 API 키가 .env에 누락되었습니다.");
         }
 
-        // 1. KIS 토큰 발급
-        const token = await getKisToken(KIS_APP_KEY, KIS_APP_SECRET);
-        console.log("✅ KIS 토큰 발급 완료");
-
-        // 2. 선물 시세 수집 (10100 종목 하나면 주/야간 데이터 확보 가능)
-        // futs_prpr: 오전 08:35 기준 야간 세션 마감가
-        // futs_prdy_clpr: 전일 오후 15:45 기준 정규 세션 종가
-        const res = await fetchFuturesPrice('10100', token, { appKey: KIS_APP_KEY, appSecret: KIS_APP_SECRET });
+        // 1. Yahoo Finance를 통한 야간선물(ETN) 데이터 수집
+        console.log("📊 Yahoo Finance 데이터 수집 중 (580039.KS)...");
+        const etnData = await fetchFromYahooFinance('580039.KS');
         
-        const nightPrice = parseFloat(res.stck_prpr || 0);
-        const regPrice = parseFloat(res.stck_sdpr || 0);
+        let nightPrice = 0;
+        let regPrice = 0;
+        let premium = 0;
+        let dataSource = "Yahoo Finance (580039.KS)";
 
-        if (nightPrice === 0 || regPrice === 0) {
-            console.warn("⚠️ KIS로부터 선물 데이터를 받지 못했습니다. (권한 또는 시장 마감 확인 필요)");
-            await sendBriefing(`⚠️ *[주의]* KIS API로부터 선물 데이터를 수집하지 못했습니다.\n\n해당 계정의 *국내선물옵션 시세 이용 권한*을 확인해 주세요. (현재 069500 등 주식 데이터는 정상 수신 중)`);
-            return;
+        if (etnData) {
+            // 💡 580039.KS는 코스피 200 레버리지(2x) ETN이므로
+            // 수익률의 절반을 일반 선물 프리미엄으로 추정함
+            premium = parseFloat((etnData.change / 2).toFixed(2));
+            nightPrice = etnData.price;
+            regPrice = etnData.prevClose;
+            console.log(`✅ ETN 수집 성공: 현재가 ${nightPrice}, 등락률 ${etnData.change}% (선물추정 프리미엄: ${premium}%)`);
+        } else {
+            console.warn("⚠️ Yahoo Finance 수집 실패. KIS 폴백 시도...");
+            // 2. KIS 폴백 (기존 로직)
+            try {
+                const token = await getKisToken(KIS_APP_KEY, KIS_APP_SECRET);
+                const res = await fetchFuturesPrice('10100', token, { appKey: KIS_APP_KEY, appSecret: KIS_APP_SECRET });
+                nightPrice = parseFloat(res.stck_prpr || 0);
+                regPrice = parseFloat(res.stck_sdpr || 0);
+                premium = calculateOvernightPremium(regPrice, nightPrice);
+                dataSource = "한국투자증권 (10100)";
+            } catch (kisErr) {
+                console.error("❌ KIS 폴백도 실패:", kisErr.message);
+            }
+        }
+
+        if (premium === 0 && nightPrice === 0) {
+            throw new Error("모든 소스에서 데이터 수집에 실패했습니다.");
         }
         
-        // 3. 지표 계산
-        const premium = calculateOvernightPremium(regPrice, nightPrice);
+        // 3. 심리 상태 분석
         const sentiment = getPremiumSentiment(premium);
         
         console.log(`📊 분석 성공: Reg(전일종가) ${regPrice} | Night(현재가/야간종가) ${nightPrice} | Premium ${premium}% (${sentiment.level}${sentiment.trend})`);
