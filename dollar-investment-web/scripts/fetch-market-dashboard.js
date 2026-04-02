@@ -1611,7 +1611,7 @@ async function main() {
             }).reverse();
 
             // 실시간 보정치가 있는 예탁금, 일일 지표(D) 또는 정책 금리(한국 기준금리)인 경우에만 오늘 날짜 노드 보장
-            const isDailyOrRealtime = item.id === 'investor-deposits' || item.id === 'bok-rate' || item.cycle === 'D';
+            const isDailyOrRealtime = item.id === 'bok-rate' || item.cycle === 'D';
             if (isDailyOrRealtime && history.length > 0 && history[history.length-1].date !== todayStr) {
                 // 오늘 데이터가 이미 있다면 업데이트, 없으면 추가
                 history.push({ date: todayStr, value: val });
