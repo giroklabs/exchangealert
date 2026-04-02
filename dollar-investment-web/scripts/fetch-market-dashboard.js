@@ -588,61 +588,77 @@ async function kisRequest(method, path, headers, params = null) {
  * KIS 시장별 투자자 매매동향 (v15.2 최종 성공 버전)
  * [성공 전략] FID_COND_SCR_DIV_CODE: '20403' 필수
  */
-async function fetchMarketInvestorTrend(token) {
-    if (!token) return null;
-    
-    // [v15.6 최종 성공 전략] 날짜 필드와 시장구분(U)이 포함된 5종 필수 세트
-    const PATH = '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market';
-    const now = new Date();
-    const todayStr = now.getFullYear() + 
-                     String(now.getMonth() + 1).padStart(2, '0') + 
-                     String(now.getDate()).padStart(2, '0');
+async function fetchMarketInvestorTrend() {
+    // [v16.0 삼성증권 스크래핑 전략] KIS API 대신 삼성증권 내부 API 사용
+    const url = 'https://www.samsungpop.com/wts/fidBuilder.do';
+    const payload = JSON.stringify([
+        {
+            "idx": "fid11500",
+            "gid": "1150",
+            "fidCodeBean": { "242": "02", "9228": "7,16,9" },
+            "outFid": "3,17,19",
+            "isList": "1",
+            "order": "ASC",
+            "reqCnt": "30",
+            "actionKey": "0",
+            "saveBufLen": "1",
+            "saveBuf": "1"
+        }
+    ]);
 
-    const PARAMS = {
-        FID_COND_MRKT_DIV_CODE: 'U',    // 지수/업종 조회 시 U
-        FID_COND_SCR_DIV_CODE: '20403', // HTS 화면코드
-        FID_INPUT_ISCD: '0001',          // KOSPI 종합지수
-        FID_INPUT_ISCD_2: '0001',        // 보조 코드
-        FID_INPUT_DATE_1: todayStr,     // 조회 시작일
-        FID_INPUT_DATE_2: todayStr,     // 조회 종료일
-        FID_DIV_CLS_CODE: '0'           // [마지막 퍼즐] 0: 수량/대금 합계 구분
-    };
-
-    const HEADERS = {
-        'Authorization': `Bearer ${token}`,
-        'appkey': KIS_APP_KEY,
-        'appsecret': KIS_APP_SECRET,
-        'tr_id': 'FHPTJ04030000',
-        'custtype': 'P'
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.samsungpop.com/mbw/trading/etc.do?cmd=compositeList',
+            'Origin': 'https://www.samsungpop.com',
+            'Content-Length': Buffer.byteLength(payload)
+        }
     };
 
     try {
-        console.log(`🔍 [KIS-Req] TR:${HEADERS.tr_id} PATH:${PATH} PARAMS:${JSON.stringify(PARAMS)}`);
-        const data = await kisRequest('GET', PATH, HEADERS, PARAMS);
+        const result = await new Promise((resolve, reject) => {
+            const req = https.request(url, options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => {
+                    try {
+                        const parsed = JSON.parse(data);
+                        const rows = parsed.fid11500?.data || [];
+                        const trends = { personal: 0, foreigner: 0, institution: 0 };
+                        
+                        rows.forEach(row => {
+                            const val = parseInt(row["17"] || "0"); // 억원 단위
+                            if (row["3"] === "0018") trends.personal = val;
+                            if (row["3"] === "001C") trends.foreigner = val;
+                            if (row["3"] === "001T") trends.institution = val;
+                        });
+                        resolve(trends);
+                    } catch (e) {
+                        reject(new Error(`Samsung Parse Error: ${e.message}`));
+                    }
+                });
+            });
+            req.on('error', reject);
+            req.write(payload);
+            req.end();
+        });
 
-        if (data && data.rt_cd === '0' && data.output && data.output.length > 0) {
-            const d = data.output[0];
-            const toEok = v => Math.round(parseInt(v || '0') / 100);
-            const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-            return {
-                foreigner:   [{ date: today, value: toEok(d.frgn_ntby_tr_pbmn) }],
-                institution: [{ date: today, value: toEok(d.orgn_ntby_tr_pbmn) }],
-                individual:  [{ date: today, value: toEok(d.prsn_ntby_tr_pbmn) }],
-                detailed: {
-                    pension: toEok(d.fund_ntby_tr_pbmn),
-                    financial: toEok(d.scrt_ntby_tr_pbmn),
-                    investment: toEok(d.ivtr_ntby_tr_pbmn)
-                },
-                status: 'Confirmed', subState: null, realtimeMsg: ''
-            };
-        } else {
-            const msg = data?.error ? String(data.error) : `[${data?.msg_cd}] ${data?.msg1}`;
-            console.warn(`⚠️ [KIS] 시장별 수급 조회 최종 실패: ${msg}`);
-        }
-    } catch(e) {
-        console.error('❌ KIS 시장별 수급 예외 발생:', e.message);
+        const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+        console.log(`✅ [Samsung-Scrape] KOSPI 수급 데이터 획득: 개 ${result.personal}, 외 ${result.foreigner}, 기 ${result.institution}`);
+        
+        return {
+            foreigner:   [{ date: today, value: result.foreigner }],
+            institution: [{ date: today, value: result.institution }],
+            individual:  [{ date: today, value: result.personal }],
+            status: 'Confirmed', subState: null, realtimeMsg: ''
+        };
+    } catch (e) {
+        console.error('❌ [Samsung-Scrape] 삼성증권 수집 실패:', e.message);
+        return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: 'SamsungScrapeOffline' };
     }
-    return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: 'Exception' };
 }
 
 
@@ -1392,7 +1408,7 @@ async function main() {
     const indicators = [];
     const kisToken = await getKisAccessToken();
     const marketStats = kisToken ? await fetchMarketStats(kisToken) : null;
-    const investorTrend = kisToken ? await fetchMarketInvestorTrend(kisToken) : null;
+    const investorTrend = await fetchMarketInvestorTrend();
     const samsungProvisional = kisToken ? await fetchStockProvisionalTrend(kisToken, "005930") : null;
     const samsungInvestor = kisToken ? await fetchStockInvestorTrend(kisToken, "005930") : null;
     const programTrading = kisToken ? await fetchProgramTrading(kisToken) : null;
