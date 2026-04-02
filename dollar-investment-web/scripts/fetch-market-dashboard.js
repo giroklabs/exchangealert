@@ -1616,7 +1616,7 @@ async function main() {
 
         if (!s.hidden) {
             // 코스피 지수의 경우 KIS 연동 여부에 따라 소스 표기 차별화
-            const finalSource = (s.id === 'KOSPI' && s.isRealtime) ? '한국투자증권 실시간' : (s.source || 'FRED');
+            const finalSource = (s.id === 'KOSPI' && s.isRealtime) ? 'Yahoo Finance 실시간' : (s.source || 'FRED');
             indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history, source: finalSource });
             const latestDate = obs.length > 0 ? obs[0].date : 'N/A';
             console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)}) - Source: ${finalSource}`);
@@ -1647,7 +1647,7 @@ async function main() {
                     TIME: s.date.replace(/-/g, ''),
                     DATA_VALUE: (s.value * 100000000).toString() 
                 }));
-                item.source = '한국투자증권 실시간';
+                item.source = 'Yahoo Finance 실시간';
                 console.log(`⚡ [KIS] 투자자예탁금 실시간 적용 완료 (${marketStats.deposits[0].value}억원)`);
             }
         }
@@ -1734,7 +1734,7 @@ async function main() {
     // --- 신규 Kofia/KIS 지표: 신용융자잔고 ---
     {
         let creditMarginData = null;
-        let creditSource = '한국투자증권 실시간';
+        let creditSource = 'FreeSIS';
 
         if (freesisCreditMargin && freesisCreditMargin.length > 0) {
             creditMarginData = freesisCreditMargin;
@@ -1840,7 +1840,7 @@ async function main() {
             unit: '주',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: '삼성증권',
+            source: '삼성증권 실시간',
             description: `장중 주요 기관 수급 추정치 (현재 ${timeStr} 기준)`,
             value: `외:${(foreignerQty/10000).toFixed(1)}만 / 기:${(institutionQty/10000).toFixed(1)}만`,
             trend: (foreignerQty + institutionQty) > 0 ? 'up' : 'down',
@@ -1871,7 +1871,7 @@ async function main() {
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: '삼성증권',
+            source: '삼성증권 실시간',
             status: invStatus,
             description: `KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)`,
             value: (latest || 0).toLocaleString(),
@@ -1901,7 +1901,7 @@ async function main() {
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: '삼성증권',
+            source: '삼성증권 실시간',
             status: invStatus,
             description: `KOSPI 시장 전체 기관 실시간 누적 순매수 대금${detailTxt}`,
             value: (latest || 0).toLocaleString(),
@@ -1925,7 +1925,7 @@ async function main() {
             unit: '주',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: '삼성증권',
+            source: '삼성증권 실시간',
             description: `삼성전자 종목별 실시간 수입/수급 가집계 신호: ${signal}`,
             value: `외:${(foreignerQty/10000).toFixed(1)}만 / 기:${(institutionQty/10000).toFixed(1)}만`,
             trend: signalType,
