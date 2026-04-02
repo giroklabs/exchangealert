@@ -752,9 +752,10 @@ async function fetchMarketStats(token) {
 
 
 /**
- * 금융투자협회(FreeSIS)를 통한 투자자예탁금 데이터 스크래핑
+ * 금융투자협회(FreeSIS) 데이터 스크래핑
+ * @param {string} objNm 대상 오브젝트명 (STATSCU0100000060BO: 예탁금, STATSCU0100000070BO: 신용융자)
  */
-async function fetchFromFreeSIS() {
+async function fetchFromFreeSIS(objNm = "STATSCU0100000060BO") {
     try {
         const today = todayStr.replace(/-/g, '');
         // 3개월치 데이터 요청
@@ -769,7 +770,7 @@ async function fetchFromFreeSIS() {
                 tmpV1: "D",
                 tmpV45: threeMonthsAgo,
                 tmpV46: today,
-                OBJ_NM: "STATSCU0100000060BO"
+                OBJ_NM: objNm
             }
         };
 
@@ -777,21 +778,29 @@ async function fetchFromFreeSIS() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win32; x64) AppleWebKit/537.36"
             },
             body: JSON.stringify(payload)
         });
         
         const data = await res.json();
         if (data.ds1 && Array.isArray(data.ds1)) {
-            // TMPV1: 날짜(2024/04/26), TMPV2: 예탁금(111,579,004 - 백만원 단위)
-            return data.ds1.map(row => ({
-                date: (row.TMPV1 || "").replace(/\//g, '-'),
-                value: Math.round(parseFloat(String(row.TMPV2 || "0").replace(/,/g, '')) / 100)
-            })).sort((a,b) => b.date.localeCompare(a.date));
+            // TMPV1: 날짜, TMPV2: 값 (백만원 단위)
+            return data.ds1.map(row => {
+                let rawDate = (row.TMPV1 || "");
+                // 날짜 포맷 정규화 (YYYY/MM/DD 또는 YYYYMMDD -> YYYY-MM-DD)
+                let dateStr = rawDate.includes('/') 
+                    ? rawDate.replace(/\//g, '-') 
+                    : rawDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+
+                return {
+                    date: dateStr,
+                    value: Math.round(parseFloat(String(row.TMPV2 || "0").replace(/,/g, '')) / 100)
+                };
+            }).sort((a,b) => b.date.localeCompare(a.date));
         }
     } catch (e) {
-        console.warn("ℹ️ [FreeSIS] 데이터 수집 실패:", e.message);
+        console.warn(`ℹ️ [FreeSIS] 데이터 수집 실패 (${objNm}):`, e.message);
     }
     return null;
 }
@@ -1379,7 +1388,8 @@ async function main() {
     const samsungProvisional = kisToken ? await fetchStockProvisionalTrend(kisToken, "005930") : null;
     const programTrading = kisToken ? await fetchProgramTrading(kisToken) : null;
     const bondRates = kisToken ? await fetchBondRates(kisToken) : null;
-    const freesisDeposits = await fetchFromFreeSIS();
+    const freesisDeposits = await fetchFromFreeSIS("STATSCU0100000060BO");
+    const freesisCreditMargin = await fetchFromFreeSIS("STATSCU0100000070BO");
     
     // 블록별 점수 합산용 (정규화용)
     const blockScores = {
@@ -1645,31 +1655,44 @@ async function main() {
         console.log(`${statusIcon} [${dataSource}] ${item.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)})`);
     }
 
-    // --- 신규 KIS 지표: 신용융자잔고 ---
-    if (marketStats?.creditMargin && marketStats.creditMargin.length > 0) {
-        const latest = marketStats.creditMargin[0].value;
-        const prev = marketStats.creditMargin.length > 1 ? marketStats.creditMargin[1].value : latest;
-        const trend = latest >= prev ? 'up' : 'down';
-        
-        // 신용융자 증가 -> 리스크 증가 (+1.5), 코스피 하락 요인 (-2.0)
-        if (trend === 'up') {
-            blockScores['risk'].up += 1.5;
-            kospiScores.down += 2.0;
+    // --- 신규 Kofia/KIS 지표: 신용융자잔고 ---
+    {
+        let creditMarginData = null;
+        let creditSource = '한국투자증권 실시간';
+
+        if (freesisCreditMargin && freesisCreditMargin.length > 0) {
+            creditMarginData = freesisCreditMargin;
+            creditSource = '금융투자협회';
+            console.log(`⚡ [FreeSIS] 신용융자잔고 적용 완료 (${freesisCreditMargin[0].value}억원)`);
+        } else if (marketStats?.creditMargin && marketStats.creditMargin.length > 0) {
+            creditMarginData = marketStats.creditMargin;
+            console.log(`⚡ [KIS] 신용융자잔고: ${marketStats.creditMargin[0].value}억원`);
         }
 
-        indicators.push({
-            id: 'credit-margin',
-            name: '신용융자잔고',
-            unit: '억원',
-            block: 'risk',
-            impact: 'up',
-            source: '한국투자증권 실시간',
-            description: '개인 투자자의 부채 이용 주식 매수 규모, 급증 시 시장 과열 및 반대매매 리스크',
-            value: latest.toLocaleString(),
-            trend,
-            history: [...marketStats.creditMargin].reverse()
-        });
-        console.log(`⚡ [KIS] 신용융자잔고: ${latest}억원`);
+        if (creditMarginData) {
+            const latest = creditMarginData[0].value;
+            const prev = creditMarginData.length > 1 ? creditMarginData[1].value : latest;
+            const trend = latest >= prev ? 'up' : 'down';
+            
+            // 신용융자 증가 -> 리스크 증가 (+1.5), 코스피 하락 요인 (-2.0)
+            if (trend === 'up') {
+                blockScores['risk'].up += 1.5;
+                kospiScores.down += 2.0;
+            }
+
+            indicators.push({
+                id: 'credit-margin',
+                name: '신용융자잔고',
+                unit: '억원',
+                block: 'risk',
+                impact: 'up',
+                source: creditSource,
+                description: '개인 투자자의 부채 이용 주식 매수 규모, 급증 시 시장 과열 및 반대매매 리스크',
+                value: latest.toLocaleString(),
+                trend,
+                history: [...creditMarginData].reverse()
+            });
+        }
     }
 
     // --- 신규 KIS 지표: 프로그램 매매 ---
