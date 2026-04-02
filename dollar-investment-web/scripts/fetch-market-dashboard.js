@@ -602,9 +602,10 @@ async function fetchMarketInvestorTrend(token) {
         FID_COND_MRKT_DIV_CODE: 'U',    // 지수/업종 조회 시 U
         FID_COND_SCR_DIV_CODE: '20403', // HTS 화면코드
         FID_INPUT_ISCD: '0001',          // KOSPI 종합지수
-        FID_INPUT_ISCD_2: '0001',        // [추가] 필수 보조 코드
-        FID_INPUT_DATE_1: todayStr,
-        FID_INPUT_DATE_2: todayStr
+        FID_INPUT_ISCD_2: '0001',        // 보조 코드
+        FID_INPUT_DATE_1: todayStr,     // 조회 시작일
+        FID_INPUT_DATE_2: todayStr,     // 조회 종료일
+        FID_DIV_CLS_CODE: '0'           // [마지막 퍼즐] 0: 수량/대금 합계 구분
     };
 
     const HEADERS = {
