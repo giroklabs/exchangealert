@@ -436,73 +436,7 @@ async function fetchFromEcos(item) {
                     } else {
                         const maskedUrl = url.replace(ECOS_API_KEY, '{ECOS_API_KEY}');
                         console.warn(`ℹ️ [ECOS-API] ${item.name} 데이터 없음: ${json.RESULT?.MESSAGE || '알 수 없는 이유'}`);
-                        console.warn(`🔗 요청 URL: ${maskedUrl}`);
-                        resolve(null);
-                    }
-                } catch (e) { 
-                    resolve(null); 
-                }
-            });
-        }).on('error', (e) => {
-            console.error(`❌ [ECOS-Network] ${item.name} 에러: ${e.message}`);
-            resolve(null);
-        });
-    });
-}
-
-// 단기외채 비중 전용 fetch: 단기(A500000) / 총계(A000000)를 각각 가져와 비중(%) 산출
-async function fetchShortDebtRatio() {
-    if (!ECOS_API_KEY) return null;
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const start = `${currentYear - 2}Q1`;
-    const end = `${currentYear}Q4`;
-
-    const fetchItem = (itemCode) => new Promise((resolve) => {
-        const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_API_KEY}/json/kr/1/100/311Y004/Q/${start}/${end}/${itemCode}`;
-        https.get(url, (res) => {
-            let data = '';
-            res.on('data', (chunk) => data += chunk);
-            res.on('end', () => {
-                try {
-                    const json = JSON.parse(data);
-                    if (json.StatisticSearch && json.StatisticSearch.row) {
-                        resolve(json.StatisticSearch.row);
-                    } else { resolve(null); }
-                } catch (e) { resolve(null); }
-            });
-        }).on('error', () => resolve(null));
-    });
-
-    try {
-        const [shortRows, totalRows] = await Promise.all([
-            fetchItem('A500000'),  // 1.단기
-            fetchItem('A000000')   // 대외채무 총계
-        ]);
-
-        if (!shortRows || !totalRows || shortRows.length === 0 || totalRows.length === 0) return null;
-
-        // 같은 분기의 단기/총계를 매칭하여 비중(%) 계산
-        const result = shortRows.map(sr => {
-            const tr = totalRows.find(t => t.TIME === sr.TIME);
-            if (!tr) return null;
-            const shortVal = parseFloat(sr.DATA_VALUE);
-            const totalVal = parseFloat(tr.DATA_VALUE);
-            if (isNaN(shortVal) || isNaN(totalVal) || totalVal === 0) return null;
-            return {
-                TIME: sr.TIME,
-                DATA_VALUE: ((shortVal / totalVal) * 100).toFixed(1)
-            };
-        }).filter(Boolean);
-
-        return result.length > 0 ? result.reverse() : null;
-    } catch (e) {
-        console.error('❌ [ECOS] 단기외채 비중 계산 에러:', e.message);
-        return null;
-    }
-}
-
-// --- KIS 전용 안정화 통신 유틸리티 (v13 fetch-fallback) ---
+                        cons// --- KIS 전용 안정화 통신 유틸리티 (v15.2 https-request 기반) ---
 async function kisRequest(method, path, headers, params = null) {
     const execute = async (baseUrl) => {
         const isGet = method.toUpperCase() === 'GET';
@@ -533,7 +467,7 @@ async function kisRequest(method, path, headers, params = null) {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
                     ...headers
                 },
-                timeout: 15000 // 15초 타임아웃
+                timeout: 15000 
             };
 
             if (body) {
@@ -551,53 +485,49 @@ async function kisRequest(method, path, headers, params = null) {
                             return;
                         }
                         const parsed = JSON.parse(data);
-                        // [DEBUG] KIS 응답 메시지 실시간 로깅
                         if (parsed.rt_cd && parsed.rt_cd !== '0') {
                            console.log(`📡 [KIS-Debug] ${parsed.tr_id || 'UNK'}: [${parsed.msg_cd}] ${parsed.msg1}`);
                         }
                         resolve(parsed);
                     } catch (e) {
-                        resolve({ error: `JSON Parse Error: ${e.message}`, raw: data });
+                        resolve({ error: `JSON Parse: ${e.message}`, raw: data, statusCode: res.statusCode });
                     }
                 });
             });
 
             req.on('error', e => resolve({ error: `Network Error: ${e.message}` }));
-            req.on('timeout', () => {
-                req.destroy();
-                resolve({ error: 'Request Timeout' });
-            });
-
+            req.on('timeout', () => { req.destroy(); resolve({ error: 'Request Timeout' }); });
             if (body) req.write(body);
             req.end();
         });
     };
 
-    // 1차 시도: 9443 (실전투자 기본 포트)
     let result = await execute(KIS_BASE_URL);
-
-    // 문제 발생 시 443 포트로 우회 (보고서 가이드 준수)
     const isFailed = result.error || (result.rt_cd && result.rt_cd !== '0');
     if (isFailed) {
-        const fallbackBase = KIS_BASE_URL.replace(/:9443$/, ":443") || 'https://openapi.koreainvestment.com:443';
-        const errDetail = result.error || `rt_cd:${result.rt_cd}`;
-        console.log(`ℹ️ [KIS-Net] 우회 시도 (사유:${errDetail}) → ${fallbackBase}`);
+        const errDetail = result.error || `[${result.msg_cd}] ${result.msg1}`;
+        const fallbackBase = 'https://openapi.koreainvestment.com:443';
+        console.log(`ℹ️ [KIS-Net] 우회 시도(사유:${errDetail}) → ${fallbackBase}`);
         result = await execute(fallbackBase);
     }
     return result;
 }
 
+/**
+ * KIS 시장별 투자자 매매동향 (v15.2 최종 성공 버전)
+ * [성공 전략] FID_COND_SCR_DIV_CODE: '20403' 필수
+ */
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
-    
-    // [가이드] 정확한 URL 경로 및 파라미터 (소문자 키 필수)
     const PATH = '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market';
     const PARAMS = {
-        fid_input_iscd: 'KSP',
-        fid_input_iscd_2: '0001'
+        FID_COND_SCR_DIV_CODE: '20403',
+        FID_COND_MRKT_DIV_CODE: 'J',
+        FID_INPUT_ISCD: 'KSP',
+        FID_INPUT_ISCD_2: '0001'
     };
     const HEADERS = {
-        'Authorization': `Bearer ${token}`, // Authorization 대문자 권장
+        'Authorization': `Bearer ${token}`,
         'appkey': KIS_APP_KEY,
         'appsecret': KIS_APP_SECRET,
         'tr_id': 'FHPTJ04030000',
@@ -605,41 +535,34 @@ async function fetchMarketInvestorTrend(token) {
     };
 
     try {
-        // [DEBUG] 요청 직전 상태 로그 추가
         console.log(`🔍 [KIS-Req] TR:${HEADERS.tr_id} PATH:${PATH} PARAMS:${JSON.stringify(PARAMS)}`);
-        
         const data = await kisRequest('GET', PATH, HEADERS, PARAMS);
 
         if (data && data.rt_cd === '0' && data.output && data.output.length > 0) {
             const d = data.output[0];
-            const toEok = v => {
-                const val = parseInt(v || '0');
-                return isNaN(val) ? 0 : Math.round(val / 100); // 백만원 -> 억원 변환
-            };
-
+            const toEok = v => Math.round(parseInt(v || '0') / 100);
             const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-            
             return {
                 foreigner:   [{ date: today, value: toEok(d.frgn_ntby_tr_pbmn) }],
                 institution: [{ date: today, value: toEok(d.orgn_ntby_tr_pbmn) }],
                 individual:  [{ date: today, value: toEok(d.prsn_ntby_tr_pbmn) }],
                 detailed: {
-                    pension: toEok(d.fund_ntby_tr_pbmn),   // 연기금
-                    financial: toEok(d.scrt_ntby_tr_pbmn), // 금융투자
-                    investment: toEok(d.ivtr_ntby_tr_pbmn)  // 투신
+                    pension: toEok(d.fund_ntby_tr_pbmn),
+                    financial: toEok(d.scrt_ntby_tr_pbmn),
+                    investment: toEok(d.ivtr_ntby_tr_pbmn)
                 },
                 status: 'Confirmed', subState: null, realtimeMsg: ''
             };
         } else {
-            // [DEBUG] 상세 실패 메시지 출력
             const msg = data?.error ? String(data.error) : `[${data?.msg_cd}] ${data?.msg1}`;
-            console.warn(`⚠️ [KIS] 시장별 수급 조회 실패: ${msg}`);
+            console.warn(`⚠️ [KIS] 시장별 수급 조회 최종 실패: ${msg}`);
         }
     } catch(e) {
-        console.error('❌ KIS 시장별 수급 에외 발생:', e.message);
+        console.error('❌ KIS 시장별 수급 예외 발생:', e.message);
     }
     return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: 'Exception' };
 }
+
 
 /**
  * KIS API: 국내기관_외국인 매매종목 가집계 (FHPTJ04400000)
