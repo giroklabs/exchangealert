@@ -1937,7 +1937,7 @@ async function main() {
             value: (latest || 0).toLocaleString(),
             diff: parseFloat((latest - (foreignerTrend[1]?.value || latest)).toFixed(2)),
             diffPercent: (foreignerTrend[1]?.value || 0) !== 0 ? parseFloat((( (latest - foreignerTrend[1].value) / Math.abs(foreignerTrend[1].value) ) * 100).toFixed(2)) : 0,
-            trend: latest >= 0 ? 'up' : 'down',
+            trend: (latest - (foreignerTrend[1]?.value || latest)) >= 0 ? 'up' : 'down',
             realizedImpact,
             history: foreignerTrend.map(d => ({ date: d.date, value: d.value })).reverse()
         });
@@ -1969,7 +1969,7 @@ async function main() {
             value: (latest || 0).toLocaleString(),
             diff: parseFloat((latest - (institutionTrend[1]?.value || latest)).toFixed(2)),
             diffPercent: (institutionTrend[1]?.value || 0) !== 0 ? parseFloat((( (latest - institutionTrend[1].value) / Math.abs(institutionTrend[1].value) ) * 100).toFixed(2)) : 0,
-            trend: latest >= 0 ? 'up' : 'down',
+            trend: (latest - (institutionTrend[1]?.value || latest)) >= 0 ? 'up' : 'down',
             history: institutionTrend.map(d => ({ date: d.date, value: d.value })).reverse()
         });
 
@@ -1993,7 +1993,7 @@ async function main() {
             value: (latest || 0).toLocaleString(),
             diff: parseFloat((latest - (individualTrend[1]?.value || latest)).toFixed(2)),
             diffPercent: (individualTrend[1]?.value || 0) !== 0 ? parseFloat((( (latest - individualTrend[1].value) / Math.abs(individualTrend[1].value) ) * 100).toFixed(2)) : 0,
-            trend: latest >= 0 ? 'up' : 'down',
+            trend: (latest - (individualTrend[1]?.value || latest)) >= 0 ? 'up' : 'down',
             history: individualTrend.map(d => ({ date: d.date, value: d.value })).reverse()
         });
     }
