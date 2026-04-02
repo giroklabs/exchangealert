@@ -119,7 +119,9 @@ const FRED_SERIES = [
     { id: 'KOSPI_NIGHT', name: '코스피 야간선물(ETN)', unit: '원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '야간 시간대 코스피 선물 흐름 추종 (KB 레버리지)', realtimeSymbol: '580039.KS', historySymbol: '122630.KS', fredId: null },
     { id: 'NASDAQ', name: '나스닥 종합지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 기술주 심리 및 성장성 지표', realtimeSymbol: '^IXIC', fredId: null },
     { id: 'SP500', name: 'S&P 500 지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'S&P', description: '미국 대형주 중심 글로벌 증시 벤치마크', realtimeSymbol: '^GSPC', fredId: null },
-    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업황 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
+    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업업 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
+    { id: 'nasdaq-futures', name: '나스닥 100 선물', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'CME', description: '미국 나스닥 100 지수 추종 선물 (실시간 글로벌 심리)', realtimeSymbol: 'NQ=F', fredId: null },
+    { id: 'sp500-futures', name: 'S&P 500 선물', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'CME', description: '미국 S&P 500 지수 추종 선물 (전 세계 증시 나침반)', realtimeSymbol: 'ES=F', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
     // --- 금리 기대 산출용 (hidden: AI 분석 내부 계산용, 대시보드 미표시) ---
     { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치 (GS1-EFFR 스프레드로 금리인하 기대 산출)', fredId: 'DGS1', hidden: true },
@@ -1113,6 +1115,8 @@ ${usdKrwHistory.slice(0, 30).map(h => `${h.date}: ${h.value}원`).join('\n')}
 ${kospiHistory.slice(0, 30).map(h => `${h.value}pt`).join('\n')}
 
 분석 가이드 (심층 추론 필수):
+0. [시장 세션 컨텍스트]: 현재 한국 시장이 운영 중인 시간대라면, 미국 지수(^IXIC, ^GSPC, ^SOX)는 '이미 마감된 어제의 데이터'임을 명심하세요. 반면 미국 선물(NQ=F, ES=F)은 '현재 실시간 데이터'입니다. 만약 지수는 올랐는데 선물과 코스피가 내리고 있다면, 이는 모순이 아니라 최신 선물 흐름이 코스피에 반영되고 있는 정상적인 상황입니다. 실시간 선물 방향성에 더 높은 가중치를 두세요.
+
 1. 각 섹션은 반드시 다음의 헤더로 시작하여 명확히 구분하세요:
    [파트A: 원/달러 환율 분석]
    [파트B: 코스피(KOSPI) 분석]
