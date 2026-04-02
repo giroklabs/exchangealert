@@ -101,7 +101,8 @@ const FACTOR_BLOCKS = {
     RATES_DOLLAR: { id: 'rates-dollar', name: '금리·달러 블록', description: '캐리/글로벌 달러 사이클 요인' },
     RISK: { id: 'risk', name: '리스크 블록', description: '리스크온/오프, 안전통화 수요' },
     ASSETS: { id: 'assets', name: '한국 자산 블록', description: '자본유출입, 한국 위험자산 선호도' },
-    FUNDING_POLICY: { id: 'funding-policy', name: '펀딩·정책 블록', description: '유동성·신용/정책에 따른 변동성' }
+    FUNDING_POLICY: { id: 'funding-policy', name: '펀딩·정책 블록', description: '유동성·신용/정책에 따른 변동성' },
+    GLOBAL_INDICES: { id: 'global-indices', name: '글로벌 지수 블록', description: '미국 및 글로벌 주요 증시 지수 (국내 시장 선행 지표)' }
 };
 
 // 2. 해외지표 (FRED)
@@ -116,7 +117,9 @@ const FRED_SERIES = [
     { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', fredId: 'DTB3' },
     { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
     { id: 'KOSPI_NIGHT', name: '코스피 야간선물(ETN)', unit: '원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '야간 시간대 코스피 선물 흐름 추종 (KB 레버리지)', realtimeSymbol: '580039.KS', historySymbol: '122630.KS', fredId: null },
-    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업황 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
+    { id: 'NASDAQ', name: '나스닥 종합지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 기술주 심리 및 성장성 지표', realtimeSymbol: '^IXIC', fredId: null },
+    { id: 'SP500', name: 'S&P 500 지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'S&P', description: '미국 대형주 중심 글로벌 증시 벤치마크', realtimeSymbol: '^GSPC', fredId: null },
+    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업황 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
     // --- 금리 기대 산출용 (hidden: AI 분석 내부 계산용, 대시보드 미표시) ---
     { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치 (GS1-EFFR 스프레드로 금리인하 기대 산출)', fredId: 'DGS1', hidden: true },
@@ -1403,7 +1406,8 @@ async function main() {
         'rates-dollar': { up: 0, down: 0 },
         'risk': { up: 0, down: 0 },
         'assets': { up: 0, down: 0 },
-        'funding-policy': { up: 0, down: 0 }
+        'funding-policy': { up: 0, down: 0 },
+        'global-indices': { up: 0, down: 0 }
     };
 
     const kospiScores = { up: 0, down: 0 }; // 코스피 상승요인 점수

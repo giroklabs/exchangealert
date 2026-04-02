@@ -314,15 +314,20 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* 블록별 섹션 */}
-                {['rates-dollar', 'risk', 'assets', 'funding-policy'].map((blockId) => (
+                {['rates-dollar', 'risk', 'assets', 'funding-policy', 'global-indices'].map((blockId) => (
                     <section key={blockId} className={`p-6 rounded-2xl shadow-xl border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                         <div className="flex items-center gap-3 mb-4">
                             {blockId === 'rates-dollar' ? <Globe className="w-5 h-5 text-slate-400" /> : 
                              blockId === 'risk' ? <AlertCircle className="w-5 h-5 text-slate-400" /> : 
                              blockId === 'assets' ? <Compass className="w-5 h-5 text-slate-400" /> : 
+                             blockId === 'global-indices' ? <TrendingUp className="w-5 h-5 text-slate-400" /> :
                              <ShieldCheck className="w-5 h-5 text-slate-400" />}
                             <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
-                                {blockId === 'rates-dollar' ? '금리·달러 블록' : blockId === 'risk' ? '리스크 블록' : blockId === 'assets' ? '한국 자산 블록' : '펀딩·정책 블록'}
+                                {blockId === 'rates-dollar' ? '금리·달러 블록' : 
+                                 blockId === 'risk' ? '리스크 블록' : 
+                                 blockId === 'assets' ? '한국 자산 블록' : 
+                                 blockId === 'global-indices' ? '글로벌 지수 블록' :
+                                 '펀딩·정책 블록'}
                             </h2>
                         </div>
                         <div className="grid grid-cols-1 gap-4">
