@@ -591,12 +591,21 @@ async function kisRequest(method, path, headers, params = null) {
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
     
-    // [v15.4 원복 전략] 명세서의 기본 파라미터 2개만 전송하여 서버 반응 확인
+    // [v15.6 최종 성공 전략] 날짜 필드와 시장구분(U)이 포함된 5종 필수 세트
     const PATH = '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market';
+    const now = new Date();
+    const todayStr = now.getFullYear() + 
+                     String(now.getMonth() + 1).padStart(2, '0') + 
+                     String(now.getDate()).padStart(2, '0');
+
     const PARAMS = {
-        FID_INPUT_ISCD: 'KSP',
-        FID_INPUT_ISCD_2: '0001'
+        FID_COND_MRKT_DIV_CODE: 'U',    // [핵심] 지수/업종 조회 시 U (Stock은 J)
+        FID_COND_SCR_DIV_CODE: '20403', // [핵심] HTS 화면코드
+        FID_INPUT_ISCD: '0001',          // KOSPI 종합지수
+        FID_INPUT_DATE_1: todayStr,     // [필수] 조회 시작일
+        FID_INPUT_DATE_2: todayStr      // [필수] 조회 종료일
     };
+
     const HEADERS = {
         'Authorization': `Bearer ${token}`,
         'appkey': KIS_APP_KEY,
