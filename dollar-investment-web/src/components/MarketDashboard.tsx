@@ -132,7 +132,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
             </div>
 
             {/* 시장 향방 예측 섹션 */}
-            <div className={`rounded-2xl shadow-xl border overflow-hidden transition-all duration-300 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+            <div className={`rounded-2xl shadow-xl border transition-all duration-300 ${isPredictionExpanded ? 'overflow-visible' : 'overflow-hidden'} ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <button
                     onClick={() => setIsPredictionExpanded(!isPredictionExpanded)}
                     className={`w-full px-6 py-4 flex items-center justify-between font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${theme === 'dark' ? 'text-white border-b border-gray-700' : 'text-gray-800 border-b border-gray-100'
@@ -147,7 +147,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                     </div>
                 </button>
 
-                <div className={`transition-all duration-500 ease-in-out ${isPredictionExpanded ? 'max-h-[8000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                <div className={`transition-all duration-500 ease-in-out ${isPredictionExpanded ? 'max-h-[20000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                     <div className="p-6">
                         <div className="flex flex-col md:flex-row items-center gap-8">
                             <div className="flex-1 w-full space-y-4">
