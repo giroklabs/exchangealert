@@ -1760,6 +1760,8 @@ async function main() {
         if (creditMarginData) {
             const latest = creditMarginData[0].value;
             const prev = creditMarginData.length > 1 ? creditMarginData[1].value : latest;
+            const diff = parseFloat((latest - prev).toFixed(2));
+            const diffPercent = prev !== 0 ? parseFloat(((diff / prev) * 100).toFixed(2)) : 0;
             const trend = latest >= prev ? 'up' : 'down';
             
             // 신용융자 증가 -> 리스크 증가 (+1.5), 코스피 하락 요인 (-2.0)
@@ -1777,6 +1779,8 @@ async function main() {
                 source: creditSource,
                 description: '개인 투자자의 부채 이용 주식 매수 규모, 급증 시 시장 과열 및 반대매매 리스크',
                 value: latest.toLocaleString(),
+                diff,
+                diffPercent,
                 trend,
                 history: [...creditMarginData].reverse()
             });
@@ -2001,18 +2005,29 @@ async function main() {
 
     if (sofr && dtb3 && effr) {
         const calculateSpread = (id, name, base, ref, desc) => {
-            const val = (base.value - ref.value).toFixed(3);
-            const prevVal = (base.history[1]?.value - ref.history[1]?.value) || val;
+            const val = parseFloat((base.value - ref.value).toFixed(3));
+            let prevVal;
+            if (base.history && base.history.length > 1 && ref.history && ref.history.length > 1) {
+                // history는 과거->최신 순이므로 마지막이 최신, 마지막-1이 전일
+                const bHistory = base.history;
+                const rHistory = ref.history;
+                prevVal = (bHistory[bHistory.length - 2].value - rHistory[rHistory.length - 2].value);
+            } else {
+                prevVal = val;
+            }
+            
+            const diff = parseFloat((val - prevVal).toFixed(3));
+            const diffPercent = prevVal !== 0 ? parseFloat(((diff / prevVal) * 100).toFixed(2)) : 0;
             const trend = val > prevVal ? 'up' : (val < prevVal ? 'down' : 'neutral');
             
             let spreadWeight = 1.0;
-            if (parseFloat(val) > 0.5) spreadWeight *= 2.0; // 50bp 돌파 시 리스크 가중
+            if (val > 0.5) spreadWeight *= 2.0;
 
             blockScores['risk'].up += (trend === 'up' ? 1.5 : 0.5) * spreadWeight;
             
             indicators.push({
                 id, name, unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: '계산치',
-                description: desc, value: val, trend, realizedImpact: trend,
+                description: desc, value: val.toFixed(3), diff, diffPercent, trend, realizedImpact: trend,
                 history: base.history.map((h, idx) => {
                     // 역순 탐색으로 가장 가까운 시점의 참조 데이터를 찾음
                     const rh = [...ref.history].reverse().find(r => r.date <= h.date) || ref.history[0];
