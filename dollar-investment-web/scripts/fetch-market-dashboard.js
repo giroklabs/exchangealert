@@ -114,7 +114,7 @@ const FRED_SERIES = [
     { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '담보 유동성 지표', fredId: 'SOFR' },
     { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', fredId: 'EFFR' },
     { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', fredId: 'DTB3' },
-    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'KRX', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
+    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
     { id: 'KOSPI_NIGHT', name: '코스피 야간선물(ETN)', unit: '원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '야간 시간대 코스피 선물 흐름 추종 (KB 레버리지)', realtimeSymbol: '580039.KS', fredId: null },
     { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업황 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
