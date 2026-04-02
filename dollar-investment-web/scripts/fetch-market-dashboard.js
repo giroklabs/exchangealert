@@ -29,7 +29,35 @@ if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.")
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC']; // 마감 후 업데이트되는 미국 지표
+const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC'];
+
+// [v17.0] KOSPI 투자자별 매매동향 기반 데이터 (단위: 억원)
+const KOSPI_INVESTOR_HISTORY = {
+    institution: [
+        { date: '2026-04-02', value: -14517 }, { date: '2026-04-01', value: 40419 }, { date: '2026-03-31', value: 10251 }, { date: '2026-03-30', value: 8450 },
+        { date: '2026-03-27', value: 7785 }, { date: '2026-03-26', value: -2999 }, { date: '2026-03-25', value: 23230 }, { date: '2026-03-24', value: 9683 },
+        { date: '2026-03-23', value: -38173 }, { date: '2026-03-20', value: -10260 }, { date: '2026-03-19', value: -6649 }, { date: '2026-03-18', value: 31093 },
+        { date: '2026-03-17', value: 7341 }, { date: '2026-03-16', value: 911 }, { date: '2026-03-13', value: -10434 }, { date: '2026-03-12', value: 775 },
+        { date: '2026-03-11', value: 7821 }, { date: '2026-03-10', value: 9164 }, { date: '2026-03-09', value: -15441 }, { date: '2026-03-06', value: -11142 },
+        { date: '2026-03-05', value: -17186 }, { date: '2026-03-04', value: -5978 }, { date: '2026-03-03', value: -8859 }, { date: '2026-02-27', value: 5666 }
+    ],
+    individual: [
+        { date: '2026-04-02', value: 12097 }, { date: '2026-04-01', value: -37628 }, { date: '2026-03-31', value: 24400 }, { date: '2026-03-30', value: 8945 },
+        { date: '2026-03-27', value: 22596 }, { date: '2026-03-26', value: 30598 }, { date: '2026-03-25', value: -13402 }, { date: '2026-03-24', value: 7270 },
+        { date: '2026-03-23', value: 70029 }, { date: '2026-03-20', value: 22338 }, { date: '2026-03-19', value: 24116 }, { date: '2026-03-18', value: -38717 },
+        { date: '2026-03-17', value: -5752 }, { date: '2026-03-16', value: 7164 }, { date: '2026-03-13', value: 24512 }, { date: '2026-03-12', value: 22291 },
+        { date: '2026-03-11', value: -5086 }, { date: '2026-03-10', value: -18340 }, { date: '2026-03-09', value: 46242 }, { date: '2026-03-06', value: 29488 },
+        { date: '2026-03-05', value: 18228 }, { date: '2026-03-04', value: 796 }, { date: '2026-03-03', value: 57974 }, { date: '2026-02-27', value: 62496 }
+    ],
+    foreigner: [
+        { date: '2026-04-02', value: -1368 }, { date: '2026-04-01', value: -6411 }, { date: '2026-03-31', value: -38386 }, { date: '2026-03-30', value: -20945 },
+        { date: '2026-03-27', value: -34286 }, { date: '2026-03-26', value: -29370 }, { date: '2026-03-25', value: -12895 }, { date: '2026-03-24', value: -19863 },
+        { date: '2026-03-23', value: -36751 }, { date: '2026-03-20', value: -12402 }, { date: '2026-03-19', value: -18760 }, { date: '2026-03-18', value: 8802 },
+        { date: '2026-03-17', value: -1740 }, { date: '2026-03-16', value: -8485 }, { date: '2026-03-13', value: -14502 }, { date: '2026-03-12', value: -23831 },
+        { date: '2026-03-11', value: -2563 }, { date: '2026-03-10', value: 10283 }, { date: '2026-03-09', value: -31735 }, { date: '2026-03-06', value: -19411 },
+        { date: '2026-03-05', value: -1446 }, { date: '2026-03-04', value: 2303 }, { date: '2026-03-03', value: -51487 }, { date: '2026-02-27', value: -70528 }
+    ]
+};
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
@@ -655,15 +683,31 @@ async function fetchMarketInvestorTrend() {
         const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
         console.log(`✅ [Samsung-Scrape] KOSPI 수급 데이터 획득: 개 ${result.personal}, 외 ${result.foreigner}, 기 ${result.institution}`);
         
+        const mergeHistory = (type, currentVal) => {
+            const hist = [...KOSPI_INVESTOR_HISTORY[type]];
+            // 오늘 날짜 데이터가 히스토리에 이미 있으면 실시간 값으로 업데이트, 없으면 앞에 추가
+            if (hist.length > 0 && hist[0].date === today) {
+                hist[0].value = currentVal;
+            } else {
+                hist.unshift({ date: today, value: currentVal });
+            }
+            return hist;
+        };
+
         return {
-            foreigner:   [{ date: today, value: result.foreigner }],
-            institution: [{ date: today, value: result.institution }],
-            individual:  [{ date: today, value: result.personal }],
+            foreigner:   mergeHistory('foreigner', result.foreigner),
+            institution: mergeHistory('institution', result.institution),
+            individual:  mergeHistory('individual', result.personal),
             status: 'Confirmed', subState: null, realtimeMsg: ''
         };
     } catch (e) {
         console.error('❌ [Samsung-Scrape] 삼성증권 수집 실패:', e.message);
-        return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: 'SamsungScrapeOffline' };
+        return { 
+            foreigner: KOSPI_INVESTOR_HISTORY.foreigner, 
+            institution: KOSPI_INVESTOR_HISTORY.institution, 
+            individual: KOSPI_INVESTOR_HISTORY.individual,
+            status: 'Error', subState: null, realtimeMsg: 'SamsungScrapeOffline' 
+        };
     }
 }
 
@@ -1891,6 +1935,8 @@ async function main() {
             status: invStatus,
             description: `KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)`,
             value: (latest || 0).toLocaleString(),
+            diff: parseFloat((latest - (foreignerTrend[1]?.value || latest)).toFixed(2)),
+            diffPercent: (foreignerTrend[1]?.value || 0) !== 0 ? parseFloat((( (latest - foreignerTrend[1].value) / Math.abs(foreignerTrend[1].value) ) * 100).toFixed(2)) : 0,
             trend: latest >= 0 ? 'up' : 'down',
             realizedImpact,
             history: foreignerTrend.map(d => ({ date: d.date, value: d.value }))
@@ -1921,12 +1967,35 @@ async function main() {
             status: invStatus,
             description: `KOSPI 시장 전체 기관 실시간 누적 순매수 대금${detailTxt}`,
             value: (latest || 0).toLocaleString(),
+            diff: parseFloat((latest - (institutionTrend[1]?.value || latest)).toFixed(2)),
+            diffPercent: (institutionTrend[1]?.value || 0) !== 0 ? parseFloat((( (latest - institutionTrend[1].value) / Math.abs(institutionTrend[1].value) ) * 100).toFixed(2)) : 0,
             trend: latest >= 0 ? 'up' : 'down',
             history: institutionTrend.map(d => ({ date: d.date, value: d.value }))
         });
 
         if (latest > 200) kospiScores.up += 2.0;
         else if (latest < -200) kospiScores.down += 2.0;
+    }
+
+    // 3. 시장 전체 개인 수급
+    const individualTrend = investorTrend?.individual;
+    if (individualTrend && individualTrend.length > 0) {
+        const latest = individualTrend[0].value;
+        indicators.push({
+            id: 'individual-net-buy-market',
+            name: 'KOSPI 개인 (실시간)',
+            unit: '억원',
+            block: FACTOR_BLOCKS.ASSETS.id,
+            impact: 'down',
+            source: '삼성증권 실시간',
+            status: invStatus,
+            description: `KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)`,
+            value: (latest || 0).toLocaleString(),
+            diff: parseFloat((latest - (individualTrend[1]?.value || latest)).toFixed(2)),
+            diffPercent: (individualTrend[1]?.value || 0) !== 0 ? parseFloat((( (latest - individualTrend[1].value) / Math.abs(individualTrend[1].value) ) * 100).toFixed(2)) : 0,
+            trend: latest >= 0 ? 'up' : 'down',
+            history: individualTrend.map(d => ({ date: d.date, value: d.value }))
+        });
     }
 
     // 🌟 [추가] 삼성전자 가집계 데이터 반영 (v15.0 - 교차 검증용)
