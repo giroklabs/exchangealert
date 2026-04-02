@@ -506,7 +506,10 @@ async function fetchShortDebtRatio() {
 async function kisRequest(method, path, headers, params = null) {
     const execute = async (baseUrl) => {
         const isGet = method.toUpperCase() === 'GET';
-        const urlObj = new URL(`${baseUrl}${path}`);
+        // [체크] baseUrl 끝에 /가 있고 path 시작에 /가 있으면 중복 제거
+        const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+        const cleanPath = path.startsWith('/') ? path : `/${path}`;
+        const urlObj = new URL(`${cleanBase}${cleanPath}`);
         let fullUrl = urlObj.toString();
         
         if (isGet && params) {
@@ -547,7 +550,12 @@ async function kisRequest(method, path, headers, params = null) {
                             resolve({ error: `Empty Response (HTTP ${res.statusCode})` });
                             return;
                         }
-                        resolve(JSON.parse(data));
+                        const parsed = JSON.parse(data);
+                        // [DEBUG] KIS 응답 메시지 실시간 로깅
+                        if (parsed.rt_cd && parsed.rt_cd !== '0') {
+                           console.log(`📡 [KIS-Debug] ${parsed.tr_id || 'UNK'}: [${parsed.msg_cd}] ${parsed.msg1}`);
+                        }
+                        resolve(parsed);
                     } catch (e) {
                         resolve({ error: `JSON Parse Error: ${e.message}`, raw: data });
                     }
@@ -581,25 +589,29 @@ async function kisRequest(method, path, headers, params = null) {
 
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
+    
+    // [가이드] 정확한 URL 경로 및 파라미터 (소문자 키 필수)
+    const PATH = '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market';
+    const PARAMS = {
+        fid_input_iscd: 'KSP',
+        fid_input_iscd_2: '0001'
+    };
+    const HEADERS = {
+        'Authorization': `Bearer ${token}`, // Authorization 대문자 권장
+        'appkey': KIS_APP_KEY,
+        'appsecret': KIS_APP_SECRET,
+        'tr_id': 'FHPTJ04030000',
+        'custtype': 'P'
+    };
+
     try {
-        const data = await kisRequest(
-            'GET',
-            '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market', 
-            {
-                'Authorization': `Bearer ${token}`,
-                'appkey': KIS_APP_KEY,
-                'appsecret': KIS_APP_SECRET,
-                'tr_id': 'FHPTJ04030000',
-                'custtype': 'P'
-            },
-            {
-                fid_input_iscd: 'KSP',       // [가이드] 소문자 키 및 시장 코드 KSP
-                fid_input_iscd_2: '0001'     // [가이드] 소문자 키
-            }
-        );
+        // [DEBUG] 요청 직전 상태 로그 추가
+        console.log(`🔍 [KIS-Req] TR:${HEADERS.tr_id} PATH:${PATH} PARAMS:${JSON.stringify(PARAMS)}`);
+        
+        const data = await kisRequest('GET', PATH, HEADERS, PARAMS);
 
         if (data && data.rt_cd === '0' && data.output && data.output.length > 0) {
-            const d = data.output[0];      // 시장별 API는 배열의 첫 번째가 당일 누계
+            const d = data.output[0];
             const toEok = v => {
                 const val = parseInt(v || '0');
                 return isNaN(val) ? 0 : Math.round(val / 100); // 백만원 -> 억원 변환
@@ -619,11 +631,12 @@ async function fetchMarketInvestorTrend(token) {
                 status: 'Confirmed', subState: null, realtimeMsg: ''
             };
         } else {
-            const msg = data?.error || data?.msg1 || "Unknown Error";
+            // [DEBUG] 상세 실패 메시지 출력
+            const msg = data?.error ? String(data.error) : `[${data?.msg_cd}] ${data?.msg1}`;
             console.warn(`⚠️ [KIS] 시장별 수급 조회 실패: ${msg}`);
         }
     } catch(e) {
-        console.error('❌ KIS 시장별 수급 에러:', e.message);
+        console.error('❌ KIS 시장별 수급 에외 발생:', e.message);
     }
     return { foreigner: [], institution: [], status: 'Error', subState: null, realtimeMsg: 'Exception' };
 }
