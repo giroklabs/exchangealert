@@ -1553,6 +1553,8 @@ async function main() {
         const numVal = currentPoint.value;
         const prevVal = cleanedObs.length > 1 ? cleanedObs[1].value : numVal;
         const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
+        const diff = parseFloat((numVal - prevVal).toFixed(2));
+        const diffPercent = prevVal !== 0 ? parseFloat(((diff / prevVal) * 100).toFixed(2)) : 0;
 
         const history = cleanedObs.slice(0, 10).reverse();
         
@@ -1621,12 +1623,12 @@ async function main() {
         if (!s.hidden) {
             // 코스피 지수의 경우 KIS 연동 여부에 따라 소스 표기 차별화
             const finalSource = (s.id === 'KOSPI' && s.isRealtime) ? 'Yahoo Finance 실시간' : (s.source || 'FRED');
-            indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, trend, realizedImpact, history, source: finalSource });
+            indicators.push({ ...s, id: s.id.toLowerCase(), value: displayVal, diff, diffPercent, trend, realizedImpact, history, source: finalSource });
             const latestDate = obs.length > 0 ? obs[0].date : 'N/A';
             console.log(`✅ [FRED/RT] ${s.name}: ${displayVal} (${latestDate}, Z:${zScore.toFixed(2)}) - Source: ${finalSource}`);
         } else {
             // 히든 지표도 데이터는 보유 (계산용)
-            indicators.push({ ...s, id: s.id.toLowerCase(), value: numVal, trend, realizedImpact, history, isInternal: true });
+            indicators.push({ ...s, id: s.id.toLowerCase(), value: numVal, diff, diffPercent, trend, realizedImpact, history, isInternal: true });
         }
     }
 
@@ -1656,7 +1658,7 @@ async function main() {
             }
         }
         
-        let val, trend, displayVal, history;
+        let val, trend, displayVal, history, diff, diffPercent;
 
         if (rows && rows.length > 0) {
             val = parseFloat(String(rows[0].DATA_VALUE).replace(/,/g, ''));
@@ -1670,12 +1672,18 @@ async function main() {
                 val = Math.round(val / 100000);
             }
 
-            trend = rows.length > 1 ? (() => {
+            const calcRes = rows.length > 1 ? (() => {
                 let prevVal = parseFloat(String(rows[1].DATA_VALUE).replace(/,/g, ''));
                 if (item.transform === 'wonToEok') prevVal = Math.round(prevVal / 100000000);
                 else if (item.transform === 'thousandUsdToEokUsd') prevVal = Math.round(prevVal / 100000);
-                return val > prevVal ? 'up' : (val < prevVal ? 'down' : 'neutral');
-            })() : 'neutral';
+                const d = parseFloat((val - prevVal).toFixed(2));
+                const dp = prevVal !== 0 ? parseFloat(((d / prevVal) * 100).toFixed(2)) : 0;
+                return { diff: d, diffPercent: dp, trend: val > prevVal ? 'up' : (val < prevVal ? 'down' : 'neutral') };
+            })() : { diff: 0, diffPercent: 0, trend: 'neutral' };
+            
+            diff = calcRes.diff;
+            diffPercent = calcRes.diffPercent;
+            trend = calcRes.trend;
             displayVal = val.toLocaleString();
             // ECOS 데이터 히스토리 매핑 및 날짜 포맷 정문화 (YYYYMMDD -> YYYY-MM-DD)
             history = rows.slice(0, 10).map(r => {
@@ -1728,7 +1736,7 @@ async function main() {
         const realizedImpact = trend === 'neutral' ? 'neutral' : 
             ((item.impact === 'up' && trend === 'up') || (item.impact === 'down' && trend === 'down') ? 'up' : 'down');
 
-        indicators.push({ ...item, value: displayVal, trend, realizedImpact, history });
+        indicators.push({ ...item, value: displayVal, diff, diffPercent, trend, realizedImpact, history });
         const latestDate = history.length > 0 ? history[0].date : 'N/A';
         const statusIcon = rows && rows.length > 0 ? '✅' : '⚠️';
         const dataSource = rows && rows.length > 0 ? 'ECOS' : 'Fallback';

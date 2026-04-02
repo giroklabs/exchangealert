@@ -359,10 +359,16 @@ function IndicatorCard({ indicator, theme }: { indicator: MarketIndicator, theme
                         {indicator.description}
                     </p>
                 </div>
-                <div className="text-right min-w-[100px]">
-                    <div className={`text-xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                        {indicator.value}{indicator.unit}
+                <div className="text-right min-w-[120px]">
+                    <div className={`text-[22px] font-black leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {indicator.value}<span className="text-xs ml-0.5 font-bold opacity-60">{indicator.unit}</span>
                     </div>
+                    {indicator.diffPercent !== undefined && indicator.diffPercent !== 0 && (
+                        <div className={`text-xs font-bold mt-1 flex items-center justify-end gap-1 ${indicator.trend === 'up' ? 'text-red-500' : indicator.trend === 'down' ? 'text-blue-500' : 'text-gray-400'}`}>
+                            {indicator.trend === 'up' ? '▲' : indicator.trend === 'down' ? '▼' : ''} 
+                            {Math.abs(indicator.diffPercent).toFixed(2)}%
+                        </div>
+                    )}
                 </div>
             </div>
 
