@@ -701,39 +701,6 @@ async function fetchStockProvisionalTrend(token, iscd = "005930") {
     return null;
 }
 
-/**
- * KIS API: 주식현재가 투자자 (FHKST01010900)
- * 종목별 확정치 (장 종료 후 제공)
- */
-async function fetchStockInvestorTrend(token, iscd = "005930") {
-    if (!token) return null;
-    try {
-        const data = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-investor", {
-            "Authorization": `Bearer ${token}`,
-            "appkey": KIS_APP_KEY,
-            "appsecret": KIS_APP_SECRET,
-            "tr_id": "FHKST01010900",
-            "custtype": "P"
-        }, {
-            FID_COND_MRKT_DIV_CODE: "J",
-            FID_INPUT_ISCD: iscd
-        });
-
-        if (data && data.rt_cd === '0' && data.output && data.output.length > 0) {
-            return data.output.map(d => ({
-                date: (d.stck_bsop_date || "").replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-                foreigner: parseInt(d.frgn_ntby_qty),
-                institution: parseInt(d.orgn_ntby_qty),
-                individual: parseInt(d.indv_ntby_qty),
-                foreignerAmount: Math.round(parseInt(d.frgn_ntby_tr_pbmn) / 100), // 백만원 -> 억원
-                institutionAmount: Math.round(parseInt(d.orgn_ntby_tr_pbmn) / 100)
-            })).slice(0, 14);
-        }
-    } catch (e) {
-        console.error(`❌ KIS 종목 투자자 조회 에러 (${iscd}):`, e.message);
-    }
-    return null;
-}
 
 
 
@@ -1410,7 +1377,6 @@ async function main() {
     const marketStats = kisToken ? await fetchMarketStats(kisToken) : null;
     const investorTrend = await fetchMarketInvestorTrend();
     const samsungProvisional = kisToken ? await fetchStockProvisionalTrend(kisToken, "005930") : null;
-    const samsungInvestor = kisToken ? await fetchStockInvestorTrend(kisToken, "005930") : null;
     const programTrading = kisToken ? await fetchProgramTrading(kisToken) : null;
     const bondRates = kisToken ? await fetchBondRates(kisToken) : null;
     const freesisDeposits = await fetchFromFreeSIS();
@@ -1775,7 +1741,7 @@ async function main() {
             unit: '주',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: 'KIS 장중 가집계',
+            source: '삼성증권',
             description: `장중 주요 기관 수급 추정치 (현재 ${timeStr} 기준)`,
             value: `외:${(foreignerQty/10000).toFixed(1)}만 / 기:${(institutionQty/10000).toFixed(1)}만`,
             trend: (foreignerQty + institutionQty) > 0 ? 'up' : 'down',
@@ -1806,7 +1772,7 @@ async function main() {
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: 'KIS [0403]',
+            source: '삼성증권',
             status: invStatus,
             description: `KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)`,
             value: (latest || 0).toLocaleString(),
@@ -1836,7 +1802,7 @@ async function main() {
             unit: '억원',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: 'KIS [0403]',
+            source: '삼성증권',
             status: invStatus,
             description: `KOSPI 시장 전체 기관 실시간 누적 순매수 대금${detailTxt}`,
             value: (latest || 0).toLocaleString(),
@@ -1860,7 +1826,7 @@ async function main() {
             unit: '주',
             block: FACTOR_BLOCKS.ASSETS.id,
             impact: 'down',
-            source: 'KIS [0440]',
+            source: '삼성증권',
             description: `삼성전자 종목별 실시간 수입/수급 가집계 신호: ${signal}`,
             value: `외:${(foreignerQty/10000).toFixed(1)}만 / 기:${(institutionQty/10000).toFixed(1)}만`,
             trend: signalType,
@@ -1872,25 +1838,6 @@ async function main() {
         });
     }
 
-    // 🌟 [추가] 삼성전자 확정 수급 (FHKST01010900) - 히스토리용
-    if (samsungInvestor && samsungInvestor.length > 0) {
-        const latestVal = samsungInvestor[0].foreignerAmount + samsungInvestor[0].institutionAmount;
-        indicators.push({
-            id: 'samsung-investor-amount',
-            name: '삼성전자 외인/기관 합계 (확정)',
-            unit: '억원',
-            block: FACTOR_BLOCKS.ASSETS.id,
-            impact: 'down',
-            source: 'KIS 종목별투자자',
-            description: '삼성전자 일별 외국인/기관 순매수 대금 합계',
-            value: latestVal > 0 ? `+${latestVal.toLocaleString()}` : latestVal.toLocaleString(),
-            trend: latestVal > 0 ? 'up' : 'down',
-            history: samsungInvestor.map(d => ({
-                date: d.date,
-                value: d.foreignerAmount + d.institutionAmount
-            })).reverse()
-        });
-    }
 
 
     // 2.2 한·미 금리차 산출 (US 10Y - KR 10Y)
