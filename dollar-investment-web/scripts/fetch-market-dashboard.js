@@ -552,6 +552,7 @@ async function kisRequest(method, path, headers, params = null) {
                         const parsed = JSON.parse(data);
                         if (parsed.rt_cd && parsed.rt_cd !== '0') {
                            console.log(`📡 [KIS-Debug] ${parsed.tr_id || 'UNK'}: [${parsed.msg_cd}] ${parsed.msg1}`);
+                           console.log(`🔗 [KIS-DebugURL] ${method} ${fullUrl}`); // 실패 시 전체 URL 노출
                         }
                         resolve(parsed);
                     } catch (e) {
@@ -567,9 +568,14 @@ async function kisRequest(method, path, headers, params = null) {
         });
     };
 
+    // 1차 시도: 9443 (실전투자 기본 포트)
     let result = await execute(KIS_BASE_URL);
+
+    // 문제 발생 시 443 포트로 우회 (단, 404가 확실시되는 시세 API 경로는 제외)
     const isFailed = result.error || (result.rt_cd && result.rt_cd !== '0');
-    if (isFailed) {
+    const isQuotation = path.includes('/quotations/');
+
+    if (isFailed && !isQuotation) {
         const errDetail = result.error || `[${result.msg_cd}] ${result.msg1}`;
         const fallbackBase = 'https://openapi.koreainvestment.com:443';
         console.log(`ℹ️ [KIS-Net] 우회 시도(사유:${errDetail}) → ${fallbackBase}`);
@@ -584,10 +590,10 @@ async function kisRequest(method, path, headers, params = null) {
  */
 async function fetchMarketInvestorTrend(token) {
     if (!token) return null;
+    
+    // [v15.4 원복 전략] 명세서의 기본 파라미터 2개만 전송하여 서버 반응 확인
     const PATH = '/uapi/domestic-stock/v1/quotations/inquire-investor-time-by-market';
     const PARAMS = {
-        FID_COND_SCR_DIV_CODE: '20403',
-        FID_COND_MRKT_DIV_CODE: 'J',
         FID_INPUT_ISCD: 'KSP',
         FID_INPUT_ISCD_2: '0001'
     };
