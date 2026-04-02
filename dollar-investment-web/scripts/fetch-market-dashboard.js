@@ -356,7 +356,7 @@ function detectCompoundSignals(indicators) {
     const vix       = val('vixcls');
     const dxy       = val('dxy');
     const hySpread  = val('bamlh0a0hym2'); // %
-    const foreigner = trend('foreigner-net-buy');
+    const foreigner = trend('foreigner-net-buy-market');
     const rateDiff  = trend('rate-differential');
     const dxyTrend  = trend('dxy');
     const vixTrend  = trend('vixcls');
@@ -1112,7 +1112,7 @@ ${backtestSection}
 ${usdKrwHistory.slice(0, 30).map(h => `${h.date}: ${h.value}원`).join('\n')}
 
 코스피(KOSPI) 최근 30일 추세 (최신순):
-${kospiHistory.slice(0, 30).map(h => `${h.value}pt`).join('\n')}
+${kospiHistory.slice(0, 30).map(h => `${h.date}: ${h.close}pt`).join('\n')}
 
 분석 가이드 (심층 추론 필수):
 0. [시장 세션 컨텍스트]: 현재 한국 시장이 운영 중인 시간대라면, 미국 지수(^IXIC, ^GSPC, ^SOX)는 '이미 마감된 어제의 데이터'임을 명심하세요. 반면 미국 선물(NQ=F, ES=F)은 '현재 실시간 데이터'입니다. 만약 지수는 올랐는데 선물과 코스피가 내리고 있다면, 이는 모순이 아니라 최신 선물 흐름이 코스피에 반영되고 있는 정상적인 상황입니다. 실시간 선물 방향성에 더 높은 가중치를 두세요.
@@ -1371,7 +1371,7 @@ async function main() {
         'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
         'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
-        'foreigner-net-buy': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
+        'foreigner-net-buy-market': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
         'bamlh0a0hym2': { value: '3.10', trend: 'up', history: [{ date: '2026-03-10', value: 2.90 }, { date: '2026-03-11', value: 2.95 }, { date: '2026-03-12', value: 3.05 }, { date: '2026-03-13', value: 3.10 }] },
         'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
 
@@ -2331,7 +2331,7 @@ async function main() {
             const levels   = detectKeyLevels(fxHist.data);
             const macd     = calculateMACD(closes);
             const stochastic = calculateStochastic(fxHist.data, 14);
-            technicals = { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels: levels, macd, stochastic };
+            technicals = { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels: levels, macd, stochastic, compoundSignals };
             console.log(`📐 [Tech] RSI14=${rsi14}, MA5=${ma5}, MA20=${ma20}, MA60=${ma60}`);
             console.log(`📐 [Tech] MACD=${macd?.hist}, Stochastic=%K ${stochastic?.k}%`);
             console.log(`📐 [Tech] BB(상단=${bb?.upper}, 하단=${bb?.lower}), 지지=${levels.support}, 저항=${levels.resistance}`);
