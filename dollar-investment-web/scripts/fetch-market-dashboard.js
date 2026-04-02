@@ -29,7 +29,7 @@ if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.")
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX']; // 마감 후 업데이트되는 미국 지표
+const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC']; // 마감 후 업데이트되는 미국 지표
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
