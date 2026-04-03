@@ -767,7 +767,7 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,207",
+      "value": "24,206.25",
       "diff": 0,
       "diffPercent": 0,
       "trend": "neutral",
@@ -807,11 +807,11 @@
         },
         {
           "date": "2026-04-02",
-          "value": 24207
+          "value": 24206.25
         },
         {
           "date": "2026-04-03",
-          "value": 24207
+          "value": 24206.25
         }
       ]
     },
@@ -1781,11 +1781,11 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "0",
-      "diff": 1368,
-      "diffPercent": 100,
+      "value": "-882",
+      "diff": 486,
+      "diffPercent": 35.53,
       "trend": "up",
-      "realizedImpact": "neutral",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-02-27",
@@ -1885,7 +1885,7 @@
         },
         {
           "date": "2026-04-03",
-          "value": 0
+          "value": -882
         }
       ]
     },
@@ -1898,9 +1898,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "0",
-      "diff": 14517,
-      "diffPercent": 100,
+      "value": "38",
+      "diff": 14555,
+      "diffPercent": 100.26,
       "trend": "up",
       "history": [
         {
@@ -2001,7 +2001,7 @@
         },
         {
           "date": "2026-04-03",
-          "value": 0
+          "value": 38
         }
       ]
     },
@@ -2014,9 +2014,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "0",
-      "diff": -12097,
-      "diffPercent": -100,
+      "value": "755",
+      "diff": -11342,
+      "diffPercent": -93.76,
       "trend": "down",
       "history": [
         {
@@ -2117,7 +2117,7 @@
         },
         {
           "date": "2026-04-03",
-          "value": 0
+          "value": 755
         }
       ]
     },
@@ -2392,8 +2392,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 185100,
-      "changePercent": "+3.76",
+      "price": 186000,
+      "changePercent": "+4.26",
       "trend": "up"
     },
     {
@@ -2402,8 +2402,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 866000,
-      "changePercent": "+4.34",
+      "price": 869000,
+      "changePercent": "+4.70",
       "trend": "up"
     },
     {
@@ -2412,8 +2412,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 477500,
-      "changePercent": "+2.58",
+      "price": 478500,
+      "changePercent": "+2.79",
       "trend": "up"
     },
     {
@@ -2422,8 +2422,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 154500,
-      "changePercent": "+2.59",
+      "price": 154800,
+      "changePercent": "+2.79",
       "trend": "up"
     },
     {
@@ -2432,8 +2432,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 198800,
-      "changePercent": "+1.53",
+      "price": 198700,
+      "changePercent": "+1.48",
       "trend": "up"
     },
     {
@@ -2442,8 +2442,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 46150,
-      "changePercent": "+1.65",
+      "price": 46050,
+      "changePercent": "+1.43",
       "trend": "up"
     }
   ],
@@ -2452,8 +2452,8 @@
     "kospiSentiment": "코스피 상승 우세",
     "upProb": 39,
     "downProb": 61,
-    "kospiUpProb": 71,
-    "kospiDownProb": 29,
+    "kospiUpProb": 60,
+    "kospiDownProb": 40,
     "timeframes": {
       "d1": {
         "upProb": 69,
@@ -2476,9 +2476,9 @@
     "lastAiUpdate": 1775172721634,
     "score": {
       "upScore": 31.519480305211054,
-      "downScore": 48.88082656840201,
+      "downScore": 48.880514264920166,
       "kospiUpScore": 21.852929798707194,
-      "kospiDownScore": 8.788898309344876
+      "kospiDownScore": 14.33407575382444
     }
   },
   "technicals": {
@@ -2550,5 +2550,5 @@
     "kospiRecentHitRate": null,
     "kospiTotal": 0
   },
-  "lastUpdate": "2026. 4. 3. AM 12:01:48"
+  "lastUpdate": "2026. 4. 3. AM 12:04:32"
 }
