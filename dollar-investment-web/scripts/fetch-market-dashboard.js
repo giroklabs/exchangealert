@@ -29,7 +29,7 @@ if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.")
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC'];
+const US_SETTLED_SYMBOLS = ['^VIX', '^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC'];
 
 // [v17.0] KOSPI 투자자별 매매동향 기반 데이터 (단위: 억원)
 const KOSPI_INVESTOR_HISTORY = {
@@ -1513,9 +1513,13 @@ async function main() {
     for (const s of FRED_SERIES) {
         let obs = await fetchFromFred(s.fredId || s.id);
 
+        // 실시간 데이터 가져오기; regularPrice 가 없을 경우 최신 종가를 fallback
+        const { observations: rtObs, regularPrice: rtPriceRaw } = await fetchFromYahooFinance(s.realtimeSymbol);
+        const rtPrice = (rtPriceRaw !== null && rtPriceRaw !== undefined)
+            ? rtPriceRaw
+            : (rtObs && rtObs.length > 0 ? parseFloat(rtObs[0].value) : null);
+        
         if (s.realtimeSymbol) {
-            const { observations: rtObs, regularPrice: rtPrice } = await fetchFromYahooFinance(s.realtimeSymbol);
-            
             // 만약 주 기호(realtimeSymbol)의 히스토리가 부족한 경우(예: 580039.KS), 보조 히스토리 기호(historySymbol) 사용 시도
             if (rtObs.length <= 1 && s.historySymbol) {
                 console.log(`🔍 [History] ${s.name} 히스토리 부족으로 보조 기호(${s.historySymbol}) 데이터 연동 시도...`);
@@ -1561,6 +1565,8 @@ async function main() {
                 s.isRealtime = true;
                 s.source = 'Yahoo Finance 실시간';
                 console.log(`⚡ [Realtime] ${s.name} 보정 완료 (${rtObs[0].value}) - 소스: ${s.source}`);
+            } else {
+                console.warn(`⚠️ [Realtime] ${s.name} 실시간 데이터 없음 - 기존 데이터 유지`);
             }
         }
         
@@ -1601,8 +1607,8 @@ async function main() {
         if (obs.length > 0 && s.realtimeSymbol) {
             const isUsSettled = US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
             if (obs[0].date !== todayStr && !isUsSettled) {
-                 // 🌟 [개선] 야후 메타데이터의 regularPrice가 있으면 이를 우선 사용, 없으면 차트 최신값 사용
-                 const latestPrice = (typeof rtPrice !== 'undefined' && rtPrice !== null) ? String(rtPrice) : obs[0].value;
+                 // 🌟 [개선] 야후 메타데이터의 regularPrice가 없을 경우 최신 관측값을 사용
+                 const latestPrice = (rtPrice !== null && rtPrice !== undefined) ? String(rtPrice) : (rtObs && rtObs.length > 0 ? rtObs[0].value : obs[0].value);
                  obs.unshift({ date: todayStr, value: latestPrice });
                  console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 노출물 실시간 보정: ${latestPrice}`);
             }
