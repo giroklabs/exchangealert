@@ -34,7 +34,7 @@ const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC'];
 // [v17.0] KOSPI 투자자별 매매동향 기반 데이터 (단위: 억원)
 const KOSPI_INVESTOR_HISTORY = {
     institution: [
-        { date: '2026-04-02', value: -14517 }, { date: '2026-04-01', value: 40419 }, { date: '2026-03-31', value: 10251 }, { date: '2026-03-30', value: 8450 },
+        { date: '2026-04-03', value: 1956 }, { date: '2026-04-02', value: -14517 }, { date: '2026-04-01', value: 40419 }, { date: '2026-03-31', value: 10251 }, { date: '2026-03-30', value: 8450 },
         { date: '2026-03-27', value: 7785 }, { date: '2026-03-26', value: -2999 }, { date: '2026-03-25', value: 23230 }, { date: '2026-03-24', value: 9683 },
         { date: '2026-03-23', value: -38173 }, { date: '2026-03-20', value: -10260 }, { date: '2026-03-19', value: -6649 }, { date: '2026-03-18', value: 31093 },
         { date: '2026-03-17', value: 7341 }, { date: '2026-03-16', value: 911 }, { date: '2026-03-13', value: -10434 }, { date: '2026-03-12', value: 775 },
@@ -42,7 +42,7 @@ const KOSPI_INVESTOR_HISTORY = {
         { date: '2026-03-05', value: -17186 }, { date: '2026-03-04', value: -5978 }, { date: '2026-03-03', value: -8859 }, { date: '2026-02-27', value: 5666 }
     ],
     individual: [
-        { date: '2026-04-02', value: 12097 }, { date: '2026-04-01', value: -37628 }, { date: '2026-03-31', value: 24400 }, { date: '2026-03-30', value: 8945 },
+        { date: '2026-04-03', value: -957 }, { date: '2026-04-02', value: 12097 }, { date: '2026-04-01', value: -37628 }, { date: '2026-03-31', value: 24400 }, { date: '2026-03-30', value: 8945 },
         { date: '2026-03-27', value: 22596 }, { date: '2026-03-26', value: 30598 }, { date: '2026-03-25', value: -13402 }, { date: '2026-03-24', value: 7270 },
         { date: '2026-03-23', value: 70029 }, { date: '2026-03-20', value: 22338 }, { date: '2026-03-19', value: 24116 }, { date: '2026-03-18', value: -38717 },
         { date: '2026-03-17', value: -5752 }, { date: '2026-03-16', value: 7164 }, { date: '2026-03-13', value: 24512 }, { date: '2026-03-12', value: 22291 },
@@ -50,7 +50,7 @@ const KOSPI_INVESTOR_HISTORY = {
         { date: '2026-03-05', value: 18228 }, { date: '2026-03-04', value: 796 }, { date: '2026-03-03', value: 57974 }, { date: '2026-02-27', value: 62496 }
     ],
     foreigner: [
-        { date: '2026-04-02', value: -1368 }, { date: '2026-04-01', value: -6411 }, { date: '2026-03-31', value: -38386 }, { date: '2026-03-30', value: -20945 },
+        { date: '2026-04-03', value: -1194 }, { date: '2026-04-02', value: -1368 }, { date: '2026-04-01', value: -6411 }, { date: '2026-03-31', value: -38386 }, { date: '2026-03-30', value: -20945 },
         { date: '2026-03-27', value: -34286 }, { date: '2026-03-26', value: -29370 }, { date: '2026-03-25', value: -12895 }, { date: '2026-03-24', value: -19863 },
         { date: '2026-03-23', value: -36751 }, { date: '2026-03-20', value: -12402 }, { date: '2026-03-19', value: -18760 }, { date: '2026-03-18', value: 8802 },
         { date: '2026-03-17', value: -1740 }, { date: '2026-03-16', value: -8485 }, { date: '2026-03-13', value: -14502 }, { date: '2026-03-12', value: -23831 },
@@ -1543,6 +1543,13 @@ async function main() {
                 
                 if (newerObs.length > 0) {
                     obs = [...newerObs, ...obs.filter(o => o.date < newerObs[newerObs.length-1].date)];
+                } else if (rtObs.length > 0) {
+                    // [v18.0] API가 과거 데이터만 리턴할 경우(주말/공휴일 후 또는 일시적 누락)를 위해 병합
+                    const existingDates = new Set(obs.map(o => o.date));
+                    const toAdd = rtObs.filter(r => !existingDates.has(r.date));
+                    if (toAdd.length > 0) {
+                        obs = [...toAdd, ...obs].sort((a,b) => b.date.localeCompare(a.date));
+                    }
                 }
             }
             
@@ -1551,6 +1558,23 @@ async function main() {
                 s.isRealtime = true;
                 s.source = 'Yahoo Finance 실시간';
                 console.log(`⚡ [Realtime] ${s.name} 보정 완료 (${rtObs[0].value}) - 소스: ${s.source}`);
+            }
+        }
+        
+        // 🌟 [v18.0 Persistence] Yahoo API 누락 대응: 이전 대시보드 히스토리와 강제 병합
+        // 4.2 코스피 누락 사태 방지를 위해, API 결과가 불완전해도 이전 데이터를 절대 버리지 않음
+        if (prevDashboard) {
+            const prevInd = prevDashboard.indicators.find(i => i.id === s.id.toLowerCase());
+            if (prevInd && prevInd.history && prevInd.history.length > 0) {
+                const apiDates = new Set(obs.map(o => o.date));
+                const persisted = prevInd.history
+                    .map(h => ({ date: h.date, value: String(h.value) }))
+                    .filter(h => !apiDates.has(h.date)); // API에 없는 것만 복원
+                
+                if (persisted.length > 0) {
+                    obs = [...obs, ...persisted].sort((a,b) => b.date.localeCompare(a.date));
+                    console.log(`♻️ [Persistence] ${s.name} 누락 데이터 복구 완료 (${persisted.length}건 병합)`);
+                }
             }
         }
         
@@ -2394,11 +2418,23 @@ async function main() {
                     }
                 });
                 const kHistory = Array.from(kHistoryMap.values()).sort((a, b) => b.date.localeCompare(a.date));
+                
+                // [v18.0 Persistence] 기존 파일 데이터 로드 및 병합
+                let finalKHistory = kHistory;
+                if (fs.existsSync(kospiHistPath)) {
+                    try {
+                        const existing = JSON.parse(fs.readFileSync(kospiHistPath, 'utf8')).data || [];
+                        const apiDates = new Set(kHistory.map(h => h.date));
+                        const missing = existing.filter(h => !apiDates.has(h.date));
+                        finalKHistory = [...kHistory, ...missing].sort((a,b) => b.date.localeCompare(a.date));
+                    } catch(e) { console.warn('⚠️ 기존 코스피 히스토리 파싱 실패:', e.message); }
+                }
+
                 fs.writeFileSync(kospiHistPath, JSON.stringify({
                     symbol: '^KS11', name: 'KOSPI', source: 'Yahoo',
-                    lastUpdate: new Date().toISOString(), data: kHistory
+                    lastUpdate: new Date().toISOString(), data: finalKHistory
                 }, null, 2));
-                console.log(`  ✅ Yahoo Finance 코스피 히스토리 저장 완료 (${kHistory.length}일치)`);
+                console.log(`  ✅ Yahoo Finance 코스피 히스토리 저장 완료 (${finalKHistory.length}일치, 누락복구 포함)`);
             }
         }
     } catch (kospiHistErr) {
