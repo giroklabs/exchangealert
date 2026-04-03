@@ -81,7 +81,10 @@ async function fetchFromYahooFinance(symbol) {
                     }
                     const result = json.chart.result[0];
                     const timestamps = result.timestamp;
+                    if (!timestamps) return resolve({ observations: [], regularPrice: null });
+
                     const closes = result.indicators.quote[0].close;
+                    const regularPrice = result.meta.regularMarketPrice || (closes.length > 0 ? closes[closes.length - 1] : null);
 
                     // 유효한 데이터만 필터링하여 히스토리 생성
                     const observations = [];
@@ -111,15 +114,15 @@ async function fetchFromYahooFinance(symbol) {
                         }
                     }
 
-                    resolve(observations.reverse()); // 최신순으로 반환
+                    resolve({ observations: observations.reverse(), regularPrice: regularPrice }); // 최신순으로 반환
                 } catch (e) {
                     console.error(`❌ Yahoo Finance Parse Error (${symbol}):`, e.message);
-                    resolve([]);
+                    resolve({ observations: [], regularPrice: null });
                 }
             });
         }).on('error', (e) => {
             console.error(`❌ Yahoo Finance Network Error (${symbol}):`, e.message);
-            resolve([]);
+            resolve({ observations: [], regularPrice: null });
         });
     });
 }
@@ -1511,12 +1514,12 @@ async function main() {
         let obs = await fetchFromFred(s.fredId || s.id);
 
         if (s.realtimeSymbol) {
-            const rtObs = await fetchFromYahooFinance(s.realtimeSymbol);
+            const { observations: rtObs, regularPrice: rtPrice } = await fetchFromYahooFinance(s.realtimeSymbol);
             
             // 만약 주 기호(realtimeSymbol)의 히스토리가 부족한 경우(예: 580039.KS), 보조 히스토리 기호(historySymbol) 사용 시도
             if (rtObs.length <= 1 && s.historySymbol) {
-                console.log(`🔍 [History] ${s.name} 히스토리 부족으로 보구 기호(${s.historySymbol}) 데이터 연동 시도...`);
-                const hObs = await fetchFromYahooFinance(s.historySymbol);
+                console.log(`🔍 [History] ${s.name} 히스토리 부족으로 보조 기호(${s.historySymbol}) 데이터 연동 시도...`);
+                const { observations: hObs } = await fetchFromYahooFinance(s.historySymbol);
                 if (hObs && hObs.length > 1 && rtObs.length > 0) {
                     // 보조 기호의 과거 데이터와 주 기호의 현재가 결합
                     // 🌟 [추가] 가격 레벨 차이로 인한 그래프 왜곡 방지를 위해 히스토리 스케일링 수행
@@ -1598,8 +1601,10 @@ async function main() {
         if (obs.length > 0 && s.realtimeSymbol) {
             const isUsSettled = US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
             if (obs[0].date !== todayStr && !isUsSettled) {
-                 // 장중인 경우 현재가를 오늘 날짜로 강제 주입하여 그래프 끊김 방지
-                 obs.unshift({ date: todayStr, value: obs[0].value });
+                 // 🌟 [개선] 야후 메타데이터의 regularPrice가 있으면 이를 우선 사용, 없으면 차트 최신값 사용
+                 const latestPrice = (typeof rtPrice !== 'undefined' && rtPrice !== null) ? String(rtPrice) : obs[0].value;
+                 obs.unshift({ date: todayStr, value: latestPrice });
+                 console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 노출물 실시간 보정: ${latestPrice}`);
             }
         }
 
@@ -2301,7 +2306,7 @@ async function main() {
 
     console.log('🤖 AI 시장 분석 생성 중...');
 
-    const usdKrwHistory = await fetchFromYahooFinance('USDKRW=X');
+    const { observations: usdKrwHistory } = await fetchFromYahooFinance('USDKRW=X');
 
     // --- 코스피 히스토리 자동 수집 (KIS API 우선, Yahoo Finance 폴백) ---
     try {
@@ -2771,7 +2776,7 @@ async function main() {
 
         for (const stock of yahooFallbackStocks) {
             try {
-                const history = await fetchFromYahooFinance(stock.symbol);
+                const { observations: history } = await fetchFromYahooFinance(stock.symbol);
                 if (history && history.length > 0) {
                     const currentVal = parseFloat(history[0].value);
                     const prevVal = history.length > 1 ? parseFloat(history[1].value) : currentVal;
