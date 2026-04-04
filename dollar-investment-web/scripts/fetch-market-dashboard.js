@@ -1569,19 +1569,9 @@ async function main() {
     for (const s of FRED_SERIES) {
         let obs = await fetchFromFred(s.fredId || s.id);
 
-        // 실시간 데이터 가져오기; regularPrice 가 없을 경우 최신 종가를 fallback
-        let rtObs = [], rtPriceRaw = null;
-        if (s.id === 'DCOILWTICO') {
-            // WTI 선물은 1분 간격 실시간 데이터 필요
-            const result = await fetchFromYahooFinanceRealtime(s.realtimeSymbol);
-            rtObs = result.observations || [];
-            // regularPrice may be stale; use latest observation value as price
-            rtPriceRaw = rtObs.length > 0 ? parseFloat(rtObs[0].value) : null;
-        } else {
-            const { observations: tmpObs, regularPrice: tmpPrice } = await fetchFromYahooFinance(s.realtimeSymbol);
-            rtObs = tmpObs;
-            rtPriceRaw = tmpPrice;
-        }
+        // 실시간 데이터 가져오기 (일별 히스토리 + 실시간 현재가)
+        const { observations: rtObs, regularPrice: rtPriceRaw } = await fetchFromYahooFinance(s.realtimeSymbol);
+        
         const rtPrice = (rtPriceRaw !== null && rtPriceRaw !== undefined)
             ? rtPriceRaw
             : (rtObs && rtObs.length > 0 ? parseFloat(rtObs[0].value) : null);
@@ -1702,19 +1692,15 @@ async function main() {
         // 🌟 [개선] 메인 표시값(numVal) 결정 로직: 
         // FRED 히스토리보다 실시간(rtPrice) 데이터가 있다면 이를 최우선으로 메인 가격에 반영
         let numVal = cleanedObs.length > 0 ? cleanedObs[0].value : 0;
-        if (s.realtimeSymbol) {
-            // 야후 실시간 수집 코드에서 가져온 tmpPrice/rtPriceRaw 활용
-            const { regularPrice: livePrice } = await fetchFromYahooFinance(s.realtimeSymbol);
-            if (livePrice !== null && livePrice !== undefined) {
-                numVal = parseFloat(String(livePrice));
-            }
+        if (s.realtimeSymbol && rtPrice !== null && rtPrice !== undefined) {
+            numVal = parseFloat(String(rtPrice));
         }
 
         if (cleanedObs.length === 0 && fallbacks[s.id.toLowerCase()]) {
             const fb = fallbacks[s.id.toLowerCase()];
-            const val = parseFloat(String(fb.value).replace(/,/g, ''));
             const history = fb.history || [];
-            if (!s.hidden) indicators.push({ ...s, id: s.id.toLowerCase(), value: livePrice ? String(livePrice) : fb.value, trend: fb.trend, realizedImpact: fb.trend, history });
+            const displayValue = (s.realtimeSymbol && rtPrice !== null) ? String(rtPrice) : fb.value;
+            if (!s.hidden) indicators.push({ ...s, id: s.id.toLowerCase(), value: displayValue, trend: fb.trend, realizedImpact: fb.trend, history });
             console.log(`⚠️ [FRED-Fallback] ${s.name} 데이터 누락으로 폴백 대체`);
             continue;
         }
