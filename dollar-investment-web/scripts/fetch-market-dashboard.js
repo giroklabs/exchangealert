@@ -1495,7 +1495,7 @@ async function main() {
         console.warn('⚠️ correlations.json 로드 실패. 기존 패턴 가중치로 롤백합니다.');
     }
 
-    // 상관계수 가중치 매핑 유틸 함수
+    // 상관계수 가중치 매핑 유틸 함수 (다중공선성 제어 포함)
     const getCorrelationWeight = (id, target = 'usdkrw') => {
         if (!correlations) return 1.0;
         const keyMap = {
@@ -1505,7 +1505,12 @@ async function main() {
         const key = keyMap[id];
         if (key && correlations[target] && typeof correlations[target][key] === 'number') {
             const corr = correlations[target][key];
-            return 1.0 + Math.abs(corr); // 상관계수에 비례하여 가중치 1.0x ~ 2.0x 앰플리파이
+            const absCorr = Math.abs(corr);
+            // 🌟 [추가] 다중공선성(Multi-collinearity) 관리: |r| > 0.8 시 가중치 절반 축소 (Pruning)
+            if (absCorr > 0.8) {
+                return 1.0 + (absCorr * 0.5); // 과적합 방지
+            }
+            return 1.0 + absCorr; // 상관계수에 비례하여 가중치 1.0x ~ 2.0x 앰플리파이
         }
         return 1.0;
     };
@@ -2326,6 +2331,16 @@ async function main() {
         // 📊 [Score Breakdown] 각 블록의 상세 기여도 출력 (디버깅 투명성 확보)
         console.log(`📊 [Block Score] ${blockId.padEnd(15)} | Up: ${dampenedUp.toFixed(1).padStart(4)} | Down: ${dampenedDown.toFixed(1).padStart(4)} | Contribution: ${((dampenedUp + dampenedDown) / 1).toFixed(1)}`);
     });
+
+    // 🌟 [추가] 비선형 상호작용 항 (Non-linear Interactions)
+    // 금리/달러 상승(Rates Up)과 시장 공포(Risk Up)가 동시 발생 시 변동성 증폭 
+    const ratesUp = blockScores['rates-dollar']?.up || 0;
+    const riskUp = blockScores['risk']?.up || 0;
+    if (ratesUp > 0 && riskUp > 0) {
+        const interactionWeight = Math.min((ratesUp * riskUp * 0.05), 5.0); // 가중치 최대 +5점
+        upScore += interactionWeight;
+        console.log(`🔥 [Interaction] 금리 상승 + 리스크 오프 폭발적 시너지: 변동성 압력 +${interactionWeight.toFixed(1)}점 우대`);
+    }
 
     // --- 5단계: 복합 신호 적용 (블록 점수 최종 적용 후) ---
     const compoundSignals = detectCompoundSignals(indicators);
