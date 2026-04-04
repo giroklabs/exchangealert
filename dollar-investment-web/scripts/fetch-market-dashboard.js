@@ -120,8 +120,8 @@ async function fetchFromYahooFinance(symbol) {
                 try {
                     const json = JSON.parse(data);
                     if (!json.chart || !json.chart.result || !json.chart.result[0]) {
-                        console.warn(`⚠️ Yahoo Finance No Result (${symbol})`);
-                        return resolve([]);
+                        console.warn(`⚠️ Yahoo Finance No Result (symbol: ${symbol})`);
+                        return resolve({ observations: [], regularPrice: null });
                     }
                     const result = json.chart.result[0];
                     const timestamps = result.timestamp;
@@ -1593,7 +1593,10 @@ async function main() {
                     todayOpeningTime.setHours(9, 0, 0, 0);
                     const isTrulyLive = regularMarketTime ? (regularMarketTime * 1000 > todayOpeningTime.getTime()) : false;
                     
-                    if (o.value === prevVal && !isTrulyLive) return false;
+                    if (o.value === prevVal && !isTrulyLive) {
+                        // console.log(`♻️ [Deduplicate] ${s.name}의 가짜 실시간 노드(${o.date}) 스킵`);
+                        return false;
+                    }
                 }
             }
             return true;
@@ -2348,7 +2351,8 @@ async function main() {
         
         upScore += dampenedUp;
         downScore += dampenedDown;
-        console.log(`📊 [Block] ${blockId}: Up:${dampenedUp.toFixed(1)}, Down:${dampenedDown.toFixed(1)}`);
+        // 📊 [Score Breakdown] 각 블록의 상세 기여도 출력 (디버깅 투명성 확보)
+        console.log(`📊 [Block Score] ${blockId.padEnd(15)} | Up: ${dampenedUp.toFixed(1).padStart(4)} | Down: ${dampenedDown.toFixed(1).padStart(4)} | Contribution: ${((dampenedUp + dampenedDown) / 1).toFixed(1)}`);
     });
 
     // --- 5단계: 복합 신호 적용 (블록 점수 최종 적용 후) ---
@@ -2379,7 +2383,18 @@ async function main() {
             const predHist = JSON.parse(fs.readFileSync(predFile, 'utf8'));
             backtest = calcBacktestSummary(predHist.records || []);
             if (backtest) {
-                console.log(`📈 [Backtest] 총 ${backtest.total}일 | 적중률 ${backtest.hitRate}% | 최근5일 ${backtest.recentHitRate}% | ${backtest.streak}`);
+                console.log(`📈 [Backtest Summary] 총 ${backtest.total}일 | 적중률 ${backtest.hitRate}% | 최근5일 ${backtest.recentHitRate}% | ${backtest.streak}`);
+                
+                // 🔍 [추가] 최근 3일간의 상세 적중 내역 출력
+                const recentLogs = (predHist.records || []).slice(-3).reverse();
+                recentLogs.forEach(r => {
+                    const resultEmoji = r.hit_d1 ? '✅ Hit' : '❌ Miss';
+                    const predDir = (r.predicted?.d1_up > 50) ? '상승' : '하락';
+                    const actualDir = r.actual_next_close > r.rateAtPrediction ? '상승' : '하락';
+                    if (r.actual_next_close) {
+                        console.log(`   └ [${r.date}] 예측: ${predDir}(${r.predicted?.d1_up}%) | 실제: ${actualDir} (${r.rateAtPrediction}→${r.actual_next_close}) | 결과: ${resultEmoji}`);
+                    }
+                });
             }
         }
     } catch (btErr) {
