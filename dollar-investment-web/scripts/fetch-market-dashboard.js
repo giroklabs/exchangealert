@@ -2332,14 +2332,22 @@ async function main() {
         console.log(`📊 [Block Score] ${blockId.padEnd(15)} | Up: ${dampenedUp.toFixed(1).padStart(4)} | Down: ${dampenedDown.toFixed(1).padStart(4)} | Contribution: ${((dampenedUp + dampenedDown) / 1).toFixed(1)}`);
     });
 
-    // 🌟 [추가] 비선형 상호작용 항 (Non-linear Interactions)
+    // 🌟 [추가] 비선형 상호작용 항 (Non-linear Interactions) 및 Regime 스위칭
     // 금리/달러 상승(Rates Up)과 시장 공포(Risk Up)가 동시 발생 시 변동성 증폭 
     const ratesUp = blockScores['rates-dollar']?.up || 0;
     const riskUp = blockScores['risk']?.up || 0;
+    
+    // 단순 변동성이 아닌 실제 시장 레짐(Regime) 파악
+    const vixTarget = indicators.find(i => i.id === 'vixcls');
+    const bamlTarget = indicators.find(i => i.id === 'bamlh0a0hym2');
+    const isHighVolRegime = (vixTarget && parseFloat(String(vixTarget.value)) > 25) || (bamlTarget && parseFloat(String(bamlTarget.value)) > 4.0);
+
     if (ratesUp > 0 && riskUp > 0) {
-        const interactionWeight = Math.min((ratesUp * riskUp * 0.05), 5.0); // 가중치 최대 +5점
+        // High Volatility 레짐일 때만 상호작용(Interaction) 항을 강하게 반영하고, Normal엔 축소하여 과적합/노이즈 방지
+        const regimeMultiplier = isHighVolRegime ? 1.0 : 0.2; 
+        const interactionWeight = Math.min((ratesUp * riskUp * 0.05 * regimeMultiplier), 5.0); // 가중치 최대 +5점
         upScore += interactionWeight;
-        console.log(`🔥 [Interaction] 금리 상승 + 리스크 오프 폭발적 시너지: 변동성 압력 +${interactionWeight.toFixed(1)}점 우대`);
+        console.log(`🔥 [Interaction] 금리 상승 + 리스크 오프 폭발적 시너지 (${isHighVolRegime ? '위기 레짐' : '평시 레짐'}): 변동성 압력 +${interactionWeight.toFixed(1)}점 우대`);
     }
 
     // --- 5단계: 복합 신호 적용 (블록 점수 최종 적용 후) ---
@@ -2412,8 +2420,17 @@ async function main() {
         if (pastKospiProbs.length > 0) {
             const probSeries = [...pastKospiProbs, rawKospiUpProb].slice(-5); // 최근 5일치로 3일 EMA 산출
             const emaProbs = calculateEMA(probSeries, 3);
-            kospiUpProb = Math.round(emaProbs[emaProbs.length - 1]);
-            console.log(`📊 [KOSPI Smoothing] Raw Prob: ${rawKospiUpProb}% -> EMA(3) Prob: ${kospiUpProb}%`);
+            let finalEmaProb = Math.round(emaProbs[emaProbs.length - 1]);
+            
+            // 🌟 [Lag 완화] 원시 확률(Raw)과 EMA 간 괴리가 15% 이상 크게 벌어지면 (급격한 추세 전환/역재 발생)
+            // EMA의 지연(Lag) 리스크가 더 크다고 판단하여 실시간 Raw 점수 방향으로 가중 평균을 둡니다.
+            if (Math.abs(rawKospiUpProb - finalEmaProb) >= 15) {
+                finalEmaProb = Math.round((rawKospiUpProb * 0.6) + (finalEmaProb * 0.4));
+                console.log(`⚠️ [EMA-Lag 방어] Raw(${rawKospiUpProb}%)와 EMA(${Math.round(emaProbs[emaProbs.length - 1])}%) 괴리 발생 → Raw 가중치 상승반영(${finalEmaProb}%)`);
+            } else {
+                console.log(`📊 [KOSPI Smoothing] Raw Prob: ${rawKospiUpProb}% -> EMA(3) Prob: ${finalEmaProb}%`);
+            }
+            kospiUpProb = finalEmaProb;
         }
     }
 
