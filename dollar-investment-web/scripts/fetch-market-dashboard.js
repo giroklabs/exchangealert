@@ -1105,7 +1105,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 - 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
 - 핵심 레벨: 60일 지지=${keyLevels?.support}원, 저항=${keyLevels?.resistance}원`;
 
-        // 복합 신호 섹션 추가
+        // 복합 위험 신호 섹션 추가
         const { compoundSignals } = technicals;
         if (compoundSignals && compoundSignals.length > 0) {
             techSection += `\n\n⚡ 복합 위험 신호 (동시 발생):`;
@@ -1113,136 +1113,71 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         }
     }
 
-    // 코스피 기술적 지표 섹션 생성
-    let kospiTechSection = '';
-    if (kospiTechnicals) {
-        const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels, macd, stochastic } = kospiTechnicals;
-        const rsiSignal = rsi14 > 70 ? '과매수 주의' : (rsi14 < 30 ? '과매도 반등 가능' : '중립');
-        const maSignal = ma5 && ma20 ? (ma5 > ma20 ? '단기 상승 모멘텀' : '단기 하락 모멘텀') : '';
-        kospiTechSection = `
+    // 🌟 [추가] Gemini 3 최적화: 구조화된 컨텍스트(Category-based Context) 생성
+    let macroContext = "[CONTEXT: 거시경제 및 리스크 지표]\n";
+    let koreaContext = "\n[CONTEXT: 한국 시장 및 기술지표]\n";
+    let fxContext = "\n[CONTEXT: 환율 및 외환 흐름]\n";
+    let globalContext = "\n[CONTEXT: 주요 해외 지수 및 상황]\n";
 
-기술적 코스피(KOSPI) 지표:
-- RSI(14일): ${rsi14} → ${rsiSignal}
-- MACD: MACD=${macd?.macd || 'N/A'}, Signal=${macd?.signal || 'N/A'}, Hist=${macd?.hist || 'N/A'}
-- Stochastic(14): %K=${stochastic?.k || 'N/A'}%
-- 이동평균: MA5=${ma5}pt, MA20=${ma20}pt, MA60=${ma60}pt (${maSignal})
-- 볼린저밴드: 상단=${bb?.upper}pt / 중단=${bb?.mid}pt / 하단=${bb?.lower}pt (밴드폭=${bb?.bandwidth}%)
-- 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
-- 핵심 레벨: 60일 지지=${keyLevels?.support}pt, 저항=${keyLevels?.resistance}pt`;
-        
-        // 만기일 정보 추가
-        const expiryInfo = getKospi200ExpiryInfo(new Date());
-        if (expiryInfo.isExpiryWeek) {
-            kospiTechSection += `\n- 📅 파생상품 만기운용: ${expiryInfo.isQuarterly ? '분기 선물' : '월간 옵션'} 만기 주간 (D-${expiryInfo.daysToExpiry}) → 변동성 확대 주의`;
-        }
+    // 지표별 카테고리 분류
+    macroContext += blockSummary.split('\n').filter(l => l.includes('금리') || l.includes('리스크') || l.includes('정책')).join('\n');
+    macroContext += `\n${corrSection || ''}`;
+
+    koreaContext += blockSummary.split('\n').filter(l => l.includes('한국') || l.includes('자산') || l.includes('수급')).join('\n');
+    koreaContext += `\n${kospiTechSection || ''}`;
+    if (kospiHistory && kospiHistory.length > 0) {
+        koreaContext += `\n- 코스피 최근 5일 추세: ${kospiHistory.slice(0, 5).map(h => `${h.close}pt`).join(' → ')}`;
     }
 
-    // 백테스팅 성과 섹션 생성
-    let backtestSection = '';
-    if (backtest) {
-        const fxConfidence = backtest.hitRate >= 65 ? '높음' : (backtest.hitRate >= 50 ? '보통' : '낮음');
-        const kospiConf = backtest.kospiHitRate !== null ? (backtest.kospiHitRate >= 65 ? '높음' : (backtest.kospiHitRate >= 50 ? '보통' : '낮음')) : 'N/A';
-        backtestSection = `
-[예측 성과 이력 - 최근 ${backtest.total}일 기준]
-- 환율 1일 적중률: ${backtest.hitRate}% (최근5일: ${backtest.recentHitRate}%) → 신뢰도: ${fxConfidence}
-- 코스피 1일 적중률: ${backtest.kospiHitRate ?? 'N/A'}% (최근5일: ${backtest.kospiRecentHitRate ?? 'N/A'}%) → 신뢰도: ${kospiConf} [${backtest.kospiTotal}일 데이터]
-- 현재 흐름: ${backtest.streak}`;
-        if (backtest.hitRate < 55 || (backtest.kospiHitRate !== null && backtest.kospiHitRate < 55)) {
-            backtestSection += `\n⚠️ 적중률이 낮은 항목은 단정적 방향 제시보다 다양한 시나리오와 리스크(Tail Risk)를 함께 제시하세요.`;
-        }
-    }
+    fxContext += `\n- 원/달러 최근 5일 추세: ${usdKrwHistory.slice(0, 5).map(h => `${h.value}원`).join(' → ')}`;
+    majorRates.forEach(r => { fxContext += `\n- ${r.name}: ${r.value} (${r.changePercent}%)`; });
 
-    // 동적 상관관계 섹션 생성
-    let corrSection = '';
-    if (correlations && correlations.usdkrw && correlations.kospi) {
-        corrSection = `
-[동적 상관관계 분석 (최근 120일 피어슨 상관계수)]
-- 원/달러 환율 연동도: 달러인덱스(${correlations.usdkrw.dxy}), 국제유가(${correlations.usdkrw.wti}), 미10년물금리(${correlations.usdkrw.tnx}), 필라델피아반도체(${correlations.usdkrw.sox})
-- 코스피 지수 연동도: 필라델피아반도체(${correlations.kospi.sox}), 국제유가(${correlations.kospi.wti}), 환율(${correlations.kospi.usdkrw}), 미10년물금리(${correlations.kospi.tnx})
-⚠️ (절댓값 0.5 이상은 '매우 강한 상관관계'입니다. 상관계수가 높은 지표의 현재 방향성에 최우선 가중치를 부여하여 추론하세요.)`;
-    }
+    globalContext += `\n${newsSection || ''}`;
+    globalContext += `\n${techSection || ''}`;
 
-    // 최신 주요 뉴스 헤드라인 섹션 생성
-    let newsSection = '';
-    try {
-        let actualNewsPath = path.join(process.cwd(), 'dollar-investment-web', 'public', 'data', 'news.json');
-        if (!fs.existsSync(actualNewsPath)) actualNewsPath = path.join(process.cwd(), 'public', 'data', 'news.json');
-
-        if (fs.existsSync(actualNewsPath)) {
-            const newsData = JSON.parse(fs.readFileSync(actualNewsPath, 'utf8'));
-            const targetCategories = ['환율', '코스피', '한국은행', '달러 투자'];
-            const headlines = [];
-            
-            for (const cat of targetCategories) {
-                if (newsData?.news?.[cat] && newsData.news[cat].length > 0) {
-                    const topNews = newsData.news[cat].slice(0, 2); // 카테고리당 가장 중요한 기사 2건
-                    topNews.forEach((item) => {
-                        headlines.push(`- [${cat}] ${item.title}`);
-                    });
-                }
-            }
-            if (headlines.length > 0) {
-                newsSection = `\n[최신 시장 헤드라인 뉴스 (상황 추론 및 내러티브 파악용)]\n${headlines.join('\n')}`;
-            }
-        }
-    } catch(e) {
-        console.warn('⚠️ news.json 로드 실패. 뉴스 헤드라인 주입 없이 분석을 진행합니다.', e.message);
-    }
+    const combinedDataContext = macroContext + koreaContext + fxContext + globalContext;
 
     const nowKst = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
-    const kstYear = nowKst.getUTCFullYear();
-    const kstMonth = nowKst.getUTCMonth() + 1;
-    const kstDate = nowKst.getUTCDate();
-    const kstHour = nowKst.getUTCHours();
-    const kstMin = nowKst.getUTCMinutes();
-    const kstTimeStr = `${kstYear}년 ${kstMonth}월 ${kstDate}일 ${kstHour}시 ${kstMin}분`;
+    const kstTimeStr = `${nowKst.getUTCFullYear()}년 ${nowKst.getUTCMonth() + 1}월 ${nowKst.getUTCDate()}일 ${nowKst.getUTCHours()}시 ${nowKst.getUTCMinutes()}분`;
 
-    const prompt = `당신은 한수지(금융 분석가)입니다. 현재 시각은 한국 시간(KST) 기준으로 **${kstTimeStr}**입니다. 
-다음 4대 핵심 요인(Block)을 바탕으로 향후 (1) 원/달러 환율과 (2) 코스피(KOSPI) 지수의 방향성을 한국어로 심층 분석해주세요. 
-분석 시점(장전, 장중, 장후 등)에 따라 시장 세션을 정확히 인지하여 답변의 어조와 강조점을 조절하세요. 
-인사말이나 소개 멘트는 절대 포함하지 말고 곧바로 본문 분석부터 시작하세요.
+    const prompt = `당신은 대한민국 외환 및 증시 분석 전문가입니다. 현재 시각은 KST **${kstTimeStr}**입니다.
+제공된 실시간 거시지표와 기술지표를 바탕으로 원/달러 환율과 코스피 지수의 1~5거래일 전망을 객관적이고 구조화된 보고서 형식으로 작성해 주세요.
 
-연구 자료에 따르면 환율의 초단기 급변동은 '외국인 순매수', 'VIX(전이위험)', 'DXY(달러인덱스)' 및 극초단기 기술적 지표(MACD 히스토그램 변화, Stochastic 과매수/과매도)에 의해 주도됩니다. 코스피는 외국인 및 기관 수급(프로그램 매매), VIX, 원/달러 환율, 미국 필라델피아 반도체지수(SOX), 금리 인하 기대(EFFR-GS1 스프레드), 국제 유가(WTI), 투자자 예탁금에 의해 주도됩니다.
+${combinedDataContext}
 
-컴퓨팅 모델에 의한 정량적 예측치:
-- 원/달러 환율: 상승 확률 ${upProb}%, 하락 확률 ${downProb}%
-- 코스피 지수: 상승 확률 ${kospiUpProb}%, 하락 확률 ${kospiDownProb}% (근거: SOX 지수, 금리인하 기대치, 기관/외인 수급 가중치 적용)
+[정량적 모델 예측치]
+- 환율: 상승 ${upProb}% / 하락 ${downProb}%
+- 코스피: 상승 ${kospiUpProb}% / 하락 ${kospiDownProb}%
 
-분석 대상 지표:
-${blockSummary}
-${corrSection}
-${newsSection}
-${techSection}
-${kospiTechSection}
-${backtestSection}
+분석 지침 (각 단계는 1~2문단으로 핵심만 작성):
 
-원/달러 환율 최근 30일 추세 (최신순):
-${usdKrwHistory.slice(0, 30).map(h => `${h.date}: ${h.value}원`).join('\n')}
+1. [파트A: 원/달러 환율 분석]
+   - 한미 금리차, 달러 인덱스, VIX, WTI, TED 스프레드 등 리스크 요인을 종합해 1~5거래일 동안 환율의 방향성과 변동성을 판단해 주세요.
+   - 현재 흐름에 영향을 주는 핵심 요인을 3~4개만 집중적으로 설명해 주세요.
 
-코스피(KOSPI) 최근 30일 추세 (최신순):
-${kospiHistory.slice(0, 30).map(h => `${h.date}: ${h.close}pt`).join('\n')}
+2. [파트B: 코스피 지수 분석]
+   - 해외지수, VIX, 수급, 기술지표(RSI, 이평선, MACD 등)를 종합해 1~5거래일 동안의 방향성을 판단해 주세요.
+   - **기술적 지표가 향후 1~5거래일 방향성에 가장 큰 힘을 가질 수 있음을 최우선으로 고려**하고, 거시지표는 보정 요인으로 활용하세요.
+   - 비정상적인 신호(과열/과매도 등)가 있다면 반드시 명시하세요.
 
-분석 가이드 (심층 추론 필수):
-0. [시장 세션 컨텍스트]: 현재 한국 시장이 운영 중인 시간대라면, 미국 지수(^IXIC, ^GSPC, ^SOX)는 '이미 마감된 어제의 데이터'임을 명심하세요. 반면 미국 선물(NQ=F, ES=F)은 '현재 실시간 데이터'입니다. 만약 지수는 올랐는데 선물과 코스피가 내리고 있다면, 이는 모순이 아니라 최신 선물 흐름이 코스피에 반영되고 있는 정상적인 상황입니다. 실시간 선물 방향성에 더 높은 가중치를 두세요.
+3. [최종 실전 투자 대응 가이드] (헤더 명칭은 '실전 투자 대응'으로 시작)
+   - 현재 포지션 보유자와 신규 진입자 관점에서 각각에 대한 구체적 행동 지침(분할 매수/매도, 헤지 등)을 작성해 주세요. (결론: [상승/하락/보합] 우세 포함)
 
-1. 각 섹션은 반드시 다음의 헤더로 시작하여 명확히 구분하세요:
-   [파트A: 원/달러 환율 분석]
-   [파트B: 코스피(KOSPI) 분석]
-   [파트C: 시장 종합 및 위험 신호 (모순 지표 심층 추론)]
+출력 형식 (다음 형식을 엄격히 준수하며 마크다운 헤더(#) 기호 사용 금지):
 
-2. [원/달러 환율 분석]: 제공된 30일간의 가격 추세를 바탕으로 현재 위치가 장기적 추세 전환점(Structural Break)인지, 단순 기술적 반등인지 파악하세요. 기술적 지표, 외국인 수급, DXY, 매크로 펀더멘털을 결합하여 단기(1D)/주간(1W) 방향성을 제시하세요.
+[파트A: 원/달러 환율 분석]
+(1~2문단의 분석, 140자 이내 권장)
 
-3. [코스피 분석]: 제공된 30일간의 지수 흐름을 환율 추세와 대조하여 상관관계(Correlation)를 심층 분석하세요. 기술적 지표, 수급, 미 국채 1년물 기반 금리 인하 기대(Target-GS1), 국제 유가(WTI) 흐름을 종합하여 추세를 제시하고, 파생상품 만기 주간인 경우 변동성 확대를 언급하세요.
-
-4. [시장 종합 및 위험 신호 (모순 지표 심층 추론)]: **[매우 중요] 만약 제공된 정보 중 방향성이 서로 모순되는 지표들(예: 달러 스마일/스윙, 유가 점프 속 환율 하락, 미국 증시 대비 코스피의 디커플링 등)이 발견된다면, 기계적인 점수에 얽매이지 말고 그 괴리가 발생하는 구조적 원인을 최우선으로 분석(Chain-of-Thought)하여 서술하세요.** 단순 지표 서술을 넘어 "왜 다르게 움직이는가"에 대한 펀더멘털 인사이트를 제공해야 합니다.
-
-5. 응답은 지표 나열을 지양하고 논리적이되 결론 위주의 문장으로 작성하세요.
-6. 핵심 키워드는 **볼드체**를 활용하되, # 이나 ## 같은 마크다운 헤더 기호는 절대 사용하지 마세요.
-7. 마지막에는 다음 포맷의 '실전 투자 대응' 섹션을 반드시 포함해야 합니다:
+[파트B: 코스피 지수 분석]
+(1~2문단의 분석, 140자 이내 권장)
 
 실전 투자 대응:
-- 환율: [구체적 환율 매수/매도 목표가 및 대응전력]. (결론: [상승/하락/보합] 우세)
-- 코스피: [구체적 코스피 매수/매도 포인트 및 대응전력]. (결론: [상승/하락/보합] 우세)`;
+- 환율: [구체적 대응]. (결론: [상승/하락/보합] 우세, 60자 이내)
+- 코스피: [구체적 대응]. (결론: [상승/하락/보합] 우세, 60자 이내)
+
+톤과 스타일:
+- 공식적이고 객관적인 리포트 톤, 추측성 표현(100%, 확실 등) 최소화.
+- 항상 "가능성"과 "주요 리스크"를 함께 언급해 주세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
