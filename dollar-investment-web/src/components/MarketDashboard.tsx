@@ -202,7 +202,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                     Gemini AI 심층 시장 분석
                                     {data?.forecast?.lastAiUpdate && (
                                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-500/80' : 'bg-yellow-100/50 text-yellow-700/70'}`}>
-                                            분석 기준: {new Date(data.forecast.lastAiUpdate).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                                            분석 기준: {new Date(data.forecast.lastAiUpdate).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </span>
                                     )}
                                 </h3>
