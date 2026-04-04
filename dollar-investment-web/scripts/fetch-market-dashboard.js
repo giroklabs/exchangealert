@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 
 import { calcZScore, rollingZScore } from './utils/zscore.js';
 import { calculateEMA } from './utils/ema.js';
+import { isTradingHoliday } from './utils/holidays.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1548,7 +1549,14 @@ async function main() {
                 const day = new Date().getDay(); // 0:일, 6:토
                 if (isKorean && (day === 0 || day === 6)) return false;
 
-                // 2. 오늘 시세가 어제 시세와 100% 같고, 거래 시각(regularMarketTime)이 오늘 오전 9시 이전이면 가짜로 간주
+                // 2. [v18.0] 공식 거래 휴장일(Trading Holiday) 체크 (VIX 평행선 문제 해결)
+                const region = s.realtimeSymbol ? (s.realtimeSymbol.endsWith('.KS') || s.realtimeSymbol.endsWith('.KQ') || s.realtimeSymbol === '^KS11' || s.realtimeSymbol === '^KQ11' ? 'KR' : 'US') : 'US';
+                if (isTradingHoliday(o.date, region)) {
+                    // console.log(`💤 [Holiday] ${s.name}의 휴장일 데이터(${o.date}, ${region}) 스킵`);
+                    return false;
+                }
+
+                // 3. 오늘 시세가 어제 시세와 100% 같고, 거래 시각(regularMarketTime)이 오늘 오전 9시 이전이면 가짜로 간주
                 if (idx < rawRtObs.length - 1) {
                     const prevVal = rawRtObs[idx + 1].value;
                     const todayOpeningTime = new Date();
@@ -1642,6 +1650,10 @@ async function main() {
                             if (isKorean) return false;
                         }
                         
+                        // 3. [v18.0] 공식 거래 휴장일(Holiday) 데이터는 과거 파일에 있더라도 복구하지 않음 (오염 전파 방지)
+                        const region = s.realtimeSymbol ? (s.realtimeSymbol.endsWith('.KS') || s.realtimeSymbol.endsWith('.KQ') || s.realtimeSymbol === '^KS11' || s.realtimeSymbol === '^KQ11' ? 'KR' : 'US') : 'US';
+                        if (isTradingHoliday(h.date, region)) return false;
+
                         return true;
                     });
                 
