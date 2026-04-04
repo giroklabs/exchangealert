@@ -103,6 +103,7 @@ async function fetchFromYahooFinanceRealtime(symbol) {
     });
 }
 
+async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
         // Yahoo Finance Chart API (v8) - 1개월치 데이터 요청 (히스토리 연속성 보장)
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1mo`;
@@ -1669,14 +1670,17 @@ async function main() {
             }
         }
 
-        // 야후 데이터 반영 후 오늘 날짜(todayStr) 강제 추가 로직 (기존 유지)
+        // 야후 데이터 반영 후 오늘 날짜(todayStr) 강제 추가 로직
+        // 🌟 [개선] Yahoo에서 실제로 오늘 날짜 데이터를 받아왔을 때만 삽입 (휴장일 flat-line 방지)
         if (obs.length > 0 && s.realtimeSymbol) {
             const isUsSettled = US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
-            if (obs[0].date !== todayStr && !isUsSettled) {
-                 // 🌟 [개선] 야후 메타데이터의 regularPrice가 없을 경우 최신 관측값을 사용
-                 const latestPrice = (rtPrice !== null && rtPrice !== undefined) ? String(rtPrice) : (rtObs && rtObs.length > 0 ? rtObs[0].value : obs[0].value);
+            const yahooHasTodayData = rtObs && rtObs.length > 0 && rtObs[0].date && rtObs[0].date.startsWith(todayStr);
+            if (obs[0].date !== todayStr && !isUsSettled && yahooHasTodayData) {
+                 const latestPrice = (rtPrice !== null && rtPrice !== undefined) ? String(rtPrice) : rtObs[0].value;
                  obs.unshift({ date: todayStr, value: latestPrice });
-                 console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 노출물 실시간 보정: ${latestPrice}`);
+                 console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 데이터 확인 후 삽입: ${latestPrice}`);
+            } else if (obs[0].date !== todayStr && !isUsSettled && !yahooHasTodayData) {
+                 console.log(`⏸️ [Realtime-Skip] ${s.name} Yahoo에 오늘(${todayStr}) 데이터 없음 → 강제 노드 생성 생략 (휴장/갱신 전)`);
             }
         }
 
@@ -1704,10 +1708,10 @@ async function main() {
         const history = cleanedObs.slice(0, 10).reverse();
         
         // --- 오늘 날짜(todayStr) 보장 로직 (히스토리 배열 끝점 확인) ---
-        // 미국 기준금리(Fed)는 정책 유효성을 위해 실시간 심볼이 없어도 오늘 노드를 보장함
-        // 단, 미국 마감 지표(US_SETTLED_SYMBOLS)는 강제 노드 생성 대상에서 제외하여 수평선 방지
+        // 🌟 [개선] Yahoo가 오늘 데이터를 실제로 반환했을 때만 today 노드 삽입 (휴장일 flat-line 방지)
         const isUsSettled = s.realtimeSymbol && US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
-        const shouldForceToday = (s.isRealtime && !isUsSettled);
+        const yahooHasTodayInHistory = rtObs && rtObs.length > 0 && rtObs[0].date && rtObs[0].date.startsWith(todayStr);
+        const shouldForceToday = (s.isRealtime && !isUsSettled && yahooHasTodayInHistory);
         
         if (history.length > 0 && history[history.length-1].date !== todayStr && shouldForceToday) {
             history.push({ date: todayStr, value: numVal });
