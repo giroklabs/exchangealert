@@ -733,10 +733,15 @@ async function fetchMarketInvestorTrend() {
         
         const mergeHistory = (type, currentVal) => {
             const hist = [...KOSPI_INVESTOR_HISTORY[type]];
-            // 오늘 날짜 데이터가 히스토리에 이미 있으면 실시간 값으로 업데이트, 없으면 앞에 추가
+            // 🌟 [개선] 주말/공휴일에는 오늘(KST 토/일) 날짜의 새로운 노드를 생성하지 않음
+            const day = new Date().getDay(); // 0:일, 6:토
+            const isWeekend = (day === 0 || day === 6);
+
+            // 오늘 날짜 데이터가 히스토리에 이미 있으면 실시간 값으로 업데이트, 
+            // 단, 신규로 추가하는 것은 정규장(평일) 기간에만 허용
             if (hist.length > 0 && hist[0].date === today) {
                 hist[0].value = currentVal;
-            } else {
+            } else if (!isWeekend) {
                 hist.unshift({ date: today, value: currentVal });
             }
             return hist;
@@ -1656,9 +1661,24 @@ async function main() {
             const prevInd = prevDashboard.indicators.find(i => i.id === s.id.toLowerCase());
             if (prevInd && prevInd.history && prevInd.history.length > 0) {
                 const apiDates = new Set(obs.map(o => o.date));
+                const day = new Date().getDay(); // 0:일, 6:토
+                const isWeekend = (day === 0 || day === 6);
+
                 const persisted = prevInd.history
                     .map(h => ({ date: h.date, value: String(h.value) }))
-                    .filter(h => !apiDates.has(h.date)); // API에 없는 것만 복원
+                    .filter(h => {
+                        // 1. 이미 API 결과에 있는 날짜는 제외 (업데이트 우선)
+                        if (apiDates.has(h.date)) return false;
+                        
+                        // 2. 🌟 [추가] 오늘이 주말인데 파일에 '오늘' 날짜가 있다면, 
+                        // 이는 이전 세션의 가짜 노드일 확률이 높으므로 복구하지 않음 (한국 마켓 한정)
+                        if (isWeekend && h.date === todayStr) {
+                            const isKorean = s.realtimeSymbol ? (s.realtimeSymbol.endsWith('.KS') || s.realtimeSymbol.endsWith('.KQ') || s.realtimeSymbol === '^KS11' || s.realtimeSymbol === '^KQ11') : false;
+                            if (isKorean) return false;
+                        }
+                        
+                        return true;
+                    });
                 
                 if (persisted.length > 0) {
                     obs = [...obs, ...persisted].sort((a,b) => b.date.localeCompare(a.date));
@@ -1712,7 +1732,17 @@ async function main() {
         const diff = parseFloat((numVal - prevVal).toFixed(2));
         const diffPercent = prevVal !== 0 ? parseFloat(((diff / prevVal) * 100).toFixed(2)) : 0;
 
-        const history = cleanedObs.slice(0, 10).reverse();
+        // 🌟 [추가] 히스토리 데이터의 일별 단일화(Granularity) 강제 적용
+        // 동일 날짜에 여러 데이터(분 단위 등)가 있으면 최신(배열 앞쪽) 것 1개만 남김
+        const seenDates = new Set();
+        const dailyHistory = cleanedObs.filter(o => {
+            const datePart = o.date.split(',')[0].trim(); // "2026-04-03, 5:51:00 a.m." -> "2026-04-03"
+            if (seenDates.has(datePart)) return false;
+            seenDates.add(datePart);
+            return true;
+        });
+
+        const history = dailyHistory.slice(0, 10).reverse();
         
         // --- 오늘 날짜 보장 로직 폐기 (데이터 무결성 우선) ---
         
@@ -2477,8 +2507,15 @@ async function main() {
                 const kTimestamps = kResult.timestamp;
                 const kQuotes = kResult.indicators.quote[0];
                 const kHistoryMap = new Map();
+                const day = new Date().getDay(); // 0:일, 6:토
+                const isWeekend = (day === 0 || day === 6);
+
                 kTimestamps.forEach((ts, i) => {
                     const date = new Date(ts * 1000).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+                    
+                    // 🌟 [추가] 야후가 보낸 데이터 중 주말(토/일) 데이터가 '오늘' 날짜인 경우 제외
+                    if (isWeekend && date === todayStr) return;
+
                     if (kQuotes.high[i] !== null && kQuotes.low[i] !== null && kQuotes.close[i] !== null) {
                         kHistoryMap.set(date, {
                             date,
@@ -2992,21 +3029,19 @@ async function main() {
             }
         }
 
-        // 오늘 레코드 추가 (이미 없으면)
-        if (!predHist.records.find(r => r.date === todayStr)) {
-            const fxHistFile3 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json'))
-                ? path.join(__dirname, '..', 'public', 'data', 'fx-history-6m.json')
-                : path.join(process.cwd(), 'public', 'data', 'fx-history-6m.json');
-            const todayRate = fs.existsSync(fxHistFile3)
-                ? JSON.parse(fs.readFileSync(fxHistFile3, 'utf8')).data[0]?.close
-                : null;
-            // 코스피 현재 지수 저장
-            const kospiHistFile3 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json'))
-                ? path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json')
-                : path.join(process.cwd(), 'public', 'data', 'kospi-history-6m.json');
-            const todayKospi = fs.existsSync(kospiHistFile3)
-                ? JSON.parse(fs.readFileSync(kospiHistFile3, 'utf8')).data[0]?.close
-                : null;
+        // 코스피 현재 지수 저장
+        const kospiHistFile3 = fs.existsSync(path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json'))
+            ? path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json')
+            : path.join(process.cwd(), 'public', 'data', 'kospi-history-6m.json');
+        const todayKospi = fs.existsSync(kospiHistFile3)
+            ? JSON.parse(fs.readFileSync(kospiHistFile3, 'utf8')).data[0]?.close
+            : null;
+
+        const dayPred = new Date().getDay();
+        const isWeekendPred = (dayPred === 0 || dayPred === 6);
+
+        // 오늘 레코드 추가 (이미 없으면 & 주말이 아니면)
+        if (!isWeekendPred && !predHist.records.find(r => r.date === todayStr)) {
             predHist.records.push({
                 date: todayStr,
                 predicted: {

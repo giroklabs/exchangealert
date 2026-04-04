@@ -66,6 +66,14 @@ async function consolidate() {
                 if (usdData) {
                     const rate = parseRate(usdData.deal_bas_r);
                     if (rate > 0) {
+                        // 🌟 [추가] 주말(토,일) 데이터는 히스토리에 포함하지 않도록 차단 (데이터 왜곡 방지)
+                        const d = new Date(dateStr);
+                        const day = d.getDay();
+                        if (day === 0 || day === 6) {
+                            console.log(`⏩ Skipping weekend record for ${dateStr}`);
+                            continue;
+                        }
+
                         // 중복 시 더 큰 파일(데이터가 더 완전할 가능성) 또는 나중에 읽은 것으로 갱신
                         fxDataMap.set(dateStr, rate);
                     }

@@ -94,10 +94,20 @@ function getIntradayData() {
     const seenFullTimes = new Set();
     // 최신 데이터를 우선하기 위해 역순으로 처리
     for (let i = intradayData.length - 1; i >= 0; i--) {
+        const item = intradayData[i];
+        const date = new Date(item.timestamp);
+        const day = date.getDay(); // 0:일, 6:토
+        const hour = date.getHours();
+
+        // 🌟 [개선] 주말 데이터 필터링
+        // 토요일 오전 7시 이후 ~ 일요일 전체 데이터는 가짜 데이터(휴장기 평탄선)로 간주하여 제외
+        if (day === 6 && hour >= 7) continue; 
+        if (day === 0) continue;
+
         // 날짜와 시/분까지 포함하여 고유성 체크
-        const uniqueKey = intradayData[i].fullTime.split('+')[0].trim(); 
+        const uniqueKey = item.fullTime.split('+')[0].trim(); 
         if (!seenFullTimes.has(uniqueKey)) {
-            uniqueData.unshift(intradayData[i]);
+            uniqueData.unshift(item);
             seenFullTimes.add(uniqueKey);
         }
     }
