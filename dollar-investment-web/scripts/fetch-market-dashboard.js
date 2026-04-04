@@ -1699,17 +1699,27 @@ async function main() {
             .filter(o => o.value && o.value !== '.' && !isNaN(parseFloat(o.value)))
             .map(o => ({ date: o.date, value: parseFloat(o.value) }));
 
+        // 🌟 [개선] 메인 표시값(numVal) 결정 로직: 
+        // FRED 히스토리보다 실시간(rtPrice) 데이터가 있다면 이를 최우선으로 메인 가격에 반영
+        let numVal = cleanedObs.length > 0 ? cleanedObs[0].value : 0;
+        if (s.realtimeSymbol) {
+            // 야후 실시간 수집 코드에서 가져온 tmpPrice/rtPriceRaw 활용
+            const { regularPrice: livePrice } = await fetchFromYahooFinance(s.realtimeSymbol);
+            if (livePrice !== null && livePrice !== undefined) {
+                numVal = parseFloat(String(livePrice));
+            }
+        }
+
         if (cleanedObs.length === 0 && fallbacks[s.id.toLowerCase()]) {
             const fb = fallbacks[s.id.toLowerCase()];
             const val = parseFloat(String(fb.value).replace(/,/g, ''));
             const history = fb.history || [];
-            if (!s.hidden) indicators.push({ ...s, id: s.id.toLowerCase(), value: fb.value, trend: fb.trend, realizedImpact: fb.trend, history });
+            if (!s.hidden) indicators.push({ ...s, id: s.id.toLowerCase(), value: livePrice ? String(livePrice) : fb.value, trend: fb.trend, realizedImpact: fb.trend, history });
             console.log(`⚠️ [FRED-Fallback] ${s.name} 데이터 누락으로 폴백 대체`);
             continue;
         }
 
         const currentPoint = cleanedObs.length > 0 ? cleanedObs[0] : { value: 0 };
-        const numVal = currentPoint.value;
         const prevVal = cleanedObs.length > 1 ? cleanedObs[1].value : numVal;
         const trend = numVal > prevVal ? 'up' : (numVal < prevVal ? 'down' : 'neutral');
         const diff = parseFloat((numVal - prevVal).toFixed(2));
