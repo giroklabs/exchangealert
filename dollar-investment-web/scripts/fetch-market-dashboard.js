@@ -1086,15 +1086,20 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = [], correlations = null) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = [], correlations = null, majorRates = []) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
 
     const blockSummary = summarizeByBlock(indicators);
 
-    // 기술적 지표 섹션 생성
+    // 🌟 [추가] Gemini 3 최적화: 구조화된 컨텍스트(Category-based Context) 생성
     let techSection = '';
+    let kospiTechSection = '';
+    let corrSection = '';
+    let newsSection = '';
+
+    // 환율 기술적 지표 섹션 생성
     if (technicals) {
         const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels } = technicals;
         const rsiSignal = rsi14 > 70 ? '과매수 주의' : (rsi14 < 30 ? '과매도 반등 가능' : '중립');
@@ -1109,7 +1114,6 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 - 단기 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
 - 핵심 레벨: 60일 지지=${keyLevels?.support}원, 저항=${keyLevels?.resistance}원`;
 
-        // 복합 위험 신호 섹션 추가
         const { compoundSignals } = technicals;
         if (compoundSignals && compoundSignals.length > 0) {
             techSection += `\n\n⚡ 복합 위험 신호 (동시 발생):`;
@@ -1117,7 +1121,27 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         }
     }
 
-    // 🌟 [추가] Gemini 3 최적화: 구조화된 컨텍스트(Category-based Context) 생성
+    // 코스피 기술적 지표 섹션 생성
+    if (kospiTechnicals) {
+        const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels } = kospiTechnicals;
+        kospiTechSection = `
+기술적 코스피 지표:
+- RSI(14일): ${rsi14}
+- 이동평균: MA5=${ma5}pt, MA20=${ma20}pt, MA60=${ma60}pt
+- 볼린저밴드: 상단=${bb?.upper}pt / 하단=${bb?.lower}pt
+- 모멘텀: 1일=${momentum?.d1}%, 5일=${momentum?.d5}%, 20일=${momentum?.d20}%
+- 지지/저항: 지지=${keyLevels?.support}pt, 저항=${keyLevels?.resistance}pt`;
+    }
+
+    // 상관관계 섹션 생성
+    if (correlations && correlations.usdkrw) {
+        corrSection = "\n주요 지표별 환율 상관계수 (최근 60일):";
+        Object.entries(correlations.usdkrw).forEach(([id, val]) => {
+            if (typeof val === 'number' && Math.abs(val) > 0.5) {
+                corrSection += `\n- ${id}: ${val > 0 ? '정적' : '부적'} 상관 (${val.toFixed(2)})`;
+            }
+        });
+    }
     let macroContext = "[CONTEXT: 거시경제 및 리스크 지표]\n";
     let koreaContext = "\n[CONTEXT: 한국 시장 및 기술지표]\n";
     let fxContext = "\n[CONTEXT: 환율 및 외환 흐름]\n";
@@ -1134,7 +1158,9 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     }
 
     fxContext += `\n- 원/달러 최근 5일 추세: ${usdKrwHistory.slice(0, 5).map(h => `${h.value}원`).join(' → ')}`;
-    majorRates.forEach(r => { fxContext += `\n- ${r.name}: ${r.value} (${r.changePercent}%)`; });
+    if (majorRates && majorRates.length > 0) {
+        majorRates.forEach(r => { fxContext += `\n- ${r.name}: ${r.value} (${r.changePercent}%)`; });
+    }
 
     globalContext += `\n${newsSection || ''}`;
     globalContext += `\n${techSection || ''}`;
@@ -2760,18 +2786,7 @@ async function main() {
         aiAnalysis = "실시간 지표 업데이트 중입니다. 상세 분석은 정기 리포트(1시간 주기)에서 확인 가능합니다. 결론: 관망 우세";
         lastAiUpdate = 0;
     } else if (!shouldSkipAi) {
-        // 코스피 히스토리 로드 (AI 전달용)
-        let kospiHistoryForAi = [];
-        try {
-            const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
-            if (fs.existsSync(kospiHistPath)) {
-                const kh = JSON.parse(fs.readFileSync(kospiHistPath, 'utf8'));
-                kospiHistoryForAi = kh.data || [];
-            }
-        } catch (e) {}
-
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi, correlations);
-        lastAiUpdate = Date.now(); // 새로운 분석 시간 기록
+        // AI 분석은 모든 데이터 수집 후 하단에서 실행하기 위해 이곳에서 제거
     }
 
     // 마크다운 기호 및 깨진 글자 세밀하게 제거 (단, ** 강조와 [헤더]는 유지하여 프론트엔드에서 활용)
@@ -3008,6 +3023,41 @@ async function main() {
         console.log(`📊 [Timeframe] 1일: 상승${timeframes.d1.upProb}% | 5일: 상승${timeframes.d5.upProb}% | 20일: 상승${timeframes.d20.upProb}%`);
     } catch (tfErr) {
         console.warn('⚠️ 타임프레임 예측 계산 실패 (비치명적):', tfErr.message);
+    }
+    // --- [단계 추가] AI 심층 분석 (모든 데이터 수집 후 실행) ---
+    if (!shouldSkipAi) {
+        console.log('🤖 Gemini AI 심층 분석 시작...');
+        let kospiHistoryForAi = [];
+        try {
+            const kospiHistPath = path.join(__dirname, '..', 'public', 'data', 'kospi-history-6m.json');
+            if (fs.existsSync(kospiHistPath)) {
+                const kh = JSON.parse(fs.readFileSync(kospiHistPath, 'utf8'));
+                kospiHistoryForAi = kh.data || [];
+            }
+        } catch (e) {}
+
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi, correlations, majorRates);
+        lastAiUpdate = Date.now();
+
+        // 마크다운 기호 및 깨진 글자 세밀하게 제거
+        aiAnalysis = aiAnalysis
+            .replace(/###|##|#/g, '')
+            .replace(/(?<!\*)\*(?!\*)/g, '')
+            .replace(/\uFFFD/g, '')
+            .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+            .replace(/[“”]/g, '"')
+            .replace(/[‘’]/g, "'")
+            .replace(/—|–/g, '-')
+            .trim();
+
+        // 방향성 판정 리프레시
+        const fxPattern = /-\s*환율[:\s].*\(결론:\s*(상승|하락|보합|강세|약세)/i;
+        const fxMatch = aiAnalysis.match(fxPattern);
+        if (fxMatch) {
+            const res = fxMatch[1];
+            if (res === '상승' || res === '강세') sentiment = '환율 상승 우세';
+            else if (res === '하락' || res === '약세') sentiment = '환율 하락 우세';
+        }
     }
 
     const dashboardData = {
