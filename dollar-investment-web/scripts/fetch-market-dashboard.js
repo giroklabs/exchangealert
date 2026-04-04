@@ -1661,28 +1661,7 @@ async function main() {
             }
         }
 
-        // 야후 데이터 반영 후 오늘 날짜(todayStr) 강제 추가 로직
-        // 🌟 [개선] Yahoo에서 오늘 데이터를 받아왔더라도, 실제 거래 시각(regularMarketTime)이 오늘 오전 9시 이후인지 확인
-        if (obs.length > 0 && s.realtimeSymbol) {
-            const isUsSettled = US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
-            const { observations: tmpObs, regularPrice: tmpPrice, regularMarketTime } = await fetchFromYahooFinance(s.realtimeSymbol);
-            
-            // 거래 시각이 오늘 오전 9시(한국 시간) 대라면 진짜 오늘 데이터로 인정
-            const todayOpeningTime = new Date();
-            todayOpeningTime.setHours(9, 0, 0, 0); 
-            const isTrulyToday = regularMarketTime ? (regularMarketTime * 1000 > todayOpeningTime.getTime()) : false;
-            
-            const yahooHasTodayData = tmpObs && tmpObs.length > 0 && tmpObs[0].date && tmpObs[0].date.startsWith(todayStr);
-            
-            if (obs[0].date !== todayStr && !isUsSettled && yahooHasTodayData && isTrulyToday) {
-                 const latestPrice = (rtPrice !== null && rtPrice !== undefined) ? String(rtPrice) : tmpObs[0].value;
-                 obs.unshift({ date: todayStr, value: latestPrice });
-                 console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 거래 확인 후 삽입: ${latestPrice}`);
-            } else if (obs[0].date !== todayStr && !isUsSettled && (!yahooHasTodayData || !isTrulyToday)) {
-                 const reason = !yahooHasTodayData ? "오늘 데이터 없음" : "거래 시각이 어제장 마감분임";
-                 console.log(`⏸️ [Realtime-Skip] ${s.name} 강제 노드 생성 생략 (${reason})`);
-            }
-        }
+        // 야후 데이터 반영 후 오늘 날짜(todayStr) 강제 추가 로직 폐기 (실제 수집된 데이터만 사용)
 
         // FRED 데이터 클리닝 (특히 '.' 으로 들어오는 누락 데이터 필터링)
         const cleanedObs = obs
@@ -1713,16 +1692,7 @@ async function main() {
 
         const history = cleanedObs.slice(0, 10).reverse();
         
-        // --- 오늘 날짜(todayStr) 보장 로직 (히스토리 배열 끝점 확인) ---
-        // 🌟 [개선] Yahoo가 오늘 데이터를 실제로 반환했을 때만 today 노드 삽입 (휴장일 flat-line 방지)
-        const isUsSettled = s.realtimeSymbol && US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
-        const yahooHasTodayInHistory = rtObs && rtObs.length > 0 && rtObs[0].date && rtObs[0].date.startsWith(todayStr);
-        const shouldForceToday = (s.isRealtime && !isUsSettled && yahooHasTodayInHistory);
-        
-        if (history.length > 0 && history[history.length-1].date !== todayStr && shouldForceToday) {
-            history.push({ date: todayStr, value: numVal });
-            if (history.length > 10) history.shift();
-        }
+        // --- 오늘 날짜 보장 로직 폐기 (데이터 무결성 우선) ---
         
         // --- 고도화 로직 적용 ---
         const zScore = calculateZScore(numVal, history);
@@ -1853,13 +1823,7 @@ async function main() {
                 return { date: dateStr, value: v };
             }).reverse();
 
-            // 실시간 보정치가 있는 예탁금 또는 정책 금리(한국 기준금리)인 경우에만 오늘 날짜 노드 보장
-            const isDailyOrRealtime = item.id === 'bok-rate';
-            if (isDailyOrRealtime && history.length > 0 && history[history.length-1].date !== todayStr) {
-                // 오늘 데이터가 이미 있다면 업데이트, 없으면 추가
-                history.push({ date: todayStr, value: val });
-                if (history.length > 30) history.shift();
-            }
+            // --- 강제 늘여 그리기 폐기 (수집된 데이터만 사용) ---
         } else {
             const fallback = fallbacks[item.id];
             val = parseFloat(String(fallback.value).replace(/,/g, ''));
