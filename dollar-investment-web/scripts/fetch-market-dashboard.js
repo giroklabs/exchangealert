@@ -2704,11 +2704,12 @@ async function main() {
         const minute = kstDate.getUTCMinutes();
         const timeVal = hour + minute / 60;
 
-        // 1. [일회성 임시 활성화] 토요일 전면 중단 로직 잠시 무력화
-        // if (day === 6) return -1; 
+        // 1. 토요일: 전면 중단
+        if (day === 6) return -1; 
 
-        // 2. [일요일 임시 활성화] 23:00 정기 알림 전에도 분석 가능하도록 주석 처리
-        // if (day === 0) return (hour === 23) ? 60 : -1;
+        // 2. 일요일: 23:00 정기 알림 1회만 허용 (월요일 개장 준비)
+        // 60분 간격으로 설정하여 23:00~23:59 사이에 단 한 번만 실행되도록 보장
+        if (day === 0) return (hour === 23) ? 60 : -1;
 
         // 3. 평일 (월-금)
         // 02:00 ~ 07:30: 휴지기 (중단)
