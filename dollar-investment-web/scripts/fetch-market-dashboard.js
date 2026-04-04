@@ -8,6 +8,9 @@ import path from 'path';
 import https from 'https';
 import { fileURLToPath } from 'url';
 
+import { calcZScore, rollingZScore } from './utils/zscore.js';
+import { calculateEMA } from './utils/ema.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -105,8 +108,8 @@ async function fetchFromYahooFinanceRealtime(symbol) {
 
 async function fetchFromYahooFinance(symbol) {
     return new Promise((resolve) => {
-        // Yahoo Finance Chart API (v8) - 1개월치 데이터 요청 (히스토리 연속성 보장)
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1mo`;
+        // Yahoo Finance Chart API (v8) - 1년치 데이터 요청 (장기 Z-score 활용)
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1y`;
         const options = {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -219,7 +222,7 @@ const ECOS_SERIES = [
 
 async function fetchFromFred(seriesId) {
     return new Promise((resolve) => {
-        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&limit=14&sort_order=desc`;
+        const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_API_KEY}&file_type=json&limit=250&sort_order=desc`;
         https.get(url, (res) => {
             let data = '';
             res.on('data', (chunk) => data += chunk);
@@ -1140,44 +1143,63 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     const nowKst = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
     const kstTimeStr = `${nowKst.getUTCFullYear()}년 ${nowKst.getUTCMonth() + 1}월 ${nowKst.getUTCDate()}일 ${nowKst.getUTCHours()}시 ${nowKst.getUTCMinutes()}분`;
 
+    const getVal = id => indicators.find(i => i.id === id)?.value || 0;
+    
+    // --- 🌟 [추가] Anchor Prediction Signal 생성 ---
+    const anchorSignal = {
+        market: "KOSPI & USD/KRW",
+        fxUpProb: upProb / 100,
+        kospiUpProb: kospiUpProb / 100,
+        kospiTechSignal: kospiTechnicals ? (kospiTechnicals.rsi14 > 70 ? "bullish" : (kospiTechnicals.rsi14 < 30 ? "bearish" : "neutral")) : "neutral",
+        fxTechSignal: technicals ? (technicals.rsi14 > 70 ? "bullish" : (technicals.rsi14 < 30 ? "bearish" : "neutral")) : "neutral",
+        macroSignal: "neutral", // 향후 블록 점수 기반 고도화 가능
+        wtiLevel: getVal('dcoilwtico'),
+        vixLevel: getVal('vixcls'),
+        dxyLevel: getVal('dxy')
+    };
+
     const prompt = `당신은 대한민국 외환 및 증시 분석 전문가입니다. 현재 시각은 KST **${kstTimeStr}**입니다.
-제공된 실시간 거시지표와 기술지표를 바탕으로 원/달러 환율과 코스피 지수의 1~5거래일 전망을 객관적이고 구조화된 보고서 형식으로 작성해 주세요.
+제공된 규칙 기반 예측 신호와 실시간 지표를 바탕으로,
+원/달러 환율과 코스피 지수의 1~5거래일 전망을 객관적이고 구조화된 보고서 형식으로 작성해 주세요.
+
+[ANCHOR PREDICTION SIGNAL]
+${JSON.stringify(anchorSignal, null, 2)}
+
+이 신호는 다음을 의미합니다:
+- KOSPI UpProb ${(anchorSignal.kospiUpProb * 100).toFixed(0)}% = KOSPI가 향후 1~5거래일 동안 상승할 확률
+- 환율 UpProb ${(anchorSignal.fxUpProb * 100).toFixed(0)}% = 원/달러 환율이 상승할 확률
+- techSignal = 기술적 지표 기준 현재 과매수(bullish)/과매도(bearish) 여부
 
 ${combinedDataContext}
 
-[정량적 모델 예측치]
-- 환율: 상승 ${upProb}% / 하락 ${downProb}%
-- 코스피: 상승 ${kospiUpProb}% / 하락 ${kospiDownProb}%
-
-분석 지침 (각 단계는 1~2문단으로 핵심만 작성):
+[분석 지침 (각 1~2문단, 140자 이내 추천)]
 
 1. [파트A: 원/달러 환율 분석]
-   - 한미 금리차, 달러 인덱스, VIX, WTI, TED 스프레드 등 리스크 요인을 종합해 1~5거래일 동안 환율의 방향성과 변동성을 판단해 주세요.
-   - 현재 흐름에 영향을 주는 핵심 요인을 3~4개만 집중적으로 설명해 주세요.
+   - 위 ANCHOR SIGNAL의 확률(상승 ${upProb}%)과 CONTEXT를 기반으로 방향성을 설명해 주세요.
+   - 스스로 새로운 확률을 계산하지 말고, 주어진 확률이 왜 나왔는지 핵심 요인 3~4개만 집중적으로 설명해 주세요.
 
 2. [파트B: 코스피 지수 분석]
-   - 해외지수, VIX, 수급, 기술지표(RSI, 이평선, MACD 등)를 종합해 1~5거래일 동안의 방향성을 판단해 주세요.
-   - **기술적 지표가 향후 1~5거래일 방향성에 가장 큰 힘을 가질 수 있음을 최우선으로 고려**하고, 거시지표는 보정 요인으로 활용하세요.
-   - 비정상적인 신호(과열/과매도 등)가 있다면 반드시 명시하세요.
+   - 위 ANCHOR SIGNAL의 KOSPI 확률(상승 ${kospiUpProb}%)을 우선 판단 근거로 두고 방향성을 설명해 주세요.
+   - 기술지표(RSI, MA, MACD 등)의 신호가 어떤 식으로 해석되는지 간단히 설명하세요.
 
-3. [최종 실전 투자 대응 가이드] (헤더 명칭은 '실전 투자 대응'으로 시작)
-   - 현재 포지션 보유자와 신규 진입자 관점에서 각각에 대한 구체적 행동 지침(분할 매수/매도, 헤지 등)을 작성해 주세요. (결론: [상승/하락/보합] 우세 포함)
+3. [실전 투자 대응]
+   - 현재 포지션 보유자와 신규 진입자에 대한 구체적인 행동 지침(예: 분할 매수/매도, 헤지 등)을 간결하고 직관적으로 제시해 주세요.
 
 출력 형식 (다음 형식을 엄격히 준수하며 마크다운 헤더(#) 기호 사용 금지):
 
 [파트A: 원/달러 환율 분석]
-(1~2문단의 분석, 140자 이내 권장)
+(1~2문단의 분석, 140자 이내 추천)
 
 [파트B: 코스피 지수 분석]
-(1~2문단의 분석, 140자 이내 권장)
+(1~2문단의 분석, 140자 이내 추천)
 
 실전 투자 대응:
-- 환율: [구체적 대응]. (결론: [상승/하락/보합] 우세, 60자 이내)
-- 코스피: [구체적 대응]. (결론: [상승/하락/보합] 우세, 60자 이내)
+- 환율: (추세 및 대응, 60자 이내 추천)
+- 코스피: (추세 및 대응, 60자 이내 추천)
 
 톤과 스타일:
-- 공식적이고 객관적인 리포트 톤, 추측성 표현(100%, 확실 등) 최소화.
-- 항상 "가능성"과 "주요 리스크"를 함께 언급해 주세요.`;
+- 객관적이고, 과도한 감정 표현 없이 공식적인 리포트 톤 사용 (추측성/확정적 표현 100% 등 금지).
+- 항상 "가능성", "리스크", "주의점"을 함께 언급해 주세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -1685,7 +1707,9 @@ async function main() {
         // --- 오늘 날짜 보장 로직 폐기 (데이터 무결성 우선) ---
         
         // --- 고도화 로직 적용 ---
-        const zScore = calculateZScore(numVal, history);
+        const reversedDailyHist = [...dailyHistory].reverse().map(o => o.value);
+        const zScores = rollingZScore(reversedDailyHist, 252);
+        const zScore = zScores.length > 0 ? zScores[zScores.length - 1] : 0;
         const freshness = getFreshnessMultiplier(s.realtimeSymbol ? 'realtime' : 'D');
         
         // 🌟 상관계수 기반 동적 가중치 산출
@@ -1823,7 +1847,20 @@ async function main() {
         }
 
         // --- 고도화 로직 적용 ---
-        const zScore = calculateZScore(val, history);
+        let zScore = 0;
+        if (rows && rows.length > 0) {
+            const reversedFullHist = [...rows].reverse().map(r => {
+                let v = parseFloat(String(r.DATA_VALUE).replace(/,/g, ''));
+                if (item.transform === 'wonToEok') v = Math.round(v / 100000000);
+                else if (item.transform === 'thousandUsdToEokUsd') v = Math.round(v / 100000);
+                return v;
+            });
+            const zScores = rollingZScore(reversedFullHist, 252);
+            zScore = zScores.length > 0 ? zScores[zScores.length - 1] : 0;
+        } else if (history && history.length > 0) {
+            zScore = calculateZScore(val, history);
+        }
+        
         const freshness = getFreshnessMultiplier(item.cycle);
         const volatilityWeight = Math.min(Math.abs(zScore), 1.5);
         let finalWeight = (1.0 + volatilityWeight) * freshness;
@@ -2310,12 +2347,13 @@ async function main() {
 
     // --- 4단계: 백테스팅 통계 로드 ---
     let backtest = null;
+    let predHist = null;
     try {
         const predHistPath = path.join(__dirname, '..', 'public', 'data', 'prediction-history.json');
         const altPath = path.join(process.cwd(), 'public', 'data', 'prediction-history.json');
         const predFile = fs.existsSync(predHistPath) ? predHistPath : (fs.existsSync(altPath) ? altPath : null);
         if (predFile) {
-            const predHist = JSON.parse(fs.readFileSync(predFile, 'utf8'));
+            predHist = JSON.parse(fs.readFileSync(predFile, 'utf8'));
             backtest = calcBacktestSummary(predHist.records || []);
             if (backtest) {
                 console.log(`📈 [Backtest Summary] 총 ${backtest.total}일 | 적중률 ${backtest.hitRate}% | 최근5일 ${backtest.recentHitRate}% | ${backtest.streak}`);
@@ -2348,9 +2386,24 @@ async function main() {
     const kUp = kospiScores.up > 0 ? Math.log1p(kospiScores.up) * 8 : 0;
     const kDown = kospiScores.down > 0 ? Math.log1p(kospiScores.down) * 8 : 0;
     const kTotal = kUp + kDown;
-    const kospiUpProb = kTotal > 0 ? Math.round((kUp / kTotal) * 100) : 50;
+    const rawKospiUpProb = kTotal > 0 ? Math.round((kUp / kTotal) * 100) : 50;
+    
+    // --- 고도화 로직: KOSPI Score EMA 평활화 ---
+    let kospiUpProb = rawKospiUpProb;
+    if (predHist && predHist.records) {
+        const pastKospiProbs = predHist.records
+            .filter(r => r.predicted && r.predicted.kospi_predicted_up !== undefined)
+            .map(r => r.predicted.kospi_predicted_up);
+        if (pastKospiProbs.length > 0) {
+            const probSeries = [...pastKospiProbs, rawKospiUpProb].slice(-5); // 최근 5일치로 3일 EMA 산출
+            const emaProbs = calculateEMA(probSeries, 3);
+            kospiUpProb = Math.round(emaProbs[emaProbs.length - 1]);
+            console.log(`📊 [KOSPI Smoothing] Raw Prob: ${rawKospiUpProb}% -> EMA(3) Prob: ${kospiUpProb}%`);
+        }
+    }
+
     const kospiDownProb = 100 - kospiUpProb;
-    console.log(`📊 [KOSPI Score] Up:${kUp.toFixed(1)}, Down:${kDown.toFixed(1)} → Up Prob: ${kospiUpProb}%`);
+    console.log(`📊 [KOSPI Score] Up:${kUp.toFixed(1)}, Down:${kDown.toFixed(1)} → Smoothed Up Prob: ${kospiUpProb}%`);
 
     console.log('🤖 AI 시장 분석 생성 중...');
 
