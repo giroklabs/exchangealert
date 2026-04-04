@@ -1567,7 +1567,8 @@ async function main() {
     }
 
     for (const s of FRED_SERIES) {
-        let obs = await fetchFromFred(s.fredId || s.id);
+        // 🌟 [개선] 국제 유가(WTI)는 지연된 FRED 데이터 대신 야후 실시간(CL=F)만 사용하기 위해 FETCH 건너뜀
+        let obs = (s.id === 'DCOILWTICO') ? [] : await fetchFromFred(s.fredId || s.id);
 
         // 실시간 데이터 가져오기 (일별 히스토리 + 실시간 현재가)
         const { observations: rtObs, regularPrice: rtPriceRaw } = await fetchFromYahooFinance(s.realtimeSymbol);
