@@ -29,7 +29,7 @@ if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.")
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC'];
+const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC', '^VIX'];
 
 // [v17.0] KOSPI 투자자별 매매동향 기반 데이터 (단위: 억원)
 const KOSPI_INVESTOR_HISTORY = {
@@ -129,6 +129,7 @@ async function fetchFromYahooFinance(symbol) {
 
                     const closes = result.indicators.quote[0].close;
                     const regularPrice = result.meta.regularMarketPrice || (closes.length > 0 ? closes[closes.length - 1] : null);
+                    const regularMarketTime = result.meta.regularMarketTime || null;
 
                     // 유효한 데이터만 필터링하여 히스토리 생성
                     const observations = [];
@@ -158,7 +159,7 @@ async function fetchFromYahooFinance(symbol) {
                         }
                     }
 
-                    resolve({ observations: observations.reverse(), regularPrice: regularPrice }); // 최신순으로 반환
+                    resolve({ observations: observations.reverse(), regularPrice: regularPrice, regularMarketTime: regularMarketTime }); // 최신순으로 반환
                 } catch (e) {
                     console.error(`❌ Yahoo Finance Parse Error (${symbol}):`, e.message);
                     resolve({ observations: [], regularPrice: null });
@@ -1671,16 +1672,25 @@ async function main() {
         }
 
         // 야후 데이터 반영 후 오늘 날짜(todayStr) 강제 추가 로직
-        // 🌟 [개선] Yahoo에서 실제로 오늘 날짜 데이터를 받아왔을 때만 삽입 (휴장일 flat-line 방지)
+        // 🌟 [개선] Yahoo에서 오늘 데이터를 받아왔더라도, 실제 거래 시각(regularMarketTime)이 오늘 오전 9시 이후인지 확인
         if (obs.length > 0 && s.realtimeSymbol) {
             const isUsSettled = US_SETTLED_SYMBOLS.includes(s.realtimeSymbol);
-            const yahooHasTodayData = rtObs && rtObs.length > 0 && rtObs[0].date && rtObs[0].date.startsWith(todayStr);
-            if (obs[0].date !== todayStr && !isUsSettled && yahooHasTodayData) {
-                 const latestPrice = (rtPrice !== null && rtPrice !== undefined) ? String(rtPrice) : rtObs[0].value;
+            const { observations: tmpObs, regularPrice: tmpPrice, regularMarketTime } = await fetchFromYahooFinance(s.realtimeSymbol);
+            
+            // 거래 시각이 오늘 오전 9시(한국 시간) 대라면 진짜 오늘 데이터로 인정
+            const todayOpeningTime = new Date();
+            todayOpeningTime.setHours(9, 0, 0, 0); 
+            const isTrulyToday = regularMarketTime ? (regularMarketTime * 1000 > todayOpeningTime.getTime()) : false;
+            
+            const yahooHasTodayData = tmpObs && tmpObs.length > 0 && tmpObs[0].date && tmpObs[0].date.startsWith(todayStr);
+            
+            if (obs[0].date !== todayStr && !isUsSettled && yahooHasTodayData && isTrulyToday) {
+                 const latestPrice = (rtPrice !== null && rtPrice !== undefined) ? String(rtPrice) : tmpObs[0].value;
                  obs.unshift({ date: todayStr, value: latestPrice });
-                 console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 데이터 확인 후 삽입: ${latestPrice}`);
-            } else if (obs[0].date !== todayStr && !isUsSettled && !yahooHasTodayData) {
-                 console.log(`⏸️ [Realtime-Skip] ${s.name} Yahoo에 오늘(${todayStr}) 데이터 없음 → 강제 노드 생성 생략 (휴장/갱신 전)`);
+                 console.log(`⚡ [Realtime-Force] ${s.name} 오늘(${todayStr}) 거래 확인 후 삽입: ${latestPrice}`);
+            } else if (obs[0].date !== todayStr && !isUsSettled && (!yahooHasTodayData || !isTrulyToday)) {
+                 const reason = !yahooHasTodayData ? "오늘 데이터 없음" : "거래 시각이 어제장 마감분임";
+                 console.log(`⏸️ [Realtime-Skip] ${s.name} 강제 노드 생성 생략 (${reason})`);
             }
         }
 
