@@ -1571,8 +1571,29 @@ async function main() {
         let obs = (s.id === 'DCOILWTICO') ? [] : await fetchFromFred(s.fredId || s.id);
 
         // 실시간 데이터 가져오기 (일별 히스토리 + 실시간 현재가)
-        const { observations: rtObs, regularPrice: rtPriceRaw } = await fetchFromYahooFinance(s.realtimeSymbol);
+        const { observations: rawRtObs, regularPrice: rtPriceRaw, regularMarketTime } = await fetchFromYahooFinance(s.realtimeSymbol);
         
+        // 🌟 [가짜 노드 제거] 야후가 보낸 오늘 날짜 데이터가 가짜 평탄선인 경우 제거
+        const rtObs = (rawRtObs || []).filter((o, idx) => {
+            if (o.date === todayStr) {
+                // 1. 한국 지수(^KS11 등)인데 토요일/일요일 데이터가 들어오면 가짜로 간주
+                const isKorean = s.realtimeSymbol.endsWith('.KS') || s.realtimeSymbol.endsWith('.KQ') || s.realtimeSymbol === '^KS11' || s.realtimeSymbol === '^KQ11';
+                const day = new Date().getDay(); // 0:일, 6:토
+                if (isKorean && (day === 0 || day === 6)) return false;
+
+                // 2. 오늘 시세가 어제 시세와 100% 같고, 거래 시각(regularMarketTime)이 오늘 오전 9시 이전이면 가짜로 간주
+                if (idx < rawRtObs.length - 1) {
+                    const prevVal = rawRtObs[idx + 1].value;
+                    const todayOpeningTime = new Date();
+                    todayOpeningTime.setHours(9, 0, 0, 0);
+                    const isTrulyLive = regularMarketTime ? (regularMarketTime * 1000 > todayOpeningTime.getTime()) : false;
+                    
+                    if (o.value === prevVal && !isTrulyLive) return false;
+                }
+            }
+            return true;
+        });
+
         const rtPrice = (rtPriceRaw !== null && rtPriceRaw !== undefined)
             ? rtPriceRaw
             : (rtObs && rtObs.length > 0 ? parseFloat(rtObs[0].value) : null);
