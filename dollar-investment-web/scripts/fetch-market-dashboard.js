@@ -29,7 +29,7 @@ if (!ECOS_API_KEY) console.warn("⚠️ [Config] ECOS_API_KEY가 없습니다.")
 if (!GEMINI_API_KEY) console.warn("⚠️ [Config] GEMINI_API_KEY가 없습니다.");
 
 const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
-const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC', '^VIX'];
+const US_SETTLED_SYMBOLS = ['^SOX', '^TNX', '^FVX', '^TYX', '^IXIC', '^GSPC', '^VIX', 'NQ=F', 'ES=F', 'CL=F'];
 
 // [v17.0] KOSPI 투자자별 매매동향 기반 데이터 (단위: 억원)
 const KOSPI_INVESTOR_HISTORY = {
