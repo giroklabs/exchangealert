@@ -1709,6 +1709,13 @@ async function main() {
 
         const history = dailyHistory.slice(0, 10).reverse();
         
+        // 🌟 [추가] 실시간 값(Real-time)과 히스토리(History) 동기화
+        // 카드 상단 헤더(Realtime)와 하단 그래프(History)의 마지막 점이 불일치하는 현상 해결
+        if (s.realtimeSymbol && rtPrice !== null && rtPrice !== undefined && history.length > 0) {
+            // 히스토리의 가장 마지막 요소(최신 데이터)를 실시간 값으로 업데이트
+            history[history.length - 1].value = parseFloat(rtPrice.toFixed(2));
+        }
+        
         // --- 오늘 날짜 보장 로직 폐기 (데이터 무결성 우선) ---
         
         // --- 고도화 로직 적용 ---
