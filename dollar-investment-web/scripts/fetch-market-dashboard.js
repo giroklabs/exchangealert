@@ -59,7 +59,50 @@ const KOSPI_INVESTOR_HISTORY = {
     ]
 };
 
-async function fetchFromYahooFinance(symbol) {
+async function fetchFromYahooFinanceRealtime(symbol) {
+    return new Promise((resolve) => {
+        // 1분 간격 실시간 차트 데이터 (1일 범위)
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`;
+        const options = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        };
+        https.get(url, options, (res) => {
+            let data = '';
+            res.on('data', (chunk) => data += chunk);
+            res.on('end', () => {
+                try {
+                    const json = JSON.parse(data);
+                    if (!json.chart || !json.chart.result || !json.chart.result[0]) {
+                        console.warn(`⚠️ Yahoo FinanceRealtime No Result (${symbol})`);
+                        return resolve({ observations: [], regularPrice: null });
+                    }
+                    const result = json.chart.result[0];
+                    const timestamps = result.timestamp;
+                    if (!timestamps) return resolve({ observations: [], regularPrice: null });
+                    const closes = result.indicators.quote[0].close;
+                    const regularPrice = result.meta?.regularMarketPrice || (closes && closes.length > 0 ? closes[closes.length - 1] : null);
+                    const observations = [];
+                    for (let i = 0; i < timestamps.length; i++) {
+                        if (closes[i] !== null) {
+                            const date = new Date(timestamps[i] * 1000).toLocaleString('en-CA', { timeZone: 'Asia/Seoul' });
+                            observations.push({ date, value: closes[i].toFixed(2) });
+                        }
+                    }
+                    resolve({ observations: observations.reverse(), regularPrice });
+                } catch (e) {
+                    console.error(`❌ Yahoo FinanceRealtime Parse Error (${symbol}):`, e.message);
+                    resolve({ observations: [], regularPrice: null });
+                }
+            });
+        }).on('error', (e) => {
+            console.error(`❌ Yahoo FinanceRealtime Network Error (${symbol}):`, e.message);
+            resolve({ observations: [], regularPrice: null });
+        });
+    });
+}
+
     return new Promise((resolve) => {
         // Yahoo Finance Chart API (v8) - 1개월치 데이터 요청 (히스토리 연속성 보장)
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1mo`;
@@ -1525,10 +1568,22 @@ async function main() {
         let obs = await fetchFromFred(s.fredId || s.id);
 
         // 실시간 데이터 가져오기; regularPrice 가 없을 경우 최신 종가를 fallback
-        const { observations: rtObs, regularPrice: rtPriceRaw } = await fetchFromYahooFinance(s.realtimeSymbol);
+        let rtObs = [], rtPriceRaw = null;
+        if (s.id === 'DCOILWTICO') {
+            // WTI 선물은 1분 간격 실시간 데이터 필요
+            const result = await fetchFromYahooFinanceRealtime(s.realtimeSymbol);
+            rtObs = result.observations || [];
+            // regularPrice may be stale; use latest observation value as price
+            rtPriceRaw = rtObs.length > 0 ? parseFloat(rtObs[0].value) : null;
+        } else {
+            const { observations: tmpObs, regularPrice: tmpPrice } = await fetchFromYahooFinance(s.realtimeSymbol);
+            rtObs = tmpObs;
+            rtPriceRaw = tmpPrice;
+        }
         const rtPrice = (rtPriceRaw !== null && rtPriceRaw !== undefined)
             ? rtPriceRaw
             : (rtObs && rtObs.length > 0 ? parseFloat(rtObs[0].value) : null);
+
         
         if (s.realtimeSymbol) {
             // 만약 주 기호(realtimeSymbol)의 히스토리가 부족한 경우(예: 580039.KS), 보조 히스토리 기호(historySymbol) 사용 시도
