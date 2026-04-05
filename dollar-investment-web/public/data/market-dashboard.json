@@ -767,12 +767,16 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,129.75",
-      "diff": -88.25,
-      "diffPercent": -0.36,
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "24,218",
+      "diff": 23.25,
+      "diffPercent": 0.1,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
+        {
+          "date": "2026-03-20",
+          "value": 24291.78
+        },
         {
           "date": "2026-03-23",
           "value": 24408.25
@@ -808,10 +812,6 @@
         {
           "date": "2026-04-02",
           "value": 24218
-        },
-        {
-          "date": "2026-04-03",
-          "value": 24129.75
         }
       ]
     },
@@ -826,12 +826,16 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,603.75",
-      "diff": -18.5,
-      "diffPercent": -0.28,
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "6,622.25",
+      "diff": 4.5,
+      "diffPercent": 0.07,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
+        {
+          "date": "2026-03-20",
+          "value": 6594.63
+        },
         {
           "date": "2026-03-23",
           "value": 6634.75
@@ -867,10 +871,6 @@
         {
           "date": "2026-04-02",
           "value": 6622.25
-        },
-        {
-          "date": "2026-04-03",
-          "value": 6603.75
         }
       ]
     },
@@ -2448,10 +2448,10 @@
     }
   ],
   "forecast": {
-    "sentiment": "보합",
+    "sentiment": "환율 하락 우세",
     "kospiSentiment": "보합",
-    "upProb": 48,
-    "downProb": 52,
+    "upProb": 44,
+    "downProb": 56,
     "kospiUpProb": 53,
     "kospiDownProb": 47,
     "timeframes": {
@@ -2475,8 +2475,8 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\nANCHOR SIGNAL은 원/달러 환율 상승 확률을 48%로 제시, 약한 하방 가능성을 시사합니다. 미 10년물 국채금리 하락 추세는 환율 상방을 제한하는 요인입니다. 다만, 높은 WTI 유가와 단기 이동평균선 정배열은 상승 모멘텀을 유지시키고 있어, 밴드 상단 부근에서 상방 저항에 부딪히며 횡보할 가능성 또한 존재합니다. 기술적 지표는 중립이나 변동성 확대에 유의해야 합니다.\n\n[파트B: 코스피 지수 분석]\nANCHOR SIGNAL은 코스피 상승 확률 53%로 약한 반등 시도를 예상합니다. 1일 모멘텀 양전환 및 RSI 중립 수준은 단기 반등 여력을 시사합니다. 하지만 주요 이동평균선 역배열로 단기 하락 추세가 지속되고 있으며, 높은 VIX 수준은 시장의 변동성 확대 리스크를 경고하므로, 상승은 저항에 직면할 가능성이 높습니다.\n\n실전 투자 대응:\n- 환율: 하방 압력 우세하나, 단기 모멘텀 상승 중. 보유자는 상방 제한 시 분할 매도, 신규는 관망 후 신중 접근.\n- 코스피: 약한 반등 시도 예상. 보유자는 반등 시 비중 조절, 신규는 변동성 유의 분할 매수 고려.",
     "lastAiUpdate": 1775315610998,
     "score": {
-      "upScore": 50.19600763090619,
-      "downScore": 53.95125835413418,
+      "upScore": 43.32071617906292,
+      "downScore": 55.18336141276983,
       "kospiUpScore": 23.486274040134607,
       "kospiDownScore": 21.01081044320955
     }
@@ -2550,5 +2550,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 5. AM 8:11:24"
+  "lastUpdate": "2026. 4. 5. AM 8:16:34"
 }
