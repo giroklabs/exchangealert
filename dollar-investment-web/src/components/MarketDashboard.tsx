@@ -4,7 +4,7 @@ import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchAllCurrentExchangeRates, fetchLastUpdateTime } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, ClipboardList, Globe } from 'lucide-react';
+import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, Globe } from 'lucide-react';
 import { UnifiedFXChart } from './UnifiedFXChart';
 
 export function MarketDashboard({ initialData = null, isLoadingExternal = false }: { initialData?: DashboardData | null, isLoadingExternal?: boolean }) {
@@ -13,9 +13,6 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
     const [isLoading, setIsLoading] = useState(!initialData);
     const [isChartExpanded, setIsChartExpanded] = useState(true);
     const [isPredictionExpanded, setIsPredictionExpanded] = useState(true);
-    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-    const [historyData, setHistoryData] = useState<any[]>([]);
-    const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
     const renderLineWithBold = (text: string) => {
         const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -68,27 +65,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
         loadData();
     }, []);
 
-    useEffect(() => {
-        const loadHistory = async () => {
-            if (!isHistoryOpen || historyData.length > 0) return;
-            setIsLoadingHistory(true);
-            try {
-                const baseUrl = import.meta.env.BASE_URL || '/';
-                const response = await fetch(`${baseUrl}data/prediction-history.json?t=${Date.now()}`);
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.records) {
-                        setHistoryData([...result.records].reverse().filter((r: any) => r.aiAnalysis));
-                    }
-                }
-            } catch (e) {
-                console.warn('예측 이력 로드 실패:', e);
-            } finally {
-                setIsLoadingHistory(false);
-            }
-        };
-        loadHistory();
-    }, [isHistoryOpen]);
+
 
     if (isLoading) {
         return (
