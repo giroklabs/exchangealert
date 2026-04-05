@@ -35,13 +35,18 @@ async function fetchBillingStats() {
         const startTime = new Date(now.getFullYear(), now.getMonth(), 1).toISOString(); // 이번 달 1일부터
         const endTime = now.toISOString();
 
-        console.log(`📊 프로젝트 [${projectId}]의 지표 조회 시작 (StartTime: ${startTime})`);
+        console.log("📋 프로젝트 ID:", projectId);
+        console.log(`📊 프로젝트 [${projectId}]의 지표 조회 시작 (StartTime: ${startTime} ~ EndTime: ${endTime})`);
+
+        const metricType = "billing.googleapis.com/billing/account_cost";
 
         const response = await monitoring.projects.timeSeries.list({
             name: `projects/${projectId}`,
-            filter: 'metric.type="billing.googleapis.com/billing/total_cost"',
+            filter: `metric.type="${metricType}"`,
             'interval.startTime': startTime,
             'interval.endTime': endTime,
+            'aggregation.alignmentPeriod': '86400s',
+            'aggregation.perSeriesAligner': 'ALIGN_SUM',
             view: 'FULL'
         });
 
@@ -88,6 +93,7 @@ async function fetchBillingStats() {
 
     } catch (error) {
         console.error('❌ 결제 데이터 수집 실패:', error.message);
+        console.error("💡 해결방법: 1) billing.googleapis.com/billing/account_cost 메트릭 사용, 2) Billing API 활성화 확인");
         if (error.stack) console.log('DEBUG:', error.stack);
         
         // 실패 시에도 앱이 깨지지 않도록 기본값 저장
