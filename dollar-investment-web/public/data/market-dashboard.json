@@ -1521,7 +1521,7 @@
       "block": "risk",
       "impact": "up",
       "source": "금융투자협회",
-      "description": "개인 투자자의 부채 이용 주식 매수 규모, 급증 시 시장 과열 및 반대매매 리스크",
+      "description": "개인 부채 매수 규모, 급증 시 반대매매 리스크",
       "value": "327,255",
       "diff": -2555,
       "diffPercent": -0.77,
@@ -2291,7 +2291,7 @@
       "block": "rates-dollar",
       "impact": "up",
       "source": "FRED(Target-GS1)",
-      "description": "시장 내재 연내 기준금리 인하(양수)/인상(음수) 기대 횟수 (25bp 단위)",
+      "description": "연내 기준금리 인하/인상 기대 횟수 (25bp)",
       "value": "-0.2",
       "trend": "down",
       "realizedImpact": "neutral",
@@ -2547,5 +2547,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 5. PM 12:56:20"
+  "lastUpdate": "2026. 4. 5. PM 12:58:53"
 }
