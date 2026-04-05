@@ -8,16 +8,12 @@
       "impact": "up",
       "source": "Federal Reserve",
       "description": "미국 기준 금리, 달러 가치 결정",
-      "value": "3.64",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "3.72",
+      "diff": -0.37,
+      "diffPercent": -9.05,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-06-01",
-          "value": 4.33
-        },
         {
           "date": "2025-07-01",
           "value": 4.33
@@ -35,24 +31,8 @@
           "value": 4.09
         },
         {
-          "date": "2025-11-01",
-          "value": 3.88
-        },
-        {
           "date": "2025-12-01",
           "value": 3.72
-        },
-        {
-          "date": "2026-01-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-02-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-01",
-          "value": 3.64
         }
       ]
     },
@@ -1012,14 +992,6 @@
           "value": 3.75
         },
         {
-          "date": "2026-03-28",
-          "value": 3.75
-        },
-        {
-          "date": "2026-03-29",
-          "value": 3.75
-        },
-        {
           "date": "2026-03-30",
           "value": 3.75
         },
@@ -1033,18 +1005,6 @@
         },
         {
           "date": "2026-04-02",
-          "value": 3.75
-        },
-        {
-          "date": "2026-04-03",
-          "value": 3.75
-        },
-        {
-          "date": "2026-04-04",
-          "value": 3.75
-        },
-        {
-          "date": "2026-04-05",
           "value": 3.75
         }
       ],
@@ -2449,17 +2409,17 @@
     "kospiSentiment": "보합",
     "upProb": 48,
     "downProb": 52,
-    "kospiUpProb": 53,
-    "kospiDownProb": 47,
+    "kospiUpProb": 54,
+    "kospiDownProb": 46,
     "timeframes": {
       "d1": {
-        "upProb": 50,
-        "downProb": 50,
+        "upProb": 49,
+        "downProb": 51,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 46,
-        "downProb": 54,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2472,9 +2432,9 @@
     "detailedAnalysis": "**[파트A: 원/달러 환율 분석]**\n현재 환율은 1,516.13원이다. 단기적으로 볼린저밴드 상단인 1,525원 재시도 후 1,500원대 초반 조정 가능성이 있다. 1,510원(MA5)은 1차 지지, 1,525원(BB 상단)은 저항이다. 1,525원 부근에서는 매도 또는 관망, 1,500원 초반 조정 시 분할 매수 대응이 적절하다. fxUpProb 48%로 하락 우세이나 단기상승 모멘텀, WTI와 금리차 확대 요인이 상존한다.\n\n**[파트B: 코스피 지수 분석]**\n현재 코스피는 5,277.3pt다. 단기적으로 볼린저밴드 하단인 5,100pt 지지력 확인 후 5,300pt대 회복을 시도할 것이다. 5,100pt(BB 하단)는 1차 지지, 5,317pt(MA60)는 저항이다. 5,100pt 부근 눌림목은 분할 매수 가능하나, 5,300pt 돌파 여부를 확인 후 비중 확대가 적절하다. kospiUpProb 53%로 상승 우세하나, 이평선 역배열로 하락 압력이 상존한다.\n\n**[실전 투자 대응]**\n환율: 현재 1,516원 부근은 관망, 1,525원 상단 저항 확인 후 매도, 1,500원대 초반 조정 시 분할 매수.\n코스피: 현재 5,277pt는 관망, 5,100pt 하단 지지 시 분할 매수, 5,317pt 저항 돌파 여부 확인.",
     "lastAiUpdate": 1775397717742,
     "score": {
-      "upScore": 50.69128989913189,
-      "downScore": 53.98859548974323,
-      "kospiUpScore": 23.486274040134607,
+      "upScore": 50.68968558199978,
+      "downScore": 55.906388676761594,
+      "kospiUpScore": 24.5684207213895,
       "kospiDownScore": 21.01081044320955
     }
   },
@@ -2547,5 +2507,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 5. PM 2:26:22"
+  "lastUpdate": "2026. 4. 5. PM 2:30:42"
 }
