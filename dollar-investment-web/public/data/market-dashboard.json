@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.286",
-      "diff": 0.26,
-      "diffPercent": 0.26,
+      "value": "100.259",
+      "diff": 0.23,
+      "diffPercent": 0.23,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-05",
-          "value": 100.29
+          "value": 100.26
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "23,997.75",
-      "diff": -220.25,
-      "diffPercent": -0.91,
+      "value": "24,021.25",
+      "diff": -196.75,
+      "diffPercent": -0.81,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-05",
-          "value": 23997.75
+          "value": 24021.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,569.75",
-      "diff": -52.5,
-      "diffPercent": -0.79,
+      "value": "6,576",
+      "diff": -46.25,
+      "diffPercent": -0.7,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-05",
-          "value": 6569.75
+          "value": 6576
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "115.06",
-      "diff": 3.52,
-      "diffPercent": 3.16,
+      "value": "114.59",
+      "diff": 3.05,
+      "diffPercent": 2.73,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-05",
-          "value": 115.06
+          "value": 114.59
         }
       ]
     },
@@ -2468,8 +2468,8 @@
     "detailedAnalysis": "파트A: 원/달러 환율 분석\n현재 환율은 1,516.13원이다. 단기 상승 모멘텀을 바탕으로 1,520원대 초반 재시도 후 1,525.47원(볼린저 상단)까지 상승 가능성이 있다. 1,510.26원(MA5)은 1차 지지, 1,525.47원은 단기 저항이며 1,536.82원(60일 저항)이 2차 저항이다. 1,510원 부근 지지 확인 시 분할 매수 관점, 1,525원 이상에서는 경계 매도 및 관망이 적절하다. 핵심 근거는 단기 이평선 정배열(MA5>MA20>MA60) 및 MACD 강세 신호, 그리고 5일간의 상승 추세 지속이다.\n\n파트B: 코스피 지수 분석\n현재 코스피는 5,277.3pt다. 정량모델의 상승 확률(53%)에도 불구하고 단기 이평선 역배열로 5,200~5,300pt 박스권 흐름이 예상된다. 5,100.69pt(볼린저 하단)는 1차 지지, 5,283.96pt(MA5)는 1차 저항, 5,317.83pt(MA60)는 2차 저항이다. 5,100pt 부근 하락 시 분할 매수 관점, 5,300pt 이상에서는 이익 실현 및 관망이 적절하다. 주요 근거는 정량모델의 제한적 상승확률, 단기 이평선 역배열, 그리고 높은 변동성 지수(VIX 23.87)이다.\n\n실전 투자 대응\n환율: 단기 상승 모멘텀 유지 시 1,510원 지지 확인 후 매수, 1,525원 이상에서는 비중 조절을 고려.\n코스피: 5,100pt 볼린저 하단 지지 확인 시 분할 매수, 5,280pt 이상에서는 단기 수익 실현을 고려.",
     "lastAiUpdate": 1775404924986,
     "score": {
-      "upScore": 50.424502162509995,
-      "downScore": 53.94482630069586,
+      "upScore": 50.4644902920316,
+      "downScore": 53.9517066624911,
       "kospiUpScore": 23.486274040134607,
       "kospiDownScore": 21.01081044320955
     }
@@ -2543,5 +2543,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 5. PM 10:21:25"
+  "lastUpdate": "2026. 4. 5. PM 10:26:20"
 }
