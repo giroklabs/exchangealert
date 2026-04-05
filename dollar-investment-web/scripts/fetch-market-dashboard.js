@@ -187,38 +187,37 @@ const FACTOR_BLOCKS = {
 
 // 2. 해외지표 (FRED)
 const FRED_SERIES = [
-    { id: 'FEDFUNDS', name: '미국 기준금리(Fed)', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'Fed 금리 인상 시 달러 가치 상승으로 환율 상승' },
-    { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러의 상대적 가치 (환율의 핵심 나침반)', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
-    { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세 유발', realtimeSymbol: '^TNX', fredId: 'GS10' },
+    { id: 'FEDFUNDS', name: '미국 기준금리(Fed)', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: '미국 기준 금리, 달러 가치 결정' },
+    { id: 'DXY', name: '달러 인덱스(DXY)', unit: 'pt', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'ICE', description: '달러 상대 가치, 환율 핵심 지표', realtimeSymbol: 'DX-Y.NYB', fredId: 'DTWEXBGS' },
+    { id: 'TNX', name: '미 10년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'CBOE', description: '미 국채 금리 상승 시 달러 강세', realtimeSymbol: '^TNX', fredId: 'GS10' },
     { id: 'VIXCLS', name: 'VIX 공포지수', unit: 'pt', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'CBOE', description: '시장 불안정성 및 공포 심리 지표', realtimeSymbol: '^VIX' },
     { id: 'BAMLH0A0HYM2', name: '미국 하이일드 스프레드', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'ICE BofA', description: '글로벌 신용 리스크 온/오프 지표', fredId: 'BAMLH0A0HYM2' },
-    { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '담보 유동성 지표', fredId: 'SOFR' },
-    { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '무담보 유동성 지표', fredId: 'EFFR' },
-    { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '무위험 단기 금리', fredId: 'DTB3' },
-    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '국내 시장 악화 시 원화 약세(환율 상승) 유도', realtimeSymbol: '^KS11', fredId: null },
-    { id: 'KOSPI_NIGHT', name: '코스피 야간선물(ETN)', unit: '원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '야간 시간대 코스피 선물 흐름 추종 (KB 레버리지)', realtimeSymbol: '580039.KS', historySymbol: '122630.KS', fredId: null },
-    { id: 'NASDAQ', name: '나스닥 종합지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 기술주 심리 및 성장성 지표', realtimeSymbol: '^IXIC', fredId: null },
-    { id: 'SP500', name: 'S&P 500 지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'S&P', description: '미국 대형주 중심 글로벌 증시 벤치마크', realtimeSymbol: '^GSPC', fredId: null },
-    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '글로벌 반도체 업업 (코스피와 강한 동조화)', realtimeSymbol: '^SOX', fredId: null },
-    { id: 'nasdaq-futures', name: '나스닥 100 선물', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'CME', description: '미국 나스닥 100 지수 추종 선물 (실시간 글로벌 심리)', realtimeSymbol: 'NQ=F', fredId: null },
-    { id: 'sp500-futures', name: 'S&P 500 선물', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'CME', description: '미국 S&P 500 지수 추종 선물 (전 세계 증시 나침반)', realtimeSymbol: 'ES=F', fredId: null },
-    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '원자재 가격 상승 시 인플레이션 및 달러 수요 자극', realtimeSymbol: 'CL=F' },
+    { id: 'SOFR', name: 'SOFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'NY Fed', description: '금융기관 간 담보부 유동성 지표', fredId: 'SOFR' },
+    { id: 'EFFR', name: 'EFFR', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'Fed', description: '미 유동성 측정 실효연방기금금리', fredId: 'EFFR' },
+    { id: 'DTB3', name: 'T-Bill 3M', unit: '%', block: FACTOR_BLOCKS.RISK.id, impact: 'down', source: 'Fed', description: '미국 무위험 단기 국채 금리', fredId: 'DTB3' },
+    { id: 'KOSPI', name: '코스피 지수', unit: 'pt', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '국내 증시 흐름 및 외인 심리', realtimeSymbol: '^KS11', fredId: null },
+    { id: 'KOSPI_NIGHT', name: '코스피 야간선물(ETN)', unit: '원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: 'Yahoo Finance 실시간', description: '야간 시간대 코스피 선물 흐름', realtimeSymbol: '580039.KS', historySymbol: '122630.KS', fredId: null },
+    { id: 'NASDAQ', name: '나스닥 종합지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '미국 기술주 중심 성장성 지표', realtimeSymbol: '^IXIC', fredId: null },
+    { id: 'SP500', name: 'S&P 500 지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'S&P', description: '미 대형주 중심 글로벌 벤치마크', realtimeSymbol: '^GSPC', fredId: null },
+    { id: 'SOX', name: '필라델피아 반도체지수', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'NASDAQ', description: '반도체 업황 및 코스피 동조화', realtimeSymbol: '^SOX', fredId: null },
+    { id: 'nasdaq-futures', name: '나스닥 100 선물', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'CME', description: '미 기술주 실시간 투자 심리', realtimeSymbol: 'NQ=F', fredId: null },
+    { id: 'sp500-futures', name: 'S&P 500 선물', unit: 'pt', block: FACTOR_BLOCKS.GLOBAL_INDICES.id, impact: 'down', source: 'CME', description: '전 세계 증시 흐름의 실시간 척도', realtimeSymbol: 'ES=F', fredId: null },
+    { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '유가 상승 시 인플레 및 달러 수요', realtimeSymbol: 'CL=F' },
     // --- 금리 기대 산출용 (hidden: AI 분석 내부 계산용, 대시보드 미표시) ---
-    { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치 (GS1-EFFR 스프레드로 금리인하 기대 산출)', fredId: 'DGS1', hidden: true },
-    { id: 'DFEDTARU', name: 'Fed 기준금리 목표 상단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표범위 상단', fredId: 'DFEDTARU', hidden: true },
-    { id: 'DFEDTARL', name: 'Fed 기준금리 목표 하단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표범위 하단', fredId: 'DFEDTARL', hidden: true },
+    { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치', fredId: 'DGS1', hidden: true },
+    { id: 'DFEDTARU', name: 'Fed 기준금리 목표 상단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표 범위 상단', fredId: 'DFEDTARU', hidden: true },
+    { id: 'DFEDTARL', name: 'Fed 기준금리 목표 하단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표 범위 하단', fredId: 'DFEDTARL', hidden: true },
 ];
 
 // 3. 국내지표 (ECOS)
 const ECOS_SERIES = [
-    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'D' },
-    { id: 'investor-deposits', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '금융투자협회/Yahoo', description: '증시 대기 자금, 증가 시 증시 상승 기대', transform: 'wonToEok' },
-    { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '인플레이션 지표, 금리 정책에 영향', cycle: 'M' },
-    { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
-    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },
-
-    { id: 'fx-reserves', statCode: '732Y001', item1: '99', name: '외환보유액', unit: '억$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '외환 방어 능력 (증가 시 원화 안정)', cycle: 'M', transform: 'thousandUsdToEokUsd' },
-    { id: 'short-debt-ratio', statCode: '311Y004', item1: 'A500000', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '대외채무 대비 단기외채 비중 (상승 시 건전성 악화)', cycle: 'Q', customFetch: 'shortDebtRatio' }
+    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한국 기준금리, 한미 금리차 결정', cycle: 'D' },
+    { id: 'investor-deposits', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '금융투자협회/Yahoo', description: '증시 대기 자금, 투자 심리 지표', transform: 'wonToEok' },
+    { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '한국 물가 지표, 금리 정책 영향', cycle: 'M' },
+    { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한국 국고채 금리, 한미 금리차용', cycle: 'D' },
+    { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 가치 안정', cycle: 'M' },
+    { id: 'fx-reserves', statCode: '732Y001', item1: '99', name: '외환보유액', unit: '억$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '외환 방어 및 원화 안정화 능력', cycle: 'M', transform: 'thousandUsdToEokUsd' },
+    { id: 'short-debt-ratio', statCode: '311Y004', item1: 'A500000', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '대외채무 건전성 및 상환 능력', cycle: 'Q', customFetch: 'shortDebtRatio' }
 ];
 
 async function fetchFromFred(seriesId) {
