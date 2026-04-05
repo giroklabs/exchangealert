@@ -256,7 +256,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                 )}
                             </div>
 
-                            {/* 과거 분석 기록 보기 영역 */}
+                            {/* 과거 분석 기록 보기 영역 (비활성화)
                             <div className="mt-8 pt-6 border-t border-yellow-200/30 dark:border-gray-700/50">
                                 <button
                                     onClick={() => setIsHistoryOpen(!isHistoryOpen)}
@@ -307,6 +307,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                     </div>
                                 )}
                             </div>
+                            */}
                         </div>
                     </div>
                 </div>
