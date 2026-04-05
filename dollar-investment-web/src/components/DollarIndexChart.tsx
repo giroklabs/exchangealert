@@ -70,7 +70,7 @@ export function DollarIndexChart({ data, average, isLoading }: DollarIndexChartP
             stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
             fontSize={12}
             tick={{ fill: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
-            domain={['dataMin - 2', 'dataMax + 2']}
+            domain={[(dataMin: number) => Number((dataMin - 2).toFixed(1)), (dataMax: number) => Number((dataMax + 2).toFixed(1))]}
           />
           <Tooltip
             contentStyle={{

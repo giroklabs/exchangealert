@@ -211,8 +211,8 @@ const FRED_SERIES = [
 
 // 3. 국내지표 (ECOS)
 const ECOS_SERIES = [
-    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'M' },
-    { id: 'investor-deposits', statCode: '901Y056', item1: 'S23A', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'M', transform: 'wonToEok' },
+    { id: 'bok-rate', statCode: '722Y001', item1: '0101000', name: '한국 기준금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '미국과의 금리차 결정 요인', cycle: 'D' },
+    { id: 'investor-deposits', statCode: '901Y056', item1: 'S23A', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '한국은행', description: '증시 대기 자금, 증가 시 증시 상승 기대', cycle: 'D', transform: 'wonToEok' },
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '인플레이션 지표, 금리 정책에 영향', cycle: 'M' },
     { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 금리차 산출용', cycle: 'D' },
     { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 강세(환율 하락) 유도', cycle: 'M' },

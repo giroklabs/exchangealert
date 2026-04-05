@@ -59,7 +59,7 @@ export function ExchangeRateChart({ data, average, isLoading }: ExchangeRateChar
             stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
             fontSize={12}
             tick={{ fill: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
-            domain={['dataMin - 50', 'dataMax + 50']}
+            domain={[(dataMin: number) => Math.floor(dataMin - 50), (dataMax: number) => Math.ceil(dataMax + 50)]}
           />
           <Tooltip
             contentStyle={{

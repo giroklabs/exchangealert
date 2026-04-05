@@ -173,7 +173,7 @@ export function UnifiedFXChart({ isEmbedded = false }: { isEmbedded?: boolean })
         });
         const min = Math.min(...values);
         const max = Math.max(...values);
-        const range = max - min;
+        const range = Math.max(max - min, 1);
         return [Math.floor(min - range * 0.1), Math.ceil(max + range * 0.1)];
     };
 
