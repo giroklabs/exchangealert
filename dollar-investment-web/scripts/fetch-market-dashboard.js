@@ -1399,10 +1399,10 @@ async function sendTelegramNotification(forecast, lastUpdate) {
             }
         }
 
-        // 요약 추출 (각 파트별 최신 문장 중 첫 100자 정도만)
+        // 요약 추출 (각 파트별 최신 문장 전체 추출)
         if (!captureStrategy && trimmed.length > 30 && !trimmed.startsWith('[') && !trimmed.startsWith('1)') && !trimmed.startsWith('2)')) {
-            if (currentPart === 'A' && !fxSummary) fxSummary = trimmed.substring(0, 200).trim();
-            if (currentPart === 'B' && !kSummary) kSummary = trimmed.substring(0, 200).trim();
+            if (currentPart === 'A' && !fxSummary) fxSummary = trimmed;
+            if (currentPart === 'B' && !kSummary) kSummary = trimmed;
         }
     }
 
