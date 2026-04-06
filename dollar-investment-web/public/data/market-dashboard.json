@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.077",
-      "diff": 0.05,
-      "diffPercent": 0.05,
+      "value": "100.088",
+      "diff": 0.06,
+      "diffPercent": 0.06,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 100.08
+          "value": 100.09
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "24.77",
-      "diff": 0.9,
-      "diffPercent": 3.77,
+      "value": "24.85",
+      "diff": 0.98,
+      "diffPercent": 4.11,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 24.77
+          "value": 24.85
         }
       ]
     },
@@ -826,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,621.75",
-      "diff": -0.5,
+      "value": "6,621.5",
+      "diff": -0.75,
       "diffPercent": -0.01,
       "trend": "down",
       "realizedImpact": "up",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 6621.75
+          "value": 6621.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "110.78",
-      "diff": -0.76,
-      "diffPercent": -0.68,
+      "value": "111.04",
+      "diff": -0.5,
+      "diffPercent": -0.45,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 110.78
+          "value": 111.04
         }
       ]
     },
@@ -1295,16 +1295,12 @@
       "source": "한국은행",
       "description": "한국 국고채 금리, 한미 금리차용",
       "cycle": "D",
-      "value": "3.747",
-      "diff": -0.06,
-      "diffPercent": -1.58,
+      "value": "3.725",
+      "diff": -0.02,
+      "diffPercent": -0.53,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-03-23",
-          "value": 3.879
-        },
         {
           "date": "2026-03-24",
           "value": 3.835
@@ -1340,6 +1336,10 @@
         {
           "date": "2026-04-03",
           "value": 3.747
+        },
+        {
+          "date": "2026-04-06",
+          "value": 3.725
         }
       ]
     },
@@ -2138,17 +2138,17 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.57",
+      "value": "0.59",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-20",
-          "value": 0.51
+          "value": 0.55
         },
         {
           "date": "2026-03-23",
-          "value": 0.45
+          "value": 0.5
         },
         {
           "date": "2026-03-24",
@@ -2357,7 +2357,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,504.70",
+      "value": "1,504.20",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2368,7 +2368,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "941.95",
+      "value": "941.98",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2378,7 +2378,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,734.87",
+      "value": "1,735.47",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2388,7 +2388,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.56",
+      "value": "218.58",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2484,10 +2484,10 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1503.58원입니다. 향후 1~5거래일간 1500~1515원 구간 내 등락이 예상됩니다. 1495원은 단기 지지선, 1515원은 단기 저항선으로 작용할 것입니다. 1495원 부근 조정 시 분할 매수 고려, 1515원 돌파 시 관망하며 추격 매수보다 확인 후 대응이 적절합니다. 달러 패닉 및 자본 유출 위험 신호가 원화 약세 압력을 높이지만, 환율 상승 확률이 48%로 강한 상방 모멘텀은 제한적입니다. 기술적으로는 단기 이동평균선이 상승 모멘텀을 지지하나 MACD는 약화를 보입니다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,450.33pt입니다. 향후 1~5거래일간 5400~5520pt 구간에서 움직일 것으로 보입니다. 핵심 지지선은 5320pt, 저항선은 5510pt입니다. 5320pt 부근 하락 시 분할 매수 관점으로 접근하고, 5510pt 저항선 돌파 여부를 확인하며 비중 확대는 신중해야 합니다. 코스피 상승 확률은 48%로 상승 동력은 약합니다. 긍정적인 기술적 모멘텀에도 불구하고 미국 금리 인하 기대 약화와 국내 물가 상승 압력이 지수 상단을 제한할 것입니다.\n\n[실전 투자 대응]\n환율: 1503.58원 기준, 1495원 지지 시 분할 매수, 1515원 저항 확인 후 매도 고려.\n코스피: 5450.33pt 기준, 5320pt 부근 분할 매수, 5510pt 돌파 실패 시 비중 조절.",
     "lastAiUpdate": 1775460709595,
     "score": {
-      "upScore": 51.82962215431735,
-      "downScore": 55.98194756433406,
+      "upScore": 51.77259790056367,
+      "downScore": 55.88519636123401,
       "kospiUpScore": 21.93920738082107,
-      "kospiDownScore": 23.539653848937817
+      "kospiDownScore": 23.557867120741243
     }
   },
   "technicals": {
@@ -2574,5 +2574,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 6. AM 7:31:49"
+  "lastUpdate": "2026. 4. 6. AM 7:36:28"
 }
