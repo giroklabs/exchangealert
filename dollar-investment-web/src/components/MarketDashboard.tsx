@@ -138,9 +138,13 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                             </span>
                                         </div>
                                         <div className="relative pt-1">
+                                            <div className="flex mb-2 items-center justify-between text-xs font-semibold">
+                                                <div className="text-blue-500">하락 {data?.forecast?.downProb || 50}%</div>
+                                                <div className="text-red-500">상승 {data?.forecast?.upProb || 50}%</div>
+                                            </div>
                                             <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                                <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400"></div>
-                                                <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400"></div>
+                                                <div style={{ width: `${data?.forecast?.downProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400 flex items-center justify-center text-[10px] text-white font-bold">{(data?.forecast?.downProb ?? 0) > 20 && `${data?.forecast?.downProb}%`}</div>
+                                                <div style={{ width: `${data?.forecast?.upProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400 flex items-center justify-center text-[10px] text-white font-bold">{(data?.forecast?.upProb ?? 0) > 20 && `${data?.forecast?.upProb}%`}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -154,9 +158,13 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                             </span>
                                         </div>
                                         <div className="relative pt-1">
+                                            <div className="flex mb-2 items-center justify-between text-xs font-semibold">
+                                                <div className="text-blue-500">하락 {data?.forecast?.kospiDownProb || 50}%</div>
+                                                <div className="text-red-500">상승 {data?.forecast?.kospiUpProb || 50}%</div>
+                                            </div>
                                             <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
-                                                <div style={{ width: `${data?.forecast?.kospiDownProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400"></div>
-                                                <div style={{ width: `${data?.forecast?.kospiUpProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400"></div>
+                                                <div style={{ width: `${data?.forecast?.kospiDownProb || 50}%` }} className="flex-shrink-0 h-full bg-blue-400 flex items-center justify-center text-[10px] text-white font-bold">{(data?.forecast?.kospiDownProb ?? 0) > 20 && `${data?.forecast?.kospiDownProb}%`}</div>
+                                                <div style={{ width: `${data?.forecast?.kospiUpProb || 50}%` }} className="flex-shrink-0 h-full bg-red-400 flex items-center justify-center text-[10px] text-white font-bold">{(data?.forecast?.kospiUpProb ?? 0) > 20 && `${data?.forecast?.kospiUpProb}%`}</div>
                                             </div>
                                         </div>
                                     </div>

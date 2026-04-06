@@ -1228,16 +1228,15 @@ ${combinedDataContext}
 예시 형식:
 현재 코스피는 2,550.5pt다. 단기 반등 시 2,600~2,620pt 구간까지 열려 있으나, 2,500pt는 1차 지지, 2,650pt는 저항이다. 2,520pt 부근 눌림목은 분할 접근 가능하나, 2,650pt 돌파 실패 시 비중 확대는 신중해야 한다.
 
-[실전 투자 대응]
-- 환율: 숫자를 포함해 80자 이내
-- 코스피: 숫자를 포함해 80자 이내
+[실전 투자 대응] (이 섹션은 절대 누락하지 마세요)
+- 환율: 숫자를 포함해 80자 이내의 구체적 대응
+- 코스피: 숫자를 포함해 80자 이내의 구체적 대응
 
 중요 지침:
-- 방향성만 설명하지 말고 반드시 숫자를 포함하세요.
-- "상승 가능성", "하락 우세"처럼 추상적으로 끝내지 말고 현재가, 목표 구간, 지지선, 저항선을 모두 제시하세요.
-- 숫자가 없는 답변은 잘못된 답변입니다.
-- CONTEXT와 Anchor Signal에 포함된 가격, 기술지표, 지지/저항 값을 우선 사용하세요.
-- 톤과 스타일: 객관적이고 공식적인 리포트 톤 사용 (마크다운 헤더(#) 기호 사용 금지).`;
+1. [실전 투자 대응] 섹션은 텔레그램 알림의 핵심이므로 반드시 별도 섹션으로 작성하세요.
+2. 모든 분석 결과에 현재가, 지지선, 저항선 등 숫자를 반드시 포함하세요.
+3. 마크다운 헤더(#) 기호 사용 금지.
+4. 톤과 스타일: 냉철하고 객관적인 공식 리포트 스타일.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -1381,22 +1380,29 @@ async function sendTelegramNotification(forecast, lastUpdate) {
         const trimmed = line.trim();
         if (trimmed.includes('[파트A:')) { currentPart = 'A'; continue; }
         if (trimmed.includes('[파트B:')) { currentPart = 'B'; continue; }
-        if (trimmed.startsWith('실전 투자 대응:')) { captureStrategy = true; continue; }
         
-        // 투자 대응 - 환율 및 코스피 항목 모두 캡처
+        // 투자 대응 - 헤더 문구 유연화
+        if (trimmed.includes('[실전 투자 대응]') || trimmed.includes('실전 투자 대응') || trimmed.includes('실전 대응')) { 
+            captureStrategy = true; 
+            continue; 
+        }
+        
         if (captureStrategy) {
-            if (trimmed.startsWith('- ')) {
+            // 리스트 항목(환율/코스피 대응) 추출
+            if (trimmed.startsWith('-') || trimmed.startsWith('*') || trimmed.startsWith('•') || (trimmed.length > 5 && (trimmed.includes('환율:') || trimmed.includes('코스피:')))) {
                 strategy += trimmed + '\n';
-            } else if (trimmed.length === 0 && strategy.includes('코스피')) {
-                // 코스피 항목까지 다 읽었으면 중단
+            } else if (trimmed.length === 0 && strategy.length > 20) {
+                // 이미 내용을 충분히 읽었다면 종료
+                captureStrategy = false;
+            } else if (trimmed.startsWith('[') && strategy.length > 0) {
                 captureStrategy = false;
             }
         }
 
-        // 요약 추출 (각 파트별 첫 긴 문장)
-        if (!captureStrategy && trimmed.length > 50 && !trimmed.startsWith('[')) {
-            if (currentPart === 'A' && !fxSummary) fxSummary = trimmed;
-            if (currentPart === 'B' && !kSummary) kSummary = trimmed;
+        // 요약 추출 (각 파트별 최신 문장 중 첫 100자 정도만)
+        if (!captureStrategy && trimmed.length > 30 && !trimmed.startsWith('[') && !trimmed.startsWith('1)') && !trimmed.startsWith('2)')) {
+            if (currentPart === 'A' && !fxSummary) fxSummary = trimmed.substring(0, 200).trim();
+            if (currentPart === 'B' && !kSummary) kSummary = trimmed.substring(0, 200).trim();
         }
     }
 
