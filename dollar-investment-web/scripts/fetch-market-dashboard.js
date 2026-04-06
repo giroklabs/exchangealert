@@ -1153,10 +1153,12 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     koreaContext += blockSummary.split('\n').filter(l => l.includes('한국') || l.includes('자산') || l.includes('수급')).join('\n');
     koreaContext += `\n${kospiTechSection || ''}`;
     if (kospiHistory && kospiHistory.length > 0) {
-        koreaContext += `\n- 코스피 최근 5일 추세: ${kospiHistory.slice(0, 5).map(h => `${h.close}pt`).join(' → ')}`;
+        koreaContext += `\n- 코스피 최근 추세 (최신순): ${kospiHistory.slice(0, 7).map((h, idx) => `${idx === 0 ? '[최신]' : ''}${h.close}pt`).join(' ← ')}`;
+        koreaContext += `\n- 코스피 기준일: ${kospiHistory[0].date}`;
     }
 
-    fxContext += `\n- 원/달러 최근 5일 추세: ${usdKrwHistory.slice(0, 5).map(h => `${h.value}원`).join(' → ')}`;
+    fxContext += `\n- 원/달러 최근 추세 (최신순): ${usdKrwHistory.slice(0, 7).map((h, idx) => `${idx === 0 ? '[최신]' : ''}${h.value}원`).join(' ← ')}`;
+    fxContext += `\n- 환율 기준일: ${usdKrwHistory[0]?.date || 'N/A'}`;
     if (majorRates && majorRates.length > 0) {
         majorRates.forEach(r => { fxContext += `\n- ${r.name}: ${r.value} (${r.changePercent}%)`; });
     }
@@ -1174,11 +1176,13 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     // --- 🌟 [추가] Anchor Prediction Signal 생성 ---
     const anchorSignal = {
         market: "KOSPI & USD/KRW",
+        fxCurrent: getVal('usdkrw') || (usdKrwHistory[0]?.value),
+        kospiCurrent: getVal('kospi') || (kospiHistory[0]?.close),
         fxUpProb: upProb / 100,
         kospiUpProb: kospiUpProb / 100,
         kospiTechSignal: kospiTechnicals ? (kospiTechnicals.rsi14 > 70 ? "bullish" : (kospiTechnicals.rsi14 < 30 ? "bearish" : "neutral")) : "neutral",
         fxTechSignal: technicals ? (technicals.rsi14 > 70 ? "bullish" : (technicals.rsi14 < 30 ? "bearish" : "neutral")) : "neutral",
-        macroSignal: "neutral", // 향후 블록 점수 기반 고도화 가능
+        macroSignal: "neutral", 
         wtiLevel: getVal('dcoilwtico'),
         vixLevel: getVal('vixcls'),
         dxyLevel: getVal('dxy')
@@ -1192,7 +1196,9 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 ${JSON.stringify(anchorSignal, null, 2)}
 
 이 모델 데이터는 다음을 의미합니다:
+- KOSPI 현재가: ${anchorSignal.kospiCurrent}pt (분석의 절대 기준점)
 - KOSPI UpProb ${(anchorSignal.kospiUpProb * 100).toFixed(0)}% = KOSPI가 향후 1~5거래일 동안 상승할 확률
+- 환율 현재가: ${anchorSignal.fxCurrent}원 (분석의 절대 기준점)
 - 환율 UpProb ${(anchorSignal.fxUpProb * 100).toFixed(0)}% = 원/달러 환율이 상승할 확률
 - techSignal = 기술적 지표 기준 현재 과매수(bullish)/과매도(bearish) 여부
 
