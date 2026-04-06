@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.99",
-      "diff": -20.67,
-      "diffPercent": -17.13,
+      "value": "99.992",
+      "diff": -20.66,
+      "diffPercent": -17.12,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,349",
-      "diff": 131,
-      "diffPercent": 0.54,
+      "value": "24,351.75",
+      "diff": 133.75,
+      "diffPercent": 0.55,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 24349
+          "value": 24351.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,651.75",
-      "diff": 29.5,
-      "diffPercent": 0.45,
+      "value": "6,652.5",
+      "diff": 30.25,
+      "diffPercent": 0.46,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 6651.75
+          "value": 6652.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "112.71",
-      "diff": 1.17,
-      "diffPercent": 1.05,
+      "value": "112.98",
+      "diff": 1.44,
+      "diffPercent": 1.29,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-06",
-          "value": 112.71
+          "value": 112.98
         }
       ]
     },
@@ -2432,16 +2432,6 @@
       "trend": "neutral"
     },
     {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 196800,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
       "id": "kakao",
       "symbol": "035720",
       "market": "domestic",
@@ -2481,7 +2471,7 @@
     "lastAiUpdate": 1775492916092,
     "score": {
       "upScore": 43.369928141965,
-      "downScore": 54.3675188376871,
+      "downScore": 54.369347176111766,
       "kospiUpScore": 22.81305350781318,
       "kospiDownScore": 20.377349023931416
     }
@@ -2555,5 +2545,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 6. PM 8:41:28"
+  "lastUpdate": "2026. 4. 6. PM 8:46:35"
 }
