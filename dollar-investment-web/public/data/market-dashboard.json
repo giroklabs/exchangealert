@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.942",
-      "diff": -0.04,
-      "diffPercent": -0.04,
+      "value": "99.929",
+      "diff": -0.05,
+      "diffPercent": -0.05,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 99.94
+          "value": 99.93
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "25.49",
-      "diff": 1.32,
-      "diffPercent": 5.46,
+      "value": "25.59",
+      "diff": 1.42,
+      "diffPercent": 5.88,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 25.49
+          "value": 25.59
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,200.5",
-      "diff": -158,
-      "diffPercent": -0.65,
+      "value": "24,192",
+      "diff": -166.5,
+      "diffPercent": -0.68,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24200.5
+          "value": 24192
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,617.75",
-      "diff": -33.25,
-      "diffPercent": -0.5,
+      "value": "6,616.25",
+      "diff": -34.75,
+      "diffPercent": -0.52,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6617.75
+          "value": 6616.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "115.88",
-      "diff": 3.47,
-      "diffPercent": 3.09,
+      "value": "115.87",
+      "diff": 3.46,
+      "diffPercent": 3.08,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 115.88
+          "value": 115.87
         }
       ]
     },
@@ -2484,10 +2484,10 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 원/달러 환율은 1499.04원이다. 향후 1~5거래일 동안 1490원~1515원 구간 내 등락이 예상된다. 1497.67원(MA20, 볼린저밴드 중단)이 1차 지지선이며, 1508.94원(MA5)은 1차 저항선이다. 1495원 부근 지지 확인 시 분할 매수, 1510원 이상에서는 경계하며 관망하는 전략이 유효하다. 정량 모델상 환율 하락 확률(51%)이 높고 최근 하락 추세지만, 미 국채금리 상승 및 한미 금리차 확대 등 달러 강세 요인도 잠재한다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피 지수는 5,494.78pt이다. 향후 1~5거래일간 5,450pt~5,550pt 구간에서 등락할 것으로 전망된다. 5,407.03pt(MA5)가 1차 지지선이며, 5,510.32pt(MA20)가 1차 저항선이다. 5,450pt 부근 지지 확인 시 분할 매수 접근, 5,510pt 돌파 후 안착 여부 확인이 중요하며 돌파 실패 시 관망이 바람직하다. 정량 모델상 상승 확률(51%)이 우세하고, RSI는 중립 수준이다.\n\n[실전 투자 대응]\n환율: 1495원 부근 지지 확인 후 분할 매수 고려, 1510원 이상에서는 매도 관점으로 대응하세요.\n코스피: 5450pt 지지 확인 시 분할 매수 유효하며, 5510pt 저항선 돌파 여부를 신중히 관찰하세요.",
     "lastAiUpdate": 1775561815729,
     "score": {
-      "upScore": 53.20724400535197,
-      "downScore": 58.35348446321176,
+      "upScore": 53.21058789261254,
+      "downScore": 58.351518224240074,
       "kospiUpScore": 24.09127519817617,
-      "kospiDownScore": 22.88538629059311
+      "kospiDownScore": 22.910284267171193
     }
   },
   "technicals": {
@@ -2567,5 +2567,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. PM 12:11:27"
+  "lastUpdate": "2026. 4. 7. PM 12:16:32"
 }
