@@ -67,11 +67,11 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.93",
-      "diff": -0.05,
-      "diffPercent": -0.05,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "100.01",
+      "diff": 0.03,
+      "diffPercent": 0.03,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-25",
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 99.93
+          "value": 100.01
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "24.43",
-      "diff": 0.26,
-      "diffPercent": 1.08,
+      "value": "24.46",
+      "diff": 0.29,
+      "diffPercent": 1.2,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24.43
+          "value": 24.46
         }
       ]
     },
@@ -767,11 +767,11 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,379.25",
-      "diff": 20.75,
-      "diffPercent": 0.09,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "24,322.25",
+      "diff": -36.25,
+      "diffPercent": -0.15,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-24",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24379.25
+          "value": 24322.25
         }
       ]
     },
@@ -826,11 +826,11 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,659",
-      "diff": 8,
-      "diffPercent": 0.12,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "6,643",
+      "diff": -8,
+      "diffPercent": -0.12,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-03-24",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6659
+          "value": 6643
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "112.87",
-      "diff": 0.46,
-      "diffPercent": 0.41,
+      "value": "114.3",
+      "diff": 1.89,
+      "diffPercent": 1.68,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 112.87
+          "value": 114.3
         }
       ]
     },
@@ -2357,7 +2357,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,500.90",
+      "value": "1,500.20",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2368,7 +2368,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "939.40",
+      "value": "939.33",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2378,7 +2378,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,733.75",
+      "value": "1,733.63",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2388,7 +2388,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.59",
+      "value": "218.56",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2459,35 +2459,35 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 46,
-    "downProb": 54,
-    "kospiUpProb": 52,
-    "kospiDownProb": 48,
+    "upProb": 54,
+    "downProb": 46,
+    "kospiUpProb": 46,
+    "kospiDownProb": 54,
     "timeframes": {
       "d1": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 46,
+        "downProb": 54,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 48,
+        "downProb": 52,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 47,
-        "downProb": 53,
+        "upProb": 48,
+        "downProb": 52,
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1497.61원이다. 향후 1~5거래일간 1485~1505원 박스권 흐름 예상된다. 1490원은 1차 지지선이며, 1510원은 저항선이다. 1490원 부근 지지 확인 시 저점 매수, 1505원 이상 상승 시 분할 매도 관점 유효하다. 환율 상승확률 43%로 하방 압력이 우세하나, 미국 금리 상승 및 WTI 강세가 하단을 지지할 수 있다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5494.78pt이다. 향후 1~5거래일간 5450~5600pt 범위 내 상승 시도 예상된다. 5450pt는 1차 지지선, 5510pt는 단기 저항선이다. 5450pt 부근 조정 시 분할 매수 관점, 5510pt 돌파 시 5600pt까지 추가 상승 가능성에 대비한 추격 매수도 유효하다. 코스피 상승 확률 53%와 강한 단기 모멘텀이 상승 동력으로 작용할 것이다.\n\n[실전 투자 대응]\n환율: 1505원 이상 매도 후 1490원 지지 시 매수. 1490원 이탈 시 매수 관망, 1470원 대 지지 확인.\n코스피: 5450pt 부근 분할 매수, 5510pt 돌파 시 5600pt 목표 추격 매수 검토.",
-    "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1497.61원이다. 향후 1~5거래일간 1485~1505원 박스권 흐름 예상된다. 1490원은 1차 지지선이며, 1510원은 저항선이다. 1490원 부근 지지 확인 시 저점 매수, 1505원 이상 상승 시 분할 매도 관점 유효하다. 환율 상승확률 43%로 하방 압력이 우세하나, 미국 금리 상승 및 WTI 강세가 하단을 지지할 수 있다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5494.78pt이다. 향후 1~5거래일간 5450~5600pt 범위 내 상승 시도 예상된다. 5450pt는 1차 지지선, 5510pt는 단기 저항선이다. 5450pt 부근 조정 시 분할 매수 관점, 5510pt 돌파 시 5600pt까지 추가 상승 가능성에 대비한 추격 매수도 유효하다. 코스피 상승 확률 53%와 강한 단기 모멘텀이 상승 동력으로 작용할 것이다.\n\n[실전 투자 대응]\n환율: 1505원 이상 매도 후 1490원 지지 시 매수. 1490원 이탈 시 매수 관망, 1470원 대 지지 확인.\n코스피: 5450pt 부근 분할 매수, 5510pt 돌파 시 5600pt 목표 추격 매수 검토.",
-    "lastAiUpdate": 1775554612263,
+    "aiAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1499.84원이다. 1~5거래일 내 1510~1520원 재진입 가능성이 높다. 1497.67원이 핵심 지지선, 1508.94원과 1524.71원은 주요 저항선이다. 1497원 부근 조정 시 분할 매수, 1520원대 접근 시 차익 실현 고려가 적절하다. '달러패닉' 신호, 미 국채금리 상승, WTI 강세가 환율 상방 압력을 키우고 있다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,494.78pt이다. 단기적으로 5,450~5,550pt 범위 내 등락이 예상된다. 5,407.03pt가 핵심 지지선, 5,510.32pt는 강한 저항선이다. 5,510pt 돌파 실패 시 비중 축소 고려, 5,407pt 부근은 단기 매수 기회로 활용 가능하다. '달러패닉'과 금리차 확대가 상방을 제한하나, 5일간의 강한 기술적 반등이 지지력을 형성했다.\n\n[실전 투자 대응]\n환율: 1497원 지지 확인 시 분할 매수, 1510원 돌파 시 1520원대 목표. 달러 강세에 대비.\n코스피: 5510pt 저항 돌파 실패 시 비중 축소, 5407pt 부근은 단기적 매수 기회. 보수적 접근.",
+    "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1499.84원이다. 1~5거래일 내 1510~1520원 재진입 가능성이 높다. 1497.67원이 핵심 지지선, 1508.94원과 1524.71원은 주요 저항선이다. 1497원 부근 조정 시 분할 매수, 1520원대 접근 시 차익 실현 고려가 적절하다. '달러패닉' 신호, 미 국채금리 상승, WTI 강세가 환율 상방 압력을 키우고 있다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,494.78pt이다. 단기적으로 5,450~5,550pt 범위 내 등락이 예상된다. 5,407.03pt가 핵심 지지선, 5,510.32pt는 강한 저항선이다. 5,510pt 돌파 실패 시 비중 축소 고려, 5,407pt 부근은 단기 매수 기회로 활용 가능하다. '달러패닉'과 금리차 확대가 상방을 제한하나, 5일간의 강한 기술적 반등이 지지력을 형성했다.\n\n[실전 투자 대응]\n환율: 1497원 지지 확인 시 분할 매수, 1510원 돌파 시 1520원대 목표. 달러 강세에 대비.\n코스피: 5510pt 저항 돌파 실패 시 비중 축소, 5407pt 부근은 단기적 매수 기회. 보수적 접근.",
+    "lastAiUpdate": 1775558206618,
     "score": {
-      "upScore": 46.288809904456976,
-      "downScore": 55.08596081566418,
-      "kospiUpScore": 24.09127519817617,
-      "kospiDownScore": 22.615727138830525
+      "upScore": 58.95520097352415,
+      "downScore": 50.044277518033766,
+      "kospiUpScore": 21.75467496623863,
+      "kospiDownScore": 25.38407809374185
     }
   },
   "technicals": {
@@ -2518,7 +2518,15 @@
     "stochastic": {
       "k": 54.5
     },
-    "compoundSignals": []
+    "compoundSignals": [
+      {
+        "type": "DOLLAR_PANIC",
+        "up": 2.5,
+        "down": 0,
+        "block": "risk",
+        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
+      }
+    ]
   },
   "kospiTechnicals": {
     "rsi14": 40.7,
@@ -2559,5 +2567,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. AM 10:31:42"
+  "lastUpdate": "2026. 4. 7. AM 10:36:46"
 }
