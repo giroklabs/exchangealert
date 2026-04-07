@@ -8,16 +8,12 @@
       "impact": "up",
       "source": "Federal Reserve",
       "description": "미국 기준 금리, 달러 가치 결정",
-      "value": "3.64",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "3.72",
+      "diff": -0.37,
+      "diffPercent": -9.05,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-06-01",
-          "value": 4.33
-        },
         {
           "date": "2025-07-01",
           "value": 4.33
@@ -35,24 +31,8 @@
           "value": 4.09
         },
         {
-          "date": "2025-11-01",
-          "value": 3.88
-        },
-        {
           "date": "2025-12-01",
           "value": 3.72
-        },
-        {
-          "date": "2026-01-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-02-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-01",
-          "value": 3.64
         }
       ]
     },
@@ -767,9 +747,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,702",
-      "diff": 343.5,
-      "diffPercent": 1.41,
+      "value": "24,804.75",
+      "diff": 446.25,
+      "diffPercent": 1.83,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +791,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24702
+          "value": 24804.75
         }
       ]
     },
@@ -826,9 +806,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,744.5",
-      "diff": 93.5,
-      "diffPercent": 1.41,
+      "value": "6,761",
+      "diff": 110,
+      "diffPercent": 1.65,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +850,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6744.5
+          "value": 6761
         }
       ]
     },
@@ -884,9 +864,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "103.82",
-      "diff": -8.59,
-      "diffPercent": -7.64,
+      "value": "102.22",
+      "diff": -10.19,
+      "diffPercent": -9.07,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +908,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 103.82
+          "value": 102.22
         }
       ]
     },
@@ -2455,10 +2435,10 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "보합",
-    "upProb": 42,
-    "downProb": 58,
-    "kospiUpProb": 52,
-    "kospiDownProb": 48,
+    "upProb": 41,
+    "downProb": 59,
+    "kospiUpProb": 53,
+    "kospiDownProb": 47,
     "timeframes": {
       "d1": {
         "upProb": 41,
@@ -2466,8 +2446,8 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 42,
-        "downProb": 58,
+        "upProb": 41,
+        "downProb": 59,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2480,9 +2460,9 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1,501.26원이다. 향후 1~5거래일간 1,495원~1,510원 사이의 등락을 예상한다. 핵심 지지선은 1,497.67원(MA20/볼린저밴드 중단), 1,490원이며, 저항선은 1,508.94원(MA5), 1,512원이다. 1,497원 부근 하향 이탈 시 1,490원까지 추가 조정 가능성이 있으며, 1,508원 돌파 실패 시 관망이 적절하다. 퀀트 모델의 상승 확률(42%)이 낮지만, 미 10년물 국채금리 상승 및 높은 WTI 가격, VIX 수치가 하방 경직성을 제공하며 변동성을 키울 수 있다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,494.78pt다. 향후 1~5거래일 동안 5,450~5,550pt 범위에서 등락할 것으로 보인다. 1차 지지선은 5,450.33pt, 2차 지지선은 5,318.57pt(MA5)이며, 핵심 저항선은 5,512.21pt(MA20)이다. 5,512pt 돌파 시 5,550pt까지 추가 상승을 기대할 수 있으나, 실패 시 5,450pt 지지 여부를 확인해야 한다. 퀀트 모델의 상승 확률(52%)과 양호한 단기 모멘텀에도 불구하고, 고유가, 높은 VIX 등 거시경제 부담이 상단을 제약할 수 있다.\n\n[실전 투자 대응]\n환율: 1,497원 지지 시 소폭 매수 가능하나, 1,508원 상단 저항에 유의하며 1,512원 돌파 여부 확인 후 신중하게 접근.\n코스피: 5,450pt 지지력 확인 후 분할 매수 고려. 5,512pt 저항선 돌파 실패 시 추격 매수보다 현금 비중 확대가 유리.",
     "lastAiUpdate": 1775601116336,
     "score": {
-      "upScore": 44.50764287096479,
-      "downScore": 62.16846913547608,
-      "kospiUpScore": 22.787762655900245,
+      "upScore": 44.6681024282401,
+      "downScore": 63.77157339480172,
+      "kospiUpScore": 23.961727967998197,
       "kospiDownScore": 21.123273380503647
     }
   },
@@ -2563,5 +2543,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. PM 10:46:25"
+  "lastUpdate": "2026. 4. 7. PM 10:51:26"
 }
