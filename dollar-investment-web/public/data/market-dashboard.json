@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.636",
+      "value": "99.638",
       "diff": -0.34,
       "diffPercent": -0.34,
       "trend": "down",
@@ -585,11 +585,10 @@
       "unit": "pt",
       "block": "global-indices",
       "impact": "down",
-      "source": "Yahoo Finance 실시간",
+      "source": "NASDAQ",
       "description": "미국 기술주 중심 성장성 지표",
       "realtimeSymbol": "^IXIC",
       "fredId": null,
-      "isRealtime": true,
       "value": "22,017.85",
       "diff": 21.51,
       "diffPercent": 0.1,
@@ -767,9 +766,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,368.75",
-      "diff": 10.25,
-      "diffPercent": 0.04,
+      "value": "24,371",
+      "diff": 12.5,
+      "diffPercent": 0.05,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +810,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24368.75
+          "value": 24371
         }
       ]
     },
@@ -826,9 +825,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,656.5",
-      "diff": 5.5,
-      "diffPercent": 0.08,
+      "value": "6,659",
+      "diff": 8,
+      "diffPercent": 0.12,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +869,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6656.5
+          "value": 6659
         }
       ]
     },
@@ -884,9 +883,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "112.04",
-      "diff": -0.37,
-      "diffPercent": -0.33,
+      "value": "110.82",
+      "diff": -1.59,
+      "diffPercent": -1.41,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +927,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 112.04
+          "value": 110.82
         }
       ]
     },
@@ -2481,7 +2480,7 @@
     "lastAiUpdate": 1775579517815,
     "score": {
       "upScore": 44.50764287096479,
-      "downScore": 61.95744959357091,
+      "downScore": 62.38096452113224,
       "kospiUpScore": 22.787762655900245,
       "kospiDownScore": 21.123273380503647
     }
@@ -2563,5 +2562,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. PM 8:36:37"
+  "lastUpdate": "2026. 4. 7. PM 8:41:31"
 }
