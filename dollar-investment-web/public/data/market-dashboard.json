@@ -8,16 +8,12 @@
       "impact": "up",
       "source": "Federal Reserve",
       "description": "미국 기준 금리, 달러 가치 결정",
-      "value": "3.64",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "3.72",
+      "diff": -0.37,
+      "diffPercent": -9.05,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-06-01",
-          "value": 4.33
-        },
         {
           "date": "2025-07-01",
           "value": 4.33
@@ -35,24 +31,8 @@
           "value": 4.09
         },
         {
-          "date": "2025-11-01",
-          "value": 3.88
-        },
-        {
           "date": "2025-12-01",
           "value": 3.72
-        },
-        {
-          "date": "2026-01-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-02-01",
-          "value": 3.64
-        },
-        {
-          "date": "2026-03-01",
-          "value": 3.64
         }
       ]
     },
@@ -67,9 +47,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.851",
-      "diff": -0.13,
-      "diffPercent": -0.13,
+      "value": "99.858",
+      "diff": -0.12,
+      "diffPercent": -0.12,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +91,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 99.85
+          "value": 99.86
         }
       ]
     },
@@ -126,9 +106,9 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.356",
-      "diff": 0.02,
-      "diffPercent": 0.46,
+      "value": "4.354",
+      "diff": 0.01,
+      "diffPercent": 0.23,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -170,7 +150,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 4.36
+          "value": 4.35
         }
       ]
     },
@@ -184,9 +164,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "26.42",
-      "diff": 2.25,
-      "diffPercent": 9.31,
+      "value": "26.3",
+      "diff": 2.13,
+      "diffPercent": 8.81,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +208,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 26.42
+          "value": 26.3
         }
       ]
     },
@@ -590,8 +570,8 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "21,870.18",
-      "diff": -126.16,
+      "value": "21,871.201",
+      "diff": -125.14,
       "diffPercent": -0.57,
       "trend": "down",
       "realizedImpact": "up",
@@ -634,7 +614,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 21870.18
+          "value": 21871.2
         }
       ]
     },
@@ -649,9 +629,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,586.98",
-      "diff": -24.85,
-      "diffPercent": -0.38,
+      "value": "6,586.06",
+      "diff": -25.77,
+      "diffPercent": -0.39,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -693,7 +673,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6586.98
+          "value": 6586.06
         }
       ]
     },
@@ -708,9 +688,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,944.946",
-      "diff": 28.84,
-      "diffPercent": 0.36,
+      "value": "7,938.054",
+      "diff": 21.94,
+      "diffPercent": 0.28,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +732,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 7944.95
+          "value": 7938.05
         }
       ]
     },
@@ -767,9 +747,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,218.25",
-      "diff": -140.25,
-      "diffPercent": -0.58,
+      "value": "24,226.5",
+      "diff": -132,
+      "diffPercent": -0.54,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +791,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24218.25
+          "value": 24226.5
         }
       ]
     },
@@ -826,9 +806,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,626.5",
-      "diff": -24.5,
-      "diffPercent": -0.37,
+      "value": "6,629.5",
+      "diff": -21.5,
+      "diffPercent": -0.32,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +850,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6626.5
+          "value": 6629.5
         }
       ]
     },
@@ -884,9 +864,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "114.82",
-      "diff": 2.41,
-      "diffPercent": 2.14,
+      "value": "114.62",
+      "diff": 2.21,
+      "diffPercent": 1.97,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +908,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 114.82
+          "value": 114.62
         }
       ]
     },
@@ -942,11 +922,11 @@
       "description": "시장 내재 단기 금리 기대치",
       "fredId": "DGS1",
       "hidden": true,
-      "value": 3.72,
-      "diff": 0.04,
-      "diffPercent": 1.09,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": 3.68,
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-23",
@@ -983,10 +963,6 @@
         {
           "date": "2026-04-02",
           "value": 3.68
-        },
-        {
-          "date": "2026-04-03",
-          "value": 3.72
         }
       ],
       "isInternal": true
@@ -2176,7 +2152,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 0.61
+          "value": 0.6
         }
       ]
     },
@@ -2300,7 +2276,7 @@
       "impact": "up",
       "source": "FRED(Target-GS1)",
       "description": "연내 기준금리 인하/인상 기대 횟수 (25bp)",
-      "value": "-0.4",
+      "value": "-0.2",
       "trend": "down",
       "realizedImpact": "neutral",
       "history": [
@@ -2339,10 +2315,6 @@
         {
           "date": "2026-04-02",
           "value": -0.055
-        },
-        {
-          "date": "2026-04-03",
-          "value": -0.095
         }
       ]
     }
@@ -2353,7 +2325,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,502.00",
+      "value": "1,502.90",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2364,7 +2336,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "939.72",
+      "value": "940.02",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2374,7 +2346,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,738.57",
+      "value": "1,739.01",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2384,7 +2356,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "218.85",
+      "value": "218.94",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2455,24 +2427,24 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 50,
-    "downProb": 50,
-    "kospiUpProb": 51,
-    "kospiDownProb": 49,
+    "upProb": 49,
+    "downProb": 51,
+    "kospiUpProb": 52,
+    "kospiDownProb": 48,
     "timeframes": {
       "d1": {
-        "upProb": 43,
-        "downProb": 57,
+        "upProb": 42,
+        "downProb": 58,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 43,
+        "downProb": 57,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 46,
-        "downProb": 54,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2480,10 +2452,10 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1501.15원이다. 단기적으로 1510~1520원대 재진입 가능성이 크다. 1497.7원(MA20)은 1차 지지, 1524.7원(볼린저 상단)은 저항선이다. 1500원 부근 조정 시 분할 매수 관점, 1525원 돌파 시 추가 상승 여력 확인이 필요하다. 미국 국채금리 상승, 한미 금리차 확대, 높은 WTI 유가가 상방 압력으로 작용한다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,494.78pt이다. 단기적으로 5,512pt(MA20) 저항 돌파 여부가 중요하다. 5,318.6pt(MA5)는 1차 지지, 5,512.2pt는 핵심 저항선이다. 5,512pt 돌파 실패 시 비중 확대는 신중하며, 5,320pt 부근 조정 시 분할 접근이 유효하다. 코스피 상승 확률 40% 및 VIX 지수 상승에 따른 위험 회피 심리가 지수 상단을 제한할 수 있다.\n\n[실전 투자 대응]\n환율: 1500원 조정 시 매수, 1525원 목표. 미 금리차 확대 및 WTI 강세로 상방 압력 지속.\n코스피: 5512pt 저항 돌파 실패 시 관망. 5320pt 부근 분할 매수. 높은 VIX가 상단을 제한.",
     "lastAiUpdate": 1775579517815,
     "score": {
-      "upScore": 56.059401128959436,
-      "downScore": 56.59924134331561,
-      "kospiUpScore": 23.988356860774434,
-      "kospiDownScore": 23.10916137998606
+      "upScore": 56.061854672672226,
+      "downScore": 58.17772233104566,
+      "kospiUpScore": 25.000432700743758,
+      "kospiDownScore": 23.100610623664554
     }
   },
   "technicals": {
@@ -2563,5 +2535,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. PM 4:56:23"
+  "lastUpdate": "2026. 4. 7. PM 5:01:39"
 }
