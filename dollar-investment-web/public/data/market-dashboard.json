@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.044",
+      "value": "100.039",
       "diff": 0.06,
       "diffPercent": 0.06,
       "trend": "up",
@@ -703,12 +703,11 @@
       "unit": "pt",
       "block": "global-indices",
       "impact": "down",
-      "source": "Yahoo Finance 실시간",
+      "source": "NASDAQ",
       "description": "반도체 업황 및 코스피 동조화",
       "realtimeSymbol": "^SOX",
       "fredId": null,
-      "isRealtime": true,
-      "value": "7,916.104",
+      "value": "7,916.1",
       "diff": 82.71,
       "diffPercent": 1.06,
       "trend": "up",
@@ -767,9 +766,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,230.75",
-      "diff": -127.75,
-      "diffPercent": -0.52,
+      "value": "24,243",
+      "diff": -115.5,
+      "diffPercent": -0.47,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +810,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24230.75
+          "value": 24243
         }
       ]
     },
@@ -826,9 +825,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,624.5",
-      "diff": -26.5,
-      "diffPercent": -0.4,
+      "value": "6,627.5",
+      "diff": -23.5,
+      "diffPercent": -0.35,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +869,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6624.5
+          "value": 6627.5
         }
       ]
     },
@@ -884,9 +883,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "114.96",
-      "diff": 2.55,
-      "diffPercent": 2.27,
+      "value": "114.76",
+      "diff": 2.35,
+      "diffPercent": 2.09,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +927,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 114.96
+          "value": 114.76
         }
       ]
     },
@@ -2357,7 +2356,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,505.60",
+      "value": "1,504.00",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2368,7 +2367,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "941.74",
+      "value": "940.71",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2378,7 +2377,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,737.16",
+      "value": "1,736.07",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2388,7 +2387,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "219.00",
+      "value": "218.81",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2461,8 +2460,8 @@
     "kospiSentiment": "보합",
     "upProb": 55,
     "downProb": 45,
-    "kospiUpProb": 46,
-    "kospiDownProb": 54,
+    "kospiUpProb": 45,
+    "kospiDownProb": 55,
     "timeframes": {
       "d1": {
         "upProb": 47,
@@ -2484,9 +2483,9 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1503.79원이다. 달러패닉 신호와 DXY, VIX 상승 압력 속, 향후 1~5거래일 내 1515원 내지 1525원 재시도 가능성이 높다. 핵심 지지선은 1500원 및 MA20(1497.67원), 저항선은 MA5(1508.94원) 및 볼린저밴드 상단(1524.71원)이다. 1500원 내외 조정 시 분할 매수 대응, 1515원 이상에서는 관망하거나 차익 실현을 고려한다. 1497.67원 하향 이탈 시 보수적 접근이 필요하다.\n핵심 근거: ①DXY/VIX 동시 상승에 따른 달러 강세 및 신흥국 자본 이탈 가속화, ②미 금리 및 유가 상승과 환율의 높은 정적 상관관계, ③중장기 이동평균선(MA20, MA60)이 지지하는 상승 추세.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,496.2pt다. 복합 위험 신호(달러패닉)와 낮은 상승 확률(46%) 감안 시, 5510pt 저항 확인 후 5400pt대 중반까지의 되돌림 가능성에 대비해야 한다. 핵심 지지선은 MA5(5407.32pt), 저항선은 MA20(5510.39pt) 및 볼린저밴드 중단(5510.39pt)이다. 5510pt 돌파 실패 시 비중 조절 후, 5400pt 초반 지지 확인 시 분할 매수 접근이 유효하다.\n핵심 근거: ①DXY/VIX 상승에 따른 외국인 자금 이탈 압력 및 증시 하방 리스크, ②미 국채금리 상승과 고유가 지속에 따른 기업 실적 및 투자심리 위축, ③MA20 저항선(5510.39pt)에서의 기술적 저항 가능성.\n\n[실전 투자 대응]\n환율: 1503.79원 기준, 1500원 지지 확인 후 1515원~1525원 목표로 매수 관점. 1497.67원 이탈 시 매수 신중.\n코스피: 5496.2pt 기준, 5510pt 저항 확인 후 5400pt 초반 조정 시 분할 매수. 5510pt 돌파 실패 시 비중 조절.",
     "lastAiUpdate": 1775543516075,
     "score": {
-      "upScore": 59.0677736029181,
-      "downScore": 47.57919522222359,
-      "kospiUpScore": 21.75467496623863,
+      "upScore": 59.08642044899767,
+      "downScore": 47.29932545150682,
+      "kospiUpScore": 20.997808699850545,
       "kospiDownScore": 25.33715004876537
     }
   },
@@ -2567,5 +2566,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. AM 7:16:32"
+  "lastUpdate": "2026. 4. 7. AM 7:21:34"
 }
