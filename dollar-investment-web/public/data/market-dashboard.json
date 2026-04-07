@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.972",
-      "diff": -0.01,
-      "diffPercent": -0.01,
+      "value": "99.965",
+      "diff": -0.02,
+      "diffPercent": -0.02,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,252.5",
-      "diff": -106,
-      "diffPercent": -0.44,
+      "value": "24,235",
+      "diff": -123.5,
+      "diffPercent": -0.51,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 24252.5
+          "value": 24235
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,630.25",
-      "diff": -20.75,
-      "diffPercent": -0.31,
+      "value": "6,626.5",
+      "diff": -24.5,
+      "diffPercent": -0.37,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 6630.25
+          "value": 6626.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "114.5",
-      "diff": 2.09,
-      "diffPercent": 1.86,
+      "value": "114.74",
+      "diff": 2.33,
+      "diffPercent": 2.07,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-07",
-          "value": 114.5
+          "value": 114.74
         }
       ]
     },
@@ -2484,8 +2484,8 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 원/달러 환율은 1499.04원이다. 향후 1~5거래일 동안 1490원~1515원 구간 내 등락이 예상된다. 1497.67원(MA20, 볼린저밴드 중단)이 1차 지지선이며, 1508.94원(MA5)은 1차 저항선이다. 1495원 부근 지지 확인 시 분할 매수, 1510원 이상에서는 경계하며 관망하는 전략이 유효하다. 정량 모델상 환율 하락 확률(51%)이 높고 최근 하락 추세지만, 미 국채금리 상승 및 한미 금리차 확대 등 달러 강세 요인도 잠재한다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피 지수는 5,494.78pt이다. 향후 1~5거래일간 5,450pt~5,550pt 구간에서 등락할 것으로 전망된다. 5,407.03pt(MA5)가 1차 지지선이며, 5,510.32pt(MA20)가 1차 저항선이다. 5,450pt 부근 지지 확인 시 분할 매수 접근, 5,510pt 돌파 후 안착 여부 확인이 중요하며 돌파 실패 시 관망이 바람직하다. 정량 모델상 상승 확률(51%)이 우세하고, RSI는 중립 수준이다.\n\n[실전 투자 대응]\n환율: 1495원 부근 지지 확인 후 분할 매수 고려, 1510원 이상에서는 매도 관점으로 대응하세요.\n코스피: 5450pt 지지 확인 시 분할 매수 유효하며, 5510pt 저항선 돌파 여부를 신중히 관찰하세요.",
     "lastAiUpdate": 1775561815729,
     "score": {
-      "upScore": 54.02081274839747,
-      "downScore": 56.5660570188291,
+      "upScore": 53.995962556861045,
+      "downScore": 56.56164187916897,
       "kospiUpScore": 24.09127519817617,
       "kospiDownScore": 22.857892253600873
     }
@@ -2567,5 +2567,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 7. AM 11:36:55"
+  "lastUpdate": "2026. 4. 7. AM 11:37:47"
 }
