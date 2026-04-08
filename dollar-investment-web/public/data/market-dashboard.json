@@ -184,11 +184,11 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "21.04",
-      "diff": -4.74,
-      "diffPercent": -18.39,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "25.78",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-25",
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 21.04
+          "value": 25.78
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,034",
-      "diff": 663,
-      "diffPercent": 2.72,
+      "value": "25,029.75",
+      "diff": 658.75,
+      "diffPercent": 2.7,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 25034
+          "value": 25029.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,816",
-      "diff": 159.25,
-      "diffPercent": 2.39,
+      "value": "6,815",
+      "diff": 158.25,
+      "diffPercent": 2.38,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 6816
+          "value": 6815
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "96.76",
-      "diff": -16.19,
-      "diffPercent": -14.33,
+      "value": "96.83",
+      "diff": -16.12,
+      "diffPercent": -14.27,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 96.76
+          "value": 96.83
         }
       ]
     },
@@ -2455,8 +2455,8 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 35,
-    "downProb": 65,
+    "upProb": 38,
+    "downProb": 62,
     "kospiUpProb": 72,
     "kospiDownProb": 28,
     "timeframes": {
@@ -2480,9 +2480,9 @@
     "detailedAnalysis": "외환 및 증시 분석 보고서 (2026년 4월 9일 7시 31분 KST 기준)\n시장 세션: 한국 증시 장마감 후 (야간 및 차일 준비)\n\n[파트A: 원/달러 환율 분석]\n현재 환율은 1478.49원입니다. 향후 1~5거래일 동안 1470원 초반대 지지력 확인 후 1490원대 초반 저항선까지의 반등을 시도할 것으로 예상됩니다. 핵심 지지선은 볼린저밴드 하단인 1471.65원과 60일 이동평균선인 1467.99원이며, 핵심 저항선은 20일 이동평균선 1497.73원과 5일 이동평균선 1503.06원입니다. 1470원 초반대에서는 지지 여부를 관망하고, 1490원 이상 반등 시 단기 매도를 고려하는 대응이 유효합니다.\n핵심 근거로는 정량예측모델의 낮은 환율 상승 확률(35%)과 RSI, Stochastic 지표가 과매도 영역에 진입했다는 점, 그리고 최근 가파른 하락세로 단기 기술적 반등 가능성이 있다는 점을 들 수 있습니다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피 지수는 5,872.34pt입니다. 향후 1~5거래일 동안 5890pt 부근의 볼린저밴드 상단 저항을 테스트할 것으로 보이며, 돌파 시 6000pt까지의 추가 상승을 시도할 수 있습니다. 지지선은 5800pt 부근과 20일 이동평균선 5510.32pt이며, 저항선은 볼린저밴드 상단 5896.12pt와 심리적 저항선인 6000pt입니다. 5890pt 부근에서 단기 차익실현을 고려하고, 지수 조정 시 5700pt 부근에서 재매수를 모색하는 것이 바람직합니다.\n핵심 근거로는 정량예측모델의 높은 지수 상승 확률(72%)과 모든 이동평균선을 상회하는 강력한 상승 모멘텀을 들 수 있습니다. 다만, 볼린저밴드 상단(5896.12pt)에 근접하며 단기 과열 양상을 보여 차익실현 압력에 주의가 필요합니다.\n\n[실전 투자 대응]\n환율: 1470원대 초반 지지 확인 후 관망하며, 1490원 이상 반등 시 단기 매도를 고려하십시오.\n코스피: 5890pt 부근 저항 확인 후 단기 차익실현하고, 5700pt 부근 지지 시 재매수 고려하십시오.",
     "lastAiUpdate": 1775687515161,
     "score": {
-      "upScore": 35.040537320672385,
-      "downScore": 64.47011294687343,
-      "kospiUpScore": 25.180075747722615,
+      "upScore": 38.66020353265838,
+      "downScore": 63.27467077354913,
+      "kospiUpScore": 24.31968013194884,
       "kospiDownScore": 9.641876656839322
     }
   },
@@ -2555,5 +2555,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 8. PM 11:07:02"
+  "lastUpdate": "2026. 4. 8. PM 11:11:26"
 }
