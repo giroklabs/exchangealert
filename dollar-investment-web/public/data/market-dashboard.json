@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.849",
-      "diff": -0.79,
-      "diffPercent": -0.79,
+      "value": "98.839",
+      "diff": -0.8,
+      "diffPercent": -0.8,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 98.85
+          "value": 98.84
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "20.29",
-      "diff": -5.49,
-      "diffPercent": -21.3,
+      "value": "20.28",
+      "diff": -5.5,
+      "diffPercent": -21.33,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 20.29
+          "value": 20.28
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,228.5",
-      "diff": 857.5,
-      "diffPercent": 3.52,
+      "value": "25,231.25",
+      "diff": 860.25,
+      "diffPercent": 3.53,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 25228.5
+          "value": 25231.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,838.5",
-      "diff": 181.75,
-      "diffPercent": 2.73,
+      "value": "6,839.5",
+      "diff": 182.75,
+      "diffPercent": 2.75,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 6838.5
+          "value": 6839.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "95.17",
-      "diff": -17.78,
-      "diffPercent": -15.74,
+      "value": "95.06",
+      "diff": -17.89,
+      "diffPercent": -15.84,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-08",
-          "value": 95.17
+          "value": 95.06
         }
       ]
     },
@@ -2357,7 +2357,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,479.40",
+      "value": "1,478.70",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2368,7 +2368,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "934.04",
+      "value": "933.67",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2378,7 +2378,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,728.24",
+      "value": "1,727.34",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2388,7 +2388,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.75",
+      "value": "216.61",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2484,9 +2484,9 @@
     "detailedAnalysis": "[파트A: 원/달러 환율 분석]\n현재 환율은 1480.70원이다. 향후 1~5거래일간 1470원대 중반 지지 테스트 후 1490원대 중반까지 반등 시도 예상된다. 1471.65원은 핵심 지지선이며, 1497.73원은 단기 저항선이다. 1470원대 초반 지지 확인 시 기술적 매수를 고려하고, 1490원대 후반 저항 돌파 실패 시 매도/관망이 적절하다. 낮은 `fxUpProb`(36%)와 강한 하락 모멘텀(RSI, MACD)이 근거이나, Stochastic 과매도는 단기 반등 가능성을 시사한다.\n\n[파트B: 코스피 지수 분석]\n현재 코스피는 5,872.34pt다. 향후 1~5거래일간 5900pt대 상단 돌파 후 6000pt 근접을 목표할 수 있다. 5523.44pt는 단기 지지선이며, 5938.63pt는 단기 저항선이다. 5800pt대 초반 조정 시 분할 매수 관점으로 접근하고, 5900pt대 후반에서 6000pt 근접 시 차익 실현을 고려할 수 있다. `kospiUpProb` (64%)와 강력한 상승 모멘텀이 주요 근거이며, 볼린저밴드 상단 근접은 단기 과열에 대한 주의를 요한다.\n\n[실전 투자 대응]\n환율: 1471.65원 부근 지지 확인 시 기술적 반등 노린 소폭 매수, 1497.73원 돌파 실패 시 관망.\n코스피: 5800pt대 초반 조정 시 분할 매수 접근, 5938.63pt 상단 돌파 시 6000pt 목표 차익 실현 고려.",
     "lastAiUpdate": 1775638007871,
     "score": {
-      "upScore": 34.23747807284667,
-      "downScore": 62.10453181588729,
-      "kospiUpScore": 25.515632215556607,
+      "upScore": 34.235832035518385,
+      "downScore": 62.10511958204074,
+      "kospiUpScore": 25.514375911057332,
       "kospiDownScore": 14.11934735749901
     }
   },
@@ -2559,5 +2559,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 8. AM 9:26:28"
+  "lastUpdate": "2026. 4. 8. AM 9:31:35"
 }
