@@ -152,7 +152,7 @@ async function fetchFromYahooFinance(symbol) {
                             });
                         }
                     }
-                    // 🌟 미국 마감 지표(^SOX, ^TNX 등) 전용: 중복 노드 제거 (수평선 방지)
+                    //  미국 마감 지표(^SOX, ^TNX 등) 전용: 중복 노드 제거 (수평선 방지)
                     // 야후 API가 장 오픈 전 전일 종가와 동일한 날짜 노드를 미리 생성하는 경우 이를 제거함
                     if (US_SETTLED_SYMBOLS.includes(symbol) && observations.length >= 2) {
                         const latest = observations[observations.length - 1];
@@ -736,7 +736,7 @@ async function fetchMarketInvestorTrend() {
         
         const mergeHistory = (type, currentVal) => {
             const hist = [...KOSPI_INVESTOR_HISTORY[type]];
-            // 🌟 [개선] 주말/공휴일에는 오늘(KST 토/일) 날짜의 새로운 노드를 생성하지 않음
+            //  [개선] 주말/공휴일에는 오늘(KST 토/일) 날짜의 새로운 노드를 생성하지 않음
             const day = new Date().getDay(); // 0:일, 6:토
             const isWeekend = (day === 0 || day === 6);
 
@@ -1092,7 +1092,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 
     const blockSummary = summarizeByBlock(indicators);
 
-    // 🌟 [추가] Gemini 3 최적화: 구조화된 컨텍스트(Category-based Context) 생성
+    //  [추가] Gemini 3 최적화: 구조화된 컨텍스트(Category-based Context) 생성
     let techSection = '';
     let kospiTechSection = '';
     let corrSection = '';
@@ -1169,74 +1169,84 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     const combinedDataContext = macroContext + koreaContext + fxContext + globalContext;
 
     const nowKst = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
+    const kstHour = nowKst.getUTCHours();
+    const kstMinute = nowKst.getUTCMinutes();
+    const kstTimeVal = kstHour * 100 + kstMinute;
+
+    let marketSession = "";
+    let sessionKeyFocus = "";
+
+    if (kstTimeVal >= 900 && kstTimeVal < 1530) {
+        marketSession = "한국 증시 정규장 (장중)";
+        sessionKeyFocus = "현재 실시간 수급 상황과 외국인/기관의 매매 동향, 장중 변동성을 최우선으로 반영하여 분석하세요.";
+    } else {
+        marketSession = "한국 증시 장마감 후 (야간 및 차일 준비)";
+        sessionKeyFocus = "장 마감 결과와 글로벌 지표를 바탕으로, 다음 거래일의 시초가 갭 발생 가능성과 추세 연장 여부를 반영하여 분석하세요.";
+    }
+
     const kstTimeStr = `${nowKst.getUTCFullYear()}년 ${nowKst.getUTCMonth() + 1}월 ${nowKst.getUTCDate()}일 ${nowKst.getUTCHours()}시 ${nowKst.getUTCMinutes()}분`;
 
     const getVal = id => indicators.find(i => i.id === id)?.value || 0;
     
-    // --- 🌟 [추가] Anchor Prediction Signal 생성 ---
+    // ---  [추가] Anchor Prediction Signal 생성 ---
     const anchorSignal = {
-        market: "KOSPI & USD/KRW",
+        market: "KOSPI & USD/KRW (Korea Standard)",
         fxCurrent: getVal('usdkrw') || (usdKrwHistory[0]?.value),
         kospiCurrent: getVal('kospi') || (kospiHistory[0]?.close),
-        fxUpProb: upProb / 100,
-        kospiUpProb: kospiUpProb / 100,
-        kospiTechSignal: kospiTechnicals ? (kospiTechnicals.rsi14 > 70 ? "bullish" : (kospiTechnicals.rsi14 < 30 ? "bearish" : "neutral")) : "neutral",
-        fxTechSignal: technicals ? (technicals.rsi14 > 70 ? "bullish" : (technicals.rsi14 < 30 ? "bearish" : "neutral")) : "neutral",
-        macroSignal: "neutral", 
+        fxUpProb: upProb,
+        kospiUpProb: kospiUpProb,
+        kospiTechSignal: kospiTechnicals ? (kospiTechnicals.rsi14 > 70 ? "과열(Bullish)" : (kospiTechnicals.rsi14 < 30 ? "침체(Bearish)" : "보합(Neutral)")) : "보합",
+        fxTechSignal: technicals ? (technicals.rsi14 > 70 ? "과열(Bullish)" : (technicals.rsi14 < 30 ? "침체(Bearish)" : "보합(Neutral)")) : "보합",
         wtiLevel: getVal('dcoilwtico'),
         vixLevel: getVal('vixcls'),
         dxyLevel: getVal('dxy')
     };
 
-    const prompt = `당신은 대한민국 외환 및 증시 분석 전문가입니다. 현재 시각은 KST **${kstTimeStr}**입니다.
+    const prompt = `당신은 대한민국 외환 및 증시 분석 전문가입니다.
+현재 시각은 KST **${kstTimeStr}**이며, 현재의 시장 세션은 **[${marketSession}]**입니다.
+
 제공된 규칙 기반 예측 신호와 실시간 지표를 바탕으로,
-원/달러 환율과 코스피 지수의 1~5거래일 전망을 객관적이고 구조화된 보고서 형식으로 작성해 주세요.
+**한국 장 기준**에서 원/달러 환율과 코스피 지수의 1~5거래일 전망을 객관적이고 구조화된 보고서 형식으로 작성해 주세요.
 
 [정량 예측 모델 데이터 (QUANTITATIVE MODEL)]
 ${JSON.stringify(anchorSignal, null, 2)}
 
 이 모델 데이터는 다음을 의미합니다:
-- KOSPI 현재가: ${anchorSignal.kospiCurrent}pt (분석의 절대 기준점)
-- KOSPI UpProb ${(anchorSignal.kospiUpProb * 100).toFixed(0)}% = KOSPI가 향후 1~5거래일 동안 상승할 확률
-- 환율 현재가: ${anchorSignal.fxCurrent}원 (분석의 절대 기준점)
-- 환율 UpProb ${(anchorSignal.fxUpProb * 100).toFixed(0)}% = 원/달러 환율이 상승할 확률
-- techSignal = 기술적 지표 기준 현재 과매수(bullish)/과매도(bearish) 여부
+- KOSPI 현재가: [수치]pt (분석의 핵심 기준 가격)
+- KOSPI 상승 확률: AI 모델이 계산한 향후 1~5거래일 내 지수 상승 확률 (단위: %)
+- 환율 현재가: [수치]원 (분석의 핵심 기준 가격)
+- 환율 상승 확률: AI 모델이 계산한 향후 1~5거래일 내 환율 상승 확률 (단위: %)
+- 기술적 강도(techSignal): 매수와 매도 세력 중 어느 쪽의 힘이 기술적으로 더 강한지(과열/침체) 나타내는 신호
 
+[입력 데이터 컨텍스트]
 ${combinedDataContext}
 
 출력 형식은 반드시 아래 구조를 따르세요. 각 파트는 250자 이내로 작성하세요.
 
 [파트A: 원/달러 환율 분석]
-- 반드시 다음 정보를 모두 포함하세요:
-1) 현재 환율
-2) 향후 1~5거래일 예상 도달 구간 또는 목표 가격
-3) 핵심 지지선과 저항선 (정량예측모델 데이터/CONTEXT 기반)
-4) 어떤 환율 구간에서 매수/매도/관망해야 하는지 구체적 대응
-5) 핵심 근거 2~3개
-
-예시 형식:
-현재 환율은 1,350.5원이다. 단기적으로 1,360~1,365원 재시도 가능성이 있다. 1,340원은 1차 지지, 1,370원은 저항이다. 1,345원 부근 조정 시 분할 매수 대응, 1,370원 돌파 여부는 추격보다 확인 후 대응이 적절하다.
+- 현재 환율
+- 향후 1~5거래일 예상 도달 구간 또는 목표 가격
+- 핵심 지지선과 저항선
+- 어떤 환율 구간에서 매수/매도/관망해야 하는지 구체적 대응
+- 핵심 근거 2~3개
 
 [파트B: 코스피 지수 분석]
-- 반드시 다음 정보를 모두 포함하세요:
-1) 현재 코스피 지수
-2) 향후 1~5거래일 예상 도달 구간 또는 목표 지수
-3) 핵심 지지선과 저항선 (정량예측모델 데이터/CONTEXT 기반)
-4) 어떤 지수대에서 매수/매도/관망해야 하는지 구체적 대응
-5) 핵심 근거 2~3개
+- 현재 코스피 지수
+- 향후 1~5거래일 예상 도달 구간 또는 목표 지수
+- 핵심 지지선과 저항선
+- 어떤 지수대에서 매수/매도/관망해야 하는지 구체적 대응
+- 핵심 근거 2~3개
 
-예시 형식:
-현재 코스피는 2,550.5pt다. 단기 반등 시 2,600~2,620pt 구간까지 열려 있으나, 2,500pt는 1차 지지, 2,650pt는 저항이다. 2,520pt 부근 눌림목은 분할 접근 가능하나, 2,650pt 돌파 실패 시 비중 확대는 신중해야 한다.
-
-[실전 투자 대응] (이 섹션은 절대 누락하지 마세요)
+[실전 투자 대응]
 - 환율: 숫자를 포함해 80자 이내의 구체적 대응
 - 코스피: 숫자를 포함해 80자 이내의 구체적 대응
 
 중요 지침:
-1. [실전 투자 대응] 섹션은 텔레그램 알림의 핵심이므로 반드시 별도 섹션으로 작성하세요.
-2. 모든 분석 결과에 현재가, 지지선, 저항선 등 숫자를 반드시 포함하세요.
-3. 마크다운 헤더(#) 기호 사용 금지.
-4. 톤과 스타일: 냉철하고 객관적인 공식 리포트 스타일.`;
+1. 한국 장 기준으로만 해석한다. 
+2. ${sessionKeyFocus}
+3. 모든 분석 결과에 현재가, 지지선, 저항선 등 숫자를 반드시 포함한다.
+4. 마크다운 헤더(#) 기호 사용 금지.
+5. 톤과 스타일: 냉철하고 객관적인 공식 리포트 스타일.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
@@ -1525,7 +1535,7 @@ async function main() {
 
     const kospiScores = { up: 0, down: 0 }; // 코스피 상승요인 점수
 
-    // 🌟 동적 상관관계 데이터 로드 (Dynamic Scoring 적용용)
+    //  동적 상관관계 데이터 로드 (Dynamic Scoring 적용용)
     let correlations = null;
     try {
         let actualCorrPath = path.join(process.cwd(), 'dollar-investment-web', 'public', 'data', 'correlations.json');
@@ -1550,7 +1560,7 @@ async function main() {
         if (key && correlations[target] && typeof correlations[target][key] === 'number') {
             const corr = correlations[target][key];
             const absCorr = Math.abs(corr);
-            // 🌟 [추가] 다중공선성(Multi-collinearity) 관리: |r| > 0.8 시 가중치 절반 축소 (Pruning)
+            //  [추가] 다중공선성(Multi-collinearity) 관리: |r| > 0.8 시 가중치 절반 축소 (Pruning)
             if (absCorr > 0.8) {
                 return 1.0 + (absCorr * 0.5); // 과적합 방지
             }
@@ -1559,7 +1569,7 @@ async function main() {
         return 1.0;
     };
 
-    // 🌟 [추가] 이전 데이터 로드하여 히스토리 연속성 확보 (야후 히스토리 누락 대응)
+    //  [추가] 이전 데이터 로드하여 히스토리 연속성 확보 (야후 히스토리 누락 대응)
     let prevDashboard = null;
     try {
         const paths = [
@@ -1578,13 +1588,13 @@ async function main() {
     }
 
     for (const s of FRED_SERIES) {
-        // 🌟 [개선] 국제 유가(WTI)는 지연된 FRED 데이터 대신 야후 실시간(CL=F)만 사용하기 위해 FETCH 건너뜀
+        //  [개선] 국제 유가(WTI)는 지연된 FRED 데이터 대신 야후 실시간(CL=F)만 사용하기 위해 FETCH 건너뜀
         let obs = (s.id === 'DCOILWTICO') ? [] : await fetchFromFred(s.fredId || s.id);
 
         // 실시간 데이터 가져오기 (일별 히스토리 + 실시간 현재가)
         const { observations: rawRtObs, regularPrice: rtPriceRaw, regularMarketTime } = await fetchFromYahooFinance(s.realtimeSymbol);
         
-        // 🌟 [가짜 노드 제거] 야후가 보낸 오늘 날짜 데이터가 가짜 평탄선인 경우 제거
+        //  [가짜 노드 제거] 야후가 보낸 오늘 날짜 데이터가 가짜 평탄선인 경우 제거
         const rtObs = (rawRtObs || []).filter((o, idx) => {
             if (o.date === todayStr) {
                 // 1. 한국 지수(^KS11 등)인데 토요일/일요일 데이터가 들어오면 가짜로 간주
@@ -1627,7 +1637,7 @@ async function main() {
                 const { observations: hObs } = await fetchFromYahooFinance(s.historySymbol);
                 if (hObs && hObs.length > 1 && rtObs.length > 0) {
                     // 보조 기호의 과거 데이터와 주 기호의 현재가 결합
-                    // 🌟 [추가] 가격 레벨 차이로 인한 그래프 왜곡 방지를 위해 히스토리 스케일링 수행
+                    //  [추가] 가격 레벨 차이로 인한 그래프 왜곡 방지를 위해 히스토리 스케일링 수행
                     const currentTargetPrice = parseFloat(rtObs[0].value);
                     const currentProxyPrice = parseFloat(hObs[0].value);
                     const scaleFactor = currentProxyPrice > 0 ? currentTargetPrice / currentProxyPrice : 1.0;
@@ -1671,7 +1681,7 @@ async function main() {
             }
         }
         
-        // 🌟 [v18.0 Persistence] Yahoo API 누락 대응: 이전 대시보드 히스토리와 강제 병합
+        //  [v18.0 Persistence] Yahoo API 누락 대응: 이전 대시보드 히스토리와 강제 병합
         // 4.2 코스피 누락 사태 방지를 위해, API 결과가 불완전해도 이전 데이터를 절대 버리지 않음
         if (prevDashboard) {
             const prevInd = prevDashboard.indicators.find(i => i.id === s.id.toLowerCase());
@@ -1686,7 +1696,7 @@ async function main() {
                         // 1. 이미 API 결과에 있는 날짜는 제외 (업데이트 우선)
                         if (apiDates.has(h.date)) return false;
                         
-                        // 2. 🌟 [추가] 오늘이 주말인데 파일에 '오늘' 날짜가 있다면, 
+                        // 2.  [추가] 오늘이 주말인데 파일에 '오늘' 날짜가 있다면, 
                         // 이는 이전 세션의 가짜 노드일 확률이 높으므로 복구하지 않음 (한국 마켓 한정)
                         if (isWeekend && h.date === todayStr) {
                             const isKorean = s.realtimeSymbol ? (s.realtimeSymbol.endsWith('.KS') || s.realtimeSymbol.endsWith('.KQ') || s.realtimeSymbol === '^KS11' || s.realtimeSymbol === '^KQ11') : false;
@@ -1707,7 +1717,7 @@ async function main() {
             }
         }
         
-        // 🌟 [추가] 최종적으로도 히스토리가 턱없이 부족한 경우 이전 데이터에서 히스토리 복원 (Stateful Persistence)
+        //  [추가] 최종적으로도 히스토리가 턱없이 부족한 경우 이전 데이터에서 히스토리 복원 (Stateful Persistence)
         if (obs.length <= 1 && prevDashboard) {
             const prevInd = prevDashboard.indicators.find(i => i.id === s.id.toLowerCase());
             if (prevInd && prevInd.history && prevInd.history.length > 0) {
@@ -1730,7 +1740,7 @@ async function main() {
             .filter(o => o.value && o.value !== '.' && !isNaN(parseFloat(o.value)))
             .map(o => ({ date: o.date, value: parseFloat(o.value) }));
 
-        // 🌟 [개선] 메인 표시값(numVal) 결정 로직: 
+        //  [개선] 메인 표시값(numVal) 결정 로직: 
         // FRED 히스토리보다 실시간(rtPrice) 데이터가 있다면 이를 최우선으로 메인 가격에 반영
         let numVal = cleanedObs.length > 0 ? cleanedObs[0].value : 0;
         if (s.realtimeSymbol && rtPrice !== null && rtPrice !== undefined) {
@@ -1752,7 +1762,7 @@ async function main() {
         const diff = parseFloat((numVal - prevVal).toFixed(2));
         const diffPercent = prevVal !== 0 ? parseFloat(((diff / prevVal) * 100).toFixed(2)) : 0;
 
-        // 🌟 [추가] 히스토리 데이터의 일별 단일화(Granularity) 강제 적용
+        //  [추가] 히스토리 데이터의 일별 단일화(Granularity) 강제 적용
         // 동일 날짜에 여러 데이터(분 단위 등)가 있으면 최신(배열 앞쪽) 것 1개만 남김
         const seenDates = new Set();
         const dailyHistory = cleanedObs.filter(o => {
@@ -1764,7 +1774,7 @@ async function main() {
 
         const history = dailyHistory.slice(0, 10).reverse();
         
-        // 🌟 [추가] 실시간 값(Real-time)과 히스토리(History) 동기화
+        //  [추가] 실시간 값(Real-time)과 히스토리(History) 동기화
         // 카드 상단 헤더(Realtime)와 하단 그래프(History)의 마지막 점이 불일치하는 현상 해결
         if (s.realtimeSymbol && rtPrice !== null && rtPrice !== undefined && history.length > 0) {
             // 히스토리의 가장 마지막 요소(최신 데이터)를 실시간 값으로 업데이트
@@ -1779,7 +1789,7 @@ async function main() {
         const zScore = zScores.length > 0 ? zScores[zScores.length - 1] : 0;
         const freshness = getFreshnessMultiplier(s.realtimeSymbol ? 'realtime' : 'D');
         
-        // 🌟 상관계수 기반 동적 가중치 산출
+        //  상관계수 기반 동적 가중치 산출
         const dynamicWeight = getCorrelationWeight(s.id, 'usdkrw'); // 환율용
         const kospiDynamicWeight = getCorrelationWeight(s.id, 'kospi'); // 코스피용
         
@@ -2061,7 +2071,7 @@ async function main() {
     const investorSubState = investorTrend?.subState;
     const investorRealtimeMsg = investorTrend?.realtimeMsg || "";
 
-    // 🌟 [추가] 삼성전자 가집계 데이터 반영 (장중 모니터링 최적화)
+    //  [추가] 삼성전자 가집계 데이터 반영 (장중 모니터링 최적화)
     if (samsungProvisional) {
         const { foreignerQty, institutionQty, timeGb } = samsungProvisional;
         const timeMap = { '1': '09:30', '2': '11:20', '3': '13:20', '4': '14:30', '5': '15:30+' };
@@ -2089,7 +2099,7 @@ async function main() {
         else if (foreignerQty < -500000) kospiScores.down += 2.0;
     }
 
-    // 🌟 [최종 하이브리드] 시장 전체 실시간 수급(0403) + 삼성전자 가집계(0440)
+    //  [최종 하이브리드] 시장 전체 실시간 수급(0403) + 삼성전자 가집계(0440)
     const invStatus = investorTrend?.status || 'Confirmed';
 
     // 1. 시장 전체 외국인 수급 (보고서 5. 필드명 준수)
@@ -2171,7 +2181,7 @@ async function main() {
         });
     }
 
-    // 🌟 [추가] 삼성전자 가집계 데이터 반영 (v15.0 - 교차 검증용)
+    //  [추가] 삼성전자 가집계 데이터 반영 (v15.0 - 교차 검증용)
     if (samsungProvisional) {
         const { foreignerQty, institutionQty, timeGb, signal, signalType } = samsungProvisional;
         const timeMap = { '1': '09:30', '2': '11:20', '3': '13:20', '4': '14:30', '5': '15:30+' };
@@ -2398,7 +2408,7 @@ async function main() {
         console.log(`📊 [Block Score] ${blockId.padEnd(15)} | Up: ${dampenedUp.toFixed(1).padStart(4)} | Down: ${dampenedDown.toFixed(1).padStart(4)} | Contribution: ${((dampenedUp + dampenedDown) / 1).toFixed(1)}`);
     });
 
-    // 🌟 [추가] 비선형 상호작용 항 (Non-linear Interactions) 및 Regime 스위칭
+    //  [추가] 비선형 상호작용 항 (Non-linear Interactions) 및 Regime 스위칭
     // 금리/달러 상승(Rates Up)과 시장 공포(Risk Up)가 동시 발생 시 변동성 증폭 
     const ratesUp = blockScores['rates-dollar']?.up || 0;
     const riskUp = blockScores['risk']?.up || 0;
@@ -2488,7 +2498,7 @@ async function main() {
             const emaProbs = calculateEMA(probSeries, 3);
             let finalEmaProb = Math.round(emaProbs[emaProbs.length - 1]);
             
-            // 🌟 [Lag 완화] 원시 확률(Raw)과 EMA 간 괴리가 15% 이상 크게 벌어지면 (급격한 추세 전환/역재 발생)
+            //  [Lag 완화] 원시 확률(Raw)과 EMA 간 괴리가 15% 이상 크게 벌어지면 (급격한 추세 전환/역재 발생)
             // EMA의 지연(Lag) 리스크가 더 크다고 판단하여 실시간 Raw 점수 방향으로 가중 평균을 둡니다.
             if (Math.abs(rawKospiUpProb - finalEmaProb) >= 15) {
                 finalEmaProb = Math.round((rawKospiUpProb * 0.6) + (finalEmaProb * 0.4));
@@ -2614,7 +2624,7 @@ async function main() {
                 kTimestamps.forEach((ts, i) => {
                     const date = new Date(ts * 1000).toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
                     
-                    // 🌟 [추가] 야후가 보낸 데이터 중 주말(토/일) 데이터가 '오늘' 날짜인 경우 제외
+                    //  [추가] 야후가 보낸 데이터 중 주말(토/일) 데이터가 '오늘' 날짜인 경우 제외
                     if (isWeekend && date === todayStr) return;
 
                     if (kQuotes.high[i] !== null && kQuotes.low[i] !== null && kQuotes.close[i] !== null) {
