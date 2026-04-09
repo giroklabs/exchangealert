@@ -4,7 +4,7 @@ import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchAllCurrentExchangeRates, fetchLastUpdateTime } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, Globe } from 'lucide-react';
+import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, Globe, Copy, Share2, Twitter, Send, Check } from 'lucide-react';
 import { UnifiedFXChart } from './UnifiedFXChart';
 
 export function MarketDashboard({ initialData = null, isLoadingExternal = false }: { initialData?: DashboardData | null, isLoadingExternal?: boolean }) {
@@ -13,6 +13,28 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
     const [isLoading, setIsLoading] = useState(!initialData);
     const [isChartExpanded, setIsChartExpanded] = useState(true);
     const [isPredictionExpanded, setIsPredictionExpanded] = useState(true);
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopy = () => {
+        if (!data?.forecast?.aiAnalysis) return;
+        const text = `🤖 달러 인베스트 AI 시장 분석\n\n${data.forecast.aiAnalysis}\n\n🌐 대시보드 확인: ${window.location.href}`;
+        navigator.clipboard.writeText(text).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        });
+    };
+
+    const handleShareTwitter = () => {
+        const text = encodeURIComponent(`🤖 달러 인베스트 AI 시장 분석\n원/달러 환율 및 코스피 전망 확인하기\n#환율 #코스피 #달러투자`);
+        const url = encodeURIComponent(window.location.href);
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    };
+
+    const handleShareTelegram = () => {
+        const text = encodeURIComponent(`🤖 달러 인베스트 AI 시장 분석\n\n${data?.forecast?.aiAnalysis?.slice(0, 100)}...\n\n자세한 내용은 대시보드에서 확인하세요!`);
+        const url = encodeURIComponent(window.location.href);
+        window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+    };
 
     const renderLineWithBold = (text: string) => {
         const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -177,20 +199,55 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                             ? 'bg-yellow-900/10 border-l-yellow-600 border-gray-700'
                             : 'bg-yellow-50/30 border-l-yellow-500 border-yellow-100/50'
                             }`}>
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
-                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
+                            <div className="flex items-center justify-between gap-3 mb-6">
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
+                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <h3 className={`text-xl font-black flex items-center gap-3 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-900'}`}>
+                                        Gemini AI 심층 시장 분석
+                                        {data?.forecast?.lastAiUpdate && (
+                                            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-500/80' : 'bg-yellow-100/50 text-yellow-700/70'}`}>
+                                                분석 기준: {new Date(data.forecast.lastAiUpdate).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        )}
+                                    </h3>
                                 </div>
-                                <h3 className={`text-xl font-black flex items-center gap-3 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-900'}`}>
-                                    Gemini AI 심층 시장 분석
-                                    {data?.forecast?.lastAiUpdate && (
-                                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${theme === 'dark' ? 'bg-yellow-400/10 text-yellow-500/80' : 'bg-yellow-100/50 text-yellow-700/70'}`}>
-                                            분석 기준: {new Date(data.forecast.lastAiUpdate).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                    )}
-                                </h3>
+
+                                {/* 액션 버튼 바 */}
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={handleCopy}
+                                        title="분석 결과 복사"
+                                        className={`p-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 text-sm font-bold ${isCopied
+                                            ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
+                                            : theme === 'dark' ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-50 shadow-sm border border-gray-100'
+                                            }`}
+                                    >
+                                        {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                        <span className="hidden sm:inline">{isCopied ? '복사됨!' : '본문 복사'}</span>
+                                    </button>
+
+                                    <div className={`w-px h-6 mx-1 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+
+                                    <button
+                                        onClick={handleShareTwitter}
+                                        title="트위터 공유"
+                                        className={`p-2.5 rounded-xl transition-all duration-300 hover:scale-110 ${theme === 'dark' ? 'bg-gray-800 text-blue-400 hover:bg-blue-900/20' : 'bg-white text-blue-500 hover:bg-blue-50 shadow-sm border border-gray-100'}`}
+                                    >
+                                        <Twitter className="w-4 h-4 fill-current" />
+                                    </button>
+
+                                    <button
+                                        onClick={handleShareTelegram}
+                                        title="텔레그램 공유"
+                                        className={`p-2.5 rounded-xl transition-all duration-300 hover:scale-110 ${theme === 'dark' ? 'bg-gray-800 text-sky-400 hover:bg-sky-900/20' : 'bg-white text-sky-500 hover:bg-sky-50 shadow-sm border border-gray-100'}`}
+                                    >
+                                        <Send className="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="text-left space-y-4">
