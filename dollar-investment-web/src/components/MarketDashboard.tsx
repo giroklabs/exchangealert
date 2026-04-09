@@ -14,20 +14,43 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
     const [isChartExpanded, setIsChartExpanded] = useState(true);
     const [isPredictionExpanded, setIsPredictionExpanded] = useState(true);
     const [isCopied, setIsCopied] = useState(false);
-
     const handleCopy = () => {
         if (!data?.forecast?.aiAnalysis) return;
         const text = `🤖 달러 인베스트 AI 시장 분석\n\n${data.forecast.aiAnalysis}\n\n🌐 대시보드 확인: ${window.location.href}`;
-        navigator.clipboard.writeText(text).then(() => {
+        
+        // 현대적인 Clipboard API 시도
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                setIsCopied(true);
+                setTimeout(() => setIsCopied(false), 2000);
+            }).catch(err => {
+                console.error('Clipboard API 실패, 대체 방식 시도:', err);
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    };
+
+    const fallbackCopy = (text: string) => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
             setIsCopied(true);
             setTimeout(() => setIsCopied(false), 2000);
-        });
+        } catch (err) {
+            console.error('복사 실패:', err);
+        }
+        document.body.removeChild(textArea);
     };
 
     const handleShareTwitter = () => {
         if (!data?.forecast?.aiAnalysis) return;
         
-        // 실전 투자 대응 파트만 추출 시도
         const analysis = data.forecast.aiAnalysis;
         let summary = "원/달러 환율 및 코스피 전망 확인하기";
         
@@ -39,14 +62,20 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
         const text = encodeURIComponent(`🤖 달러 인베스트 AI 분석\n\n${summary}\n\n#환율 #코스피`);
         const url = encodeURIComponent(window.location.href);
         
-        // 전체 본문은 클립보드에 복사해주어 붙여넣기 가능하게 배려
+        // 전체 본문 복사 시도
         handleCopy();
         
         window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     };
 
     const handleShareTelegram = () => {
-        const text = encodeURIComponent(`🤖 달러 인베스트 AI 시장 분석\n\n${data?.forecast?.aiAnalysis?.slice(0, 100)}...\n\n자세한 내용은 대시보드에서 확인하세요!`);
+        if (!data?.forecast?.aiAnalysis) return;
+        // 텔레그램은 4096자까지 지원하므로 제한을 대폭 늘림 (3000자)
+        const textToShare = data.forecast.aiAnalysis.length > 3000 
+            ? data.forecast.aiAnalysis.slice(0, 3000) + "..."
+            : data.forecast.aiAnalysis;
+            
+        const text = encodeURIComponent(`🤖 달러 인베스트 AI 시장 분석\n\n${textToShare}\n\n자세한 내용은 대시보드에서 확인하세요!`);
         const url = encodeURIComponent(window.location.href);
         window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
     };
