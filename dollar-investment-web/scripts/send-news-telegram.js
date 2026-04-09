@@ -25,8 +25,8 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 /** 키워드별 노출할 최대 기사 수 */
 const MAX_PER_KEYWORD = 3;
 
-/** 24시간 이내 기사만 포함 (ms) */
-const FRESH_THRESHOLD_MS = 24 * 60 * 60 * 1000;
+/** 12시간 이내 기사만 포함 (ms) - 더 신선한 뉴스 제공을 위해 단축 */
+const FRESH_THRESHOLD_MS = 12 * 60 * 60 * 1000;
 
 /** news.json 경로 */
 const NEWS_FILE = path.join(__dirname, '..', 'public', 'data', 'news.json');
@@ -42,11 +42,26 @@ const SECTION_LABELS = {
 
 // ─────────────── 유틸 ───────────────
 
+/** 얼마나 전인지 텍스트로 반환 (예: 20분 전, 3시간 전) */
+function getTimeAgo(date) {
+    if (!date) return '';
+    const diff = Date.now() - date.getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 1) return '방금 전';
+    if (minutes < 60) return `${minutes}분 전`;
+    if (hours < 24) return `${hours}시간 전`;
+    return `${days}일 전`;
+}
+
 /** RFC 2822 또는 ISO 날짜 문자열을 Date 로 파싱 */
 function parseDate(dateStr) {
     if (!dateStr) return null;
     try {
-        return new Date(dateStr);
+        const d = new Date(dateStr);
+        return isNaN(d.getTime()) ? null : d;
     } catch {
         return null;
     }
@@ -96,14 +111,19 @@ function loadAndFilterNews() {
     for (const [keyword, articles] of Object.entries(raw.news || {})) {
         const label = SECTION_LABELS[keyword] || `📌 ${keyword}`;
 
-        // 24시간 이내 기사 필터링 + 중복 제거
-        const fresh = articles.filter(article => {
-            if (seenLinks.has(article.link)) return false;
-            const pubDate = parseDate(article.pubDate);
-            if (pubDate && (now - pubDate.getTime()) > FRESH_THRESHOLD_MS) return false;
-            seenLinks.add(article.link);
-            return true;
-        }).slice(0, MAX_PER_KEYWORD);
+        // 12시간 이내 기사 필터링 + 중복 제거 + 날짜 파싱
+        const fresh = articles
+            .map(article => ({ ...article, parsedDate: parseDate(article.pubDate) }))
+            .filter(article => {
+                if (seenLinks.has(article.link)) return false;
+                if (!article.parsedDate) return false;
+                if ((now - article.parsedDate.getTime()) > FRESH_THRESHOLD_MS) return false;
+                seenLinks.add(article.link);
+                return true;
+            })
+            // 최신순 정렬 (매우 중요)
+            .sort((a, b) => b.parsedDate.getTime() - a.parsedDate.getTime())
+            .slice(0, MAX_PER_KEYWORD);
 
         if (fresh.length > 0) {
             sections.push({ keyword, label, articles: fresh });
@@ -116,7 +136,7 @@ function loadAndFilterNews() {
 
 // ─────────────── 메시지 포맷 ───────────────
 
-function buildNewsMessage(sections, lastUpdate) {
+function buildNewsMessage(sections) {
     const now = new Date();
     const kstDate = now.toLocaleString('ko-KR', {
         timeZone: 'Asia/Seoul',
@@ -137,13 +157,19 @@ function buildNewsMessage(sections, lastUpdate) {
         for (const article of section.articles) {
             // 제목 내 대괄호가 링크 문법을 깨뜨리는 것 방지 (소괄호로 교체)
             let title = article.title.replace(/\[/g, '(').replace(/\]/g, ')');
+            
+            // 신선도 표시 (예: 2시간 전)
+            const timeAgo = getTimeAgo(article.parsedDate);
+            const timeTag = timeAgo ? ` (_${timeAgo}_)` : '';
 
-            // 제목이 너무 길면 60자 자르기
-            if (title.length > 60) {
-                title = title.slice(0, 58) + '…';
+            // 제목이 너무 길면 자르기 (태그 포함 고려)
+            const maxTitleLen = 50;
+            if (title.length > maxTitleLen) {
+                title = title.slice(0, maxTitleLen - 2) + '…';
             }
+            
             const source = article.source ? ` — ${article.source}` : '';
-            msg += `• [${title}](${article.link})${source}\n`;
+            msg += `• [${title}](${article.link})${timeTag}${source}\n`;
         }
         msg += '\n';
     }
