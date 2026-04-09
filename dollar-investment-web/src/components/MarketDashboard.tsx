@@ -63,9 +63,9 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
 
     const handleShareTelegram = () => {
         if (!data?.forecast?.aiAnalysis) return;
-        // 텔레그램은 4096자까지 지원하므로 제한을 대폭 늘림 (3000자)
-        const textToShare = data.forecast.aiAnalysis.length > 3000 
-            ? data.forecast.aiAnalysis.slice(0, 3000) + "..."
+        // URL 길이 제한으로 인한 400 에러를 방지하기 위해 1000자로 조정 (안전 범위)
+        const textToShare = data.forecast.aiAnalysis.length > 1000 
+            ? data.forecast.aiAnalysis.slice(0, 1000) + "..."
             : data.forecast.aiAnalysis;
             
         const text = encodeURIComponent(`🤖 달러 인베스트 AI 시장 분석\n\n${textToShare}\n\n자세한 내용은 대시보드에서 확인하세요!`);
