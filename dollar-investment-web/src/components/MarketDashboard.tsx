@@ -4,7 +4,8 @@ import { fetchMarketDashboardData } from '../services/marketDashboardService';
 import { fetchAllCurrentExchangeRates, fetchLastUpdateTime } from '../services/exchangeRateService';
 import type { DashboardData, MarketIndicator, MajorRate } from '../types';
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, Globe, Copy, Send, Check } from 'lucide-react';
+import { TrendingUp, Target, ShieldCheck, AlertCircle, Compass, Globe, Copy, Check } from 'lucide-react';
+// import { Send } from 'lucide-react'; // 텔레그램 버튼 비활성화로 인한 주석 처리
 import { UnifiedFXChart } from './UnifiedFXChart';
 
 export function MarketDashboard({ initialData = null, isLoadingExternal = false }: { initialData?: DashboardData | null, isLoadingExternal?: boolean }) {
@@ -61,6 +62,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
         window.open(`https://x.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     };
 
+    /* 텔레그램 버튼 비활성화로 인한 주석 처리
     const handleShareTelegram = () => {
         if (!data?.forecast?.aiAnalysis) return;
         // URL 길이 제한으로 인한 400 에러를 방지하기 위해 1000자로 조정 (안전 범위)
@@ -72,6 +74,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
         const url = encodeURIComponent(window.location.href);
         window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
     };
+    */
 
     const renderLineWithBold = (text: string) => {
         const parts = text.split(/(\*\*.*?\*\*)/g);
