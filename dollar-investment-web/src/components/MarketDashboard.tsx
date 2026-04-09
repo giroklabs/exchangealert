@@ -52,17 +52,10 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
         if (!data?.forecast?.aiAnalysis) return;
         
         const analysis = data.forecast.aiAnalysis;
-        let summary = "원/달러 환율 및 코스피 전망 확인하기";
-        
-        const guideIndex = analysis.indexOf('[실전 투자 대응]');
-        if (guideIndex !== -1) {
-            summary = analysis.slice(guideIndex + 10, guideIndex + 150).trim() + "...";
-        }
-
-        const text = encodeURIComponent(`🤖 달러 인베스트 AI 분석\n\n${summary}\n\n#환율 #코스피`);
+        const text = encodeURIComponent(`🤖 달러 인베스트 AI 분석\n\n${analysis}\n\n#환율 #코스피`);
         const url = encodeURIComponent(window.location.href);
         
-        // 전체 본문 복사 시도
+        // 전체 본문 복사 시도 (붙여넣기용)
         handleCopy();
         
         window.open(`https://x.com/intent/tweet?text=${text}&url=${url}`, '_blank');
