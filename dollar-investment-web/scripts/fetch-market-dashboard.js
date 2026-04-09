@@ -1092,13 +1092,11 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 
     const blockSummary = summarizeByBlock(indicators);
 
-    //  [추가] Gemini 3 최적화: 구조화된 컨텍스트(Category-based Context) 생성
     let techSection = '';
     let kospiTechSection = '';
     let corrSection = '';
     let newsSection = '';
 
-    // 환율 기술적 지표 섹션 생성
     if (technicals) {
         const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels } = technicals;
         const rsiSignal = rsi14 > 70 ? '과매수 주의' : (rsi14 < 30 ? '과매도 반등 가능' : '중립');
@@ -1120,7 +1118,6 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
         }
     }
 
-    // 코스피 기술적 지표 섹션 생성
     if (kospiTechnicals) {
         const { rsi14, ma5, ma20, ma60, bb, momentum, keyLevels } = kospiTechnicals;
         kospiTechSection = `
@@ -1132,7 +1129,6 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 - 지지/저항: 지지=${keyLevels?.support}pt, 저항=${keyLevels?.resistance}pt`;
     }
 
-    // 상관관계 섹션 생성
     if (correlations && correlations.usdkrw) {
         corrSection = "\n주요 지표별 환율 상관계수 (최근 60일):";
         Object.entries(correlations.usdkrw).forEach(([id, val]) => {
@@ -1141,6 +1137,7 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
             }
         });
     }
+
     let macroContext = "[CONTEXT: 거시경제 및 리스크 지표]\n";
     let koreaContext = "\n[CONTEXT: 한국 시장 및 기술지표]\n";
     let fxContext = "\n[CONTEXT: 환율 및 외환 흐름]\n";
@@ -1205,49 +1202,40 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     const prompt = `당신은 대한민국 외환 및 증시 분석 전문가입니다.
 현재 시각은 KST **${kstTimeStr}**이며, 현재의 시장 세션은 **[${marketSession}]**입니다.
 
-제공된 규칙 기반 예측 신호와 실시간 지표를 바탕으로,
-**한국 장 기준**에서 원/달러 환율과 코스피 지수의 1~5거래일 전망을 객관적이고 구조화된 보고서 형식으로 작성해 주세요.
+제공된 규칙 기반 예측 신호와 실시간 지표를 바탕으로 원/달러 환율과 코스피 지수의 1~5거래일 전망을 분석해 주세요. 
 
 [정량 예측 모델 데이터 (QUANTITATIVE MODEL)]
 ${JSON.stringify(anchorSignal, null, 2)}
 
-이 모델 데이터는 다음을 의미합니다:
-- KOSPI 현재가: [수치]pt (분석의 핵심 기준 가격)
-- KOSPI 상승 확률: 정량예측모델이 계산한 향후 1~5거래일 내 지수 상승 확률 (단위: %)
-- 환율 현재가: [수치]원 (분석의 핵심 기준 가격)
-- 환율 상승 확률: 정량예측모델이 계산한 향후 1~5거래일 내 환율 상승 확률 (단위: %)
-- 기술적 강도(techSignal): 매수와 매도 세력 중 어느 쪽의 힘이 기술적으로 더 강한지(과열/침체) 나타내는 신호
+이 데이터는 다음을 의미합니다:
+- KOSPI 상승 확률: 향후 1~5거래일 내 지수 상승 확률 (%)
+- 환율 상승 확률: 향후 1~5거래일 내 환율 상승 확률 (%)
+- 기술적 강도(techSignal): 과열/침체 신호
 
 [입력 데이터 컨텍스트]
 ${combinedDataContext}
 
-출력 형식은 반드시 아래 구조를 따르세요. 각 파트는 250자 이내로 작성하세요.
+출력 형식은 반드시 아래 구조를 **토씨 하나 틀리지 말고 정확히** 따르세요:
 
-[파트A: 원/달러 환율 분석]
-- 현재 환율
-- 향후 1~5거래일 예상 도달 구간 또는 목표 가격
-- 핵심 지지선과 저항선
-- 어떤 환율 구간에서 매수/매도/관망해야 하는지 구체적 대응
-- 핵심 근거 2~3개
+🤖 달러 인베스트 AI 분석
 
-[파트B: 코스피 지수 분석]
-- 현재 코스피 지수
-- 향후 1~5거래일 예상 도달 구간 또는 목표 지수
-- 핵심 지지선과 저항선
-- 어떤 지수대에서 매수/매도/관망해야 하는지 구체적 대응
-- 핵심 근거 2~3개
+**${kstTimeStr.split(' ')[0]}년 ${kstTimeStr.split(' ')[1]} ${kstTimeStr.split(' ')[2]} 한국 외환 및 증시 분석 보고서**
 
-[실전 투자 대응]
-- 환율: 숫자를 포함해 80자 이내의 구체적 대응
-- 코스피: 숫자를 포함해 80자 이내의 구체적 대응
+파트A: 원/달러 환율 분석
+현재 원/달러 환율, 모델 상승 확률, 예상 도달 지수, 핵심 지지/저항선, 매수/매도/관망 대응 전략을 포함하여 하나의 흐름 있는 단락으로 상세히 작성하세요. 핵심 근거 2~3개는 반드시 문장 끝에 ①... ②... ③... 형태로 포함하세요.
+
+파트B: 코스피 지수 분석
+현재 코스피 지수, 모델 상승 확률, 예상 도달 지수, 핵심 지지/저항선, 매수/매도/관망 대응 전략을 포함하여 하나의 흐름 있는 단락으로 상세히 작성하세요. 핵심 근거 2~3개는 반드시 문장 끝에 ①... ②... ③... 형태로 포함하세요.
+
+실전 투자 대응
+환율: [수치 포함 60자 이내 요약]
+코스피: [수치 포함 60자 이내 요약]
 
 중요 지침:
-1. 한국 장 기준으로만 해석한다. 
-2. ${sessionKeyFocus}
-3. 모든 분석 결과에 현재가, 지지선, 저항선 등 숫자를 반드시 포함한다.
-4. 마크다운 헤더(#) 기호 사용 금지.
-5. 톤과 스타일: 냉철하고 객관적인 공식 리포트 스타일.
-6. 용어 사용: 분석 내용 중 모델을 언급할 때는 반드시 'AI 모델' 대신 **'정량예측모델'**이라는 용어를 사용하세요.`;
+1. 마크다운 헤더(#) 기호 사용 절대 금지.
+2. 모든 분석에 지지선, 저항선 등 구체적 숫자를 반드시 포함할 것.
+3. 분석 내용 중 모델을 언급할 때는 반드시 '정량예측모델'이라는 용어를 사용하세요.
+4. 불렛 포인트(-)를 사용하여 항목을 나누지 말고, 파트별로 하나의 긴 문단으로 작성하세요.`;
 
     const data = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }]
