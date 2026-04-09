@@ -279,6 +279,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                         </svg>
                                     </button>
 
+                                    {/* 텔레그램 공유 버튼 주석 처리
                                     <button
                                         onClick={handleShareTelegram}
                                         title="텔레그램 공유"
@@ -286,6 +287,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
                                     >
                                         <Send className="w-4 h-4" />
                                     </button>
+                                    */}
                                 </div>
                             </div>
 
