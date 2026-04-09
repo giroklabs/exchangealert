@@ -1377,11 +1377,11 @@ async function sendTelegramNotification(forecast, lastUpdate) {
     
     for (const line of analysisLines) {
         const trimmed = line.trim();
-        if (trimmed.includes('[파트A:')) { currentPart = 'A'; continue; }
-        if (trimmed.includes('[파트B:')) { currentPart = 'B'; continue; }
+        if (trimmed.includes('파트A:') || trimmed.includes('[파트A:')) { currentPart = 'A'; continue; }
+        if (trimmed.includes('파트B:') || trimmed.includes('[파트B:')) { currentPart = 'B'; continue; }
         
         // 투자 대응 - 헤더 문구 유연화
-        if (trimmed.includes('[실전 투자 대응]') || trimmed.includes('실전 투자 대응') || trimmed.includes('실전 대응')) { 
+        if (trimmed.includes('실전 투자 대응') || trimmed.includes('실전 대응') || trimmed.includes('[실전 투자 대응]')) { 
             captureStrategy = true; 
             continue; 
         }
@@ -1398,8 +1398,8 @@ async function sendTelegramNotification(forecast, lastUpdate) {
             }
         }
 
-        // 요약 추출 (각 파트별 최신 문장 전체 추출)
-        if (!captureStrategy && trimmed.length > 30 && !trimmed.startsWith('[') && !trimmed.startsWith('1)') && !trimmed.startsWith('2)')) {
+        // 요약 추출 (각 파트별 최신 문장 전체 추출) - 기준 완화 (30자 -> 15자)
+        if (!captureStrategy && trimmed.length > 15 && !trimmed.startsWith('[') && !trimmed.startsWith('1)') && !trimmed.startsWith('2)')) {
             if (currentPart === 'A' && !fxSummary) fxSummary = trimmed;
             if (currentPart === 'B' && !kSummary) kSummary = trimmed;
         }
