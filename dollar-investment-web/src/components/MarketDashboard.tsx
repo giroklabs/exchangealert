@@ -25,8 +25,23 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
     };
 
     const handleShareTwitter = () => {
-        const text = encodeURIComponent(`🤖 달러 인베스트 AI 시장 분석\n원/달러 환율 및 코스피 전망 확인하기\n#환율 #코스피 #달러투자`);
+        if (!data?.forecast?.aiAnalysis) return;
+        
+        // 실전 투자 대응 파트만 추출 시도
+        const analysis = data.forecast.aiAnalysis;
+        let summary = "원/달러 환율 및 코스피 전망 확인하기";
+        
+        const guideIndex = analysis.indexOf('[실전 투자 대응]');
+        if (guideIndex !== -1) {
+            summary = analysis.slice(guideIndex + 10, guideIndex + 150).trim() + "...";
+        }
+
+        const text = encodeURIComponent(`🤖 달러 인베스트 AI 분석\n\n${summary}\n\n#환율 #코스피`);
         const url = encodeURIComponent(window.location.href);
+        
+        // 전체 본문은 클립보드에 복사해주어 붙여넣기 가능하게 배려
+        handleCopy();
+        
         window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     };
 
