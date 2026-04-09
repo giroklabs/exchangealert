@@ -65,7 +65,7 @@ export function MarketDashboard({ initialData = null, isLoadingExternal = false 
         // 전체 본문 복사 시도
         handleCopy();
         
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        window.open(`https://x.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     };
 
     const handleShareTelegram = () => {
