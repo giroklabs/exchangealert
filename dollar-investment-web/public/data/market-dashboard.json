@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.582",
-      "diff": -0.24,
-      "diffPercent": -0.24,
+      "value": "98.592",
+      "diff": -0.23,
+      "diffPercent": -0.23,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 98.58
+          "value": 98.59
         }
       ]
     },
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.299",
+      "value": "4.301",
       "diff": 0.01,
       "diffPercent": 0.23,
       "trend": "up",
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "22,926.707",
-      "diff": 104.29,
-      "diffPercent": 0.46,
+      "value": "22,929.738",
+      "diff": 107.32,
+      "diffPercent": 0.47,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 22926.71
+          "value": 22929.74
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,832.72",
-      "diff": 8.06,
-      "diffPercent": 0.12,
+      "value": "6,831.63",
+      "diff": 6.97,
+      "diffPercent": 0.1,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 6832.72
+          "value": 6831.63
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "8,825.906",
-      "diff": 136.38,
-      "diffPercent": 1.57,
+      "value": "8,843.279",
+      "diff": 153.75,
+      "diffPercent": 1.77,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 8825.91
+          "value": 8843.28
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,353.25",
-      "diff": 101.75,
+      "value": "25,351.75",
+      "diff": 100.25,
       "diffPercent": 0.4,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 25353.25
+          "value": 25351.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,879",
-      "diff": 15.75,
-      "diffPercent": 0.23,
+      "value": "6,875.25",
+      "diff": 12,
+      "diffPercent": 0.17,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 6879
+          "value": 6875.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "98.41",
-      "diff": 0.54,
-      "diffPercent": 0.55,
+      "value": "98.33",
+      "diff": 0.46,
+      "diffPercent": 0.47,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-10",
-          "value": 98.41
+          "value": 98.33
         }
       ]
     },
@@ -2138,7 +2138,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.61",
+      "value": "0.62",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -2485,8 +2485,8 @@
     "lastAiUpdate": 1775824014463,
     "score": {
       "upScore": 38.823438688176424,
-      "downScore": 60.21347959037102,
-      "kospiUpScore": 25.072130633407365,
+      "downScore": 60.21572783929125,
+      "kospiUpScore": 25.092704761691422,
       "kospiDownScore": 18.147658073393213
     }
   },
@@ -2559,5 +2559,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 10. PM 1:41:35"
+  "lastUpdate": "2026. 4. 10. PM 1:43:27"
 }
