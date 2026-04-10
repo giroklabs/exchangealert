@@ -29,6 +29,22 @@ export function FXExchangeProfitTracker() {
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 50;
     const [showDailyLog, setShowDailyLog] = useState(false);
+    const [sortConfig, setSortConfig] = useState<{ field: keyof FXInvestment | 'profit'; order: 'asc' | 'desc' }>({
+        field: 'date',
+        order: 'desc'
+    });
+
+    const handleSort = (field: keyof FXInvestment | 'profit') => {
+        setSortConfig(current => ({
+            field,
+            order: current.field === field && current.order === 'desc' ? 'asc' : 'desc'
+        }));
+    };
+
+    const getSortIcon = (field: string) => {
+        if (sortConfig.field !== field) return '↕️';
+        return sortConfig.order === 'desc' ? '⬇️' : '⬆️';
+    };
 
     const handleAddInvestment = () => {
         if (!newInvestment.date || !newInvestment.usdAmount || !newInvestment.buyRate) {
@@ -194,9 +210,38 @@ export function FXExchangeProfitTracker() {
 
     const sortedDates = Object.keys(dailyLogs).sort((a, b) => b.localeCompare(a));
 
+    // 정렬된 투자 내역 계산
+    const sortedInvestments = [...investments].sort((a, b) => {
+        let aValue: any;
+        let bValue: any;
+
+        switch (sortConfig.field) {
+            case 'profit':
+                const aTargetProfit = a.status === 'holding' ? currentRate : a.sellRate!;
+                const bTargetProfit = b.status === 'holding' ? currentRate : b.sellRate!;
+                aValue = a.usdAmount * (aTargetProfit - a.buyRate);
+                bValue = b.usdAmount * (bTargetProfit - b.buyRate);
+                break;
+            case 'sellRate': // 현재/매도 환율 컬럼 대응
+                aValue = a.status === 'holding' ? currentRate : a.sellRate!;
+                bValue = b.status === 'holding' ? currentRate : b.sellRate!;
+                break;
+            default:
+                aValue = a[sortConfig.field as keyof FXInvestment];
+                bValue = b[sortConfig.field as keyof FXInvestment];
+        }
+
+        if (aValue === null || aValue === undefined) return 1;
+        if (bValue === null || bValue === undefined) return -1;
+
+        if (aValue < bValue) return sortConfig.order === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.order === 'asc' ? 1 : -1;
+        return 0;
+    });
+
     // 페이징 처리
-    const totalPages = Math.ceil(investments.length / ITEMS_PER_PAGE);
-    const paginatedInvestments = investments.slice(
+    const totalPages = Math.ceil(sortedInvestments.length / ITEMS_PER_PAGE);
+    const paginatedInvestments = sortedInvestments.slice(
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
@@ -475,12 +520,24 @@ export function FXExchangeProfitTracker() {
                     <table className="w-full text-left">
                         <thead className={theme === 'dark' ? 'bg-gray-700/50' : 'bg-gray-50'}>
                             <tr>
-                                <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>상태</th>
-                                <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>날짜</th>
-                                <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>매수 금액</th>
-                                <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>매수 환율</th>
-                                <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>현재/매도 환율</th>
-                                <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>수익률 (수익금)</th>
+                                <th onClick={() => handleSort('status')} className={`p-4 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    상태 {getSortIcon('status')}
+                                </th>
+                                <th onClick={() => handleSort('date')} className={`p-4 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    날짜 {getSortIcon('date')}
+                                </th>
+                                <th onClick={() => handleSort('usdAmount')} className={`p-4 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    매수 금액 {getSortIcon('usdAmount')}
+                                </th>
+                                <th onClick={() => handleSort('buyRate')} className={`p-4 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    매수 환율 {getSortIcon('buyRate')}
+                                </th>
+                                <th onClick={() => handleSort('sellRate')} className={`p-4 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    현재/매도 환율 {getSortIcon('sellRate')}
+                                </th>
+                                <th onClick={() => handleSort('profit')} className={`p-4 text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    수익률 (수익금) {getSortIcon('profit')}
+                                </th>
                                 <th className={`p-4 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>관리</th>
                             </tr>
                         </thead>
