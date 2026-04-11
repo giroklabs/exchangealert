@@ -44,7 +44,7 @@ export function useSyncState<T>(key: string, initialValue: T | (() => T)): [T, (
             window.localStorage.setItem(`${key}_lastUpdated`, now);
 
             // Firestore 저장 (로그인 되어있는 경우)
-            if (user) {
+            if (user && db) {
                 const docRef = doc(db, 'users', user.uid);
                 // merge: true로 부분 업데이트 처리
                 setDoc(docRef, {

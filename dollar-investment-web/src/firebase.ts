@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getAnalytics } from "firebase/analytics";
+import { FirebaseApp, initializeApp } from "firebase/app";
+import { Auth, getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { Firestore, getFirestore } from "firebase/firestore";
+import { Analytics, getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,14 +13,18 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-let app, analytics, auth, provider, db;
+let app: FirebaseApp | undefined, 
+    analytics: Analytics | undefined, 
+    auth: Auth | undefined, 
+    provider: GoogleAuthProvider | undefined, 
+    db: Firestore | undefined;
 
 if (firebaseConfig.projectId && firebaseConfig.projectId !== "undefined") {
     app = initializeApp(firebaseConfig);
     try {
         analytics = getAnalytics(app);
-    } catch (e) {
-        console.warn('Analytics initialization failed:', e.message);
+    } catch (e: any) {
+        console.warn('Analytics initialization failed:', e?.message || e);
     }
     
     auth = getAuth(app);

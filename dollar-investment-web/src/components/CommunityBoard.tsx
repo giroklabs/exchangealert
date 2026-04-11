@@ -69,6 +69,10 @@ export const CommunityBoard: React.FC = () => {
 
     // Real-time Firestore sync
     useEffect(() => {
+        if (!db) {
+            setLoading(false);
+            return;
+        }
         const q = query(collection(db, 'community_posts'), orderBy('createdAt', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const fetchedPosts = snapshot.docs.map(doc => {
@@ -96,7 +100,7 @@ export const CommunityBoard: React.FC = () => {
             login();
             return;
         }
-        if (!newPost.title || !newPost.content) return;
+        if (!newPost.title || !newPost.content || !db) return;
 
         try {
             await addDoc(collection(db, 'community_posts'), {
@@ -122,7 +126,7 @@ export const CommunityBoard: React.FC = () => {
 
     const handleEditSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!editingPostId) return;
+        if (!editingPostId || !db) return;
 
         try {
             const postRef = doc(db, 'community_posts', editingPostId);
@@ -143,6 +147,7 @@ export const CommunityBoard: React.FC = () => {
         if (!window.confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
 
         try {
+            if (!db) return;
             console.log("Attempting to delete post:", postId);
             console.log("Current user UID:", user?.uid);
             await deleteDoc(doc(db, 'community_posts', postId));
@@ -174,6 +179,7 @@ export const CommunityBoard: React.FC = () => {
             login();
             return;
         }
+        if (!db) return;
         try {
             const postRef = doc(db, 'community_posts', postId);
             await updateDoc(postRef, {
@@ -186,9 +192,9 @@ export const CommunityBoard: React.FC = () => {
 
     const handleAddComment = async (postId: string) => {
         const text = commentTexts[postId];
-        if (!user) {
+        if (!user || !db) {
             alert('댓글을 달려면 로그인이 필요합니다.');
-            login();
+            if (!user) login();
             return;
         }
         if (!text || !text.trim()) return;
@@ -212,7 +218,7 @@ export const CommunityBoard: React.FC = () => {
     };
 
     const handleDeleteComment = async (postId: string, comment: Comment) => {
-        if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
+        if (!window.confirm('댓글을 삭제하시겠습니까?') || !db) return;
 
         try {
             const postRef = doc(db, 'community_posts', postId);
