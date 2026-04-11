@@ -1,7 +1,7 @@
-import { FirebaseApp, initializeApp } from "firebase/app";
-import { Auth, getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { Firestore, getFirestore } from "firebase/firestore";
-import { Analytics, getAnalytics } from "firebase/analytics";
+import { type FirebaseApp, initializeApp } from "firebase/app";
+import { type Auth, getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { type Firestore, getFirestore } from "firebase/firestore";
+import { type Analytics, getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -37,7 +37,7 @@ if (firebaseConfig.projectId && firebaseConfig.projectId !== "undefined") {
 export { analytics, auth, provider, db };
 
 export const loginWithGoogle = () => {
-    if (!auth) return Promise.reject("Firebase is not initialized");
+    if (!auth || !provider) return Promise.reject("Firebase is not initialized");
     return signInWithPopup(auth, provider);
 };
 export const logout = () => {
