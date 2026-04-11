@@ -28,11 +28,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     ];
 
     useEffect(() => {
+        if (!auth) {
+            setLoading(false);
+            setUserDataLoaded(true);
+            return;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
             setIsAdmin(!!currentUser?.email && DEVELOPER_EMAILS.includes(currentUser.email));
             
-            if (currentUser) {
+            if (currentUser && db) {
                 // 로그인 시 Firestore에서 데이터 가져와서 localStorage에 병합/덮어쓰기
                 try {
                     const docRef = doc(db, 'users', currentUser.uid);

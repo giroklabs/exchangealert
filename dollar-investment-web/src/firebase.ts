@@ -13,13 +13,30 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
+let app, analytics, auth, provider, db;
 
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
-export const db = getFirestore(app);
+if (firebaseConfig.projectId && firebaseConfig.projectId !== "undefined") {
+    app = initializeApp(firebaseConfig);
+    try {
+        analytics = getAnalytics(app);
+    } catch (e) {
+        console.warn('Analytics initialization failed:', e.message);
+    }
+    
+    auth = getAuth(app);
+    provider = new GoogleAuthProvider();
+    db = getFirestore(app);
+} else {
+    console.warn("⚠️ Firebase 설정(.env)이 누락되어 로컬 개발 모드로 구동됩니다. 인증/DB 기능은 비활성화됩니다.");
+}
 
-export const loginWithGoogle = () => signInWithPopup(auth, provider);
-export const logout = () => signOut(auth);
+export { analytics, auth, provider, db };
+
+export const loginWithGoogle = () => {
+    if (!auth) return Promise.reject("Firebase is not initialized");
+    return signInWithPopup(auth, provider);
+};
+export const logout = () => {
+    if (!auth) return Promise.resolve();
+    return signOut(auth);
+};

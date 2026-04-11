@@ -12,6 +12,11 @@ export async function trackVisitor() {
             return;
         }
 
+        if (!db) {
+            console.warn('⚠️ db (FireStore) is not initialized. Skipping visitor tracking.');
+            return;
+        }
+
         const docRef = doc(db, 'analytics', `visitors_${today}`);
         const docSnap = await getDoc(docRef);
 
@@ -50,6 +55,7 @@ export async function trackVisitor() {
 
 export async function getVisitorStats(days: number = 7) {
     try {
+        if (!db) return [];
         const analyticsRef = collection(db, 'analytics');
         // visitors_ 로 시작하는 문서들을 날짜순으로 가져옴
         const q = query(analyticsRef, orderBy('date', 'desc'), limit(days));
@@ -79,6 +85,7 @@ export async function getVisitorStats(days: number = 7) {
 
 export async function getTotalVisitorCount() {
     try {
+        if (!db) return 0;
         const totalRef = doc(db, 'analytics', 'total_stats');
         const totalSnap = await getDoc(totalRef);
         return totalSnap.exists() ? totalSnap.data().totalVisitors : 0;

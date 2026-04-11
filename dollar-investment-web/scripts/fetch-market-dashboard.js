@@ -205,6 +205,7 @@ const FRED_SERIES = [
     { id: 'DCOILWTICO', name: '국제 유가(WTI)', unit: '$', block: FACTOR_BLOCKS.RISK.id, impact: 'up', source: 'WTI', description: '유가 상승 시 인플레 및 달러 수요', realtimeSymbol: 'CL=F' },
     // --- 금리 기대 산출용 (hidden: AI 분석 내부 계산용, 대시보드 미표시) ---
     { id: 'GS1', name: '미 1년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '시장 내재 단기 금리 기대치', fredId: 'DGS1', hidden: true },
+    { id: 'GS2', name: '미 2년물 국채금리', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Fed', description: '단기 금리차 계산용', fredId: 'DGS2', hidden: true },
     { id: 'DFEDTARU', name: 'Fed 기준금리 목표 상단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표 범위 상단', fredId: 'DFEDTARU', hidden: true },
     { id: 'DFEDTARL', name: 'Fed 기준금리 목표 하단', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'up', source: 'Federal Reserve', description: 'FOMC 기준금리 목표 범위 하단', fredId: 'DFEDTARL', hidden: true },
 ];
@@ -215,6 +216,7 @@ const ECOS_SERIES = [
     { id: 'investor-deposits', name: '투자자예탁금', unit: '억원', block: FACTOR_BLOCKS.ASSETS.id, impact: 'down', source: '금융투자협회/Yahoo', description: '증시 대기 자금, 투자 심리 지표', transform: 'wonToEok' },
     { id: 'kr-cpi', statCode: '901Y009', item1: '0', name: '한국 소비자물가', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '한국 물가 지표, 금리 정책 영향', cycle: 'M' },
     { id: 'kr-10y', statCode: '817Y002', item1: '010210000', name: '국고채 10년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한국 국고채 금리, 한미 금리차용', cycle: 'D' },
+    { id: 'kr-2y', statCode: '817Y002', item1: '010190000', name: '국고채 2년', unit: '%', block: FACTOR_BLOCKS.RATES_DOLLAR.id, impact: 'down', source: '한국은행', description: '한미 2년물 금리차 계산용', cycle: 'D', hidden: true },
     { id: 'trade-balance', statCode: '301Y013', item1: '000000', name: '경상수지', unit: 'M$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '수지 흑자 시 원화 가치 안정', cycle: 'M' },
     { id: 'fx-reserves', statCode: '732Y001', item1: '99', name: '외환보유액', unit: '억$', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'down', source: '한국은행', description: '외환 방어 및 원화 안정화 능력', cycle: 'M', transform: 'thousandUsdToEokUsd' },
     { id: 'short-debt-ratio', statCode: '311Y004', item1: 'A500000', name: '단기외채 비중', unit: '%', block: FACTOR_BLOCKS.FUNDING_POLICY.id, impact: 'up', source: '한국은행', description: '대외채무 건전성 및 상환 능력', cycle: 'Q', customFetch: 'shortDebtRatio' }
@@ -1085,7 +1087,7 @@ async function fetchOverseasStockFromKIS(excd, symbol, token) {
     return null;
 }
 
-async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = [], correlations = null, majorRates = []) {
+async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null, backtest = null, kospiTechnicals = null, upProb = 50, downProb = 50, kospiUpProb = 50, kospiDownProb = 50, kospiHistory = [], correlations = null, majorRates = [], additionalMetrics = null) {
     if (!GEMINI_API_KEY) {
         return "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다.";
     }
@@ -1163,7 +1165,18 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
     globalContext += `\n${newsSection || ''}`;
     globalContext += `\n${techSection || ''}`;
 
-    const combinedDataContext = macroContext + koreaContext + fxContext + globalContext;
+    let coreDriversContext = "";
+    if (additionalMetrics) {
+        coreDriversContext = `
+[Market Core Drivers - 환율/코스피 방향성 판단 최우선 단기 요인]
+- 한미 2년물 금리차 (단기스프레드): ${additionalMetrics.spread_2y}% (해당 값이 전일/과거대비 확대일 경우 환율 상승 압력 강화)
+- 달러(DXY) 단기 5일 모멘텀: ${additionalMetrics.dxy_d5}%
+- 반도체(SOX) 단기 5일 모멘텀: ${additionalMetrics.sox_d5}% (SOX 모멘텀은 코스피 삼성/하이닉스 선행 지표로 직접 활용)
+- 나스닥 선물 단기 흐름: ${additionalMetrics.nq_d5}%
+`;
+    }
+
+    const combinedDataContext = coreDriversContext + macroContext + koreaContext + fxContext + globalContext;
 
     const nowKst = new Date(new Date().getTime() + (9 * 60 * 60 * 1000));
     const kstHour = nowKst.getUTCHours();
@@ -1175,10 +1188,10 @@ async function fetchAiAnalysis(indicators, usdKrwHistory = [], technicals = null
 
     if (kstTimeVal >= 900 && kstTimeVal < 1530) {
         marketSession = "한국 증시 정규장 (장중)";
-        sessionKeyFocus = "현재 실시간 수급 상황과 외국인/기관의 매매 동향, 장중 변동성을 최우선으로 반영하여 분석하세요.";
+        sessionKeyFocus = "현재 실시간 수급 상황과 매매 동향, 장중 변동성을 최우선으로 분석하세요. 환율은 한미 2년물 단기 금리 스프레드와 DXY 모멘텀을 핵심 지표로 평가하고, 코스피는 나스닥/SOX 단기 선행 모멘텀을 강하게 반영하여 결론을 도출하세요.";
     } else {
         marketSession = "한국 증시 장마감 후 (야간 및 차일 준비)";
-        sessionKeyFocus = "장 마감 결과와 글로벌 지표를 바탕으로, 다음 거래일의 시초가 갭 발생 가능성과 추세 연장 여부를 반영하여 분석하세요.";
+        sessionKeyFocus = "글로벌 지표를 바탕으로 차일 시초가 및 추세 연장을 분석하세요. 야간 구간에서는 한미 2년물 스프레드와 달러 모멘텀의 방향성 변화, 그리고 나스닥/SOX 미국 선물의 흐름이 가장 결정적인 예측 인자입니다.";
     }
 
     const kstTimeStr = `${nowKst.getUTCFullYear()}년 ${nowKst.getUTCMonth() + 1}월 ${nowKst.getUTCDate()}일 ${nowKst.getUTCHours()}시 ${nowKst.getUTCMinutes()}분`;
@@ -1479,6 +1492,7 @@ async function main() {
         'm2-supply': { value: '4500', trend: 'up', history: [{ date: '2025-12', value: 4420 }, { date: '2026-01', value: 4480 }, { date: '2026-02', value: 4500 }] },
         'trade-balance': { value: '15200', trend: 'up', history: [{ date: '2025-12', value: 11800 }, { date: '2026-01', value: 13500 }, { date: '2026-02', value: 15200 }] },
         'kr-10y': { value: '3.45', trend: 'up', history: [{ date: '2026-03-01', value: 3.3 }, { date: '2026-03-05', value: 3.4 }, { date: '2026-03-10', value: 3.45 }] },
+        'kr-2y': { value: '3.35', trend: 'up', history: [{ date: '2026-03-01', value: 3.2 }, { date: '2026-03-05', value: 3.3 }, { date: '2026-03-10', value: 3.35 }] },
         'foreigner-net-buy-market': { value: '520', trend: 'up', history: [{ date: '2026-03-10', value: -200 }, { date: '2026-03-11', value: 100 }, { date: '2026-03-12', value: 400 }, { date: '2026-03-13', value: 520 }] },
         'bamlh0a0hym2': { value: '3.10', trend: 'up', history: [{ date: '2026-03-10', value: 2.90 }, { date: '2026-03-11', value: 2.95 }, { date: '2026-03-12', value: 3.05 }, { date: '2026-03-13', value: 3.10 }] },
         'fx-reserves': { value: '4097', trend: 'neutral', history: [{ date: '202501', value: 4110 }, { date: '202502', value: 4092 }, { date: '202503', value: 4097 }] },
@@ -1493,6 +1507,7 @@ async function main() {
         'dtb3': { value: '5.24', trend: 'neutral', history: [{ date: '2026-03-10', value: 5.24 }, { date: '2026-03-11', value: 5.24 }, { date: '2026-03-12', value: 5.24 }, { date: '2026-03-13', value: 5.24 }] },
         // --- Phase 3 전용 폴백 ---
         'gs1': { value: '4.80', trend: 'down', history: [{ date: '2026-03-10', value: 4.90 }, { date: '2026-03-20', value: 4.80 }] },
+        'GS2': { value: '4.60', trend: 'down', history: [{ date: '2026-03-10', value: 4.70 }, { date: '2026-03-20', value: 4.60 }] },
         'dfedtaru': { value: '5.50', trend: 'neutral', history: [] },
         'dfedtarl': { value: '5.25', trend: 'neutral', history: [] }
     };
@@ -1909,7 +1924,7 @@ async function main() {
 
             // --- 강제 늘여 그리기 폐기 (수집된 데이터만 사용) ---
         } else {
-            const fallback = fallbacks[item.id];
+            const fallback = fallbacks[item.id] || { value: '0', trend: 'neutral', history: [] };
             val = parseFloat(String(fallback.value).replace(/,/g, ''));
             trend = fallback.trend;
             displayVal = fallback.value;
@@ -3057,7 +3072,32 @@ async function main() {
             }
         } catch (e) {}
 
-        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi, correlations, majorRates);
+        // --- 1순위 파생 지표 연산 (Market Core Drivers) ---
+        const additionalMetrics = { spread_2y: 'N/A', dxy_d5: 'N/A', sox_d5: 'N/A', nq_d5: 'N/A' };
+        try {
+            const getIndVal = (id) => { const ind = indicators.find(i => i.id.toLowerCase() === id.toLowerCase()); return ind && ind.value !== null ? parseFloat(ind.value) : null; };
+            const getIndHist = (id) => { const ind = indicators.find(i => i.id.toLowerCase() === id.toLowerCase()); return ind && ind.history ? ind.history.map(h => parseFloat(h.value)) : []; };
+
+            const gs2 = getIndVal('GS2');
+            const kr2y = getIndVal('kr-2y');
+            if (gs2 !== null && kr2y !== null) {
+                additionalMetrics.spread_2y = (gs2 - kr2y).toFixed(2);
+            }
+
+            const getD5 = (id) => {
+                const closes = getIndHist(id);
+                if (closes.length >= 6) return (((closes[0] - closes[5]) / closes[5]) * 100).toFixed(2);
+                if (closes.length > 1) return (((closes[0] - closes[closes.length-1]) / closes[closes.length-1]) * 100).toFixed(2);
+                return 'N/A';
+            };
+            additionalMetrics.dxy_d5 = getD5('DXY');
+            additionalMetrics.sox_d5 = getD5('SOX');
+            additionalMetrics.nq_d5  = getD5('nasdaq-futures');
+        } catch (err) {
+            console.warn('⚠️ Market Core Drivers 계산 실패:', err.message);
+        }
+
+        aiAnalysis = await fetchAiAnalysis(indicators, usdKrwHistory, technicals, backtest, kospiTechnicals, upProb, downProb, kospiUpProb, kospiDownProb, kospiHistoryForAi, correlations, majorRates, additionalMetrics);
         lastAiUpdate = Date.now();
 
         // 마크다운 기호 및 깨진 글자 세밀하게 제거
