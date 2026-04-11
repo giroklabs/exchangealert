@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const API_KEY = 'JTSPA7TI69N84M1L';
+const API_KEY = process.env.ALPHA_VANTAGE_API_KEY;
 const API_URL = `https://www.alphavantage.co/query?function=DX&interval=daily&apikey=${API_KEY}`;
 
 console.log('📊 Alpha Vantage API에서 달러 지수(DX) 데이터 가져오기...');

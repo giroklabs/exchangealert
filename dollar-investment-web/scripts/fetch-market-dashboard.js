@@ -15,7 +15,7 @@ import { isTradingHoliday } from './utils/holidays.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const FRED_API_KEY = process.env.FRED_API_KEY || '0a8892024728a9a0fa015e609cd5d232';
+const FRED_API_KEY = process.env.FRED_API_KEY;
 const ECOS_API_KEY = process.env.ECOS_API_KEY;
 const KIS_APP_KEY = process.env.KIS_APP_KEY;
 const KIS_APP_SECRET = process.env.KIS_APP_SECRET;

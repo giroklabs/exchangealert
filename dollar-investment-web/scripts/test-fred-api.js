@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const FRED_API_KEY = process.env.FRED_API_KEY || '0a8892024728a9a0fa015e609cd5d232';
+const FRED_API_KEY = process.env.FRED_API_KEY;
 // Trade Weighted U.S. Dollar Index: Broad, Goods (DTWEXBGS)
 const API_URL = `https://api.stlouisfed.org/fred/series/observations?series_id=DTWEXBGS&api_key=${FRED_API_KEY}&file_type=json&limit=365&sort_order=desc`;
 
