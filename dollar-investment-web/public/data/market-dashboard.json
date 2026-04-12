@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.082",
-      "diff": 0.43,
-      "diffPercent": 0.44,
+      "value": "99.116",
+      "diff": 0.47,
+      "diffPercent": 0.48,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-12",
-          "value": 99.08
+          "value": 99.12
         }
       ]
     },
@@ -2519,6 +2519,16 @@
       "trend": "neutral"
     },
     {
+      "id": "hyundai",
+      "symbol": "005380",
+      "market": "domestic",
+      "name": "현대차",
+      "enName": "Hyundai Motor",
+      "price": 489500,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
       "id": "kia",
       "symbol": "000270",
       "market": "domestic",
@@ -2652,5 +2662,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 12. PM 10:11:35"
+  "lastUpdate": "2026. 4. 12. PM 10:16:29"
 }
