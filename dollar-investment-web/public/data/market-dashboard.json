@@ -8,12 +8,16 @@
       "impact": "up",
       "source": "Federal Reserve",
       "description": "미국 기준 금리, 달러 가치 결정",
-      "value": "3.72",
-      "diff": -0.37,
-      "diffPercent": -9.05,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "3.64",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
+        {
+          "date": "2025-06-01",
+          "value": 4.33
+        },
         {
           "date": "2025-07-01",
           "value": 4.33
@@ -31,8 +35,24 @@
           "value": 4.09
         },
         {
+          "date": "2025-11-01",
+          "value": 3.88
+        },
+        {
           "date": "2025-12-01",
           "value": 3.72
+        },
+        {
+          "date": "2026-01-01",
+          "value": 3.64
+        },
+        {
+          "date": "2026-02-01",
+          "value": 3.64
+        },
+        {
+          "date": "2026-03-01",
+          "value": 3.64
         }
       ]
     },
@@ -47,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.596",
-      "diff": -0.05,
-      "diffPercent": -0.05,
+      "value": "98.561",
+      "diff": -0.09,
+      "diffPercent": -0.09,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -91,7 +111,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 98.6
+          "value": 98.56
         }
       ]
     },
@@ -164,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "19.53",
-      "diff": 0.3,
-      "diffPercent": 1.56,
+      "value": "19.69",
+      "diff": 0.46,
+      "diffPercent": 2.39,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -208,7 +228,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 19.53
+          "value": 19.69
         }
       ]
     },
@@ -570,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "23,064.564",
-      "diff": 161.67,
-      "diffPercent": 0.71,
+      "value": "23,061.457",
+      "diff": 158.57,
+      "diffPercent": 0.69,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -614,7 +634,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 23064.56
+          "value": 23061.46
         }
       ]
     },
@@ -629,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,848.76",
-      "diff": 31.87,
-      "diffPercent": 0.47,
+      "value": "6,847.69",
+      "diff": 30.8,
+      "diffPercent": 0.45,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -673,7 +693,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 6848.76
+          "value": 6847.69
         }
       ]
     },
@@ -688,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "8,965.748",
-      "diff": 75.92,
-      "diffPercent": 0.85,
+      "value": "8,961.396",
+      "diff": 71.57,
+      "diffPercent": 0.81,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -732,7 +752,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 8965.75
+          "value": 8961.4
         }
       ]
     },
@@ -747,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,413.25",
-      "diff": 132,
-      "diffPercent": 0.52,
+      "value": "25,421.5",
+      "diff": 140.25,
+      "diffPercent": 0.55,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -791,7 +811,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 25413.25
+          "value": 25421.5
         }
       ]
     },
@@ -806,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,885.25",
-      "diff": 30,
+      "value": "6,885.75",
+      "diff": 30.5,
       "diffPercent": 0.44,
       "trend": "up",
       "realizedImpact": "down",
@@ -850,7 +870,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 6885.25
+          "value": 6885.75
         }
       ]
     },
@@ -864,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "99.72",
-      "diff": 3.15,
-      "diffPercent": 3.26,
+      "value": "99.43",
+      "diff": 2.86,
+      "diffPercent": 2.96,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -908,7 +928,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 99.72
+          "value": 99.43
         }
       ]
     },
@@ -2452,7 +2472,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,480.20",
+      "value": "1,480.70",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2463,7 +2483,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "928.72",
+      "value": "928.95",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2473,7 +2493,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,737.31",
+      "value": "1,737.75",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2483,7 +2503,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "217.01",
+      "value": "217.10",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2556,8 +2576,8 @@
     "kospiSentiment": "보합",
     "upProb": 47,
     "downProb": 53,
-    "kospiUpProb": 54,
-    "kospiDownProb": 46,
+    "kospiUpProb": 53,
+    "kospiDownProb": 47,
     "timeframes": {
       "d1": {
         "upProb": 21,
@@ -2565,8 +2585,8 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2579,10 +2599,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 4월 14일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1485.09원이며, 정량예측모델은 향후 1~5거래일 내 54%의 상승 확률을 제시하며 달러 강세 흐름을 예고하고 있습니다. DXY 지수의 강한 모멘텀과 [DOLLAR_PANIC] 복합 위험 신호 발동은 신흥국 자본 이탈 우려를 가중시키며 원화 약세 압력을 강화할 것으로 보입니다. 단기적으로는 1474.95원(볼린저밴드 하단)이 핵심 지지선으로 작용할 것으로 예상되며, 상방으로는 1489.51원(5일 이동평균선)을 넘어 1498.48원(20일 이동평균선 및 볼린저밴드 중단)까지 도달을 시도할 수 있습니다. 궁극적으로 1522.01원(볼린저밴드 상단)까지의 테스트 가능성도 열려 있습니다. 이러한 환경 속에서 투자자들은 관망하며 1474.95원 지지선 근방에서 저가 매수를 고려하거나, 단기적인 조정 시 매수 기회를 탐색하는 전략이 유효할 것으로 판단됩니다. ① 정량예측모델이 54%의 상승 확률을 제시하며 달러 강세 압력을 시사합니다. ② DXY의 98.768 수준 및 21.47%의 단기 5일 모멘텀, 그리고 [DOLLAR_PANIC] 복합 위험 신호는 달러화에 대한 강한 수요를 유발하고 있습니다. ③ 한미 2년물 금리차 0.84%p 확대는 원화 약세 압력을 가중시키는 요인입니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 5,808.62pt를 기록하고 있으며, 정량예측모델은 향후 1~5거래일 내 45%의 상승 확률을 제시하며 보합 또는 하방 압력이 우세함을 시사합니다. 최근 코스피는 강한 상승 모멘텀을 보였으나, 반도체(SOX) 지수의 급락(-10.76%)과 나스닥 선물 시장의 약세(-5.05%)는 국내 증시, 특히 기술주에 부정적인 영향을 미칠 것으로 예상됩니다. 여기에 [DOLLAR_PANIC] 복합 위험 신호는 외국인 자본 유출 우려를 심화시켜 지수 하방 압력을 가중시킬 수 있습니다. 핵심 지지선으로는 5일 이동평균선인 5690.87pt와 20일 이동평균선인 5551.76pt가 있으며, 이 레벨들이 지지되지 않을 경우 추가 하락 가능성도 배제할 수 없습니다. 상방 저항선은 볼린저밴드 상단인 6003.05pt로 예상됩니다. 따라서 투자자들은 현재 시장 상황에서 보수적인 관망세를 유지하거나, 단기적인 차익 실현을 위한 매도 전략을 고려하는 것이 합리적입니다. ① 정량예측모델이 45%의 상승 확률을 제시하며 보합 또는 하방 압력을 시사합니다. ② [DOLLAR_PANIC] 복합 위험 신호는 국내 증시의 외국인 자본 유출 우려를 키우고 있습니다. ③ 반도체(SOX) 단기 5일 모멘텀이 -10.76%를 기록하며 코스피 대형주에 하방 압력을 가할 가능성이 큽니다.\n\n실전 투자 대응\n환율: 환율은 1485.09원, 달러 강세로 1474.95원 지지하며 1498.48원 돌파 시도, 관망 후 저가 매수.\n코스피: 코스피 5808.62pt, 해외 악재로 5690.87pt 지지선 테스트 가능성, 보수적 관망 또는 단기 매도 전략.",
     "lastAiUpdate": 1776097924750,
     "score": {
-      "upScore": 49.54325185160197,
-      "downScore": 55.22761025850234,
-      "kospiUpScore": 25.230964634349444,
-      "kospiDownScore": 21.274519387896692
+      "upScore": 49.18067546111821,
+      "downScore": 54.52886849801085,
+      "kospiUpScore": 24.240390954456636,
+      "kospiDownScore": 21.328388234524937
     }
   },
   "technicals": {
@@ -2654,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 13. PM 5:21:33"
+  "lastUpdate": "2026. 4. 13. PM 5:26:32"
 }
