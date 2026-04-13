@@ -67,11 +67,11 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.374",
-      "diff": -0.28,
-      "diffPercent": -0.28,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "98.65",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-03-31",
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 98.37
+          "value": 98.65
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,596.75",
-      "diff": 315.5,
-      "diffPercent": 1.25,
+      "value": "25,600.25",
+      "diff": 319,
+      "diffPercent": 1.26,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 25596.75
+          "value": 25600.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,928",
-      "diff": 72.75,
-      "diffPercent": 1.06,
+      "value": "6,928.5",
+      "diff": 73.25,
+      "diffPercent": 1.07,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 6928
+          "value": 6928.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "97.51",
-      "diff": 0.94,
-      "diffPercent": 0.97,
+      "value": "97.13",
+      "diff": 0.56,
+      "diffPercent": 0.58,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 97.51
+          "value": 97.13
         }
       ]
     },
@@ -2574,24 +2574,24 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 48,
-    "downProb": 52,
-    "kospiUpProb": 62,
-    "kospiDownProb": 38,
+    "upProb": 49,
+    "downProb": 51,
+    "kospiUpProb": 60,
+    "kospiDownProb": 40,
     "timeframes": {
       "d1": {
-        "upProb": 21,
-        "downProb": 79,
+        "upProb": 22,
+        "downProb": 78,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 46,
+        "downProb": 54,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 47,
-        "downProb": 53,
+        "upProb": 48,
+        "downProb": 52,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2600,8 +2600,8 @@
     "lastAiUpdate": 1776119514552,
     "score": {
       "upScore": 50.00166524451837,
-      "downScore": 53.81606333384907,
-      "kospiUpScore": 24.240390954456636,
+      "downScore": 52.2718199838809,
+      "kospiUpScore": 22.73615894900457,
       "kospiDownScore": 15.016048566038247
     }
   },
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 13. PM 11:11:26"
+  "lastUpdate": "2026. 4. 13. PM 11:16:35"
 }
