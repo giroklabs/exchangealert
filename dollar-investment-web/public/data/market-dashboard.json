@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,603.5",
-      "diff": 322.25,
+      "value": "25,601.25",
+      "diff": 320,
       "diffPercent": 1.27,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 25603.5
+          "value": 25601.25
         }
       ]
     },
@@ -826,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,928.25",
-      "diff": 73,
+      "value": "6,928",
+      "diff": 72.75,
       "diffPercent": 1.06,
       "trend": "up",
       "realizedImpact": "down",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 6928.25
+          "value": 6928
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "96.89",
-      "diff": 0.32,
-      "diffPercent": 0.33,
+      "value": "96.84",
+      "diff": 0.27,
+      "diffPercent": 0.28,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 96.89
+          "value": 96.84
         }
       ]
     },
@@ -2472,7 +2472,7 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,480.00",
+      "value": "1,479.80",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2483,7 +2483,7 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "928.95",
+      "value": "929.26",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2493,7 +2493,7 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,741.15",
+      "value": "1,740.98",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2503,7 +2503,7 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.57",
+      "value": "217.10",
       "change": "0.00",
       "changePercent": "0.00",
       "trend": "neutral"
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1776123119477,
     "score": {
       "upScore": 49.99182631830639,
-      "downScore": 57.175695940746586,
+      "downScore": 57.17492967938545,
       "kospiUpScore": 24.861179744848183,
       "kospiDownScore": 15.016048566038247
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 13. PM 11:38:07"
+  "lastUpdate": "2026. 4. 13. PM 11:41:28"
 }
