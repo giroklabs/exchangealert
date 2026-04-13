@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,603.25",
-      "diff": 322,
+      "value": "25,603.5",
+      "diff": 322.25,
       "diffPercent": 1.27,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 25603.25
+          "value": 25603.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "96.99",
-      "diff": 0.42,
-      "diffPercent": 0.43,
+      "value": "96.89",
+      "diff": 0.32,
+      "diffPercent": 0.33,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-13",
-          "value": 96.99
+          "value": 96.89
         }
       ]
     },
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1776123119477,
     "score": {
       "upScore": 49.99182631830639,
-      "downScore": 57.17563863635297,
+      "downScore": 57.175695940746586,
       "kospiUpScore": 24.861179744848183,
       "kospiDownScore": 15.016048566038247
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 13. PM 11:36:27"
+  "lastUpdate": "2026. 4. 13. PM 11:38:07"
 }
