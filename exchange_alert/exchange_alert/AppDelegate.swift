@@ -411,8 +411,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                 }
             } else {
                 print("✅ 백그라운드 알림 발송 성공: \(message)")
-                // 알림 발송 기록
-                self.recordNotification()
+                // 알림 발송 기록 및 앱 내 내역 추가
+                self.recordNotification(message: message)
             }
         }
     }
@@ -430,7 +430,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
     
     // 알림 발송 기록
-    private func recordNotification() {
+    private func recordNotification(message: String = "") {
         let currentCount = UserDefaults.standard.integer(forKey: "total_notifications")
         UserDefaults.standard.set(currentCount + 1, forKey: "total_notifications")
         
@@ -441,6 +441,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         let timestamp = formatter.string(from: Date())
         UserDefaults.standard.set(timestamp, forKey: "last_notification")
+        
+        // 앱 내 알림 센터 내역에 추가
+        if !message.isEmpty {
+            NotificationManager.shared.addNotificationToHistory(message: message)
+        }
         
         print("📱 알림 발송 기록: \(currentCount + 1)번째 알림, \(timestamp)")
     }
