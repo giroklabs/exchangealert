@@ -72,6 +72,7 @@ jobs:
         fi
         
         cp data/exchange-rates.json "data/history/exchange-rates-${SEARCH_DATE}.json"
+        cp data/exchange-rates.json "data/daily/exchange-rates-${SEARCH_DATE}.json"
         
         # Scripts
         node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
