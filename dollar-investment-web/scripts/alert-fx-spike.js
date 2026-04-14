@@ -463,7 +463,7 @@ async function sendPushNotifications(db, triggers, state) {
         // FCM은 500개씩 나눠서 전송
         for (let i = 0; i < messages.length; i += 500) {
             const chunk = messages.slice(i, i + 500);
-            const response = await admin.app('spike-alert-app').messaging().sendEach(chunk);
+            const response = await admin.messaging().sendEach(chunk);
             console.log(`✅ 푸시 발송 완료: 성공 ${response.successCount}, 실패 ${response.failureCount}`);
         }
     } catch (e) {
@@ -486,9 +486,11 @@ async function main() {
         }
         try {
             const serviceAccount = JSON.parse(SERVICE_ACCOUNT);
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount)
-            }, 'spike-alert-app'); // 별도 앱 이름 사용 (중복 초기화 방지)
+            if (admin.apps.length === 0) {
+                admin.initializeApp({
+                    credential: admin.credential.cert(serviceAccount)
+                });
+            }
             return admin.firestore();
         } catch (e) {
             console.error('❌ Firebase 초기화 실패:', e.message);
