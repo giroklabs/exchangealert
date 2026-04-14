@@ -439,7 +439,7 @@ struct NotificationPopupFooter: View {
                     // 백그라운드 fetch 강제 실행 (메뉴 활성화를 위해)
                     triggerBackgroundFetch()
                     
-                    NotificationManager.sendTestNotification()
+                    NotificationManager.shared.sendTestNotification()
                     // 테스트 알림 발송 후 히스토리 새로고침
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         onRefreshNotifications()
