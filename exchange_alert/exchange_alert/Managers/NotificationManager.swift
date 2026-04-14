@@ -188,22 +188,22 @@ class NotificationManager {
                 switch settings.authorizationStatus {
                 case .authorized, .provisional:
                     // 권한이 있으면 알림 발송
-                    sendActualNotification()
+                    self.sendActualNotification()
                 case .denied:
                     print("❌ 알림 권한이 거부되어 있습니다. 설정에서 권한을 허용해주세요.")
                     // 히스토리에 권한 거부 메시지 추가
-                    addNotificationToHistory(
+                    self.addNotificationToHistory(
                         currency: "SYSTEM",
                         message: "알림 권한이 거부되어 있습니다. 설정에서 권한을 허용해주세요.",
                         type: .alert
                     )
                 case .notDetermined:
                     print("⚠️ 알림 권한이 결정되지 않았습니다. 권한을 요청합니다.")
-                    requestPermission { granted in
+                    self.requestPermission { granted in
                         if granted {
-                            sendActualNotification()
+                            self.sendActualNotification()
                         } else {
-                            addNotificationToHistory(
+                            self.addNotificationToHistory(
                                 currency: "SYSTEM",
                                 message: "알림 권한 요청이 거부되었습니다.",
                                 type: .alert
@@ -212,10 +212,10 @@ class NotificationManager {
                     }
                 case .ephemeral:
                     print("⚠️ 임시 알림 권한 상태입니다.")
-                    sendActualNotification()
+                    self.sendActualNotification()
                 @unknown default:
                     print("❌ 알 수 없는 알림 권한 상태입니다.")
-                    addNotificationToHistory(
+                    self.addNotificationToHistory(
                         currency: "SYSTEM",
                         message: "알 수 없는 알림 권한 상태입니다.",
                         type: .alert
