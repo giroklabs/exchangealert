@@ -455,7 +455,15 @@ async function sendPushNotifications(db, triggers, state) {
             },
             apns: {
                 payload: {
-                    aps: { sound: 'default', badge: 1 }
+                    aps: {
+                        alert: {
+                            title: title,
+                            body: body
+                        },
+                        sound: 'default',
+                        badge: 1,
+                        'mutable-content': 1
+                    }
                 }
             }
         }));

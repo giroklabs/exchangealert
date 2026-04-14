@@ -227,9 +227,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
-            // sendBackgroundNotification(message: message)
-            print("✅ 백그라운드 환율 알림 조건 충족 (서버 알림 대기 중)")
+            sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 환율 알림 발송 완료")
         }
     }
     
@@ -298,9 +297,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
-            // sendBackgroundNotification(message: message)
-            print("✅ 백그라운드 USD 알림 조건 충족 (서버 알림 대기 중)")
+            sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 USD 알림 발송 완료")
         }
     }
     
@@ -347,9 +345,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
-            // sendBackgroundNotification(message: message)
-            print("✅ 백그라운드 기본 알림 조건 충족 (서버 알림 대기 중)")
+            sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
     
@@ -380,9 +377,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
-            // sendBackgroundNotification(message: message)
-            print("✅ 백그라운드 기본 알림 조건 충족 (서버 알림 대기 중)")
+            sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
     

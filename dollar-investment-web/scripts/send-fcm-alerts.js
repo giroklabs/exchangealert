@@ -137,8 +137,13 @@ async function main() {
                 apns: {
                     payload: {
                         aps: {
+                            alert: {
+                                title: `${emoji} ${currency} 환율 ${direction}!`,
+                                body: `현재 환율이 ${currentRate.toLocaleString()}원입니다. (목표: ${threshold.toLocaleString()}원)`
+                            },
                             sound: 'default',
-                            badge: 1
+                            badge: 1,
+                            'mutable-content': 1
                         }
                     }
                 }

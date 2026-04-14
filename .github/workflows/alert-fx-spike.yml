@@ -1,10 +1,10 @@
 name: FX Spike Alert
 
 on:
-  schedule:
-    # 평일 KST 09:00~18:00 (UTC 00:00~09:00) -> 글로벌 시장 대응을 위해 24시간 감시로 변경 권장
-    # 5분마다 실행 (GitHub 지연 방지를 위해 아래에서 연동 트리거도 병행)
-    - cron: '*/5 * * * 1-5'
+  # schedule:
+  #   # 평일 KST 09:00~18:00 (UTC 00:00~09:00) -> 글로벌 시장 대응을 위해 24시간 감시로 변경 권장
+  #   # 5분마다 실행 (GitHub 지연 방지를 위해 아래에서 연동 트리거도 병행)
+  #   - cron: '*/5 * * * 1-5'
   workflow_dispatch: # 수동 트리거
   repository_dispatch: # 외부 워크플로에서 트리거 가능
     types: [trigger-fx-alert]
@@ -43,10 +43,10 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-      - name: Send FCM Push Alerts (Mobile App)
-        run: node scripts/send-fcm-alerts.js
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      # - name: Send FCM Push Alerts (Mobile App)
+      #   run: node scripts/send-fcm-alerts.js
+      #   env:
+      #     FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       - name: Commit last-alert-rate.json (if updated)
         run: |
