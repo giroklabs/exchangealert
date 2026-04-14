@@ -3,8 +3,11 @@ import UserNotifications
 import UIKit
 
 // MARK: - Notification Manager
-struct NotificationManager {
-    static func requestPermission(completion: @escaping (Bool) -> Void) {
+class NotificationManager {
+    static let shared = NotificationManager()
+    private init() {}
+    
+    func requestPermission(completion: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound, .provisional]) { granted, error in
             DispatchQueue.main.async {
                 if let error = error {
@@ -17,18 +20,18 @@ struct NotificationManager {
         }
     }
     
-    static func openSystemSettings() {
+    func openSystemSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url)
     }
     
-    static func clearAllNotifications() {
+    func clearAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
     
     // MARK: - 알림 진단 도구 (개발자용)
-    static func diagnoseNotificationIssues() {
+    func diagnoseNotificationIssues() {
         print("🔍 알림 진단 시작...")
         
         // 1. 알림 권한 상태 확인
@@ -127,7 +130,7 @@ struct NotificationManager {
     }
     
     // MARK: - 알림 권한 상태 확인
-    static func getNotificationPermissionStatus(completion: @escaping (UNAuthorizationStatus) -> Void) {
+    func getNotificationPermissionStatus(completion: @escaping (UNAuthorizationStatus) -> Void) {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
                 completion(settings.authorizationStatus)
@@ -135,14 +138,14 @@ struct NotificationManager {
         }
     }
     
-    static func isNotificationPermissionGranted(completion: @escaping (Bool) -> Void) {
+    func isNotificationPermissionGranted(completion: @escaping (Bool) -> Void) {
         getNotificationPermissionStatus { status in
             completion(status == .authorized || status == .provisional)
         }
     }
     
     // MARK: - 알림 히스토리 관리
-    static func addNotificationToHistory(
+    func addNotificationToHistory(
         currency: String,
         message: String,
         type: NotificationHistory.NotificationType
@@ -166,7 +169,7 @@ struct NotificationManager {
         print("📝 알림 히스토리 추가: \(message)")
     }
     
-    static func sendTestNotification() {
+    func sendTestNotification() {
         // 먼저 알림 권한 상태 확인
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
@@ -222,29 +225,28 @@ struct NotificationManager {
         }
     }
     
-    private static func sendActualNotification() {
+    func sendActualNotification() {
         let content = UNMutableNotificationContent()
-        content.title = "테스트 알림"
-        content.body = "환율알라미 알림이 정상적으로 작동합니다!"
+        content.title = "💱 환율알라미 테스트"
+        content.body = "알림 기능이 정상적으로 작동합니다!"
         content.sound = .default
         content.badge = 1
         
-        /*
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
         let request = UNNotificationRequest(identifier: "test-notification-\(Date().timeIntervalSince1970)", content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     print("❌ 테스트 알림 발송 실패: \(error.localizedDescription)")
-                    addNotificationToHistory(
+                    self.addNotificationToHistory(
                         currency: "SYSTEM",
                         message: "테스트 알림 발송 실패: \(error.localizedDescription)",
                         type: .alert
                     )
                 } else {
                     print("✅ 테스트 알림 발송 성공")
-                    addNotificationToHistory(
+                    self.addNotificationToHistory(
                         currency: "USD",
                         message: "테스트 알림이 발송되었습니다",
                         type: .update
@@ -252,12 +254,10 @@ struct NotificationManager {
                 }
             }
         }
-        */
-        print("✅ 테스트 알림 조건 충족 (서버 알림 대기 중 또는 로컬 전송 중단)")
-        addNotificationToHistory(
-            currency: "USD",
-            message: "테스트 알림이 발송되었습니다 (로컬 알림은 서버 알림으로 대체되었습니다)",
-            type: .update
-        )
+    }
+    
+    // 간소화된 히스토리 추가 메서드 (AppDelegate용)
+    func addNotificationToHistory(message: String) {
+        self.addNotificationToHistory(currency: "USD", message: message, type: .update)
     }
 }

@@ -958,9 +958,8 @@ class ExchangeRateManager: ObservableObject {
         }
         
         if shouldNotify {
-            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
-            // sendNotification(message: message)
-            print("✅ 환율 알림 조건 충족 (서버 알림 대기 중)")
+            sendNotification(message: message)
+            print("✅ 환율 알림 발송 완료")
             
             // 해당 통화의 마지막 알림 시간 업데이트
             var updatedSettings = alertSettings
@@ -1001,7 +1000,7 @@ class ExchangeRateManager: ObservableObject {
                     } else {
                         print("✅ 환율 알림이 전송되었습니다.")
                         // 히스토리에 성공 메시지 추가
-                        NotificationManager.addNotificationToHistory(
+                        NotificationManager.shared.addNotificationToHistory(
                             currency: "EXCHANGE",
                             message: message,
                             type: .alert
@@ -1310,7 +1309,7 @@ class ExchangeRateManager: ObservableObject {
     
     // MARK: - Notification History Helper
     private func addNotificationHistory(message: String) {
-        NotificationManager.addNotificationToHistory(
+        NotificationManager.shared.addNotificationToHistory(
             currency: selectedCurrency.rawValue,
             message: message,
             type: .alert
