@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import UserNotifications
+import FirebaseFirestore
 
 // MARK: - Exchange Rate Manager
 class ExchangeRateManager: ObservableObject {
@@ -48,6 +49,9 @@ class ExchangeRateManager: ObservableObject {
         loadSettings()
         loadAPICallCount() // API 호출 횟수 로드
         
+        // 토큰이 업데이트되었을 때 알려달라고 설정
+        NotificationCenter.default.addObserver(self, selector: #selector(tokenDidUpdate), name: Notification.Name("FCMTokenUpdated"), object: nil)
+        
         // 앱 시작 시 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드하기 위해)
         previousDayData = [:]
         print("🔄 앱 시작 - 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드 예정)")
@@ -60,6 +64,11 @@ class ExchangeRateManager: ObservableObject {
         }
         
         startPeriodicRefresh() // 5분마다 자동 새로고침 (API 호출 제한 고려)
+    }
+    
+    @objc private func tokenDidUpdate() {
+        print("🔔 토큰 업데이트 감지 - 클라우드 동기화 재시도")
+        syncSettingsToCloud()
     }
     
     deinit {
@@ -227,7 +236,6 @@ class ExchangeRateManager: ObservableObject {
         }
         
         // 2. 날짜별 백업 저장 (히스토리 관리) - 전일 데이터 저장과 구분
-        let calendar = Calendar.current
         let today = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
@@ -593,7 +601,7 @@ class ExchangeRateManager: ObservableObject {
                 fallbackFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
                 
                 if let fallbackTime = fallbackFormatter.date(from: timeString) {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
                         self?.lastUpdateTime = fallbackTime
                         print("✅ GitHub 데이터 기준 시간 설정 (fallback): \(timeString) -> \(fallbackTime)")
                     }
@@ -635,16 +643,17 @@ class ExchangeRateManager: ObservableObject {
             let calculatedChanges = self.calculateDailyChangesSync(newRates: lastRates)
             
             // 메인 큐에서 UI 업데이트 수행
-            DispatchQueue.main.async {
-                self.dailyChanges = calculatedChanges
-                self.isDailyChangeLoading = false  // 로딩 완료
-                self.exchangeRates = lastRates
-                self.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
-                self.currentApiSource = "로컬 저장된 데이터 (오프라인)"
+            DispatchQueue.main.async { [weak self] in
+                self?.dailyChanges = calculatedChanges
+                self?.isDailyChangeLoading = false  // 로딩 완료
+                self?.exchangeRates = lastRates
+                self?.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
+                self?.currentApiSource = "로컬 저장된 데이터 (오프라인)"
                 
                 // 현재 선택된 통화의 환율이 있으면 알림 체크
-                if let currentRate = lastRates[self.selectedCurrency] {
-                    self.checkAlertThresholds(rate: currentRate)
+                if let currentCurrency = self?.selectedCurrency,
+                   let currentRate = lastRates[currentCurrency] {
+                    self?.checkAlertThresholds(rate: currentRate)
                 }
                 
                 print("✅ 오프라인 모드 활성화 완료")
@@ -690,7 +699,8 @@ class ExchangeRateManager: ObservableObject {
             }
 
             // 메인 큐에서 UI 업데이트 수행 (동시성 안전성 보장)
-            self.uiUpdateQueue.async {
+            self.uiUpdateQueue.async { [weak self] in
+                guard let self = self else { return }
                 // 전일 데이터가 없으면 먼저 GitHub에서 전일 데이터 로드 (비동기)
                 if self.previousDayData.isEmpty {
                     print("⚠️ 전일 데이터 없음 - GitHub에서 전일 데이터 로드 후 계산")
@@ -948,12 +958,18 @@ class ExchangeRateManager: ObservableObject {
         }
         
         if shouldNotify {
-            sendNotification(message: message)
+            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
+            // sendNotification(message: message)
+            print("✅ 환율 알림 조건 충족 (서버 알림 대기 중)")
+            
             // 해당 통화의 마지막 알림 시간 업데이트
             var updatedSettings = alertSettings
             updatedSettings.lastNotificationTime = now
             currencyAlertSettings.updateSettings(for: currency, newSettings: updatedSettings)
             saveSettings()
+            
+            // 알림 히스토리에 기록 (UI에는 표시)
+            addNotificationHistory(message: message)
         }
     }
     
@@ -1006,6 +1022,48 @@ class ExchangeRateManager: ObservableObject {
     private func saveSettings() {
         if let data = try? JSONEncoder().encode(currencyAlertSettings) {
             UserDefaults.standard.set(data, forKey: "CurrencyAlertSettings")
+            
+            // Cloud(Firestore)와 동기화
+            syncSettingsToCloud()
+        }
+    }
+    
+    func syncSettingsToCloud() {
+        // 1. FCM 토큰 확인 (실제 기기에서 푸시 수신을 위해 필수)
+        guard let fcmToken = UserDefaults.standard.string(forKey: "FCMToken") else {
+            print("⚠️ [Firestore] FCM 토큰이 없습니다. 동기화를 중단합니다.")
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let batch = db.batch()
+        
+        print("📡 [Firestore] 클라우드 동기화 시작... (ID: \(fcmToken.prefix(8))...)")
+
+        for (currency, settings) in currencyAlertSettings.settings {
+            let docId = "\(fcmToken)_\(currency.rawValue)"
+            let docRef = db.collection("alerts").document(docId)
+            
+            if settings.isEnabled {
+                batch.setData([
+                    "token": fcmToken,
+                    "currency": currency.rawValue,
+                    "threshold": settings.threshold,
+                    "thresholdType": settings.thresholdType.rawValue,
+                    "isEnabled": settings.isEnabled,
+                    "updatedAt": FieldValue.serverTimestamp()
+                ], forDocument: docRef)
+            } else {
+                batch.deleteDocument(docRef)
+            }
+        }
+        
+        batch.commit { error in
+            if let error = error {
+                print("❌ [Firestore] 저장 실패: \(error.localizedDescription)")
+            } else {
+                print("✅ [Firestore] 클라우드 동기화 성공!")
+            }
         }
     }
     
@@ -1140,106 +1198,122 @@ class ExchangeRateManager: ObservableObject {
     
     
     // MARK: - GitHub에서 전일 데이터 로드 (주말/공휴일 고려)
-    private func loadPreviousDayFromGitHub() {
+    private func loadPreviousDayFromGitHub(attempt: Int = 0) {
+        if attempt > 5 {
+            print("❌ GitHub 전일 데이터 로드 최종 실패 (5일치 시도)")
+            DispatchQueue.main.async { [weak self] in
+                self?.isDailyChangeLoading = false
+            }
+            return
+        }
+        
         let calendar = Calendar.current
         let today = Date()
         
-        // 주말/공휴일 처리: 오늘 기준으로 주말이면 금요일 데이터 로드
-        let todayWeekday = calendar.component(.weekday, from: today)
+        // 시도 횟수에 따라 타겟 날짜 계산
         var targetDate: Date
-        
-        if todayWeekday == 1 { // 일요일이면 금요일 데이터
-            targetDate = calendar.date(byAdding: .day, value: -2, to: today) ?? today
-            print("📅 오늘이 일요일 - 금요일 데이터 로드")
-        } else if todayWeekday == 7 { // 토요일이면 금요일 데이터
-            targetDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
-            print("📅 오늘이 토요일 - 금요일 데이터 로드")
-        } else if todayWeekday == 2 { // 월요일이면 금요일 데이터
-            targetDate = calendar.date(byAdding: .day, value: -3, to: today) ?? today
-            print("📅 오늘이 월요일 - 금요일 데이터 로드")
+        if attempt == 0 {
+            // 초기 시도: 주말/월요일 로직 적용
+            let todayWeekday = calendar.component(.weekday, from: today)
+            if todayWeekday == 1 { // 일요일이면 금요일 데이터
+                targetDate = calendar.date(byAdding: .day, value: -2, to: today) ?? today
+            } else if todayWeekday == 7 { // 토요일이면 금요일 데이터
+                targetDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+            } else if todayWeekday == 2 { // 월요일이면 금요일 데이터
+                targetDate = calendar.date(byAdding: .day, value: -3, to: today) ?? today
+            } else {
+                targetDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+            }
         } else {
-            // 평일이면 어제 데이터
-            targetDate = calendar.date(byAdding: .day, value: -1, to: today) ?? today
-            print("📅 오늘이 평일 - 어제 데이터 로드")
+            // 이전 데이터 찾기 시도: 단순히 1일씩 더 뒤로
+            targetDate = calendar.date(byAdding: .day, value: -(attempt + 1), to: today) ?? today
         }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"  // 하이픈 포함 형식
-        let targetDateString = dateFormatter.string(from: targetDate)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: targetDate)
         
-        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/daily/exchange-rates-\(targetDateString).json"
-        let dateString = targetDateString  // 클로저에서 사용할 수 있도록 로컬 변수로 복사
+        // 우선순위 1: data/daily (기본)
+        let githubURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/daily/exchange-rates-\(dateString).json"
         
-        print("📥 GitHub에서 전일 데이터 로드 시도: \(githubURL) (기준일: \(dateString))")
+        print("📥 GitHub 데이터 로드 시도 (\(attempt+1)회차): \(dateString)")
         
         guard let url = URL(string: githubURL) else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let data = data,
-                  let rates = try? JSONDecoder().decode([ExchangeRate].self, from: data) else {
-                print("❌ GitHub 전일 데이터 로드 실패: \(dateString)")
-                
-                // GitHub 로드 실패 시에만 로컬 백업 데이터 시도
-                DispatchQueue.main.async {
-                    print("❌ GitHub 전일 데이터 로드 실패 - 로컬 백업 데이터 사용")
-                    if let backupData = UserDefaults.standard.data(forKey: "PreviousDayExchangeRates"),
-                       let backupRates = try? JSONDecoder().decode([CurrencyType: ExchangeRate].self, from: backupData) {
-                        self?.previousDayData = backupRates
-                        print("📁 로컬 백업 데이터로 전일 데이터 설정 (부정확할 수 있음)")
-                        
-                        // 백업 데이터로 일일변동 재계산
-                        if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
-                            let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
-                            self?.dailyChanges = recalculatedChanges
-                            self?.isDailyChangeLoading = false  // 로딩 완료 (부정확할 수 있음)
-                            print("🔄 백업 데이터로 일일변동 재계산 완료 (부정확할 수 있음)")
-                        } else {
-                            self?.isDailyChangeLoading = false  // 계산 실패해도 로딩 중단
-                        }
-                    } else {
-                        print("❌ GitHub 및 로컬 백업 데이터 모두 실패 - 일일변동 계산 불가")
-                        self?.isDailyChangeLoading = false  // 로딩 중단
-                    }
-                }
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
+                print("⚠️ \(dateString) 데이터가 daily에 없음 (404) -> history 확인 또는 이전 날짜 시도")
+                // history 폴더도 한 번 더 시도
+                self?.loadFromHistoryFallback(dateString: dateString, attempt: attempt)
                 return
             }
             
-            var previousRates: [CurrencyType: ExchangeRate] = [:]
-            for rate in rates {
-                if let currencyType = CurrencyType(rawValue: rate.curUnit ?? "") {
-                    previousRates[currencyType] = rate
-                }
+            guard let data = data,
+                  let rates = try? JSONDecoder().decode([ExchangeRate].self, from: data) else {
+                print("⚠️ \(dateString) 데이터 파싱 실패 -> 이전 날짜 시도")
+                self?.loadPreviousDayFromGitHub(attempt: attempt + 1)
+                return
             }
             
-                DispatchQueue.main.async {
-                    self?.previousDayData = previousRates
-                    self?.savePreviousDayData()
-                    print("✅ GitHub 전일 데이터 로드 완료: \(previousRates.count)개 통화")
-                    
-                    // USD 데이터 디버깅
-                    if let usdRate = previousRates[.USD] {
-                        print("📊 GitHub USD 전일 데이터: \(usdRate.dealBasR ?? "N/A")원")
-                    }
-                    
-                    // 전일 데이터 로드 완료 후 일일변동 재계산 (동시성 안전성 보장)
-                    if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
-                        let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
-                        self?.dailyChanges = recalculatedChanges
-                        self?.isDailyChangeLoading = false  // 로딩 완료
-                        print("🔄 전일 데이터 로드 후 일일변동 재계산 완료")
-                        
-                        // USD 일일변동 디버깅
-                        if let usdChange = recalculatedChanges[.USD] {
-                            print("📊 USD 일일변동 계산 결과: \(usdChange.changeValue >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changeValue))원 (\(usdChange.changePercent >= 0 ? "+" : "")\(String(format: "%.2f", usdChange.changePercent))%)")
-                        }
-                    }
-                }
+            self?.processPreviousDayData(rates: rates, dateString: dateString)
         }.resume()
+    }
+    
+    private func loadFromHistoryFallback(dateString: String, attempt: Int) {
+        let historyURL = "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/history/exchange-rates-\(dateString).json"
+        guard let url = URL(string: historyURL) else { return }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
+                print("⚠️ \(dateString) 데이터가 history에도 없음 -> 이전 날짜 시도")
+                self?.loadPreviousDayFromGitHub(attempt: attempt + 1)
+                return
+            }
+            
+            guard let data = data,
+                  let rates = try? JSONDecoder().decode([ExchangeRate].self, from: data) else {
+                self?.loadPreviousDayFromGitHub(attempt: attempt + 1)
+                return
+            }
+            
+            self?.processPreviousDayData(rates: rates, dateString: dateString)
+        }.resume()
+    }
+    
+    private func processPreviousDayData(rates: [ExchangeRate], dateString: String) {
+        var previousRates: [CurrencyType: ExchangeRate] = [:]
+        for rate in rates {
+            if let currencyType = CurrencyType(rawValue: rate.curUnit ?? "") {
+                previousRates[currencyType] = rate
+            }
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.previousDayData = previousRates
+            self?.savePreviousDayData()
+            print("✅ GitHub 데이터 로드 완료: \(dateString) (\(previousRates.count)개)")
+            
+            if let currentRates = self?.exchangeRates, !currentRates.isEmpty {
+                let recalculatedChanges = self?.calculateDailyChangesSync(newRates: currentRates) ?? [:]
+                self?.dailyChanges = recalculatedChanges
+                self?.isDailyChangeLoading = false
+                print("🔄 \(dateString) 기준으로 일일변동 재계산 완료")
+            }
+        }
     }
     
     private func getDealBasRValue(from rate: ExchangeRate) -> Double? {
         guard let dealBasR = rate.dealBasR else { return nil }
         let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
         return Double(cleanedRate)
+    }
+    
+    // MARK: - Notification History Helper
+    private func addNotificationHistory(message: String) {
+        NotificationManager.addNotificationToHistory(
+            currency: selectedCurrency.rawValue,
+            message: message,
+            type: .alert
+        )
     }
 }

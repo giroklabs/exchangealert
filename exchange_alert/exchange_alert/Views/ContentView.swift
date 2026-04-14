@@ -6,105 +6,96 @@ struct ContentView: View {
     @State private var showingSettings = false
     
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
-                // 배경 그라데이션
-                AppTheme.backgroundGradient
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    // 상단 구분선
-                    TopSeparator()
-                        .padding(.top, 4)
-                    
-                    ScrollView {
-                        LazyVStack(spacing: 16) {
-                            // 환율 정보 카드
-                            if let rate = exchangeManager.currentRate {
-                                ExchangeRateCard(rate: rate, alertSettings: exchangeManager.currentAlertSettings, selectedCurrency: $exchangeManager.selectedCurrency)
-                                    .padding(.horizontal, 16)
-                            } else if exchangeManager.isLoading {
-                                LoadingView()
-                                    .frame(maxWidth: .infinity, maxHeight: 200)
-                                    .padding(.horizontal, 16)
-                            } else if let errorMessage = exchangeManager.errorMessage {
-                                ErrorStateView(message: errorMessage) {
-                                    exchangeManager.refresh()
-                                }
-                                .padding(.horizontal, 16)
-                            } else {
-                                // 환율 데이터가 없을 때 기본 카드 표시
-                                DefaultExchangeCard(selectedCurrency: $exchangeManager.selectedCurrency)
-                                    .padding(.horizontal, 16)
-                            }
-                            
-                            // 알림 설정 카드
-                            AlertSettingsCard(currency: exchangeManager.selectedCurrency)
-                            
-                            // 마지막 업데이트 시간
-                            if exchangeManager.currentRate != nil {
-                                LastUpdateView()
-                                    .padding(.horizontal, 16)
-                                    .padding(.top, -11)  // 간격을 30% 수준으로 줄임 (LazyVStack spacing 16의 30% ≈ 5, 음수 패딩으로 간격 축소)
-                            }
-                            
-                        }
-                        .refreshable {
-                            // Pull-to-Refresh: 최신 데이터 갱신 (강제 즉시 업데이트)
-                            await refreshData()
-                        }
-                        .padding(.top, 8)
-                        .padding(.bottom, 20)
-                    }
-                }
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(edge: .bottom) {
-                // AdMob 배너 광고를 화면 하단에 고정 (정책 준수)
-                // 키보드가 보이지 않을 때만 표시하고, 충분한 여백 확보
-                if !isKeyboardVisible {
-                    AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/9991728010")
-                        .frame(height: 50)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 12)  // 상단 여백
-                        .padding(.bottom, 12)  // 하단 여백 (안전 영역 고려)
-                        .background(Color(.systemBackground))  // 배경색으로 명확히 구분
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+        ZStack(alignment: .top) {
+            // 배경 그라데이션
+            AppTheme.backgroundGradient
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // 커스텀 헤더 (내비게이션 바 대체)
+                HStack {
                     AppTitleView(baseSize: 26)
-                        .padding(.top, 12)
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 4) {
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 16) {
                         // 설정 버튼
                         Button(action: {
                             showingSettings = true
                         }) {
                             Image(systemName: "gearshape.fill")
-                                .font(.system(size: 18, weight: .medium))
+                                .font(.system(size: 20, weight: .medium))
                                 .foregroundColor(.yellow)
                         }
                         
                         // 새로고침 버튼
                         Button(action: {
-                            print("🔄 헤더 새로고침 버튼 클릭됨")
                             exchangeManager.pullToRefresh()
                         }) {
                             Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 18, weight: .medium))
+                                .font(.system(size: 20, weight: .medium))
                                 .foregroundColor(.yellow)
                         }
                     }
-                    .padding(.top, 12)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                
+                // 상단 구분선
+                TopSeparator()
+                
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        // 환율 정보 카드
+                        if let rate = exchangeManager.currentRate {
+                            ExchangeRateCard(rate: rate, alertSettings: exchangeManager.currentAlertSettings, selectedCurrency: $exchangeManager.selectedCurrency)
+                                .padding(.horizontal, 16)
+                        } else if exchangeManager.isLoading {
+                            LoadingView()
+                                .frame(maxWidth: .infinity, maxHeight: 200)
+                                .padding(.horizontal, 16)
+                        } else if let errorMessage = exchangeManager.errorMessage {
+                            ErrorStateView(message: errorMessage) {
+                                exchangeManager.refresh()
+                            }
+                            .padding(.horizontal, 16)
+                        } else {
+                            // 환율 데이터가 없을 때 기본 카드 표시
+                            DefaultExchangeCard(selectedCurrency: $exchangeManager.selectedCurrency)
+                                .padding(.horizontal, 16)
+                        }
+                        
+                        // 알림 설정 카드
+                        AlertSettingsCard(currency: exchangeManager.selectedCurrency)
+                        
+                        // 마지막 업데이트 시간
+                        if exchangeManager.currentRate != nil {
+                            LastUpdateView()
+                                .padding(.horizontal, 16)
+                                .padding(.top, -11)
+                        }
+                        
+                    }
+                    .refreshable {
+                        await refreshData()
+                    }
+                    .padding(.top, 8)
+                    .padding(.bottom, 20)
                 }
             }
-            .sheet(isPresented: $showingSettings) {
-                AppSettingsView()
+        }
+        .safeAreaInset(edge: .bottom) {
+            if !isKeyboardVisible {
+                AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/9991728010")
+                    .frame(height: 50)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 12)
+                    .padding(.bottom, 12)
+                    .background(Color(.systemBackground))
             }
+        }
+        .sheet(isPresented: $showingSettings) {
+            AppSettingsView()
         }
         .onAppear {
             if exchangeManager.currentRate == nil {

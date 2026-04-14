@@ -1,9 +1,24 @@
 import UIKit
 import UserNotifications
 import BackgroundTasks
+import FirebaseCore
+import FirebaseMessaging
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Firebase 초기화
+        FirebaseApp.configure()
+        
+        // 원격 알림 대리자 설정
+        UNUserNotificationCenter.current().delegate = self
+        Messaging.messaging().delegate = self
+        
+        // 알림 권한 요청
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { _, _ in }
+        
+        application.registerForRemoteNotifications()
+        
         // iOS 13+ BackgroundTasks 프레임워크 사용
         if #available(iOS 13.0, *) {
             // BGAppRefreshTask 등록
@@ -34,6 +49,41 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         )
         
         return true
+    }
+    
+    // MARK: - APNs Registration
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        print("✅ Apple APNs Token 발급 성공: \(tokenString)")
+        // 파이어베이스에 APNs 토큰 연결 확인
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("❌ Apple APNs Token 발급 실패: \(error.localizedDescription)")
+    }
+    
+    // MARK: - MessagingDelegate
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("🚀 Firebase registration token: \(String(describing: fcmToken))")
+        
+        // 토큰을 UserDefaults에 저장하여 추후 Firestore 연동 시 사용
+        if let token = fcmToken {
+            UserDefaults.standard.set(token, forKey: "FCMToken")
+            // 토큰이 업데이트되었음을 앱 전체에 알림
+            NotificationCenter.default.post(name: Notification.Name("FCMTokenUpdated"), object: nil)
+        }
+    }
+    
+    // MARK: - UNUserNotificationCenterDelegate
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // 앱이 포그라운드에 있을 때도 알림 표시
+        completionHandler([[.banner, .sound, .badge]])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        // 알림을 클릭했을 때 처리
+        completionHandler()
     }
     
     @objc private func appDidEnterBackground() {
@@ -177,9 +227,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         if shouldNotify {
-            // 마지막 알림 시간 저장
-            UserDefaults.standard.set(now, forKey: lastNotificationKey)
-            sendBackgroundNotification(message: message)
+            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
+            // sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 환율 알림 조건 충족 (서버 알림 대기 중)")
         }
     }
     
@@ -248,9 +298,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         if shouldNotify {
-            // 마지막 알림 시간 저장
-            UserDefaults.standard.set(now, forKey: lastNotificationKey)
-            sendBackgroundNotification(message: message)
+            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
+            // sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 USD 알림 조건 충족 (서버 알림 대기 중)")
         }
     }
     
@@ -297,9 +347,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         if shouldNotify {
-            // 마지막 알림 시간 저장
-            UserDefaults.standard.set(now, forKey: lastNotificationKey)
-            sendBackgroundNotification(message: message)
+            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
+            // sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 기본 알림 조건 충족 (서버 알림 대기 중)")
         }
     }
     
@@ -330,9 +380,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         if shouldNotify {
-            // 마지막 알림 시간 저장
-            UserDefaults.standard.set(now, forKey: lastNotificationKey)
-            sendBackgroundNotification(message: message)
+            // 서버(FCM) 알림으로 일원화하기 위해 로컬 알림은 주석 처리
+            // sendBackgroundNotification(message: message)
+            print("✅ 백그라운드 기본 알림 조건 충족 (서버 알림 대기 중)")
         }
     }
     

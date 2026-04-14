@@ -15,6 +15,7 @@ import path from 'path';
 import https from 'https';
 import { fileURLToPath } from 'url';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
+import admin from 'firebase-admin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +23,7 @@ const __dirname = path.dirname(__filename);
 // ─────────────── 설정 ───────────────
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const SERVICE_ACCOUNT = process.env.FIREBASE_SERVICE_ACCOUNT;
 
 /** 알림 트리거 임계값 (%) */
 const SPIKE_THRESHOLD = 0.5;
@@ -417,12 +419,82 @@ ${triggerLines}
 🌐 [대시보드 바로가기](https://giroklabs.github.io/exchangealert/)`;
 }
 
+// ─────────────── FCM 푸시 전송 ───────────────
+
+async function sendPushNotifications(db, triggers, state) {
+    try {
+        console.log('📡 Firestore에서 푸시 알림 대상 조회 중...');
+        // 일단 알림 설정이 되어 있는 모든 토큰 수집
+        const alertsSnapshot = await db.collection('alerts').get();
+        const tokens = new Set();
+        alertsSnapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.token) tokens.add(data.token);
+        });
+
+        if (tokens.size === 0) {
+            console.log('✅ 푸시를 보낼 대상 토큰이 없습니다.');
+            return;
+        }
+
+        const tokenList = Array.from(tokens);
+        const title = `🚨 매크로 지표 급변동 감지!`;
+        const body = triggers[0] + (triggers.length > 1 ? ` 외 ${triggers.length - 1}건` : '') + ` (환율: ${state.rate}원)`;
+
+        console.log(`📤 ${tokenList.size}개 기기로 푸시 알림 발송 중...`);
+
+        const messages = tokenList.map(token => ({
+            token: token,
+            notification: {
+                title: title,
+                body: body
+            },
+            data: {
+                type: 'spike_alert',
+                rate: state.rate.toString()
+            },
+            apns: {
+                payload: {
+                    aps: { sound: 'default', badge: 1 }
+                }
+            }
+        }));
+
+        // FCM은 500개씩 나눠서 전송
+        for (let i = 0; i < messages.length; i += 500) {
+            const chunk = messages.slice(i, i + 500);
+            const response = await admin.app('spike-alert-app').messaging().sendEach(chunk);
+            console.log(`✅ 푸시 발송 완료: 성공 ${response.successCount}, 실패 ${response.failureCount}`);
+        }
+    } catch (e) {
+        console.error('❌ 푸시 알림 발송 에러:', e.message);
+    }
+}
+
 // ─────────────── 메인 ───────────────
 
 async function main() {
     console.log('🚀 환율 및 매크로 지표 급변동 알림 스크립트 시작...');
     console.log(`- Telegram 봇: ${TELEGRAM_TOKEN ? '✅' : '❌ 미설정'}`);
     console.log(`- Chat ID: ${TELEGRAM_CHAT_ID ? '✅' : '❌ 미설정'}`);
+
+    // 1. Firebase Admin 초기화 (푸시용)
+    const db = (() => {
+        if (!SERVICE_ACCOUNT) {
+            console.warn('⚠️ FIREBASE_SERVICE_ACCOUNT 미설정 - 푸시 알림은 건너뜁니다.');
+            return null;
+        }
+        try {
+            const serviceAccount = JSON.parse(SERVICE_ACCOUNT);
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount)
+            }, 'spike-alert-app'); // 별도 앱 이름 사용 (중복 초기화 방지)
+            return admin.firestore();
+        } catch (e) {
+            console.error('❌ Firebase 초기화 실패:', e.message);
+            return null;
+        }
+    })();
 
     // 1. 현재 모든 지표 데이터 조회
     const current = await getCurrentRate();
@@ -532,6 +604,11 @@ async function main() {
     if (success) {
         saveLastAlertInfo(currentState, new Date().toISOString());
         console.log(`📝 모든 모니터링 기준 지표 업데이트 완료.`);
+        
+        // 9. 앱 푸시 알림 발송
+        if (db) {
+            await sendPushNotifications(db, triggers, currentState);
+        }
     }
 
     console.log('🏁 스크립트 완료');

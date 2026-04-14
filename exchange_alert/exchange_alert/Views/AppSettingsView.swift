@@ -5,44 +5,40 @@ struct AppSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .top) {
-                AppTheme.backgroundGradient
-                    .onTapGesture {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    }
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    TopSeparator()
-                        .padding(.top, 4)
-                    
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            Spacer().frame(height: 20)
-                            
-                            // 설정 메뉴 섹션
-                            settingsMenuSection
-                            
-                            Spacer().frame(height: 40)
-                        }
-                    }
+        ZStack(alignment: .top) {
+            AppTheme.backgroundGradient
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // 커스텀 헤더 (내비게이션 바 대체)
+                HStack {
                     AppTitleView(baseSize: 26)
-                        .padding(.top, 12)
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
+                    
+                    Spacer()
+                    
                     Button("닫기") {
                         dismiss()
                     }
                     .foregroundColor(AppTheme.primary)
-                    .padding(.top, 12)
+                    .font(AppTheme.bodyFont)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                
+                TopSeparator()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        Spacer().frame(height: 20)
+                        
+                        // 설정 메뉴 섹션
+                        settingsMenuSection
+                        
+                        Spacer().frame(height: 40)
+                    }
                 }
             }
         }
@@ -59,6 +55,34 @@ struct AppSettingsView: View {
                 iconColor: .green
             ) {
                 if let url = URL(string: "https://giroklabs.github.io/privacy.html") {
+                    UIApplication.shared.open(url)
+                }
+            }
+            
+            Divider()
+                .padding(.leading, 60)
+            
+            // 텔레그램 채널
+            MenuRow(
+                icon: "paperplane.fill",
+                title: "텔레그램 채널",
+                iconColor: .blue
+            ) {
+                if let url = URL(string: "https://t.me/dollar_invest_pro") {
+                    UIApplication.shared.open(url)
+                }
+            }
+            
+            Divider()
+                .padding(.leading, 60)
+            
+            // 달러인베스트 사이트
+            MenuRow(
+                icon: "globe",
+                title: "달러인베스트 사이트",
+                iconColor: .orange
+            ) {
+                if let url = URL(string: "https://dollarinvest.pro") {
                     UIApplication.shared.open(url)
                 }
             }

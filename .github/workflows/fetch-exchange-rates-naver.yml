@@ -33,10 +33,9 @@ jobs:
         echo "=== Naver API Fetch Start ==="
         CURRENT_TIME=$(date '+%Y-%m-%dT%H:%M:%S%z')
         SEARCH_DATE=$(date '+%Y-%m-%d')
-        
         echo "$CURRENT_TIME" > data/last-update.txt
         
-        # JSON generation with META field to ensure file change every time
+        # JSON generation
         echo "[" > data/exchange-rates.json
         echo "{\"result\":1,\"cur_unit\":\"META\",\"fetched_at\":\"$CURRENT_TIME\"}" >> data/exchange-rates.json
         
@@ -59,7 +58,6 @@ jobs:
             customer_sell=$(echo "scale=2; $rate_clean * 0.982" | bc)
             customer_buy_formatted=$(printf "%.2f" $customer_buy)
             customer_sell_formatted=$(printf "%.2f" $customer_sell)
-            
             echo ",{\"result\":1,\"cur_unit\":\"$cur_unit\",\"ttb\":\"$customer_buy_formatted\",\"tts\":\"$customer_sell_formatted\",\"deal_bas_r\":\"$rate\",\"bkpr\":\"${rate_clean%.*}\",\"yy_efee_r\":\"0\",\"ten_dd_efee_r\":\"0\",\"kftc_bkpr\":\"${rate_clean%.*}\",\"kftc_deal_bas_r\":\"$rate\",\"cur_nm\":\"$cur_nm\"}" >> data/exchange-rates.json
           fi
         done
@@ -71,13 +69,14 @@ jobs:
           exit 1
         fi
         
+        # Save to both History and Daily (Requirement for App)
         cp data/exchange-rates.json "data/history/exchange-rates-${SEARCH_DATE}.json"
         cp data/exchange-rates.json "data/daily/exchange-rates-${SEARCH_DATE}.json"
         
         # Scripts
-        node dollar-investment-web/scripts/consolidate-exchange-rates.cjs
-        node dollar-investment-web/scripts/generate-intraday.cjs
-        node dollar-investment-web/scripts/fetch-news.js
+        node dollar-investment-web/scripts/consolidate-exchange-rates.cjs || echo "Consolidate failed"
+        node dollar-investment-web/scripts/generate-intraday.cjs || echo "Intraday failed"
+        node dollar-investment-web/scripts/fetch-news.js || echo "News failed"
         
     - name: Commit and Push
       run: |
@@ -90,7 +89,7 @@ jobs:
           echo "No changes detected."
         else
           COMMIT_TIME=$(date '+%Y-%m-%d %H:%M:%S KST')
-          git commit -m "data: [LIVE-SYNC] Exchange rates update ($COMMIT_TIME)"
+          git commit -m "data: [LIVE-SYNC] Exchange rates update ($COMMIT_TIME) - Synced to History & Daily"
           
           PUSHED=false
           for i in 1 2 3; do
@@ -104,7 +103,7 @@ jobs:
           done
           
           if [ "$PUSHED" = true ]; then
-            echo "🚀 Triggering Deploy and FX Alert..."
+            echo "🚀 Triggering FX Alert..."
             TOKEN="${{ secrets.TRIGGER_TOKEN }}"
             if [ -z "$TOKEN" ]; then TOKEN="${{ secrets.GITHUB_TOKEN }}"; fi
             
@@ -114,7 +113,7 @@ jobs:
               "https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy-dollar-investment.yml/dispatches" \
               -d '{"ref":"main"}' || true
 
-            # 2. 환율 급변동 알림 트리거 (추가)
+            # 2. 환율 급변동 알림 트리거
             curl -X POST -H "Authorization: token $TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/repos/${{ github.repository }}/dispatches" \

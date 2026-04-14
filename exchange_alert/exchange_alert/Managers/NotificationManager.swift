@@ -229,6 +229,7 @@ struct NotificationManager {
         content.sound = .default
         content.badge = 1
         
+        /*
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: "test-notification-\(Date().timeIntervalSince1970)", content: content, trigger: trigger)
         
@@ -251,5 +252,12 @@ struct NotificationManager {
                 }
             }
         }
+        */
+        print("✅ 테스트 알림 조건 충족 (서버 알림 대기 중 또는 로컬 전송 중단)")
+        addNotificationToHistory(
+            currency: "USD",
+            message: "테스트 알림이 발송되었습니다 (로컬 알림은 서버 알림으로 대체되었습니다)",
+            type: .update
+        )
     }
 }

@@ -15,25 +15,6 @@ struct ExchangeAlertApp: App {
                 .onAppear {
                     // AdMob 초기화
                     MobileAds.shared.start { _ in }
-                    
-                    // 알림 권한 요청
-                    NotificationManager.requestPermission { granted in
-                        // 권한 요청만 하고 로깅 최소화
-                    }
-                    
-                    // 백그라운드 앱 새로고침 설정 (Settings.bundle 설정 반영)
-                    setupBackgroundRefresh()
-                    
-                    // 마지막 업데이트 시간 기록 (필요시)
-                    
-                    // iOS 설정에서 백그라운드 새로고침을 인식하도록 더 적극적으로 요청
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.setupBackgroundRefresh()
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                        self.setupBackgroundRefresh()
-                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // 앱이 포그라운드로 돌아올 때 강제 즉시 데이터 새로고침

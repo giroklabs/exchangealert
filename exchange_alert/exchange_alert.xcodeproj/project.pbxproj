@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		201E01CA6BDE343C953181F6 /* Pods_exchange_alert.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4A61F7AC0FE87F57ED13B6D /* Pods_exchange_alert.framework */; };
+		4AF79E1E2F8CA12C0011189E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4AF79E1D2F8CA12C0011189E /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		4ACDCDC52E7D27C2005BC16F /* exchange_alert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exchange_alert.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ACDCDD42E7D27C4005BC16F /* exchange_alertTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exchange_alertTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ACDCDDE2E7D27C4005BC16F /* exchange_alertUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exchange_alertUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AF79E1D2F8CA12C0011189E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6F7DCFC42016F87B74667724 /* Pods-exchange_alert.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exchange_alert.debug.xcconfig"; path = "Target Support Files/Pods-exchange_alert/Pods-exchange_alert.debug.xcconfig"; sourceTree = "<group>"; };
 		B10019034C76F4480682EEC3 /* Pods-exchange_alert.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exchange_alert.release.xcconfig"; path = "Target Support Files/Pods-exchange_alert/Pods-exchange_alert.release.xcconfig"; sourceTree = "<group>"; };
 		B4A61F7AC0FE87F57ED13B6D /* Pods_exchange_alert.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_exchange_alert.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +104,7 @@
 				4ACDCDC62E7D27C2005BC16F /* Products */,
 				4C73A949BC8CF9AB6ED0939C /* Pods */,
 				F90F2312AFCCE73F9B375E7E /* Frameworks */,
+				4AF79E1D2F8CA12C0011189E /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -145,6 +148,7 @@
 				4ACDCDC22E7D27C2005BC16F /* Frameworks */,
 				4ACDCDC32E7D27C2005BC16F /* Resources */,
 				20F282284092BEF4B86A4180 /* [CP] Copy Pods Resources */,
+				707E583A4FF66A00F90F2279 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -208,7 +212,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					4ACDCDC42E7D27C2005BC16F = {
 						CreatedOnToolsVersion = 16.4;
@@ -249,6 +253,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AF79E1E2F8CA12C0011189E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +315,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		707E583A4FF66A00F90F2279 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -411,6 +437,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -468,6 +495,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -479,6 +507,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = exchange_alert/exchange_alert.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = R5N9ZMU6G7;
@@ -515,6 +544,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = exchange_alert/exchange_alert.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = R5N9ZMU6G7;

@@ -7,6 +7,9 @@ target 'exchange_alert' do
 
   # Pods for exchange_alert
   pod 'Google-Mobile-Ads-SDK'
+  pod 'FirebaseMessaging'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseAnalytics'
 
 end
 
