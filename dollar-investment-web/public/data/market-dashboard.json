@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.077",
+      "value": "98.082",
       "diff": -0.04,
       "diffPercent": -0.04,
       "trend": "down",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,338.25",
-      "diff": 341.5,
-      "diffPercent": 1.31,
+      "value": "26,350.75",
+      "diff": 354,
+      "diffPercent": 1.36,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-15",
-          "value": 26338.25
+          "value": 26350.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,055",
-      "diff": 50.25,
-      "diffPercent": 0.72,
+      "value": "7,057.75",
+      "diff": 53,
+      "diffPercent": 0.76,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-15",
-          "value": 7055
+          "value": 7057.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "91.13",
-      "diff": -0.15,
-      "diffPercent": -0.16,
+      "value": "91.22",
+      "diff": -0.06,
+      "diffPercent": -0.07,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-15",
-          "value": 91.13
+          "value": 91.22
         }
       ]
     },
@@ -2472,10 +2472,10 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,476.00",
-      "change": "0.00",
-      "changePercent": "0.00",
-      "trend": "neutral"
+      "value": "1,475.10",
+      "change": "-0.90",
+      "changePercent": "-0.06",
+      "trend": "down"
     },
     {
       "id": "jpy-krw",
@@ -2483,8 +2483,8 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "927.89",
-      "change": "-0.21",
+      "value": "927.88",
+      "change": "-0.22",
       "changePercent": "-0.02",
       "trend": "down"
     },
@@ -2493,19 +2493,19 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,741.38",
-      "change": "+0.51",
-      "changePercent": "+0.03",
-      "trend": "up"
+      "value": "1,740.25",
+      "change": "-0.62",
+      "changePercent": "-0.04",
+      "trend": "down"
     },
     {
       "id": "cny-krw",
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.51",
-      "change": "-0.01",
-      "changePercent": "-0.00",
+      "value": "216.41",
+      "change": "-0.11",
+      "changePercent": "-0.05",
       "trend": "down"
     }
   ],
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1776270408417,
     "score": {
       "upScore": 39.09109104799525,
-      "downScore": 63.997501321769924,
+      "downScore": 64.00253942995536,
       "kospiUpScore": 25.938685454648002,
       "kospiDownScore": 16.469980928965914
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 15. PM 8:21:29"
+  "lastUpdate": "2026. 4. 15. PM 8:26:24"
 }
