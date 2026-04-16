@@ -36,17 +36,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run FX Spike Alert
-        run: node scripts/alert-fx-spike.js
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-
-      # - name: Send FCM Push Alerts (Mobile App)
-      #   run: node scripts/send-fcm-alerts.js
+      # - name: Run FX Spike Alert (매크로 급변동 알림 - 비활성화)
+      #   run: node scripts/alert-fx-spike.js
       #   env:
+      #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       #     FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Send FCM Push Alerts (개별 사용자 임계값 알림)
+        run: node scripts/send-fcm-alerts.js
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       - name: Commit last-alert-rate.json (if updated)
         run: |

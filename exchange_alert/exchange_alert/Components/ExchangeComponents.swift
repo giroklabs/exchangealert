@@ -197,6 +197,7 @@ struct AlertSettingsCard: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     @State private var showingNotificationPopup = false
     @State private var thresholdText = ""
+    @FocusState private var isThresholdFocused: Bool
     
     private var settings: AlertSettings {
         exchangeManager.currencyAlertSettings.settings[currency] ?? AlertSettings.default
@@ -280,8 +281,9 @@ struct AlertSettingsCard: View {
                             Text("기준값 (원)")
                                 .font(AppTheme.subheadlineFont)
                             
-                            HStack {
+                            HStack(spacing: 8) {
                                 TextField("예: 1350.50", text: $thresholdText)
+                                    .focused($isThresholdFocused)
                                     .onChange(of: thresholdText) { _, newValue in
                                         // 빈 문자열이면 0, 아니면 Double 변환
                                         if newValue.isEmpty {
@@ -300,22 +302,31 @@ struct AlertSettingsCard: View {
                                     .onChange(of: settings.threshold) { _, _ in
                                         updateThresholdText()
                                     }
-                                .textFieldStyle(CustomTextFieldStyle())
-                                .keyboardType(.decimalPad)
-                                .font(AppTheme.bodyFont)
-                                .toolbar {
-                                    ToolbarItemGroup(placement: .keyboard) {
-                                        Spacer()
-                                        Button("완료") {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        }
-                                    }
-                                }
+                                    .textFieldStyle(CustomTextFieldStyle())
+                                    .keyboardType(.decimalPad)
+                                    .font(AppTheme.bodyFont)
                                 
-                                Text("원")
-                                    .font(AppTheme.captionFont)
-                                    .foregroundColor(.secondary)
+                                if isThresholdFocused {
+                                    Button(action: {
+                                        isThresholdFocused = false
+                                    }) {
+                                        Text("완료")
+                                            .font(AppTheme.subheadlineFont)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 8)
+                                            .background(AppTheme.primary)
+                                            .cornerRadius(8)
+                                    }
+                                    .transition(.opacity.combined(with: .scale(scale: 0.85)))
+                                } else {
+                                    Text("원")
+                                        .font(AppTheme.captionFont)
+                                        .foregroundColor(.secondary)
+                                }
                             }
+                            .animation(AnimationHelper.quick, value: isThresholdFocused)
                         }
                         
                         

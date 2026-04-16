@@ -10,8 +10,27 @@ const __dirname = path.dirname(__filename);
 const SERVICE_ACCOUNT = process.env.FIREBASE_SERVICE_ACCOUNT;
 const RATES_FILE = path.join(__dirname, '..', '..', 'data', 'exchange-rates.json');
 
+/** 동일 통화 반복 알림 방지 쿨다운 (분) */
+const COOLDOWN_MINUTES = 10;
+
+/**
+ * 10분 단위 푸시 윈도우 ID 생성
+ * 서버와 앱이 동일한 시간 윈도우를 공유하여 중복 판별에 사용
+ * 예: "USD_2026-04-16_14:20"
+ */
+function getPushWindow(currency) {
+    const now = new Date();
+    const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000); // UTC → KST
+    const yyyy = kst.getUTCFullYear();
+    const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(kst.getUTCDate()).padStart(2, '0');
+    const hh = String(kst.getUTCHours()).padStart(2, '0');
+    const min = String(Math.floor(kst.getUTCMinutes() / 10) * 10).padStart(2, '0');
+    return `${currency}_${yyyy}-${mm}-${dd}_${hh}:${min}`;
+}
+
 async function main() {
-    console.log('🚀 FCM 알림 서버 스크립트 시작...');
+    console.log('🚀 FCM 개별 사용자 알림 스크립트 시작...');
 
     if (!SERVICE_ACCOUNT) {
         console.error('❌ FIREBASE_SERVICE_ACCOUNT 환경변수가 설정되지 않았습니다.');
@@ -21,9 +40,11 @@ async function main() {
     // 1. Firebase Admin 초기화
     try {
         const serviceAccount = JSON.parse(SERVICE_ACCOUNT);
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount)
-        });
+        if (admin.apps.length === 0) {
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount)
+            });
+        }
         console.log('✅ Firebase Admin 초기화 완료');
     } catch (e) {
         console.error('❌ Firebase 초기화 실패:', e.message);
@@ -58,11 +79,22 @@ async function main() {
     console.log(`🔔 총 ${alertsSnapshot.size}개의 알림 설정 확인됨. 조건 체크 시작...`);
 
     const messages = [];
+    const docsToUpdate = []; // 푸시 발송 후 lastPushedAt 업데이트용
     const now = new Date();
 
     for (const doc of alertsSnapshot.docs) {
         const alert = doc.data();
         const { token, currency, threshold, thresholdType } = alert;
+
+        // ─── 쿨다운 체크: 동일 통화 알림을 COOLDOWN_MINUTES 내 재발송 방지 ───
+        if (alert.lastPushedAt) {
+            const lastPushed = alert.lastPushedAt.toDate ? alert.lastPushedAt.toDate() : new Date(alert.lastPushedAt);
+            const minutesSince = (now - lastPushed) / (1000 * 60);
+            if (minutesSince < COOLDOWN_MINUTES) {
+                console.log(`⏳ 쿨다운 중: ${currency} (${doc.id}) - ${minutesSince.toFixed(1)}분 전 발송`);
+                continue;
+            }
+        }
 
         // 해당 통화의 현재 환율 찾기
         const rateInfo = rates.find(r => r.cur_unit === currency);
@@ -119,13 +151,21 @@ async function main() {
         }
 
         if (shouldNotify) {
-            console.log(`🎯 알림 조건 충족: ${currency} (${currentRate}) -> ${direction} (목표: ${threshold})`);
+            const pushWindow = getPushWindow(currency);
+            console.log(`🎯 알림 조건 충족: ${currency} (${currentRate}) -> ${direction} (목표: ${threshold}) [window: ${pushWindow}]`);
             
             messages.push({
                 token: token,
                 notification: {
                     title: `${emoji} ${currency} 환율 ${direction}!`,
                     body: `현재 환율이 ${currentRate.toLocaleString()}원입니다. (목표: ${threshold.toLocaleString()}원)`
+                },
+                data: {
+                    type: 'threshold_alert',
+                    currency: currency,
+                    pushWindow: pushWindow,
+                    rate: currentRate.toString(),
+                    threshold: threshold.toString()
                 },
                 android: {
                     priority: 'high',
@@ -148,6 +188,9 @@ async function main() {
                     }
                 }
             });
+
+            // 발송 성공 후 Firestore 업데이트 대상 기록
+            docsToUpdate.push(doc.ref);
         }
     }
 
@@ -161,16 +204,51 @@ async function main() {
             chunks.push(messages.slice(i, i + 500));
         }
 
+        let totalSuccess = 0;
+        let totalFail = 0;
+
         for (const chunk of chunks) {
             try {
                 const response = await admin.messaging().sendEach(chunk);
+                totalSuccess += response.successCount;
+                totalFail += response.failureCount;
                 console.log(`✅ 발송 완료: 성공 ${response.successCount}, 실패 ${response.failureCount}`);
                 
-                // 실패한 경우 중 잘못된 토큰 등은 Firestore에서 삭제하거나 처리하는 로직 추가 가능
+                // 실패 응답에서 잘못된 토큰 정리
+                response.responses.forEach((resp, idx) => {
+                    if (!resp.success && resp.error) {
+                        const errorCode = resp.error.code;
+                        if (errorCode === 'messaging/invalid-registration-token' ||
+                            errorCode === 'messaging/registration-token-not-registered') {
+                            const badToken = chunk[idx].token;
+                            console.log(`🗑️ 만료된 토큰 감지, Firestore에서 삭제 예정: ${badToken.substring(0, 8)}...`);
+                            // 해당 토큰의 알림 설정 삭제
+                            db.collection('alerts').where('token', '==', badToken).get()
+                                .then(snap => snap.forEach(d => d.ref.delete()))
+                                .catch(() => {});
+                        }
+                    }
+                });
             } catch (e) {
                 console.error('❌ 발송 에러:', e.message);
             }
         }
+
+        // 5. 발송 성공한 알림 설정에 lastPushedAt 업데이트
+        if (totalSuccess > 0) {
+            const batch = db.batch();
+            for (const ref of docsToUpdate) {
+                batch.update(ref, { lastPushedAt: admin.firestore.FieldValue.serverTimestamp() });
+            }
+            try {
+                await batch.commit();
+                console.log(`📝 ${docsToUpdate.length}개 알림 설정의 lastPushedAt 업데이트 완료`);
+            } catch (e) {
+                console.error('⚠️ lastPushedAt 업데이트 실패:', e.message);
+            }
+        }
+
+        console.log(`📊 최종 결과: 성공 ${totalSuccess}, 실패 ${totalFail}`);
     } else {
         console.log('✅ 현재 조건에 맞는 알림 대상이 없습니다.');
     }
@@ -180,5 +258,5 @@ async function main() {
 
 main().catch(err => {
     console.error('❌ 에러 발생:', err);
-    process.exit(1);
+    process.exit(0); // 워크플로 중단 방지
 });

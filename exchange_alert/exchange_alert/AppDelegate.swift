@@ -1,3 +1,18 @@
+// [알림 시스템 안내]
+// 이 앱은 Firebase FCM 기반 원격(푸시) 알림 시스템과 로컬(Background fetch) 알림을 모두 지원합니다.
+// Xcode > Signing & Capabilities > Background Modes > Remote notifications를 반드시 체크해야 백그라운드/잠금 화면에서 알림이 정상적으로 도착합니다.
+// ⚠️ iOS의 시스템 한계 (저전력 모드, 앱 강제종료 등)로 인해 푸시/로컬 알림 모두 완벽히 신뢰할 수 없습니다. 테스트 시 주의 바랍니다.
+//  - 알림이 오지 않을 경우: 시스템 알림 권한, Remote notifications 설정, 토큰 발급 여부, 기기 네트워크 상태 등을 점검하세요.
+//  - 앱이 완전히 종료(최근앱에서 밀어내기)된 경우 푸시만 도달(로컬 알림, BG fetch 완전 중단됨)
+//  - 저전력모드, Wi-Fi/셀룰러 상태, iOS 알림설정도 필수확인
+
+// [중복 알림 방지 전략]
+// 서버 푸시(FCM)와 로컬(Background fetch) 알림이 동일 이벤트에 대해 중복 도달하는 것을 방지:
+// 1. 서버 푸시가 도착하면 "ServerPush_{통화}" 키에 현재 시각을 기록
+// 2. 로컬 알림 발송 전, 해당 통화의 서버 푸시가 최근 30분 내에 도착했는지 확인
+// 3. 서버 푸시가 이미 도착한 경우 로컬 알림은 건너뜀 (서버 푸시 우선)
+// 4. 서버 푸시가 도달하지 못한 경우(네트워크 등)에만 로컬 알림이 보완적으로 작동
+
 import UIKit
 import UserNotifications
 import BackgroundTasks
@@ -62,6 +77,21 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("❌ Apple APNs Token 발급 실패: \(error.localizedDescription)")
     }
+
+    // MARK: - Remote Notification Receive (silent/data 포함)
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        // FCM Analytics / delivery tracking
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        // [중복 방지] 서버 푸시 도착 기록 (백그라운드에서도 호출됨)
+        recordServerPushArrival(userInfo: userInfo)
+
+        completionHandler(.noData)
+    }
     
     // MARK: - MessagingDelegate
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
@@ -77,6 +107,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     // MARK: - UNUserNotificationCenterDelegate
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // [중복 방지] 서버 푸시 도착 기록 (포그라운드)
+        let userInfo = notification.request.content.userInfo
+        recordServerPushArrival(userInfo: userInfo)
+        
         // 앱이 포그라운드에 있을 때도 알림 표시 (배너, 알림센터 리스트, 소리, 배지 모두 허용)
         if #available(iOS 14.0, *) {
             completionHandler([.banner, .list, .sound, .badge])
@@ -87,7 +121,51 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         // 알림을 클릭했을 때 처리
+        
+        // [중복 알림 방지] 푸시 알림 도착 시 해당 이벤트ID 기록
+        let userInfo = response.notification.request.content.userInfo
+        if let currency = userInfo["currency"] as? String,
+           let eventTimeInterval = userInfo["eventTime"] as? TimeInterval {
+            let eventId = "\(currency)_\(Int(eventTimeInterval))"
+            UserDefaults.standard.set(true, forKey: "pushed_event_\(eventId)")
+            print("📌 푸시 알림 이벤트ID 기록됨: pushed_event_\(eventId)")
+        }
+        
         completionHandler()
+    }
+    
+    // MARK: - 서버 푸시 중복 방지 헬퍼
+    
+    /// 서버 푸시(FCM) 도착 시 통화별 타임스탬프를 기록
+    /// send-fcm-alerts.js가 보내는 data 필드: type="threshold_alert", currency="USD", pushWindow="USD_2026-04-16_14:20"
+    private func recordServerPushArrival(userInfo: [AnyHashable: Any]) {
+        // threshold_alert 타입만 기록 (급변동 알림 등 다른 타입은 무시)
+        guard let type = userInfo["type"] as? String, type == "threshold_alert" else { return }
+        guard let currency = userInfo["currency"] as? String else { return }
+        
+        let key = "ServerPush_\(currency)"
+        UserDefaults.standard.set(Date(), forKey: key)
+        print("📌 [중복방지] 서버 푸시 도착 기록: \(currency) at \(Date())")
+        
+        // pushWindow도 기록 (디버깅용)
+        if let pushWindow = userInfo["pushWindow"] as? String {
+            UserDefaults.standard.set(pushWindow, forKey: "ServerPushWindow_\(currency)")
+            print("📌 [중복방지] pushWindow: \(pushWindow)")
+        }
+    }
+    
+    /// 해당 통화에 대해 최근 30분 내 서버 푸시가 도착했는지 확인
+    private func wasServerPushRecentlyReceived(for currency: CurrencyType) -> Bool {
+        let key = "ServerPush_\(currency.rawValue)"
+        guard let lastPushDate = UserDefaults.standard.object(forKey: key) as? Date else {
+            return false
+        }
+        let elapsed = Date().timeIntervalSince(lastPushDate)
+        let isRecent = elapsed < 1800 // 30분 = 1800초
+        if isRecent {
+            print("📌 [중복방지] \(currency.rawValue): 서버 푸시가 \(Int(elapsed))초 전에 도착함 → 로컬 알림 건너뜀")
+        }
+        return isRecent
     }
     
     @objc private func appDidEnterBackground() {
@@ -166,8 +244,26 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         task.resume()
     }
     
+    // 이벤트ID 생성 도우미 함수
+    private func eventId(for currency: CurrencyType, eventTime: Date) -> String {
+        return "\(currency.rawValue)_\(Int(eventTime.timeIntervalSince1970))"
+    }
+    
     // 통화별 임계점 확인 및 알림 발송 (백그라운드용)
     private func checkAndSendAlertForCurrency(currency: CurrencyType, rate: Double) {
+        // [중복 방지 1단계] 서버 푸시가 최근 30분 내 도착했으면 로컬 알림 건너뜀
+        if wasServerPushRecentlyReceived(for: currency) {
+            print("⚠️ [중복방지] \(currency.rawValue): 서버 푸시가 이미 도착함 → 로컬 알림 생략")
+            return
+        }
+        
+        // [중복 방지 2단계] 이벤트ID 기반 체크 (기존 로직 유지)
+        let eventId = eventId(for: currency, eventTime: Date())
+        if UserDefaults.standard.bool(forKey: "pushed_event_\(eventId)") {
+            print("⚠️ 중복 알림 방지: 이미 알림이 발송된 이벤트ID \(eventId) - 로컬 알림 건너뜀")
+            return
+        }
+        
         // 사용자 설정에서 해당 통화 알림 설정 로드
         guard let alertData = UserDefaults.standard.data(forKey: "CurrencyAlertSettings"),
               var currencyAlertSettings = try? JSONDecoder().decode(CurrencyAlertSettings.self, from: alertData) else {
@@ -231,13 +327,21 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            sendBackgroundNotification(message: message)
+            sendBackgroundNotification(message: message, eventId: eventId)
             print("✅ 백그라운드 환율 알림 발송 완료")
         }
     }
     
     // 임계점 확인 및 알림 발송 (백그라운드용) - 기존 함수 (하위 호환성)
     private func checkAndSendAlert(rate: Double) {
+        // [중복 알림 방지] 이벤트ID 생성 및 중복 체크
+        // 기존 함수는 USD 기준, 이벤트 시간 현재시간으로 가정
+        let eventId = "USD_\(Int(Date().timeIntervalSince1970))"
+        if UserDefaults.standard.bool(forKey: "pushed_event_\(eventId)") {
+            print("⚠️ 중복 알림 방지: 이미 푸시 알림이 발송된 이벤트ID \(eventId) - 로컬 알림 건너뜀")
+            return
+        }
+        
         // 사용자 설정에서 USD 알림 설정 로드
         guard let alertData = UserDefaults.standard.data(forKey: "CurrencyAlertSettings"),
               var currencyAlertSettings = try? JSONDecoder().decode(CurrencyAlertSettings.self, from: alertData) else {
@@ -301,7 +405,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            sendBackgroundNotification(message: message)
+            sendBackgroundNotification(message: message, eventId: eventId)
             print("✅ 백그라운드 USD 알림 발송 완료")
         }
     }
@@ -328,6 +432,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             lowerThreshold = 1350.0
         }
         
+        // [중복 알림 방지] 이벤트ID 생성 및 중복 체크
+        let eventId = eventId(for: currency, eventTime: Date())
+        if UserDefaults.standard.bool(forKey: "pushed_event_\(eventId)") {
+            print("⚠️ 중복 알림 방지: 이미 푸시 알림이 발송된 이벤트ID \(eventId) - 로컬 알림 건너뜀")
+            return
+        }
+        
         // 백그라운드 알림 스팸 방지 (5분 간격)
         let now = Date()
         let lastNotificationKey = "LastBackgroundNotification_\(currency.rawValue)"
@@ -349,7 +460,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            sendBackgroundNotification(message: message)
+            sendBackgroundNotification(message: message, eventId: eventId)
             print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
@@ -359,6 +470,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // 기본 임계값 사용 (1400/1350) - 하위 호환성
         let upperThreshold = 1400.0
         let lowerThreshold = 1350.0
+        
+        // [중복 알림 방지] 이벤트ID 생성 및 중복 체크
+        let eventId = "USD_\(Int(Date().timeIntervalSince1970))"
+        if UserDefaults.standard.bool(forKey: "pushed_event_\(eventId)") {
+            print("⚠️ 중복 알림 방지: 이미 푸시 알림이 발송된 이벤트ID \(eventId) - 로컬 알림 건너뜀")
+            return
+        }
         
         // 백그라운드 알림 스팸 방지 (5분 간격)
         let now = Date()
@@ -381,13 +499,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            sendBackgroundNotification(message: message)
+            sendBackgroundNotification(message: message, eventId: eventId)
             print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
     
-    // 백그라운드 알림 발송 (최적화된 버전)
-    private func sendBackgroundNotification(message: String) {
+    // 백그라운드 알림 발송 (최적화된 버전) - eventId 파라미터 추가, 푸시 이벤트ID 기록
+    private func sendBackgroundNotification(message: String, eventId: String) {
         print("📱 백그라운드 알림 발송 시도: \(message)")
         
         // 즉시 알림 발송 (권한 체크는 앱 시작 시 이미 완료됨)
@@ -417,6 +535,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                 print("✅ 백그라운드 알림 발송 성공: \(message)")
                 // 알림 발송 기록 및 앱 내 내역 추가
                 self.recordNotification(message: message)
+                
+                // [중복 알림 방지] 로컬 알림 발송 후에도 해당 이벤트ID 기록하여 중복 방지
+                UserDefaults.standard.set(true, forKey: "pushed_event_\(eventId)")
+                print("📌 로컬 알림 발송 이벤트ID 기록됨: pushed_event_\(eventId)")
             }
         }
     }
