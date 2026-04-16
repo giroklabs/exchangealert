@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.24",
-      "diff": 0.18,
-      "diffPercent": 0.18,
+      "value": "98.232",
+      "diff": 0.17,
+      "diffPercent": 0.17,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-16",
-          "value": 98.24
+          "value": 98.23
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,397.75",
-      "diff": 32.25,
-      "diffPercent": 0.12,
+      "value": "26,375.75",
+      "diff": 10.25,
+      "diffPercent": 0.04,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-16",
-          "value": 26397.75
+          "value": 26375.75
         }
       ]
     },
@@ -826,11 +826,11 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,063.5",
-      "diff": 3,
-      "diffPercent": 0.04,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "7,060.5",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-04-02",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-16",
-          "value": 7063.5
+          "value": 7060.5
         }
       ]
     },
@@ -2487,9 +2487,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "929.28",
-      "change": "+1.18",
-      "changePercent": "+0.13",
+      "value": "929.42",
+      "change": "+1.32",
+      "changePercent": "+0.14",
       "trend": "up"
     },
     {
@@ -2507,8 +2507,8 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.69",
-      "change": "+0.17",
+      "value": "216.70",
+      "change": "+0.18",
       "changePercent": "+0.08",
       "trend": "up"
     }
@@ -2604,7 +2604,7 @@
     "lastAiUpdate": 1776335519330,
     "score": {
       "upScore": 44.18533029890447,
-      "downScore": 62.00956730939302,
+      "downScore": 61.38670778362881,
       "kospiUpScore": 24.738240544770395,
       "kospiDownScore": 20.632191401863565
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 16. AM 10:51:28"
+  "lastUpdate": "2026. 4. 16. AM 10:56:29"
 }
