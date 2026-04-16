@@ -21,6 +21,9 @@ struct ExchangeAlertApp: App {
                     print("🔄 앱 포그라운드 복귀 - 즉시 데이터 새로고침")
                     exchangeManager.forceRefreshOnStartup()
                     
+                    // 앱 아이콘 뱃지 초기화
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                    
                     // 백그라운드 새로고침을 다시 요청 (iOS가 인식하도록)
                     setupBackgroundRefresh()
                     
