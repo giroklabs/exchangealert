@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.19",
-      "diff": 0.13,
-      "diffPercent": 0.13,
+      "value": "98.201",
+      "diff": 0.14,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-16",
-          "value": 98.19
+          "value": 98.2
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,480",
-      "diff": 114.5,
+      "value": "26,478.25",
+      "diff": 112.75,
       "diffPercent": 0.43,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-16",
-          "value": 26480
+          "value": 26478.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "90.14",
-      "diff": -1.15,
-      "diffPercent": -1.26,
+      "value": "90.21",
+      "diff": -1.08,
+      "diffPercent": -1.18,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-16",
-          "value": 90.14
+          "value": 90.21
         }
       ]
     },
@@ -2526,9 +2526,9 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1155000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 1152000,
+      "changePercent": "-0.26",
+      "trend": "down"
     },
     {
       "id": "hyundai",
@@ -2536,9 +2536,9 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 534000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 541000,
+      "changePercent": "+1.31",
+      "trend": "up"
     },
     {
       "id": "kia",
@@ -2546,9 +2546,9 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 157900,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 158300,
+      "changePercent": "+0.25",
+      "trend": "up"
     },
     {
       "id": "naver",
@@ -2556,9 +2556,9 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 218500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 217000,
+      "changePercent": "-0.69",
+      "trend": "down"
     },
     {
       "id": "kakao",
@@ -2566,9 +2566,9 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 50600,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 50000,
+      "changePercent": "-1.19",
+      "trend": "down"
     }
   ],
   "forecast": {
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1776382328716,
     "score": {
       "upScore": 44.567120028210695,
-      "downScore": 60.9995752293064,
+      "downScore": 60.999217184269625,
       "kospiUpScore": 21.896109493127025,
       "kospiDownScore": 22.007810113242318
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 16. PM 11:56:33"
+  "lastUpdate": "2026. 4. 17. AM 12:01:44"
 }
