@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "97.893",
-      "diff": -0.33,
-      "diffPercent": -0.34,
+      "value": "97.933",
+      "diff": -0.29,
+      "diffPercent": -0.3,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 97.89
+          "value": 97.93
         }
       ]
     },
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.236",
+      "value": "4.238",
       "diff": -0.07,
       "diffPercent": -1.62,
       "trend": "down",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "17.15",
-      "diff": -0.79,
-      "diffPercent": -4.4,
+      "value": "17.16",
+      "diff": -0.78,
+      "diffPercent": -4.35,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 17.15
+          "value": 17.16
         }
       ]
     },
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,500.854",
-      "diff": 398.15,
-      "diffPercent": 1.65,
+      "value": "24,516.549",
+      "diff": 413.85,
+      "diffPercent": 1.72,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 24500.85
+          "value": 24516.55
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,134.06",
-      "diff": 92.78,
-      "diffPercent": 1.32,
+      "value": "7,137.14",
+      "diff": 95.86,
+      "diffPercent": 1.36,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 7134.06
+          "value": 7137.14
         }
       ]
     },
@@ -708,7 +708,7 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "9,524.186",
+      "value": "9,524.194",
       "diff": 194.84,
       "diffPercent": 2.09,
       "trend": "up",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,825.75",
-      "diff": 338.5,
-      "diffPercent": 1.28,
+      "value": "26,840.25",
+      "diff": 353,
+      "diffPercent": 1.33,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 26825.75
+          "value": 26840.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,164",
-      "diff": 87,
-      "diffPercent": 1.23,
+      "value": "7,165.75",
+      "diff": 88.75,
+      "diffPercent": 1.25,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 7164
+          "value": 7165.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "81.16",
-      "diff": -13.53,
-      "diffPercent": -14.29,
+      "value": "81.3",
+      "diff": -13.39,
+      "diffPercent": -14.14,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-17",
-          "value": 81.16
+          "value": 81.3
         }
       ]
     },
@@ -1079,14 +1079,6 @@
           "value": 3.75
         },
         {
-          "date": "2026-04-11",
-          "value": 3.75
-        },
-        {
-          "date": "2026-04-12",
-          "value": 3.75
-        },
-        {
           "date": "2026-04-13",
           "value": 3.75
         },
@@ -1135,14 +1127,6 @@
         },
         {
           "date": "2026-04-10",
-          "value": 3.5
-        },
-        {
-          "date": "2026-04-11",
-          "value": 3.5
-        },
-        {
-          "date": "2026-04-12",
           "value": 3.5
         },
         {
@@ -2578,8 +2562,8 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 41,
-    "downProb": 59,
+    "upProb": 40,
+    "downProb": 60,
     "kospiUpProb": 60,
     "kospiDownProb": 40,
     "timeframes": {
@@ -2603,9 +2587,9 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 4월 17일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1457.62원이며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 41%로 제시하고 기술적 신호는 '보합(Neutral)'을 나타내고 있습니다. 현재 환율은 볼린저밴드 하단인 1464.51원 아래에 위치하며, RSI(14일) 36.3, Stochastic %K 18.1% 등 기술적 지표들이 과매도 영역에 근접하여 단기적인 반등 가능성을 시사하고 있습니다. 그러나 MACD는 하락 추세를 보이고 있으며, 이동평균선(MA5 1476.36원, MA20 1494.65원, MA60 1469.23원) 모두 현재 환율 위에 있어 단기 하락 모멘텀을 지지합니다. 단기 과매도에 따른 일시적 반등 시도가 있을 수 있지만, 강한 달러(DXY 5일 모멘텀 22.43%)의 상승 압력과 정량예측모델의 낮은 상승 확률(41%), 기술적 중립 신호를 고려할 때, 1450원대 중반에서 1470원대 초반 사이의 횡보 또는 추가 하락 압력이 우세할 것으로 전망됩니다. 핵심 지지선은 1411.53원, 단기 저항선은 MA5인 1476.36원 및 볼린저밴드 하단인 1464.51원입니다. 투자 전략은 단기 과매도 반등을 노린 제한적 매수보다는 관망하며 추세 확인 후 대응하는 것이 바람직합니다. ① 정량예측모델의 낮은 상승 확률(41%) 및 기술적 중립 신호 ② 주요 이동평균선이 현재 환율 위에 위치하며 단기 하락 모멘텀 유지 ③ DXY 5일 모멘텀은 강하지만, 국내 기술적 지표는 과매도 영역 진입.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,191.92pt를 기록하고 있습니다. 정량예측모델은 향후 1~5거래일 내 코스피 상승 확률을 60%로 제시하며, 기술적 신호는 '과열(Bullish)' 상태임을 나타냅니다. 현재 지수는 MA5(6057.15pt), MA20(5633.05pt), MA60(5516.85pt) 등 모든 주요 이동평균선 위에 있어 강력한 상승 추세를 유지하고 있으나, RSI(14일)가 70.7로 과매수 영역에 진입했으며, 볼린저밴드 상단(6271.21pt)에 근접하여 단기적인 조정 또는 숨 고르기 가능성이 높습니다. 또한, 반도체(SOX) 단기 5일 모멘텀이 -12.43%, 나스닥 선물 단기 흐름이 -4.64%로 해외 기술주 지수의 약세가 국내 증시에 부담으로 작용할 수 있습니다. 핵심 지지선은 MA5인 6057.15pt, 주요 저항선은 볼린저밴드 상단인 6271.21pt 및 6347.41pt입니다. 정량예측모델은 여전히 강세장을 전망하나, 단기 과열 및 해외 기술주 지표 약세로 인해 추가 상승은 제한적이며, 6050~6250pt 내에서 등락을 보일 것으로 예상됩니다. 현재는 추가 매수보다는 관망하거나 단기 이익 실현 후 조정 시 재진입 전략이 유효합니다. ① 정량예측모델의 '과열(Bullish)' 신호 및 60%의 상승 확률 ② RSI(14일) 70.7 등 기술적 과매수 신호 및 볼린저밴드 상단 근접 ③ 해외 기술주 지수(SOX, 나스닥 선물)의 단기 모멘텀 약세.\n\n실전 투자 대응\n환율: 원/달러 1457.62원, 기술적 과매도이나 달러 강세 압력으로 관망. 단기 1470원 저항.\n코스피: 코스피 6191.92pt, 모델은 강세이나 기술적 과열 및 해외 약세로 6057pt 지지 확인 후 대응.",
     "lastAiUpdate": 1776436029437,
     "score": {
-      "upScore": 43.436981593125964,
-      "downScore": 63.72266847609404,
-      "kospiUpScore": 25.601789681796856,
+      "upScore": 42.827671712265634,
+      "downScore": 63.74076557559454,
+      "kospiUpScore": 25.600422989689307,
       "kospiDownScore": 16.960098692087843
     }
   },
@@ -2678,5 +2662,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 17. PM 3:31:55"
+  "lastUpdate": "2026. 4. 17. PM 3:36:26"
 }
