@@ -615,10 +615,10 @@ async function main() {
         saveLastAlertInfo(currentState, new Date().toISOString());
         console.log(`📝 모든 모니터링 기준 지표 업데이트 완료.`);
         
-        // 9. 앱 푸시 알림 발송
-        if (db) {
-            await sendPushNotifications(db, triggers, currentState);
-        }
+        // 9. 앱 푸시 알림 발송 (비활성화: 텔레그램 알림으로 충분)
+        // if (db) {
+        //     await sendPushNotifications(db, triggers, currentState);
+        // }
     }
 
     console.log('🏁 스크립트 완료');
