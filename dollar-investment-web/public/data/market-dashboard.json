@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.149",
-      "diff": 0.1,
-      "diffPercent": 0.1,
+      "value": "98.145",
+      "diff": 0.09,
+      "diffPercent": 0.09,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 98.15
+          "value": 98.14
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,824.5",
-      "diff": 75.75,
-      "diffPercent": 0.28,
+      "value": "26,818.75",
+      "diff": 70,
+      "diffPercent": 0.26,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 26824.5
+          "value": 26818.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,158.75",
-      "diff": 10.75,
-      "diffPercent": 0.15,
+      "value": "7,158.25",
+      "diff": 10.25,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 7158.75
+          "value": 7158.25
         }
       ]
     },
@@ -2476,9 +2476,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,470.50",
-      "change": "-1.40",
-      "changePercent": "-0.10",
+      "value": "1,470.30",
+      "change": "-1.60",
+      "changePercent": "-0.11",
       "trend": "down"
     },
     {
@@ -2487,9 +2487,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "925.67",
-      "change": "-1.48",
-      "changePercent": "-0.16",
+      "value": "924.73",
+      "change": "-2.42",
+      "changePercent": "-0.26",
       "trend": "down"
     },
     {
@@ -2497,9 +2497,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,731.51",
-      "change": "-0.84",
-      "changePercent": "-0.05",
+      "value": "1,731.20",
+      "change": "-1.15",
+      "changePercent": "-0.07",
       "trend": "down"
     },
     {
@@ -2507,13 +2507,33 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.79",
-      "change": "-0.12",
+      "value": "215.77",
+      "change": "-0.14",
       "changePercent": "-0.06",
       "trend": "down"
     }
   ],
   "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 219000,
+      "changePercent": "+2.10",
+      "trend": "up"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1224000,
+      "changePercent": "+4.97",
+      "trend": "up"
+    },
     {
       "id": "hyundai",
       "symbol": "005380",
@@ -2542,6 +2562,16 @@
       "enName": "NAVER",
       "price": 214000,
       "changePercent": "+0.23",
+      "trend": "up"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 48950,
+      "changePercent": "+0.20",
       "trend": "up"
     }
   ],
@@ -2574,7 +2604,7 @@
     "lastAiUpdate": 1776753116483,
     "score": {
       "upScore": 50.95037339355552,
-      "downScore": 62.42767755506593,
+      "downScore": 62.4255560903119,
       "kospiUpScore": 24.18360070949268,
       "kospiDownScore": 19.11843641825752
     }
@@ -2656,5 +2686,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 21. AM 7:21:31"
+  "lastUpdate": "2026. 4. 21. AM 7:26:29"
 }
