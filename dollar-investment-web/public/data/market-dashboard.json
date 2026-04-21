@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.196",
-      "diff": 0.15,
-      "diffPercent": 0.15,
+      "value": "98.195",
+      "diff": 0.14,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 98.2
+          "value": 98.19
         }
       ]
     },
@@ -184,11 +184,11 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.87",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "18.86",
+      "diff": -0.01,
+      "diffPercent": -0.05,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-04-08",
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 18.87
+          "value": 18.86
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,870.75",
-      "diff": 122,
+      "value": "26,871.5",
+      "diff": 122.75,
       "diffPercent": 0.46,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 26870.75
+          "value": 26871.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,174.75",
-      "diff": 26.75,
-      "diffPercent": 0.37,
+      "value": "7,175.75",
+      "diff": 27.75,
+      "diffPercent": 0.39,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 7174.75
+          "value": 7175.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "87.61",
-      "diff": -2,
-      "diffPercent": -2.23,
+      "value": "87.45",
+      "diff": -2.16,
+      "diffPercent": -2.41,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-21",
-          "value": 87.61
+          "value": 87.45
         }
       ]
     },
@@ -2476,9 +2476,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,470.00",
-      "change": "-1.90",
-      "changePercent": "-0.13",
+      "value": "1,471.20",
+      "change": "-0.70",
+      "changePercent": "-0.05",
       "trend": "down"
     },
     {
@@ -2487,9 +2487,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "924.27",
-      "change": "-2.88",
-      "changePercent": "-0.31",
+      "value": "924.88",
+      "change": "-2.27",
+      "changePercent": "-0.24",
       "trend": "down"
     },
     {
@@ -2497,9 +2497,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,729.75",
-      "change": "-2.60",
-      "changePercent": "-0.15",
+      "value": "1,730.57",
+      "change": "-1.78",
+      "changePercent": "-0.10",
       "trend": "down"
     },
     {
@@ -2507,9 +2507,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.68",
-      "change": "-0.23",
-      "changePercent": "-0.11",
+      "value": "215.83",
+      "change": "-0.08",
+      "changePercent": "-0.04",
       "trend": "down"
     }
   ],
@@ -2578,8 +2578,8 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 43,
-    "downProb": 57,
+    "upProb": 42,
+    "downProb": 58,
     "kospiUpProb": 59,
     "kospiDownProb": 41,
     "timeframes": {
@@ -2603,9 +2603,9 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 4월 21일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1469.38원으로 마감되었으며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 45%로 제시하며 보합(Neutral) 기술적 신호를 보이고 있습니다. 그러나 달러인덱스(DXY)의 단기 5일 모멘텀이 0.59% 상승세를 보이고, 특히 DXY와 VIX 레벨이 각각 98.255와 18.94로 높아지며 '달러패닉' 복합 위험 신호가 발동된 점은 환율의 상방 압력을 크게 강화할 것으로 분석됩니다. 또한 WTI 유가(87.35달러)와 VIX 지수는 환율과 정적 상관관계를 보이며 달러 강세에 힘을 더하고 있습니다. 기술적으로는 RSI 33.5와 스토캐스틱 %K 25.4%로 과매도권에 근접하여 단기 반등 가능성을 시사하지만, 5일 이동평균선(1471.59원)과 60일 이동평균선(1470.05원)이 현재 환율 수준과 매우 가까워 중요한 지지 및 저항선으로 작용할 것입니다. 하단 볼린저밴드 1458.25원을 지지선으로, 1~5거래일 내 1491.93원(중단 볼린저밴드 및 20일 이동평균선)을 향한 상승 시도가 예상되며, 핵심 저항선인 1536.82원까지의 가능성도 열어두는 매수 관점의 접근이 바람직합니다. ① DXY 및 VIX 상승에 따른 '달러패닉' 복합 위험 신호 발생으로 달러 강세 압력 증대 ② WTI 유가 및 VIX 지수가 환율과 정적 상관관계를 보이며 상승 요인으로 작용 ③ RSI 및 스토캐스틱 지표가 과매도권 진입하며 단기 반등 가능성 시사.\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 6,388.47pt로 단기 저항선에 위치하며, 정량예측모델이 56%의 상승 확률과 '과열(Bullish)' 기술적 신호를 제시하고 있음에도 불구하고 강한 조정 압력에 직면해 있습니다. RSI(14일)는 75.9로 극심한 과매수 구간에 진입하여 단기 급등에 대한 피로도가 높은 상태이며, 지수는 상단 볼린저밴드 6457.97pt에 근접해 있어 추가 상승 여력이 제한적입니다. 무엇보다 코스피를 선행하는 핵심 지표인 반도체(SOX) 지수의 단기 5일 모멘텀이 -13.23%, 나스닥 선물 단기 흐름도 -4.90%로 매우 큰 폭의 하락세를 보이며 국내 증시의 하방 압력을 강하게 가중시키고 있습니다. 따라서 1~5거래일 내 6457.97pt 상단 돌파는 어려울 것으로 판단되며, 오히려 5일 이동평균선인 6223.38pt까지의 단기 조정 가능성이 높습니다. 핵심 지지선은 4890.72pt로 설정되어 있으나, 단기적으로는 5일 이동평균선 테스트가 먼저 예상됩니다. 현 시점에서는 관망 후 매도 또는 보수적인 접근이 바람직하며, 신규 매수 포지션은 지양하는 것이 좋겠습니다. ① RSI 75.9의 극심한 과매수 상태로 인한 단기 조정 압력 ② SOX 및 나스닥 선물의 큰 폭 하락 모멘텀으로 외부 악재 심화 ③ 지수가 단기 저항선 6388.47pt 및 상단 볼린저밴드 6457.97pt에 근접하여 상승 여력 제한.\n\n실전 투자 대응\n환율: 1469.38원 기준, '달러패닉' 신호로 1491.93원대 진입 염두에 둔 매수 관점 유지.\n코스피: 6388.47pt 기준, 과열 및 해외 악재로 6223.38pt까지 조정 대비 관망.",
     "lastAiUpdate": 1776771125019,
     "score": {
-      "upScore": 46.211140813452374,
-      "downScore": 62.62122399253762,
-      "kospiUpScore": 24.18360070949268,
+      "upScore": 46.202361537099804,
+      "downScore": 63.39965788182878,
+      "kospiUpScore": 24.794559575945907,
       "kospiDownScore": 17.080795976491707
     }
   },
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 21. PM 12:16:37"
+  "lastUpdate": "2026. 4. 21. PM 12:21:32"
 }
