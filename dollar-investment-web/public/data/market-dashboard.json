@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.603",
-      "diff": 0.19,
-      "diffPercent": 0.19,
+      "value": "98.608",
+      "diff": 0.2,
+      "diffPercent": 0.2,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-22",
-          "value": 98.6
+          "value": 98.61
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,097",
-      "diff": 462.25,
-      "diffPercent": 1.74,
+      "value": "27,096",
+      "diff": 461.25,
+      "diffPercent": 1.73,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-22",
-          "value": 27097
+          "value": 27096
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,163",
-      "diff": 63,
-      "diffPercent": 0.89,
+      "value": "7,162.75",
+      "diff": 62.75,
+      "diffPercent": 0.88,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-22",
-          "value": 7163
+          "value": 7162.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "92.4",
-      "diff": 0.27,
-      "diffPercent": 0.29,
+      "value": "92.48",
+      "diff": 0.35,
+      "diffPercent": 0.38,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-22",
-          "value": 92.4
+          "value": 92.48
         }
       ]
     },
@@ -2516,9 +2516,9 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 217500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 224000,
+      "changePercent": "+2.99",
+      "trend": "up"
     },
     {
       "id": "hynix",
@@ -2526,9 +2526,9 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1223000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 1221000,
+      "changePercent": "-0.16",
+      "trend": "down"
     },
     {
       "id": "hyundai",
@@ -2536,9 +2536,9 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 541000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 548000,
+      "changePercent": "+1.29",
+      "trend": "up"
     },
     {
       "id": "kia",
@@ -2546,9 +2546,9 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 160000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 162200,
+      "changePercent": "+1.38",
+      "trend": "up"
     },
     {
       "id": "naver",
@@ -2556,9 +2556,9 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 214000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 219500,
+      "changePercent": "+2.57",
+      "trend": "up"
     },
     {
       "id": "kakao",
@@ -2566,9 +2566,9 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 48450,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 49450,
+      "changePercent": "+2.06",
+      "trend": "up"
     }
   ],
   "forecast": {
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1776900715836,
     "score": {
       "upScore": 47.358556985648335,
-      "downScore": 59.66229834068112,
+      "downScore": 59.66187991073389,
       "kospiUpScore": 22.71470722835069,
       "kospiDownScore": 21.694498404860845
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 22. PM 11:59:26"
+  "lastUpdate": "2026. 4. 23. AM 12:01:41"
 }
