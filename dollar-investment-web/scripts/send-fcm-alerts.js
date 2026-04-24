@@ -206,6 +206,7 @@ async function main() {
 
         let totalSuccess = 0;
         let totalFail = 0;
+        const badTokens = new Set(); // 만료/무효 토큰 수집
 
         for (const chunk of chunks) {
             try {
@@ -214,18 +215,16 @@ async function main() {
                 totalFail += response.failureCount;
                 console.log(`✅ 발송 완료: 성공 ${response.successCount}, 실패 ${response.failureCount}`);
                 
-                // 실패 응답에서 잘못된 토큰 정리
+                // 실패 응답에서 에러 원인 파악 및 만료 토큰 수집
                 response.responses.forEach((resp, idx) => {
                     if (!resp.success && resp.error) {
                         const errorCode = resp.error.code;
+                        const errorMessage = resp.error.message;
+                        console.error(`❌ 메시지 발송 실패 [${idx}]: ${errorCode} - ${errorMessage}`);
+                        
                         if (errorCode === 'messaging/invalid-registration-token' ||
                             errorCode === 'messaging/registration-token-not-registered') {
-                            const badToken = chunk[idx].token;
-                            console.log(`🗑️ 만료된 토큰 감지, Firestore에서 삭제 예정: ${badToken.substring(0, 8)}...`);
-                            // 해당 토큰의 알림 설정 삭제
-                            db.collection('alerts').where('token', '==', badToken).get()
-                                .then(snap => snap.forEach(d => d.ref.delete()))
-                                .catch(() => {});
+                            badTokens.add(chunk[idx].token);
                         }
                     }
                 });
@@ -234,7 +233,30 @@ async function main() {
             }
         }
 
-        // 5. 발송 성공한 알림 설정에 lastPushedAt 업데이트
+        // 5. 만료/무효 토큰의 Firestore 문서 일괄 삭제 (await로 완료 보장)
+        if (badTokens.size > 0) {
+            console.log(`🗑️ ${badTokens.size}개의 만료된 토큰 Firestore에서 정리 중...`);
+            let deletedCount = 0;
+            
+            for (const badToken of badTokens) {
+                try {
+                    const snap = await db.collection('alerts').where('token', '==', badToken).get();
+                    if (!snap.empty) {
+                        const batch = db.batch();
+                        snap.forEach(d => batch.delete(d.ref));
+                        await batch.commit();
+                        deletedCount += snap.size;
+                        console.log(`🗑️ 토큰 ${badToken.substring(0, 8)}... → ${snap.size}개 문서 삭제 완료`);
+                    }
+                } catch (e) {
+                    console.error(`⚠️ 토큰 정리 실패 (${badToken.substring(0, 8)}...): ${e.message}`);
+                }
+            }
+            
+            console.log(`✅ 만료 토큰 정리 완료: ${deletedCount}개 문서 삭제됨`);
+        }
+
+        // 6. 발송 성공한 알림 설정에 lastPushedAt 업데이트
         if (totalSuccess > 0) {
             const batch = db.batch();
             for (const ref of docsToUpdate) {
@@ -248,7 +270,7 @@ async function main() {
             }
         }
 
-        console.log(`📊 최종 결과: 성공 ${totalSuccess}, 실패 ${totalFail}`);
+        console.log(`📊 최종 결과: 성공 ${totalSuccess}, 실패 ${totalFail}, 토큰 정리 ${badTokens.size}개`);
     } else {
         console.log('✅ 현재 조건에 맞는 알림 대상이 없습니다.');
     }
