@@ -15,8 +15,6 @@ const COOLDOWN_MINUTES = 10;
 
 /**
  * 10분 단위 푸시 윈도우 ID 생성
- * 서버와 앱이 동일한 시간 윈도우를 공유하여 중복 판별에 사용
- * 예: "USD_2026-04-16_14:20"
  */
 function getPushWindow(currency) {
     const now = new Date();
@@ -30,14 +28,13 @@ function getPushWindow(currency) {
 }
 
 async function main() {
-    console.log('🚀 FCM 개별 사용자 알림 스크립트 시작...');
+    console.log('🚀 [최신버전] FCM 알림 및 토큰 정리 스크립트 시작...');
 
     if (!SERVICE_ACCOUNT) {
         console.error('❌ FIREBASE_SERVICE_ACCOUNT 환경변수가 설정되지 않았습니다.');
         return;
     }
 
-    // 1. Firebase Admin 초기화
     try {
         const serviceAccount = JSON.parse(SERVICE_ACCOUNT);
         if (admin.apps.length === 0) {
@@ -53,7 +50,6 @@ async function main() {
 
     const db = admin.firestore();
 
-    // 2. 현재 환율 데이터 로드
     if (!fs.existsSync(RATES_FILE)) {
         console.error('❌ 환율 데이터 파일이 없습니다:', RATES_FILE);
         return;
@@ -67,7 +63,6 @@ async function main() {
         return;
     }
 
-    // 3. Firestore에서 모든 활성화된 알림 설정 가져오기
     console.log('📡 Firestore에서 알림 대상 조회 중...');
     const alertsSnapshot = await db.collection('alerts').where('isEnabled', '==', true).get();
     
@@ -79,24 +74,22 @@ async function main() {
     console.log(`🔔 총 ${alertsSnapshot.size}개의 알림 설정 확인됨. 조건 체크 시작...`);
 
     const messages = [];
-    const docsToUpdate = []; // 푸시 발송 후 lastPushedAt 업데이트용
+    const docsToUpdate = [];
     const now = new Date();
 
     for (const doc of alertsSnapshot.docs) {
         const alert = doc.data();
         const { token, currency, threshold, thresholdType } = alert;
 
-        // ─── 쿨다운 체크: 동일 통화 알림을 COOLDOWN_MINUTES 내 재발송 방지 ───
         if (alert.lastPushedAt) {
             const lastPushed = alert.lastPushedAt.toDate ? alert.lastPushedAt.toDate() : new Date(alert.lastPushedAt);
             const minutesSince = (now - lastPushed) / (1000 * 60);
             if (minutesSince < COOLDOWN_MINUTES) {
-                console.log(`⏳ 쿨다운 중: ${currency} (${doc.id}) - ${minutesSince.toFixed(1)}분 전 발송`);
+                // 쿨다운 중에는 스킵
                 continue;
             }
         }
 
-        // 해당 통화의 현재 환율 찾기
         const rateInfo = rates.find(r => r.cur_unit === currency);
         if (!rateInfo || !rateInfo.deal_bas_r) continue;
 
@@ -108,177 +101,95 @@ async function main() {
         let direction = '';
 
         switch (thresholdType) {
-            case 'upper':
-            case '상한선':
-                if (currentRate >= threshold) {
-                    shouldNotify = true;
-                    emoji = '📈';
-                    direction = '상한선 돌파';
-                }
-                break;
-            case 'lower':
-            case '하한선':
-                if (currentRate <= threshold) {
-                    shouldNotify = true;
-                    emoji = '📉';
-                    direction = '하한선 돌파';
-                }
-                break;
-            case 'both3':
+            case '상한선': if (currentRate >= threshold) { shouldNotify = true; emoji = '📈'; direction = '상한선 돌파'; } break;
+            case '하한선': if (currentRate <= threshold) { shouldNotify = true; emoji = '📉'; direction = '하한선 돌파'; } break;
             case '3% 변동':
-                if (currentRate >= threshold * 1.03) {
-                    shouldNotify = true;
-                    emoji = '🚀';
-                    direction = '3% 상승';
-                } else if (currentRate <= threshold * 0.97) {
-                    shouldNotify = true;
-                    emoji = '⬇️';
-                    direction = '3% 하락';
-                }
+                if (currentRate >= threshold * 1.03) { shouldNotify = true; emoji = '🚀'; direction = '3% 상승'; }
+                else if (currentRate <= threshold * 0.97) { shouldNotify = true; emoji = '⬇️'; direction = '3% 하락'; }
                 break;
-            case 'both':
             case '5% 변동':
-                if (currentRate >= threshold * 1.05) {
-                    shouldNotify = true;
-                    emoji = '🔥';
-                    direction = '5% 상승';
-                } else if (currentRate <= threshold * 0.95) {
-                    shouldNotify = true;
-                    emoji = '❄️';
-                    direction = '5% 하락';
-                }
+                if (currentRate >= threshold * 1.05) { shouldNotify = true; emoji = '🔥'; direction = '5% 상승'; }
+                else if (currentRate <= threshold * 0.95) { shouldNotify = true; emoji = '❄️'; direction = '5% 하락'; }
                 break;
         }
 
         if (shouldNotify) {
             const pushWindow = getPushWindow(currency);
-            console.log(`🎯 알림 조건 충족: ${currency} (${currentRate}) -> ${direction} (목표: ${threshold}) [window: ${pushWindow}]`);
-            
             messages.push({
                 token: token,
                 notification: {
                     title: `${emoji} ${currency} 환율 ${direction}!`,
                     body: `현재 환율이 ${currentRate.toLocaleString()}원입니다. (목표: ${threshold.toLocaleString()}원)`
                 },
-                data: {
-                    type: 'threshold_alert',
-                    currency: currency,
-                    pushWindow: pushWindow,
-                    rate: currentRate.toString(),
-                    threshold: threshold.toString()
-                },
-                android: {
-                    priority: 'high',
-                    notification: {
-                        sound: 'default',
-                        clickAction: 'FLUTTER_NOTIFICATION_CLICK'
-                    }
-                },
-                apns: {
-                    payload: {
-                        aps: {
-                            alert: {
-                                title: `${emoji} ${currency} 환율 ${direction}!`,
-                                body: `현재 환율이 ${currentRate.toLocaleString()}원입니다. (목표: ${threshold.toLocaleString()}원)`
-                            },
-                            sound: 'default',
-                            badge: 1,
-                            'mutable-content': 1
-                        }
-                    }
-                }
+                data: { type: 'threshold_alert', currency, pushWindow, rate: currentRate.toString(), threshold: threshold.toString() },
+                apns: { payload: { aps: { alert: { title: `${emoji} ${currency} 환율 ${direction}!`, body: `현재 환율이 ${currentRate.toLocaleString()}원입니다.` }, sound: 'default', badge: 1, 'mutable-content': 1 } } }
             });
-
-            // 발송 성공 후 Firestore 업데이트 대상 기록
             docsToUpdate.push(doc.ref);
         }
     }
 
-    // 4. 알림 발송 (일괄 전송)
     if (messages.length > 0) {
         console.log(`📤 ${messages.length}개의 푸시 알림 발송 중...`);
-        
-        // chunk로 나누어 발송 (FCM은 한 번에 최대 500개 권장)
-        const chunks = [];
-        for (let i = 0; i < messages.length; i += 500) {
-            chunks.push(messages.slice(i, i + 500));
-        }
-
+        const badTokens = new Set();
         let totalSuccess = 0;
         let totalFail = 0;
-        const badTokens = new Set(); // 만료/무효 토큰 수집
 
-        for (const chunk of chunks) {
+        // 500개씩 나눠서 발송
+        for (let i = 0; i < messages.length; i += 500) {
+            const chunk = messages.slice(i, i + 500);
             try {
                 const response = await admin.messaging().sendEach(chunk);
                 totalSuccess += response.successCount;
                 totalFail += response.failureCount;
-                console.log(`✅ 발송 완료: 성공 ${response.successCount}, 실패 ${response.failureCount}`);
-                
-                // 실패 응답에서 에러 원인 파악 및 만료 토큰 수집
+
                 response.responses.forEach((resp, idx) => {
                     if (!resp.success && resp.error) {
                         const errorCode = resp.error.code;
-                        const errorMessage = resp.error.message;
-                        console.error(`❌ 메시지 발송 실패 [${idx}]: ${errorCode} - ${errorMessage}`);
+                        const badToken = chunk[idx].token;
                         
+                        // 모든 종류의 무효/인증 에러 토큰 수집
                         if (errorCode === 'messaging/invalid-registration-token' ||
-                            errorCode === 'messaging/registration-token-not-registered') {
-                            badTokens.add(chunk[idx].token);
+                            errorCode === 'messaging/registration-token-not-registered' ||
+                            errorCode === 'messaging/invalid-argument' ||
+                            errorCode === 'messaging/third-party-auth-error') {
+                            console.log(`🗑️ 정리 대상 감지 (${errorCode}): ${badToken ? badToken.substring(0, 8) : 'null'}...`);
+                            if (badToken) badTokens.add(badToken);
+                        } else {
+                            console.error(`❌ 기타 발송 실패: ${errorCode} - ${resp.error.message}`);
                         }
                     }
                 });
             } catch (e) {
-                console.error('❌ 발송 에러:', e.message);
+                console.error('❌ 일괄 발송 에러:', e.message);
             }
         }
 
-        // 5. 만료/무효 토큰의 Firestore 문서 일괄 삭제 (await로 완료 보장)
+        // Firestore에서 무효 토큰 삭제
         if (badTokens.size > 0) {
-            console.log(`🗑️ ${badTokens.size}개의 만료된 토큰 Firestore에서 정리 중...`);
-            let deletedCount = 0;
-            
-            for (const badToken of badTokens) {
-                try {
-                    const snap = await db.collection('alerts').where('token', '==', badToken).get();
-                    if (!snap.empty) {
-                        const batch = db.batch();
-                        snap.forEach(d => batch.delete(d.ref));
-                        await batch.commit();
-                        deletedCount += snap.size;
-                        console.log(`🗑️ 토큰 ${badToken.substring(0, 8)}... → ${snap.size}개 문서 삭제 완료`);
-                    }
-                } catch (e) {
-                    console.error(`⚠️ 토큰 정리 실패 (${badToken.substring(0, 8)}...): ${e.message}`);
-                }
+            console.log(`🧹 ${badTokens.size}개의 무효 토큰 Firestore에서 삭제 중...`);
+            for (const token of badTokens) {
+                const snap = await db.collection('alerts').where('token', '==', token).get();
+                const batch = db.batch();
+                snap.forEach(d => batch.delete(d.ref));
+                await batch.commit();
             }
-            
-            console.log(`✅ 만료 토큰 정리 완료: ${deletedCount}개 문서 삭제됨`);
+            console.log('✅ 무효 토큰 정리 완료');
         }
 
-        // 6. 발송 성공한 알림 설정에 lastPushedAt 업데이트
+        // 성공한 건들만 쿨다운 업데이트
         if (totalSuccess > 0) {
             const batch = db.batch();
-            for (const ref of docsToUpdate) {
+            docsToUpdate.slice(0, totalSuccess).forEach(ref => {
                 batch.update(ref, { lastPushedAt: admin.firestore.FieldValue.serverTimestamp() });
-            }
-            try {
-                await batch.commit();
-                console.log(`📝 ${docsToUpdate.length}개 알림 설정의 lastPushedAt 업데이트 완료`);
-            } catch (e) {
-                console.error('⚠️ lastPushedAt 업데이트 실패:', e.message);
-            }
+            });
+            await batch.commit();
         }
 
-        console.log(`📊 최종 결과: 성공 ${totalSuccess}, 실패 ${totalFail}, 토큰 정리 ${badTokens.size}개`);
+        console.log(`📊 최종 결과: 성공 ${totalSuccess}, 실패 ${totalFail}, 정리 ${badTokens.size}개`);
     } else {
-        console.log('✅ 현재 조건에 맞는 알림 대상이 없습니다.');
+        console.log('✅ 현재 발송할 알림이 없습니다.');
     }
-
-    console.log('🏁 알림 스크립트 완료');
+    console.log('🏁 완료');
 }
 
-main().catch(err => {
-    console.error('❌ 에러 발생:', err);
-    process.exit(0); // 워크플로 중단 방지
-});
+main().catch(console.error);
