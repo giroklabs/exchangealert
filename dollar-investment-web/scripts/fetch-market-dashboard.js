@@ -3086,8 +3086,17 @@ async function main() {
 
             const getD5 = (id) => {
                 const closes = getIndHist(id);
-                if (closes.length >= 6) return (((closes[0] - closes[5]) / closes[5]) * 100).toFixed(2);
-                if (closes.length > 1) return (((closes[0] - closes[closes.length-1]) / closes[closes.length-1]) * 100).toFixed(2);
+                const len = closes.length;
+                if (len >= 6) {
+                    const current = closes[len - 1]; // Newest
+                    const prev5 = closes[len - 6];   // 5 steps before newest
+                    return (((current - prev5) / prev5) * 100).toFixed(2);
+                }
+                if (len > 1) {
+                    const current = closes[len - 1];
+                    const oldest = closes[0];
+                    return (((current - oldest) / oldest) * 100).toFixed(2);
+                }
                 return 'N/A';
             };
             additionalMetrics.dxy_d5 = getD5('DXY');
