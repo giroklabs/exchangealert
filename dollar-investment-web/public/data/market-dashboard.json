@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.616",
-      "diff": -0.18,
-      "diffPercent": -0.18,
+      "value": "98.65",
+      "diff": -0.15,
+      "diffPercent": -0.15,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-24",
-          "value": 98.62
+          "value": 98.65
         }
       ]
     },
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.312",
+      "value": "4.31",
       "diff": -0.01,
       "diffPercent": -0.23,
       "trend": "down",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,278.5",
-      "diff": 344.5,
-      "diffPercent": 1.28,
+      "value": "27,254.75",
+      "diff": 320.75,
+      "diffPercent": 1.19,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-24",
-          "value": 27278.5
+          "value": 27254.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,170.75",
-      "diff": 27.25,
-      "diffPercent": 0.38,
+      "value": "7,167.75",
+      "diff": 24.25,
+      "diffPercent": 0.34,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-24",
-          "value": 7170.75
+          "value": 7167.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "95.09",
-      "diff": -0.76,
-      "diffPercent": -0.79,
+      "value": "95.51",
+      "diff": -0.34,
+      "diffPercent": -0.35,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-24",
-          "value": 95.09
+          "value": 95.51
         }
       ]
     },
@@ -2257,7 +2257,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.50",
+      "value": "0.49",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -2604,7 +2604,7 @@
     "lastAiUpdate": 1777033617386,
     "score": {
       "upScore": 55.8941781674689,
-      "downScore": 63.3096335489276,
+      "downScore": 63.29970778444802,
       "kospiUpScore": 26.03189762749856,
       "kospiDownScore": 14.33407575382444
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 24. PM 12:41:39"
+  "lastUpdate": "2026. 4. 24. PM 12:45:28"
 }
