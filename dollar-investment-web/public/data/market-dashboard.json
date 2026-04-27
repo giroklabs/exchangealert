@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.483",
-      "diff": -0.03,
-      "diffPercent": -0.03,
+      "value": "98.494",
+      "diff": -0.02,
+      "diffPercent": -0.02,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-04-27",
-          "value": 98.48
+          "value": 98.49
         }
       ]
     },
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,564.58",
-      "diff": 88.95,
-      "diffPercent": 1.37,
+      "value": "6,566.65",
+      "diff": 91.02,
+      "diffPercent": 1.41,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-04-27",
-          "value": 6564.58
+          "value": 6566.65
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,493",
-      "diff": 58,
-      "diffPercent": 0.21,
+      "value": "27,490.75",
+      "diff": 55.75,
+      "diffPercent": 0.2,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-27",
-          "value": 27493
+          "value": 27490.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,198.25",
-      "diff": 3.5,
-      "diffPercent": 0.05,
+      "value": "7,197",
+      "diff": 2.25,
+      "diffPercent": 0.03,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-27",
-          "value": 7198.25
+          "value": 7197
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "95.76",
-      "diff": 1.36,
-      "diffPercent": 1.44,
+      "value": "95.77",
+      "diff": 1.37,
+      "diffPercent": 1.45,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-27",
-          "value": 95.76
+          "value": 95.77
         }
       ]
     },
@@ -2516,8 +2516,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 222500,
-      "changePercent": "+1.37",
+      "price": 222250,
+      "changePercent": "+1.25",
       "trend": "up"
     },
     {
@@ -2526,8 +2526,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1283000,
-      "changePercent": "+4.99",
+      "price": 1282000,
+      "changePercent": "+4.91",
       "trend": "up"
     },
     {
@@ -2536,8 +2536,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 528000,
-      "changePercent": "+2.92",
+      "price": 527000,
+      "changePercent": "+2.73",
       "trend": "up"
     },
     {
@@ -2566,8 +2566,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 48975,
-      "changePercent": "+1.93",
+      "price": 48950,
+      "changePercent": "+1.87",
       "trend": "up"
     }
   ],
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1777249916817,
     "score": {
       "upScore": 39.056392532984695,
-      "downScore": 62.899066856632956,
+      "downScore": 62.89798302346333,
       "kospiUpScore": 26.445565427937577,
       "kospiDownScore": 15.672114015135692
     }
@@ -2637,31 +2637,31 @@
   },
   "kospiTechnicals": {
     "rsi14": 87.5,
-    "ma5": 6464.48,
-    "ma20": 5921.2,
-    "ma60": 5663,
+    "ma5": 6464.68,
+    "ma20": 5921.25,
+    "ma60": 5663.01,
     "bb": {
-      "upper": 6809.08,
-      "mid": 5921.2,
-      "lower": 5033.32,
+      "upper": 6809.27,
+      "mid": 5921.25,
+      "lower": 5033.23,
       "bandwidth": 29.99
     },
     "momentum": {
-      "d1": 1.37,
-      "d5": 5.56,
-      "d20": 24.39
+      "d1": 1.39,
+      "d5": 5.57,
+      "d20": 24.41
     },
     "keyLevels": {
       "support": 4899.3,
       "resistance": 6575.42
     },
     "macd": {
-      "macd": 260.11,
-      "signal": 196.05,
-      "hist": 64.06
+      "macd": 260.19,
+      "signal": 196.06,
+      "hist": 64.13
     },
     "stochastic": {
-      "k": 98.7
+      "k": 98.8
     }
   },
   "kospiSentiment": "코스피 상승 우세",
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 27. AM 1:15:47"
+  "lastUpdate": "2026. 4. 27. AM 1:16:33"
 }
