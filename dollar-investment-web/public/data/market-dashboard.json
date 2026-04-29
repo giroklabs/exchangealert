@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.668",
+      "value": "98.671",
       "diff": 0.05,
       "diffPercent": 0.05,
       "trend": "up",
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,655.23",
-      "diff": 14.21,
-      "diffPercent": 0.21,
+      "value": "6,654.6",
+      "diff": 13.58,
+      "diffPercent": 0.2,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": 6655.23
+          "value": 6654.6
         }
       ]
     },
@@ -532,46 +532,46 @@
       "fredId": null,
       "isRealtime": true,
       "value": "191,315",
-      "diff": 729.08,
-      "diffPercent": 0.38,
+      "diff": 908.45,
+      "diffPercent": 0.48,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2026-04-16",
-          "value": 168975.53
+          "value": 168816.5
         },
         {
           "date": "2026-04-17",
-          "value": 166976.69
+          "value": 166819.54
         },
         {
           "date": "2026-04-20",
-          "value": 168590.51
+          "value": 168431.84
         },
         {
           "date": "2026-04-21",
-          "value": 177388.67
+          "value": 177221.72
         },
         {
           "date": "2026-04-22",
-          "value": 178273.4
+          "value": 178105.62
         },
         {
           "date": "2026-04-23",
-          "value": 182205.54
+          "value": 182034.06
         },
         {
           "date": "2026-04-24",
-          "value": 180575.34
+          "value": 180405.4
         },
         {
           "date": "2026-04-27",
-          "value": 188996.68
+          "value": 188818.8
         },
         {
           "date": "2026-04-28",
-          "value": 190585.92
+          "value": 190406.55
         },
         {
           "date": "2026-04-29",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,284.75",
-      "diff": 116,
-      "diffPercent": 0.43,
+      "value": "27,280.25",
+      "diff": 111.5,
+      "diffPercent": 0.41,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": 27284.75
+          "value": 27280.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,183.5",
-      "diff": 12.5,
-      "diffPercent": 0.17,
+      "value": "7,182.5",
+      "diff": 11.5,
+      "diffPercent": 0.16,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": 7183.5
+          "value": 7182.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "99.35",
-      "diff": -0.58,
-      "diffPercent": -0.58,
+      "value": "99.39",
+      "diff": -0.54,
+      "diffPercent": -0.54,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": 99.35
+          "value": 99.39
         }
       ]
     },
@@ -1414,21 +1414,51 @@
       "description": "한미 2년물 금리차 계산용",
       "cycle": "D",
       "hidden": true,
-      "value": "3.35",
+      "value": "2.998",
+      "diff": 0.01,
+      "diffPercent": 0.33,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-01",
-          "value": 3.2
+          "date": "2026-04-15",
+          "value": 2.919
         },
         {
-          "date": "2026-03-05",
-          "value": 3.3
+          "date": "2026-04-16",
+          "value": 2.92
         },
         {
-          "date": "2026-03-10",
-          "value": 3.35
+          "date": "2026-04-17",
+          "value": 2.935
+        },
+        {
+          "date": "2026-04-20",
+          "value": 2.923
+        },
+        {
+          "date": "2026-04-21",
+          "value": 2.917
+        },
+        {
+          "date": "2026-04-22",
+          "value": 2.933
+        },
+        {
+          "date": "2026-04-23",
+          "value": 2.975
+        },
+        {
+          "date": "2026-04-24",
+          "value": 2.987
+        },
+        {
+          "date": "2026-04-27",
+          "value": 2.986
+        },
+        {
+          "date": "2026-04-28",
+          "value": 2.998
         }
       ]
     },
@@ -1863,9 +1893,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-8,644",
-      "diff": -7450,
-      "diffPercent": -623.95,
+      "value": "-8,673",
+      "diff": -7479,
+      "diffPercent": -626.38,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -1971,7 +2001,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": -8644
+          "value": -8673
         }
       ]
     },
@@ -1984,9 +2014,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "5,151",
-      "diff": 3195,
-      "diffPercent": 163.34,
+      "value": "5,100",
+      "diff": 3144,
+      "diffPercent": 160.74,
       "trend": "up",
       "history": [
         {
@@ -2091,7 +2121,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": 5151
+          "value": 5100
         }
       ]
     },
@@ -2104,9 +2134,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "3,842",
-      "diff": 4799,
-      "diffPercent": 501.46,
+      "value": "3,925",
+      "diff": 4882,
+      "diffPercent": 510.14,
       "trend": "up",
       "history": [
         {
@@ -2211,7 +2241,7 @@
         },
         {
           "date": "2026-04-29",
-          "value": 3842
+          "value": 3925
         }
       ]
     },
@@ -2496,9 +2526,9 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1301000,
-      "changePercent": "+0.08",
-      "trend": "up"
+      "price": 1300000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
     },
     {
       "id": "hyundai",
@@ -2506,9 +2536,9 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 555000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 554000,
+      "changePercent": "-0.18",
+      "trend": "down"
     },
     {
       "id": "kia",
@@ -2570,7 +2600,7 @@
     "lastAiUpdate": 1777433536081,
     "score": {
       "upScore": 48.391687517760765,
-      "downScore": 61.95319797785255,
+      "downScore": 62.745425602612414,
       "kospiUpScore": 14.562612352193593,
       "kospiDownScore": 26.261599218870856
     }
@@ -2607,18 +2637,18 @@
   },
   "kospiTechnicals": {
     "rsi14": 91.9,
-    "ma5": 6572.54,
-    "ma20": 6061.98,
-    "ma60": 5712.24,
+    "ma5": 6572.46,
+    "ma20": 6061.96,
+    "ma60": 5712.23,
     "bb": {
-      "upper": 6924.43,
-      "mid": 6061.98,
-      "lower": 5199.53,
+      "upper": 6924.36,
+      "mid": 6061.96,
+      "lower": 5199.56,
       "bandwidth": 28.45
     },
     "momentum": {
       "d1": 0.21,
-      "d5": 3.7,
+      "d5": 3.69,
       "d20": 21.47
     },
     "keyLevels": {
@@ -2626,9 +2656,9 @@
       "resistance": 6712.73
     },
     "macd": {
-      "macd": 283.3,
-      "signal": 226.81,
-      "hist": 56.49
+      "macd": 283.27,
+      "signal": 226.8,
+      "hist": 56.47
     },
     "stochastic": {
       "k": 94.1
@@ -2644,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 4. 29. AM 3:51:33"
+  "lastUpdate": "2026. 4. 29. AM 3:55:28"
 }
