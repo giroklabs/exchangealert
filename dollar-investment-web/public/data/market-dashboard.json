@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.185",
+      "value": "98.189",
       "diff": 0.11,
       "diffPercent": 0.11,
       "trend": "up",
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,629",
-      "diff": 33,
+      "value": "27,628.25",
+      "diff": 32.25,
       "diffPercent": 0.12,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-01",
-          "value": 27629
+          "value": 27628.25
         }
       ]
     },
@@ -826,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,258.5",
-      "diff": 14.75,
+      "value": "7,258",
+      "diff": 14.25,
       "diffPercent": 0.2,
       "trend": "up",
       "realizedImpact": "down",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-01",
-          "value": 7258.5
+          "value": 7258
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "105.06",
-      "diff": -0.01,
-      "diffPercent": -0.01,
+      "value": "105.01",
+      "diff": -0.06,
+      "diffPercent": -0.06,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-01",
-          "value": 105.06
+          "value": 105.01
         }
       ]
     },
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1777609930808,
     "score": {
       "upScore": 47.125004176918125,
-      "downScore": 65.05364873529852,
+      "downScore": 65.05320815610814,
       "kospiUpScore": 25.03006562943227,
       "kospiDownScore": 19.447961553307234
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 1. AM 5:06:31"
+  "lastUpdate": "2026. 5. 1. AM 5:10:21"
 }
