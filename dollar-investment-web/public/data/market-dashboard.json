@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.021",
+      "value": "98.016",
       "diff": -0.06,
       "diffPercent": -0.06,
       "trend": "down",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,599.5",
-      "diff": 3.5,
-      "diffPercent": 0.01,
+      "value": "27,603.5",
+      "diff": 7.5,
+      "diffPercent": 0.03,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-01",
-          "value": 27599.5
+          "value": 27603.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,253",
-      "diff": 9.25,
-      "diffPercent": 0.13,
+      "value": "7,253.75",
+      "diff": 10,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-01",
-          "value": 7253
+          "value": 7253.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "104.94",
-      "diff": -0.13,
-      "diffPercent": -0.12,
+      "value": "104.91",
+      "diff": -0.16,
+      "diffPercent": -0.15,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-01",
-          "value": 104.94
+          "value": 104.91
         }
       ]
     },
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1777620735378,
     "score": {
       "upScore": 46.41610627548096,
-      "downScore": 65.5343732611313,
+      "downScore": 65.5350348859024,
       "kospiUpScore": 25.604342322364502,
       "kospiDownScore": 17.321292720883353
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 1. AM 8:01:48"
+  "lastUpdate": "2026. 5. 1. AM 8:03:19"
 }
