@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.158",
-      "diff": -0.05,
-      "diffPercent": -0.05,
+      "value": "98.166",
+      "diff": -0.04,
+      "diffPercent": -0.04,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-05-04",
-          "value": 98.16
+          "value": 98.17
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,897.25",
-      "diff": 61.5,
-      "diffPercent": 0.22,
+      "value": "27,888.75",
+      "diff": 53,
+      "diffPercent": 0.19,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-04",
-          "value": 27897.25
+          "value": 27888.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,263.5",
-      "diff": 5.5,
-      "diffPercent": 0.08,
+      "value": "7,261.25",
+      "diff": 3.25,
+      "diffPercent": 0.04,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-04",
-          "value": 7263.5
+          "value": 7261.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "102.4",
-      "diff": 0.46,
-      "diffPercent": 0.45,
+      "value": "102.76",
+      "diff": 0.82,
+      "diffPercent": 0.8,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-04",
-          "value": 102.4
+          "value": 102.76
         }
       ]
     },
@@ -2014,9 +2014,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "19,361",
-      "diff": 17405,
-      "diffPercent": 889.83,
+      "value": "19,359",
+      "diff": 17403,
+      "diffPercent": 889.72,
       "trend": "up",
       "history": [
         {
@@ -2121,7 +2121,7 @@
         },
         {
           "date": "2026-05-04",
-          "value": 19361
+          "value": 19359
         }
       ]
     },
@@ -2134,9 +2134,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-47,936",
-      "diff": -46979,
-      "diffPercent": -4908.99,
+      "value": "-47,934",
+      "diff": -46977,
+      "diffPercent": -4908.78,
       "trend": "down",
       "history": [
         {
@@ -2241,7 +2241,7 @@
         },
         {
           "date": "2026-05-04",
-          "value": -47936
+          "value": -47934
         }
       ]
     },
@@ -2472,9 +2472,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,466.70",
-      "change": "-10.30",
-      "changePercent": "-0.70",
+      "value": "1,466.90",
+      "change": "-10.10",
+      "changePercent": "-0.68",
       "trend": "down"
     },
     {
@@ -2483,9 +2483,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "934.50",
-      "change": "-5.93",
-      "changePercent": "-0.63",
+      "value": "934.72",
+      "change": "-5.71",
+      "changePercent": "-0.61",
       "trend": "down"
     },
     {
@@ -2493,9 +2493,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,719.85",
-      "change": "-11.34",
-      "changePercent": "-0.66",
+      "value": "1,719.87",
+      "change": "-11.32",
+      "changePercent": "-0.65",
       "trend": "down"
     },
     {
@@ -2503,8 +2503,8 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.07",
-      "change": "-1.19",
+      "value": "215.08",
+      "change": "-1.18",
       "changePercent": "-0.55",
       "trend": "down"
     }
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1777876321183,
     "score": {
       "upScore": 42.79748277238128,
-      "downScore": 60.04715614593462,
+      "downScore": 60.04518580771301,
       "kospiUpScore": 26.009917113809404,
       "kospiDownScore": 16.658159532264513
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 4. AM 7:06:41"
+  "lastUpdate": "2026. 5. 4. AM 7:11:43"
 }
