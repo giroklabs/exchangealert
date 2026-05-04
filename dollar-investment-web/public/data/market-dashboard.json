@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.144",
+      "value": "98.138",
       "diff": -0.07,
       "diffPercent": -0.07,
       "trend": "down",
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "101.64",
-      "diff": -0.3,
-      "diffPercent": -0.29,
+      "value": "101.59",
+      "diff": -0.35,
+      "diffPercent": -0.34,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-03",
-          "value": 101.64
+          "value": 101.59
         }
       ]
     },
@@ -1889,11 +1889,11 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-1,194",
-      "diff": 174,
-      "diffPercent": 12.72,
+      "value": "0",
+      "diff": 1194,
+      "diffPercent": 100,
       "trend": "up",
-      "realizedImpact": "up",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-02-27",
@@ -1994,6 +1994,10 @@
         {
           "date": "2026-04-03",
           "value": -1194
+        },
+        {
+          "date": "2026-05-04",
+          "value": 0
         }
       ]
     },
@@ -2006,10 +2010,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "1,956",
-      "diff": 16473,
-      "diffPercent": 113.47,
-      "trend": "up",
+      "value": "0",
+      "diff": -1956,
+      "diffPercent": -100,
+      "trend": "down",
       "history": [
         {
           "date": "2026-02-27",
@@ -2110,6 +2114,10 @@
         {
           "date": "2026-04-03",
           "value": 1956
+        },
+        {
+          "date": "2026-05-04",
+          "value": 0
         }
       ]
     },
@@ -2122,10 +2130,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-957",
-      "diff": -13054,
-      "diffPercent": -107.91,
-      "trend": "down",
+      "value": "0",
+      "diff": 957,
+      "diffPercent": 100,
+      "trend": "up",
       "history": [
         {
           "date": "2026-02-27",
@@ -2226,6 +2234,10 @@
         {
           "date": "2026-04-03",
           "value": -957
+        },
+        {
+          "date": "2026-05-04",
+          "value": 0
         }
       ]
     },
@@ -2500,9 +2512,9 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 220500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 227000,
+      "changePercent": "+2.95",
+      "trend": "up"
     },
     {
       "id": "hynix",
@@ -2510,9 +2522,9 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1286000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 1340000,
+      "changePercent": "+4.20",
+      "trend": "up"
     },
     {
       "id": "hyundai",
@@ -2520,9 +2532,9 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 531000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 544000,
+      "changePercent": "+2.45",
+      "trend": "up"
     },
     {
       "id": "kia",
@@ -2530,9 +2542,9 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 151800,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 155400,
+      "changePercent": "+2.37",
+      "trend": "up"
     },
     {
       "id": "naver",
@@ -2540,9 +2552,9 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 211000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 212000,
+      "changePercent": "+0.47",
+      "trend": "up"
     },
     {
       "id": "kakao",
@@ -2550,9 +2562,9 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 47300,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 47150,
+      "changePercent": "-0.32",
+      "trend": "down"
     }
   ],
   "forecast": {
@@ -2560,8 +2572,8 @@
     "kospiSentiment": "코스피 상승 우세",
     "upProb": 43,
     "downProb": 57,
-    "kospiUpProb": 56,
-    "kospiDownProb": 44,
+    "kospiUpProb": 59,
+    "kospiDownProb": 41,
     "timeframes": {
       "d1": {
         "upProb": 42,
@@ -2584,9 +2596,9 @@
     "lastAiUpdate": 1777851125014,
     "score": {
       "upScore": 47.532387134028745,
-      "downScore": 64.11248966477973,
-      "kospiUpScore": 25.031936176370127,
-      "kospiDownScore": 19.34730925050888
+      "downScore": 64.11498004884058,
+      "kospiUpScore": 24.299190212605822,
+      "kospiDownScore": 16.86037650105092
     }
   },
   "technicals": {
@@ -2658,5 +2670,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 3. PM 11:59:56"
+  "lastUpdate": "2026. 5. 4. AM 12:01:43"
 }
