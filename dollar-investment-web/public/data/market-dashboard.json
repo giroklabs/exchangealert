@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "28,259.5",
-      "diff": 483.5,
-      "diffPercent": 1.74,
+      "value": "28,254.25",
+      "diff": 478.25,
+      "diffPercent": 1.72,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-05",
-          "value": 28259.5
+          "value": 28254.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,295.5",
-      "diff": 65.25,
-      "diffPercent": 0.9,
+      "value": "7,294.25",
+      "diff": 64,
+      "diffPercent": 0.89,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-05",
-          "value": 7295.5
+          "value": 7294.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "102.57",
-      "diff": -3.85,
-      "diffPercent": -3.62,
+      "value": "102.56",
+      "diff": -3.86,
+      "diffPercent": -3.63,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-05",
-          "value": 102.57
+          "value": 102.56
         }
       ]
     },
@@ -2464,10 +2464,10 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,470.50",
-      "change": "0.00",
-      "changePercent": "0.00",
-      "trend": "neutral"
+      "value": "1,470.00",
+      "change": "-0.50",
+      "changePercent": "-0.03",
+      "trend": "down"
     },
     {
       "id": "jpy-krw",
@@ -2592,7 +2592,7 @@
     "lastAiUpdate": 1777998156262,
     "score": {
       "upScore": 41.855059650888435,
-      "downScore": 67.63471871369883,
+      "downScore": 67.63363086346465,
       "kospiUpScore": 23.53235388354012,
       "kospiDownScore": 17.80769758032811
     }
@@ -2666,5 +2666,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 5. PM 10:21:39"
+  "lastUpdate": "2026. 5. 5. PM 10:27:03"
 }
