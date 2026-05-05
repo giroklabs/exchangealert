@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.523",
+      "value": "98.521",
       "diff": 0.05,
       "diffPercent": 0.05,
       "trend": "up",
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,839.5",
-      "diff": 63.5,
+      "value": "27,841",
+      "diff": 65,
       "diffPercent": 0.23,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-05",
-          "value": 27839.5
+          "value": 27841
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,240.25",
-      "diff": 10,
-      "diffPercent": 0.14,
+      "value": "7,240.75",
+      "diff": 10.5,
+      "diffPercent": 0.15,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-05",
-          "value": 7240.25
+          "value": 7240.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "104.44",
-      "diff": -1.98,
-      "diffPercent": -1.86,
+      "value": "104.32",
+      "diff": -2.1,
+      "diffPercent": -1.97,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-05",
-          "value": 104.44
+          "value": 104.32
         }
       ]
     },
@@ -2596,7 +2596,7 @@
     "lastAiUpdate": 1777951947549,
     "score": {
       "upScore": 57.668189566155725,
-      "downScore": 62.7525626424916,
+      "downScore": 62.753300136994596,
       "kospiUpScore": 16.65477938292789,
       "kospiDownScore": 25.349481716898495
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 5. AM 4:06:48"
+  "lastUpdate": "2026. 5. 5. AM 4:11:38"
 }
