@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,378.5",
-      "diff": 46,
-      "diffPercent": 0.16,
+      "value": "29,375",
+      "diff": 42.5,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 29378.5
+          "value": 29375
         }
       ]
     },
@@ -826,11 +826,11 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,419",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "7,419.5",
+      "diff": 0.5,
+      "diffPercent": 0.01,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-04-28",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 7419
+          "value": 7419.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "97.76",
-      "diff": 2.34,
-      "diffPercent": 2.45,
+      "value": "97.77",
+      "diff": 2.35,
+      "diffPercent": 2.46,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 97.76
+          "value": 97.77
         }
       ]
     },
@@ -2596,7 +2596,7 @@
     "lastAiUpdate": 1778499147417,
     "score": {
       "upScore": 49.64083189327586,
-      "downScore": 63.892033488657006,
+      "downScore": 64.57964278786807,
       "kospiUpScore": 22.85669207407646,
       "kospiDownScore": 24.452523383592908
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 11. AM 11:42:02"
+  "lastUpdate": "2026. 5. 11. AM 11:43:23"
 }
