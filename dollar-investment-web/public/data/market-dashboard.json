@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "97.923",
+      "value": "97.916",
       "diff": 0.08,
       "diffPercent": 0.08,
       "trend": "up",
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.394",
+      "value": "4.392",
       "diff": 0.03,
       "diffPercent": 0.69,
       "trend": "up",
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,321.602",
-      "diff": 74.52,
-      "diffPercent": 0.28,
+      "value": "26,318.848",
+      "diff": 71.77,
+      "diffPercent": 0.27,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 26321.6
+          "value": 26318.85
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,422.78",
-      "diff": 23.85,
-      "diffPercent": 0.32,
+      "value": "7,421.52",
+      "diff": 22.59,
+      "diffPercent": 0.31,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 7422.78
+          "value": 7421.52
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "12,009.489",
-      "diff": 233.99,
-      "diffPercent": 1.99,
+      "value": "12,017.297",
+      "diff": 241.8,
+      "diffPercent": 2.05,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 12009.49
+          "value": 12017.3
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,467",
-      "diff": 134.5,
-      "diffPercent": 0.46,
+      "value": "29,475",
+      "diff": 142.5,
+      "diffPercent": 0.49,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 29467
+          "value": 29475
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "98.73",
-      "diff": 3.31,
-      "diffPercent": 3.47,
+      "value": "98.66",
+      "diff": 3.24,
+      "diffPercent": 3.4,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 98.73
+          "value": 98.66
         }
       ]
     },
@@ -2464,9 +2464,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,471.00",
-      "change": "+0.90",
-      "changePercent": "+0.06",
+      "value": "1,470.90",
+      "change": "+0.80",
+      "changePercent": "+0.05",
       "trend": "up"
     },
     {
@@ -2475,29 +2475,29 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "936.29",
-      "change": "+0.07",
-      "changePercent": "+0.01",
-      "trend": "up"
+      "value": "936.13",
+      "change": "-0.09",
+      "changePercent": "-0.01",
+      "trend": "down"
     },
     {
       "id": "eur-krw",
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,732.25",
-      "change": "-0.04",
-      "changePercent": "-0.00",
-      "trend": "down"
+      "value": "1,732.35",
+      "change": "+0.06",
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "cny-krw",
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.57",
-      "change": "+0.10",
-      "changePercent": "+0.05",
+      "value": "216.56",
+      "change": "+0.09",
+      "changePercent": "+0.04",
       "trend": "up"
     }
   ],
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 11. PM 4:40:51"
+  "lastUpdate": "2026. 5. 11. PM 4:41:58"
 }
