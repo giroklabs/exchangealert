@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.022",
-      "diff": 0.18,
-      "diffPercent": 0.18,
+      "value": "98.001",
+      "diff": 0.16,
+      "diffPercent": 0.16,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 98.02
+          "value": 98
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,320.75",
-      "diff": -11.75,
-      "diffPercent": -0.04,
+      "value": "29,302.5",
+      "diff": -30,
+      "diffPercent": -0.1,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 29320.75
+          "value": 29302.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,413.5",
-      "diff": -5.5,
-      "diffPercent": -0.07,
+      "value": "7,411.5",
+      "diff": -7.5,
+      "diffPercent": -0.1,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 7413.5
+          "value": 7411.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "98.96",
-      "diff": 3.54,
-      "diffPercent": 3.71,
+      "value": "99.05",
+      "diff": 3.63,
+      "diffPercent": 3.8,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 98.96
+          "value": 99.05
         }
       ]
     },
@@ -2130,9 +2130,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "28,714",
-      "diff": 29671,
-      "diffPercent": 3100.42,
+      "value": "28,710",
+      "diff": 29667,
+      "diffPercent": 3100,
       "trend": "up",
       "history": [
         {
@@ -2237,7 +2237,7 @@
         },
         {
           "date": "2026-05-11",
-          "value": 28714
+          "value": 28710
         }
       ]
     },
@@ -2468,9 +2468,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,470.20",
-      "change": "+4.70",
-      "changePercent": "+0.32",
+      "value": "1,470.60",
+      "change": "+5.10",
+      "changePercent": "+0.35",
       "trend": "up"
     },
     {
@@ -2479,9 +2479,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "936.16",
-      "change": "+0.75",
-      "changePercent": "+0.08",
+      "value": "936.47",
+      "change": "+1.06",
+      "changePercent": "+0.11",
       "trend": "up"
     },
     {
@@ -2489,9 +2489,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,730.13",
-      "change": "+2.89",
-      "changePercent": "+0.17",
+      "value": "1,731.15",
+      "change": "+3.91",
+      "changePercent": "+0.23",
       "trend": "up"
     },
     {
@@ -2499,9 +2499,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.46",
-      "change": "+0.82",
-      "changePercent": "+0.38",
+      "value": "216.56",
+      "change": "+0.92",
+      "changePercent": "+0.43",
       "trend": "up"
     }
   ],
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 11. AM 7:16:51"
+  "lastUpdate": "2026. 5. 11. AM 7:21:55"
 }
