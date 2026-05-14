@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.572",
+      "value": "98.571",
       "diff": 0.09,
       "diffPercent": 0.09,
       "trend": "up",
@@ -184,11 +184,11 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "17.88",
-      "diff": 0.01,
-      "diffPercent": 0.06,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "17.87",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-05-01",
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-05-14",
-          "value": 17.88
+          "value": 17.87
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,546.25",
-      "diff": 67,
-      "diffPercent": 0.23,
+      "value": "29,552",
+      "diff": 72.75,
+      "diffPercent": 0.25,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-14",
-          "value": 29546.25
+          "value": 29552
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,490.25",
-      "diff": 20.75,
-      "diffPercent": 0.28,
+      "value": "7,491.75",
+      "diff": 22.25,
+      "diffPercent": 0.3,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-14",
-          "value": 7490.25
+          "value": 7491.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "100.74",
-      "diff": -0.28,
-      "diffPercent": -0.28,
+      "value": "100.72",
+      "diff": -0.3,
+      "diffPercent": -0.3,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-14",
-          "value": 100.74
+          "value": 100.72
         }
       ]
     },
@@ -2468,9 +2468,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,492.50",
-      "change": "+2.50",
-      "changePercent": "+0.17",
+      "value": "1,492.40",
+      "change": "+2.40",
+      "changePercent": "+0.16",
       "trend": "up"
     },
     {
@@ -2479,9 +2479,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "944.92",
-      "change": "+0.93",
-      "changePercent": "+0.10",
+      "value": "944.86",
+      "change": "+0.87",
+      "changePercent": "+0.09",
       "trend": "up"
     },
     {
@@ -2489,8 +2489,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,746.52",
-      "change": "+2.03",
+      "value": "1,746.63",
+      "change": "+2.14",
       "changePercent": "+0.12",
       "trend": "up"
     },
@@ -2570,10 +2570,10 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "보합",
-    "upProb": 43,
-    "downProb": 57,
-    "kospiUpProb": 48,
-    "kospiDownProb": 52,
+    "upProb": 40,
+    "downProb": 60,
+    "kospiUpProb": 49,
+    "kospiDownProb": 51,
     "timeframes": {
       "d1": {
         "upProb": 71,
@@ -2595,10 +2595,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 5월 14일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1492.24원으로, 최근 변동성이 높은 흐름 속에서 주요 이동평균선(MA5 1474.61원, MA20 1473.82원, MA60 1477.91원)을 상회하며 단기 상승 모멘텀을 유지하고 있습니다. 그러나 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 43%로 비교적 낮게 제시하며, 기술적 신호는 '보합(Neutral)' 상태입니다. 특히 스토캐스틱(Stochastic) %K값이 84.3%로 과매수 구간에 진입했으며, 볼린저밴드 상단인 1496.4원에 근접해 있어 단기적으로는 상승 압력이 다소 완화될 수 있습니다. 달러인덱스(DXY)의 단기 5일 모멘텀이 -16.49%로 크게 하락하며 달러 약세 요인으로 작용하는 반면, 한미 2년물 금리차는 0.92%로 높은 수준을 유지하여 환율의 하방 경직성을 지지하고 있습니다. 이러한 복합적인 요인을 고려할 때, 원/달러 환율은 단기 저항선인 1496.4원에 근접한 후 1480원에서 1495원 사이에서 등락하며 조정 또는 횡보할 가능성이 높습니다. 따라서 당분간 관망세를 유지하며, 단기적으로 볼린저밴드 상단인 1496.4원 부근에서는 차익 실현을 위한 매도 전략을, 주요 이동평균선인 1474.61원(MA5) 또는 1473.82원(MA20) 부근까지 하락 시에는 저점 매수 기회를 모색하는 것이 바람직합니다. ① 정량예측모델의 낮은 상승 확률(43%) ② DXY의 강한 하락 모멘텀으로 인한 달러 약세 압력 ③ 기술적 과매수 신호 및 볼린저밴드 상단 근접.\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 7,981.41pt를 기록하며 강한 상승 흐름을 이어가고 있습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 49%로 중립적인 수준으로 평가하고 있으나, 기술적 신호는 '과열(Bullish)' 상태를 명확히 보여주고 있습니다. RSI(14일)는 87.1로 극심한 과매수 구간에 있으며, 모든 이동평균선(MA5 7757.76pt, MA20 6881.63pt, MA60 6048.82pt)이 정배열을 이루며 강력한 추세 상승을 나타내고 있습니다. 또한, 반도체(SOX) 단기 5일 모멘텀이 4.75%, 나스닥 선물 단기 흐름이 2.90%로 양호하여 국내 증시 특히 기술주에 긍정적인 영향을 미치고 있습니다. 현재 지수는 단기 저항선인 7999.67pt에 근접해 있으며, 볼린저밴드 상단인 8115.2pt를 향해 나아가고 있습니다. 강력한 상승 모멘텀에도 불구하고, 단기적인 과열 양상과 저항선 임박은 일정 수준의 조정 또는 숨고르기 가능성을 시사합니다. 따라서 코스피 지수는 7850pt에서 8100pt 사이에서 변동성을 보이며, 현 수준에서의 단기 저항선인 7999.67pt와 볼린저밴드 상단인 8115.2pt 돌파 여부가 중요할 것으로 예상됩니다. 투자 전략으로는 과열된 시장 상황을 감안하여 신규 매수는 관망하고, 단기 고점에서 차익 실현을 위한 매도 전략을 고려하는 것이 좋습니다. 지수의 1차 지지선인 MA5 7757.76pt 부근까지 조정 시에는 재매수 기회를 모색할 수 있습니다. ① RSI(14일) 87.1로 극심한 과매수 ② 정량예측모델의 상승 확률 49%로 중립적 ③ 주요 저항선(7999.67pt, 8115.2pt)에 근접한 과열 양상.\n\n실전 투자 대응\n환율: 1492.24원 환율은 단기 과열로 1496.4원 저항선에서 관망, 1474.61원 지지선 하락 시 매수.\n코스피: 7981.41pt 코스피는 과매수 구간으로 7999.67pt 저항선에서 매도, 7757.76pt 지지선에서 매수.",
     "lastAiUpdate": 1778758634120,
     "score": {
-      "upScore": 47.333310129461374,
+      "upScore": 42.24059326441271,
       "downScore": 63.86310901320587,
       "kospiUpScore": 22.192650861640022,
-      "kospiDownScore": 24.26282477626385
+      "kospiDownScore": 23.455406393325724
     }
   },
   "technicals": {
@@ -2629,15 +2629,7 @@
     "stochastic": {
       "k": 84.3
     },
-    "compoundSignals": [
-      {
-        "type": "DOLLAR_PANIC",
-        "up": 2.5,
-        "down": 0,
-        "block": "risk",
-        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
-      }
-    ]
+    "compoundSignals": []
   },
   "kospiTechnicals": {
     "rsi14": 87.1,
@@ -2678,5 +2670,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 14. AM 11:51:47"
+  "lastUpdate": "2026. 5. 14. AM 11:56:36"
 }
