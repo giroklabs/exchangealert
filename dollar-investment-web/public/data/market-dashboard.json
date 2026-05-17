@@ -67,16 +67,12 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.27",
-      "diff": 0.39,
-      "diffPercent": 0.39,
+      "value": "99.271",
+      "diff": 0,
+      "diffPercent": 0,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-05-04",
-          "value": 118.8264
-        },
         {
           "date": "2026-05-05",
           "value": 118.6207
@@ -111,6 +107,10 @@
         },
         {
           "date": "2026-05-15",
+          "value": 99.27
+        },
+        {
+          "date": "2026-05-17",
           "value": 99.27
         }
       ]
@@ -885,15 +885,11 @@
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
       "value": "101.02",
-      "diff": -0.15,
-      "diffPercent": -0.15,
+      "diff": -4.4,
+      "diffPercent": -4.17,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-05-04",
-          "value": 106.42
-        },
         {
           "date": "2026-05-05",
           "value": 102.27
@@ -928,6 +924,10 @@
         },
         {
           "date": "2026-05-15",
+          "value": 105.42
+        },
+        {
+          "date": "2026-05-17",
           "value": 101.02
         }
       ]
@@ -2666,5 +2666,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 17. PM 10:06:37"
+  "lastUpdate": "2026. 5. 17. PM 10:11:46"
 }
