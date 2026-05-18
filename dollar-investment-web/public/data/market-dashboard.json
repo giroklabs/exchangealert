@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.187",
+      "value": "99.194",
       "diff": -0.08,
       "diffPercent": -0.08,
       "trend": "down",
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,515.99",
-      "diff": 22.81,
-      "diffPercent": 0.3,
+      "value": "7,516.04",
+      "diff": 22.86,
+      "diffPercent": 0.31,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-05-18",
-          "value": 7515.99
+          "value": 7516.04
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,036.25",
-      "diff": -195.5,
-      "diffPercent": -0.67,
+      "value": "29,088.5",
+      "diff": -143.25,
+      "diffPercent": -0.49,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-18",
-          "value": 29036.25
+          "value": 29088.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,384.5",
-      "diff": -47.75,
-      "diffPercent": -0.64,
+      "value": "7,391.75",
+      "diff": -40.5,
+      "diffPercent": -0.54,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-18",
-          "value": 7384.5
+          "value": 7391.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "103.37",
-      "diff": -2.05,
-      "diffPercent": -1.94,
+      "value": "103.08",
+      "diff": -2.34,
+      "diffPercent": -2.22,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-18",
-          "value": 103.37
+          "value": 103.08
         }
       ]
     },
@@ -2134,9 +2134,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "22,092",
-      "diff": 23049,
-      "diffPercent": 2408.46,
+      "value": "22,093",
+      "diff": 23050,
+      "diffPercent": 2408.57,
       "trend": "up",
       "history": [
         {
@@ -2241,7 +2241,7 @@
         },
         {
           "date": "2026-05-18",
-          "value": 22092
+          "value": 22093
         }
       ]
     },
@@ -2472,9 +2472,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,497.90",
-      "change": "-2.10",
-      "changePercent": "-0.14",
+      "value": "1,498.80",
+      "change": "-1.20",
+      "changePercent": "-0.08",
       "trend": "down"
     },
     {
@@ -2483,9 +2483,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "942.70",
-      "change": "-2.03",
-      "changePercent": "-0.21",
+      "value": "943.19",
+      "change": "-1.54",
+      "changePercent": "-0.16",
       "trend": "down"
     },
     {
@@ -2493,9 +2493,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,742.81",
-      "change": "-1.09",
-      "changePercent": "-0.06",
+      "value": "1,743.50",
+      "change": "-0.40",
+      "changePercent": "-0.02",
       "trend": "down"
     },
     {
@@ -2503,9 +2503,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "220.01",
-      "change": "-0.15",
-      "changePercent": "-0.07",
+      "value": "220.10",
+      "change": "-0.06",
+      "changePercent": "-0.03",
       "trend": "down"
     }
   ],
@@ -2637,18 +2637,18 @@
   },
   "kospiTechnicals": {
     "rsi14": 70.3,
-    "ma5": 7695.55,
-    "ma20": 7016.21,
+    "ma5": 7695.56,
+    "ma20": 7016.22,
     "ma60": 6115.15,
     "bb": {
-      "upper": 8196.74,
-      "mid": 7016.21,
+      "upper": 8196.76,
+      "mid": 7016.22,
       "lower": 5835.68,
       "bandwidth": 33.65
     },
     "momentum": {
-      "d1": 0.3,
-      "d5": -3.92,
+      "d1": 0.31,
+      "d5": -3.91,
       "d20": 20.72
     },
     "keyLevels": {
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 18. AM 6:52:25"
+  "lastUpdate": "2026. 5. 18. AM 6:56:45"
 }
