@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.439",
-      "diff": 0.14,
-      "diffPercent": 0.14,
+      "value": "99.43",
+      "diff": 0.13,
+      "diffPercent": 0.13,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 99.44
+          "value": 99.43
         }
       ]
     },
@@ -184,11 +184,11 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.11",
-      "diff": 0.05,
-      "diffPercent": 0.28,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "18.06",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-05-07",
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 18.11
+          "value": 18.06
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,092",
-      "diff": 167.75,
+      "value": "29,092.25",
+      "diff": 168,
       "diffPercent": 0.58,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 29092
+          "value": 29092.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,394.25",
-      "diff": 16.25,
-      "diffPercent": 0.22,
+      "value": "7,395.5",
+      "diff": 17.5,
+      "diffPercent": 0.24,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 7394.25
+          "value": 7395.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "102.87",
-      "diff": -4.9,
-      "diffPercent": -4.55,
+      "value": "102.69",
+      "diff": -5.08,
+      "diffPercent": -4.71,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 102.87
+          "value": 102.69
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,508.40",
-      "change": "-3.40",
-      "changePercent": "-0.22",
+      "value": "1,506.60",
+      "change": "-5.20",
+      "changePercent": "-0.34",
       "trend": "down"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "948.29",
-      "change": "-1.66",
-      "changePercent": "-0.17",
+      "value": "947.28",
+      "change": "-2.67",
+      "changePercent": "-0.28",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,748.08",
-      "change": "-5.15",
-      "changePercent": "-0.29",
+      "value": "1,746.38",
+      "change": "-6.85",
+      "changePercent": "-0.39",
       "trend": "down"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "221.53",
-      "change": "-0.17",
-      "changePercent": "-0.08",
+      "value": "221.31",
+      "change": "-0.39",
+      "changePercent": "-0.18",
       "trend": "down"
     }
   ],
@@ -2582,10 +2582,10 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 51,
-    "downProb": 49,
-    "kospiUpProb": 48,
-    "kospiDownProb": 52,
+    "upProb": 49,
+    "downProb": 51,
+    "kospiUpProb": 49,
+    "kospiDownProb": 51,
     "timeframes": {
       "d1": {
         "upProb": 76,
@@ -2607,10 +2607,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 5월 20일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1507.58원으로 마감했으며, 정량예측모델은 향후 1~5거래일 내 상승 확률을 51%로 제시하며 달러 강세에 무게를 싣고 있습니다. 기술적으로 환율은 단기 이동평균선(MA5=1496.07원, MA20=1478.41원) 위에 견고히 자리 잡고 있으며, MACD와 Stochastic %K(92.4%) 모두 강한 상승 모멘텀을 나타내 단기적으로 과매수 구간에 진입했음에도 불구하고 추가 상승 여력이 있을 수 있음을 시사합니다. 특히 현재 환율이 볼린저밴드 상단(1507.63원)에 근접해 단기 고점 부담이 있지만, \"DOLLAR_PANIC\" 복합 위험 신호 발생과 DXY 상승 압력(신호 기준), VIX 레벨 상승(18.1) 등 전반적인 위험 회피 심리가 달러 강세를 부추길 것으로 보입니다. 핵심 지지선은 1496.07원(MA5)이며, 1500원대 지지 여부가 중요합니다. 상단으로는 1536.82원의 저항선을 향해 나아갈 가능성이 있으며, 1~5거래일 내 1510원~1530원대 도달 가능성을 열어두고 있습니다. 따라서 전반적인 글로벌 위험 선호 약화 및 신흥국 자본 이탈 우려 속에서, 환율은 추가 상승 압력을 받을 것으로 예상되며, 급격한 상승보다는 일시적인 조정 시 매수 기회로 활용하는 관망 후 매수 전략이 유효해 보입니다. ① \"DOLLAR_PANIC\" 복합 위험 신호 발생으로 인한 달러 강세 및 신흥국 자본 이탈 우려 ② 한미 2년물 금리차(0.91%) 등 우호적인 금리 스프레드 유지 ③ 단기 이동평균선 상향 돌파 및 MACD 상승 등 기술적 강세 신호 다수.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,208.95pt로 마감했으며, 정량예측모델은 향후 1~5거래일 내 상승 확률을 48%로 제시하며 하방 압력이 우세하거나 제한적인 상승세를 예상합니다. 코스피는 최근 5거래일 동안 8.1% 하락하는 등 단기적으로 급락세를 보였으며, 현재 지수는 단기 이동평균선(MA5=7494.25pt) 아래에서 거래되고 있어 기술적으로 약세 흐름이 뚜렷합니다. 특히 국내 증시의 핵심 동력인 반도체(SOX) 지수가 단기 5일 모멘텀 -3.51%로 약세를 보이고 나스닥 선물 단기 흐름(-1.38%) 역시 부정적이어서 외국인 수급에 대한 우려가 커지고 있습니다. 또한, \"DOLLAR_PANIC\" 복합 위험 신호 발생으로 인한 글로벌 위험 회피 심화와 신흥국 증시에서의 자본 유출 가능성이 코스피에 직접적인 하방 압력으로 작용할 것으로 판단됩니다. 단기적으로 7119.7pt(MA20)가 중요한 지지선으로 작용할 것이나, 이를 하향 이탈할 경우 추가 하락 가능성이 높습니다. 상단 저항선은 7494.25pt(MA5)로, 반등 시 이 구간을 돌파하기 어려울 것으로 예상됩니다. 1~5거래일 내 7000pt~7100pt 구간을 하향 이탈하여 6900pt대까지 조정받을 가능성도 배제할 수 없습니다. 따라서 당분간은 보수적인 관점에서 관망하거나, 보유 비중을 줄이는 방어적인 매도 전략을 고려해야 할 시점입니다. ① \"DOLLAR_PANIC\" 복합 위험 신호 및 반도체(SOX) 지수 약세로 인한 외국인 자금 유출 우려 ② 단기 5일 모멘텀 -8.1% 등 급격한 하락세로 인한 기술적 약세 ③ 7119.7pt(MA20) 등 주요 지지선 붕괴 시 추가 하락 압력 가중.\n\n실전 투자 대응\n환율: 현재 1507.58원, 달러패닉 등 강세 요인 우세, 1536.82원 저항선 상단 테스트 대비.\n코스피: 현재 7208.95pt, 반도체 약세 및 위험 회피, 7119.7pt 지지선 이탈 시 7000pt 하회 가능성.",
     "lastAiUpdate": 1779265935802,
     "score": {
-      "upScore": 63.09794672273861,
-      "downScore": 60.78161590328155,
+      "upScore": 58.13173833914912,
+      "downScore": 60.78307325546234,
       "kospiUpScore": 22.21620591284483,
-      "kospiDownScore": 23.680835912744598
+      "kospiDownScore": 22.87754493967368
     }
   },
   "technicals": {
@@ -2641,15 +2641,7 @@
     "stochastic": {
       "k": 92.4
     },
-    "compoundSignals": [
-      {
-        "type": "DOLLAR_PANIC",
-        "up": 2.5,
-        "down": 0,
-        "block": "risk",
-        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
-      }
-    ]
+    "compoundSignals": []
   },
   "kospiTechnicals": {
     "rsi14": 60.5,
@@ -2690,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 20. AM 8:36:53"
+  "lastUpdate": "2026. 5. 20. AM 8:41:51"
 }
