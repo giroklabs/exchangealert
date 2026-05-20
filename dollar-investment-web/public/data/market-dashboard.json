@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.356",
+      "value": "99.365",
       "diff": 0.06,
       "diffPercent": 0.06,
       "trend": "up",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,125.75",
-      "diff": 201.5,
-      "diffPercent": 0.7,
+      "value": "29,101",
+      "diff": 176.75,
+      "diffPercent": 0.61,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 29125.75
+          "value": 29101
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,402.25",
-      "diff": 24.25,
-      "diffPercent": 0.33,
+      "value": "7,399.5",
+      "diff": 21.5,
+      "diffPercent": 0.29,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 7402.25
+          "value": 7399.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "101.46",
-      "diff": -6.31,
-      "diffPercent": -5.86,
+      "value": "101.51",
+      "diff": -6.26,
+      "diffPercent": -5.81,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-05-20",
-          "value": 101.46
+          "value": 101.51
         }
       ]
     },
@@ -1414,21 +1414,51 @@
       "description": "한미 2년물 금리차 계산용",
       "cycle": "D",
       "hidden": true,
-      "value": "3.35",
+      "value": "3.163",
+      "diff": 0.01,
+      "diffPercent": 0.32,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-01",
-          "value": 3.2
+          "date": "2026-05-07",
+          "value": 2.997
         },
         {
-          "date": "2026-03-05",
-          "value": 3.3
+          "date": "2026-05-08",
+          "value": 3.008
         },
         {
-          "date": "2026-03-10",
-          "value": 3.35
+          "date": "2026-05-11",
+          "value": 3.022
+        },
+        {
+          "date": "2026-05-12",
+          "value": 3.066
+        },
+        {
+          "date": "2026-05-13",
+          "value": 3.068
+        },
+        {
+          "date": "2026-05-14",
+          "value": 3.08
+        },
+        {
+          "date": "2026-05-15",
+          "value": 3.138
+        },
+        {
+          "date": "2026-05-18",
+          "value": 3.147
+        },
+        {
+          "date": "2026-05-19",
+          "value": 3.153
+        },
+        {
+          "date": "2026-05-20",
+          "value": 3.163
         }
       ]
     },
@@ -2568,8 +2598,8 @@
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 49,
-        "downProb": 51,
+        "upProb": 48,
+        "downProb": 52,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2578,7 +2608,7 @@
     "lastAiUpdate": 1779273144722,
     "score": {
       "upScore": 58.15060172232799,
-      "downScore": 60.731741815714514,
+      "downScore": 61.61358021479549,
       "kospiUpScore": 22.83099133619867,
       "kospiDownScore": 22.87754493967368
     }
@@ -2652,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 20. AM 11:11:54"
+  "lastUpdate": "2026. 5. 20. AM 11:13:25"
 }
