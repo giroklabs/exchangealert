@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.006",
+      "value": "99.011",
       "diff": -0.18,
       "diffPercent": -0.18,
       "trend": "down",
@@ -2584,13 +2584,13 @@
     "kospiDownProb": 38,
     "timeframes": {
       "d1": {
-        "upProb": 73,
-        "downProb": 27,
+        "upProb": 75,
+        "downProb": 25,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 55,
-        "downProb": 45,
+        "upProb": 54,
+        "downProb": 46,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2610,32 +2610,32 @@
     }
   },
   "technicals": {
-    "rsi14": 65.9,
-    "ma5": 1504.97,
-    "ma20": 1483.03,
-    "ma60": 1485.3,
+    "rsi14": 63.1,
+    "ma5": 1502.83,
+    "ma20": 1482.49,
+    "ma60": 1485.12,
     "bb": {
-      "upper": 1519.75,
-      "mid": 1483.03,
-      "lower": 1446.31,
-      "bandwidth": 4.95
+      "upper": 1517.27,
+      "mid": 1482.49,
+      "lower": 1447.71,
+      "bandwidth": 4.69
     },
     "momentum": {
-      "d1": 1.07,
-      "d5": 1.56,
-      "d20": 3.11
+      "d1": 0.36,
+      "d5": 0.84,
+      "d20": 2.38
     },
     "keyLevels": {
       "support": 1411.53,
       "resistance": 1536.82
     },
     "macd": {
-      "macd": 7.89,
-      "signal": 3.24,
-      "hist": 4.65
+      "macd": 7.03,
+      "signal": 3.06,
+      "hist": 3.97
     },
     "stochastic": {
-      "k": 100
+      "k": 86.4
     },
     "compoundSignals": [
       {
@@ -2686,5 +2686,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 25. AM 2:56:50"
+  "lastUpdate": "2026. 5. 25. AM 3:02:01"
 }
