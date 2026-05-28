@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.992",
+      "value": "98.993",
       "diff": -0.22,
       "diffPercent": -0.22,
       "trend": "down",
@@ -530,52 +530,51 @@
       "realtimeSymbol": "580039.KS",
       "historySymbol": "122630.KS",
       "fredId": null,
-      "isRealtime": true,
-      "value": "314,800",
-      "diff": -3397.9,
+      "value": "189,460",
+      "diff": -2045,
       "diffPercent": -1.07,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
         {
           "date": "2026-05-14",
-          "value": 294263.06
+          "value": 177100
         },
         {
           "date": "2026-05-15",
-          "value": 257542.49
+          "value": 155000
         },
         {
           "date": "2026-05-18",
-          "value": 261447.17
+          "value": 157350
         },
         {
           "date": "2026-05-19",
-          "value": 246218.93
+          "value": 148185
         },
         {
           "date": "2026-05-20",
-          "value": 241084.69
+          "value": 145095
         },
         {
           "date": "2026-05-21",
-          "value": 283562.59
+          "value": 170660
         },
         {
           "date": "2026-05-22",
-          "value": 284792.15
+          "value": 171400
         },
         {
           "date": "2026-05-26",
-          "value": 300867.78
+          "value": 181075
         },
         {
           "date": "2026-05-27",
-          "value": 318197.9
+          "value": 191505
         },
         {
           "date": "2026-05-28",
-          "value": 314800
+          "value": 189460
         }
       ]
     },
@@ -703,12 +702,11 @@
       "unit": "pt",
       "block": "global-indices",
       "impact": "down",
-      "source": "Yahoo Finance 실시간",
+      "source": "NASDAQ",
       "description": "반도체 업황 및 코스피 동조화",
       "realtimeSymbol": "^SOX",
       "fredId": null,
-      "isRealtime": true,
-      "value": "12,829.144",
+      "value": "12,829.14",
       "diff": 126.95,
       "diffPercent": 1,
       "trend": "up",
@@ -762,11 +760,10 @@
       "unit": "pt",
       "block": "global-indices",
       "impact": "down",
-      "source": "Yahoo Finance 실시간",
+      "source": "CME",
       "description": "미 기술주 실시간 투자 심리",
       "realtimeSymbol": "NQ=F",
       "fredId": null,
-      "isRealtime": true,
       "value": "30,313",
       "diff": 265.75,
       "diffPercent": 0.88,
@@ -2580,8 +2577,8 @@
     "kospiSentiment": "코스피 상승 우세",
     "upProb": 40,
     "downProb": 60,
-    "kospiUpProb": 75,
-    "kospiDownProb": 25,
+    "kospiUpProb": 74,
+    "kospiDownProb": 26,
     "timeframes": {
       "d1": {
         "upProb": 73,
@@ -2604,8 +2601,8 @@
     "lastAiUpdate": 1779986236843,
     "score": {
       "upScore": 43.87257820789744,
-      "downScore": 67.30368916861849,
-      "kospiUpScore": 25.80813778491215,
+      "downScore": 66.95887221076336,
+      "kospiUpScore": 24.873605197034607,
       "kospiDownScore": 8.788898309344876
     }
   },
@@ -2678,5 +2675,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 28. PM 9:25:33"
+  "lastUpdate": "2026. 5. 28. PM 9:26:55"
 }
