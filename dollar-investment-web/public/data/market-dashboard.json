@@ -470,7 +470,6 @@
       "description": "국내 증시 흐름 및 외인 심리",
       "realtimeSymbol": "^KS11",
       "fredId": null,
-      "isRealtime": true,
       "value": "8,476.15",
       "diff": 290.86,
       "diffPercent": 3.55,
@@ -2576,8 +2575,8 @@
     "kospiDownProb": 47,
     "timeframes": {
       "d1": {
-        "upProb": 60,
-        "downProb": 40,
+        "upProb": 61,
+        "downProb": 39,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
@@ -2596,7 +2595,7 @@
     "lastAiUpdate": 1780066345247,
     "score": {
       "upScore": 36.85901560592329,
-      "downScore": 68.4625948975844,
+      "downScore": 68.03768685247687,
       "kospiUpScore": 24.467852387840782,
       "kospiDownScore": 21.690572857629373
     }
@@ -2670,5 +2669,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 5. 30. AM 4:02:06"
+  "lastUpdate": "2026. 5. 30. AM 4:06:44"
 }
