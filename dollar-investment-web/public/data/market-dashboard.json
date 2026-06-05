@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.429",
+      "value": "99.43",
       "diff": 0.01,
       "diffPercent": 0.01,
       "trend": "up",
@@ -471,16 +471,12 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "8,639.41",
-      "diff": -162.08,
-      "diffPercent": -1.84,
+      "value": "8,294.41",
+      "diff": -345,
+      "diffPercent": -3.99,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-05-20",
-          "value": 7208.95
-        },
         {
           "date": "2026-05-21",
           "value": 7815.59
@@ -516,6 +512,10 @@
         {
           "date": "2026-06-04",
           "value": 8639.41
+        },
+        {
+          "date": "2026-06-05",
+          "value": 8294.41
         }
       ]
     },
@@ -532,46 +532,46 @@
       "fredId": null,
       "isRealtime": true,
       "value": "358,000",
-      "diff": -15177.1,
-      "diffPercent": -4.07,
+      "diff": -49584.03,
+      "diffPercent": -12.17,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
         {
           "date": "2026-05-20",
-          "value": 241196.18
+          "value": 263434.48
         },
         {
           "date": "2026-05-21",
-          "value": 283693.72
+          "value": 309850.29
         },
         {
           "date": "2026-05-22",
-          "value": 284923.85
+          "value": 311193.83
         },
         {
           "date": "2026-05-26",
-          "value": 301006.92
+          "value": 328759.76
         },
         {
           "date": "2026-05-27",
-          "value": 318345.05
+          "value": 347696.47
         },
         {
           "date": "2026-05-28",
-          "value": 314945.58
+          "value": 343983.57
         },
         {
           "date": "2026-05-29",
-          "value": 339780.83
+          "value": 371108.63
         },
         {
           "date": "2026-06-01",
-          "value": 374856.05
+          "value": 409417.79
         },
         {
           "date": "2026-06-02",
-          "value": 373177.1
+          "value": 407584.03
         },
         {
           "date": "2026-06-04",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,225.75",
-      "diff": -51.75,
-      "diffPercent": -0.17,
+      "value": "30,220",
+      "diff": -57.5,
+      "diffPercent": -0.19,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-05",
-          "value": 30225.75
+          "value": 30220
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,567.25",
-      "diff": -8.5,
-      "diffPercent": -0.11,
+      "value": "7,566",
+      "diff": -9.75,
+      "diffPercent": -0.13,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-05",
-          "value": 7567.25
+          "value": 7566
         }
       ]
     },
@@ -1897,9 +1897,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-8,064",
-      "diff": -6870,
-      "diffPercent": -575.38,
+      "value": "-8,851",
+      "diff": -7657,
+      "diffPercent": -641.29,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2005,7 +2005,7 @@
         },
         {
           "date": "2026-06-05",
-          "value": -8064
+          "value": -8851
         }
       ]
     },
@@ -2018,9 +2018,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "695",
-      "diff": -1261,
-      "diffPercent": -64.47,
+      "value": "731",
+      "diff": -1225,
+      "diffPercent": -62.63,
       "trend": "down",
       "history": [
         {
@@ -2125,7 +2125,7 @@
         },
         {
           "date": "2026-06-05",
-          "value": 695
+          "value": 731
         }
       ]
     },
@@ -2138,9 +2138,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "6,798",
-      "diff": 7755,
-      "diffPercent": 810.34,
+      "value": "7,420",
+      "diff": 8377,
+      "diffPercent": 875.34,
       "trend": "up",
       "history": [
         {
@@ -2245,7 +2245,7 @@
         },
         {
           "date": "2026-06-05",
-          "value": 6798
+          "value": 7420
         }
       ]
     },
@@ -2476,9 +2476,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,534.70",
-      "change": "+3.20",
-      "changePercent": "+0.21",
+      "value": "1,537.50",
+      "change": "+6.00",
+      "changePercent": "+0.39",
       "trend": "up"
     },
     {
@@ -2487,9 +2487,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "959.22",
-      "change": "+1.82",
-      "changePercent": "+0.19",
+      "value": "960.94",
+      "change": "+3.54",
+      "changePercent": "+0.37",
       "trend": "up"
     },
     {
@@ -2497,9 +2497,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,782.09",
-      "change": "+0.65",
-      "changePercent": "+0.04",
+      "value": "1,785.27",
+      "change": "+3.83",
+      "changePercent": "+0.21",
       "trend": "up"
     },
     {
@@ -2507,9 +2507,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "226.44",
-      "change": "+0.39",
-      "changePercent": "+0.17",
+      "value": "226.84",
+      "change": "+0.79",
+      "changePercent": "+0.35",
       "trend": "up"
     }
   ],
@@ -2520,8 +2520,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 328750,
-      "changePercent": "-6.47",
+      "price": 326500,
+      "changePercent": "-7.11",
       "trend": "down"
     },
     {
@@ -2530,8 +2530,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 2110000,
-      "changePercent": "-8.18",
+      "price": 2083000,
+      "changePercent": "-9.36",
       "trend": "down"
     },
     {
@@ -2540,8 +2540,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 665000,
-      "changePercent": "-5.00",
+      "price": 655000,
+      "changePercent": "-6.43",
       "trend": "down"
     },
     {
@@ -2550,8 +2550,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 158500,
-      "changePercent": "-3.53",
+      "price": 156900,
+      "changePercent": "-4.50",
       "trend": "down"
     },
     {
@@ -2560,8 +2560,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 255000,
-      "changePercent": "-4.67",
+      "price": 251500,
+      "changePercent": "-5.98",
       "trend": "down"
     },
     {
@@ -2570,8 +2570,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 40700,
-      "changePercent": "-3.10",
+      "price": 40400,
+      "changePercent": "-3.81",
       "trend": "down"
     }
   ],
@@ -2640,32 +2640,32 @@
     "compoundSignals": []
   },
   "kospiTechnicals": {
-    "rsi14": 70.4,
-    "ma5": 8496,
-    "ma20": 7814.05,
-    "ma60": 6486.24,
+    "rsi14": 57.2,
+    "ma5": 8509.14,
+    "ma20": 7881.92,
+    "ma60": 6531.4,
     "bb": {
-      "upper": 8793.54,
-      "mid": 7814.05,
-      "lower": 6834.56,
-      "bandwidth": 25.07
+      "upper": 8794.76,
+      "mid": 7881.92,
+      "lower": 6969.08,
+      "bandwidth": 23.16
     },
     "momentum": {
-      "d1": 0.15,
-      "d5": 9.37,
-      "d20": 33.38
+      "d1": -5.76,
+      "d5": 0.8,
+      "d20": 19.57
     },
     "keyLevels": {
       "support": 5042.99,
       "resistance": 8933.62
     },
     "macd": {
-      "macd": 536.77,
-      "signal": 469.71,
-      "hist": 67.06
+      "macd": 510.33,
+      "signal": 477.83,
+      "hist": 32.5
     },
     "stochastic": {
-      "k": 93
+      "k": 66
     }
   },
   "kospiSentiment": "코스피 하락 우세",
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 5. AM 12:16:57"
+  "lastUpdate": "2026. 6. 5. AM 12:22:04"
 }
