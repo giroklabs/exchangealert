@@ -2507,6 +2507,26 @@
   ],
   "stockPrices": [
     {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 329000,
+      "changePercent": "-6.40",
+      "trend": "down"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 2070000,
+      "changePercent": "-9.92",
+      "trend": "down"
+    },
+    {
       "id": "hyundai",
       "symbol": "005380",
       "market": "domestic",
@@ -2658,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 6. AM 12:20:08"
+  "lastUpdate": "2026. 6. 6. AM 12:21:59"
 }
