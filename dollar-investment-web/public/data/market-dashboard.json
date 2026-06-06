@@ -1901,10 +1901,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-27,814",
-      "diff": -26620,
-      "diffPercent": -2229.48,
-      "trend": "down",
+      "value": "-1,194",
+      "diff": 174,
+      "diffPercent": 12.72,
+      "trend": "up",
       "realizedImpact": "up",
       "history": [
         {
@@ -2006,10 +2006,6 @@
         {
           "date": "2026-04-03",
           "value": -1194
-        },
-        {
-          "date": "2026-06-06",
-          "value": -27814
         }
       ]
     },
@@ -2022,10 +2018,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "-13,808",
-      "diff": -15764,
-      "diffPercent": -805.93,
-      "trend": "down",
+      "value": "1,956",
+      "diff": 16473,
+      "diffPercent": 113.47,
+      "trend": "up",
       "history": [
         {
           "date": "2026-02-27",
@@ -2126,10 +2122,6 @@
         {
           "date": "2026-04-03",
           "value": 1956
-        },
-        {
-          "date": "2026-06-06",
-          "value": -13808
         }
       ]
     },
@@ -2142,10 +2134,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "42,239",
-      "diff": 43196,
-      "diffPercent": 4513.69,
-      "trend": "up",
+      "value": "-957",
+      "diff": -13054,
+      "diffPercent": -107.91,
+      "trend": "down",
       "history": [
         {
           "date": "2026-02-27",
@@ -2246,10 +2238,6 @@
         {
           "date": "2026-04-03",
           "value": -957
-        },
-        {
-          "date": "2026-06-06",
-          "value": 42239
         }
       ]
     },
@@ -2584,8 +2572,8 @@
     "kospiSentiment": "코스피 하락 우세",
     "upProb": 56,
     "downProb": 44,
-    "kospiUpProb": 31,
-    "kospiDownProb": 69,
+    "kospiUpProb": 36,
+    "kospiDownProb": 64,
     "timeframes": {
       "d1": {
         "upProb": 76,
@@ -2609,8 +2597,8 @@
     "score": {
       "upScore": 72.97862415991807,
       "downScore": 57.45396145865053,
-      "kospiUpScore": 12.6755974383207,
-      "kospiDownScore": 27.86015473529082
+      "kospiUpScore": 15.425002829063057,
+      "kospiDownScore": 27.35271811566154
     }
   },
   "technicals": {
@@ -2690,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 5. PM 11:56:56"
+  "lastUpdate": "2026. 6. 6. AM 12:02:13"
 }
