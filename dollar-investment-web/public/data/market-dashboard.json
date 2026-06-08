@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,353.75",
-      "diff": 327.25,
-      "diffPercent": 1.13,
+      "value": "29,362.5",
+      "diff": 336,
+      "diffPercent": 1.16,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 29353.75
+          "value": 29362.5
         }
       ]
     },
@@ -826,11 +826,11 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,400.25",
-      "diff": -0.25,
-      "diffPercent": 0,
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "7,401.75",
+      "diff": 1.25,
+      "diffPercent": 0.02,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-05-26",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 7400.25
+          "value": 7401.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "91.41",
-      "diff": 0.87,
-      "diffPercent": 0.96,
+      "value": "91.29",
+      "diff": 0.75,
+      "diffPercent": 0.83,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 91.41
+          "value": 91.29
         }
       ]
     },
@@ -2578,8 +2578,8 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 52,
-    "downProb": 48,
+    "upProb": 49,
+    "downProb": 51,
     "kospiUpProb": 55,
     "kospiDownProb": 45,
     "timeframes": {
@@ -2601,10 +2601,10 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1780958537425,
+    "lastAiUpdate": 1780958830336,
     "score": {
-      "upScore": 62.09143894000211,
-      "downScore": 56.960496886941804,
+      "upScore": 54.73648685575262,
+      "downScore": 57.563265509566676,
       "kospiUpScore": 25.138895729702767,
       "kospiDownScore": 20.8818557103532
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 8. PM 10:42:17"
+  "lastUpdate": "2026. 6. 8. PM 10:47:10"
 }
