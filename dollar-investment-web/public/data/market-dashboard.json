@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.728",
-      "diff": -0.32,
-      "diffPercent": -0.32,
+      "value": "99.719",
+      "diff": -0.33,
+      "diffPercent": -0.33,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 99.73
+          "value": 99.72
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.06",
-      "diff": -0.86,
-      "diffPercent": -4.55,
+      "value": "18.09",
+      "diff": -0.83,
+      "diffPercent": -4.39,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 18.06
+          "value": 18.09
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,681.5",
-      "diff": 226.75,
-      "diffPercent": 0.77,
+      "value": "29,691",
+      "diff": 236.25,
+      "diffPercent": 0.8,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29681.5
+          "value": 29691
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,445.75",
-      "diff": 29.75,
-      "diffPercent": 0.4,
+      "value": "7,447",
+      "diff": 31,
+      "diffPercent": 0.42,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7445.75
+          "value": 7447
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.58",
-      "diff": -1.72,
-      "diffPercent": -1.88,
+      "value": "89.46",
+      "diff": -1.84,
+      "diffPercent": -2.02,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 89.58
+          "value": 89.46
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,524.70",
-      "change": "-4.30",
-      "changePercent": "-0.28",
+      "value": "1,525.20",
+      "change": "-3.80",
+      "changePercent": "-0.25",
       "trend": "down"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "951.99",
-      "change": "-3.07",
-      "changePercent": "-0.32",
+      "value": "952.24",
+      "change": "-2.82",
+      "changePercent": "-0.30",
       "trend": "down"
     },
     {
@@ -2501,23 +2501,84 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,764.31",
-      "change": "-0.23",
-      "changePercent": "-0.01",
-      "trend": "down"
+      "value": "1,764.58",
+      "change": "+0.04",
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "cny-krw",
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "225.16",
-      "change": "-0.24",
-      "changePercent": "-0.11",
+      "value": "225.23",
+      "change": "-0.17",
+      "changePercent": "-0.08",
       "trend": "down"
     }
   ],
-  "stockPrices": [],
+  "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 322000,
+      "changePercent": "+8.97",
+      "trend": "up"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 2215000,
+      "changePercent": "+15.91",
+      "trend": "up"
+    },
+    {
+      "id": "hyundai",
+      "symbol": "005380",
+      "market": "domestic",
+      "name": "현대차",
+      "enName": "Hyundai Motor",
+      "price": 639000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 164300,
+      "changePercent": "+8.52",
+      "trend": "up"
+    },
+    {
+      "id": "naver",
+      "symbol": "035420",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 257000,
+      "changePercent": "-7.89",
+      "trend": "down"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 39500,
+      "changePercent": "+2.33",
+      "trend": "up"
+    }
+  ],
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
@@ -2544,11 +2605,11 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1781005244106,
+    "lastAiUpdate": 1781005324421,
     "score": {
-      "upScore": 42.751127129779434,
-      "downScore": 64.48902935133339,
-      "kospiUpScore": 25.724079283364524,
+      "upScore": 42.74865782579597,
+      "downScore": 64.48492980946081,
+      "kospiUpScore": 25.72551812128065,
       "kospiDownScore": 20.39474070893056
     }
   },
@@ -2621,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 11:40:44"
+  "lastUpdate": "2026. 6. 9. AM 11:42:04"
 }
