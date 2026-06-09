@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.701",
-      "diff": -0.35,
-      "diffPercent": -0.35,
+      "value": "99.706",
+      "diff": -0.34,
+      "diffPercent": -0.34,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 99.7
+          "value": 99.71
         }
       ]
     },
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.542",
+      "value": "4.538",
       "diff": -0.01,
       "diffPercent": -0.22,
       "trend": "down",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.04",
-      "diff": -0.88,
-      "diffPercent": -4.65,
+      "value": "17.92",
+      "diff": -1,
+      "diffPercent": -5.29,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 18.04
+          "value": 17.92
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,728",
-      "diff": 273.25,
-      "diffPercent": 0.93,
+      "value": "29,698.75",
+      "diff": 244,
+      "diffPercent": 0.83,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29728
+          "value": 29698.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,455.5",
-      "diff": 39.5,
-      "diffPercent": 0.53,
+      "value": "7,449.5",
+      "diff": 33.5,
+      "diffPercent": 0.45,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7455.5
+          "value": 7449.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.14",
-      "diff": -2.16,
-      "diffPercent": -2.37,
+      "value": "89.34",
+      "diff": -1.96,
+      "diffPercent": -2.15,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 89.14
+          "value": 89.34
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,527.20",
-      "change": "-1.80",
-      "changePercent": "-0.12",
+      "value": "1,527.60",
+      "change": "-1.40",
+      "changePercent": "-0.09",
       "trend": "down"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "953.43",
-      "change": "-1.63",
-      "changePercent": "-0.17",
+      "value": "953.65",
+      "change": "-1.41",
+      "changePercent": "-0.15",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,767.58",
-      "change": "+3.04",
-      "changePercent": "+0.17",
+      "value": "1,767.97",
+      "change": "+3.43",
+      "changePercent": "+0.19",
       "trend": "up"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "225.50",
-      "change": "+0.10",
-      "changePercent": "+0.04",
+      "value": "225.57",
+      "change": "+0.17",
+      "changePercent": "+0.08",
       "trend": "up"
     }
   ],
@@ -2605,11 +2605,11 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1781009232740,
+    "lastAiUpdate": 1781009535425,
     "score": {
-      "upScore": 39.06817064102073,
-      "downScore": 65.79641429845407,
-      "kospiUpScore": 26.904795772276223,
+      "upScore": 39.095817145701226,
+      "downScore": 65.84515892833122,
+      "kospiUpScore": 26.915052374698032,
       "kospiDownScore": 15.40054687269613
     }
   },
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. PM 12:47:12"
+  "lastUpdate": "2026. 6. 9. PM 12:52:15"
 }
