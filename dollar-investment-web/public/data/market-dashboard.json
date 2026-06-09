@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.931",
-      "diff": -0.12,
-      "diffPercent": -0.12,
+      "value": "99.943",
+      "diff": -0.11,
+      "diffPercent": -0.11,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 99.93
+          "value": 99.94
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.18",
-      "diff": -0.74,
-      "diffPercent": -3.91,
+      "value": "18.28",
+      "diff": -0.64,
+      "diffPercent": -3.38,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 18.18
+          "value": 18.28
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,613.25",
-      "diff": 158.5,
-      "diffPercent": 0.54,
+      "value": "29,611.5",
+      "diff": 156.75,
+      "diffPercent": 0.53,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29613.25
+          "value": 29611.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,432",
-      "diff": 16,
-      "diffPercent": 0.22,
+      "value": "7,434",
+      "diff": 18,
+      "diffPercent": 0.24,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7432
+          "value": 7434
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.86",
-      "diff": -1.44,
-      "diffPercent": -1.58,
+      "value": "89.74",
+      "diff": -1.56,
+      "diffPercent": -1.71,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 89.86
+          "value": 89.74
         }
       ]
     },
@@ -1354,16 +1354,12 @@
       "source": "한국은행",
       "description": "한국 국고채 금리, 한미 금리차용",
       "cycle": "D",
-      "value": "4.348",
-      "diff": 0.09,
-      "diffPercent": 2.12,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "4.273",
+      "diff": -0.08,
+      "diffPercent": -1.84,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-05-22",
-          "value": 4.128
-        },
         {
           "date": "2026-05-26",
           "value": 4.073
@@ -1399,6 +1395,10 @@
         {
           "date": "2026-06-08",
           "value": 4.348
+        },
+        {
+          "date": "2026-06-09",
+          "value": 4.273
         }
       ]
     },
@@ -1414,16 +1414,12 @@
       "description": "한미 2년물 금리차 계산용",
       "cycle": "D",
       "hidden": true,
-      "value": "3.263",
-      "diff": 0.02,
-      "diffPercent": 0.62,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "3.249",
+      "diff": -0.01,
+      "diffPercent": -0.31,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-05-22",
-          "value": 3.161
-        },
         {
           "date": "2026-05-26",
           "value": 3.144
@@ -1459,6 +1455,10 @@
         {
           "date": "2026-06-08",
           "value": 3.263
+        },
+        {
+          "date": "2026-06-09",
+          "value": 3.249
         }
       ]
     },
@@ -2261,7 +2261,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.20",
+      "value": "0.28",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,519.10",
-      "change": "-9.90",
-      "changePercent": "-0.65",
+      "value": "1,518.10",
+      "change": "-10.90",
+      "changePercent": "-0.71",
       "trend": "down"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "947.25",
-      "change": "-7.81",
-      "changePercent": "-0.82",
+      "value": "947.66",
+      "change": "-7.40",
+      "changePercent": "-0.77",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,753.12",
-      "change": "-11.42",
-      "changePercent": "-0.65",
+      "value": "1,752.04",
+      "change": "-12.50",
+      "changePercent": "-0.71",
       "trend": "down"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "224.09",
-      "change": "-1.31",
-      "changePercent": "-0.58",
+      "value": "224.17",
+      "change": "-1.23",
+      "changePercent": "-0.55",
       "trend": "down"
     }
   ],
@@ -2582,34 +2582,34 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 39,
-    "downProb": 61,
+    "upProb": 40,
+    "downProb": 60,
     "kospiUpProb": 56,
     "kospiDownProb": 44,
     "timeframes": {
       "d1": {
-        "upProb": 68,
-        "downProb": 32,
+        "upProb": 69,
+        "downProb": 31,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 43,
-        "downProb": 57,
+        "upProb": 44,
+        "downProb": 56,
         "basis": "ECOS+경상·외환중심"
       }
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1780990624409,
+    "lastAiUpdate": 1780990922883,
     "score": {
-      "upScore": 41.18490252341587,
-      "downScore": 65.84093896375353,
-      "kospiUpScore": 25.734433120631188,
+      "upScore": 42.78804621716418,
+      "downScore": 64.55556709877659,
+      "kospiUpScore": 25.74432691787134,
       "kospiDownScore": 20.39474070893056
     }
   },
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 7:37:04"
+  "lastUpdate": "2026. 6. 9. AM 7:42:02"
 }
