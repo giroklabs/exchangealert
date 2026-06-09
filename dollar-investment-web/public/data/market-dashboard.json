@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.761",
-      "diff": -0.29,
-      "diffPercent": -0.29,
+      "value": "99.765",
+      "diff": -0.28,
+      "diffPercent": -0.28,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 99.76
+          "value": 99.77
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.12",
-      "diff": -0.8,
-      "diffPercent": -4.23,
+      "value": "18.09",
+      "diff": -0.83,
+      "diffPercent": -4.39,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 18.12
+          "value": 18.09
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,654.75",
-      "diff": 200,
-      "diffPercent": 0.68,
+      "value": "29,665.25",
+      "diff": 210.5,
+      "diffPercent": 0.71,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29654.75
+          "value": 29665.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,447",
-      "diff": 31,
-      "diffPercent": 0.42,
+      "value": "7,449",
+      "diff": 33,
+      "diffPercent": 0.44,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7447
+          "value": 7449
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.27",
-      "diff": -2.03,
-      "diffPercent": -2.22,
+      "value": "89.1",
+      "diff": -2.2,
+      "diffPercent": -2.41,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 89.27
+          "value": 89.1
         }
       ]
     },
@@ -1233,54 +1233,24 @@
       "unit": "억원",
       "block": "assets",
       "impact": "down",
-      "source": "금융투자협회 실시간",
+      "source": "금융투자협회/Yahoo",
       "description": "증시 대기 자금, 투자 심리 지표",
       "transform": "wonToEok",
-      "value": "1,363,847",
-      "diff": 21503,
-      "diffPercent": 1.6,
+      "value": "555786",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-05-22",
-          "value": 1212452
+          "date": "202501",
+          "value": 555786
         },
         {
-          "date": "2026-05-26",
-          "value": 1245769
+          "date": "202502",
+          "value": 560529
         },
         {
-          "date": "2026-05-27",
-          "value": 1285750
-        },
-        {
-          "date": "2026-05-28",
-          "value": 1311318
-        },
-        {
-          "date": "2026-05-29",
-          "value": 1315856
-        },
-        {
-          "date": "2026-06-01",
-          "value": 1325992
-        },
-        {
-          "date": "2026-06-02",
-          "value": 1368111
-        },
-        {
-          "date": "2026-06-04",
-          "value": 1396948
-        },
-        {
-          "date": "2026-06-05",
-          "value": 1342344
-        },
-        {
-          "date": "2026-06-08",
-          "value": 1363847
+          "date": "202503",
+          "value": 584743
         }
       ]
     },
@@ -2491,8 +2461,8 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "951.61",
-      "change": "-3.45",
+      "value": "951.64",
+      "change": "-3.42",
       "changePercent": "-0.36",
       "trend": "down"
     },
@@ -2501,9 +2471,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,763.04",
-      "change": "-1.50",
-      "changePercent": "-0.09",
+      "value": "1,762.81",
+      "change": "-1.73",
+      "changePercent": "-0.10",
       "trend": "down"
     },
     {
@@ -2511,9 +2481,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "225.07",
-      "change": "-0.33",
-      "changePercent": "-0.15",
+      "value": "225.08",
+      "change": "-0.32",
+      "changePercent": "-0.14",
       "trend": "down"
     }
   ],
@@ -2593,8 +2563,8 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 46,
+        "downProb": 54,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2605,11 +2575,11 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1781002620447,
+    "lastAiUpdate": 1781002954424,
     "score": {
-      "upScore": 42.74580190047667,
-      "downScore": 64.47897536004824,
-      "kospiUpScore": 25.72849089784118,
+      "upScore": 42.73469038151933,
+      "downScore": 63.824852079822435,
+      "kospiUpScore": 25.72551812128065,
       "kospiDownScore": 20.39474070893056
     }
   },
@@ -2682,5 +2652,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 10:57:00"
+  "lastUpdate": "2026. 6. 9. AM 11:02:34"
 }
