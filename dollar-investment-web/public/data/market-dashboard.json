@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.712",
-      "diff": -0.34,
-      "diffPercent": -0.34,
+      "value": "99.719",
+      "diff": -0.33,
+      "diffPercent": -0.33,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 99.71
+          "value": 99.72
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.12",
-      "diff": -0.8,
-      "diffPercent": -4.23,
+      "value": "18.11",
+      "diff": -0.81,
+      "diffPercent": -4.28,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 18.12
+          "value": 18.11
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,691.75",
-      "diff": 237,
-      "diffPercent": 0.8,
+      "value": "29,673.25",
+      "diff": 218.5,
+      "diffPercent": 0.74,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29691.75
+          "value": 29673.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,446.25",
-      "diff": 30.25,
-      "diffPercent": 0.41,
+      "value": "7,443.75",
+      "diff": 27.75,
+      "diffPercent": 0.37,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7446.25
+          "value": 7443.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.44",
-      "diff": -1.86,
-      "diffPercent": -2.04,
+      "value": "89.46",
+      "diff": -1.84,
+      "diffPercent": -2.02,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 89.44
+          "value": 89.46
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,527.20",
-      "change": "-1.80",
-      "changePercent": "-0.12",
+      "value": "1,526.90",
+      "change": "-2.10",
+      "changePercent": "-0.14",
       "trend": "down"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "953.46",
-      "change": "-1.60",
-      "changePercent": "-0.17",
+      "value": "953.27",
+      "change": "-1.79",
+      "changePercent": "-0.19",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,767.20",
-      "change": "+2.66",
-      "changePercent": "+0.15",
+      "value": "1,766.70",
+      "change": "+2.16",
+      "changePercent": "+0.12",
       "trend": "up"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "225.48",
-      "change": "+0.08",
-      "changePercent": "+0.04",
+      "value": "225.44",
+      "change": "+0.04",
+      "changePercent": "+0.02",
       "trend": "up"
     }
   ],
@@ -2605,11 +2605,11 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1781007723433,
+    "lastAiUpdate": 1781008025943,
     "score": {
-      "upScore": 40.588217816741526,
-      "downScore": 64.49208467158597,
-      "kospiUpScore": 25.72849089784118,
+      "upScore": 40.587377264395805,
+      "downScore": 64.48847995430799,
+      "kospiUpScore": 25.727500095483055,
       "kospiDownScore": 20.39474070893056
     }
   },
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. PM 12:22:03"
+  "lastUpdate": "2026. 6. 9. PM 12:27:05"
 }
