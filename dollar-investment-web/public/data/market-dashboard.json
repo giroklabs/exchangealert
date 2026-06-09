@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.894",
-      "diff": -0.16,
-      "diffPercent": -0.16,
+      "value": "99.896",
+      "diff": -0.15,
+      "diffPercent": -0.15,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 99.89
+          "value": 99.9
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,615.75",
-      "diff": 161,
+      "value": "29,616.75",
+      "diff": 162,
       "diffPercent": 0.55,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29615.75
+          "value": 29616.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,433",
-      "diff": 17,
-      "diffPercent": 0.23,
+      "value": "7,432.25",
+      "diff": 16.25,
+      "diffPercent": 0.22,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7433
+          "value": 7432.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.95",
-      "diff": -1.35,
-      "diffPercent": -1.48,
+      "value": "90",
+      "diff": -1.3,
+      "diffPercent": -1.42,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 89.95
+          "value": 90
         }
       ]
     },
@@ -2480,8 +2480,8 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,516.10",
-      "change": "-12.90",
+      "value": "1,516.20",
+      "change": "-12.80",
       "changePercent": "-0.84",
       "trend": "down"
     },
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "946.53",
-      "change": "-8.53",
-      "changePercent": "-0.89",
+      "value": "946.90",
+      "change": "-8.16",
+      "changePercent": "-0.85",
       "trend": "down"
     },
     {
@@ -2501,8 +2501,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,750.26",
-      "change": "-14.28",
+      "value": "1,750.30",
+      "change": "-14.24",
       "changePercent": "-0.81",
       "trend": "down"
     },
@@ -2511,8 +2511,8 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "223.88",
-      "change": "-1.52",
+      "value": "223.90",
+      "change": "-1.50",
       "changePercent": "-0.67",
       "trend": "down"
     }
@@ -2605,10 +2605,10 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1780988543079,
+    "lastAiUpdate": 1780988818034,
     "score": {
-      "upScore": 41.29030055866442,
-      "downScore": 66.07322615094007,
+      "upScore": 41.292069278657124,
+      "downScore": 66.07640600071753,
       "kospiUpScore": 25.807528619007964,
       "kospiDownScore": 20.39474070893056
     }
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 7:02:23"
+  "lastUpdate": "2026. 6. 9. AM 7:06:58"
 }
