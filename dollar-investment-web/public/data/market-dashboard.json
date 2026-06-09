@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.978",
-      "diff": -0.07,
-      "diffPercent": -0.07,
+      "value": "99.985",
+      "diff": -0.06,
+      "diffPercent": -0.06,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,816.02",
-      "diff": 331.61,
-      "diffPercent": 4.43,
+      "value": "7,838.01",
+      "diff": 353.6,
+      "diffPercent": 4.72,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7816.02
+          "value": 7838.01
         }
       ]
     },
@@ -539,35 +539,35 @@
       "history": [
         {
           "date": "2026-05-26",
-          "value": 298503.49
+          "value": 296187.3
         },
         {
           "date": "2026-05-27",
-          "value": 315697.43
+          "value": 313247.82
         },
         {
           "date": "2026-05-28",
-          "value": 312326.23
+          "value": 309902.78
         },
         {
           "date": "2026-05-29",
-          "value": 336954.93
+          "value": 334340.38
         },
         {
           "date": "2026-06-01",
-          "value": 371738.44
+          "value": 368853.99
         },
         {
           "date": "2026-06-02",
-          "value": 370073.45
+          "value": 367201.92
         },
         {
           "date": "2026-06-04",
-          "value": 355022.57
+          "value": 352267.83
         },
         {
           "date": "2026-06-05",
-          "value": 312936.18
+          "value": 310508
         },
         {
           "date": "2026-06-08",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,545.25",
-      "diff": 90.5,
-      "diffPercent": 0.31,
+      "value": "29,562",
+      "diff": 107.25,
+      "diffPercent": 0.36,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29545.25
+          "value": 29562
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,425.75",
-      "diff": 9.75,
-      "diffPercent": 0.13,
+      "value": "7,428",
+      "diff": 12,
+      "diffPercent": 0.16,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7425.75
+          "value": 7428
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "90.33",
-      "diff": -0.97,
-      "diffPercent": -1.06,
+      "value": "90.26",
+      "diff": -1.04,
+      "diffPercent": -1.14,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 90.33
+          "value": 90.26
         }
       ]
     },
@@ -1414,21 +1414,51 @@
       "description": "한미 2년물 금리차 계산용",
       "cycle": "D",
       "hidden": true,
-      "value": "3.35",
+      "value": "3.263",
+      "diff": 0.02,
+      "diffPercent": 0.62,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-01",
-          "value": 3.2
+          "date": "2026-05-22",
+          "value": 3.161
         },
         {
-          "date": "2026-03-05",
-          "value": 3.3
+          "date": "2026-05-26",
+          "value": 3.144
         },
         {
-          "date": "2026-03-10",
-          "value": 3.35
+          "date": "2026-05-27",
+          "value": 3.157
+        },
+        {
+          "date": "2026-05-28",
+          "value": 3.177
+        },
+        {
+          "date": "2026-05-29",
+          "value": 3.174
+        },
+        {
+          "date": "2026-06-01",
+          "value": 3.197
+        },
+        {
+          "date": "2026-06-02",
+          "value": 3.193
+        },
+        {
+          "date": "2026-06-04",
+          "value": 3.23
+        },
+        {
+          "date": "2026-06-05",
+          "value": 3.239
+        },
+        {
+          "date": "2026-06-08",
+          "value": 3.263
         }
       ]
     },
@@ -1867,9 +1897,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-9,280",
-      "diff": -8086,
-      "diffPercent": -677.22,
+      "value": "-9,279",
+      "diff": -8085,
+      "diffPercent": -677.14,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -1975,7 +2005,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": -9280
+          "value": -9279
         }
       ]
     },
@@ -1988,9 +2018,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "4,818",
-      "diff": 2862,
-      "diffPercent": 146.32,
+      "value": "5,119",
+      "diff": 3163,
+      "diffPercent": 161.71,
       "trend": "up",
       "history": [
         {
@@ -2095,7 +2125,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 4818
+          "value": 5119
         }
       ]
     },
@@ -2108,9 +2138,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "3,895",
-      "diff": 4852,
-      "diffPercent": 507,
+      "value": "3,599",
+      "diff": 4556,
+      "diffPercent": 476.07,
       "trend": "up",
       "history": [
         {
@@ -2215,7 +2245,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 3895
+          "value": 3599
         }
       ]
     },
@@ -2446,8 +2476,8 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,519.30",
-      "change": "-9.70",
+      "value": "1,519.40",
+      "change": "-9.60",
       "changePercent": "-0.63",
       "trend": "down"
     },
@@ -2457,9 +2487,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "948.17",
-      "change": "-6.89",
-      "changePercent": "-0.72",
+      "value": "948.32",
+      "change": "-6.74",
+      "changePercent": "-0.71",
       "trend": "down"
     },
     {
@@ -2467,9 +2497,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,752.66",
-      "change": "-11.88",
-      "changePercent": "-0.67",
+      "value": "1,752.93",
+      "change": "-11.61",
+      "changePercent": "-0.66",
       "trend": "down"
     },
     {
@@ -2477,9 +2507,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "224.08",
-      "change": "-1.32",
-      "changePercent": "-0.59",
+      "value": "224.09",
+      "change": "-1.31",
+      "changePercent": "-0.58",
       "trend": "down"
     }
   ],
@@ -2490,8 +2520,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 311000,
-      "changePercent": "+5.25",
+      "price": 311500,
+      "changePercent": "+5.41",
       "trend": "up"
     },
     {
@@ -2510,8 +2540,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 639500,
-      "changePercent": "+0.08",
+      "price": 640000,
+      "changePercent": "+0.16",
       "trend": "up"
     },
     {
@@ -2520,8 +2550,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 164800,
-      "changePercent": "+8.85",
+      "price": 164500,
+      "changePercent": "+8.65",
       "trend": "up"
     },
     {
@@ -2530,8 +2560,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 252000,
-      "changePercent": "-9.68",
+      "price": 252500,
+      "changePercent": "-9.50",
       "trend": "down"
     },
     {
@@ -2540,8 +2570,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 39400,
-      "changePercent": "+2.07",
+      "price": 39500,
+      "changePercent": "+2.33",
       "trend": "up"
     }
   ],
@@ -2559,8 +2589,8 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 50,
-        "downProb": 50,
+        "upProb": 49,
+        "downProb": 51,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2571,10 +2601,10 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1780976527476,
+    "lastAiUpdate": 1780976820937,
     "score": {
-      "upScore": 47.34110298589865,
-      "downScore": 64.82327169088362,
+      "upScore": 47.33875734721434,
+      "downScore": 65.45632533255245,
       "kospiUpScore": 25.807528619007964,
       "kospiDownScore": 21.556307692399955
     }
@@ -2610,32 +2640,32 @@
     "compoundSignals": []
   },
   "kospiTechnicals": {
-    "rsi14": 54.1,
-    "ma5": 8180.38,
-    "ma20": 7953.59,
-    "ma60": 6654.93,
+    "rsi14": 54.4,
+    "ma5": 8184.54,
+    "ma20": 7954.63,
+    "ma60": 6655.27,
     "bb": {
-      "upper": 8865.61,
-      "mid": 7953.59,
-      "lower": 7041.57,
-      "bandwidth": 22.93
+      "upper": 8866.07,
+      "mid": 7954.63,
+      "lower": 7043.19,
+      "bandwidth": 22.92
     },
     "momentum": {
-      "d1": 4.43,
-      "d5": -11.06,
-      "d20": 4.24
+      "d1": 4.71,
+      "d5": -10.83,
+      "d20": 4.52
     },
     "keyLevels": {
       "support": 5042.99,
       "resistance": 8933.62
     },
     "macd": {
-      "macd": 349.24,
-      "signal": 444.71,
-      "hist": -95.47
+      "macd": 350.9,
+      "signal": 445.04,
+      "hist": -94.14
     },
     "stochastic": {
-      "k": 40.5
+      "k": 41.7
     }
   },
   "kospiSentiment": "보합",
@@ -2648,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 3:42:07"
+  "lastUpdate": "2026. 6. 9. AM 3:47:00"
 }
