@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.039",
-      "diff": -0.03,
-      "diffPercent": -0.03,
+      "value": "100.049",
+      "diff": -0.02,
+      "diffPercent": -0.02,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 100.04
+          "value": 100.05
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,411.5",
-      "diff": 385,
-      "diffPercent": 1.33,
+      "value": "29,401.5",
+      "diff": 375,
+      "diffPercent": 1.29,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 29411.5
+          "value": 29401.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,407.75",
-      "diff": 7.25,
-      "diffPercent": 0.1,
+      "value": "7,405.5",
+      "diff": 5,
+      "diffPercent": 0.07,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 7407.75
+          "value": 7405.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "91.4",
-      "diff": 0.86,
-      "diffPercent": 0.95,
+      "value": "91.41",
+      "diff": 0.87,
+      "diffPercent": 0.96,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-08",
-          "value": 91.4
+          "value": 91.41
         }
       ]
     },
@@ -1897,9 +1897,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-2,430",
-      "diff": -1236,
-      "diffPercent": -103.52,
+      "value": "-1,887",
+      "diff": -693,
+      "diffPercent": -58.04,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2005,7 +2005,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": -2430
+          "value": -1887
         }
       ]
     },
@@ -2018,9 +2018,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "-1,098",
-      "diff": -3054,
-      "diffPercent": -156.13,
+      "value": "-1,521",
+      "diff": -3477,
+      "diffPercent": -177.76,
       "trend": "down",
       "history": [
         {
@@ -2125,7 +2125,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": -1098
+          "value": -1521
         }
       ]
     },
@@ -2138,9 +2138,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "3,502",
-      "diff": 4459,
-      "diffPercent": 465.94,
+      "value": "3,438",
+      "diff": 4395,
+      "diffPercent": 459.25,
       "trend": "up",
       "history": [
         {
@@ -2245,7 +2245,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 3502
+          "value": 3438
         }
       ]
     },
@@ -2476,10 +2476,10 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,527.80",
-      "change": "-1.20",
-      "changePercent": "-0.08",
-      "trend": "down"
+      "value": "1,530.40",
+      "change": "+1.40",
+      "changePercent": "+0.09",
+      "trend": "up"
     },
     {
       "id": "jpy-krw",
@@ -2487,30 +2487,30 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "953.50",
-      "change": "-1.56",
-      "changePercent": "-0.16",
-      "trend": "down"
+      "value": "955.83",
+      "change": "+0.77",
+      "changePercent": "+0.08",
+      "trend": "up"
     },
     {
       "id": "eur-krw",
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,761.55",
-      "change": "-2.99",
-      "changePercent": "-0.17",
-      "trend": "down"
+      "value": "1,764.94",
+      "change": "+0.40",
+      "changePercent": "+0.02",
+      "trend": "up"
     },
     {
       "id": "cny-krw",
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "225.21",
-      "change": "-0.19",
-      "changePercent": "-0.08",
-      "trend": "down"
+      "value": "225.67",
+      "change": "+0.27",
+      "changePercent": "+0.12",
+      "trend": "up"
     }
   ],
   "stockPrices": [
@@ -2520,8 +2520,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 310000,
-      "changePercent": "+4.91",
+      "price": 307500,
+      "changePercent": "+4.06",
       "trend": "up"
     },
     {
@@ -2530,8 +2530,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 2060000,
-      "changePercent": "+7.80",
+      "price": 2030000,
+      "changePercent": "+6.23",
       "trend": "up"
     },
     {
@@ -2540,8 +2540,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 666000,
-      "changePercent": "+4.23",
+      "price": 657000,
+      "changePercent": "+2.82",
       "trend": "up"
     },
     {
@@ -2550,8 +2550,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 157300,
-      "changePercent": "+3.90",
+      "price": 158400,
+      "changePercent": "+4.62",
       "trend": "up"
     },
     {
@@ -2560,8 +2560,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 278500,
-      "changePercent": "-0.18",
+      "price": 267000,
+      "changePercent": "-4.30",
       "trend": "down"
     },
     {
@@ -2570,8 +2570,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 39300,
-      "changePercent": "+1.81",
+      "price": 39500,
+      "changePercent": "+2.33",
       "trend": "up"
     }
   ],
@@ -2601,10 +2601,10 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1780963340823,
+    "lastAiUpdate": 1780963617566,
     "score": {
-      "upScore": 54.74619384011418,
-      "downScore": 57.57029653841613,
+      "upScore": 54.74707600352286,
+      "downScore": 57.568405965173,
       "kospiUpScore": 25.138895729702767,
       "kospiDownScore": 23.386241279896133
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 12:02:20"
+  "lastUpdate": "2026. 6. 9. AM 12:06:57"
 }
