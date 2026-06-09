@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.871",
+      "value": "99.869",
       "diff": -0.18,
       "diffPercent": -0.18,
       "trend": "down",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,628.5",
-      "diff": 173.75,
-      "diffPercent": 0.59,
+      "value": "29,639.75",
+      "diff": 185,
+      "diffPercent": 0.63,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 29628.5
+          "value": 29639.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,434.75",
-      "diff": 18.75,
-      "diffPercent": 0.25,
+      "value": "7,435.5",
+      "diff": 19.5,
+      "diffPercent": 0.26,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 7434.75
+          "value": 7435.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "90.03",
-      "diff": -1.27,
-      "diffPercent": -1.39,
+      "value": "89.92",
+      "diff": -1.38,
+      "diffPercent": -1.51,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 90.03
+          "value": 89.92
         }
       ]
     },
@@ -1901,9 +1901,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-19,809",
-      "diff": -18615,
-      "diffPercent": -1559.05,
+      "value": "-19,820",
+      "diff": -18626,
+      "diffPercent": -1559.97,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2009,7 +2009,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": -19809
+          "value": -19820
         }
       ]
     },
@@ -2022,9 +2022,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "24,978",
-      "diff": 23022,
-      "diffPercent": 1176.99,
+      "value": "25,021",
+      "diff": 23065,
+      "diffPercent": 1179.19,
       "trend": "up",
       "history": [
         {
@@ -2129,7 +2129,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": 24978
+          "value": 25021
         }
       ]
     },
@@ -2142,9 +2142,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-6,146",
-      "diff": -5189,
-      "diffPercent": -542.22,
+      "value": "-6,178",
+      "diff": -5221,
+      "diffPercent": -545.56,
       "trend": "down",
       "history": [
         {
@@ -2249,7 +2249,7 @@
         },
         {
           "date": "2026-06-09",
-          "value": -6146
+          "value": -6178
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,515.40",
-      "change": "-13.60",
-      "changePercent": "-0.89",
+      "value": "1,515.50",
+      "change": "-13.50",
+      "changePercent": "-0.88",
       "trend": "down"
     },
     {
@@ -2491,8 +2491,8 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "946.30",
-      "change": "-8.76",
+      "value": "946.27",
+      "change": "-8.79",
       "changePercent": "-0.92",
       "trend": "down"
     },
@@ -2501,8 +2501,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,749.76",
-      "change": "-14.78",
+      "value": "1,749.80",
+      "change": "-14.74",
       "changePercent": "-0.84",
       "trend": "down"
     },
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "223.75",
-      "change": "-1.65",
-      "changePercent": "-0.73",
+      "value": "223.74",
+      "change": "-1.66",
+      "changePercent": "-0.74",
       "trend": "down"
     }
   ],
@@ -2605,10 +2605,10 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billingprepay. \n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1780987329062,
+    "lastAiUpdate": 1780987623410,
     "score": {
-      "upScore": 41.29313036894024,
-      "downScore": 66.08078349918753,
+      "upScore": 41.28923918498812,
+      "downScore": 66.07303345515915,
       "kospiUpScore": 25.807528619007964,
       "kospiDownScore": 20.39474070893056
     }
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 9. AM 6:42:09"
+  "lastUpdate": "2026. 6. 9. AM 6:47:03"
 }
