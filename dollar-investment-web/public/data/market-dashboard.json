@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.935",
-      "diff": -0.08,
-      "diffPercent": -0.08,
+      "value": "99.98",
+      "diff": -0.04,
+      "diffPercent": -0.04,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-10",
-          "value": 99.94
+          "value": 99.98
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "21.44",
-      "diff": 1.57,
-      "diffPercent": 7.9,
+      "value": "21.46",
+      "diff": 1.59,
+      "diffPercent": 8,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-10",
-          "value": 21.44
+          "value": 21.46
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "28,729.25",
-      "diff": -387.75,
-      "diffPercent": -1.33,
+      "value": "28,667",
+      "diff": -450,
+      "diffPercent": -1.55,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-10",
-          "value": 28729.25
+          "value": 28667
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,327.75",
-      "diff": -65,
-      "diffPercent": -0.88,
+      "value": "7,311.5",
+      "diff": -81.25,
+      "diffPercent": -1.1,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-10",
-          "value": 7327.75
+          "value": 7311.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "89.2",
-      "diff": 1,
-      "diffPercent": 1.13,
+      "value": "89.85",
+      "diff": 1.65,
+      "diffPercent": 1.87,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-10",
-          "value": 89.2
+          "value": 89.85
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,524.90",
-      "change": "-1.90",
-      "changePercent": "-0.12",
+      "value": "1,525.70",
+      "change": "-1.10",
+      "changePercent": "-0.07",
       "trend": "down"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "950.18",
-      "change": "-2.76",
-      "changePercent": "-0.29",
+      "value": "950.62",
+      "change": "-2.32",
+      "changePercent": "-0.24",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,760.27",
-      "change": "-5.47",
-      "changePercent": "-0.31",
+      "value": "1,760.89",
+      "change": "-4.85",
+      "changePercent": "-0.27",
       "trend": "down"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "224.81",
-      "change": "-0.60",
-      "changePercent": "-0.27",
+      "value": "224.92",
+      "change": "-0.49",
+      "changePercent": "-0.22",
       "trend": "down"
     }
   ],
@@ -2603,14 +2603,14 @@
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 41.330592438s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 41.330592438s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1781091139793,
+    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 53.643205243s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 53.643205243s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "lastAiUpdate": 1781091429102,
     "score": {
-      "upScore": 65.05429346620453,
-      "downScore": 55.84793887639133,
+      "upScore": 65.08231282275979,
+      "downScore": 55.82503038085292,
       "kospiUpScore": 19.988713006596516,
-      "kospiDownScore": 25.86311206758777
+      "kospiDownScore": 25.86599503540022
     }
   },
   "technicals": {
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 10. AM 11:32:19"
+  "lastUpdate": "2026. 6. 10. AM 11:37:09"
 }
