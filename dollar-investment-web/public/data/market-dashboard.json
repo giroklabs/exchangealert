@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.698",
-      "diff": -0.25,
-      "diffPercent": -0.25,
+      "value": "99.693",
+      "diff": -0.26,
+      "diffPercent": -0.26,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-11",
-          "value": 99.7
+          "value": 99.69
         }
       ]
     },
@@ -2513,68 +2513,7 @@
       "trend": "down"
     }
   ],
-  "stockPrices": [
-    {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 299000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "hynix",
-      "symbol": "000660",
-      "market": "domestic",
-      "name": "SK하이닉스",
-      "enName": "SK Hynix",
-      "price": 2101000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "hyundai",
-      "symbol": "005380",
-      "market": "domestic",
-      "name": "현대차",
-      "enName": "Hyundai Motor",
-      "price": 597000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "kia",
-      "symbol": "000270",
-      "market": "domestic",
-      "name": "기아",
-      "enName": "Kia",
-      "price": 156000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 224000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 39300,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    }
-  ],
+  "stockPrices": [],
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
@@ -2678,5 +2617,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 11. PM 9:12:14"
+  "lastUpdate": "2026. 6. 11. PM 9:20:55"
 }
