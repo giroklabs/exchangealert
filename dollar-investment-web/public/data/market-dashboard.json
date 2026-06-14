@@ -62,12 +62,11 @@
       "unit": "pt",
       "block": "rates-dollar",
       "impact": "up",
-      "source": "Yahoo Finance 실시간",
+      "source": "ICE",
       "description": "달러 상대 가치, 환율 핵심 지표",
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
-      "isRealtime": true,
-      "value": "99.807",
+      "value": "99.81",
       "diff": -0.05,
       "diffPercent": -0.05,
       "trend": "down",
@@ -91,7 +90,7 @@
         },
         {
           "date": "2026-06-05",
-          "value": 100.07
+          "value": 120.0831
         },
         {
           "date": "2026-06-08",
@@ -2501,68 +2500,7 @@
       "trend": "neutral"
     }
   ],
-  "stockPrices": [
-    {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 322500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "hynix",
-      "symbol": "000660",
-      "market": "domestic",
-      "name": "SK하이닉스",
-      "enName": "SK Hynix",
-      "price": 2150000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "hyundai",
-      "symbol": "005380",
-      "market": "domestic",
-      "name": "현대차",
-      "enName": "Hyundai Motor",
-      "price": 607000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "kia",
-      "symbol": "000270",
-      "market": "domestic",
-      "name": "기아",
-      "enName": "Kia",
-      "price": 166800,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 247000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 41500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    }
-  ],
+  "stockPrices": [],
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
@@ -2666,5 +2604,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 14. PM 9:02:23"
+  "lastUpdate": "2026. 6. 14. PM 9:10:57"
 }
