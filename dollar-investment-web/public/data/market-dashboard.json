@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.531",
+      "value": "99.534",
       "diff": -0.22,
       "diffPercent": -0.22,
       "trend": "down",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "16.7",
-      "diff": -0.98,
-      "diffPercent": -5.54,
+      "value": "16.73",
+      "diff": -0.95,
+      "diffPercent": -5.37,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-15",
-          "value": 16.7
+          "value": 16.73
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,565",
-      "diff": 903,
-      "diffPercent": 3.04,
+      "value": "30,553.25",
+      "diff": 891.25,
+      "diffPercent": 3,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-15",
-          "value": 30565
+          "value": 30553.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,526",
-      "diff": 91,
-      "diffPercent": 1.22,
+      "value": "7,523.5",
+      "diff": 88.5,
+      "diffPercent": 1.19,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-15",
-          "value": 7526
+          "value": 7523.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "80.29",
-      "diff": -4.59,
-      "diffPercent": -5.41,
+      "value": "80.38",
+      "diff": -4.5,
+      "diffPercent": -5.3,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-15",
-          "value": 80.29
+          "value": 80.38
         }
       ]
     },
@@ -2480,8 +2480,8 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,514.40",
-      "change": "-5.10",
+      "value": "1,514.30",
+      "change": "-5.20",
       "changePercent": "-0.34",
       "trend": "down"
     },
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "945.82",
-      "change": "-2.53",
-      "changePercent": "-0.27",
+      "value": "945.70",
+      "change": "-2.65",
+      "changePercent": "-0.28",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,757.61",
-      "change": "-0.22",
-      "changePercent": "-0.01",
+      "value": "1,757.35",
+      "change": "-0.48",
+      "changePercent": "-0.03",
       "trend": "down"
     },
     {
@@ -2511,13 +2511,74 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "224.07",
-      "change": "-0.60",
+      "value": "224.06",
+      "change": "-0.61",
       "changePercent": "-0.27",
       "trend": "down"
     }
   ],
-  "stockPrices": [],
+  "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 337000,
+      "changePercent": "+4.50",
+      "trend": "up"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 2288000,
+      "changePercent": "+6.42",
+      "trend": "up"
+    },
+    {
+      "id": "hyundai",
+      "symbol": "005380",
+      "market": "domestic",
+      "name": "현대차",
+      "enName": "Hyundai Motor",
+      "price": 647000,
+      "changePercent": "+6.59",
+      "trend": "up"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 167500,
+      "changePercent": "+0.42",
+      "trend": "up"
+    },
+    {
+      "id": "naver",
+      "symbol": "035420",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 248000,
+      "changePercent": "+0.40",
+      "trend": "up"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 40750,
+      "changePercent": "-1.81",
+      "trend": "down"
+    }
+  ],
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
@@ -2542,13 +2603,13 @@
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 6월 15일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1512.28원에 위치하며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 41%로 제시하여 하락 또는 보합 가능성에 무게를 싣고 있습니다. 기술적 신호는 현재 보합(Neutral) 상태를 나타내고 있지만, 최근 5거래일간 달러인덱스(DXY) 모멘텀이 -0.53%를 기록하며 달러 약세 흐름을 보이고 있어 원/달러 환율의 추가 하락 압력으로 작용할 수 있습니다. 다만, 미 10년물 국채금리가 4.487%로 상승 추세에 있고 한미 10년물 금리차가 0.37%p로 확대되는 점, 그리고 Fed의 금리 인하 기대 횟수가 -0.9회로 줄어들며 '고금리 장기화' 가능성이 높아진 점은 중장기적인 달러 강세 요인으로 작용할 수 있습니다. 단기적으로는 5일 이동평균선(1523원)과 20일 이동평균선(1515.16원) 아래에 현재 환율이 위치하여 추가 하락 가능성이 있으나, 이동평균선 배열(MA5=1523원, MA20=1515.16원, MA60=1494.65원)이 단기 상승 모멘텀을 내포하고 있어 1494.65원(MA60) 선에서의 지지를 확인하며 반등을 모색할 수도 있습니다. 따라서 단기적인 하락 압력 속에서도 1515.16원(MA20)과 1523원(MA5)이 중요한 저항선으로 작용하며, 이를 돌파 시 1543.99원(볼린저밴드 상단)까지 상승 여력이 열릴 수 있습니다. 핵심 지지선은 1494.65원(MA60), 핵심 저항선은 1523원(MA5)을 주시하며 관망하는 전략이 유효해 보입니다. ① 정량예측모델의 낮은 상승 확률과 DXY의 단기 약세 모멘텀 ② 상승 추세인 미 국채금리 및 확대되는 한미 금리차로 인한 중장기적 달러 강세 압력 ③ 단기 이동평균선 아래에 위치하나 상승 모멘텀을 내포한 기술적 지표.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 8,545.98pt를 기록하며 강력한 상승세를 이어가고 있습니다. 정량예측모델은 향후 1~5거래일 내 코스피 상승 확률을 60%로 높게 제시하고 있으며, 기술적 신호는 보합(Neutral) 상태이지만 지표들은 강세 흐름을 지지합니다. 특히, 코스피의 선행 지표로 활용되는 반도체(SOX) 단기 5일 모멘텀이 9.42%로 매우 강한 상승세를 보이고 있고, 나스닥 선물 단기 흐름 또한 3.78%로 긍정적인 모습을 보여 코스피의 추가 상승에 대한 기대감을 높이고 있습니다. 코스피 지수는 5일 이동평균선(8052.26pt), 20일 이동평균선(8011.32pt), 60일 이동평균선(6824.67pt)을 모두 상회하며 완벽한 정배열을 형성, 강력한 상승 추세를 유지하고 있습니다. RSI(14일)는 58.4로 과열되지 않은 건강한 상승세를 나타내며, 볼린저밴드 상단(8952.91pt)까지 추가 상승 여력이 충분합니다. 핵심 저항선은 8933.62pt로, 이 수준을 돌파할 경우 지수는 9000pt대 진입을 시도할 것으로 예상됩니다. 단기적인 강한 모멘텀을 고려할 때, 8052.26pt(MA5)를 단기 지지선으로 삼아 매수 관점으로 접근하는 전략이 유효해 보입니다. ① 반도체(SOX) 및 나스닥 선물 등 핵심 선행 지표의 강한 상승 모멘텀 ② 정량예측모델의 높은 상승 확률과 이동평균선 정배열로 확인되는 강력한 기술적 상승 추세 ③ RSI 및 볼린저밴드 상단을 통해 확인되는 추가 상승 여력.\n\n실전 투자 대응\n환율: 1512.28원 기준, 1494.65원 지지, 1523원 저항 확인하며 관망.\n코스피: 8545.98pt 기준, 8052.26pt 지지, 8933.62pt 저항 돌파 기대하며 매수.",
-    "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 6월 15일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1512.28원에 위치하며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 41%로 제시하여 하락 또는 보합 가능성에 무게를 싣고 있습니다. 기술적 신호는 현재 보합(Neutral) 상태를 나타내고 있지만, 최근 5거래일간 달러인덱스(DXY) 모멘텀이 -0.53%를 기록하며 달러 약세 흐름을 보이고 있어 원/달러 환율의 추가 하락 압력으로 작용할 수 있습니다. 다만, 미 10년물 국채금리가 4.487%로 상승 추세에 있고 한미 10년물 금리차가 0.37%p로 확대되는 점, 그리고 Fed의 금리 인하 기대 횟수가 -0.9회로 줄어들며 '고금리 장기화' 가능성이 높아진 점은 중장기적인 달러 강세 요인으로 작용할 수 있습니다. 단기적으로는 5일 이동평균선(1523원)과 20일 이동평균선(1515.16원) 아래에 현재 환율이 위치하여 추가 하락 가능성이 있으나, 이동평균선 배열(MA5=1523원, MA20=1515.16원, MA60=1494.65원)이 단기 상승 모멘텀을 내포하고 있어 1494.65원(MA60) 선에서의 지지를 확인하며 반등을 모색할 수도 있습니다. 따라서 단기적인 하락 압력 속에서도 1515.16원(MA20)과 1523원(MA5)이 중요한 저항선으로 작용하며, 이를 돌파 시 1543.99원(볼린저밴드 상단)까지 상승 여력이 열릴 수 있습니다. 핵심 지지선은 1494.65원(MA60), 핵심 저항선은 1523원(MA5)을 주시하며 관망하는 전략이 유효해 보입니다. ① 정량예측모델의 낮은 상승 확률과 DXY의 단기 약세 모멘텀 ② 상승 추세인 미 국채금리 및 확대되는 한미 금리차로 인한 중장기적 달러 강세 압력 ③ 단기 이동평균선 아래에 위치하나 상승 모멘텀을 내포한 기술적 지표.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 8,545.98pt를 기록하며 강력한 상승세를 이어가고 있습니다. 정량예측모델은 향후 1~5거래일 내 코스피 상승 확률을 60%로 높게 제시하고 있으며, 기술적 신호는 보합(Neutral) 상태이지만 지표들은 강세 흐름을 지지합니다. 특히, 코스피의 선행 지표로 활용되는 반도체(SOX) 단기 5일 모멘텀이 9.42%로 매우 강한 상승세를 보이고 있고, 나스닥 선물 단기 흐름 또한 3.78%로 긍정적인 모습을 보여 코스피의 추가 상승에 대한 기대감을 높이고 있습니다. 코스피 지수는 5일 이동평균선(8052.26pt), 20일 이동평균선(8011.32pt), 60일 이동평균선(6824.67pt)을 모두 상회하며 완벽한 정배열을 형성, 강력한 상승 추세를 유지하고 있습니다. RSI(14일)는 58.4로 과열되지 않은 건강한 상승세를 나타내며, 볼린저밴드 상단(8952.91pt)까지 추가 상승 여력이 충분합니다. 핵심 저항선은 8933.62pt로, 이 수준을 돌파할 경우 지수는 9000pt대 진입을 시도할 것으로 예상됩니다. 단기적인 강한 모멘텀을 고려할 때, 8052.26pt(MA5)를 단기 지지선으로 삼아 매수 관점으로 접근하는 전략이 유효해 보입니다. ① 반도체(SOX) 및 나스닥 선물 등 핵심 선행 지표의 강한 상승 모멘텀 ② 정량예측모델의 높은 상승 확률과 이동평균선 정배열로 확인되는 강력한 기술적 상승 추세 ③ RSI 및 볼린저밴드 상단을 통해 확인되는 추가 상승 여력.\n\n실전 투자 대응\n환율: 1512.28원 기준, 1494.65원 지지, 1523원 저항 확인하며 관망.\n코스피: 8545.98pt 기준, 8052.26pt 지지, 8933.62pt 저항 돌파 기대하며 매수.",
-    "lastAiUpdate": 1781512384369,
+    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 17.969689884s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 17.969689884s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "lastAiUpdate": 1781515962950,
     "score": {
-      "upScore": 45.01352689066155,
-      "downScore": 65.49056897265675,
-      "kospiUpScore": 26.611403664254755,
+      "upScore": 45.01264940771246,
+      "downScore": 65.48886555171995,
+      "kospiUpScore": 26.60882188715694,
       "kospiDownScore": 17.514613060414174
     }
   },
@@ -2621,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 15. AM 9:30:59"
+  "lastUpdate": "2026. 6. 15. AM 9:32:42"
 }
