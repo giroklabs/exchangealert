@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.396",
-      "diff": 0.31,
-      "diffPercent": 0.31,
+      "value": "100.426",
+      "diff": 0.34,
+      "diffPercent": 0.34,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-06-18",
-          "value": 100.4
+          "value": 100.43
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "17.01",
-      "diff": -1.43,
-      "diffPercent": -7.75,
+      "value": "17.07",
+      "diff": -1.37,
+      "diffPercent": -7.43,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-06-18",
-          "value": 17.01
+          "value": 17.07
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,431.75",
-      "diff": 744.25,
-      "diffPercent": 2.51,
+      "value": "30,425.25",
+      "diff": 737.75,
+      "diffPercent": 2.49,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-18",
-          "value": 30431.75
+          "value": 30425.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,557.25",
-      "diff": 132.75,
-      "diffPercent": 1.79,
+      "value": "7,555",
+      "diff": 130.5,
+      "diffPercent": 1.76,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-18",
-          "value": 7557.25
+          "value": 7555
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "74.23",
-      "diff": -2.56,
-      "diffPercent": -3.33,
+      "value": "74.39",
+      "diff": -2.4,
+      "diffPercent": -3.13,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-06-18",
-          "value": 74.23
+          "value": 74.39
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,532.80",
-      "change": "+16.80",
-      "changePercent": "+1.11",
+      "value": "1,534.30",
+      "change": "+18.30",
+      "changePercent": "+1.21",
       "trend": "up"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "954.09",
-      "change": "+8.33",
-      "changePercent": "+0.88",
+      "value": "954.94",
+      "change": "+9.18",
+      "changePercent": "+0.97",
       "trend": "up"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,762.11",
-      "change": "+4.91",
-      "changePercent": "+0.28",
+      "value": "1,763.98",
+      "change": "+6.78",
+      "changePercent": "+0.39",
       "trend": "up"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "226.57",
-      "change": "+2.33",
-      "changePercent": "+1.04",
+      "value": "226.79",
+      "change": "+2.55",
+      "changePercent": "+1.14",
       "trend": "up"
     }
   ],
@@ -2603,13 +2603,13 @@
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 42.418468415s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 429: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 42.418468415s.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1781771838621,
+    "aiAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년 6월 18일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1534.59원에 마감하며 최근의 상승 흐름을 이어가고 있습니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 45%로 제시하여 보합 또는 소폭 하락 가능성도 열어두고 있으나, 최근 1일 모멘텀(0.77%)이 강하게 나타나 단기적으로 추가 상승 압력이 상존합니다. 기술적으로는 환율이 모든 이동평균선 위에 위치하며 상승 추세를 공고히 하고 있으며, 볼린저밴드 상단인 1543.06원에 근접해 단기 저항에 부딪힐 가능성이 있습니다. 핵심 저항선은 1556.39원이며, 지지선은 단기 이동평균선이 위치한 1517.09원과 1514.75원으로 볼 수 있습니다. 현재의 상승 모멘텀을 고려할 때, 1543.06원 저항 돌파 시 1556.39원까지의 추가 상승을 시도할 수 있으나, MACD의 데드크로스와 RSI가 과매수권 진입 직전인 점을 감안하면 단기적인 숨고르기나 조정 가능성도 배제할 수 없습니다. 따라서 공격적인 추격 매수보다는 1517원대 지지 여부를 확인하며 관망하는 전략이 유효하며, 1543.06원 돌파 여부에 따라 대응을 달리할 필요가 있습니다. ① 미 10년물 국채금리 상승 추세와 한미 10년물 금리차 확대, 금리 인하 기대 횟수 감소는 달러 강세 압력을 강화합니다. ② 현재 환율이 볼린저밴드 상단인 1543.06원에 근접하여 단기 저항 가능성이 높습니다. ③ MACD의 데드크로스는 단기적인 하락 압력을 시사합니다.\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 9,063.84pt를 기록하며 강력한 상승 추세를 지속하고 있습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 50%로 제시하며 중립적인 시각을 보이지만, 대부분의 기술적 지표는 매우 긍정적인 흐름을 나타내고 있습니다. 지수는 모든 이동평균선(MA5=8664.86pt, MA20=8230.01pt, MA60=6977.75pt) 위에 위치하며 완벽한 정배열을 형성, 견고한 강세장을 시사합니다. 특히 1일(2.25%), 5일(16.74%), 20일(24.65%) 모멘텀이 모두 강하게 상승 중이며, 이는 지수 상승 탄력이 유지될 것임을 보여줍니다. 핵심 저항선은 9106.07pt이며, 볼린저밴드 상단인 9205.97pt가 단기 목표가 될 수 있습니다. 주요 지지선은 MA5인 8664.86pt입니다. SOX 지수의 강한 상승 모멘텀(10.41%)과 나스닥 선물 단기 흐름(3.26%) 또한 한국 증시 특히 반도체 섹터에 긍정적인 영향을 미칠 것으로 예상됩니다. RSI가 60.3으로 과매수권 진입 직전이라는 점은 경계 요소이나, 강력한 매수세와 펀더멘털 개선 기대감으로 인해 상승 추세는 당분간 지속될 가능성이 높습니다. 따라서 9106.07pt 저항 돌파 시 9205.97pt까지의 추가 상승을 기대하며 매수 우위의 전략이 유효합니다. ① SOX 및 나스닥 선물 모멘텀이 코스피에 긍정적인 영향을 미칩니다. ② 코스피 지수가 모든 이동평균선 위에 위치하며 강력한 정배열을 보입니다. ③ 1일, 5일, 20일 모멘텀이 모두 강한 상승세를 지지합니다.\n\n실전 투자 대응\n환율: 볼린저밴드 상단 1543.06원 저항 확인, 1517.09원 지지 시 재매수 고려.\n코스피: 9106.07원 저항 돌파 시 9205.97원까지 추가 상승 기대, 매수 우위.",
+    "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년 6월 18일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1534.59원에 마감하며 최근의 상승 흐름을 이어가고 있습니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 45%로 제시하여 보합 또는 소폭 하락 가능성도 열어두고 있으나, 최근 1일 모멘텀(0.77%)이 강하게 나타나 단기적으로 추가 상승 압력이 상존합니다. 기술적으로는 환율이 모든 이동평균선 위에 위치하며 상승 추세를 공고히 하고 있으며, 볼린저밴드 상단인 1543.06원에 근접해 단기 저항에 부딪힐 가능성이 있습니다. 핵심 저항선은 1556.39원이며, 지지선은 단기 이동평균선이 위치한 1517.09원과 1514.75원으로 볼 수 있습니다. 현재의 상승 모멘텀을 고려할 때, 1543.06원 저항 돌파 시 1556.39원까지의 추가 상승을 시도할 수 있으나, MACD의 데드크로스와 RSI가 과매수권 진입 직전인 점을 감안하면 단기적인 숨고르기나 조정 가능성도 배제할 수 없습니다. 따라서 공격적인 추격 매수보다는 1517원대 지지 여부를 확인하며 관망하는 전략이 유효하며, 1543.06원 돌파 여부에 따라 대응을 달리할 필요가 있습니다. ① 미 10년물 국채금리 상승 추세와 한미 10년물 금리차 확대, 금리 인하 기대 횟수 감소는 달러 강세 압력을 강화합니다. ② 현재 환율이 볼린저밴드 상단인 1543.06원에 근접하여 단기 저항 가능성이 높습니다. ③ MACD의 데드크로스는 단기적인 하락 압력을 시사합니다.\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 9,063.84pt를 기록하며 강력한 상승 추세를 지속하고 있습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 50%로 제시하며 중립적인 시각을 보이지만, 대부분의 기술적 지표는 매우 긍정적인 흐름을 나타내고 있습니다. 지수는 모든 이동평균선(MA5=8664.86pt, MA20=8230.01pt, MA60=6977.75pt) 위에 위치하며 완벽한 정배열을 형성, 견고한 강세장을 시사합니다. 특히 1일(2.25%), 5일(16.74%), 20일(24.65%) 모멘텀이 모두 강하게 상승 중이며, 이는 지수 상승 탄력이 유지될 것임을 보여줍니다. 핵심 저항선은 9106.07pt이며, 볼린저밴드 상단인 9205.97pt가 단기 목표가 될 수 있습니다. 주요 지지선은 MA5인 8664.86pt입니다. SOX 지수의 강한 상승 모멘텀(10.41%)과 나스닥 선물 단기 흐름(3.26%) 또한 한국 증시 특히 반도체 섹터에 긍정적인 영향을 미칠 것으로 예상됩니다. RSI가 60.3으로 과매수권 진입 직전이라는 점은 경계 요소이나, 강력한 매수세와 펀더멘털 개선 기대감으로 인해 상승 추세는 당분간 지속될 가능성이 높습니다. 따라서 9106.07pt 저항 돌파 시 9205.97pt까지의 추가 상승을 기대하며 매수 우위의 전략이 유효합니다. ① SOX 및 나스닥 선물 모멘텀이 코스피에 긍정적인 영향을 미칩니다. ② 코스피 지수가 모든 이동평균선 위에 위치하며 강력한 정배열을 보입니다. ③ 1일, 5일, 20일 모멘텀이 모두 강한 상승세를 지지합니다.\n\n실전 투자 대응\n환율: 볼린저밴드 상단 1543.06원 저항 확인, 1517.09원 지지 시 재매수 고려.\n코스피: 9106.07원 저항 돌파 시 9205.97원까지 추가 상승 기대, 매수 우위.",
+    "lastAiUpdate": 1781772161680,
     "score": {
-      "upScore": 50.35312802104018,
-      "downScore": 62.51810761987669,
-      "kospiUpScore": 24.11628858699538,
+      "upScore": 50.3501615767946,
+      "downScore": 62.51299083113727,
+      "kospiUpScore": 24.10939893868013,
       "kospiDownScore": 23.726340283922177
     }
   },
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 18. AM 8:37:18"
+  "lastUpdate": "2026. 6. 18. AM 8:42:41"
 }
