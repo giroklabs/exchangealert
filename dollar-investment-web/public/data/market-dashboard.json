@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,719.75",
-      "diff": 456.4,
-      "diffPercent": 1.51,
+      "value": "30,647",
+      "diff": 383.65,
+      "diffPercent": 1.27,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-06-19",
-          "value": 30719.75
+          "value": 30647
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,570.75",
-      "diff": 62.32,
-      "diffPercent": 0.83,
+      "value": "7,556.25",
+      "diff": 47.82,
+      "diffPercent": 0.64,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-06-19",
-          "value": 7570.75
+          "value": 7556.25
         }
       ]
     },
@@ -2632,29 +2632,29 @@
     "compoundSignals": []
   },
   "kospiTechnicals": {
-    "rsi14": 57.3,
-    "ma5": 8850.62,
-    "ma20": 8322.18,
-    "ma60": 7038.53,
+    "rsi14": 60.2,
+    "ma5": 8662.57,
+    "ma20": 8229.44,
+    "ma60": 6977.56,
     "bb": {
-      "upper": 9241.56,
-      "mid": 8322.18,
-      "lower": 7402.8,
-      "bandwidth": 22.09
+      "upper": 9203.46,
+      "mid": 8229.44,
+      "lower": 7255.42,
+      "bandwidth": 23.67
     },
     "momentum": {
-      "d1": -0.13,
-      "d5": 11.43,
-      "d20": 25.57
+      "d1": 2.12,
+      "d5": 16.6,
+      "d20": 24.49
     },
     "keyLevels": {
       "support": 5042.99,
       "resistance": 9385.59
     },
     "macd": {
-      "macd": 402.29,
-      "signal": 360.37,
-      "hist": 41.92
+      "macd": 378.56,
+      "signal": 349.71,
+      "hist": 28.85
     },
     "stochastic": {
       "k": 83.3
@@ -2670,5 +2670,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 20. PM 8:17:17"
+  "lastUpdate": "2026. 6. 20. PM 8:22:14"
 }
