@@ -2505,68 +2505,7 @@
       "trend": "neutral"
     }
   ],
-  "stockPrices": [
-    {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 339500,
-      "changePercent": "-5.30",
-      "trend": "down"
-    },
-    {
-      "id": "hynix",
-      "symbol": "000660",
-      "market": "domestic",
-      "name": "SK하이닉스",
-      "enName": "SK Hynix",
-      "price": 2673000,
-      "changePercent": "-8.36",
-      "trend": "down"
-    },
-    {
-      "id": "hyundai",
-      "symbol": "005380",
-      "market": "domestic",
-      "name": "현대차",
-      "enName": "Hyundai Motor",
-      "price": 480500,
-      "changePercent": "-4.47",
-      "trend": "down"
-    },
-    {
-      "id": "kia",
-      "symbol": "000270",
-      "market": "domestic",
-      "name": "기아",
-      "enName": "Kia",
-      "price": 135300,
-      "changePercent": "-3.01",
-      "trend": "down"
-    },
-    {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 196400,
-      "changePercent": "-1.65",
-      "trend": "down"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 33150,
-      "changePercent": "-3.21",
-      "trend": "down"
-    }
-  ],
+  "stockPrices": [],
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
@@ -2632,32 +2571,32 @@
     "compoundSignals": []
   },
   "kospiTechnicals": {
-    "rsi14": 58.2,
-    "ma5": 8754.43,
-    "ma20": 8461.19,
-    "ma60": 7248.94,
+    "rsi14": 60.2,
+    "ma5": 8626.18,
+    "ma20": 8472.49,
+    "ma60": 7301.17,
     "bb": {
-      "upper": 9389.39,
-      "mid": 8461.19,
-      "lower": 7532.99,
-      "bandwidth": 21.94
+      "upper": 9392.44,
+      "mid": 8472.49,
+      "lower": 7552.54,
+      "bandwidth": 21.72
     },
     "momentum": {
-      "d1": 5.42,
-      "d5": -1.47,
-      "d20": 8.53
+      "d1": -5.81,
+      "d5": -7.08,
+      "d20": 2.76
     },
     "keyLevels": {
       "support": 5042.99,
       "resistance": 9385.59
     },
     "macd": {
-      "macd": 332.85,
-      "signal": 355.02,
-      "hist": -22.17
+      "macd": 293.67,
+      "signal": 342.75,
+      "hist": -49.08
     },
     "stochastic": {
-      "k": 77.1
+      "k": 51.1
     }
   },
   "kospiSentiment": "보합",
@@ -2670,5 +2609,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 6. 28. AM 12:14:09"
+  "lastUpdate": "2026. 6. 28. AM 12:22:43"
 }
