@@ -68,15 +68,11 @@
       "fredId": "DTWEXBGS",
       "isRealtime": true,
       "value": "100.857",
-      "diff": -0.53,
-      "diffPercent": -0.52,
+      "diff": 0,
+      "diffPercent": 0,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-06-18",
-          "value": 120.3958
-        },
         {
           "date": "2026-06-22",
           "value": 120.5463
@@ -111,6 +107,10 @@
         },
         {
           "date": "2026-07-02",
+          "value": 100.86
+        },
+        {
+          "date": "2026-07-04",
           "value": 100.86
         }
       ]
@@ -2469,9 +2469,9 @@
       "unit": "원",
       "flag": "🇺🇸",
       "value": "1,530.00",
-      "change": "-2.00",
-      "changePercent": "-0.13",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     },
     {
       "id": "jpy-krw",
@@ -2480,9 +2480,9 @@
       "flag": "🇯🇵",
       "is100Yen": true,
       "value": "948.10",
-      "change": "-2.01",
-      "changePercent": "-0.21",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     },
     {
       "id": "eur-krw",
@@ -2490,9 +2490,9 @@
       "unit": "원",
       "flag": "🇪🇺",
       "value": "1,749.63",
-      "change": "-3.44",
-      "changePercent": "-0.20",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     },
     {
       "id": "cny-krw",
@@ -2500,9 +2500,9 @@
       "unit": "원",
       "flag": "🇨🇳",
       "value": "225.49",
-      "change": "-0.33",
-      "changePercent": "-0.15",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     }
   ],
   "stockPrices": [
@@ -2769,5 +2769,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 4. PM 2:57:24"
+  "lastUpdate": "2026. 7. 4. PM 3:03:15"
 }
