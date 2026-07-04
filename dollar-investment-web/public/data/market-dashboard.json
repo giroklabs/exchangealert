@@ -2505,7 +2505,167 @@
       "trend": "down"
     }
   ],
-  "stockPrices": [],
+  "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930.KS",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 309500,
+      "changePercent": "+8.22",
+      "trend": "up"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660.KS",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 2425000,
+      "changePercent": "+10.88",
+      "trend": "up"
+    },
+    {
+      "id": "hyundai",
+      "symbol": "005380.KS",
+      "market": "domestic",
+      "name": "현대차",
+      "enName": "Hyundai Motor",
+      "price": 492000,
+      "changePercent": "+2.07",
+      "trend": "up"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270.KS",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 152000,
+      "changePercent": "+4.68",
+      "trend": "up"
+    },
+    {
+      "id": "naver",
+      "symbol": "035420.KS",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 195800,
+      "changePercent": "-2.05",
+      "trend": "down"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720.KS",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 35500,
+      "changePercent": "+0.71",
+      "trend": "up"
+    },
+    {
+      "id": "apple",
+      "symbol": "AAPL",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "애플",
+      "enName": "Apple",
+      "price": 308.63,
+      "changePercent": "+4.84",
+      "trend": "up"
+    },
+    {
+      "id": "tesla",
+      "symbol": "TSLA",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "테슬라",
+      "enName": "Tesla",
+      "price": 393.45,
+      "changePercent": "-7.49",
+      "trend": "down"
+    },
+    {
+      "id": "nvidia",
+      "symbol": "NVDA",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "엔비디아",
+      "enName": "NVIDIA",
+      "price": 194.83,
+      "changePercent": "-1.39",
+      "trend": "down"
+    },
+    {
+      "id": "microsoft",
+      "symbol": "MSFT",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "마이크로소프트",
+      "enName": "Microsoft",
+      "price": 390.49,
+      "changePercent": "+1.62",
+      "trend": "up"
+    },
+    {
+      "id": "google",
+      "symbol": "GOOGL",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "구글",
+      "enName": "Google",
+      "price": 359.91,
+      "changePercent": "-0.36",
+      "trend": "down"
+    },
+    {
+      "id": "amazon",
+      "symbol": "AMZN",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "아마존",
+      "enName": "Amazon",
+      "price": 242.67,
+      "changePercent": "+0.40",
+      "trend": "up"
+    },
+    {
+      "id": "qqq",
+      "symbol": "QQQ",
+      "market": "overseas",
+      "excd": "NAS",
+      "name": "QQQ",
+      "enName": "Invesco QQQ Trust",
+      "price": 712.6,
+      "changePercent": "-1.73",
+      "trend": "down"
+    },
+    {
+      "id": "spy",
+      "symbol": "SPY",
+      "market": "overseas",
+      "excd": "NYS",
+      "name": "SPY",
+      "enName": "SPDR S&P 500 ETF",
+      "price": 744.78,
+      "changePercent": "-0.13",
+      "trend": "down"
+    },
+    {
+      "id": "schd",
+      "symbol": "SCHD",
+      "market": "overseas",
+      "excd": "NYS",
+      "name": "SCHD",
+      "enName": "Schwab US Dividend Equity ETF",
+      "price": 32.39,
+      "changePercent": "+1.70",
+      "trend": "up"
+    }
+  ],
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 하락 우세",
@@ -2609,5 +2769,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 4. AM 12:08:43"
+  "lastUpdate": "2026. 7. 4. AM 12:12:59"
 }
