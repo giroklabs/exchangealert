@@ -2675,13 +2675,13 @@
     "kospiDownProb": 60,
     "timeframes": {
       "d1": {
-        "upProb": 48,
-        "downProb": 52,
+        "upProb": 34,
+        "downProb": 66,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 43,
+        "downProb": 57,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2701,32 +2701,32 @@
     }
   },
   "technicals": {
-    "rsi14": 64.5,
-    "ma5": 1543.29,
-    "ma20": 1532.98,
-    "ma60": 1502.7,
+    "rsi14": 57.8,
+    "ma5": 1542.89,
+    "ma20": 1531.92,
+    "ma60": 1503.56,
     "bb": {
-      "upper": 1558.97,
-      "mid": 1532.98,
-      "lower": 1506.99,
-      "bandwidth": 3.39
+      "upper": 1556.2,
+      "mid": 1531.92,
+      "lower": 1507.64,
+      "bandwidth": 3.17
     },
     "momentum": {
-      "d1": -0.82,
-      "d5": -0.48,
-      "d20": 0.39
+      "d1": -0.78,
+      "d5": -0.33,
+      "d20": -1.57
     },
     "keyLevels": {
       "support": 1439.15,
       "resistance": 1558.88
     },
     "macd": {
-      "macd": 10.01,
-      "signal": 9.89,
-      "hist": 0.12
+      "macd": 8.78,
+      "signal": 9.71,
+      "hist": -0.93
     },
     "stochastic": {
-      "k": 63.8
+      "k": 42
     },
     "compoundSignals": []
   },
@@ -2769,5 +2769,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 4. AM 2:27:43"
+  "lastUpdate": "2026. 7. 4. AM 2:32:48"
 }
