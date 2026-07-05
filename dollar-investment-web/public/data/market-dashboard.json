@@ -2507,16 +2507,6 @@
   ],
   "stockPrices": [
     {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 309500,
-      "changePercent": "+8.22",
-      "trend": "up"
-    },
-    {
       "id": "hynix",
       "symbol": "000660",
       "market": "domestic",
@@ -2576,8 +2566,8 @@
     "kospiDownProb": 60,
     "timeframes": {
       "d1": {
-        "upProb": 35,
-        "downProb": 65,
+        "upProb": 34,
+        "downProb": 66,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
@@ -2586,8 +2576,8 @@
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 44,
+        "downProb": 56,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2596,7 +2586,7 @@
     "lastAiUpdate": 1783089182224,
     "score": {
       "upScore": 53.169544880873,
-      "downScore": 57.79120947300483,
+      "downScore": 58.49843935449742,
       "kospiUpScore": 16.134738729409776,
       "kospiDownScore": 24.530411818256436
     }
@@ -2670,5 +2660,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 5. AM 3:22:43"
+  "lastUpdate": "2026. 7. 5. AM 3:32:57"
 }
