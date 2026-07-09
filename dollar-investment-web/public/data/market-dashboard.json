@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.944",
-      "diff": -0.11,
-      "diffPercent": -0.11,
+      "value": "100.971",
+      "diff": -0.08,
+      "diffPercent": -0.08,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 100.94
+          "value": 100.97
         }
       ]
     },
@@ -126,11 +126,11 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.579",
-      "diff": 0.01,
-      "diffPercent": 0.22,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "4.569",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-06-25",
@@ -170,7 +170,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 4.58
+          "value": 4.57
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "16.66",
-      "diff": -0.24,
-      "diffPercent": -1.42,
+      "value": "16.74",
+      "diff": -0.16,
+      "diffPercent": -0.95,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 16.66
+          "value": 16.74
         }
       ]
     },
@@ -355,16 +355,12 @@
       "source": "Fed",
       "description": "미 유동성 측정 실효연방기금금리",
       "fredId": "EFFR",
-      "value": "3.63",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "3.62",
+      "diff": -0.01,
+      "diffPercent": -0.28,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-06-24",
-          "value": 3.63
-        },
         {
           "date": "2026-06-25",
           "value": 3.63
@@ -400,6 +396,10 @@
         {
           "date": "2026-07-07",
           "value": 3.63
+        },
+        {
+          "date": "2026-07-08",
+          "value": 3.62
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,775",
-      "diff": 306.5,
-      "diffPercent": 1.04,
+      "value": "29,755.5",
+      "diff": 287,
+      "diffPercent": 0.97,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 29775
+          "value": 29755.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,553.5",
-      "diff": 24.75,
-      "diffPercent": 0.33,
+      "value": "7,547.25",
+      "diff": 18.5,
+      "diffPercent": 0.25,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 7553.5
+          "value": 7547.25
         }
       ]
     },
@@ -884,11 +884,11 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "73.7",
-      "diff": 0.18,
-      "diffPercent": 0.24,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "73.34",
+      "diff": -0.18,
+      "diffPercent": -0.24,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-06-25",
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 73.7
+          "value": 73.34
         }
       ]
     },
@@ -2261,7 +2261,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.33",
+      "value": "0.32",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -2303,7 +2303,7 @@
         },
         {
           "date": "2026-07-09",
-          "value": 0.33
+          "value": 0.32
         }
       ]
     },
@@ -2371,9 +2371,9 @@
       "impact": "up",
       "source": "계산치",
       "description": "금융시장 유동성 리스크 (상승 시 위험회피 강화)",
-      "value": "-0.050",
-      "diff": -0.04,
-      "diffPercent": 400,
+      "value": "-0.040",
+      "diff": -0.03,
+      "diffPercent": 300,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -2415,7 +2415,7 @@
         },
         {
           "date": "2026-07-08",
-          "value": -0.05
+          "value": -0.04
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,513.40",
-      "change": "+4.40",
-      "changePercent": "+0.29",
+      "value": "1,512.10",
+      "change": "+3.10",
+      "changePercent": "+0.21",
       "trend": "up"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "931.58",
-      "change": "+3.23",
-      "changePercent": "+0.35",
+      "value": "931.21",
+      "change": "+2.86",
+      "changePercent": "+0.31",
       "trend": "up"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,729.36",
-      "change": "+7.89",
-      "changePercent": "+0.46",
+      "value": "1,728.71",
+      "change": "+7.24",
+      "changePercent": "+0.42",
       "trend": "up"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "222.63",
-      "change": "+1.00",
-      "changePercent": "+0.45",
+      "value": "222.43",
+      "change": "+0.80",
+      "changePercent": "+0.36",
       "trend": "up"
     }
   ],
@@ -2582,24 +2582,24 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 44,
-    "downProb": 56,
-    "kospiUpProb": 58,
-    "kospiDownProb": 42,
+    "upProb": 41,
+    "downProb": 59,
+    "kospiUpProb": 70,
+    "kospiDownProb": 30,
     "timeframes": {
       "d1": {
-        "upProb": 19,
-        "downProb": 81,
+        "upProb": 18,
+        "downProb": 82,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 38,
-        "downProb": 62,
+        "upProb": 36,
+        "downProb": 64,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 40,
-        "downProb": 60,
+        "upProb": 38,
+        "downProb": 62,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2607,10 +2607,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 7월 9일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1512.08원을 기록하고 있으며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 44%로 제시하여 하락 가능성에 무게를 싣고 있습니다. 기술적 지표들을 살펴보면, RSI(14일) 34.3, Stochastic(14) %K 13.7%로 과매도 구간에 진입했음을 시사하며, MACD 또한 약세 신호를 보내고 있어 단기적으로는 하락 모멘텀이 강합니다. 특히 볼린저밴드 하단인 1503.5원에 근접해 있으며, 이 레벨은 단기 지지선으로 작용할 수 있습니다. 5일 이동평균선(1525.39원)과 20일 이동평균선(1530.67원)은 저항선으로 작용할 것으로 보이며, 60일 이동평균선(1505.79원)은 현 환율보다 아래에 위치해 단기 하락 추세를 지지하고 있습니다. 달러인덱스(DXY)의 단기 5일 모멘텀이 -16.66%로 급락하며 원/달러 환율 하락 압력을 가중시키고 있으나, 미국의 10년물 국채금리(4.569%) 상승 및 한·미 10년물 금리차 확대(0.32%p)는 중장기적으로 달러 강세 요인으로 작용할 수 있어 하락폭은 제한적일 수 있습니다. 따라서 향후 1~5거래일 동안 원/달러 환율은 하방으로는 1503.5원에서 1500원까지의 지지선 테스트 후 1525.39원 부근까지의 단기 반등을 모색하는 흐름을 보일 것으로 예상되며, 급격한 변동성보다는 박스권 내 움직임에 대비하는 관망 전략이 유효합니다. ①정량예측모델의 하락 우위 신호(상승 확률 44%) ②기술적 지표 상 과매도 구간 진입으로 인한 하락 모멘텀 둔화 가능성 ③달러인덱스(DXY)의 급격한 약세 모멘텀 지속.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,291.91pt를 기록하고 있으며, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 58%로 예측하며 긍정적인 전망을 제시하고 있습니다. 코스피는 최근 하락세를 이어왔으나, RSI(14일)가 30.3으로 과매도권에 진입했으며, 볼린저밴드 하단인 7243.05pt에 근접하여 단기적인 반등 가능성을 시사합니다. 이동평균선(MA5=7666.94pt, MA20=8333.25pt, MA60=7660.51pt)은 모두 현재 지수 위에 위치하여 중단기 하락 추세는 여전하지만, 1일 모멘텀이 0.62%로 소폭 상승 전환하며 반등 시도를 나타내고 있습니다. 그러나 반도체(SOX) 지수의 단기 5일 모멘텀이 -11.74%, 나스닥 선물 흐름이 -1.29%로 글로벌 기술주 약세가 지속되고 있어 코스피 상방 압력은 제한될 것으로 보입니다. 따라서 향후 1~5거래일 동안 코스피 지수는 7243.05pt를 단기 지지선으로 삼아 하방 경직성을 확보한 후, 5일 이동평균선인 7666.94pt까지 반등을 시도할 가능성이 높으며, 매수 관점으로 접근하되 외부 요인 변화에 대한 주의가 필요합니다. ①정량예측모델의 상승 우위 신호(상승 확률 58%) ②RSI 및 볼린저밴드 하단 근접 등 기술적 과매도 구간 진입 ③직전 거래일 소폭 상승 전환으로 단기 반등 기대감.\n\n실전 투자 대응\n환율: 원/달러 환율은 1503.5원~1525.39원 박스권 내 관망하며 하단 매수 기회를 모색합니다.\n코스피: 코스피 지수는 7243.05원 지지 확인 후 7666.94원 목표로 매수 관점 유효합니다.",
     "lastAiUpdate": 1783599211595,
     "score": {
-      "upScore": 49.87489509529511,
-      "downScore": 63.298128298314325,
-      "kospiUpScore": 26.827787430141353,
-      "kospiDownScore": 19.606745872704565
+      "upScore": 47.053159909243746,
+      "downScore": 66.91408909858436,
+      "kospiUpScore": 27.878935069681848,
+      "kospiDownScore": 11.678217103037552
     }
   },
   "technicals": {
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 9. PM 12:48:18"
+  "lastUpdate": "2026. 7. 9. PM 1:25:00"
 }
