@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.706",
-      "diff": -0.57,
-      "diffPercent": -0.56,
+      "value": "100.755",
+      "diff": -0.53,
+      "diffPercent": -0.52,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 100.71
+          "value": 100.75
         }
       ]
     },
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.557",
+      "value": "4.559",
       "diff": -0.05,
       "diffPercent": -1.08,
       "trend": "down",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "16.17",
-      "diff": -0.33,
-      "diffPercent": -2,
+      "value": "16.08",
+      "diff": -0.42,
+      "diffPercent": -2.55,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 16.17
+          "value": 16.08
         }
       ]
     },
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,142.533",
-      "diff": 269.35,
-      "diffPercent": 1.04,
+      "value": "26,181.186",
+      "diff": 308.01,
+      "diffPercent": 1.19,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 26142.53
+          "value": 26181.19
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,551.63",
-      "diff": 8.04,
-      "diffPercent": 0.11,
+      "value": "7,557.33",
+      "diff": 13.74,
+      "diffPercent": 0.18,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 7551.63
+          "value": 7557.33
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "12,209.81",
-      "diff": -137.97,
-      "diffPercent": -1.12,
+      "value": "12,245.454",
+      "diff": -102.33,
+      "diffPercent": -0.83,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 12209.81
+          "value": 12245.45
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,613.5",
-      "diff": -176.75,
-      "diffPercent": -0.59,
+      "value": "29,564.25",
+      "diff": -226,
+      "diffPercent": -0.76,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 29613.5
+          "value": 29564.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,605.75",
-      "diff": 14.5,
-      "diffPercent": 0.19,
+      "value": "7,596",
+      "diff": 4.75,
+      "diffPercent": 0.06,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 7605.75
+          "value": 7596
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "78.76",
-      "diff": -0.58,
-      "diffPercent": -0.73,
+      "value": "78.79",
+      "diff": -0.55,
+      "diffPercent": -0.69,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 78.76
+          "value": 78.79
         }
       ]
     },
@@ -2476,10 +2476,10 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,492.30",
-      "change": "+0.20",
-      "changePercent": "+0.01",
-      "trend": "up"
+      "value": "1,490.90",
+      "change": "-1.20",
+      "changePercent": "-0.08",
+      "trend": "down"
     },
     {
       "id": "jpy-krw",
@@ -2487,30 +2487,30 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "920.07",
-      "change": "+0.10",
-      "changePercent": "+0.01",
-      "trend": "up"
+      "value": "919.46",
+      "change": "-0.51",
+      "changePercent": "-0.06",
+      "trend": "down"
     },
     {
       "id": "eur-krw",
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,706.52",
-      "change": "+0.23",
-      "changePercent": "+0.01",
-      "trend": "up"
+      "value": "1,705.29",
+      "change": "-1.00",
+      "changePercent": "-0.06",
+      "trend": "down"
     },
     {
       "id": "cny-krw",
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "220.38",
-      "change": "0.00",
-      "changePercent": "0.00",
-      "trend": "neutral"
+      "value": "220.17",
+      "change": "-0.21",
+      "changePercent": "-0.10",
+      "trend": "down"
     }
   ],
   "stockPrices": [
@@ -2603,10 +2603,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 7월 15일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n원/달러 환율은 현재 1489.97원을 기록하며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 43%로 제시하여 하락 압력이 우세함을 시사하고 있습니다. 기술적 분석에서 MACD 지표는 매도 신호를 나타내고 있으며, 달러 인덱스(DXY)의 단기 5일 모멘텀이 -16.57%로 크게 하락하며 달러 약세 흐름을 강하게 뒷받침하고 있습니다. 이러한 요인들에 따라 환율은 단기적으로 추가 하락할 가능성이 높으며, 1476.01원(MA5)과 1472.6원(MA60) 선에서 지지력을 테스트할 것으로 예상됩니다. 상단 저항선은 1488.77원(MA20)과 심리적 저항선인 1500원 부근이 될 것입니다. 투자 전략으로는 추가적인 환율 하락에 대비하여 달러 매도를 고려하거나, 관망 후 1470원대 중반까지의 하락 시 저점 매수 기회를 활용하는 것이 유효할 것입니다. ① 정량예측모델의 43% 낮은 상승 확률 ② DXY의 급격한 단기 모멘텀 하락 ③ MACD 매도 신호\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 7,284.41pt를 기록하며, 정량예측모델은 향후 1~5거래일 내 62%의 높은 상승 확률을 제시하여 긍정적인 전망을 보이고 있습니다. 직전 거래일 7.01%의 강한 반등을 기록하며 단기 이동평균선(MA5: 7221.2pt)을 상회했고, 반도체 지수(SOX) 및 나스닥 선물 흐름 또한 각각 0.46%, 0.87% 상승하며 긍정적인 모멘텀을 제공하고 있습니다. 현재 RSI 37로 과매도권에서 벗어나며 추가 상승 여력이 있음을 시사합니다. 이에 따라 지수는 7,221.2pt(MA5)를 지지선으로 삼아 추가 상승을 시도하며 7,722.17pt(MA60) 및 8,141.8pt(MA20)를 저항선으로 두고 움직일 것으로 예상됩니다. 투자 전략으로는 상승 추세에 동참하는 매수 또는 단기 조정 시 저점 매수 기회를 활용하는 것이 유효할 것입니다. ① 정량예측모델의 62% 높은 상승 확률 ② 직전 거래일의 강한 반등 및 긍정적인 해외 증시 모멘텀 ③ RSI 37로 추가 상승 여력 존재\n\n실전 투자 대응\n환율: 환율 1489.97원, DXY 약세와 모델 하락 우세로 1476원 선 지지력 테스트 전망. 매도.\n코스피: 코스피 7284.41pt, 강한 반등과 모델 상승 우세로 7722pt 향한 매수 전략 유효.",
     "lastAiUpdate": 1784126054326,
     "score": {
-      "upScore": 47.19052663941452,
-      "downScore": 59.83058010661024,
-      "kospiUpScore": 20.379680334941078,
-      "kospiDownScore": 19.677727491737805
+      "upScore": 47.19322929274731,
+      "downScore": 59.86070556335944,
+      "kospiUpScore": 20.395947351684544,
+      "kospiDownScore": 19.70123926977569
     }
   },
   "technicals": {
@@ -2640,32 +2640,32 @@
     "compoundSignals": []
   },
   "kospiTechnicals": {
-    "rsi14": 37,
-    "ma5": 7221.2,
-    "ma20": 8141.8,
-    "ma60": 7722.17,
+    "rsi14": 29.9,
+    "ma5": 7143.2,
+    "ma20": 8041.43,
+    "ma60": 7732.68,
     "bb": {
-      "upper": 9493.12,
-      "mid": 8141.8,
-      "lower": 6790.48,
-      "bandwidth": 33.19
+      "upper": 9459.75,
+      "mid": 8041.43,
+      "lower": 6623.11,
+      "bandwidth": 35.28
     },
     "momentum": {
-      "d1": 7.01,
-      "d5": -4.86,
-      "d20": -16.53
+      "d1": 6.24,
+      "d5": 0.52,
+      "d20": -17.82
     },
     "keyLevels": {
-      "support": 6126.06,
+      "support": 6159.88,
       "resistance": 9385.59
     },
     "macd": {
-      "macd": -240.62,
-      "signal": -73.06,
-      "hist": -167.56
+      "macd": -276.82,
+      "signal": -119.27,
+      "hist": -157.55
     },
     "stochastic": {
-      "k": 22.2
+      "k": 34.6
     }
   },
   "kospiSentiment": "보합",
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 15. PM 3:23:06"
+  "lastUpdate": "2026. 7. 15. PM 3:27:30"
 }
