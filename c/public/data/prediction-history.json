@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "date": "2026-03-22",
+      "predicted": {
+        "d1_up": 77,
+        "d5_up": 58,
+        "d20_up": 48,
+        "overall_up": 49
+      },
+      "actual_next_close": 1504.58,
+      "hit_d1": false,
+      "rateAtPrediction": 1504.83
+    },
+    {
+      "date": "2026-03-28",
+      "predicted": {
+        "d1_up": 72,
+        "d5_up": 65,
+        "d20_up": 59,
+        "overall_up": 66
+      },
+      "actual_next_close": 1506.98,
+      "hit_d1": true,
+      "rateAtPrediction": 1504.58
+    },
+    {
+      "date": "2026-04-01",
+      "type": "market_close",
+      "sentiment": "강세",
+      "aiBrief": "기관 +2.4조원 역대급 순매수와 중동 리스크 완화로 코스피 5,440선 탈환. 외국인도 순매수 전환하며 강력한 반등 장세 시현."
+    },
+    {
+      "date": "2026-04-02",
+      "predicted": {
+        "d1_up": 65,
+        "d5_up": 49,
+        "d20_up": 46,
+        "overall_up": 48
+      },
+      "actual_next_close": 1519.38,
+      "hit_d1": true,
+      "rateAtPrediction": 1506.98,
+      "kospi_predicted_up": 63,
+      "kospi_actual_next_close": 5478.7,
+      "kospi_hit_d1": true,
+      "kospiAtPrediction": 5052.46,
+      "aiAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다."
+    },
+    {
+      "date": "2026-04-03",
+      "predicted": {
+        "d1_up": 68,
+        "d5_up": 48,
+        "d20_up": 44,
+        "overall_up": 37
+      },
+      "actual_next_close": 1509.67,
+      "hit_d1": false,
+      "rateAtPrediction": 1519.38,
+      "kospi_predicted_up": 56,
+      "kospi_actual_next_close": 5377.3,
+      "kospi_hit_d1": false,
+      "kospiAtPrediction": 5478.7,
+      "aiAnalysis": "Gemini API 키가 설정되지 않아 기본 분석 시스템을 사용합니다."
+    }
+  ]
+}
