@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.769",
+      "value": "100.767",
       "diff": -0.51,
       "diffPercent": -0.5,
       "trend": "down",
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.559",
+      "value": "4.557",
       "diff": -0.05,
       "diffPercent": -1.08,
       "trend": "down",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "16.02",
-      "diff": -0.48,
-      "diffPercent": -2.91,
+      "value": "16.1",
+      "diff": -0.4,
+      "diffPercent": -2.42,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 16.02
+          "value": 16.1
         }
       ]
     },
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,163.092",
-      "diff": 289.91,
-      "diffPercent": 1.12,
+      "value": "26,168.945",
+      "diff": 295.76,
+      "diffPercent": 1.14,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 26163.09
+          "value": 26168.94
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,560.41",
-      "diff": 16.82,
-      "diffPercent": 0.22,
+      "value": "7,559.54",
+      "diff": 15.95,
+      "diffPercent": 0.21,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 7560.41
+          "value": 7559.54
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "12,278.791",
-      "diff": -68.99,
-      "diffPercent": -0.56,
+      "value": "12,312.007",
+      "diff": -35.77,
+      "diffPercent": -0.29,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 12278.79
+          "value": 12312.01
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,689.5",
-      "diff": -100.75,
-      "diffPercent": -0.34,
+      "value": "29,619",
+      "diff": -171.25,
+      "diffPercent": -0.57,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 29689.5
+          "value": 29619
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,615.75",
-      "diff": 24.5,
-      "diffPercent": 0.32,
+      "value": "7,608.75",
+      "diff": 17.5,
+      "diffPercent": 0.23,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 7615.75
+          "value": 7608.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "79.17",
-      "diff": -0.17,
-      "diffPercent": -0.21,
+      "value": "79.16",
+      "diff": -0.18,
+      "diffPercent": -0.23,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-07-15",
-          "value": 79.17
+          "value": 79.16
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,491.70",
-      "change": "+1.70",
-      "changePercent": "+0.11",
+      "value": "1,491.40",
+      "change": "+1.40",
+      "changePercent": "+0.09",
       "trend": "up"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "919.61",
-      "change": "-0.34",
-      "changePercent": "-0.04",
+      "value": "919.51",
+      "change": "-0.44",
+      "changePercent": "-0.05",
       "trend": "down"
     },
     {
@@ -2501,8 +2501,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,705.83",
-      "change": "+1.05",
+      "value": "1,705.79",
+      "change": "+1.01",
       "changePercent": "+0.06",
       "trend": "up"
     },
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "220.31",
-      "change": "+0.29",
-      "changePercent": "+0.13",
+      "value": "220.27",
+      "change": "+0.25",
+      "changePercent": "+0.11",
       "trend": "up"
     }
   ],
@@ -2607,10 +2607,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 7월 15일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n원/달러 환율은 현재 1489.97원을 기록하며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 43%로 제시하여 하락 압력이 우세함을 시사하고 있습니다. 기술적 분석에서 MACD 지표는 매도 신호를 나타내고 있으며, 달러 인덱스(DXY)의 단기 5일 모멘텀이 -16.57%로 크게 하락하며 달러 약세 흐름을 강하게 뒷받침하고 있습니다. 이러한 요인들에 따라 환율은 단기적으로 추가 하락할 가능성이 높으며, 1476.01원(MA5)과 1472.6원(MA60) 선에서 지지력을 테스트할 것으로 예상됩니다. 상단 저항선은 1488.77원(MA20)과 심리적 저항선인 1500원 부근이 될 것입니다. 투자 전략으로는 추가적인 환율 하락에 대비하여 달러 매도를 고려하거나, 관망 후 1470원대 중반까지의 하락 시 저점 매수 기회를 활용하는 것이 유효할 것입니다. ① 정량예측모델의 43% 낮은 상승 확률 ② DXY의 급격한 단기 모멘텀 하락 ③ MACD 매도 신호\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 7,284.41pt를 기록하며, 정량예측모델은 향후 1~5거래일 내 62%의 높은 상승 확률을 제시하여 긍정적인 전망을 보이고 있습니다. 직전 거래일 7.01%의 강한 반등을 기록하며 단기 이동평균선(MA5: 7221.2pt)을 상회했고, 반도체 지수(SOX) 및 나스닥 선물 흐름 또한 각각 0.46%, 0.87% 상승하며 긍정적인 모멘텀을 제공하고 있습니다. 현재 RSI 37로 과매도권에서 벗어나며 추가 상승 여력이 있음을 시사합니다. 이에 따라 지수는 7,221.2pt(MA5)를 지지선으로 삼아 추가 상승을 시도하며 7,722.17pt(MA60) 및 8,141.8pt(MA20)를 저항선으로 두고 움직일 것으로 예상됩니다. 투자 전략으로는 상승 추세에 동참하는 매수 또는 단기 조정 시 저점 매수 기회를 활용하는 것이 유효할 것입니다. ① 정량예측모델의 62% 높은 상승 확률 ② 직전 거래일의 강한 반등 및 긍정적인 해외 증시 모멘텀 ③ RSI 37로 추가 상승 여력 존재\n\n실전 투자 대응\n환율: 환율 1489.97원, DXY 약세와 모델 하락 우세로 1476원 선 지지력 테스트 전망. 매도.\n코스피: 코스피 7284.41pt, 강한 반등과 모델 상승 우세로 7722pt 향한 매수 전략 유효.",
     "lastAiUpdate": 1784126054326,
     "score": {
-      "upScore": 47.264712257794216,
-      "downScore": 61.12844196464769,
-      "kospiUpScore": 20.406771833274938,
-      "kospiDownScore": 19.723165360286714
+      "upScore": 47.24096041868258,
+      "downScore": 61.104314684433305,
+      "kospiUpScore": 20.392335600977336,
+      "kospiDownScore": 19.744947132731316
     }
   },
   "technicals": {
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 15. PM 2:44:50"
+  "lastUpdate": "2026. 7. 15. PM 2:47:31"
 }
