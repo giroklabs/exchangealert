@@ -74,9 +74,9 @@ jobs:
         cp data/exchange-rates.json "data/daily/exchange-rates-${SEARCH_DATE}.json"
         
         # Scripts
-        node dollar-investment-web/scripts/consolidate-exchange-rates.cjs || echo "Consolidate failed"
-        node dollar-investment-web/scripts/generate-intraday.cjs || echo "Intraday failed"
-        node dollar-investment-web/scripts/fetch-news.js || echo "News failed"
+        node c/scripts/consolidate-exchange-rates.cjs || echo "Consolidate failed"
+        node c/scripts/generate-intraday.cjs || echo "Intraday failed"
+        node c/scripts/fetch-news.js || echo "News failed"
         
     - name: Commit and Push
       run: |

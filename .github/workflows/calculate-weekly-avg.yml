@@ -102,7 +102,7 @@ jobs:
           // 달러 지수 데이터 로드 (이미 저장된 파일에서)
           let dollarIndexData = null;
           let dollarIndexAvg = { low: 0, high: 0, average: 0 };
-          const dollarIndexPath = path.join('dollar-investment-web', 'public', 'data', 'dollar-index.json');
+          const dollarIndexPath = path.join('c', 'public', 'data', 'dollar-index.json');
           if (fs.existsSync(dollarIndexPath)) {
             try {
               dollarIndexData = JSON.parse(fs.readFileSync(dollarIndexPath, 'utf8'));
@@ -155,8 +155,8 @@ jobs:
             }
           };
 
-          // dollar-investment-web/public/data에 저장
-          const outputPath = path.join('dollar-investment-web', 'public', 'data', 'weekly-averages.json');
+          // c/public/data에 저장
+          const outputPath = path.join('c', 'public', 'data', 'weekly-averages.json');
           fs.mkdirSync(path.dirname(outputPath), { recursive: true });
           fs.writeFileSync(outputPath, JSON.stringify(weeklyAverages, null, 2));
           console.log('✅ 52주 평균 데이터 생성 완료');
@@ -165,7 +165,7 @@ jobs:
 
       - name: Calculate Dynamic Correlation (70-day Window)
         run: |
-          cd dollar-investment-web
+          cd c
           npm install node-fetch || true
           node scripts/analyze-correlation.js
 
@@ -173,7 +173,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add dollar-investment-web/public/data/weekly-averages.json dollar-investment-web/public/data/correlations.json
+          git add c/public/data/weekly-averages.json c/public/data/correlations.json
           git diff --staged --quiet || git commit -m "Update 52-week averages and correlations [skip ci]"
           for i in 1 2 3; do
             git pull --rebase origin main || true

@@ -184,7 +184,7 @@ jobs:
             console.log('  - 사용된 데이터:', recent52Weeks.length, '개 (최근 52주, 약', Math.round(recent52Weeks.length / 5), '주)');
             console.log('  - 최신 데이터 날짜:', latestDate);
             
-            const outputPath = 'dollar-investment-web/public/data/dollar-index.json';
+            const outputPath = 'c/public/data/dollar-index.json';
             fs.mkdirSync(path.dirname(outputPath), { recursive: true });
             fs.writeFileSync(outputPath, JSON.stringify(dollarIndexData, null, 2));
             console.log('✅ FRED API에서 달러 지수 데이터 저장 완료:', dollarIndexData.current);
@@ -202,7 +202,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add dollar-investment-web/public/data/dollar-index.json
+          git add c/public/data/dollar-index.json
           if ! git diff --staged --quiet; then
             git commit -m "Update dollar index data"
             for i in 1 2 3; do

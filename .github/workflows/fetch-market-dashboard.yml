@@ -37,7 +37,7 @@ jobs:
       - name: Cache KIS Token
         uses: actions/cache@v4
         with:
-          path: dollar-investment-web/.kis-token.json
+          path: c/.kis-token.json
           key: kis-token-${{ github.run_id }}
           restore-keys: |
             kis-token-
@@ -54,21 +54,21 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           echo "🚀 Starting data fetch..."
-          node dollar-investment-web/scripts/fetch-market-dashboard.js
+          node c/scripts/fetch-market-dashboard.js
           echo "✅ Data fetch process completed."
 
       - name: Validate Market Data
         if: success()
         run: |
           echo "🔍 Validating data integrity..."
-          node dollar-investment-web/scripts/validate-market-data.js
+          node c/scripts/validate-market-data.js
 
       - name: Commit and push
         if: always()
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add dollar-investment-web/public/data/market-dashboard.json
+          git add c/public/data/market-dashboard.json
           if ! git diff --staged --quiet; then
             git commit -m "data: 환율 지표 데이터 및 AI 분석 업데이트"
             for i in 1 2 3; do

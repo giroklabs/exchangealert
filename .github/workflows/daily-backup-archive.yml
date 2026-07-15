@@ -20,10 +20,10 @@ jobs:
 
       - name: Create Backup Archive
         run: |
-          BACKUP_FILE="dollar-investment-web/data/user-backup.json"
+          BACKUP_FILE="c/data/user-backup.json"
           if [ -f "$BACKUP_FILE" ]; then
             DATE=$(date +'%Y-%m-%d')
-            ARCHIVE_DIR="dollar-investment-web/data/backups"
+            ARCHIVE_DIR="c/data/backups"
             mkdir -p "$ARCHIVE_DIR"
             cp "$BACKUP_FILE" "$ARCHIVE_DIR/backup-$DATE.json"
             echo "✅ Backup archived for $DATE"
@@ -35,7 +35,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add dollar-investment-web/data/backups/
+          git add c/data/backups/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
