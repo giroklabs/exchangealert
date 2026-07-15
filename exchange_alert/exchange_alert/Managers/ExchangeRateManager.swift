@@ -47,6 +47,7 @@ class ExchangeRateManager: ObservableObject {
     
     init() {
         loadSettings()
+        saveSettings() // 앱 시작 시 기존 설정을 AppGroup(Watch)에 즉시 동기화
         loadAPICallCount() // API 호출 횟수 로드
         
         // 토큰이 업데이트되었을 때 알려달라고 설정
@@ -1022,6 +1023,12 @@ class ExchangeRateManager: ObservableObject {
         if let data = try? JSONEncoder().encode(currencyAlertSettings) {
             UserDefaults.standard.set(data, forKey: "CurrencyAlertSettings")
             
+            // Watch 앱과 공유를 위한 AppGroup 저장
+            if let userDefaults = UserDefaults(suiteName: "group.com.giroklabs.exchangealert") {
+                userDefaults.set(data, forKey: "CurrencyAlertSettings")
+                print("⌚ [AppGroup] Watch용 설정 동기화 완료")
+            }
+            
             // Cloud(Firestore)와 동기화
             syncSettingsToCloud()
         }
@@ -1055,6 +1062,20 @@ class ExchangeRateManager: ObservableObject {
             } else {
                 batch.deleteDocument(docRef)
             }
+        }
+        
+        // 2. 이전 토큰의 stale 문서 정리 (토큰 갱신 시 이전 토큰 문서가 남아있으면 만료된 토큰으로 발송 시도됨)
+        if let previousToken = UserDefaults.standard.string(forKey: "PreviousFCMToken"),
+           previousToken != fcmToken {
+            print("🗑️ [Firestore] 이전 토큰 문서 정리 시작: \(previousToken.prefix(8))...")
+            for (currency, _) in currencyAlertSettings.settings {
+                let oldDocId = "\(previousToken)_\(currency.rawValue)"
+                let oldDocRef = db.collection("alerts").document(oldDocId)
+                batch.deleteDocument(oldDocRef)
+            }
+            // 정리 완료 후 이전 토큰 기록 삭제
+            UserDefaults.standard.removeObject(forKey: "PreviousFCMToken")
+            print("✅ [Firestore] 이전 토큰 문서 정리 완료")
         }
         
         batch.commit { error in

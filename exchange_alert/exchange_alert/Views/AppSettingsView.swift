@@ -15,7 +15,7 @@ struct AppSettingsView: View {
             VStack(spacing: 0) {
                 // 커스텀 헤더 (내비게이션 바 대체)
                 HStack {
-                    AppTitleView(baseSize: 26)
+                    AppTitleView(title: "설정", baseSize: 26)
                     
                     Spacer()
                     

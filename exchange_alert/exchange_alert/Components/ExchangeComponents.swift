@@ -195,7 +195,6 @@ struct ExchangeStatusIcon: View {
 struct AlertSettingsCard: View {
     let currency: CurrencyType
     @EnvironmentObject var exchangeManager: ExchangeRateManager
-    @State private var showingNotificationPopup = false
     @State private var thresholdText = ""
     @FocusState private var isThresholdFocused: Bool
     
@@ -228,15 +227,6 @@ struct AlertSettingsCard: View {
                     }
                     
                     Spacer()
-                    
-                    // 알림 관리 버튼
-                    Button(action: {
-                        showingNotificationPopup = true
-                    }) {
-                        Image(systemName: "list.bullet.rectangle")
-                            .font(AppTheme.headlineFont)
-                            .foregroundColor(AppTheme.primary)
-                    }
                     
                     Toggle("", isOn: Binding(
                         get: { settings.isEnabled },
@@ -334,10 +324,6 @@ struct AlertSettingsCard: View {
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
-        }
-        .sheet(isPresented: $showingNotificationPopup) {
-            NotificationManagementPopup(isPresented: $showingNotificationPopup)
-                .environmentObject(exchangeManager)
         }
     }
 }
@@ -477,6 +463,7 @@ struct LoadingView: View {
 
 // MARK: - App Title View
 struct AppTitleView: View {
+    var title: String = "환율알라미"
     var baseSize: CGFloat = 20
     
     var body: some View {
@@ -486,7 +473,7 @@ struct AppTitleView: View {
                 .accessibilityHidden(true)
             
             GradientText(
-                text: "환율알라미",
+                text: title,
                 font: .custom("MaruBuri-Bold", size: baseSize),
                 gradient: AppTheme.exchangeGradient
             )

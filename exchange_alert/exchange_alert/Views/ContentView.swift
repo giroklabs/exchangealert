@@ -2,118 +2,142 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
-    @State private var isKeyboardVisible = false
     @State private var showingSettings = false
+    @State private var showingCalculator = false
+    @State private var showingNotifications = false
     
     var body: some View {
-        ZStack(alignment: .top) {
-            // 배경 그라데이션
-            AppTheme.backgroundGradient
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                // 커스텀 헤더 (내비게이션 바 대체)
-                HStack {
-                    AppTitleView(baseSize: 26)
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 16) {
-                        // 설정 버튼
-                        Button(action: {
-                            showingSettings = true
-                        }) {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.yellow)
-                        }
+        ZStack {
+            // 1. 메인 콘텐츠 뷰 (키보드 나타날 때 정상적으로 줄어듦)
+            ZStack(alignment: .top) {
+                // 배경 그라데이션
+                AppTheme.backgroundGradient
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    // 커스텀 헤더 (내비게이션 바 대체)
+                    HStack {
+                        AppTitleView(baseSize: 26)
                         
-                        // 새로고침 버튼
-                        Button(action: {
-                            exchangeManager.pullToRefresh()
-                        }) {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.yellow)
+                        Spacer()
+                        
+                        HStack(spacing: 16) {
+                            // 환차익 계산기 버튼
+                            Button(action: {
+                                showingCalculator = true
+                            }) {
+                                Image(systemName: "plus.forwardslash.minus")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundColor(.yellow)
+                            }
+                            
+                            // 알림 센터 버튼
+                            Button(action: {
+                                showingNotifications = true
+                            }) {
+                                Image(systemName: "bell.fill")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundColor(.yellow)
+                            }
+                            
+                            // 설정 버튼
+                            Button(action: {
+                                showingSettings = true
+                            }) {
+                                Image(systemName: "gearshape.fill")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundColor(.yellow)
+                            }
                         }
                     }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                
-                // 상단 구분선
-                TopSeparator()
-                
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        // 환율 정보 카드
-                        if let rate = exchangeManager.currentRate {
-                            ExchangeRateCard(rate: rate, alertSettings: exchangeManager.currentAlertSettings, selectedCurrency: $exchangeManager.selectedCurrency)
-                                .padding(.horizontal, 16)
-                        } else if exchangeManager.isLoading {
-                            LoadingView()
-                                .frame(maxWidth: .infinity, maxHeight: 200)
-                                .padding(.horizontal, 16)
-                        } else if let errorMessage = exchangeManager.errorMessage {
-                            ErrorStateView(message: errorMessage) {
-                                exchangeManager.refresh()
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    
+                    // 상단 구분선
+                    TopSeparator()
+                    
+                    ScrollView {
+                        ZStack(alignment: .top) {
+                            LazyVStack(spacing: 16) {
+                                // 환율 정보 카드
+                                if let rate = exchangeManager.currentRate {
+                                    ExchangeRateCard(rate: rate, alertSettings: exchangeManager.currentAlertSettings, selectedCurrency: $exchangeManager.selectedCurrency)
+                                        .padding(.horizontal, 16)
+                                        .opacity(exchangeManager.isLoading ? 0.6 : 1.0)
+                                } else if exchangeManager.isLoading {
+                                    LoadingView()
+                                        .frame(maxWidth: .infinity, maxHeight: 200)
+                                        .padding(.horizontal, 16)
+                                } else if let errorMessage = exchangeManager.errorMessage {
+                                    ErrorStateView(message: errorMessage) {
+                                        exchangeManager.refresh()
+                                    }
+                                    .padding(.horizontal, 16)
+                                } else {
+                                    // 환율 데이터가 없을 때 기본 카드 표시
+                                    DefaultExchangeCard(selectedCurrency: $exchangeManager.selectedCurrency)
+                                        .padding(.horizontal, 16)
+                                }
+                                
+                                // 알림 설정 카드
+                                AlertSettingsCard(currency: exchangeManager.selectedCurrency)
+                                    .opacity(exchangeManager.isLoading ? 0.6 : 1.0)
+                                
+                                // 마지막 업데이트 시간
+                                if exchangeManager.currentRate != nil {
+                                    LastUpdateView()
+                                        .padding(.horizontal, 16)
+                                        .padding(.top, -11)
+                                }
                             }
-                            .padding(.horizontal, 16)
-                        } else {
-                            // 환율 데이터가 없을 때 기본 카드 표시
-                            DefaultExchangeCard(selectedCurrency: $exchangeManager.selectedCurrency)
-                                .padding(.horizontal, 16)
+                            .padding(.top, 8)
+                            .padding(.bottom, 20)
+                            
+                            // 당겨서 새로고침 외의 로딩 시 표시할 오버레이
+                            if exchangeManager.isLoading && exchangeManager.currentRate != nil {
+                                ProgressView()
+                                    .scaleEffect(1.2)
+                                    .padding(.top, 40)
+                                    .transition(.opacity)
+                            }
                         }
-                        
-                        // 알림 설정 카드
-                        AlertSettingsCard(currency: exchangeManager.selectedCurrency)
-                        
-                        // 마지막 업데이트 시간
-                        if exchangeManager.currentRate != nil {
-                            LastUpdateView()
-                                .padding(.horizontal, 16)
-                                .padding(.top, -11)
-                        }
-                        
                     }
                     .refreshable {
                         await refreshData()
                     }
-                    .padding(.top, 8)
-                    .padding(.bottom, 20)
                 }
+                .padding(.bottom, 50) // 하단 배너 공간 확보
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if !isKeyboardVisible {
+            .onTapGesture {
+                // 배경 탭 시 키보드 내리기
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
+            
+            // 2. 하단 배너 뷰 (키보드를 무시하고 항상 맨 아래 고정)
+            VStack {
+                Spacer()
                 AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/9991728010")
                     .frame(height: 50)
-                    .padding(.horizontal, 16)
-                    .padding(.top, 12)
-                    .padding(.bottom, 12)
-                    .background(Color(.systemBackground))
+                    .frame(maxWidth: .infinity)
+                    .background(Color.clear)
             }
+            .ignoresSafeArea(.keyboard, edges: .bottom) // 키보드가 올라올 때 밀려 올라가지 않음
         }
+
         .sheet(isPresented: $showingSettings) {
             AppSettingsView()
+        }
+        .sheet(isPresented: $showingCalculator) {
+            ProfitCalculatorView()
+                .environmentObject(exchangeManager)
+        }
+        .sheet(isPresented: $showingNotifications) {
+            NotificationManagementPopup(isPresented: $showingNotifications)
+                .environmentObject(exchangeManager)
         }
         .onAppear {
             if exchangeManager.currentRate == nil {
                 exchangeManager.fetchExchangeRate()
-            }
-        }
-        .onTapGesture {
-            // 배경 탭 시 키보드 내리기
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-            DispatchQueue.main.async {
-                isKeyboardVisible = true
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            DispatchQueue.main.async {
-                isKeyboardVisible = false
             }
         }
     }

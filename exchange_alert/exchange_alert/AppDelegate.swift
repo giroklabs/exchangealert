@@ -99,6 +99,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         // 토큰을 UserDefaults에 저장하여 추후 Firestore 연동 시 사용
         if let token = fcmToken {
+            // 이전 토큰 저장 (Firestore에서 이전 토큰의 stale 문서 정리용)
+            let previousToken = UserDefaults.standard.string(forKey: "FCMToken")
+            if let prev = previousToken, prev != token {
+                UserDefaults.standard.set(prev, forKey: "PreviousFCMToken")
+                print("🔄 FCM 토큰 갱신 감지: 이전 토큰 백업 완료 (\(prev.prefix(8))... → \(token.prefix(8))...)")
+            }
+            
             UserDefaults.standard.set(token, forKey: "FCMToken")
             // 토큰이 업데이트되었음을 앱 전체에 알림
             NotificationCenter.default.post(name: Notification.Name("FCMTokenUpdated"), object: nil)
@@ -111,11 +118,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         let userInfo = notification.request.content.userInfo
         recordServerPushArrival(userInfo: userInfo)
         
-        // 앱이 포그라운드에 있을 때도 알림 표시 (배너, 알림센터 리스트, 소리, 배지 모두 허용)
+        // 앱이 켜져있는 상태(포그라운드)에서는 상단 배너를 띄우지 않음
+        // (사용자가 이미 화면을 보고 있으므로 방해받지 않도록 조치)
         if #available(iOS 14.0, *) {
-            completionHandler([.banner, .list, .sound, .badge])
+            completionHandler([.sound, .badge])
         } else {
-            completionHandler([.alert, .sound, .badge])
+            completionHandler([.sound, .badge])
         }
     }
     

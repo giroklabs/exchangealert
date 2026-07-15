@@ -2486,6 +2486,37 @@ async function main() {
     const downProb = 100 - upProb;
 
     // --- KOSPI 점수 정규화 및 확률 산출 ---
+    // --- [단기 예측 강화] Regime Switching (국면 전환) 스위치 ---
+    let isCrisisMode = false;
+    let crisisReason = "";
+    const vixInd = indicators.find(i => i.id.toLowerCase() === 'vix');
+    if (vixInd && parseFloat(vixInd.value) >= 20) {
+        isCrisisMode = true;
+        crisisReason = "VIX 급등(20 이상)";
+    }
+    const soxInd = indicators.find(i => i.id.toLowerCase() === 'sox');
+    if (!isCrisisMode && soxInd && Math.abs(soxInd.diffPercent) >= 1.5) {
+        isCrisisMode = true;
+        crisisReason = `SOX 급등락(${soxInd.diffPercent}%)`;
+    }
+    const nightInd = indicators.find(i => i.id.toLowerCase() === 'kospi_night');
+    if (!isCrisisMode && nightInd && Math.abs(nightInd.diffPercent) >= 1.5) {
+        isCrisisMode = true;
+        crisisReason = `야간선물 급등락(${nightInd.diffPercent}%)`;
+    }
+    
+    if (isCrisisMode) {
+        console.log(`🚨 [Regime Switch] 단기 모멘텀 급변 감지 (${crisisReason}): 오버나잇 가중치 증폭 모드 가동!`);
+        if (soxInd) {
+            if (soxInd.trend === 'up') kospiScores.up += 15.0;
+            else if (soxInd.trend === 'down') kospiScores.down += 15.0;
+        }
+        if (nightInd) {
+            if (nightInd.trend === 'up') kospiScores.up += 20.0;
+            else if (nightInd.trend === 'down') kospiScores.down += 20.0;
+        }
+    }
+
     const kUp = kospiScores.up > 0 ? Math.log1p(kospiScores.up) * 8 : 0;
     const kDown = kospiScores.down > 0 ? Math.log1p(kospiScores.down) * 8 : 0;
     const kTotal = kUp + kDown;
@@ -3045,16 +3076,37 @@ async function main() {
         const ecosUp    = Math.log1p(fundBlock.up) * 5;
         const ecosDown  = Math.log1p(fundBlock.down) * 5;
 
+        // [단기 예측 강화] 환율 1일 단기 예측용 오버나잇 모멘텀 가중
+        let overnightFxUp = 0, overnightFxDown = 0;
+        if (typeof isCrisisMode !== 'undefined' && isCrisisMode) {
+            const dxyInd = indicators.find(i => i.id.toLowerCase() === 'dxy');
+            if (dxyInd) {
+                if (dxyInd.trend === 'up') overnightFxUp += 10;
+                else if (dxyInd.trend === 'down') overnightFxDown += 10;
+            }
+            // 미국 10년물 국채금리
+            const tnxInd = indicators.find(i => i.id.toLowerCase() === '미 10년물 국채금리' || i.id.toLowerCase() === 'tnx');
+            if (tnxInd) {
+                if (tnxInd.trend === 'up') overnightFxUp += 5;
+                else if (tnxInd.trend === 'down') overnightFxDown += 5;
+            }
+        }
+
         const calcProb = (tU, tD, mU, mD, eU, eD, w) => {
-            const u = tU * w.tech + mU * w.macro + eU * w.ecos + 0.3;
-            const d = tD * w.tech + mD * w.macro + eD * w.ecos + 0.3;
+            let macroU = mU; let macroD = mD;
+            // Regime Switch 발동 시 1일 예측(isD1)에서 매크로의 영향을 완전히 0%로 차단
+            if (w.isD1 && typeof isCrisisMode !== 'undefined' && isCrisisMode) {
+                macroU = 0; macroD = 0; 
+            }
+            const u = tU * w.tech + macroU * w.macro + eU * w.ecos + (w.isD1 ? overnightFxUp : 0) + 0.3;
+            const d = tD * w.tech + macroD * w.macro + eD * w.ecos + (w.isD1 ? overnightFxDown : 0) + 0.3;
             return { upProb: Math.round((u / (u + d)) * 100), downProb: Math.round((d / (u + d)) * 100) };
         };
 
         timeframes = {
-            d1:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.85, macro: 0.15, ecos: 0.0 }), basis: '초단기 기술적지표(MACD/Stoch)+실시간거시강조' },
-            d5:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.4, macro: 0.6, ecos: 0.0 }), basis: '모멘텀+수급·달러사이클중심' },
-            d20: { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.1, macro: 0.45, ecos: 0.45 }), basis: 'ECOS+경상·외환중심' }
+            d1:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.85, macro: 0.15, ecos: 0.0, isD1: true }), basis: (typeof isCrisisMode !== 'undefined' && isCrisisMode) ? 'Regime Switch 가동(매크로 0%+오버나잇 집중)' : '초단기 기술적지표(MACD/Stoch)+실시간거시강조' },
+            d5:  { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.4, macro: 0.6, ecos: 0.0, isD1: false }), basis: '모멘텀+수급·달러사이클중심' },
+            d20: { ...calcProb(techUp, techDown, macroUp, macroDown, ecosUp, ecosDown, { tech: 0.1, macro: 0.45, ecos: 0.45, isD1: false }), basis: 'ECOS+경상·외환중심' }
         };
         console.log(`📊 [Timeframe] 1일: 상승${timeframes.d1.upProb}% | 5일: 상승${timeframes.d5.upProb}% | 20일: 상승${timeframes.d20.upProb}%`);
     } catch (tfErr) {

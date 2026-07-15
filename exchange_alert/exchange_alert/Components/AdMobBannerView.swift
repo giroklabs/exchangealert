@@ -38,6 +38,13 @@ struct AdMobBannerView: UIViewRepresentable {
         let request = Request()
         bannerView.load(request)
         
+        // 배경을 투명하게 설정
+        bannerView.backgroundColor = .clear
+        bannerView.isOpaque = false
+        
+        // 내부 서브뷰들도 투명하게 처리 (일부 광고 타입 대응)
+        bannerView.subviews.forEach { $0.backgroundColor = .clear }
+        
         print("📢 AdMob 배너 광고 로드 시작: \(adUnitID)")
         
         return bannerView
@@ -55,6 +62,10 @@ struct AdMobBannerView: UIViewRepresentable {
     class Coordinator: NSObject, BannerViewDelegate {
         func bannerViewDidReceiveAd(_ bannerView: BannerView) {
             print("✅ AdMob 배너 광고 로드 성공")
+            
+            // 광고 로드 후에도 다시 한번 투명화 처리 (동적으로 생성된 서브뷰 대응)
+            bannerView.backgroundColor = .clear
+            bannerView.subviews.forEach { $0.backgroundColor = .clear }
         }
         
         func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {

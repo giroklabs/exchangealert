@@ -8,20 +8,27 @@ struct NotificationManagementPopup: View {
     @State private var isLoading = true
     
     var body: some View {
-        ZStack {
-            // 배경 오버레이
-            Color.black.opacity(0.4)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    isPresented = false
-                }
+        ZStack(alignment: .top) {
+            AppTheme.backgroundGradient.ignoresSafeArea()
             
-            // 팝업 컨테이너
             VStack(spacing: 0) {
-                // 헤더
-                NotificationPopupHeader(isPresented: $isPresented)
+                // 커스텀 헤더
+                HStack {
+                    AppTitleView(title: "알림 센터", baseSize: 26)
+                    
+                    Spacer()
+                    
+                    Button("닫기") {
+                        isPresented = false
+                    }
+                    .foregroundColor(AppTheme.primary)
+                    .font(AppTheme.bodyFont)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
                 
-                // 콘텐츠
+                TopSeparator()
+                
                 if isLoading {
                     NotificationLoadingView()
                 } else if notifications.isEmpty {
@@ -30,20 +37,12 @@ struct NotificationManagementPopup: View {
                     NotificationListView(notifications: $notifications)
                 }
                 
-                    // 푸터
-                    NotificationPopupFooter(
-                        isPresented: $isPresented,
-                        onRefreshNotifications: loadNotificationHistory
-                    )
-                    
+                // 푸터
+                NotificationPopupFooter(
+                    isPresented: $isPresented,
+                    onRefreshNotifications: loadNotificationHistory
+                )
             }
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(.systemBackground))
-                    .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
-            )
-            .frame(maxWidth: .infinity, maxHeight: 600)
-            .padding(.horizontal, 20)
         }
         .onAppear {
             loadNotificationHistory()
@@ -52,7 +51,6 @@ struct NotificationManagementPopup: View {
     
     private func loadNotificationHistory() {
         isLoading = true
-        // 실제 알림 히스토리 로드 (UserDefaults에서)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let loadedNotifications = NotificationHistory.loadFromUserDefaults()
             notifications = loadedNotifications
@@ -114,38 +112,7 @@ struct NotificationHistory: Codable, Identifiable {
     }
 }
 
-// MARK: - Popup Header
-struct NotificationPopupHeader: View {
-    @Binding var isPresented: Bool
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("알림 메시지 관리")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                
-                Text("최근 알림 내역을 확인하고 관리할 수 있습니다")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            Button(action: {
-                isPresented = false
-            }) {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 16)
-    }
-}
+// Popup Header는 더 이상 사용하지 않음 (표준 헤더로 대체)
 
 // MARK: - Loading View
 struct NotificationLoadingView: View {
@@ -170,29 +137,19 @@ struct NotificationEmptyView: View {
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "bell.slash.fill")
-                .font(.system(size: 50))
-                .foregroundColor(.secondary.opacity(0.6))
+                .font(.system(size: 60))
+                .foregroundColor(.secondary.opacity(0.4))
             
-            VStack(spacing: 8) {
+            VStack(spacing: 12) {
                 Text("알림 내역이 없습니다")
-                    .font(.headline)
+                    .font(AppTheme.titleFont)
                     .foregroundColor(.primary)
                 
                 Text("환율 변동 알림을 설정하면\n여기에 알림 내역이 표시됩니다")
-                    .font(.body)
+                    .font(AppTheme.bodyFont)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            
-            GradientButton(
-                title: "알림 설정하기",
-                icon: "bell.fill",
-                action: {
-                    isPresented = false
-                    // 알림 설정으로 이동하는 로직 (현재는 팝업 닫기)
-                }
-            )
-            .padding(.horizontal, 40)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, 40)
@@ -218,7 +175,7 @@ struct NotificationListView: View {
             
             // 알림 리스트
             ScrollView {
-                LazyVStack(spacing: 16) {
+                LazyVStack(spacing: 12) {
                     ForEach(notifications) { notification in
                         NotificationItemView(
                             notification: notification,
@@ -227,7 +184,7 @@ struct NotificationListView: View {
                         )
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
                 .padding(.vertical, 16)
             }
         }
@@ -290,7 +247,7 @@ struct NotificationActionBar: View {
                         .foregroundColor(AppTheme.primary)
                     
                     Text(selectedCount == totalCount ? "전체 해제" : "전체 선택")
-                        .font(.caption)
+                        .font(AppTheme.captionFont)
                         .foregroundColor(AppTheme.primary)
                 }
             }
@@ -301,10 +258,9 @@ struct NotificationActionBar: View {
                 Button(action: onClearSelected) {
                     HStack(spacing: 4) {
                         Image(systemName: "trash")
-                            .font(.caption)
                         Text("선택 삭제 (\(selectedCount))")
-                            .font(.caption)
                     }
+                    .font(AppTheme.captionFont)
                     .foregroundColor(.red)
                 }
             }
@@ -312,16 +268,15 @@ struct NotificationActionBar: View {
             Button(action: onClearAll) {
                 HStack(spacing: 4) {
                     Image(systemName: "trash.fill")
-                        .font(.caption)
                     Text("전체 삭제")
-                        .font(.caption)
                 }
+                .font(AppTheme.captionFont)
                 .foregroundColor(.red)
             }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
-        .background(Color(.systemGray6))
+        .background(Color(.secondarySystemBackground).opacity(0.5))
     }
 }
 
@@ -363,28 +318,28 @@ struct NotificationItemView: View {
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Text(notification.type.displayName)
-                        .font(.caption)
+                        .font(AppTheme.captionFont)
                         .fontWeight(.medium)
                         .foregroundColor(notification.type.color)
                     
                     Text("•")
-                        .font(.caption)
+                        .font(AppTheme.captionFont)
                         .foregroundColor(.secondary)
                     
                     Text(notification.currency)
-                        .font(.caption)
+                        .font(AppTheme.captionFont)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
                     
                     Spacer()
                     
                     Text(timeAgo)
-                        .font(.caption)
+                        .font(AppTheme.captionFont)
                         .foregroundColor(.secondary)
                 }
                 
                 Text(notification.message)
-                    .font(.system(size: 14, weight: .regular))
+                    .font(AppTheme.bodyFont)
                     .foregroundColor(.primary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
@@ -425,7 +380,7 @@ struct NotificationPopupFooter: View {
                         Image(systemName: "gearshape.fill")
                         Text("알림 설정")
                     }
-                    .font(.body)
+                    .font(AppTheme.bodyFont)
                     .foregroundColor(AppTheme.primary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
@@ -449,7 +404,7 @@ struct NotificationPopupFooter: View {
                         Image(systemName: "bell.badge.fill")
                         Text("테스트 알림")
                     }
-                    .font(.body)
+                    .font(AppTheme.bodyFont)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
