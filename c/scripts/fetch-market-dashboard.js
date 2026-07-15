@@ -2489,20 +2489,43 @@ async function main() {
     // --- [단기 예측 강화] Regime Switching (국면 전환) 스위치 ---
     let isCrisisMode = false;
     let crisisReason = "";
+
+    // 동적 임계값 함수 (Rolling Std Dev 기반)
+    const getDynamicThreshold = (ind, fallback) => {
+        if (!ind || !ind.history || ind.history.length < 5) return fallback;
+        const diffs = [];
+        for(let j=1; j<ind.history.length; j++) {
+            const p = parseFloat(ind.history[j-1].value);
+            const c = parseFloat(ind.history[j].value);
+            if(p !== 0) diffs.push(((c-p)/Math.abs(p))*100);
+        }
+        if(diffs.length === 0) return fallback;
+        const mean = diffs.reduce((a,b)=>a+b,0)/diffs.length;
+        const variance = diffs.reduce((a,b)=>a+Math.pow(b-mean,2),0)/diffs.length;
+        const stdDev = Math.sqrt(variance);
+        return Math.max(1.0, stdDev * 1.5); // 1.5 sigma 보수적 적용
+    };
+
     const vixInd = indicators.find(i => i.id.toLowerCase() === 'vix');
     if (vixInd && parseFloat(vixInd.value) >= 20) {
         isCrisisMode = true;
         crisisReason = "VIX 급등(20 이상)";
     }
     const soxInd = indicators.find(i => i.id.toLowerCase() === 'sox');
-    if (!isCrisisMode && soxInd && Math.abs(soxInd.diffPercent) >= 1.5) {
-        isCrisisMode = true;
-        crisisReason = `SOX 급등락(${soxInd.diffPercent}%)`;
+    if (!isCrisisMode && soxInd) {
+        const soxThreshold = getDynamicThreshold(soxInd, 1.5);
+        if (Math.abs(soxInd.diffPercent) >= soxThreshold) {
+            isCrisisMode = true;
+            crisisReason = `SOX 급등락(${soxInd.diffPercent}% / 임계치: ±${soxThreshold.toFixed(2)}%)`;
+        }
     }
     const nightInd = indicators.find(i => i.id.toLowerCase() === 'kospi_night');
-    if (!isCrisisMode && nightInd && Math.abs(nightInd.diffPercent) >= 1.5) {
-        isCrisisMode = true;
-        crisisReason = `야간선물 급등락(${nightInd.diffPercent}%)`;
+    if (!isCrisisMode && nightInd) {
+        const nightThreshold = getDynamicThreshold(nightInd, 1.0);
+        if (Math.abs(nightInd.diffPercent) >= nightThreshold) {
+            isCrisisMode = true;
+            crisisReason = `야간선물 급등락(${nightInd.diffPercent}% / 임계치: ±${nightThreshold.toFixed(2)}%)`;
+        }
     }
     
     if (isCrisisMode) {
@@ -2542,6 +2565,22 @@ async function main() {
                 console.log(`📊 [KOSPI Smoothing] Raw Prob: ${rawKospiUpProb}% -> EMA(3) Prob: ${finalEmaProb}%`);
             }
             kospiUpProb = finalEmaProb;
+            
+            // --- [Phase 1] 오차 수정 모형 (ECM) 적용 ---
+            const lastRecord = predHist.records.filter(r => r.kospi_actual_next_close !== undefined && r.kospi_actual_next_close !== null).pop();
+            if (lastRecord && lastRecord.kospi_predicted_up !== undefined && lastRecord.kospiAtPrediction !== undefined) {
+                const predictedUp = lastRecord.kospi_predicted_up;
+                const actualDir = lastRecord.kospi_actual_next_close > lastRecord.kospiAtPrediction ? 100 : 0;
+                const error = actualDir - predictedUp; // 양수: 실제>예측, 음수: 실제<예측
+                const ecmAlpha = 0.1; // 보정 계수
+                const ecmAdjustment = Math.round(error * ecmAlpha);
+                
+                if (ecmAdjustment !== 0) {
+                    console.log(`📉 [ECM] 직전 KOSPI 오차 보정: 예측 ${predictedUp}% vs 실제 ${actualDir}% -> 잔차 ${error}% (보정치: ${ecmAdjustment > 0 ? '+'+ecmAdjustment : ecmAdjustment}%)`);
+                    kospiUpProb += ecmAdjustment;
+                    kospiUpProb = Math.max(0, Math.min(100, kospiUpProb)); // 0~100 보장
+                }
+            }
         }
     }
 
@@ -3092,6 +3131,27 @@ async function main() {
             }
         }
 
+        // --- [Phase 1] 환율 오차 수정 모형 (ECM) 적용 ---
+        let fxEcmAdjustment = 0;
+        try {
+            const predHistPath = path.join(__dirname, '..', 'public', 'data', 'prediction-history.json');
+            if (fs.existsSync(predHistPath)) {
+                const histData = JSON.parse(fs.readFileSync(predHistPath, 'utf8'));
+                const lastFxRecord = (histData.records || []).filter(r => r.actual_next_close !== undefined && r.actual_next_close !== null).pop();
+                if (lastFxRecord && lastFxRecord.predicted && lastFxRecord.predicted.d1_up !== undefined && lastFxRecord.rateAtPrediction !== undefined) {
+                    const predictedUp = lastFxRecord.predicted.d1_up;
+                    const actualDir = lastFxRecord.actual_next_close > lastFxRecord.rateAtPrediction ? 100 : 0;
+                    const error = actualDir - predictedUp;
+                    fxEcmAdjustment = Math.round(error * 0.1);
+                    if (fxEcmAdjustment !== 0) {
+                        console.log(`📉 [ECM] 직전 환율 오차 보정: 예측 ${predictedUp}% vs 실제 ${actualDir}% -> 잔차 ${error}% (보정치: ${fxEcmAdjustment > 0 ? '+'+fxEcmAdjustment : fxEcmAdjustment}%)`);
+                    }
+                }
+            }
+        } catch (ecmErr) {
+            console.warn('⚠️ 환율 ECM 산출 실패:', ecmErr.message);
+        }
+
         const calcProb = (tU, tD, mU, mD, eU, eD, w) => {
             let macroU = mU; let macroD = mD;
             // Regime Switch 발동 시 1일 예측(isD1)에서 매크로의 영향을 완전히 0%로 차단
@@ -3100,7 +3160,10 @@ async function main() {
             }
             const u = tU * w.tech + macroU * w.macro + eU * w.ecos + (w.isD1 ? overnightFxUp : 0) + 0.3;
             const d = tD * w.tech + macroD * w.macro + eD * w.ecos + (w.isD1 ? overnightFxDown : 0) + 0.3;
-            return { upProb: Math.round((u / (u + d)) * 100), downProb: Math.round((d / (u + d)) * 100) };
+            let finalUpProb = Math.round((u / (u + d)) * 100);
+            if (w.isD1) finalUpProb += fxEcmAdjustment; // 1일 예측에만 오차 보정 적용
+            finalUpProb = Math.max(0, Math.min(100, finalUpProb)); // 0~100 범위 제한
+            return { upProb: finalUpProb, downProb: 100 - finalUpProb };
         };
 
         timeframes = {
@@ -3264,6 +3327,9 @@ async function main() {
 
         const dayPred = new Date().getDay();
         const isWeekendPred = (dayPred === 0 || dayPred === 6);
+
+        const usdkrwInd = indicators.find(i => i.id.toLowerCase() === 'usdkrw' || i.id === '미국 달러');
+        const todayRate = usdkrwInd && usdkrwInd.value !== null ? parseFloat(usdkrwInd.value) : null;
 
         // 오늘 레코드 추가 (이미 없으면 & 주말이 아니면)
         if (!isWeekendPred && !predHist.records.find(r => r.date === todayStr)) {
