@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.722",
+      "value": "100.725",
       "diff": -0.01,
       "diffPercent": -0.01,
       "trend": "down",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.32",
-      "diff": 1.59,
-      "diffPercent": 9.5,
+      "value": "18.74",
+      "diff": 2.01,
+      "diffPercent": 12.01,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-07-17",
-          "value": 18.32
+          "value": 18.74
         }
       ]
     },
@@ -413,15 +413,11 @@
       "description": "미국 무위험 단기 국채 금리",
       "fredId": "DTB3",
       "value": "3.7",
-      "diff": -0.01,
-      "diffPercent": -0.27,
-      "trend": "down",
-      "realizedImpact": "up",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-07-01",
-          "value": 3.71
-        },
         {
           "date": "2026-07-02",
           "value": 3.68
@@ -456,6 +452,10 @@
         },
         {
           "date": "2026-07-15",
+          "value": 3.7
+        },
+        {
+          "date": "2026-07-16",
           "value": 3.7
         }
       ]
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "28,739.5",
-      "diff": -486.25,
-      "diffPercent": -1.66,
+      "value": "28,726.5",
+      "diff": -499.25,
+      "diffPercent": -1.71,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-07-17",
-          "value": 28739.5
+          "value": 28726.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,490.5",
-      "diff": -87.25,
-      "diffPercent": -1.15,
+      "value": "7,488.5",
+      "diff": -89.25,
+      "diffPercent": -1.18,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-07-17",
-          "value": 7490.5
+          "value": 7488.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "81.41",
-      "diff": 2.46,
-      "diffPercent": 3.12,
+      "value": "81.61",
+      "diff": 2.66,
+      "diffPercent": 3.37,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-07-17",
-          "value": 81.41
+          "value": 81.61
         }
       ]
     },
@@ -942,16 +942,12 @@
       "description": "시장 내재 단기 금리 기대치",
       "fredId": "DGS1",
       "hidden": true,
-      "value": 3.97,
-      "diff": -0.05,
-      "diffPercent": -1.24,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": 3.99,
+      "diff": 0.02,
+      "diffPercent": 0.5,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-07-01",
-          "value": 4
-        },
         {
           "date": "2026-07-02",
           "value": 3.96
@@ -987,6 +983,10 @@
         {
           "date": "2026-07-15",
           "value": 3.97
+        },
+        {
+          "date": "2026-07-16",
+          "value": 3.99
         }
       ],
       "isInternal": true
@@ -1001,16 +1001,12 @@
       "description": "단기 금리차 계산용",
       "fredId": "DGS2",
       "hidden": true,
-      "value": 4.13,
-      "diff": -0.05,
-      "diffPercent": -1.2,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": 4.16,
+      "diff": 0.03,
+      "diffPercent": 0.73,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-07-01",
-          "value": 4.17
-        },
         {
           "date": "2026-07-02",
           "value": 4.14
@@ -1046,6 +1042,10 @@
         {
           "date": "2026-07-15",
           "value": 4.13
+        },
+        {
+          "date": "2026-07-16",
+          "value": 4.16
         }
       ],
       "isInternal": true
@@ -2312,8 +2312,8 @@
       "source": "계산치",
       "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
       "value": "-0.080",
-      "diff": -0.01,
-      "diffPercent": 14.29,
+      "diff": -0.02,
+      "diffPercent": 33.33,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -2423,14 +2423,10 @@
       "impact": "up",
       "source": "FRED(Target-GS1)",
       "description": "연내 기준금리 인하/인상 기대 횟수 (25bp)",
-      "value": "-1.4",
+      "value": "-1.5",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-07-01",
-          "value": -0.375
-        },
         {
           "date": "2026-07-02",
           "value": -0.335
@@ -2466,6 +2462,10 @@
         {
           "date": "2026-07-15",
           "value": -0.345
+        },
+        {
+          "date": "2026-07-16",
+          "value": -0.365
         }
       ]
     }
@@ -2578,8 +2578,8 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 하락 우세",
-    "upProb": 52,
-    "downProb": 48,
+    "upProb": 54,
+    "downProb": 46,
     "kospiUpProb": 40,
     "kospiDownProb": 60,
     "timeframes": {
@@ -2589,13 +2589,13 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 40,
-        "downProb": 60,
+        "upProb": 42,
+        "downProb": 58,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 43,
-        "downProb": 57,
+        "upProb": 44,
+        "downProb": 56,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2603,10 +2603,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 7월 17일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1484.69원입니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 53%로 제시하며, 이는 단기적인 달러 강세 압력을 시사합니다. 기술적 지표에서는 RSI(14일)가 19.9로 과매도 구간에 진입하여 단기 반등 가능성이 높게 나타나고 있습니다. 이동평균선(MA5=1489.49원, MA20=1522.54원, MA60=1507.39원)은 단기 하락 모멘텀을 나타내고 있으나, 현재 환율이 볼린저밴드 하단(1476.76원)에 근접해 있어 하방 경직성이 강해질 수 있습니다. 특히, 복합 위험 신호인 'DOLLAR_PANIC' (DXY 100.781, VIX 18.39) 발동은 신흥국 자본 이탈 가속화를 의미하며 달러 강세 전환에 대한 강력한 근거가 됩니다. 이에 따라 원/달러 환율은 단기 지지선 1476.76원을 바탕으로 반등을 시도, 1489.49원(MA5)을 1차 저항선으로, 이후 1507.39원(MA60)까지 상승 압력을 받을 것으로 예상됩니다. 투자 전략으로는 과매도 구간에서의 달러 강세 전환 가능성을 고려하여 매수 관점을 유지하는 것이 바람직합니다. ① 정량예측모델의 53% 상승 확률과 RSI 과매도 신호에 따른 기술적 반등 기대 ② DXY 상승 및 VIX 상승으로 인한 'DOLLAR_PANIC' 신호 발동으로 신흥국 통화 약세 압력 강화 ③ 한미 2년물 금리차 0.77%p가 환율 상승 압력으로 작용할 가능성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,820.6포인트입니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 36%로 제시하며, 이는 지수의 추가 하락 가능성이 높음을 의미합니다. 기술적 강도는 '보합(Neutral)' 신호를 보내지만, 실제 지표들은 강력한 하락 모멘텀을 시사합니다. 코스피는 최근 20일간 -24.75%라는 매우 큰 폭의 하락 모멘텀을 보이고 있으며, 7048.94포인트(MA5), 7929.27포인트(MA20), 7743.16포인트(MA60) 등 모든 이동평균선 아래에서 거래되며 전형적인 약세장을 형성하고 있습니다. 또한 반도체(SOX) 단기 5일 모멘텀이 -9.71%로 크게 하락하여 국내 증시의 핵심 비중을 차지하는 반도체 업종에 대한 부정적 전망을 강화하고 있습니다. 지지선은 6176.75포인트이며, 볼린저밴드 하단은 6497.38포인트로 현재 지수가 이 구간을 시험할 가능성이 높습니다. 이러한 시장 상황을 고려할 때, 투자자들은 추가 하락에 대비하여 관망 또는 매도 포지션을 유지하며, 7048.94포인트(MA5)를 단기 저항선으로 인지하고 보수적인 접근이 필요합니다. ① 정량예측모델의 낮은 상승 확률(36%)과 모든 이동평균선 아래에 위치한 지수 ② 반도체(SOX) 및 나스닥 선물 지수의 강한 하락 모멘텀(-9.71%, -4.28%) ③ 'DOLLAR_PANIC' 복합 위험 신호 발동으로 인한 글로벌 위험 회피 심리 강화.\n\n실전 투자 대응\n환율: 과매도 반등 기대, 1489.49원(MA5) 상향 돌파 시 1507.39원(MA60)까지 상승 가능.\n코스피: 6820.6pt는 6176.75pt 지지선 테스트 가능성 높음, 반등 시 7048.94pt(MA5) 저항 예상.",
     "lastAiUpdate": 1784297577544,
     "score": {
-      "upScore": 56.017684263725414,
-      "downScore": 51.73627186999792,
+      "upScore": 57.977812569796676,
+      "downScore": 50.116776876612334,
       "kospiUpScore": 14.601200741414539,
-      "kospiDownScore": 21.867469051515663
+      "kospiDownScore": 21.992550622358053
     }
   },
   "technicals": {
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 17. PM 8:12:38"
+  "lastUpdate": "2026. 7. 17. PM 8:17:23"
 }
