@@ -1180,15 +1180,11 @@
       "description": "한국 기준금리, 한미 금리차 결정",
       "cycle": "D",
       "value": "2.75",
-      "diff": 0.25,
-      "diffPercent": 10,
-      "trend": "up",
-      "realizedImpact": "down",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-07-07",
-          "value": 2.5
-        },
         {
           "date": "2026-07-08",
           "value": 2.5
@@ -1223,6 +1219,10 @@
         },
         {
           "date": "2026-07-16",
+          "value": 2.75
+        },
+        {
+          "date": "2026-07-17",
           "value": 2.75
         }
       ]
@@ -2566,8 +2566,8 @@
   "forecast": {
     "sentiment": "환율 상승 우세",
     "kospiSentiment": "코스피 하락 우세",
-    "upProb": 56,
-    "downProb": 44,
+    "upProb": 57,
+    "downProb": 43,
     "kospiUpProb": 37,
     "kospiDownProb": 63,
     "timeframes": {
@@ -2577,13 +2577,13 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 45,
-        "downProb": 55,
+        "upProb": 46,
+        "downProb": 54,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2592,7 +2592,7 @@
     "lastAiUpdate": 1784297577544,
     "score": {
       "upScore": 62.850262609594246,
-      "downScore": 48.987112855173784,
+      "downScore": 48.051629231990134,
       "kospiUpScore": 13.377387598008298,
       "kospiDownScore": 23.105667885416377
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 19. AM 6:27:57"
+  "lastUpdate": "2026. 7. 19. AM 6:32:32"
 }
