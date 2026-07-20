@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "100.997",
-      "diff": 0.25,
-      "diffPercent": 0.25,
+      "value": "100.99",
+      "diff": 0.24,
+      "diffPercent": 0.24,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-07-20",
-          "value": 101
+          "value": 100.99
         }
       ]
     },
@@ -2559,6 +2559,16 @@
       "price": 185900,
       "changePercent": "+0.00",
       "trend": "neutral"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 35050,
+      "changePercent": "+0.00",
+      "trend": "neutral"
     }
   ],
   "forecast": {
@@ -2664,5 +2674,5 @@
     "kospiRecentHitRate": 50,
     "kospiTotal": 2
   },
-  "lastUpdate": "2026. 7. 20. PM 9:48:15"
+  "lastUpdate": "2026. 7. 20. PM 9:52:28"
 }
