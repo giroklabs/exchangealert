@@ -68,7 +68,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add c/public/data/market-dashboard.json
+          git add c/public/data/market-dashboard.json c/public/data/prediction-history.json c/public/data/kospi-history-6m.json
           if ! git diff --staged --quiet; then
             git commit -m "data: 환율 지표 데이터 및 AI 분석 업데이트"
             for i in 1 2 3; do
