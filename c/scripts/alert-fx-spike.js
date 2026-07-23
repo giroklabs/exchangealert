@@ -175,7 +175,7 @@ function getMarketDashboardData() {
     if (!fs.existsSync(dashboardPath)) return null;
     try {
         const json = JSON.parse(fs.readFileSync(dashboardPath, 'utf8'));
-        const fnbObj = json.indicators?.find(i => i.id === 'foreigner-net-buy');
+        const fnbObj = json.indicators?.find(i => i.id === 'foreigner-net-buy-market');
         const kr10yObj = json.indicators?.find(i => i.id === 'kr-10y');
         
         return {
@@ -424,28 +424,13 @@ ${triggerLines}
 
 async function sendPushNotifications(db, triggers, state) {
     try {
-        console.log('📡 Firestore에서 푸시 알림 대상 조회 중...');
-        // 일단 알림 설정이 되어 있는 모든 토큰 수집
-        const alertsSnapshot = await db.collection('alerts').get();
-        const tokens = new Set();
-        alertsSnapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.token) tokens.add(data.token);
-        });
+        console.log('📡 FCM Topic(macro_spike_alert)으로 푸시 알림 발송 중...');
 
-        if (tokens.size === 0) {
-            console.log('✅ 푸시를 보낼 대상 토큰이 없습니다.');
-            return;
-        }
-
-        const tokenList = Array.from(tokens);
         const title = `🚨 매크로 지표 급변동 감지!`;
-        const body = triggers[0] + (triggers.length > 1 ? ` 외 ${triggers.length - 1}건` : '') + ` (환율: ${state.rate}원)`;
+        const body = triggers[0] + (triggers.length > 1 ? ` 외 ${triggers.length - 1}건` : '') + ` (환율: ${state.rate.toLocaleString()}원)`;
 
-        console.log(`📤 ${tokenList.size}개 기기로 푸시 알림 발송 중...`);
-
-        const messages = tokenList.map(token => ({
-            token: token,
+        const message = {
+            topic: 'macro_spike_alert',
             notification: {
                 title: title,
                 body: body
@@ -457,24 +442,14 @@ async function sendPushNotifications(db, triggers, state) {
             apns: {
                 payload: {
                     aps: {
-                        alert: {
-                            title: title,
-                            body: body
-                        },
-                        sound: 'default',
-                        badge: 1,
-                        'mutable-content': 1
+                        sound: 'default'
                     }
                 }
             }
-        }));
+        };
 
-        // FCM은 500개씩 나눠서 전송
-        for (let i = 0; i < messages.length; i += 500) {
-            const chunk = messages.slice(i, i + 500);
-            const response = await admin.messaging().sendEach(chunk);
-            console.log(`✅ 푸시 발송 완료: 성공 ${response.successCount}, 실패 ${response.failureCount}`);
-        }
+        const response = await admin.messaging().send(message);
+        console.log(`✅ 푸시 발송 완료 (Message ID: ${response})`);
     } catch (e) {
         console.error('❌ 푸시 알림 발송 에러:', e.message);
     }
@@ -628,10 +603,10 @@ async function main() {
         saveLastAlertInfo(currentState, new Date().toISOString());
         console.log(`📝 모든 모니터링 기준 지표 업데이트 완료.`);
         
-        // 9. 앱 푸시 알림 발송 (비활성화: 텔레그램 알림으로 충분)
-        // if (db) {
-        //     await sendPushNotifications(db, triggers, currentState);
-        // }
+        // 9. 앱 푸시 알림 발송 (Topic 기반 발송)
+        if (db) {
+            await sendPushNotifications(db, triggers, currentState);
+        }
     }
 
     console.log('🏁 스크립트 완료');
