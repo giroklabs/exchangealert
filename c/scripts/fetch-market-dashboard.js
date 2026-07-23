@@ -3331,9 +3331,10 @@ async function main() {
         const usdkrwInd = indicators.find(i => i.id.toLowerCase() === 'usdkrw' || i.id === '미국 달러');
         const todayRate = usdkrwInd && usdkrwInd.value !== null ? parseFloat(usdkrwInd.value) : null;
 
-        // 오늘 레코드 추가 (이미 없으면 & 주말이 아니면)
-        if (!isWeekendPred && !predHist.records.find(r => r.date === todayStr)) {
-            predHist.records.push({
+        // 오늘 레코드 조회 및 추가/업데이트 로직
+        const existingRecordIndex = predHist.records.findIndex(r => r.date === todayStr);
+        if (!isWeekendPred) {
+            const newRecord = {
                 date: todayStr,
                 predicted: {
                     d1_up: timeframes?.d1?.upProb || upProb,
@@ -3349,7 +3350,19 @@ async function main() {
                 kospi_hit_d1: null,
                 kospiAtPrediction: todayKospi,
                 aiAnalysis: aiAnalysis || null
-            });
+            };
+
+            if (existingRecordIndex !== -1) {
+                // 이미 당일 기록이 있다면 최신 데이터로 실시간 덮어쓰기 (업데이트)
+                predHist.records[existingRecordIndex].predicted = newRecord.predicted;
+                predHist.records[existingRecordIndex].kospi_predicted_up = newRecord.kospi_predicted_up;
+                predHist.records[existingRecordIndex].rateAtPrediction = newRecord.rateAtPrediction;
+                predHist.records[existingRecordIndex].kospiAtPrediction = newRecord.kospiAtPrediction;
+                predHist.records[existingRecordIndex].aiAnalysis = newRecord.aiAnalysis;
+            } else {
+                // 기록이 없으면 신규 추가
+                predHist.records.push(newRecord);
+            }
         }
         // 최대 90일치만 보관
         predHist.records = predHist.records.slice(-90);
