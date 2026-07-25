@@ -1897,10 +1897,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-32,827",
-      "diff": -31633,
-      "diffPercent": -2649.33,
-      "trend": "down",
+      "value": "-1,194",
+      "diff": 174,
+      "diffPercent": 12.72,
+      "trend": "up",
       "realizedImpact": "up",
       "history": [
         {
@@ -2002,10 +2002,6 @@
         {
           "date": "2026-04-03",
           "value": -1194
-        },
-        {
-          "date": "2026-07-25",
-          "value": -32827
         }
       ]
     },
@@ -2018,10 +2014,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "-19,514",
-      "diff": -21470,
-      "diffPercent": -1097.65,
-      "trend": "down",
+      "value": "1,956",
+      "diff": 16473,
+      "diffPercent": 113.47,
+      "trend": "up",
       "history": [
         {
           "date": "2026-02-27",
@@ -2122,10 +2118,6 @@
         {
           "date": "2026-04-03",
           "value": 1956
-        },
-        {
-          "date": "2026-07-25",
-          "value": -19514
         }
       ]
     },
@@ -2138,10 +2130,10 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "51,782",
-      "diff": 52739,
-      "diffPercent": 5510.87,
-      "trend": "up",
+      "value": "-957",
+      "diff": -13054,
+      "diffPercent": -107.91,
+      "trend": "down",
       "history": [
         {
           "date": "2026-02-27",
@@ -2242,10 +2234,6 @@
         {
           "date": "2026-04-03",
           "value": -957
-        },
-        {
-          "date": "2026-07-25",
-          "value": 51782
         }
       ]
     },
@@ -2580,8 +2568,8 @@
     "kospiSentiment": "코스피 하락 우세",
     "upProb": 50,
     "downProb": 50,
-    "kospiUpProb": 33,
-    "kospiDownProb": 67,
+    "kospiUpProb": 39,
+    "kospiDownProb": 61,
     "timeframes": {
       "d1": {
         "upProb": 32,
@@ -2604,9 +2592,9 @@
     "lastAiUpdate": 1784902968313,
     "score": {
       "upScore": 55.4282832944147,
-      "downScore": 56.29878973274175,
-      "kospiUpScore": 12.013380536472416,
-      "kospiDownScore": 23.942969240925372
+      "downScore": 56.296967722453296,
+      "kospiUpScore": 14.961103287538082,
+      "kospiDownScore": 23.097537852087772
     }
   },
   "technicals": {
@@ -2678,5 +2666,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 5
   },
-  "lastUpdate": "2026. 7. 24. PM 11:52:25"
+  "lastUpdate": "2026. 7. 25. AM 12:03:03"
 }
