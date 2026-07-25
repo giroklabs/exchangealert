@@ -2464,9 +2464,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,464.10",
-      "change": "+3.30",
-      "changePercent": "+0.23",
+      "value": "1,463.40",
+      "change": "+2.60",
+      "changePercent": "+0.18",
       "trend": "up"
     },
     {
@@ -2475,9 +2475,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "893.32",
-      "change": "+1.15",
-      "changePercent": "+0.13",
+      "value": "893.13",
+      "change": "+0.96",
+      "changePercent": "+0.11",
       "trend": "up"
     },
     {
@@ -2485,9 +2485,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,664.39",
-      "change": "+2.00",
-      "changePercent": "+0.12",
+      "value": "1,663.59",
+      "change": "+1.20",
+      "changePercent": "+0.07",
       "trend": "up"
     },
     {
@@ -2495,74 +2495,13 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "216.21",
-      "change": "+0.50",
-      "changePercent": "+0.23",
+      "value": "216.11",
+      "change": "+0.40",
+      "changePercent": "+0.19",
       "trend": "up"
     }
   ],
-  "stockPrices": [
-    {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 249500,
-      "changePercent": "-7.59",
-      "trend": "down"
-    },
-    {
-      "id": "hynix",
-      "symbol": "000660",
-      "market": "domestic",
-      "name": "SK하이닉스",
-      "enName": "SK Hynix",
-      "price": 1759000,
-      "changePercent": "-8.34",
-      "trend": "down"
-    },
-    {
-      "id": "hyundai",
-      "symbol": "005380",
-      "market": "domestic",
-      "name": "현대차",
-      "enName": "Hyundai Motor",
-      "price": 401000,
-      "changePercent": "-7.18",
-      "trend": "down"
-    },
-    {
-      "id": "kia",
-      "symbol": "000270",
-      "market": "domestic",
-      "name": "기아",
-      "enName": "Kia",
-      "price": 130500,
-      "changePercent": "-12.88",
-      "trend": "down"
-    },
-    {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 207500,
-      "changePercent": "-5.68",
-      "trend": "down"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 36200,
-      "changePercent": "-2.56",
-      "trend": "down"
-    }
-  ],
+  "stockPrices": [],
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 하락 우세",
@@ -2592,7 +2531,7 @@
     "lastAiUpdate": 1784902968313,
     "score": {
       "upScore": 53.922331143999216,
-      "downScore": 57.471292444728846,
+      "downScore": 57.458994492410554,
       "kospiUpScore": 14.961103287538082,
       "kospiDownScore": 23.097537852087772
     }
@@ -2666,5 +2605,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 5
   },
-  "lastUpdate": "2026. 7. 25. AM 4:57:23"
+  "lastUpdate": "2026. 7. 25. AM 5:06:13"
 }
