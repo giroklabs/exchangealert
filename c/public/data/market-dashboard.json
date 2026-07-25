@@ -2475,8 +2475,8 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "891.95",
-      "change": "-0.22",
+      "value": "891.97",
+      "change": "-0.20",
       "changePercent": "-0.02",
       "trend": "down"
     },
@@ -2485,9 +2485,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,661.58",
-      "change": "-0.81",
-      "changePercent": "-0.05",
+      "value": "1,661.43",
+      "change": "-0.96",
+      "changePercent": "-0.06",
       "trend": "down"
     },
     {
@@ -2495,13 +2495,74 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "215.82",
-      "change": "+0.11",
-      "changePercent": "+0.05",
+      "value": "215.83",
+      "change": "+0.12",
+      "changePercent": "+0.06",
       "trend": "up"
     }
   ],
-  "stockPrices": [],
+  "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 249500,
+      "changePercent": "-7.59",
+      "trend": "down"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1759000,
+      "changePercent": "-8.34",
+      "trend": "down"
+    },
+    {
+      "id": "hyundai",
+      "symbol": "005380",
+      "market": "domestic",
+      "name": "현대차",
+      "enName": "Hyundai Motor",
+      "price": 401000,
+      "changePercent": "-7.18",
+      "trend": "down"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 130500,
+      "changePercent": "-12.88",
+      "trend": "down"
+    },
+    {
+      "id": "naver",
+      "symbol": "035420",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 207500,
+      "changePercent": "-5.68",
+      "trend": "down"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 36200,
+      "changePercent": "-2.56",
+      "trend": "down"
+    }
+  ],
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 하락 우세",
@@ -2605,5 +2666,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 5
   },
-  "lastUpdate": "2026. 7. 25. AM 1:11:22"
+  "lastUpdate": "2026. 7. 25. AM 1:12:33"
 }
