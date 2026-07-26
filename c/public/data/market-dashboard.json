@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.308",
-      "diff": -0.16,
-      "diffPercent": -0.16,
+      "value": "101.318",
+      "diff": -0.15,
+      "diffPercent": -0.15,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-07-26",
-          "value": 101.31
+          "value": 101.32
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "28,628.75",
-      "diff": 346.5,
-      "diffPercent": 1.23,
+      "value": "28,614",
+      "diff": 331.75,
+      "diffPercent": 1.17,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-07-26",
-          "value": 28628.75
+          "value": 28614
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,493.75",
-      "diff": 46.25,
-      "diffPercent": 0.62,
+      "value": "7,492",
+      "diff": 44.5,
+      "diffPercent": 0.6,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-07-26",
-          "value": 7493.75
+          "value": 7492
         }
       ]
     },
@@ -2509,6 +2509,16 @@
       "trend": "neutral"
     },
     {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1759000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
       "id": "hyundai",
       "symbol": "005380",
       "market": "domestic",
@@ -2578,7 +2588,7 @@
     "lastAiUpdate": 1785105168355,
     "score": {
       "upScore": 50.791845188341725,
-      "downScore": 59.21513479395201,
+      "downScore": 59.19864032315665,
       "kospiUpScore": 17.899414254022567,
       "kospiDownScore": 20.89399376735239
     }
@@ -2652,5 +2662,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 6
   },
-  "lastUpdate": "2026. 7. 26. PM 11:02:41"
+  "lastUpdate": "2026. 7. 26. PM 11:07:33"
 }
