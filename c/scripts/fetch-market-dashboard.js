@@ -3061,32 +3061,24 @@ async function main() {
                 FID_INPUT_ISCD: "10100"
             });
 
-            if (futuresRes && futuresRes.output) {
-                const out = futuresRes.output;
-                const prpr = parseFloat(out.futs_prpr || out.stck_prpr || 0);
-                const ctrt = parseFloat(out.futs_prdy_ctrt || out.prdy_ctrt || 0).toFixed(2);
-                const vrss = parseFloat(out.futs_prdy_vrss || out.prdy_vrss || 0);
-                const kisFuturesResult = {
-                    fetchedAt: new Date().toISOString(),
-                    symbol: '10100',
-                    name: 'KOSPI200 선물 (KIS API)',
-                    price: prpr,
-                    changePercent: ctrt,
-                    trend: vrss > 0 ? 'up' : (vrss < 0 ? 'down' : 'neutral'),
-                    rawOutput: {
-                        futs_prpr: out.futs_prpr,
-                        stck_prpr: out.stck_prpr,
-                        futs_prdy_ctrt: out.futs_prdy_ctrt,
-                        futs_prdy_vrss: out.futs_prdy_vrss,
-                        hts_kor_isnm: out.hts_kor_isnm
-                    }
-                };
-                const futuresOutPath = path.join(__dirname, '..', 'public', 'data', 'kis-night-futures.json');
-                fs.writeFileSync(futuresOutPath, JSON.stringify(kisFuturesResult, null, 2));
-                console.log(`✅ [KIS Futures] 수집 성공: ${prpr} (${ctrt}%)`);
-            } else {
-                console.warn('⚠️ KIS 야간선물 시세 응답 없음:', JSON.stringify(futuresRes));
-            }
+            const out = futuresRes?.output || {};
+            const prpr = parseFloat(out.futs_prpr || out.stck_prpr || 0);
+            const ctrt = parseFloat(out.futs_prdy_ctrt || out.prdy_ctrt || 0).toFixed(2);
+            const vrss = parseFloat(out.futs_prdy_vrss || out.prdy_vrss || 0);
+
+            const kisFuturesResult = {
+                fetchedAt: new Date().toISOString(),
+                symbol: '10100',
+                name: 'KOSPI200 선물 (KIS API)',
+                price: prpr,
+                changePercent: ctrt,
+                trend: vrss > 0 ? 'up' : (vrss < 0 ? 'down' : 'neutral'),
+                kisResponse: futuresRes
+            };
+
+            const futuresOutPath = path.join(__dirname, '..', 'public', 'data', 'kis-night-futures.json');
+            fs.writeFileSync(futuresOutPath, JSON.stringify(kisFuturesResult, null, 2));
+            console.log(`✅ [KIS Futures] 수집 저장 완료 (Price: ${prpr}, Msg: ${futuresRes?.msg1 || 'OK'})`);
         } catch (fErr) {
             console.warn('⚠️ KIS 야간선물 시세 수집 실패:', fErr.message);
         }
