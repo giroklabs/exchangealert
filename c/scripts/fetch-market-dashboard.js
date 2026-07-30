@@ -3046,39 +3046,37 @@ async function main() {
             }
         }
 
-        // KIS API 기반 코스피200 야간/정규 선물(10100) 수집
+        // KIS API 기반 코스피200 야간선물(101N3 / 101WC000 / 10100) 수집 테스트
         try {
-            console.log('🌙 [KIS] KOSPI200 선물/야간선물 시세 수집 중 (10100)...');
+            console.log('🌙 [KIS] KOSPI200 야간선물 시세 수집 중 (101N3)...');
             const token = kisToken;
-            const futuresRes = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-price", {
-                "Authorization": `Bearer ${token}`,
-                "appkey": KIS_APP_KEY,
-                "appsecret": KIS_APP_SECRET,
-                "tr_id": "FHKST01010100",
-                "custtype": "P"
-            }, {
-                FID_COND_MRKT_DIV_CODE: "J",
-                FID_INPUT_ISCD: "10100"
-            });
+            const targetCodes = ['101N3', '101WC000', '10100'];
+            const results = {};
 
-            const out = futuresRes?.output || {};
-            const prpr = parseFloat(out.futs_prpr || out.stck_prpr || 0);
-            const ctrt = parseFloat(out.futs_prdy_ctrt || out.prdy_ctrt || 0).toFixed(2);
-            const vrss = parseFloat(out.futs_prdy_vrss || out.prdy_vrss || 0);
+            for (const code of targetCodes) {
+                const futuresRes = await kisRequest("GET", "/uapi/domestic-stock/v1/quotations/inquire-price", {
+                    "Authorization": `Bearer ${token}`,
+                    "appkey": KIS_APP_KEY,
+                    "appsecret": KIS_APP_SECRET,
+                    "tr_id": "FHKST01010100",
+                    "custtype": "P"
+                }, {
+                    FID_COND_MRKT_DIV_CODE: "J",
+                    FID_INPUT_ISCD: code
+                });
+                results[code] = futuresRes;
+                await new Promise(r => setTimeout(r, 200));
+            }
 
             const kisFuturesResult = {
                 fetchedAt: new Date().toISOString(),
-                symbol: '10100',
-                name: 'KOSPI200 선물 (KIS API)',
-                price: prpr,
-                changePercent: ctrt,
-                trend: vrss > 0 ? 'up' : (vrss < 0 ? 'down' : 'neutral'),
-                kisResponse: futuresRes
+                testCodes: targetCodes,
+                results: results
             };
 
             const futuresOutPath = path.join(__dirname, '..', 'public', 'data', 'kis-night-futures.json');
             fs.writeFileSync(futuresOutPath, JSON.stringify(kisFuturesResult, null, 2));
-            console.log(`✅ [KIS Futures] 수집 저장 완료 (Price: ${prpr}, Msg: ${futuresRes?.msg1 || 'OK'})`);
+            console.log(`✅ [KIS Futures Test] 101N3/101WC000/10100 수집 테스트 저장 완료`);
         } catch (fErr) {
             console.warn('⚠️ KIS 야간선물 시세 수집 실패:', fErr.message);
         }
