@@ -3045,6 +3045,27 @@ async function main() {
                 console.warn(`⚠️ KIS 주식 시세 수집 실패 (${stock.symbol}):`, e.message);
             }
         }
+
+        // KIS API 기반 코스피200 야간/정규 선물(10100) 수집
+        try {
+            console.log('🌙 [KIS] KOSPI200 선물/야간선물 시세 수집 중 (10100)...');
+            const futuresData = await fetchDomesticStockFromKIS('10100', kisToken);
+            if (futuresData) {
+                const kisFuturesResult = {
+                    fetchedAt: new Date().toISOString(),
+                    symbol: '10100',
+                    name: 'KOSPI200 선물 (KIS API)',
+                    price: futuresData.price,
+                    changePercent: futuresData.changePercent,
+                    trend: futuresData.trend
+                };
+                const futuresOutPath = path.join(__dirname, '..', 'public', 'data', 'kis-night-futures.json');
+                fs.writeFileSync(futuresOutPath, JSON.stringify(kisFuturesResult, null, 2));
+                console.log(`✅ [KIS Futures] 수집 성공: ${futuresData.price} (${futuresData.changePercent}%)`);
+            }
+        } catch (fErr) {
+            console.warn('⚠️ KIS 야간선물 시세 수집 실패:', fErr.message);
+        }
     } else {
         // KIS 실패 시 Yahoo FinanceFallback 시도 (기존 로직)
         console.log('📈 KIS 토큰 없음. Yahoo Finance로 대체 수집 중...');
