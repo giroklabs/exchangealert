@@ -2576,8 +2576,8 @@
     "kospiDownProb": 37,
     "timeframes": {
       "d1": {
-        "upProb": 24,
-        "downProb": 76,
+        "upProb": 29,
+        "downProb": 71,
         "basis": "Regime Switch 가동(매크로 0%+오버나잇 집중)"
       },
       "d5": {
@@ -2662,13 +2662,13 @@
   },
   "kospiSentiment": "코스피 상승 우세",
   "backtest": {
-    "total": 14,
-    "hitRate": 21,
+    "total": 15,
+    "hitRate": 20,
     "recentHitRate": 20,
-    "streak": "연속 1회 적중",
-    "kospiHitRate": 73,
-    "kospiRecentHitRate": 60,
-    "kospiTotal": 11
+    "streak": "연속 1회 미적중",
+    "kospiHitRate": 67,
+    "kospiRecentHitRate": 40,
+    "kospiTotal": 12
   },
-  "lastUpdate": "2026. 8. 1. PM 3:02:50"
+  "lastUpdate": "2026. 8. 1. PM 3:07:23"
 }
