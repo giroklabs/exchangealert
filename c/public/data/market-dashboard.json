@@ -67,16 +67,12 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.803",
-      "diff": -0.21,
-      "diffPercent": -0.21,
+      "value": "99.625",
+      "diff": -0.17,
+      "diffPercent": -0.17,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-07-20",
-          "value": 120.5401
-        },
         {
           "date": "2026-07-21",
           "value": 120.5779
@@ -112,6 +108,10 @@
         {
           "date": "2026-07-31",
           "value": 99.8
+        },
+        {
+          "date": "2026-08-02",
+          "value": 99.63
         }
       ]
     },
@@ -2464,9 +2464,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,444.00",
-      "change": "-2.00",
-      "changePercent": "-0.14",
+      "value": "1,443.00",
+      "change": "-3.00",
+      "changePercent": "-0.21",
       "trend": "down"
     },
     {
@@ -2475,9 +2475,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "918.84",
-      "change": "+1.24",
-      "changePercent": "+0.14",
+      "value": "919.08",
+      "change": "+1.48",
+      "changePercent": "+0.16",
       "trend": "up"
     },
     {
@@ -2485,9 +2485,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,668.04",
-      "change": "+1.09",
-      "changePercent": "+0.07",
+      "value": "1,667.17",
+      "change": "+0.22",
+      "changePercent": "+0.01",
       "trend": "up"
     },
     {
@@ -2495,9 +2495,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "213.96",
-      "change": "-0.18",
-      "changePercent": "-0.08",
+      "value": "213.80",
+      "change": "-0.34",
+      "changePercent": "-0.16",
       "trend": "down"
     }
   ],
@@ -2666,5 +2666,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 12
   },
-  "lastUpdate": "2026. 8. 2. PM 10:07:35"
+  "lastUpdate": "2026. 8. 2. PM 10:12:41"
 }
