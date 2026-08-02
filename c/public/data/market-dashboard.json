@@ -2581,8 +2581,8 @@
         "basis": "Regime Switch 가동(매크로 0%+오버나잇 집중)"
       },
       "d5": {
-        "upProb": 40,
-        "downProb": 60,
+        "upProb": 39,
+        "downProb": 61,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2602,32 +2602,32 @@
     }
   },
   "technicals": {
-    "rsi14": 29.8,
-    "ma5": 1444.51,
-    "ma20": 1478.97,
-    "ma60": 1505.91,
+    "rsi14": 26.9,
+    "ma5": 1443.42,
+    "ma20": 1478.69,
+    "ma60": 1505.82,
     "bb": {
-      "upper": 1531.67,
-      "mid": 1478.97,
-      "lower": 1426.27,
-      "bandwidth": 7.13
+      "upper": 1532.21,
+      "mid": 1478.69,
+      "lower": 1425.17,
+      "bandwidth": 7.24
     },
     "momentum": {
-      "d1": 1.51,
-      "d5": -1.09,
-      "d20": -5.81
+      "d1": 1.13,
+      "d5": -1.47,
+      "d20": -6.17
     },
     "keyLevels": {
       "support": 1417.93,
       "resistance": 1587.7
     },
     "macd": {
-      "macd": -20.68,
-      "signal": -15.8,
-      "hist": -4.88
+      "macd": -21.12,
+      "signal": -15.89,
+      "hist": -5.23
     },
     "stochastic": {
-      "k": 31.8
+      "k": 24.6
     },
     "compoundSignals": []
   },
@@ -2670,5 +2670,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 12
   },
-  "lastUpdate": "2026. 8. 2. AM 2:22:37"
+  "lastUpdate": "2026. 8. 2. AM 2:27:30"
 }
