@@ -2590,8 +2590,8 @@
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 47,
-        "downProb": 53,
+        "upProb": 46,
+        "downProb": 54,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2606,32 +2606,32 @@
     }
   },
   "technicals": {
-    "rsi14": 21.6,
-    "ma5": 1426.43,
-    "ma20": 1460.58,
-    "ma60": 1501.57,
+    "rsi14": 22.4,
+    "ma5": 1421.57,
+    "ma20": 1456.22,
+    "ma60": 1500.14,
     "bb": {
-      "upper": 1514.02,
-      "mid": 1460.58,
-      "lower": 1407.14,
-      "bandwidth": 7.32
+      "upper": 1510.93,
+      "mid": 1456.22,
+      "lower": 1401.51,
+      "bandwidth": 7.51
     },
     "momentum": {
-      "d1": -0.2,
-      "d5": -0.16,
-      "d20": -5.81
+      "d1": -1.04,
+      "d5": -1.97,
+      "d20": -6.07
     },
     "keyLevels": {
-      "support": 1414.47,
+      "support": 1406.18,
       "resistance": 1587.7
     },
     "macd": {
-      "macd": -23.73,
-      "signal": -20.13,
-      "hist": -3.6
+      "macd": -24.47,
+      "signal": -20.95,
+      "hist": -3.52
     },
     "stochastic": {
-      "k": 5.6
+      "k": 1.6
     },
     "compoundSignals": []
   },
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 20,
     "kospiTotal": 17
   },
-  "lastUpdate": "2026. 8. 8. AM 1:12:30"
+  "lastUpdate": "2026. 8. 8. AM 1:17:36"
 }
