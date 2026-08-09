@@ -1186,10 +1186,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-07-28",
-          "value": 2.75
-        },
-        {
           "date": "2026-07-29",
           "value": 2.75
         },
@@ -1223,6 +1219,10 @@
         },
         {
           "date": "2026-08-06",
+          "value": 2.75
+        },
+        {
+          "date": "2026-08-07",
           "value": 2.75
         }
       ]
@@ -2531,16 +2531,6 @@
       "trend": "down"
     },
     {
-      "id": "hyundai",
-      "symbol": "005380",
-      "market": "domestic",
-      "name": "현대차",
-      "enName": "Hyundai Motor",
-      "price": 395500,
-      "changePercent": "-1.12",
-      "trend": "down"
-    },
-    {
       "id": "kia",
       "symbol": "000270",
       "market": "domestic",
@@ -2600,7 +2590,7 @@
     "lastAiUpdate": 1786112876130,
     "score": {
       "upScore": 45.76622994355401,
-      "downScore": 57.15242737423614,
+      "downScore": 57.14446693716607,
       "kospiUpScore": 23.791911114634402,
       "kospiDownScore": 17.1252338067826
     }
@@ -2674,5 +2664,5 @@
     "kospiRecentHitRate": 20,
     "kospiTotal": 18
   },
-  "lastUpdate": "2026. 8. 9. AM 6:27:49"
+  "lastUpdate": "2026. 8. 9. AM 6:32:46"
 }
