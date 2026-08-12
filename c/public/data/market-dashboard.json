@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.983",
-      "diff": 0.16,
-      "diffPercent": 0.16,
+      "value": "99.985",
+      "diff": 0.17,
+      "diffPercent": 0.17,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,418.50",
-      "change": "+1.60",
-      "changePercent": "+0.11",
+      "value": "1,419.00",
+      "change": "+2.10",
+      "changePercent": "+0.15",
       "trend": "up"
     },
     {
@@ -2491,19 +2491,19 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "889.62",
-      "change": "-0.22",
-      "changePercent": "-0.02",
-      "trend": "down"
+      "value": "890.05",
+      "change": "+0.21",
+      "changePercent": "+0.02",
+      "trend": "up"
     },
     {
       "id": "eur-krw",
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,634.61",
-      "change": "-0.71",
-      "changePercent": "-0.04",
+      "value": "1,635.18",
+      "change": "-0.14",
+      "changePercent": "-0.01",
       "trend": "down"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "210.27",
-      "change": "+0.18",
-      "changePercent": "+0.09",
+      "value": "210.36",
+      "change": "+0.27",
+      "changePercent": "+0.13",
       "trend": "up"
     }
   ],
@@ -2598,8 +2598,8 @@
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2608,8 +2608,8 @@
     "lastAiUpdate": 1786552205448,
     "score": {
       "upScore": 43.35550162221676,
-      "downScore": 59.54085586894037,
-      "kospiUpScore": 18.71309870604528,
+      "downScore": 59.30565615605853,
+      "kospiUpScore": 18.754438740295573,
       "kospiDownScore": 22.41283928742159
     }
   },
@@ -2682,5 +2682,5 @@
     "kospiRecentHitRate": 20,
     "kospiTotal": 21
   },
-  "lastUpdate": "2026. 8. 12. PM 9:22:38"
+  "lastUpdate": "2026. 8. 12. PM 9:27:25"
 }
