@@ -67,11 +67,11 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.826",
-      "diff": 0.01,
-      "diffPercent": 0.01,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "99.811",
+      "diff": -0.01,
+      "diffPercent": -0.01,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-07-30",
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-08-12",
-          "value": 99.83
+          "value": 99.81
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "15.38",
-      "diff": 0.1,
-      "diffPercent": 0.65,
+      "value": "15.39",
+      "diff": 0.11,
+      "diffPercent": 0.72,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-08-12",
-          "value": 15.38
+          "value": 15.39
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,810.5",
-      "diff": 184.5,
-      "diffPercent": 0.62,
+      "value": "29,828",
+      "diff": 202,
+      "diffPercent": 0.68,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-08-12",
-          "value": 29810.5
+          "value": 29828
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,765.75",
-      "diff": 18.25,
-      "diffPercent": 0.24,
+      "value": "7,768",
+      "diff": 20.5,
+      "diffPercent": 0.26,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-08-12",
-          "value": 7765.75
+          "value": 7768
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "83.31",
-      "diff": 0.11,
-      "diffPercent": 0.13,
+      "value": "83.32",
+      "diff": 0.12,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-08-12",
-          "value": 83.31
+          "value": 83.32
         }
       ]
     },
@@ -2484,8 +2484,8 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,417.20",
-      "change": "+4.70",
+      "value": "1,417.10",
+      "change": "+4.60",
       "changePercent": "+0.33",
       "trend": "up"
     },
@@ -2495,9 +2495,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "890.82",
-      "change": "+3.82",
-      "changePercent": "+0.43",
+      "value": "890.92",
+      "change": "+3.92",
+      "changePercent": "+0.44",
       "trend": "up"
     },
     {
@@ -2505,8 +2505,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,635.45",
-      "change": "+5.14",
+      "value": "1,635.55",
+      "change": "+5.24",
       "changePercent": "+0.32",
       "trend": "up"
     },
@@ -2515,9 +2515,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "210.11",
-      "change": "+0.73",
-      "changePercent": "+0.35",
+      "value": "210.09",
+      "change": "+0.71",
+      "changePercent": "+0.34",
       "trend": "up"
     }
   ],
@@ -2585,11 +2585,11 @@
   ],
   "forecast": {
     "sentiment": "보합",
-    "kospiSentiment": "보합",
-    "upProb": 53,
-    "downProb": 47,
-    "kospiUpProb": 53,
-    "kospiDownProb": 47,
+    "kospiSentiment": "코스피 상승 우세",
+    "upProb": 50,
+    "downProb": 50,
+    "kospiUpProb": 59,
+    "kospiDownProb": 41,
     "timeframes": {
       "d1": {
         "upProb": 34,
@@ -2597,13 +2597,13 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 42,
+        "downProb": 58,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 46,
-        "downProb": 54,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2611,10 +2611,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년 8월 12일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1416.28원을 기록하며, 정량예측모델은 향후 1~5거래일 내 52%의 상승 확률을 제시하고 있습니다. 기술적 지표 상으로는 '침체(Bearish)' 신호가 나타나 최근의 하락 추세를 반영하고 있으나, RSI(14일)가 23에 도달하며 심한 과매도 상태임을 나타내 단기 기술적 반등 가능성이 높습니다. 이러한 맥락에서 환율은 1406.36원의 핵심 지지선과 볼린저밴드 하단인 1397.52원 수준에서 지지력을 확보한 후, 단기 이동평균선인 1418.33원을 1차 저항선으로, 최대 1425원선까지의 반등을 시도할 것으로 예상됩니다. DXY의 강력한 단기 하락 모멘텀(-16.37%)은 달러 강세를 제한하는 요인으로 작용하겠지만, 한미 2년물 금리차 0.85%는 여전히 달러에 우호적인 환경을 제공합니다. 따라서 투자자들은 1406.36원 부근의 지지선에서 매수 기회를 탐색하고, 1425원 근처에서 차익 실현을 고려하는 단기적인 '관망 후 매수' 또는 '단기 매수' 전략이 유효해 보입니다. ① 정량예측모델의 52% 상승 확률 및 RSI 23의 과매도 상태가 단기 반등 가능성을 시사합니다. ② DXY의 강한 하락 모멘텀에도 불구하고, 한미 2년물 금리차가 달러 강세 압력을 유지하고 있습니다. ③ 핵심 지지선 1406.36원 및 볼린저밴드 하단 1397.52원에서의 반등 시도가 예상됩니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,579.04포인트로 마감했으며, 정량예측모델은 향후 1~5거래일 내 53%의 상승 확률을 나타내며 소폭의 상승 가능성에 무게를 싣고 있습니다. 기술적 강도는 '보합(Neutral)'으로 평가되지만, 지수가 단기 이동평균선(MA5=6355.88pt, MA20=6479.01pt) 위에 위치하며 최근의 반등세가 이어질 수 있음을 보여줍니다. 1일 모멘텀이 3.68%로 강한 상승세를 보였고, 나스닥 선물 단기 흐름도 0.65% 상승하여 긍정적인 시장 분위기를 조성할 것입니다. 그러나 반도체(SOX) 지수의 단기 5일 모멘텀이 -0.66%로 부정적이기에, 국내 반도체 대형주 중심의 지수 상승은 제한될 수 있습니다. 코스피는 MA20인 6479.01포인트를 핵심 지지선으로 삼아 6600포인트를 넘어 6700포인트까지의 추가 상승을 시도할 것으로 예상되지만, 60일 이동평균선(7557.47pt)과의 괴리가 커 장기적인 하방 압력은 여전히 존재합니다. 투자자들은 단기적인 상승 흐름에 편승하는 '단기 매수/관망' 전략을 고려하되, 6479.01포인트 지지 여부를 주시하며 대응해야 합니다. ① 코스피가 MA5 및 MA20 위에 위치하고 1일 모멘텀이 3.68%로 강하게 상승하며 단기 반등세가 이어질 것으로 보입니다. ② 정량예측모델이 53%의 상승 확률을 제시하고, 낮은 VIX(15.37)와 한국 소비자물가 하향 안정화 추세가 긍정적 요인입니다. ③ SOX 지수의 단기 하락 모멘텀(-0.66%)과 장기 이동평균선과의 괴리는 상승폭을 제한하는 요소로 작용할 수 있습니다.\n\n실전 투자 대응\n환율: 원/달러 환율 1416.28원, 과매도 반등 가능성으로 1406.36원 지지선 매수, 1425원 목표.\n코스피: 코스피 6579.04포인트, 단기 반등세 지속 기대하며 6479.01포인트 지지선 관망, 6700포인트 목표.",
     "lastAiUpdate": 1786534194996,
     "score": {
-      "upScore": 59.432256176504,
-      "downScore": 53.63096048659191,
-      "kospiUpScore": 22.65060363528909,
-      "kospiDownScore": 20.178212379993163
+      "upScore": 54.2460511198251,
+      "downScore": 55.057354243278105,
+      "kospiUpScore": 23.90480023631451,
+      "kospiDownScore": 16.7669905990164
     }
   },
   "technicals": {
@@ -2645,15 +2645,7 @@
     "stochastic": {
       "k": 9.1
     },
-    "compoundSignals": [
-      {
-        "type": "DOLLAR_PANIC",
-        "up": 2.5,
-        "down": 0,
-        "block": "risk",
-        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
-      }
-    ]
+    "compoundSignals": []
   },
   "kospiTechnicals": {
     "rsi14": 43.5,
@@ -2684,7 +2676,7 @@
       "k": 75.7
     }
   },
-  "kospiSentiment": "보합",
+  "kospiSentiment": "코스피 상승 우세",
   "backtest": {
     "total": 23,
     "hitRate": 13,
@@ -2694,5 +2686,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 20
   },
-  "lastUpdate": "2026. 8. 12. AM 11:47:24"
+  "lastUpdate": "2026. 8. 12. AM 11:52:41"
 }
