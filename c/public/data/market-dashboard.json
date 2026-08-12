@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.984",
+      "value": "99.982",
       "diff": 0.16,
       "diffPercent": 0.16,
       "trend": "up",
@@ -2517,75 +2517,14 @@
       "trend": "up"
     }
   ],
-  "stockPrices": [
-    {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 255500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "hynix",
-      "symbol": "000660",
-      "market": "domestic",
-      "name": "SK하이닉스",
-      "enName": "SK Hynix",
-      "price": 1504000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "hyundai",
-      "symbol": "005380",
-      "market": "domestic",
-      "name": "현대차",
-      "enName": "Hyundai Motor",
-      "price": 409500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "kia",
-      "symbol": "000270",
-      "market": "domestic",
-      "name": "기아",
-      "enName": "Kia",
-      "price": 135600,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 215500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 39550,
-      "changePercent": "+0.00",
-      "trend": "neutral"
-    }
-  ],
+  "stockPrices": [],
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "보합",
     "upProb": 42,
     "downProb": 58,
-    "kospiUpProb": 46,
-    "kospiDownProb": 54,
+    "kospiUpProb": 45,
+    "kospiDownProb": 55,
     "timeframes": {
       "d1": {
         "upProb": 33,
@@ -2598,8 +2537,8 @@
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2608,8 +2547,8 @@
     "lastAiUpdate": 1786552205448,
     "score": {
       "upScore": 43.36464868859985,
-      "downScore": 59.54706045537624,
-      "kospiUpScore": 18.754438740295573,
+      "downScore": 59.29944542472796,
+      "kospiUpScore": 18.71309870604528,
       "kospiDownScore": 22.421441492342936
     }
   },
@@ -2682,5 +2621,5 @@
     "kospiRecentHitRate": 20,
     "kospiTotal": 21
   },
-  "lastUpdate": "2026. 8. 12. PM 9:37:22"
+  "lastUpdate": "2026. 8. 12. PM 9:47:04"
 }
