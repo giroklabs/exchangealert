@@ -2521,6 +2521,16 @@
       "trend": "up"
     },
     {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1645000,
+      "changePercent": "+3.26",
+      "trend": "up"
+    },
+    {
       "id": "hyundai",
       "symbol": "005380",
       "market": "domestic",
@@ -2575,8 +2585,8 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 40,
-        "downProb": 60,
+        "upProb": 39,
+        "downProb": 61,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2590,7 +2600,7 @@
     "lastAiUpdate": 1786718628768,
     "score": {
       "upScore": 49.95076768031175,
-      "downScore": 54.833905334057526,
+      "downScore": 55.19288149996248,
       "kospiUpScore": 16.64383778156995,
       "kospiDownScore": 22.982398932194652
     }
@@ -2664,5 +2674,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 24
   },
-  "lastUpdate": "2026. 8. 15. PM 7:22:34"
+  "lastUpdate": "2026. 8. 15. PM 7:27:31"
 }
