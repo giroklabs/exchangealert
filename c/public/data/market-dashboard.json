@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.683",
-      "diff": -0.15,
-      "diffPercent": -0.15,
+      "value": "98.694",
+      "diff": -0.14,
+      "diffPercent": -0.14,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-08-20",
-          "value": 98.68
+          "value": 98.69
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "15.22",
-      "diff": 0.33,
-      "diffPercent": 2.22,
+      "value": "15.21",
+      "diff": 0.32,
+      "diffPercent": 2.15,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-08-20",
-          "value": 15.22
+          "value": 15.21
         }
       ]
     },
@@ -767,11 +767,11 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,495.75",
-      "diff": -17,
-      "diffPercent": -0.06,
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "29,522.75",
+      "diff": 10,
+      "diffPercent": 0.03,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-08-07",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-08-20",
-          "value": 29495.75
+          "value": 29522.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,721.25",
-      "diff": -7.75,
-      "diffPercent": -0.1,
+      "value": "7,725",
+      "diff": -4,
+      "diffPercent": -0.05,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-08-20",
-          "value": 7721.25
+          "value": 7725
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "86.28",
-      "diff": 0.45,
-      "diffPercent": 0.52,
+      "value": "86.45",
+      "diff": 0.62,
+      "diffPercent": 0.72,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-08-20",
-          "value": 86.28
+          "value": 86.45
         }
       ]
     },
@@ -2484,9 +2484,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,394.80",
-      "change": "+7.70",
-      "changePercent": "+0.56",
+      "value": "1,394.00",
+      "change": "+6.90",
+      "changePercent": "+0.50",
       "trend": "up"
     },
     {
@@ -2495,9 +2495,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "880.06",
-      "change": "+4.01",
-      "changePercent": "+0.46",
+      "value": "880.02",
+      "change": "+3.97",
+      "changePercent": "+0.45",
       "trend": "up"
     },
     {
@@ -2505,9 +2505,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,631.50",
-      "change": "+13.79",
-      "changePercent": "+0.85",
+      "value": "1,631.61",
+      "change": "+13.90",
+      "changePercent": "+0.86",
       "trend": "up"
     },
     {
@@ -2515,9 +2515,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "207.48",
-      "change": "+1.39",
-      "changePercent": "+0.67",
+      "value": "207.41",
+      "change": "+1.32",
+      "changePercent": "+0.64",
       "trend": "up"
     }
   ],
@@ -2584,10 +2584,10 @@
     }
   ],
   "forecast": {
-    "sentiment": "보합",
+    "sentiment": "환율 하락 우세",
     "kospiSentiment": "보합",
-    "upProb": 46,
-    "downProb": 54,
+    "upProb": 44,
+    "downProb": 56,
     "kospiUpProb": 49,
     "kospiDownProb": 51,
     "timeframes": {
@@ -2611,10 +2611,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년 8월 20일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1392.88원으로, 최근 뚜렷한 하락 추세를 이어가며 원화 강세 흐름을 보이고 있습니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 43%로 제시하며, 이는 원화 강세에 대한 우위적 전망을 뒷받침합니다. 기술적 강도는 보합(Neutral)으로 평가되나, 달러인덱스(DXY)의 단기 5일 모멘텀이 -17.19%로 크게 하락하고 미국 국채금리가 전반적으로 하락 추세를 보이는 점은 달러 약세에 힘을 싣습니다. 그러나 단기적으로는 RSI(14일)가 34.9, Stochastic %K가 16.9%로 과매도권에 진입했으며, 현재 환율이 볼린저밴드 하단인 1387.39원과 60일 이동평균 지지선 1384.07원에 근접하고 있어 추가 하락 압력은 제한될 수 있습니다. 이에 따라 환율은 1384.07원에서 단기 지지를 확인하며 MA5인 1410.84원 사이에서 등락을 보이며 하방 경직성을 테스트하거나 기술적 반등을 시도할 것으로 예상됩니다. 매수/매도 전략은 1384.07원 지지선 하향 돌파 여부를 확인하며 관망하는 것이 현명해 보입니다. ①정량예측모델의 원화 강세 우위 전망과 ②달러인덱스 및 미국 금리 하락 추세가 달러 약세의 핵심 근거인 반면, ③RSI와 Stochastic의 과매도 시그널 및 주요 지지선 근접은 단기 반등 가능성을 시사합니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,852.58pt로, 최근 저점 대비 반등했지만 대외 불확실성 속에서 방향성을 탐색하고 있습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 49%로 제시하며, 이는 중립에서 다소 약세에 가까운 전망을 시사합니다. 기술적 강도는 보합(Neutral)으로 평가되지만, 필라델피아 반도체 지수(SOX) 모멘텀이 -5.33%로 부진하고 나스닥 선물도 -2.15% 하락하는 등 주요 해외 지표의 부정적인 흐름은 국내 증시에 하방 압력으로 작용할 수 있습니다. 지수는 단기 이동평균선(MA5=6796.97pt, MA20=6469.9pt) 위에 위치하며 단기적 강세를 유지하고 있으나, RSI(14일)가 67.4로 과매수권에 근접하여 숨 고르기 장세가 펼쳐질 가능성도 있습니다. 향후 코스피는 6796.97pt를 단기 지지선으로 삼고 최근 고점인 6869.83pt 부근의 저항을 확인하며 횡보 또는 제한적인 하락 압력을 받을 수 있습니다. 투자 전략은 대외 변수의 불확실성과 과매수권 진입을 고려하여 관망 또는 보수적인 접근이 필요합니다. ①정량예측모델의 중립적 시각과 ②부정적인 해외 증시 모멘텀이 하방 압력을 높이는 반면, ③RSI 과매수권 진입은 단기 상승세 둔화를 예고합니다.\n\n실전 투자 대응\n환율: 1392.88원, 1384.07원 지지선 확인 후, 1410.84원 목표 또는 하방 추세 관망.\n코스피: 6852.58pt, 6796.97pt 지지 테스트 예상, 대외악재 시 추가 하락 유의.",
     "lastAiUpdate": 1787214758156,
     "score": {
-      "upScore": 46.990529316315175,
-      "downScore": 55.77700173306491,
-      "kospiUpScore": 27.00206816918672,
-      "kospiDownScore": 27.90208269629971
+      "upScore": 45.29059094323439,
+      "downScore": 56.8229906447321,
+      "kospiUpScore": 27.01027365946364,
+      "kospiDownScore": 27.903149820459255
     }
   },
   "technicals": {
@@ -2686,5 +2686,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 27
   },
-  "lastUpdate": "2026. 8. 20. AM 9:12:35"
+  "lastUpdate": "2026. 8. 20. AM 9:17:34"
 }
