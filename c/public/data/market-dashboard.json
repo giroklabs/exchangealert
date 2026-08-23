@@ -2509,7 +2509,68 @@
       "trend": "neutral"
     }
   ],
-  "stockPrices": [],
+  "stockPrices": [
+    {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 281500,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1730000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
+      "id": "hyundai",
+      "symbol": "005380",
+      "market": "domestic",
+      "name": "현대차",
+      "enName": "Hyundai Motor",
+      "price": 415000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 130900,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
+      "id": "naver",
+      "symbol": "035420",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 222000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
+      "id": "kakao",
+      "symbol": "035720",
+      "market": "domestic",
+      "name": "카카오",
+      "enName": "Kakao",
+      "price": 35800,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    }
+  ],
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "코스피 하락 우세",
@@ -2613,5 +2674,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 30
   },
-  "lastUpdate": "2026. 8. 23. PM 8:50:49"
+  "lastUpdate": "2026. 8. 23. PM 8:52:27"
 }
