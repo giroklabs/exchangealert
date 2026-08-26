@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.16",
-      "diff": 0.24,
-      "diffPercent": 0.24,
+      "value": "99.149",
+      "diff": 0.23,
+      "diffPercent": 0.23,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-08-26",
-          "value": 99.16
+          "value": 99.15
         }
       ]
     },
@@ -2533,6 +2533,16 @@
       "trend": "neutral"
     },
     {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1688000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
       "id": "hyundai",
       "symbol": "005380",
       "market": "domestic",
@@ -2676,5 +2686,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 33
   },
-  "lastUpdate": "2026. 8. 26. PM 9:17:48"
+  "lastUpdate": "2026. 8. 26. PM 9:22:33"
 }
