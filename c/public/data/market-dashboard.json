@@ -2584,8 +2584,8 @@
     "kospiDownProb": 67,
     "timeframes": {
       "d1": {
-        "upProb": 92,
-        "downProb": 8,
+        "upProb": 95,
+        "downProb": 5,
         "basis": "Regime Switch 가동(매크로 0%+오버나잇 집중)"
       },
       "d5": {
@@ -2610,32 +2610,32 @@
     }
   },
   "technicals": {
-    "rsi14": 25.9,
-    "ma5": 1380.45,
-    "ma20": 1406.6,
-    "ma60": 1474.38,
+    "rsi14": 13.9,
+    "ma5": 1379.54,
+    "ma20": 1403.84,
+    "ma60": 1471.48,
     "bb": {
-      "upper": 1443.68,
-      "mid": 1406.6,
-      "lower": 1369.52,
-      "bandwidth": 5.27
+      "upper": 1440.07,
+      "mid": 1403.84,
+      "lower": 1367.61,
+      "bandwidth": 5.16
     },
     "momentum": {
-      "d1": -0.86,
-      "d5": -1.38,
-      "d20": -3.45
+      "d1": -0.65,
+      "d5": -0.97,
+      "d20": -4.47
     },
     "keyLevels": {
-      "support": 1370.48,
+      "support": 1369.74,
       "resistance": 1587.7
     },
     "macd": {
-      "macd": -23.27,
-      "signal": -22.61,
-      "hist": -0.66
+      "macd": -22.79,
+      "signal": -22.53,
+      "hist": -0.26
     },
     "stochastic": {
-      "k": 1.9
+      "k": 3.2
     },
     "compoundSignals": []
   },
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 35
   },
-  "lastUpdate": "2026. 8. 29. AM 5:22:50"
+  "lastUpdate": "2026. 8. 29. AM 5:27:30"
 }
