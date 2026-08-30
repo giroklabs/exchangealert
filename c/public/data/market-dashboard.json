@@ -1180,15 +1180,11 @@
       "description": "한국 기준금리, 한미 금리차 결정",
       "cycle": "D",
       "value": "3",
-      "diff": 0.25,
-      "diffPercent": 9.09,
-      "trend": "up",
-      "realizedImpact": "down",
+      "diff": 0,
+      "diffPercent": 0,
+      "trend": "neutral",
+      "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-08-18",
-          "value": 2.75
-        },
         {
           "date": "2026-08-19",
           "value": 2.75
@@ -1223,6 +1219,10 @@
         },
         {
           "date": "2026-08-27",
+          "value": 3
+        },
+        {
+          "date": "2026-08-28",
           "value": 3
         }
       ]
@@ -2589,8 +2589,8 @@
         "basis": "Regime Switch 가동(매크로 0%+오버나잇 집중)"
       },
       "d5": {
-        "upProb": 54,
-        "downProb": 46,
+        "upProb": 55,
+        "downProb": 45,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2604,7 +2604,7 @@
     "lastAiUpdate": 1787927601946,
     "score": {
       "upScore": 61.321585747599656,
-      "downScore": 50.61304024628103,
+      "downScore": 49.39679224407442,
       "kospiUpScore": 16.024716221142693,
       "kospiDownScore": 32.02935964046997
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 36
   },
-  "lastUpdate": "2026. 8. 30. AM 6:27:33"
+  "lastUpdate": "2026. 8. 30. AM 6:32:34"
 }
