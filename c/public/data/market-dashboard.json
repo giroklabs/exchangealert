@@ -67,16 +67,12 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.677",
-      "diff": 0.52,
-      "diffPercent": 0.52,
+      "value": "99.71",
+      "diff": 0.01,
+      "diffPercent": 0.01,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-08-17",
-          "value": 118.814
-        },
         {
           "date": "2026-08-18",
           "value": 118.9831
@@ -111,7 +107,11 @@
         },
         {
           "date": "2026-08-28",
-          "value": 99.68
+          "value": 99.7
+        },
+        {
+          "date": "2026-08-30",
+          "value": 99.71
         }
       ]
     },
@@ -2472,9 +2472,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,380.90",
-      "change": "+0.40",
-      "changePercent": "+0.03",
+      "value": "1,381.00",
+      "change": "+0.50",
+      "changePercent": "+0.04",
       "trend": "up"
     },
     {
@@ -2483,9 +2483,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "862.39",
-      "change": "-0.07",
-      "changePercent": "-0.01",
+      "value": "862.32",
+      "change": "-0.14",
+      "changePercent": "-0.02",
       "trend": "down"
     },
     {
@@ -2493,19 +2493,19 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,599.22",
-      "change": "-0.09",
-      "changePercent": "-0.01",
-      "trend": "down"
+      "value": "1,599.34",
+      "change": "+0.03",
+      "changePercent": "+0.00",
+      "trend": "up"
     },
     {
       "id": "cny-krw",
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "205.16",
-      "change": "+0.07",
-      "changePercent": "+0.03",
+      "value": "205.17",
+      "change": "+0.08",
+      "changePercent": "+0.04",
       "trend": "up"
     }
   ],
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 36
   },
-  "lastUpdate": "2026. 8. 30. PM 10:07:37"
+  "lastUpdate": "2026. 8. 30. PM 10:12:34"
 }
