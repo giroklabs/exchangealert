@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.844",
+      "value": "98.839",
       "diff": -0.32,
       "diffPercent": -0.32,
       "trend": "down",
@@ -126,11 +126,11 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.776",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "4.788",
+      "diff": 0.01,
+      "diffPercent": 0.21,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-08-25",
@@ -170,7 +170,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 4.78
+          "value": 4.79
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "15.5",
-      "diff": 0.2,
-      "diffPercent": 1.31,
+      "value": "15.69",
+      "diff": 0.39,
+      "diffPercent": 2.55,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 15.5
+          "value": 15.69
         }
       ]
     },
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,353.123",
-      "diff": -153.87,
-      "diffPercent": -0.58,
+      "value": "26,374.049",
+      "diff": -132.94,
+      "diffPercent": -0.5,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 26353.12
+          "value": 26374.05
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,678.38",
-      "diff": -40.22,
-      "diffPercent": -0.52,
+      "value": "7,680.08",
+      "diff": -38.52,
+      "diffPercent": -0.5,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 7678.38
+          "value": 7680.08
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "11,871.154",
-      "diff": 135.89,
-      "diffPercent": 1.16,
+      "value": "11,901.457",
+      "diff": 166.2,
+      "diffPercent": 1.42,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 11871.15
+          "value": 11901.46
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,449",
-      "diff": -116.25,
-      "diffPercent": -0.39,
+      "value": "29,469.25",
+      "diff": -96,
+      "diffPercent": -0.32,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 29449
+          "value": 29469.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "93.3",
-      "diff": 1.82,
-      "diffPercent": 1.99,
+      "value": "93.24",
+      "diff": 1.76,
+      "diffPercent": 1.92,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 93.3
+          "value": 93.24
         }
       ]
     },
@@ -2273,7 +2273,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.38",
+      "value": "0.39",
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -2315,7 +2315,7 @@
         },
         {
           "date": "2026-09-08",
-          "value": 0.38
+          "value": 0.39
         }
       ]
     },
@@ -2492,9 +2492,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,341.90",
-      "change": "-3.60",
-      "changePercent": "-0.27",
+      "value": "1,342.00",
+      "change": "-3.50",
+      "changePercent": "-0.26",
       "trend": "down"
     },
     {
@@ -2503,9 +2503,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "871.56",
-      "change": "-0.02",
-      "changePercent": "-0.00",
+      "value": "870.69",
+      "change": "-0.89",
+      "changePercent": "-0.10",
       "trend": "down"
     },
     {
@@ -2513,9 +2513,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,559.49",
-      "change": "-5.06",
-      "changePercent": "-0.32",
+      "value": "1,559.34",
+      "change": "-5.21",
+      "changePercent": "-0.33",
       "trend": "down"
     },
     {
@@ -2594,10 +2594,10 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 상승 우세",
-    "upProb": 49,
-    "downProb": 51,
-    "kospiUpProb": 62,
-    "kospiDownProb": 38,
+    "upProb": 50,
+    "downProb": 50,
+    "kospiUpProb": 56,
+    "kospiDownProb": 44,
     "timeframes": {
       "d1": {
         "upProb": 39,
@@ -2605,8 +2605,8 @@
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 44,
-        "downProb": 56,
+        "upProb": 45,
+        "downProb": 55,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2619,10 +2619,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 8일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1341.32원으로, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 48%로 제시하며 기술적 신호는 '침체(Bearish)'로 평가하고 있습니다. 이는 단기적으로 환율의 하락 압력이 지속될 수 있음을 시사합니다. 최근 원/달러 환율은 뚜렷한 하락 추세를 보이며 5일 이동평균선(1354.14원), 20일 이동평균선(1384.75원), 60일 이동평균선(1455.2원)을 모두 하회하고 있으며, 단기 모멘텀 지표 또한 1일 -0.45%, 5일 -2.02%, 20일 -5.53%로 강한 하락세를 나타내고 있습니다. 그러나 RSI(14일)가 10.9, Stochastic %K가 6.3%를 기록하며 과매도권에 깊이 진입하여 단기적인 기술적 반등 가능성이 높아졌습니다. 볼린저밴드 하단인 1337.18원과 핵심 지지선인 1335.12원에 근접한 현 레벨에서는 지지력 테스트 후 단기적인 반등 시도가 예상됩니다. 예상 도달 범위는 1335원~1355원 사이가 될 것으로 보이며, 주요 저항선은 1354.14원(MA5)과 1384.75원(MA20)으로 작용할 것입니다. 따라서 현 구간에서는 과매도에 따른 단기 반등 가능성을 염두에 두되, 전반적인 하락 모멘텀이 강하므로 1335.12원 지지 여부를 확인하며 보수적인 관망 전략이 유효하며, 단기 반등 시에는 1354.14원 부근에서 매도 기회를 모색하는 것이 바람직해 보입니다. ① 정량예측모델의 침체 신호와 강한 하락 모멘텀 ② RSI, Stochastic 등 기술적 지표의 과매도 진입에 따른 단기 반등 가능성 ③ 1335.12원 부근의 강력한 지지선 형성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,954.52pt를 기록하고 있으며, 정량예측모델은 향후 1~5거래일 내 코스피 상승 확률을 52%로 제시하며 기술적 신호는 '보합(Neutral)'로 평가하고 있습니다. 이는 시장의 방향성이 뚜렷하지 않음을 의미하지만, 긍정적인 요인들이 우세합니다. 특히, 반도체(SOX) 단기 5일 모멘텀이 2.32%를 기록하며 반도체 업황 개선에 대한 기대감이 코스피 상승을 지지하고 있으며, 나스닥 선물 흐름 또한 0.33%로 긍정적입니다. 코스피 자체의 5일 모멘텀 1.74%와 20일 모멘텀 10.4%는 중장기적인 상승 모멘텀이 여전히 살아있음을 보여줍니다. 현재 지수는 5일 이동평균선(6755.86pt)과 20일 이동평균선(6760.33pt) 위에 위치하여 단기 상승 추세를 지지하고 있으나, MA60(7192.39pt)는 저항으로 작용할 수 있습니다. 최근 이틀간의 하락세로 단기 조정 압력이 있지만, 볼린저밴드 상단 7104.53pt까지의 상승 여력은 남아있으며, RSI(14일) 63.5는 과열 상태는 아닙니다. 예상 도달 범위는 하방으로 6755.86pt(MA5)에서 지지력을 확인한 후 상방으로 7104.53pt(볼린저밴드 상단)까지의 상승 시도가 가능할 것으로 보이며, 핵심 지지선은 6755.86pt, 저항선은 7104.53pt입니다. 따라서 6900pt 초반대에서의 지지 여부를 확인한 후 반도체 업황 개선 기대감과 중장기 모멘텀을 바탕으로 7100pt까지의 추가 상승을 목표로 하는 매수 또는 관망 전략이 유효해 보입니다. ① 반도체(SOX) 모멘텀과 나스닥 선물 흐름의 긍정적 영향 ② 코스피의 중장기 상승 모멘텀 유지와 이동평균선 지지 ③ 7104.53pt까지의 상승 여력 존재.\n\n실전 투자 대응\n환율: 과매도권 진입에 따른 단기 반등 가능성 유의, 1335.12원 지지 여부 확인 후 보수적 관망.\n코스피: 6900pt 초반 지지 확인 후 반도체 업황 기대감에 7104.53pt 목표로 매수.",
     "lastAiUpdate": 1788872277580,
     "score": {
-      "upScore": 54.58315586113505,
-      "downScore": 57.249828812804175,
-      "kospiUpScore": 24.84364314882849,
-      "kospiDownScore": 15.424794408519524
+      "upScore": 56.34160040508453,
+      "downScore": 56.659693521698706,
+      "kospiUpScore": 23.913032971326835,
+      "kospiDownScore": 18.839676013319693
     }
   },
   "technicals": {
@@ -2694,5 +2694,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 43
   },
-  "lastUpdate": "2026. 9. 8. PM 2:12:36"
+  "lastUpdate": "2026. 9. 8. PM 2:17:40"
 }
