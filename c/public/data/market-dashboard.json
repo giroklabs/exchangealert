@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.639",
-      "diff": -0.2,
-      "diffPercent": -0.2,
+      "value": "98.677",
+      "diff": -0.16,
+      "diffPercent": -0.16,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-09",
-          "value": 98.64
+          "value": 98.68
         }
       ]
     },
@@ -184,16 +184,12 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "15.72",
-      "diff": 0.42,
-      "diffPercent": 2.75,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "15.66",
+      "diff": -0.06,
+      "diffPercent": -0.38,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-08-26",
-          "value": 15.21
-        },
         {
           "date": "2026-08-27",
           "value": 14.51
@@ -229,6 +225,10 @@
         {
           "date": "2026-09-08",
           "value": 15.72
+        },
+        {
+          "date": "2026-09-09",
+          "value": 15.66
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,562",
-      "diff": 23.25,
-      "diffPercent": 0.08,
+      "value": "29,594.25",
+      "diff": 55.5,
+      "diffPercent": 0.19,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-09",
-          "value": 29562
+          "value": 29594.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,684.25",
-      "diff": 3.75,
-      "diffPercent": 0.05,
+      "value": "7,689",
+      "diff": 8.5,
+      "diffPercent": 0.11,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-09",
-          "value": 7684.25
+          "value": 7689
         }
       ]
     },
@@ -2492,9 +2492,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,336.70",
-      "change": "-5.40",
-      "changePercent": "-0.40",
+      "value": "1,336.20",
+      "change": "-5.90",
+      "changePercent": "-0.44",
       "trend": "down"
     },
     {
@@ -2503,8 +2503,8 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "871.64",
-      "change": "-0.31",
+      "value": "871.60",
+      "change": "-0.35",
       "changePercent": "-0.04",
       "trend": "down"
     },
@@ -2513,9 +2513,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,555.85",
-      "change": "-4.88",
-      "changePercent": "-0.31",
+      "value": "1,555.20",
+      "change": "-5.53",
+      "changePercent": "-0.35",
       "trend": "down"
     },
     {
@@ -2523,9 +2523,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "199.36",
-      "change": "-0.76",
-      "changePercent": "-0.38",
+      "value": "199.26",
+      "change": "-0.86",
+      "changePercent": "-0.43",
       "trend": "down"
     }
   ],
@@ -2594,14 +2594,14 @@
   "forecast": {
     "sentiment": "환율 하락 우세",
     "kospiSentiment": "보합",
-    "upProb": 44,
-    "downProb": 56,
-    "kospiUpProb": 47,
-    "kospiDownProb": 53,
+    "upProb": 43,
+    "downProb": 57,
+    "kospiUpProb": 54,
+    "kospiDownProb": 46,
     "timeframes": {
       "d1": {
-        "upProb": 33,
-        "downProb": 67,
+        "upProb": 32,
+        "downProb": 68,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
@@ -2610,19 +2610,19 @@
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 40,
-        "downProb": 60,
+        "upProb": 39,
+        "downProb": 61,
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 9일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1335.68원을 기록하고 있으며, 정량예측모델은 환율 상승 확률을 44%로 제시하여 향후 1~5거래일 내 하락 우세가 점쳐집니다. 기술적 신호 또한 '침체(Bearish)'를 나타내고 있습니다. 하지만 RSI(14일)가 15, Stochastic(%K)이 10.7%로 강력한 과매도 구간에 진입하여 단기적인 기술적 반등 가능성이 높습니다. 핵심 지지선으로는 60일 이동평균선인 1335원과 볼린저밴드 하단인 1332.69원이 작용하고 있으며, 단기 저항선은 MA5인 1348.66원입니다. 이에 따라 단기적으로는 1332원~1348원 사이에서 움직일 것으로 예상되며, 과매도에 따른 반등 시도가 있겠으나 DXY의 강한 하락 모멘텀(-16.87%)과 한미 10년물 금리차 축소 추세(0.41%p)를 고려할 때 추가적인 상승은 제한적일 것으로 보입니다. 투자자들은 단기적 기술 반등 가능성을 염두에 두면서도 중장기적인 하락 압력에 대비하여 보수적인 관망 전략이 필요할 것으로 판단됩니다. ① 정량예측모델의 상승 확률 44% 및 '침체(Bearish)' 기술적 신호는 환율 하락 우세를 시사합니다. ② RSI(14일) 15와 Stochastic(%K) 10.7% 등 과매도 지표는 단기 기술적 반등 가능성을 높입니다. ③ DXY의 강한 하락 모멘텀(-16.87%)과 한미 10년물 금리차 0.41%p 축소 추세는 원/달러 환율의 중장기 하락 압력으로 작용할 수 있습니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,054.08pt를 기록하며 강한 상승 흐름을 보이고 있으나, 정량예측모델은 향후 1~5거래일 내 코스피 상승 확률을 47%로 예측하여 하락 우세를 나타내며, 기술적 신호는 '보합(Neutral)'입니다. 코스피 지수는 5일 모멘텀이 7.49%, 20일 모멘텀이 11.17%로 매우 강력한 상승 추세를 유지하고 있으며, 반도체(SOX) 지수의 3.06% 상승 모멘텀과 나스닥 선물 흐름 1.71%도 긍정적인 영향을 미치고 있습니다. 현재 지수는 볼린저밴드 상단인 7,106.08pt에 근접하여 단기적인 저항에 직면할 수 있으나, MA5 6854.14pt와 MA20 6795.76pt가 견고한 지지선 역할을 할 것으로 예상됩니다. 이에 따라 7,106.08pt 돌파 시도 여부가 중요하며, 돌파 성공 시 추가 상승 여력이 있겠으나 실패할 경우 6900pt~7000pt 구간에서 지지력을 테스트할 수 있습니다. 투자자들은 강한 상승 모멘텀을 고려하여 긍정적인 관점을 유지하되, 볼린저밴드 상단 저항선 돌파 여부를 확인하며 점진적인 매수 전략이 유효할 것으로 판단됩니다. ① 코스피는 5일 모멘텀 7.49%, 20일 모멘텀 11.17%로 매우 강한 상승 추세를 보이며, 반도체(SOX) 지수 3.06% 상승 모멘텀이 긍정적입니다. ② 정량예측모델은 상승 확률 47%로 하락 우세를 나타내지만, 기술적 신호는 '보합(Neutral)'이며 RSI는 56.7로 과열 상태는 아닙니다. ③ 현재 지수(7,054.08pt)는 볼린저밴드 상단(7,106.08pt)에 근접해 단기 저항을 받을 수 있으나, MA5 6854.14pt와 MA20 6795.76pt가 강력한 지지선 역할을 합니다.\n\n실전 투자 대응\n환율: 환율은 1335.68원. 과매도 지표로 1348원까지 반등 가능성, 관망이 유효.\n코스피: 코스피 7,054.08pt. 7106pt 돌파 시 추가 상승 기대, MA5 6854pt 지지 확인 후 매수.",
-    "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 9일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1335.68원을 기록하고 있으며, 정량예측모델은 환율 상승 확률을 44%로 제시하여 향후 1~5거래일 내 하락 우세가 점쳐집니다. 기술적 신호 또한 '침체(Bearish)'를 나타내고 있습니다. 하지만 RSI(14일)가 15, Stochastic(%K)이 10.7%로 강력한 과매도 구간에 진입하여 단기적인 기술적 반등 가능성이 높습니다. 핵심 지지선으로는 60일 이동평균선인 1335원과 볼린저밴드 하단인 1332.69원이 작용하고 있으며, 단기 저항선은 MA5인 1348.66원입니다. 이에 따라 단기적으로는 1332원~1348원 사이에서 움직일 것으로 예상되며, 과매도에 따른 반등 시도가 있겠으나 DXY의 강한 하락 모멘텀(-16.87%)과 한미 10년물 금리차 축소 추세(0.41%p)를 고려할 때 추가적인 상승은 제한적일 것으로 보입니다. 투자자들은 단기적 기술 반등 가능성을 염두에 두면서도 중장기적인 하락 압력에 대비하여 보수적인 관망 전략이 필요할 것으로 판단됩니다. ① 정량예측모델의 상승 확률 44% 및 '침체(Bearish)' 기술적 신호는 환율 하락 우세를 시사합니다. ② RSI(14일) 15와 Stochastic(%K) 10.7% 등 과매도 지표는 단기 기술적 반등 가능성을 높입니다. ③ DXY의 강한 하락 모멘텀(-16.87%)과 한미 10년물 금리차 0.41%p 축소 추세는 원/달러 환율의 중장기 하락 압력으로 작용할 수 있습니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,054.08pt를 기록하며 강한 상승 흐름을 보이고 있으나, 정량예측모델은 향후 1~5거래일 내 코스피 상승 확률을 47%로 예측하여 하락 우세를 나타내며, 기술적 신호는 '보합(Neutral)'입니다. 코스피 지수는 5일 모멘텀이 7.49%, 20일 모멘텀이 11.17%로 매우 강력한 상승 추세를 유지하고 있으며, 반도체(SOX) 지수의 3.06% 상승 모멘텀과 나스닥 선물 흐름 1.71%도 긍정적인 영향을 미치고 있습니다. 현재 지수는 볼린저밴드 상단인 7,106.08pt에 근접하여 단기적인 저항에 직면할 수 있으나, MA5 6854.14pt와 MA20 6795.76pt가 견고한 지지선 역할을 할 것으로 예상됩니다. 이에 따라 7,106.08pt 돌파 시도 여부가 중요하며, 돌파 성공 시 추가 상승 여력이 있겠으나 실패할 경우 6900pt~7000pt 구간에서 지지력을 테스트할 수 있습니다. 투자자들은 강한 상승 모멘텀을 고려하여 긍정적인 관점을 유지하되, 볼린저밴드 상단 저항선 돌파 여부를 확인하며 점진적인 매수 전략이 유효할 것으로 판단됩니다. ① 코스피는 5일 모멘텀 7.49%, 20일 모멘텀 11.17%로 매우 강한 상승 추세를 보이며, 반도체(SOX) 지수 3.06% 상승 모멘텀이 긍정적입니다. ② 정량예측모델은 상승 확률 47%로 하락 우세를 나타내지만, 기술적 신호는 '보합(Neutral)'이며 RSI는 56.7로 과열 상태는 아닙니다. ③ 현재 지수(7,054.08pt)는 볼린저밴드 상단(7,106.08pt)에 근접해 단기 저항을 받을 수 있으나, MA5 6854.14pt와 MA20 6795.76pt가 강력한 지지선 역할을 합니다.\n\n실전 투자 대응\n환율: 환율은 1335.68원. 과매도 지표로 1348원까지 반등 가능성, 관망이 유효.\n코스피: 코스피 7,054.08pt. 7106pt 돌파 시 추가 상승 기대, MA5 6854pt 지지 확인 후 매수.",
-    "lastAiUpdate": 1788935598698,
+    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "lastAiUpdate": 1788939356154,
     "score": {
-      "upScore": 46.85253986371238,
-      "downScore": 59.28008261704403,
-      "kospiUpScore": 19.967369788903728,
-      "kospiDownScore": 22.235382493083453
+      "upScore": 45.50257210872687,
+      "downScore": 60.709559568244444,
+      "kospiUpScore": 22.344964726863022,
+      "kospiDownScore": 19.24395567879544
     }
   },
   "technicals": {
@@ -2694,5 +2694,5 @@
     "kospiRecentHitRate": 20,
     "kospiTotal": 44
   },
-  "lastUpdate": "2026. 9. 9. AM 7:27:54"
+  "lastUpdate": "2026. 9. 9. AM 7:35:56"
 }
