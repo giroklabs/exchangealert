@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "98.78",
-      "diff": 0.01,
-      "diffPercent": 0.01,
+      "value": "98.772",
+      "diff": 0,
+      "diffPercent": 0,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": 98.78
+          "value": 98.77
         }
       ]
     },
@@ -184,11 +184,11 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "16.46",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "16.48",
+      "diff": 0.02,
+      "diffPercent": 0.12,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-08-28",
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": 16.46
+          "value": 16.48
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,415.75",
-      "diff": -33,
-      "diffPercent": -0.11,
+      "value": "29,410.25",
+      "diff": -38.5,
+      "diffPercent": -0.13,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": 29415.75
+          "value": 29410.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,652.75",
-      "diff": 9,
-      "diffPercent": 0.12,
+      "value": "7,652",
+      "diff": 8.25,
+      "diffPercent": 0.11,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": 7652.75
+          "value": 7652
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "97.24",
-      "diff": 1.19,
-      "diffPercent": 1.24,
+      "value": "97.45",
+      "diff": 1.4,
+      "diffPercent": 1.46,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": 97.24
+          "value": 97.45
         }
       ]
     },
@@ -1913,9 +1913,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-24,820",
-      "diff": -23626,
-      "diffPercent": -1978.73,
+      "value": "-26,230",
+      "diff": -25036,
+      "diffPercent": -2096.82,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2021,7 +2021,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": -24820
+          "value": -26230
         }
       ]
     },
@@ -2034,9 +2034,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "4,334",
-      "diff": 2378,
-      "diffPercent": 121.57,
+      "value": "5,743",
+      "diff": 3787,
+      "diffPercent": 193.61,
       "trend": "up",
       "history": [
         {
@@ -2141,7 +2141,7 @@
         },
         {
           "date": "2026-09-10",
-          "value": 4334
+          "value": 5743
         }
       ]
     },
@@ -2492,9 +2492,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,341.60",
-      "change": "+3.70",
-      "changePercent": "+0.28",
+      "value": "1,341.80",
+      "change": "+3.90",
+      "changePercent": "+0.29",
       "trend": "up"
     },
     {
@@ -2503,9 +2503,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "873.27",
-      "change": "+0.45",
-      "changePercent": "+0.05",
+      "value": "873.62",
+      "change": "+0.80",
+      "changePercent": "+0.09",
       "trend": "up"
     },
     {
@@ -2513,9 +2513,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,561.22",
-      "change": "+3.03",
-      "changePercent": "+0.19",
+      "value": "1,561.52",
+      "change": "+3.33",
+      "changePercent": "+0.21",
       "trend": "up"
     },
     {
@@ -2523,9 +2523,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "200.07",
-      "change": "+0.52",
-      "changePercent": "+0.26",
+      "value": "200.11",
+      "change": "+0.56",
+      "changePercent": "+0.28",
       "trend": "up"
     }
   ],
@@ -2594,19 +2594,19 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 52,
-    "downProb": 48,
-    "kospiUpProb": 46,
-    "kospiDownProb": 54,
+    "upProb": 54,
+    "downProb": 46,
+    "kospiUpProb": 45,
+    "kospiDownProb": 55,
     "timeframes": {
       "d1": {
-        "upProb": 43,
-        "downProb": 57,
+        "upProb": 44,
+        "downProb": 56,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 50,
-        "downProb": 50,
+        "upProb": 51,
+        "downProb": 49,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
@@ -2619,10 +2619,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 10일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1341.68원으로 장을 마감했습니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 52%로 제시하며, 기술적 신호는 전반적인 '침체(Bearish)' 추세 속 과매도 구간에서의 반등 가능성을 시사하고 있습니다. 한미 2년물 금리차가 0.88%로 확대되어 원화 약세 압력을 가중시키고 있으며, 특히 '자본유출(CAPITAL_OUTFLOW)' 복합 위험 신호가 발현되어 환율 상승에 대한 강력한 근거로 작용할 것으로 판단됩니다. 기술적으로 RSI(14일)가 12.4, Stochastic(%K)가 5.6%로 극심한 과매도 상태에 진입하여 단기적인 기술적 반등이 유력하며, 현재 환율은 볼린저밴드 하단(1327.37원)에 근접해 있어 하방 경직성이 강해질 수 있습니다. 핵심 지지선은 60일 지지선인 1333.25원으로, 이 레벨을 지켜낼 경우 MA5인 1343.91원을 1차 저항선으로, 이후 1350원대 중반까지의 회복 시도를 예상할 수 있습니다. 그러나 MA20(1377.32원)과 MA60(1449.26원)이 여전히 상단에 위치하며 강한 저항으로 작용할 수 있어, 반등 시 매물 압력에 주의가 필요합니다. 따라서 단기적으로는 과매도에 따른 반등 기회를 활용한 보수적 매수 접근이 유효하며, 반등 시 1343.91원 및 1350원 수준에서는 이익 실현을 고려하는 전략이 바람직합니다. ① 한미 2년물 금리차 확대와 [CAPITAL_OUTFLOW] 복합 위험 신호로 인한 환율 상승 압력 강화 ② RSI(14일) 12.4, Stochastic(%K) 5.6% 등 극심한 과매도 지표에 따른 단기 반등 기대 ③ 60일 지지선인 1333.25원 수준의 하방 경직성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,033.92포인트로 마감했습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 47%로 제시하며 '보합(Neutral)' 신호를 보내, 강한 방향성보다는 횡보 가능성을 높게 평가하고 있습니다. 미국 반도체 지수(SOX)의 단기 5일 모멘텀이 5.69%로 강세를 보이고 나스닥 선물 흐름 또한 0.83%로 긍정적이어서 국내 증시에 긍정적인 영향을 미칠 수 있습니다. 그러나 환율 분석에서 언급된 '자본유출(CAPITAL_OUTFLOW)' 복합 위험 신호는 외국인 매도세로 이어져 코스피 지수에 주요 하방 압력으로 작용할 것으로 보입니다. 기술적으로는 지수가 MA5(6944.54pt)와 MA20(6818.38pt) 위에 위치하여 단기적으로는 양호한 흐름을 유지하고 있으나, MA60(7139.27pt)과 볼린저밴드 상단(7128.14pt)에 근접해 있어 추가 상승은 제한적일 수 있습니다. 단기 모멘텀(5일, 20일)은 6.91%로 여전히 강하나, 금리차 확대 및 자본유출 위험이 상존하는 만큼 상승 탄력은 둔화될 수 있습니다. 코스피 지지는 MA5인 6944.54pt, 저항은 MA60과 볼린저밴드 상단이 위치한 7128.14pt~7139.27pt 수준으로 판단됩니다. 따라서 현재 상황에서는 긍정적인 외부 요인에도 불구하고 국내 자본유출 위험을 감안하여 신중한 접근이 필요하며, 7128.14pt~7139.27pt 저항 구간에서는 이익 실현을, 6944.54pt 지지선 부근에서는 반등 여부를 확인하며 보수적으로 매수에 나서는 전략이 유효합니다. ① [CAPITAL_OUTFLOW] 복합 위험 신호로 인한 외국인 매도 압력 우려 ② MA60(7139.27pt) 및 볼린저밴드 상단(7128.14pt)에 근접하여 단기 상승 제한적 ③ 정량예측모델 47% 상승 확률 및 '보합(Neutral)' 기술 신호로 방향성 불확실.\n\n실전 투자 대응\n환율: 원/달러 환율 1341.68원은 과매도 반등 가능성이 높으나, 1343.91원 저항 확인 후 1333.25원 지지 시 매수 관점.\n코스피: 코스피 지수 7,033.92pt는 외부 호재에도 7128.14pt 저항 및 자본유출 위험으로 6944.54pt 지지 확인 후 보수적 접근.",
     "lastAiUpdate": 1789028882107,
     "score": {
-      "upScore": 60.27947190784238,
-      "downScore": 54.930779244142215,
+      "upScore": 65.33592044823362,
+      "downScore": 54.928905266167014,
       "kospiUpScore": 19.44436085523379,
-      "kospiDownScore": 23.11895248830126
+      "kospiDownScore": 24.03829587609031
     }
   },
   "technicals": {
@@ -2654,6 +2654,13 @@
       "k": 5.6
     },
     "compoundSignals": [
+      {
+        "type": "DOLLAR_PANIC",
+        "up": 2.5,
+        "down": 0,
+        "block": "risk",
+        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
+      },
       {
         "type": "CAPITAL_OUTFLOW",
         "up": 2,
@@ -2702,5 +2709,5 @@
     "kospiRecentHitRate": 0,
     "kospiTotal": 45
   },
-  "lastUpdate": "2026. 9. 10. AM 9:03:33"
+  "lastUpdate": "2026. 9. 10. AM 9:08:20"
 }
