@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.429",
-      "diff": 0.31,
-      "diffPercent": 0.31,
+      "value": "99.447",
+      "diff": 0.33,
+      "diffPercent": 0.33,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": 99.43
+          "value": 99.45
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "17.52",
-      "diff": 1.68,
-      "diffPercent": 10.61,
+      "value": "17.55",
+      "diff": 1.71,
+      "diffPercent": 10.8,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": 17.52
+          "value": 17.55
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "28,958",
-      "diff": -429,
-      "diffPercent": -1.46,
+      "value": "28,951",
+      "diff": -436,
+      "diffPercent": -1.48,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": 28958
+          "value": 28951
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,611.5",
-      "diff": -48,
-      "diffPercent": -0.63,
+      "value": "7,610.75",
+      "diff": -48.75,
+      "diffPercent": -0.64,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": 7611.5
+          "value": 7610.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "102.62",
-      "diff": 2.57,
-      "diffPercent": 2.57,
+      "value": "102.9",
+      "diff": 2.85,
+      "diffPercent": 2.85,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": 102.62
+          "value": 102.9
         }
       ]
     },
@@ -1913,9 +1913,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-32,999",
-      "diff": -31805,
-      "diffPercent": -2663.74,
+      "value": "-33,021",
+      "diff": -31827,
+      "diffPercent": -2665.58,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2021,7 +2021,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": -32999
+          "value": -33021
         }
       ]
     },
@@ -2034,9 +2034,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "-11,660",
-      "diff": -13616,
-      "diffPercent": -696.11,
+      "value": "-11,659",
+      "diff": -13615,
+      "diffPercent": -696.06,
       "trend": "down",
       "history": [
         {
@@ -2141,7 +2141,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": -11660
+          "value": -11659
         }
       ]
     },
@@ -2154,9 +2154,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "29,660",
-      "diff": 30617,
-      "diffPercent": 3199.27,
+      "value": "29,685",
+      "diff": 30642,
+      "diffPercent": 3201.88,
       "trend": "up",
       "history": [
         {
@@ -2261,7 +2261,7 @@
         },
         {
           "date": "2026-09-14",
-          "value": 29660
+          "value": 29685
         }
       ]
     },
@@ -2492,9 +2492,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,345.80",
-      "change": "+2.00",
-      "changePercent": "+0.15",
+      "value": "1,345.60",
+      "change": "+1.80",
+      "changePercent": "+0.13",
       "trend": "up"
     },
     {
@@ -2503,9 +2503,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "871.77",
-      "change": "-3.41",
-      "changePercent": "-0.39",
+      "value": "871.64",
+      "change": "-3.54",
+      "changePercent": "-0.40",
       "trend": "down"
     },
     {
@@ -2513,9 +2513,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,555.00",
-      "change": "-3.81",
-      "changePercent": "-0.24",
+      "value": "1,554.64",
+      "change": "-4.17",
+      "changePercent": "-0.27",
       "trend": "down"
     },
     {
@@ -2523,9 +2523,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "200.64",
-      "change": "+0.32",
-      "changePercent": "+0.16",
+      "value": "200.61",
+      "change": "+0.29",
+      "changePercent": "+0.14",
       "trend": "up"
     }
   ],
@@ -2536,8 +2536,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 249000,
-      "changePercent": "-4.05",
+      "price": 248500,
+      "changePercent": "-4.24",
       "trend": "down"
     },
     {
@@ -2566,8 +2566,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 123800,
-      "changePercent": "-2.21",
+      "price": 123700,
+      "changePercent": "-2.29",
       "trend": "down"
     },
     {
@@ -2586,9 +2586,9 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 34500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 34450,
+      "changePercent": "-0.14",
+      "trend": "down"
     }
   ],
   "forecast": {
@@ -2619,10 +2619,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 14일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n원/달러 환율은 현재 1344.98원을 기록하고 있으며, 최근 기술적 침체 신호(Bearish)가 있었음에도 불구하고, 정량예측모델에 따르면 향후 1~5거래일 내 상승 확률이 55%로 나타나 단기적으로 달러 강세 전환이 예상됩니다. 미 국채 금리 상승 추세와 한미 2년물 금리차 0.99%의 확대는 원/달러 환율의 상승 압력을 강화하는 핵심 요인으로 작용하고 있습니다. 특히 RSI(14일)가 25.2로 과매도 구간에 진입하여 기술적으로도 강한 반등 가능성을 시사하고 있으며, DXY의 단기 모멘텀 상승과 VIX 수준 또한 신흥국 자본 이탈 위험을 높이는 복합 위험 신호([DOLLAR_PANIC], [CAPITAL_OUTFLOW])와 맞물려 달러 강세에 힘을 싣고 있습니다. 이에 따라 환율은 단기 지지선인 1333.25원(60일 지지선)에서 반등하여 1370.53원(MA20, 볼린저밴드 중단)을 향해 상승 시도할 것으로 보이며, 최대 1380원 선까지의 추가 상승 가능성도 열려 있습니다. 따라서 달러 매수 또는 매수 관망 전략이 유효해 보입니다. ① 한미 2년물 금리차 확대 및 DXY 단기 모멘텀 상승 ② RSI 25.2로 과매도 구간 진입 ③ [DOLLAR_PANIC], [CAPITAL_OUTFLOW] 복합 위험 신호 발생\n\n파트B: 코스피 지수 분석\n코스피 지수는 현재 6,684.37포인트를 기록하며 하락 추세가 심화되고 있으며, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 42%로 낮게 예측하여 약세장 지속을 시사합니다. 최근 1일, 5일, 20일 모멘텀이 각각 -3.26%, -4.45%, -4.21%로 모두 강한 하락세를 나타내고 있으며, 현재 지수는 MA5(6926.87pt), MA20(6808.53pt), MA60(7067.04pt) 등 주요 이동평균선 아래에 위치하며 기술적인 저항을 받고 있습니다. 비록 반도체(SOX) 단기 5일 모멘텀이 4.16%로 긍정적인 신호는 있으나, 나스닥 선물 하락(-2.05%)과 더불어 [DOLLAR_PANIC], [CAPITAL_OUTFLOW]와 같은 복합적인 시장 위험 신호가 코스피 전반에 걸쳐 하방 압력을 가하고 있습니다. 이러한 복합적인 악재로 인해 코스피는 추가적인 하락세를 보이며 볼린저밴드 하단인 6499.12포인트를 지지선으로 테스트할 가능성이 높으며, 단기적으로는 6750포인트를 저항선으로 보고 보수적인 접근이 필요합니다. ① 정량예측모델의 낮은 상승 확률과 지속적인 하락 모멘텀 ② [DOLLAR_PANIC], [CAPITAL_OUTFLOW] 등 복합 위험 신호의 발생 ③ 주요 이동평균선 아래에서 형성된 기술적 약세 추세.\n\n실전 투자 대응\n환율: 1333.25원 지지, 1370.53원 저항 예상, 매수 관망 전략.\n코스피: 6499.12pt 지지, 6750pt 저항 예상, 매도/관망 전략.",
     "lastAiUpdate": 1789371505453,
     "score": {
-      "upScore": 64.2781901854252,
-      "downScore": 52.872983356519356,
+      "upScore": 64.28325660381482,
+      "downScore": 52.87200661868875,
       "kospiUpScore": 17.587325640666712,
-      "kospiDownScore": 23.865741080882835
+      "kospiDownScore": 23.860434950412397
     }
   },
   "technicals": {
@@ -2709,5 +2709,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 48
   },
-  "lastUpdate": "2026. 9. 14. AM 7:38:25"
+  "lastUpdate": "2026. 9. 14. AM 7:42:43"
 }
