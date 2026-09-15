@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.63",
-      "diff": 0.17,
-      "diffPercent": 0.17,
+      "value": "99.608",
+      "diff": 0.15,
+      "diffPercent": 0.15,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 99.63
+          "value": 99.61
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "17.75",
-      "diff": 0.65,
-      "diffPercent": 3.8,
+      "value": "17.82",
+      "diff": 0.72,
+      "diffPercent": 4.21,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 17.75
+          "value": 17.82
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,287.25",
-      "diff": 135,
-      "diffPercent": 0.46,
+      "value": "29,276.25",
+      "diff": 124,
+      "diffPercent": 0.43,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 29287.25
+          "value": 29276.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,654",
-      "diff": 29,
-      "diffPercent": 0.38,
+      "value": "7,652.25",
+      "diff": 27.25,
+      "diffPercent": 0.36,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 7654
+          "value": 7652.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "103.34",
-      "diff": 1.95,
-      "diffPercent": 1.92,
+      "value": "103.61",
+      "diff": 2.22,
+      "diffPercent": 2.19,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 103.34
+          "value": 103.61
         }
       ]
     },
@@ -1913,9 +1913,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-15,672",
-      "diff": -14478,
-      "diffPercent": -1212.56,
+      "value": "-15,674",
+      "diff": -14480,
+      "diffPercent": -1212.73,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2021,7 +2021,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": -15672
+          "value": -15674
         }
       ]
     },
@@ -2154,9 +2154,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "8,320",
-      "diff": 9277,
-      "diffPercent": 969.38,
+      "value": "8,323",
+      "diff": 9280,
+      "diffPercent": 969.7,
       "trend": "up",
       "history": [
         {
@@ -2261,7 +2261,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 8320
+          "value": 8323
         }
       ]
     },
@@ -2492,9 +2492,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,362.20",
-      "change": "+13.60",
-      "changePercent": "+1.01",
+      "value": "1,362.90",
+      "change": "+14.30",
+      "changePercent": "+1.06",
       "trend": "up"
     },
     {
@@ -2503,9 +2503,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "879.00",
-      "change": "+7.25",
-      "changePercent": "+0.83",
+      "value": "879.04",
+      "change": "+7.29",
+      "changePercent": "+0.84",
       "trend": "up"
     },
     {
@@ -2513,8 +2513,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,572.01",
-      "change": "+16.13",
+      "value": "1,572.04",
+      "change": "+16.16",
       "changePercent": "+1.04",
       "trend": "up"
     },
@@ -2523,9 +2523,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "202.91",
-      "change": "+1.99",
-      "changePercent": "+0.99",
+      "value": "202.98",
+      "change": "+2.06",
+      "changePercent": "+1.03",
       "trend": "up"
     }
   ],
@@ -2556,8 +2556,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 368000,
-      "changePercent": "-0.94",
+      "price": 367500,
+      "changePercent": "-1.08",
       "trend": "down"
     },
     {
@@ -2566,8 +2566,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 122300,
-      "changePercent": "-1.53",
+      "price": 122200,
+      "changePercent": "-1.61",
       "trend": "down"
     },
     {
@@ -2586,8 +2586,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 34450,
-      "changePercent": "-0.58",
+      "price": 34500,
+      "changePercent": "-0.43",
       "trend": "down"
     }
   ],
@@ -2615,14 +2615,14 @@
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 15일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1358.73원을 기록하며 전일 대비 상승세를 보였습니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 53%로 예측하며 달러 강세에 무게를 싣고 있습니다. 기술적 신호는 현재 보합(Neutral) 상태를 나타내지만, 단기적으로는 상승 모멘텀이 강화되고 있습니다. 향후 1~5거래일 동안 원/달러 환율은 1350원~1380원 범위 내에서 움직일 가능성이 높으며, 핵심 지지선은 5일 이동평균선인 1344.84원과 60일 지지선인 1333.25원 수준으로 판단됩니다. 반면, 20일 이동평균선 및 볼린저밴드 중단선인 1367.41원이 단기 저항선으로 작용할 것이며, 이를 돌파할 경우 볼린저밴드 상단인 1408.36원까지 상승 압력이 확대될 수 있습니다. 전반적으로 달러 강세 기조가 우세하여 매수 또는 관망 후 매수 진입을 고려하는 전략이 유효할 것으로 보입니다. ① 한미 2년물 금리차가 1.02%p로 확대되어 달러 강세 압력이 강화되고 있습니다. ② 1일 및 5일 단기 모멘텀이 각각 +0.62%, +0.7%를 기록하며 환율의 상승 전환 가능성을 시사하고 있습니다. ③ 'DOLLAR_PANIC' 복합 위험 신호가 발생하여 신흥국으로부터의 자본 이탈 가속화 및 달러 강세를 유발할 수 있습니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,627.26pt로, 지속적인 하락세를 면치 못하고 있습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 30%로 매우 낮게 평가하며 추가 하락 가능성을 경고하고 있습니다. 기술적 신호는 현재 보합(Neutral) 상태이나, 모든 주요 이동평균선 아래에 위치하며 강력한 하락 추세를 보이고 있습니다. 향후 1~5거래일 동안 코스피는 6400pt~6700pt 사이에서 등락할 것으로 예상됩니다. 핵심 지지선은 볼린저밴드 하단인 6478.66pt 수준으로, 이탈 시 추가 하락 여력이 발생할 수 있습니다. 상방으로는 5일 이동평균선 6861.42pt와 20일 이동평균선 6796.41pt가 강력한 저항선으로 작용하여 지수의 반등을 제한할 것입니다. 전반적인 하락 압력이 강하므로 매도 또는 보수적인 관망 전략이 필요한 시점으로 판단됩니다. ① 정량예측모델이 30%의 낮은 상승 확률을 제시하며 시장 하방 압력을 경고합니다. ② 반도체(SOX) 모멘텀(-5.15%)과 나스닥 선물 흐름(-0.68%) 등 해외 기술주 동반 약세가 코스피에 부정적 영향을 미치고 있습니다. ③ 코스피는 모든 주요 이동평균선(MA5 6861.42pt, MA20 6796.41pt, MA60 7026.62pt) 아래에서 거래되며 강력한 하락 추세가 지속되고 있습니다.\n\n실전 투자 대응\n환율: 원/달러 환율은 한미 금리차 확대 및 달러 강세 신호로 1367.41원 돌파 시 1380원 선까지 상승 가능성을 염두에 둔 매수 관점 대응.\n코스피: 코스피는 해외 증시 약세 및 국내 하락 추세 지속으로 6478.66pt 지지선 이탈 시 추가 하락을 대비한 보수적 관망 또는 매도 관점 대응.",
-    "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 15일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1358.73원을 기록하며 전일 대비 상승세를 보였습니다. 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 53%로 예측하며 달러 강세에 무게를 싣고 있습니다. 기술적 신호는 현재 보합(Neutral) 상태를 나타내지만, 단기적으로는 상승 모멘텀이 강화되고 있습니다. 향후 1~5거래일 동안 원/달러 환율은 1350원~1380원 범위 내에서 움직일 가능성이 높으며, 핵심 지지선은 5일 이동평균선인 1344.84원과 60일 지지선인 1333.25원 수준으로 판단됩니다. 반면, 20일 이동평균선 및 볼린저밴드 중단선인 1367.41원이 단기 저항선으로 작용할 것이며, 이를 돌파할 경우 볼린저밴드 상단인 1408.36원까지 상승 압력이 확대될 수 있습니다. 전반적으로 달러 강세 기조가 우세하여 매수 또는 관망 후 매수 진입을 고려하는 전략이 유효할 것으로 보입니다. ① 한미 2년물 금리차가 1.02%p로 확대되어 달러 강세 압력이 강화되고 있습니다. ② 1일 및 5일 단기 모멘텀이 각각 +0.62%, +0.7%를 기록하며 환율의 상승 전환 가능성을 시사하고 있습니다. ③ 'DOLLAR_PANIC' 복합 위험 신호가 발생하여 신흥국으로부터의 자본 이탈 가속화 및 달러 강세를 유발할 수 있습니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,627.26pt로, 지속적인 하락세를 면치 못하고 있습니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 30%로 매우 낮게 평가하며 추가 하락 가능성을 경고하고 있습니다. 기술적 신호는 현재 보합(Neutral) 상태이나, 모든 주요 이동평균선 아래에 위치하며 강력한 하락 추세를 보이고 있습니다. 향후 1~5거래일 동안 코스피는 6400pt~6700pt 사이에서 등락할 것으로 예상됩니다. 핵심 지지선은 볼린저밴드 하단인 6478.66pt 수준으로, 이탈 시 추가 하락 여력이 발생할 수 있습니다. 상방으로는 5일 이동평균선 6861.42pt와 20일 이동평균선 6796.41pt가 강력한 저항선으로 작용하여 지수의 반등을 제한할 것입니다. 전반적인 하락 압력이 강하므로 매도 또는 보수적인 관망 전략이 필요한 시점으로 판단됩니다. ① 정량예측모델이 30%의 낮은 상승 확률을 제시하며 시장 하방 압력을 경고합니다. ② 반도체(SOX) 모멘텀(-5.15%)과 나스닥 선물 흐름(-0.68%) 등 해외 기술주 동반 약세가 코스피에 부정적 영향을 미치고 있습니다. ③ 코스피는 모든 주요 이동평균선(MA5 6861.42pt, MA20 6796.41pt, MA60 7026.62pt) 아래에서 거래되며 강력한 하락 추세가 지속되고 있습니다.\n\n실전 투자 대응\n환율: 원/달러 환율은 한미 금리차 확대 및 달러 강세 신호로 1367.41원 돌파 시 1380원 선까지 상승 가능성을 염두에 둔 매수 관점 대응.\n코스피: 코스피는 해외 증시 약세 및 국내 하락 추세 지속으로 6478.66pt 지지선 이탈 시 추가 하락을 대비한 보수적 관망 또는 매도 관점 대응.",
-    "lastAiUpdate": 1789458559373,
+    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "lastAiUpdate": 1789462254339,
     "score": {
-      "upScore": 60.96300649756513,
-      "downScore": 54.26227023763483,
+      "upScore": 60.958084257004835,
+      "downScore": 54.25563534942616,
       "kospiUpScore": 14.034451677461236,
-      "kospiDownScore": 32.36209194418168
+      "kospiDownScore": 32.35780506756189
     }
   },
   "technicals": {
@@ -2702,5 +2702,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 49
   },
-  "lastUpdate": "2026. 9. 15. AM 8:42:34"
+  "lastUpdate": "2026. 9. 15. AM 8:50:54"
 }
