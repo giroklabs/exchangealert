@@ -1,11 +1,827 @@
 {
-  "lastUpdate": "2026-09-15T15:37:05.730Z",
+  "lastUpdate": "2026-09-15T15:41:27.750Z",
   "news": {
-    "환율": [],
-    "원/달러": [],
-    "달러 투자": [],
-    "한국은행": [],
-    "외환시장": [],
-    "코스피": []
+    "환율": [
+      {
+        "id": "news-0-aVlZB?oc=5",
+        "title": "환율 6% 넘게 내리자 8월 수출물가 3.7%↓… 3년 8개월 만에 최대 하락 - 조선일보",
+        "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOWkNEbWpSYnVQTHdHWmJRM2Y2d05HTlVoRmtBQ0JRUVVYV2dNa3NUMGZBLWhVZlg2QThUaVJUUzZyM3Z4b3FKVWdGZ3M0THFJNzZoMHFFR19YU3dsV0ZFbjlMdC1UUzB5QnF3QjZJcW51T3R1QURVQ1NWbGlYS3N6TFJEZW5CVVZGNE5aVlZB?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 22:58:57 GMT",
+        "source": "조선일보",
+        "sourceUrl": "https://www.chosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-1-5SS2s?oc=5",
+        "title": "설마 이럴 줄 몰랐다…환율의 역습 - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3SG9nRmI3bXN5MDU5dy1FQ0RtVWZ6b2ZTQ0IzWkxBUDNzRGZfblJuQm8wd2V5ZTczM3BrYWVQNklNTjhkVXUwNkRqNm5SS2s?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 12:03:00 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-2-Q1d3c?oc=5",
+        "title": "코스피 나흘째 하락...원·달러 환율 1,359원까지 상승 - YTN",
+        "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1WeHJXMWFDUFVodWZqNlpZZm9GRTByT1g4eTFIZkNCX28yYmpqLUc2WmpLQzRZM2pHdU1GLVFNUDg5d3FlTy0yV1ByN3VCelFTZ0QtQXljTmdLdEQ1d3c?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:40:00 GMT",
+        "source": "YTN",
+        "sourceUrl": "https://www.ytn.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-3-FNnQQ?oc=5",
+        "title": "코스피 하락, 원달러 환율 상승 - 뉴스1",
+        "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE04b1Q0dGR3RXJMQ2ZyempPVGcwX3o4dUJETEFnZmhFSm51XzdrcDhNUjJuOWl0eWpjb3kyU3ZXUW1yeVJjal9UbFNnQQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:56:56 GMT",
+        "source": "뉴스1",
+        "sourceUrl": "https://www.news1.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-4-UZLQw?oc=5",
+        "title": "코스피, '금리.유가.환율' 3중고에 6,620선 후퇴 - 매일경제 마켓",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFAyWk9hUWl2a0h1WGFDdmVpU1dSWWU3RU10U1dLdHB2aGF5cWR2YXdkb3ExY3lhWF85aXBEV2xYbHpNNW5jbWlnWHhFNmt3SGxYQWpSTUhyUUNoajhYcUZLQw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:07:33 GMT",
+        "source": "매일경제 마켓",
+        "sourceUrl": "https://stock.mk.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-5-l9CUQ?oc=5",
+        "title": "[단독] 환율 급락에…기업들 사업전략 다시 짠다 - 한국경제",
+        "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1JOTM1Y0I2emFGaVZiZUZmTG5MVml6ZkNKUmZ6YU5ZTm55V2tnVk9OajhWaVNkenZCYkxrSFZDLW15RHdTV1RzWUZrUXVJQXNTdlFsUGc1el9CUQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:43:20 GMT",
+        "source": "한국경제",
+        "sourceUrl": "https://www.hankyung.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-6-RYc2U?oc=5",
+        "title": "[외환] 원/달러 환율 12.1원 오른 1,359.4원(15:30 기준가) - 연합뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9ucUE5Wkg3b0NwMkduVWpQdTg2UnNNVkhITDZhRHpnaGJWSFFiblgtdzlrWnB5cWgzUHJrTEVtWnhTN2pidUlUNU5CMDhQMGE0MUpXOXdTTXpxa0nSAWBBVV95cUxOemxZWEF0bjR2Z3JDbzN2MHVXc0UwckN4aWlld2dTWGhiVHVKSTljYzEtcF93RlYyM2ZhTVNmS2lsb2hpTEtTYUxVTE5BV1RscGg3ZnpMRl93cW84c2RYc2U?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:31:38 GMT",
+        "source": "연합뉴스",
+        "sourceUrl": "https://www.yna.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-7-VOX3c?oc=5",
+        "title": "[표] 외국환율고시표 - 매일경제 마켓",
+        "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9VVXBrUGNBUU5fR24zQ1FMTkRENkJ0c2RNWG40eDg3VFlvaGhLR29JdmZ3QkwyZ0tfZk9FLUMyZWxNLVZuTko4eWZ5WHFhMjVOX3c?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:47:36 GMT",
+        "source": "매일경제 마켓",
+        "sourceUrl": "https://stock.mk.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-8-kx0Yw?oc=5",
+        "title": "美 수출 역대 최대에도 환율 부담…화장품주 ‘희비’ [마켓시그널] - 서울경제",
+        "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE52Wi1ya1lyMHIzLUVZYlJsZHJ1ekV6eHdKSjBaMzZxcEJ0WU1QWmVKbEhzWEpyNUQzRGs5UkNPZzZIYXdObkZrTWo5ZnlZRmJYc2fSAVNBVV95cUxQREh5TXZ2VUE3MWdqWjJMVnVqc21ZOE95Wm5QOTFGV1FjWklvTFVTVFBJejJOdlV5aEc5czBmYUdvbHJQSGV1VFZoR1ZmUHJFRkx0Yw?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 21:30:00 GMT",
+        "source": "서울경제",
+        "sourceUrl": "https://www.sedaily.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-9-JPX3c?oc=5",
+        "title": "美 금리인상 가능성↑…“한은도 추가 긴축, 환율은 연말 1300원대” - 마켓인",
+        "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBHby1JNzFrOHQ1bkpINVFWUmJINjJNWGJZZTJCTWkyaGZCZk14bzhvdk5jbTZYYml2RlBNUzVKcjBQT1JfUXNUODZHajN3akdWOGo1RGp3b3RiQVRkUTdxYjItSEpDOVVVSG44eHZvdmJPX3c?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:18:02 GMT",
+        "source": "마켓인",
+        "sourceUrl": "https://marketin.edaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-10-dOSzQ?oc=5",
+        "title": "美 금리인상 가능성에 유가·환율 '꿈틀'…한은 금리 향방은 - 데일리안",
+        "link": "https://news.google.com/rss/articles/CBMilwJBVV95cUxPa0NtTG5ySEItRkxyUGY5T0I2alktdlhwREZ3MVFLVGl3SGxzWWNRYi1pSDZUSlhjaVBjSzdUUzdSSjA1eW9scllkM3BZQ0ZEcmhSZHZCNFhjSHBSLVBsWE92Z3VIZmpCdUxGMVNVTVE0UzNCTFM0SkROamdocDNzWEtqV1hpcm92Z2hoUGRVc2VxMU5hSlRrZ01TNXlNRUoxblZMRXZpTzFWTXRkSXdIcHdkcGNQdUhlYUZ2dFlDV3BfNG04SXd6ekk3NXVJSnNMczcxcHJCTHdjNGM5SFJBOG8ydnVXSjhqSkRlZEVCb2lpbVd0VElkMkRhNHJ0MmxNT3h1eWpuUkN1TkZUV3pmRnd1MWdOSzQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:36:00 GMT",
+        "source": "데일리안",
+        "sourceUrl": "https://www.dailian.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-11-hJQVk?oc=5",
+        "title": "美금리인상, 유가·환율 상승…한은 ‘금리 인상’ 이어가나 - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9VOXNJSVBZdUh5MkRyOHVhbFpHdThNdjBjQ2ZWVDh5Ym1YTWR0S29PYzZSQVo4VGlVbHgyR0hER3RlOUtFRW9PWXFVeThJQVk?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 02:13:40 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-12-FZ1cw?oc=5",
+        "title": "환율에 발목 잡힌 서학개미, 반도체 ETF로 반토막 - 메트로신문",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9yQ0hBbzdnVVpsaWpaZWN5Ul9RYVRQRVJFNzAzamhzUDRfczNBSDJ4cjdGZjQ2cjhGRUlCaWU0UFd2bGlneDJRU0JscXI2R2p6V0FOYl9yOGQzZHdhOFZ1cw?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 20:59:03 GMT",
+        "source": "메트로신문",
+        "sourceUrl": "https://www.metroseoul.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-13-DcjhB?oc=5",
+        "title": "농협사료 “환율 하락만으로 사료값 인하 어려워…실제 투입 원가 봐야” - 한국영농신문",
+        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE85Z0xkVUd6X0NZYUpkM2pkLS1PMTRrT3lrYUs1d041cW1ZOVJxbm9VbUZvc0R6T1pkQ0NEYzVlYmtGb0NYX0ExNzBtOWlCbFlMT18wUmpoY2lGOFJKVUQtbkNFRnhTZWJ3X2dDcjhB?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 12:18:20 GMT",
+        "source": "한국영농신문",
+        "sourceUrl": "https://www.youngnong.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-14-Uo0Zw?oc=5",
+        "title": "\"4분기 환율, '재정 부담 대비 금리'가 변수\" - 인베스트조선",
+        "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOdmRMQlZJd2sySnVSUzdfejlwc2d5ZzlmTVpUYlVwRnIxZ3g1ZGVPVkhKSHNhaWpFb0hjS2FmaHdKRFpPRVJRM2lJZVMxQWRxR1hKOWctNnE4SXUteEFXbldRVU8zREN0bHBPZU1wN0JKajhIRVlNdTdZWFVITGhadUo0Zw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:10:00 GMT",
+        "source": "인베스트조선",
+        "sourceUrl": "https://www.investchosun.com",
+        "relatedLinks": []
+      }
+    ],
+    "원/달러": [
+      {
+        "id": "news-0-tRMk0?oc=5",
+        "title": "원·달러 환율 하락에…수출입물가 나란히 ↓ - 연합뉴스TV",
+        "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5CZXJvM1RqRktaak03WWdrQnMxUGQzXzBGVXd3d1ppNk44dk9jdmw5LWczMkg4WTExNFBxY3BIWnlpQklZZUVwa2hNUXV5UkFnNnRPUnlYcGtma2hmUC1IX0t0VGtRMk0?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 21:14:00 GMT",
+        "source": "연합뉴스TV",
+        "sourceUrl": "https://www.yonhapnewstv.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-1-296RQ?oc=5",
+        "title": "코스피 나흘째 하락...원·달러 환율 1,359원까지 상승 - YTN",
+        "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE0zbjhLcDQ0dzc0TjU4RmtXVzlOTkx4T2NvNlVjckNqcjQtVUtOYVFJaXB2WlNqMC1hODRfaFpGSkttQVZyWGZrZkxOVG9YX2c0N3BfSVN0MkM3OTZvQ2ZYbmxjc1U3aEtfX0lya296RQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:40:00 GMT",
+        "source": "YTN",
+        "sourceUrl": "https://www.ytn.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-2-N3UmE?oc=5",
+        "title": "원/달러 환율 1,360원 터치…유가·美국채금리 상승에 12.1원↑ - 연합뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9UZzJEY1lTUm9YN0F0Y2ozNVNmMGJrb0Myd19Kd3NmZklFbGZQU1RlLVM0QlJ4a09RbzRmV1E0YkpEcWtxbVUxVFJxSXVCbUt1amFDTkViSzQ3LVHSAWBBVV95cUxNQkRHVmlTQzF1aWltcW5GaDUwSFQxRGk1YmFrRlhyLUxlTzNORGpiMWl6N0dNTnhnWHM0SlhTMFZ0NE5lR0NsZmRDSTNXR1djRDdMQmtlUlZyZ01ZUkN3UmE?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:50:38 GMT",
+        "source": "연합뉴스",
+        "sourceUrl": "https://www.yna.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-3-FRGZw?oc=5",
+        "title": "[단독] 원·달러 환율 두달새 200원 급락…기업들 사업계획 다시 짠다 - 한국경제",
+        "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1lOHZZazdnS251NjFNUkt1R3VuQkxIaWlfZWphMGhIVzRoV2ZEUTlLVi1Oek5Lc2hwSi10VThwWUFHSWxIVFRCUHZpWFdXU0xPdnh5Ulo4aFRGZw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 15:11:00 GMT",
+        "source": "한국경제",
+        "sourceUrl": "https://www.hankyung.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-4-ZUcXE?oc=5",
+        "title": "달러-원, 뉴욕장서 1,350원 후반대 거래 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE56RFFhd3hULXpCYW5WbXZ1QUpBdS00M3pPRml3eXhNeXdtSmVqVGd3WmIzS0w0b3o4Vm5pVjlqcER3bzVDUlk2OVpIUm9DemRNQUZPXzFZOXN5WENEVk5OY25lRl9IZ3RmWXNDWWZUcXE?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 14:04:05 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-5-29zcw?oc=5",
+        "title": "원화 강세보다 무서운 환율 변동성…수출기업 사업 계획도 '안갯속' - 인베스트조선",
+        "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNWGpsTGxadUFCTUFTd1ozRTNndU1VU1NyZ1B6aHQ1SUJlLXh3SjYtZU9MMUNFaDR2U3p3eTJnMUFhMGdYZnBsTndpMHpNUDZSZ3EwQjY2b2U5cFIwR204RFMzYlhXeEVHTXZOamJPSFRqRGYzeHpETG5vYmVNWXZJU29zcw?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 22:04:27 GMT",
+        "source": "인베스트조선",
+        "sourceUrl": "https://www.investchosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-6-XRfVw?oc=5",
+        "title": "원·달러 환율 1360원 근접…유가·美 국채금리 영향으로 상승 - 아시아경제",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE85Tk9zS1djZ0VhY0F3djBHWk1GOEhWWHBuNU9oVnVKVXlRMjBfb3JwVjFUdzhuSWI2ZHpzbDE3VjRxNVBVcVJJREVRYktEM1NyU2FqbnJycHpkNUxUQXRfVw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:15:23 GMT",
+        "source": "아시아경제",
+        "sourceUrl": "https://www.asiae.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-7-iTFhB?oc=5",
+        "title": "원·달러 환율 12.1원 오른 1359.4원 - 조선비즈 - biz.chosun.com",
+        "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPX0J1WFJwdmo0My1McHlaYTl2cUcxajRkNlJCX3FpSkpCN0lJNmJqTjVWRUtESXVNUVJLRkZlVEkwUERVRzR6UUxEeS1YOE5YVk13eS1xSTdnLV8wbEl4c094OFRBbUdKOEpXVFlhc1pSMG9RZlBZdndrcEhad1M4NDBMSkJRd9IBmgFBVV95cUxNSGltUzVkSzhwN21neUx1aUc1aElWOU5Tak9ZMDFpYWV4QUFsamc3U1FXeTdJblcteEN4QS1XX0hMQ0lGeUxyUmZzUjV1Q1BUUWJIZXZDTWVJcDB0RnFBdzQ4N3NiNHdGYjdaOHdkSXgyRkFVVkNwV00zQlJpTVZzMkJlcVUxblhMRXpJOXBjS3Ywa2Z6UGFiTFhB?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:35:00 GMT",
+        "source": "biz.chosun.com",
+        "sourceUrl": "https://biz.chosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-8-Dg1eQ?oc=5",
+        "title": "200원 내린 달러·원 환율... 수출 달러 소진에 반등하나 - 매일일보",
+        "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE4xd0ZMZ2ZUVDJBMVZtem1NVzNKR1ZNWUtJTGJwV1FydXdYeDdaRmVhVGFhVW1TZUlaUmp6N0JVUmF2Y2ZWMTlMSE43OTZLMmotMXBGTE9kc1hhOW1Zd0EzZVIzeVLSAWhBVV95cUxNRzhVeGY2eFJEaFJjdm5ZVjNtc1J4T0wxUFhjakpCXzBNbnlvN1d3SmZzNnprZ2RqMEdMWmZod3MteGxMN3hrejh2dmhud2NHUG9wOHR2ZHpPaVJRa0dKWFFuUzhkNDg1eQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 05:37:04 GMT",
+        "source": "매일일보",
+        "sourceUrl": "https://www.m-i.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-9-0l5Qg?oc=5",
+        "title": "[환율 전망] 더욱 부담되는 고유가와 장기 금리의 상승 - KB Think",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1DZzlLU0ltYUNKQ1lKSWZTc1R4N20wQnpfYkVadHlNb0FoeENvamYwQ1gycGx0U1dPcV9lR2pmVzQ3eFVwR1J3Zl9BTGh6bHV6MzUzalhIV2FjWEZfN0l5Qg?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 23:05:25 GMT",
+        "source": "KB Think",
+        "sourceUrl": "https://kbthink.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-10-kFHZw?oc=5",
+        "title": "1300원대 환율 언제까지?…“韓·美 통화정책 방향이 좌우” - 마켓인",
+        "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9XTzl3M09JX1BDWktYN0pINjVjQlVxQUlEM3R3dk5kVXc1M1dYZWM0d19HeHVlNnBhZWlPSEF5cWNfa1MtX3JzWkMxTGJmS3JOM3ZvVVJ6WmJvOFhZc1FPT0I1QXU0WTZZLUhRaHRUbkFHZw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:08:35 GMT",
+        "source": "마켓인",
+        "sourceUrl": "https://marketin.edaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-11-FtTkU?oc=5",
+        "title": "원·달러 환율 하락 마무리 단계…\"1320원 하단, 단기반등 가능성\" - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1tYnVMdjlfSEE0SDdMT1ZibE9HSWNKNHJoV09jSWZ0Z1E3SUVMckNuQWhicE1IcHk3RmY5SzQ5a2pNQUR3R1gtdElfZTFtTkU?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 00:38:07 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-12-HlXVQ?oc=5",
+        "title": "원달러 환율 상승 - 뉴스1",
+        "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1CV2ZqUF9JTU00M255ZVpUXzB5ZnhFUEJLZG9SZk1Xd3pIeVhHNWVrTWxQTXFBei0wb0pPOGNGZEpOUGI3aEFfbHlXVQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:59:31 GMT",
+        "source": "뉴스1",
+        "sourceUrl": "https://www.news1.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-13-URJSw?oc=5",
+        "title": "원·달러 환율, 12.1원 오른 1359.4원 마감(종합) - 뉴시스",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5UZUxaTXRtbUtueFJTbXR6NkZ2OE1TYWNwU0tIaUZFLUVKWDdrOU1nZFQ1Q1FnaFo0SExERU12RExHckREeENjLUp4WjhEcFJUYm9uNURBUVZQZGJXQXhJUdIBeEFVX3lxTE0zb01tUlhJUWlaSHlzYmRLa2pUME1xTmU0dnlrN0pQVW93WmIxWTRZb29iZGhUS0o2WUNNY2xiRF9fQVludFkyTWxuZkpmMmx6YUI1VFVDZTBTa2MwaXFoQ3AwWFdqTEJkTGZ6MlVZbmxlTDREZURJSw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:39:59 GMT",
+        "source": "뉴시스",
+        "sourceUrl": "https://www.newsis.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-14-U0wcw?oc=5",
+        "title": "[속보] 코스피, 0.85% 하락 마감...원·달러 환율 12.1원 상승 - YTN",
+        "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5XNXJobXV5RkQwNTFHc05lYzZOSlk3MHlDQmJzR0hzaXBZMWlNeHZCSXhpeFhMSzhERjU5QjBtT29rYU90ZG5wM2dzNEZnOVQ4STJrQXJEdlJvdXJSVlZ6TWktUzVFNF8ycVRzLU0wcw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:42:00 GMT",
+        "source": "YTN",
+        "sourceUrl": "https://www.ytn.co.kr",
+        "relatedLinks": []
+      }
+    ],
+    "달러 투자": [
+      {
+        "id": "news-0-GpHVQ?oc=5",
+        "title": "환율 1300원대 진입, 부자들은 지금 이 자산을 담고 있다 - 조선일보",
+        "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPejNvNEJsWVV5VFN3NC0wX2dmaDVDMklUckp2UVlmSUpvS2wtdndVcjZFX2haSVdwOU9PVGdCX2JSVzV4QmFra05GZFBuLUxDcy1RYnUxZ215dDlheGZSRXNKLUFqSWxEcm84ZUdtTFBFQjlVaHRMaUZwcER4WGpHVQ?oc=5",
+        "pubDate": "Fri, 28 Aug 2026 07:00:00 GMT",
+        "source": "조선일보",
+        "sourceUrl": "https://www.chosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-1-c1VXU?oc=5",
+        "title": "'대미투자 임박' 수십억달러 송금도 다가오나…외환시장 영향은 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5Jbl9KdDVvQ3ZLWTF2NGh4Z1VTZk9qd1UyZGNjTHAzUnlKV0NXN3B1eUo1ZlFWTng0SEdiVFQtaXBDMXFBaUxlbnNlTGZvcWd4S3lRcmd4TTFHMGR6eTlTVkFJalY4WVY1blVuR1c1VXU?oc=5",
+        "pubDate": "Thu, 10 Sep 2026 01:41:14 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-2-5OU04?oc=5",
+        "title": "서학개미 달러 사상 최대인데…외화예탁금 이용료 0~2% '천차만별' - 녹색경제신문",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9NbWRRZl9XTm9MZk13RVhIa0tmOFB5WkdyOThPbWowU3BXZTN3M2xnWGN5TFlwNnZqQW4yX1pqX1o4VDFBb2cyMXpqOVZoal9uX0hUMkQ2eWdsZ0sxcVdPNjc4cDE5OU04?oc=5",
+        "pubDate": "Fri, 11 Sep 2026 07:02:46 GMT",
+        "source": "녹색경제신문",
+        "sourceUrl": "https://www.greened.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-3-14SHc?oc=5",
+        "title": "해외주식 팔아도 달러는 그대로… 외화예수금 19조원 '사상 최대' - 머니투데이 - 머니투데이",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE43azhCbkw4SXFNTXVpcWVHTTN0OGl1bWs0S3haY0VPR0hnNnoweXZHYlV3Y3A4MTJSX3JZbEkzVHFRMFlkdTdIc0VtYUZldW5Bd3Vrd1k4TW90cWEtS0ItSlc2NEtNN3Bs0gFuQVVfeXFMTTdiVXl3Qm05UHk0U3llcF9sSWRGc1dYNHB4LVdwTklnbHJiaHVOcFFDR3hiVGFTUmRWeHZKZGxlOWdFa2pYRkVUR3FRblRJZGVVUlMyY1gxUGM0eWJCSGxqeTdFOE9ZbzhDSi14SHc?oc=5",
+        "pubDate": "Tue, 01 Sep 2026 07:00:00 GMT",
+        "source": "머니투데이",
+        "sourceUrl": "https://www.mt.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-4-3dHZw?oc=5",
+        "title": "고환율에 쌓이는 기업 달러…증권사들 \"외화예수금 잡아라\" - 인베스트조선",
+        "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQRUN0cmRZZTdVdXA2TmhGWEFOcG9zb1lkcjYydDZiSU9OcEF5bzlheDlMTDhDeERlLXBUcXZWTE1jQTZ3emFPRGdqRFVUYlJSOVl5eUtYdEhLelMtQUhydWVSaHRoUFpoR19jenhTd29zMkRyV0VGYTc2dVJSOWJZQ3dHZw?oc=5",
+        "pubDate": "Thu, 11 Jun 2026 07:00:00 GMT",
+        "source": "인베스트조선",
+        "sourceUrl": "https://www.investchosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-5-jlsZg?oc=5",
+        "title": "“달러 사둘걸, 후회했는데…지금이라도 들어가면 늦을까” - mk.co.kr",
+        "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1ZaE42MVR3YlZoaHlBUEU0UVBFNDl0b0dIQkZCOU5VRS10QTVxUnVnV0h1SnVwZ0J3Uk8ycGF0V19idmR1MGpIYUJvY2t3MmMtajlsZg?oc=5",
+        "pubDate": "Thu, 11 Jun 2026 07:00:00 GMT",
+        "source": "mk.co.kr",
+        "sourceUrl": "https://www.mk.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-6-VRTeQ?oc=5",
+        "title": "대미투자 시작에 환율 하락 제동?…“달러 공급이 더 세다” - edaily.co.kr",
+        "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOWFZ6Z0JzYmM1aC1GcGJvN3p2NkpIak91dHpnYUpCamF1MWhBRHVwWGttaUFNdGl5amMwcHFpVmVnQzc1OVc3ZWdGVkluUTJEc0t1NVBZMkduNkJOYjdOc0xrdnJXMFRRVVBoWXFCeEQwVUNBMXFzZzA0Znl1SVRTeQ?oc=5",
+        "pubDate": "Wed, 09 Sep 2026 08:04:40 GMT",
+        "source": "edaily.co.kr",
+        "sourceUrl": "https://www.edaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-7-GJfdw?oc=5",
+        "title": "2분기 국내기관 외화증권투자 5천497억弗…주식 16%↑·채권 제자리 - KB Think",
+        "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE1zYmd6dUsyVjZaUEtYajVsR29uNUdNNXFPTWlwWWVnN3JsYjZ3ekpoZ1dycDIxcmtOd2pqd1dMX3RKalZxdmw5YzdnTkMxRlB3dmUwMk1mb0VHaVNTVHlYQ25WMXhjN01ybWNWVXVoUGJfdw?oc=5",
+        "pubDate": "Tue, 01 Sep 2026 03:00:08 GMT",
+        "source": "KB Think",
+        "sourceUrl": "https://kbthink.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-8-FSXVW?oc=5",
+        "title": "\"미국 달러 투자 차단\"...외화예금 금리 '0.1%'로 크게 내린다 - 뉴스핌",
+        "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5JQkxNN3dpcHgyQm9ad29QdnpqbGZBbU9rRTNpMzhSMGdHUDVXb2FMdjY0STZjcnhKMjNwbi1fYjhaQ09ZU1lOWVlyTGI4S1V1TGhPUDFyd25FSXVW?oc=5",
+        "pubDate": "Fri, 09 Jan 2026 08:00:00 GMT",
+        "source": "뉴스핌",
+        "sourceUrl": "https://www.newspim.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-9-1pYWQ?oc=5",
+        "title": "[분석] 달러 벌어도 왜 환율은 안 내릴까···외화예금·해외투자에 갈린 수급 - womaneconomy.co.kr",
+        "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE96SHRsVDJRM3loVDY3NlhwV2ctODV5MHBRbHp3eVR6Sm1SU24yaUN1WTZPQklMNjBlZXY5bWxITm9aYVp2RldYbkMwcnE4eUsxaXd1Qzl5RG5VeFNqQ25MY1lMaVhseDJ3U3k2dUViMDJUcWfSAXdBVV95cUxQM2k3eFFYaU5pOWtvVF9jZ1o1ZE01WkNoOWxOODVUNlpwb1JCRzF2dEhLYVVUMGx0MU5nRG9ZZDNuN0pxU2ZfOHp1UmNmZDUxbEttbnJ5dGVfcU91Vy11cjM2aG5USnFnQVNpcG5obk5ibEg0S1pYWQ?oc=5",
+        "pubDate": "Tue, 07 Jul 2026 07:00:00 GMT",
+        "source": "womaneconomy.co.kr",
+        "sourceUrl": "https://www.womaneconomy.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-10-jVtTQ?oc=5",
+        "title": "[그래픽] 기관 외화증권투자 잔액 5496억 달러…주가 상승에 역대 최대 증가 - 뉴시스",
+        "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9PNlYtMXVyQ3RQbWJIWmdrMWlsTXJrNjBqVkxOTlA5UExzMFY1Tmo0NkxxOXZmOFJHTU9CdTFtblJVYzRaN3F2N1B5dEZ1REV4dC1xMkMtRTVSb29lbVlUXzJ2OEFXNXA2NTBnaXRyVnUxa2hTWjVtTdIBeEFVX3lxTE9PNlYtMXVyQ3RQbWJIWmdrMWlsTXJrNjBqVkxOTlA5UExzMFY1Tmo0NkxxOXZmOFJHTU9CdTFtblJVYzRaN3F2N1B5dEZ1REV4dC1xMkMtRTVSb29lbVlUXzJ2OEFXNXA2NTBnaXRyVnUxa2hTWjVtTQ?oc=5",
+        "pubDate": "Tue, 01 Sep 2026 07:00:00 GMT",
+        "source": "뉴시스",
+        "sourceUrl": "https://mobile.newsis.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-11-m5WNA?oc=5",
+        "title": "강달러 꺾이고 국회도 멈췄다…국민연금 외화채 발행 '동력 약화' - 인베스트조선",
+        "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNb0JxZ2FCMGFhbV9uaElXQXhiYmE0TWZqZkJ6R3N2VXZQWnFGNERZOEFuVWhFU3BtcjBKbUp1ZE1CODNlT1hKem1jTGhRa2taejNCT0xzaFZQalJGdHVjSlE4SWhxb2FyY1dmSzVkakpMNUlOSUxGczVseHdLZC05Um5WNA?oc=5",
+        "pubDate": "Fri, 14 Aug 2026 07:00:00 GMT",
+        "source": "인베스트조선",
+        "sourceUrl": "https://www.investchosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-12-IzVlE?oc=5",
+        "title": "“주식 만큼 역동적인 환율 등락, 숟가락 얹어볼까”…‘환테크’ 재시동 - 매일경제 마켓",
+        "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE90Q0wwYTE2WEtnMk51YnhDYUFDLVljT1VVSWVtNW9XWGMwcEpqWHAxUVFkTVN3OF9FQ3Q3bFc2OTlPRENQMWlqMWFmamxwZFIzVlE?oc=5",
+        "pubDate": "Tue, 19 May 2026 07:00:00 GMT",
+        "source": "매일경제 마켓",
+        "sourceUrl": "https://stock.mk.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-13-Uelpn?oc=5",
+        "title": "다소 꺾인 ‘서학개미’ 달러 투자…개인 달러 예금 11개월만에 감소 - 조선일보",
+        "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPRVVDSTBSMnl1SUZWeFgyWlVnVU56U0VXRVZDUHdqa3dFSEF2Zml0bTVxNjV1Q1RXaWNJblZGMFY2akZhUEJqdnFXakFCQTFKN0RLbDBqcE5TRnNUdHFCZ3VOQkd3RXJtTThTeFA0bDFFN0VFYldMSTVvOXVnemJfMHBGM1p2YVlyRlRUelpn?oc=5",
+        "pubDate": "Tue, 24 Mar 2026 07:00:00 GMT",
+        "source": "조선일보",
+        "sourceUrl": "https://www.chosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-14-0NxUQ?oc=5",
+        "title": "외화예금 다 어디로 갔나…1,500원대 환전해 투자상품에 넣었다 - KB Think",
+        "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE1pVEphVzVzRVR5aU9VQ3VPSnljN2JybnFWc0ZOdXlUbTZab212TUp2UE4tbkFOQ3RIQ1VtT2ZSYklDUmZ6dVZGY3plakk5UGd4Q1dxM1AtU0R6bjlWM1lXVklDU0YwMldvcERtVWItM0NxUQ?oc=5",
+        "pubDate": "Thu, 23 Apr 2026 07:00:00 GMT",
+        "source": "KB Think",
+        "sourceUrl": "https://kbthink.com",
+        "relatedLinks": []
+      }
+    ],
+    "한국은행": [
+      {
+        "id": "news-0-hJQVk?oc=5",
+        "title": "美금리인상, 유가·환율 상승…한은 ‘금리 인상’ 이어가나 - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9VOXNJSVBZdUh5MkRyOHVhbFpHdThNdjBjQ2ZWVDh5Ym1YTWR0S29PYzZSQVo4VGlVbHgyR0hER3RlOUtFRW9PWXFVeThJQVk?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 02:13:40 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-1-W1Baw?oc=5",
+        "title": "슬금슬금… 환율 1340원대, 한은 '속도조절론'에도 변수 - 머니투데이 - 머니투데이",
+        "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBSYlhvRkhBTThtSmZTeDdlOUV6dXJhMGVDN0xQSnJTcUZOQWJvQnFfcjRtUjZUczM4SERmWHZZWEd6dEQ0aDJEcHJ1M3FVam5FYjBUdlhnS1FuTFJsWWxxbEc4ZExQaHFCSGpV0gFwQVVfeXFMUElmV3lIdVRVZnN0TTdTSUp3UHltRkVLN2t4T2hBc1h4aG0wWjBzZTd3QUdfWHFxb2g2ZEpja3l5OGxhVXBqby1TNk4wMG5YNU9GVVYtMnNyUGQwTTdzTHRvbEpObHNybzFSbGhVUW1Baw?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 18:31:00 GMT",
+        "source": "머니투데이",
+        "sourceUrl": "https://www.mt.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-2-dOSzQ?oc=5",
+        "title": "美 금리인상 가능성에 유가·환율 '꿈틀'…한은 금리 향방은 - 데일리안",
+        "link": "https://news.google.com/rss/articles/CBMilwJBVV95cUxPa0NtTG5ySEItRkxyUGY5T0I2alktdlhwREZ3MVFLVGl3SGxzWWNRYi1pSDZUSlhjaVBjSzdUUzdSSjA1eW9scllkM3BZQ0ZEcmhSZHZCNFhjSHBSLVBsWE92Z3VIZmpCdUxGMVNVTVE0UzNCTFM0SkROamdocDNzWEtqV1hpcm92Z2hoUGRVc2VxMU5hSlRrZ01TNXlNRUoxblZMRXZpTzFWTXRkSXdIcHdkcGNQdUhlYUZ2dFlDV3BfNG04SXd6ekk3NXVJSnNMczcxcHJCTHdjNGM5SFJBOG8ydnVXSjhqSkRlZEVCb2lpbVd0VElkMkRhNHJ0MmxNT3h1eWpuUkN1TkZUV3pmRnd1MWdOSzQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:36:00 GMT",
+        "source": "데일리안",
+        "sourceUrl": "https://www.dailian.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-3-DVFbQ?oc=5",
+        "title": "美 금리인상 가능성↑…“한은도 추가 긴축, 환율은 연말 1300원대” - edaily.co.kr",
+        "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQLXljRHQ1UFp5VHBZN2UyaFFKTXNEeVpVRHFXOWRxZlNBdFNPd0loYXlBWUpGTDY4UW5JbUpVNUxkVlZ0S01GS0JQSVVJU0M1YzEzWE1Ydnk4S2dKY0ZfMXpLNlEyVHNIWTMyTVlNNjg1bnhUWVc4Uy01NzZCZDVFbQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:18:02 GMT",
+        "source": "edaily.co.kr",
+        "sourceUrl": "https://www.edaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-4-GQ1Nw?oc=5",
+        "title": "200원 내린 환율, 美 긴축에 방향 틀까…한은 금리 또 올리나 - SBS Biz",
+        "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFB4ZFVKOFZvS1poTnY0WkJUQmFKSG9mQmxBdy1VQmtQY1lELU1lWFUzdDNUU3VTT1d4ZEVTMVBHYTl0SXJSdEhuSXZFN1hSeUFLSlNZ0gFYQVVfeXFMTmJtTWQtOVozT3Rjd01PVFFyTWJqMjU3YUpUWFYzUVNZdll6V2M5SXA0OHZJVWhSb3RyS0F4RjBCNlJtc09PVHVDWmtmQmxlLVluREp6NGQ1Nw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:52:00 GMT",
+        "source": "SBS Biz",
+        "sourceUrl": "https://biz.sbs.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-5-U4Vnc?oc=5",
+        "title": "기준금리 3.25%?···물가·집값·환율로 읽는 한은의 다음 수 - 뉴스웨이",
+        "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBxcS1wNFJ5Y19xWGtZUVN2VkRpS1Mwa3VNRVQwS19Kd2I3WmtzMU52dkFuZUFmOEFHX19lM0c1VUN0ZGdwMUhBT1p2T1NmT09FaEhhZ190X3l1ekl5NHZZN2VKOGRvWkU4Vnc?oc=5",
+        "pubDate": "Sat, 12 Sep 2026 23:04:59 GMT",
+        "source": "뉴스웨이",
+        "sourceUrl": "https://www.newsway.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-6-V5S28?oc=5",
+        "title": "200원 내린 환율, 美 긴축에 방향 틀까…한은 금리 또 올리나 - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9zMlNtZjRiQjdKYzc1ZVdkUURoOV84eHo4dEd5OXRUazdkdGpNd20yYTFjWVZGaEFMdFN1VzRxb0FtRFJ1dzJDakFST3V5S28?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 09:16:15 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-7-jR0pB?oc=5",
+        "title": "금리 연속 올린 한은…“명백히 반대” 소수의견 들어보니 [머니뭐니] - biz.heraldcorp.com",
+        "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5MNGRzTUtwdzVMYjhuX3NpNWNfQTkzelJDZ1phdXNUd0lDN0w5SVJyOS1oZEoyVjYwTXVRNjlHb1Q1enF5aU1va2RlckY5NEtPMXRjR0pB?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:41:36 GMT",
+        "source": "biz.heraldcorp.com",
+        "sourceUrl": "https://biz.heraldcorp.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-8-UaVg0?oc=5",
+        "title": "[매일 금리·환율 브리핑] 9월 15일, 원/달러 환율 12.1원 상승 - 데일리팝",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBLaHVrUFltR05KUkYzSkdJd0tvX3ZBRmp0S09kaVdMV205VWNlMmtkU193TzNFemo0d28zTmVFSmVfZk55MVc2WmFjaTFwTk1yZEFiZTBqYkIzVXh4aFFGeWs5TnZUaVg0?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:40:22 GMT",
+        "source": "데일리팝",
+        "sourceUrl": "http://www.dailypop.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-9-NMMWk?oc=5",
+        "title": "한은, 기준금리 3%로 연속 인상…물가 우려에 긴축 속도(종합) - 연합뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41QzExWnhWREQyZXdpZUp1bDEwd3NKRWN1OE1tcmk1eGhudXJ4UzB1blFyRDk3RW1IOHJlelJhMUdfXzNLYUY4WkJYeEEyWm9mbm0zVFhaek82Z3fSAWBBVV95cUxQZlZ3RGRfSWpUYUsyTUY2YkRXU2trMkNsaURLblh0S05hTE1oS2hkMEdNN3B4aGxHUjRFVzVhemJ2RG9jR19sX0E4UnZCZ0c2MGs1eUpKRVRvNElfSENMMWk?oc=5",
+        "pubDate": "Thu, 27 Aug 2026 07:00:00 GMT",
+        "source": "연합뉴스",
+        "sourceUrl": "https://www.yna.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-10-lNwWQ?oc=5",
+        "title": "\"환율 200원 빠졌다고 美주식 샀다간\"…전문가가 꼽은 '뜻밖의 변수' - 뉴시스",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1QWlNZVXk5UWRLamZyNm1sZExPSkhza3JFRW03UGFSYlpzZnpJdmpIUkNSTWRoU09KQzB4SDRFbFR1ZVk2OXYyQ2d3SmlGTVpQUUg0X29tRW1vb2UwQmlLX9IBeEFVX3lxTE5ZTlBTQXg1Y3h1RXA2NFhYd0pfY1pZMXBzNFQ1X2VId2xNQzJ6S2lTcTdfbHgxcVlwN3doMGxSU1o0NHRpREN3WjUzd0ZEWU1paEJ2UmhmaUJSRmtMOXJ1UC1hZERjSDVkdkp0cm5NaTg4cDBOZlNwWQ?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 17:20:00 GMT",
+        "source": "뉴시스",
+        "sourceUrl": "https://www.newsis.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-11-ElMNA?oc=5",
+        "title": "美 국채 5%가 깨운 '3高 공포' … 금리·물가·환율 韓 경제 덮친다 - biz.newdaily.co.kr",
+        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1CcjFNWkZzdmVjdmRIYy1vYjZ0MjRUSDBwcTM4TGZ5eG5kTlgwM3ktY21HRkxkSEdDeHhjcmprbEE4Smh3NURMSDNVbVJsMjM1cDh6WnZXbVNrTW52U2dNOTFiQms2THJ5aG51YzYxXzZRQThqMzB1Y3dlc9IBgAFBVV95cUxOR3kzbG5hX2J6T09OY21sc3AzRkdlWTZYci1LSVVvSXB0Q2VqVGZkOHptMS1nVFdnMkNKTWl5aXJ0OXI1dlk5LUpWSHUtRU9VbHY3R3d2UkFPbUw3WVlxekFUYmhiQ3BheEUtRFRKdlBMNzJGLS03N21PX3N4TElMNA?oc=5",
+        "pubDate": "Sun, 13 Sep 2026 01:34:25 GMT",
+        "source": "biz.newdaily.co.kr",
+        "sourceUrl": "https://biz.newdaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-12-kYtYw?oc=5",
+        "title": "美 9월 금리인상 확률 85%…고유가·환율 상승에 한은 부담 커졌다 - 쿠키뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9PeWlTX0RHTmdtdlc2Y3RhRlZKdkIwT3dmN1A5alQ2a3NkaXNQaVNmY0N6RUhOMnVQUjJ2SHRDNmkyMTR3LXFxZnFZTDFkMWhiQlZOa2FTV09KS3MzUzYySkYtYw?oc=5",
+        "pubDate": "Sat, 12 Sep 2026 03:02:32 GMT",
+        "source": "쿠키뉴스",
+        "sourceUrl": "https://www.kukinews.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-13-3ptdw?oc=5",
+        "title": "'금리·환율·실적' 삼박자에 사상 최고가…은행주 나홀로 랠리 - 한��경제",
+        "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBOVW8zX3FHVGZBYnM5SVcxMWJLblJPVjVJRTlQTG9lcU0tMl9QUlNDRnVGLUlSbTdDSm5jSDJRWm1LMG80NEJqOVZTN1pvcHZQeWRfNklFZ3ptdw?oc=5",
+        "pubDate": "Thu, 10 Sep 2026 06:14:28 GMT",
+        "source": "한국경제",
+        "sourceUrl": "https://www.hankyung.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-14-5c3h3?oc=5",
+        "title": "신현송 한은 총재가 말한 금리 인상 조건 셋 중 둘 ‘충족’…“백투백 금리 인상, 가능성 열려 있다” - 조선일보",
+        "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPX2VfLXd2YjhsandQTUowOHBoYUZzOEFjTjVpTDFvcnhBUmN0bWNLeUZPYW00OEZHcG5hREdLLVJaT2JyWFFBZDN4Tm9Zc3daRy1qXzVmUW1XN0g5cl9yRTc4V0NIV2ozSkR2QnVXQllXUGtTOHF1c2NZa2hJR2tPOTRtZ0FkbGVSclR5c3h3?oc=5",
+        "pubDate": "Wed, 26 Aug 2026 07:00:00 GMT",
+        "source": "조선일보",
+        "sourceUrl": "https://www.chosun.com",
+        "relatedLinks": []
+      }
+    ],
+    "외환시장": [
+      {
+        "id": "news-0-NlcWc?oc=5",
+        "title": "외환보유액 순위 슬쩍 비공개… ‘소통 부재’ 아쉬운 한은[시장팀의 마켓워치] - 동아일보",
+        "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE8wR3k3S045eEd5MjZlbjBjWkFDTW0zZ2tvTExNWHFjSzFnSzBnb2dPbE1tTURReDd3NXZoZ0dDaC1NX2lRdzluY2VqZXctbE16djBycG9hYV9nT2RKQk1NR05tQkZ2V1BGTGZHZTU4aC1RRXN0alHSAWZBVV95cUxPTFZvLS16UklEWjVMSnVBcnRhOThWSTJBMjJfZ2FhVEJwRWF0bDR3RGQ1dDdidDZ0d3Y1VVZRdUp2OUVuU1R1T2tBZERNSTJYZVFLdkNmTlZyNDJwVWFqSW53MWNlcWc?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 15:30:00 GMT",
+        "source": "동아일보",
+        "sourceUrl": "https://www.donga.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-1-xSbVg?oc=5",
+        "title": "14년 만의 외환공동검사 석달째 후속 조치 검토…'예방'에 방점 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE82MnpGWEc3OHVWME1KcVdYcXZqbE9jLU1SeGQzWHVFMXdYTlNqYXhrTzRUeDJxTVpCWF82ek9UN1BvMDZaMVJoQ29USnBvVnlfR0VGaE1rRHNwVmdQZHg3c0JzcEk1TlhGSW4zT0xSbVg?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 01:43:29 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-2-N4WlM?oc=5",
+        "title": "[외환-마감] 美금리·달러·유가 뛰자 1,360원도 상향 돌파…\"매수세 몰려\" - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBmVzkxbnRHZFVaTV9GU2c1cGdDVUw4OUdibklRWnVRN2RZVWtpRlNKXzhrYlRobGpGeXRyTWNKZHhMenVqY0xHSEoxcF84OS1PRjhNOFM1aFFtT1hkMk1TNk5yX2ZOLTB3ei0tTWN4WlM?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 09:30:50 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-3-M0dkE?oc=5",
+        "title": "[단독]IMF 자료에 있다더니…한은 비공개한 외환보유액 순위, 확인 어려워[시장팀의 마켓워치] - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3RXBrdC1TbUFSQnRNTUFnbGV6OFpseHVpLXFsWUlyZ2V4VmFsVW1nTEhLejZlUUNSYk5kaUJpMEpCRlUxc01RZlFOR0M0dkE?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 09:58:49 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-4-kyZnc?oc=5",
+        "title": "[외환] 원·달러 환율 1359.4원 마감···12.1원↑ - 서울파이낸스",
+        "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1jVzFsTUd5NDJ5N19hbXdiVGZCZS00OTZDbzZUYjR5Nk5icmVSS2hPeVUzMkI0dHFYOFZDX3YwSU9td29tX2RObEhsSVBmN0FzNVI5bThkYURPTFI0QWRaQTBtTWVOdXkyZnc?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:47:06 GMT",
+        "source": "서울파이낸스",
+        "sourceUrl": "https://www.seoulfn.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-5-50Uzg?oc=5",
+        "title": "엔화 급등에도 전문가 80% 연말엔 다시 약세…日 추가 인상 속도가 관건 - ajunews.com",
+        "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5mNjIxNGg1c3lITHpyUjQ2ajVMVU1fV184QnZMMnFFV3NTY2tRQzFEM1plLWNWMmM1aXdEREFxN2J0czBCc2ZPQzAzbzB4NmRydGptMThsTVpxQdIBWEFVX3lxTE1UaUVOM2pnUmtjX0NodC1vT19oR1d0aTB3NjR3TG12MWVNV201VUVpY3dYOEI1ZGVTVXV2b1RPajNkNDZiWWFDTVlHdmk2dDEzQmZKM050Uzg?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 00:59:22 GMT",
+        "source": "ajunews.com",
+        "sourceUrl": "https://www.ajunews.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-6-lGU0E?oc=5",
+        "title": "환율, 1340원대 후반으로 상승…고유가·FOMC 경계에 달러 강세 - 뉴스투데이",
+        "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE8yQnFnQ1VQMzlnVTUyUDhFczNVLXN4MWFmM0tZVWJBZjFacWRMUEc2YzJGWWR4OS1KSHRBNkZWbWJsX0VrZmVicFl3Z080bnRNU2NjdEF1Rk4yeWlGU0E?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 00:33:00 GMT",
+        "source": "뉴스투데이",
+        "sourceUrl": "https://www.news2day.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-7-VllRQ?oc=5",
+        "title": "[외환] 9시 이전 마(MAR) '+0.05원' 거래…픽싱 스퀘어 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1XZWw2S2xMNC1vZEdtdUhTR0xlT1VuM2hPdHZFcTc5U1F3eUdOdWw0enpral83UTFEb0JUNUdkRU43MTZWSEVxRWFQdmQ5VHh5MjJWTlhkVnFaZjIzdEd0Nml6S1IxWWNRMUo4blhUdjfSAXRBVV95cUxQTnlFd3g3YWlNUmVRUnhHZGRDeGRlVlZ5YzFfWHRkalBHN25QVDl2Q1Z2NE10Nm4xVDV4eW10RjNHci00QVdYbmtTd1ZZU2g0NkV6MmM2UHRGM3g0T1h3ci1zcHVYZUZ3MmNrZnZ5WURSaVllRQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 02:03:17 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-8-d2Z0Y?oc=5",
+        "title": "'RFI-K'로 해외 원화길 넓힌다…FX중개사들 \"관건은 국내시장 연결\" - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1wY3l1dm5jUGRaaEZPc0tPTjJwZW9TN0N0dTVyWDRlN2ltc0FPQlFUa25kVnFjSUdUaEoteVA5dHZreEQtcUpUemVPZXc3YWFJNi1xQ25UZHI0ekZNVERJQTQtSTlSS1h4cW9hbnd2Z0Y?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 02:14:28 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-9-EyMHA?oc=5",
+        "title": "24시간 외환시장 심야 거래 2%뿐…새벽 4시 이후 '뚝' - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1tdGdQU1BNWUFhUllMOHZSWV9WTDVrZzRMSmRpWE1YWXAxeUU1VmRhVEVpSmF1NE8wVWNnLVNuNG1pbDlJZU5ZUGo4cW85dlFlanFoSDRXVDJMTmNmSkxDVnJnY21ldUZSS3Atb2EyMHA?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 01:25:16 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-10-N3UmE?oc=5",
+        "title": "원/달러 환율 1,360원 터치…유가·美국채금리 상승에 12.1원↑ - 연합뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9UZzJEY1lTUm9YN0F0Y2ozNVNmMGJrb0Myd19Kd3NmZklFbGZQU1RlLVM0QlJ4a09RbzRmV1E0YkpEcWtxbVUxVFJxSXVCbUt1amFDTkViSzQ3LVHSAWBBVV95cUxNQkRHVmlTQzF1aWltcW5GaDUwSFQxRGk1YmFrRlhyLUxlTzNORGpiMWl6N0dNTnhnWHM0SlhTMFZ0NE5lR0NsZmRDSTNXR1djRDdMQmtlUlZyZ01ZUkN3UmE?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:50:38 GMT",
+        "source": "연합뉴스",
+        "sourceUrl": "https://www.yna.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-11-kFHZw?oc=5",
+        "title": "1300원대 환율 언제까지?…“韓·美 통화정책 방향이 좌우” - 마켓인",
+        "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9XTzl3M09JX1BDWktYN0pINjVjQlVxQUlEM3R3dk5kVXc1M1dYZWM0d19HeHVlNnBhZWlPSEF5cWNfa1MtX3JzWkMxTGJmS3JOM3ZvVVJ6WmJvOFhZc1FPT0I1QXU0WTZZLUhRaHRUbkFHZw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:08:35 GMT",
+        "source": "마켓인",
+        "sourceUrl": "https://marketin.edaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-12-0l5Qg?oc=5",
+        "title": "[환율 전망] 더욱 부담되는 고유가와 장기 금리의 상승 - KB Think",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1DZzlLU0ltYUNKQ1lKSWZTc1R4N20wQnpfYkVadHlNb0FoeENvamYwQ1gycGx0U1dPcV9lR2pmVzQ3eFVwR1J3Zl9BTGh6bHV6MzUzalhIV2FjWEZfN0l5Qg?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 23:05:25 GMT",
+        "source": "KB Think",
+        "sourceUrl": "https://kbthink.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-13-hRWnY?oc=5",
+        "title": "미 달러화 나흘째 강세…엔 약세 속 사우디 송유관 폐쇄 여파 지속 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5VUWREbnVYMDNod0NsM050ZkF3LTBaSk5rNHM5eHhqa0ZXckpJVHV5Z1FQbE9Vc0QwYXpuaS10LVdraWJOTV96V0Z6bjJSQWpiZlZ1Njg1XzUxWXBFNm50S05VVmxmZ2E3YVowRDhRWnY?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 14:09:56 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-14-ZUcXE?oc=5",
+        "title": "달러-원, 뉴욕장서 1,350원 후반대 거래 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE56RFFhd3hULXpCYW5WbXZ1QUpBdS00M3pPRml3eXhNeXdtSmVqVGd3WmIzS0w0b3o4Vm5pVjlqcER3bzVDUlk2OVpIUm9DemRNQUZPXzFZOXN5WENEVk5OY25lRl9IZ3RmWXNDWWZUcXE?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 14:04:05 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      }
+    ],
+    "코스피": [
+      {
+        "id": "news-0-BDTW0?oc=5",
+        "title": "[증시-마감] 코스피 美금리 5% 쇼크에 하락…외인 닷새 10조 매도 - 연합인포맥스",
+        "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1Ha2RlQ25IWXQ3RlRTS19acHU1QnEwQ2xSemhpQWl4U0dacktVNzVxT0FUSFpEdFZyRFMwRldIdTl3RHJxYXZXUndpbFY0Yi1RbWZVV0c3eWRJVkFLV19YRGx5dDZ2T1VUbHBuRjBDTW0?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:57:40 GMT",
+        "source": "연합인포맥스",
+        "sourceUrl": "https://news.einfomax.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-1-JXbHc?oc=5",
+        "title": "6,600선까지 밀린 코스피...오늘 증시는? - YTN",
+        "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1tenZENzgzWTVVSDM5S2ZRTTZJcDl0ajhYUjk3MlR1NVNvdmJqTDFtMU15V0xSQldCeEZHQjNoQkRHVkw2c21XYTAwYXRsdk9TeFF4LUJhNDdMdjJXbHc?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 00:02:00 GMT",
+        "source": "YTN",
+        "sourceUrl": "https://www.ytn.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-2-UtySg?oc=5",
+        "title": "코스피 4일 연속 하락, 코스닥 소폭↑ - KB Think",
+        "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTFB1UXJNb3VpUzB6QlZYV1htMmE4eE1nMzBscFNDQUZicFJuV1J4Rmg4ZTlLR0F1TEFqdmVHalZtcU1qUjlJV1otMEd0RWdhdnAxLTZvODNxc2lIMWxudDNIN2tDbTUyQ1RQVUtySg?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:59:42 GMT",
+        "source": "KB Think",
+        "sourceUrl": "https://kbthink.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-3-lNWdA?oc=5",
+        "title": "[오늘의증시] 美 10년물 5% 돌파에 코스피 '출렁'…외국인 1.5조 매도 - 경인방송 뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9Xci1tZm5fS0RDSHZXTnNUM19Sdmo2bV9Da0I4eFdHYk5GajVvUHkxUjBzQXlEY1FaY2VIMkJLZVIyNGdIUHB0cHJEc3M1XzNSMXp5dWYyRlloUkhxVFdKd0JYSUrSAWhBVV95cUxNMXMzMDZVekVzT2o1UHVyWm1yY2Jfbkt6b3hqX0ZhaEtBYW1oTmduRC1qbmdjQ0l3WXgzZVFIM2htVGtBeGJsR3AzYmdhRV9TNnRoMEZUeWlrUFpieGtrdHFfMzNxVlNWdA?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:29:14 GMT",
+        "source": "경인방송 뉴스",
+        "sourceUrl": "https://news.ifm.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-4-UZLQw?oc=5",
+        "title": "코스피, '금리.유가.환율' 3중고에 6,620선 후퇴 - 매일경제 마켓",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFAyWk9hUWl2a0h1WGFDdmVpU1dSWWU3RU10U1dLdHB2aGF5cWR2YXdkb3ExY3lhWF85aXBEV2xYbHpNNW5jbWlnWHhFNmt3SGxYQWpSTUhyUUNoajhYcUZLQw?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:07:33 GMT",
+        "source": "매일경제 마켓",
+        "sourceUrl": "https://stock.mk.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-5-GFKTg?oc=5",
+        "title": "코스피, 하락 출발 후 보합권…코스닥은 1%대 상승 - 뉴스토마토",
+        "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE02T2wwajdsOEZoZHFlZHFndFZUWmpSTldLUjJ4eTBxd0ZQMFQ3bExZU2NHUWhmV2M4WXFMSDR5NVFWT1VGaThyYThKVVA3NEhGMXlXS2YxRXhNNWpYMGFKTg?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 00:54:14 GMT",
+        "source": "뉴스토마토",
+        "sourceUrl": "https://www.newstomato.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-6-FFrSQ?oc=5",
+        "title": "코스피, 전일 급락 딛고 6680선 공방…코스닥은 1%대 상승 - 스트레이트뉴스",
+        "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE00alNDbnFtWEplUFFDRGJyOU9RV0lET3cxYUNPcmh1NkhNUWxZZW80dDNNeEZuTVYtQkN1b0k0eDJvanQ2RWltMTN5d0E2Wk9TQTU0VHlib1BQX2RYV3JqWFlxNnpqU3JpRm5VNHRrM2Z2cnfSAXdBVV95cUxOOTlUREw2cGFtR2RXZ3J0Wnd2RmY2Q19VVkQ2anlZbTZZVE9rRHNBN1hWbVg4dVpyOEpYZ25RcUN4eV9RYnlUS3V6bmQtaWl4ZmI4eV9yUXh2Q18xbXJ2aTI3WjQ1RVZlTVhXMjE0SzlacHpJNFFrSQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 00:35:09 GMT",
+        "source": "스트레이트뉴스",
+        "sourceUrl": "https://www.straightnews.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-7-llOFU?oc=5",
+        "title": "2022년엔 25% 급락…미국 기준금리 인상 앞둔 K-증시 이번엔 어디로? - v.daum.net",
+        "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBhUHFFRk9nWGZXSjJBZzlyUVZIcmprQzNXYWVab0J6RElOOWlyaDVTUGJoQ3lrX0hSVlB0SHAzaFZISXpnNzkzbXFSSkllOFU?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:42:00 GMT",
+        "source": "v.daum.net",
+        "sourceUrl": "https://v.daum.net",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-8-dTTVE?oc=5",
+        "title": "[0915마감체크] 코스피, 고금리·고유가에 4거래일 연속 하락... 코스닥은 상승 - 인포스탁데일리",
+        "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9jRDFSdU1YZDE2czVqcXQ2MWxmN1RDNmU5NVFvVDJRYklXNUFUTEVCWWE3NEptZDR5azZjSk5LYnFWX2pTN2VXdFctV0pCellmaEw4bVBDT29iOHpxMUNpNFgxYjJrTFl5RGRYdEJwNXE4SXdTTVE?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 08:13:50 GMT",
+        "source": "인포스탁데일리",
+        "sourceUrl": "https://www.infostockdaily.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-9-h0b0I?oc=5",
+        "title": "[마켓뷰] 금리·유가 급등에 AI속도조절론…코스피 하락 지속되나 - 연합뉴스",
+        "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE94WXhGUkt0Si1telVwT2ZiLWM5OW1hZUlIMjFUcmtCSUxEZ1VzUllURVFzUklHckRTZUl2YXhfb1Z4QmJCaWZXZkRwY3pxY1BjQWg5Y3lVLUMwMXPSAWBBVV95cUxOMmk3VWFJN1p3cHpvZDVReHVEb25zSjJEamNUSGZoSjdGcGFwd3cwLUx0SEZxT0h3MjJYM3JGYXZ2Y3lXUlBTUFliVkswODhvRnBKZWhlR0pGNVl0N3h0b0I?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 22:57:32 GMT",
+        "source": "연합뉴스",
+        "sourceUrl": "https://www.yna.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-10-HN2d5?oc=5",
+        "title": "[AI MY 증시전망] 美 반도체 쇼크 덮친 코스피…\"하락 출발 전망\" - 뉴스핌",
+        "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5uSkFGUTF0aTFnVkRjdGNSbmhTdzFNbmQ5Z3FtYTFCb3h6ajkxdEQ0aFJhOXFpREk4dkdlUHhabnNURTFxSWJobGZmRno3d1NiR2I1RjlRLWxHN2d5?oc=5",
+        "pubDate": "Mon, 14 Sep 2026 23:47:00 GMT",
+        "source": "뉴스핌",
+        "sourceUrl": "https://www.newspim.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-11-3hPWA?oc=5",
+        "title": "[마켓뷰] 5% 재돌파한 美 금리…코스피, 6600선 겨우 방어 - 조선비즈 - biz.chosun.com",
+        "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQWlRWTGcxX2pHdkZrbUw0SXVOTkdkbnJqUzlERFRfZEM0Nk5Vdm5kTHg5ZGpvajBiemRORXZlZV84enN5LVB5VHNOVkR2Qzkwbk9TMUpwTDBMckNOMi10VGZONWRtRWc5YTdEdktOV1lJU0VyR0FacWlHMEJid2JXS1dVdFpXN1VX0gGcAUFVX3lxTE00cVZuTWhQLXlJdjJ3UC1TcVVOc2lVWXh6d0hTUFU2allzVTNRRFBCbURQOE83TnFzY05PZF9Rc0J3REdkQ0l6TGFKM3ZkaEFLLU1manJmbWV0eVcxNWZ4ZVd2ek9uQWNVTWVraFF0U2pNaEhmWWI1VmIwaEVDVlZNcXp4UlYzRmlmbGFhcG9SS1BGUUd2dGRxN3hPWA?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:16:00 GMT",
+        "source": "biz.chosun.com",
+        "sourceUrl": "https://biz.chosun.com",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-12-llaUQ?oc=5",
+        "title": "[오늘의 증시] 9월 15일 코스피 코스닥 - 뉴스1",
+        "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1BdDk4THBnZ2EtV1MwZDhxVGdBTy0tdEczVHp0V3AwcVM2NHFzeXl1R1FMNUZkMU1yeDh3UFlOcUVRSmoyeWI3WllaUQ?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 06:36:42 GMT",
+        "source": "뉴스1",
+        "sourceUrl": "https://www.news1.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-13-ZNlRK?oc=5",
+        "title": "증시 호재가 없다…코스피 약보합 마감 [시황] - 데일리안",
+        "link": "https://news.google.com/rss/articles/CBMimAJBVV95cUxPdGJ2OFhCZm9XTVdtNmxJeWV5NXBQNnZZUURTdDdUZXlMazU4dUg2T1g2dERuTk5JaVRURlp2TEgwQldQaEtHUjZKNVJRUk5tTk1zNU54OGxJMllOU1FBYnZMLWxWQXY0X201b1VlQzJ3VWZfLXdWem5abkRQa0gyQkhqRkhIWDJiYkEyMHQ1M3pVTlk5eHdoS2F1dFdpcFlMelRNd1NKNkxnYmNCRWxhX2ZMZHp0dTUxenpmNGVBSTdyR3E2eENUNm5JR20tM2EzTFhJekk2bDloMGswODFqWkhtOEpSUFQ5ZndIaWRpWTE0ZE5ScVEzOWhwUE5yb2pkSGNyT1ZGbFNIUkRwS2UxZENwZmlZNlRK?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 07:10:00 GMT",
+        "source": "데일리안",
+        "sourceUrl": "https://www.dailian.co.kr",
+        "relatedLinks": []
+      },
+      {
+        "id": "news-14-Y4VG8?oc=5",
+        "title": "코스피 미국 증시 하락에 장중 6700선 보합권 등락, 코스닥 1%대 오른 820선 - 비즈니스포스트",
+        "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE45cXZwSkxVenNrMTlZRGg3aUFwYXZTTFFIYW1CX3YwcDVoVlh5M1Byd0Nia1l2dzV5cVM2YXVMbHBYM2pmbGlVc3hwaVlOUUFHR1lRSDQzTjhGTkNlU0hDYTVIcGtBQmh1dE1uOV9Wa3Y4VG8?oc=5",
+        "pubDate": "Tue, 15 Sep 2026 01:50:31 GMT",
+        "source": "비즈니스포���트",
+        "sourceUrl": "https://www.businesspost.co.kr",
+        "relatedLinks": []
+      }
+    ]
   }
 }
