@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "99.654",
-      "diff": 0.19,
-      "diffPercent": 0.19,
+      "value": "99.668",
+      "diff": 0.21,
+      "diffPercent": 0.21,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 99.65
+          "value": 99.67
         }
       ]
     },
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "6,605.73",
-      "diff": -78.64,
-      "diffPercent": -1.18,
+      "value": "6,615.9",
+      "diff": -68.47,
+      "diffPercent": -1.02,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 6605.73
+          "value": 6615.9
         }
       ]
     },
@@ -531,51 +531,51 @@
       "historySymbol": "122630.KS",
       "fredId": null,
       "isRealtime": true,
-      "value": "166,565",
-      "diff": -4309.74,
-      "diffPercent": -2.52,
+      "value": "166,575",
+      "diff": -3898.88,
+      "diffPercent": -2.29,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
         {
           "date": "2026-09-02",
-          "value": 165527.32
+          "value": 165139.01
         },
         {
           "date": "2026-09-03",
-          "value": 165862.05
+          "value": 165472.96
         },
         {
           "date": "2026-09-04",
-          "value": 172481.47
+          "value": 172076.85
         },
         {
           "date": "2026-09-07",
-          "value": 189201.57
+          "value": 188757.73
         },
         {
           "date": "2026-09-08",
-          "value": 187703.62
+          "value": 187263.29
         },
         {
           "date": "2026-09-09",
-          "value": 193444.36
+          "value": 192990.56
         },
         {
           "date": "2026-09-10",
-          "value": 192473.62
+          "value": 192022.1
         },
         {
           "date": "2026-09-11",
-          "value": 184096.84
+          "value": 183664.97
         },
         {
           "date": "2026-09-14",
-          "value": 170874.74
+          "value": 170473.88
         },
         {
           "date": "2026-09-15",
-          "value": 166565
+          "value": 166575
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,390.25",
-      "diff": 238,
-      "diffPercent": 0.82,
+      "value": "29,375.75",
+      "diff": 223.5,
+      "diffPercent": 0.77,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 29390.25
+          "value": 29375.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,674.75",
-      "diff": 49.75,
-      "diffPercent": 0.65,
+      "value": "7,672.5",
+      "diff": 47.5,
+      "diffPercent": 0.62,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 7674.75
+          "value": 7672.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "103.09",
-      "diff": 1.7,
-      "diffPercent": 1.68,
+      "value": "103.41",
+      "diff": 2.02,
+      "diffPercent": 1.99,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-15",
-          "value": 103.09
+          "value": 103.41
         }
       ]
     },
@@ -2503,9 +2503,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "878.12",
-      "change": "+6.37",
-      "changePercent": "+0.73",
+      "value": "877.89",
+      "change": "+6.14",
+      "changePercent": "+0.70",
       "trend": "up"
     },
     {
@@ -2513,8 +2513,8 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,567.02",
-      "change": "+11.14",
+      "value": "1,567.09",
+      "change": "+11.21",
       "changePercent": "+0.72",
       "trend": "up"
     },
@@ -2615,12 +2615,12 @@
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "2026년 9월 15일 한국 외환 및 증시 분석 보고서\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1355.75원으로, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 55%로 예측하며 상승 가능성에 무게를 두고 있습니다. 최근 환율은 1340원대에서 점진적으로 상승하여 현재 수준에 도달했으며, 단기 5일 모멘텀 또한 0.7% 상승하는 등 상방 압력이 강하게 나타나고 있습니다. 한미 2년물 금리차가 1.06%p로 확대된 상황은 복합 위험 신호인 [CAPITAL_OUTFLOW]를 유발하며 달러 강세 요인으로 작용하고 있습니다. 이에 따라 단기적으로 1367.41원(20일 이동평균선이자 볼린저밴드 중단)이 1차 저항선으로 작용할 수 있으며, 이를 상향 돌파 시 1408.36원(볼린저밴드 상단)까지의 상승 시도도 배제할 수 없습니다. 하방으로는 5일 이동평균선인 1344.84원과 60일 지지선인 1333.25원에서 지지력을 확인할 필요가 있습니다. 종합적으로 매수 우위 관점에서 환율 흐름을 지켜보되, 단기 급등 시 차익 실현 기회를 모색하는 전략이 유효해 보입니다. ① 정량예측모델이 55%의 상승 확률을 제시하며, 이는 원/달러 환율의 추가 상승 가능성이 높음을 시사합니다. ② 한미 2년물 금리차가 1.06%로 확대되어 외인 자금 유출 압력이 가중되고 있으며, 이는 환율 상승 요인으로 작용합니다. ③ 원/달러 환율은 최근 1340원대에서 1355.75원으로 상승 추세를 보이며 단기 5일 모멘텀이 0.7% 상승하는 등 상방 압력이 강합니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,582.51pt로, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 30%로 낮게 예측하며 약세 흐름이 지속될 것으로 전망합니다. 지수는 5일 이동평균선(6852.47pt), 20일 이동평균선(6794.17pt), 60일 이동평균선(7025.88pt) 등 모든 주요 이동평균선 아래에서 거래되고 있으며, 최근 7051.64pt에서 6582.51pt로 하락하는 뚜렷한 약세 추세를 보이고 있습니다. 또한 반도체(SOX) 지수 단기 5일 모멘텀이 -5.15%, 나스닥 선물 단기 흐름이 -0.72%를 기록하며 국내 증시의 하방 압력을 가중시키고 있습니다. 현재 지수는 볼린저밴드 하단인 6471.1pt에 근접하여 단기 낙폭 과대에 따른 기술적 반등 가능성은 있으나, 이는 제한적일 것으로 보입니다. 주요 저항선은 5일 이동평균선인 6852.47pt와 20일 이동평균선인 6794.17pt로 예상되며, 이 수준을 돌파하지 못하면 추가 하락하여 1차 지지선인 6471.1pt를 하향 돌파할 경우 장기 지지선인 5262.77pt를 향한 압력이 커질 수 있습니다. 투자자들은 보수적인 관점에서 매도 우위 관망 또는 매도 전략을 고려하며 리스크 관리에 집중하는 것이 필요합니다. ① 정량예측모델이 코스피 상승 확률을 30%로 낮게 예측하며, 반도체(SOX) 및 나스닥 선물 단기 모멘텀이 각각 -5.15%, -0.72%로 부진하여 국내 증시에 하방 압력이 강합니다. ② 코스피 지수는 현재 모든 단기 이동평균선(MA5=6852.47pt, MA20=6794.17pt, MA60=7025.88pt) 아래에 위치하며, 최근 추세가 7051.64pt에서 6582.51pt로 지속적인 하락세를 보이고 있어 기술적으로 매우 약한 흐름입니다. ③ 한미 금리차 확대에 따른 복합 위험 신호인 [CAPITAL_OUTFLOW]가 발생하고 있어 외국인 자본 유출 우려가 국내 증시의 추가적인 약세 요인으로 작용할 수 있습니다.\n\n실전 투자 대응\n환율: 원/달러 환율은 1355.75원에서 상승 압력이 강해 1367.41원 돌파 시 매수 기회 모색이 유효합니다.\n코스피: 코스피는 6,582.51pt에서 하방 압력이 우세하며, 6471.1pt 지지 여부를 확인하며 보수적 대응이 필요합니다.",
-    "detailedAnalysis": "2026년 9월 15일 한국 외환 및 증시 분석 보고서\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1355.75원으로, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 55%로 예측하며 상승 가능성에 무게를 두고 있습니다. 최근 환율은 1340원대에서 점진적으로 상승하여 현재 수준에 도달했으며, 단기 5일 모멘텀 또한 0.7% 상승하는 등 상방 압력이 강하게 나타나고 있습니다. 한미 2년물 금리차가 1.06%p로 확대된 상황은 복합 위험 신호인 [CAPITAL_OUTFLOW]를 유발하며 달러 강세 요인으로 작용하고 있습니다. 이에 따라 단기적으로 1367.41원(20일 이동평균선이자 볼린저밴드 중단)이 1차 저항선으로 작용할 수 있으며, 이를 상향 돌파 시 1408.36원(볼린저밴드 상단)까지의 상승 시도도 배제할 수 없습니다. 하방으로는 5일 이동평균선인 1344.84원과 60일 지지선인 1333.25원에서 지지력을 확인할 필요가 있습니다. 종합적으로 매수 우위 관점에서 환율 흐름을 지켜보되, 단기 급등 시 차익 실현 기회를 모색하는 전략이 유효해 보입니다. ① 정량예측모델이 55%의 상승 확률을 제시하며, 이는 원/달러 환율의 추가 상승 가능성이 높음을 시사합니다. ② 한미 2년물 금리차가 1.06%로 확대되어 외인 자금 유출 압력이 가중되고 있으며, 이는 환율 상승 요인으로 작용합니다. ③ 원/달러 환율은 최근 1340원대에서 1355.75원으로 상승 추세를 보이며 단기 5일 모멘텀이 0.7% 상승하는 등 상방 압력이 강합니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,582.51pt로, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 30%로 낮게 예측하며 약세 흐름이 지속될 것으로 전망합니다. 지수는 5일 이동평균선(6852.47pt), 20일 이동평균선(6794.17pt), 60일 이동평균선(7025.88pt) 등 모든 주요 이동평균선 아래에서 거래되고 있으며, 최근 7051.64pt에서 6582.51pt로 하락하는 뚜렷한 약세 추세를 보이고 있습니다. 또한 반도체(SOX) 지수 단기 5일 모멘텀이 -5.15%, 나스닥 선물 단기 흐름이 -0.72%를 기록하며 국내 증시의 하방 압력을 가중시키고 있습니다. 현재 지수는 볼린저밴드 하단인 6471.1pt에 근접하여 단기 낙폭 과대에 따른 기술적 반등 가능성은 있으나, 이는 제한적일 것으로 보입니다. 주요 저항선은 5일 이동평균선인 6852.47pt와 20일 이동평균선인 6794.17pt로 예상되며, 이 수준을 돌파하지 못하면 추가 하락하여 1차 지지선인 6471.1pt를 하향 돌파할 경우 장기 지지선인 5262.77pt를 향한 압력이 커질 수 있습니다. 투자자들은 보수적인 관점에서 매도 우위 관망 또는 매도 전략을 고려하며 리스크 관리에 집중하는 것이 필요합니다. ① 정량예측모델이 코스피 상승 확률을 30%로 낮게 예측하며, 반도체(SOX) 및 나스닥 선물 단기 모멘텀이 각각 -5.15%, -0.72%로 부진하여 국내 증시에 하방 압력이 강합니다. ② 코스피 지수는 현재 모든 단기 이동평균선(MA5=6852.47pt, MA20=6794.17pt, MA60=7025.88pt) 아래에 위치하며, 최근 추세가 7051.64pt에서 6582.51pt로 지속적인 하락세를 보이고 있어 기술적으로 매우 약한 흐름입니다. ③ 한미 금리차 확대에 따른 복합 위험 신호인 [CAPITAL_OUTFLOW]가 발생하고 있어 외국인 자본 유출 우려가 국내 증시의 추가적인 약세 요인으로 작용할 수 있습니다.\n\n실전 투자 대응\n환율: 원/달러 환율은 1355.75원에서 상승 압력이 강해 1367.41원 돌파 시 매수 기회 모색이 유효합니다.\n코스피: 코스피는 6,582.51pt에서 하방 압력이 우세하며, 6471.1pt 지지 여부를 확인하며 보수적 대응이 필요합니다.",
-    "lastAiUpdate": 1789450684970,
+    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "lastAiUpdate": 1789454377163,
     "score": {
-      "upScore": 66.10010197363678,
-      "downScore": 52.604039527855086,
+      "upScore": 66.13433033714774,
+      "downScore": 52.60552024305626,
       "kospiUpScore": 14.034451677461236,
       "kospiDownScore": 32.40193084623522
     }
@@ -2671,32 +2671,32 @@
     ]
   },
   "kospiTechnicals": {
-    "rsi14": 43.6,
-    "ma5": 6857.76,
-    "ma20": 6795.49,
-    "ma60": 7026.32,
+    "rsi14": 43.8,
+    "ma5": 6859.14,
+    "ma20": 6795.84,
+    "ma60": 7026.43,
     "bb": {
-      "upper": 7115.28,
-      "mid": 6795.49,
-      "lower": 6475.7,
-      "bandwidth": 9.41
+      "upper": 7114.84,
+      "mid": 6795.84,
+      "lower": 6476.84,
+      "bandwidth": 9.39
     },
     "momentum": {
-      "d1": -1.13,
-      "d5": -4.97,
-      "d20": -3.8
+      "d1": -1.02,
+      "d5": -4.87,
+      "d20": -3.7
     },
     "keyLevels": {
       "support": 5262.77,
       "resistance": 9253
     },
     "macd": {
-      "macd": 6.6,
-      "signal": 8.32,
-      "hist": -1.72
+      "macd": 7.16,
+      "signal": 8.43,
+      "hist": -1.27
     },
     "stochastic": {
-      "k": 23.1
+      "k": 24.1
     }
   },
   "kospiSentiment": "코스피 하락 우세",
@@ -2709,5 +2709,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 49
   },
-  "lastUpdate": "2026. 9. 15. AM 6:32:41"
+  "lastUpdate": "2026. 9. 15. AM 6:39:37"
 }
