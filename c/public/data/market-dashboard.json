@@ -1067,10 +1067,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-09-10",
-          "value": 3.75
-        },
-        {
           "date": "2026-09-11",
           "value": 3.75
         },
@@ -1104,6 +1100,10 @@
         },
         {
           "date": "2026-09-19",
+          "value": 4
+        },
+        {
+          "date": "2026-09-20",
           "value": 4
         }
       ],
@@ -1126,10 +1126,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-09-10",
-          "value": 3.5
-        },
-        {
           "date": "2026-09-11",
           "value": 3.5
         },
@@ -1163,6 +1159,10 @@
         },
         {
           "date": "2026-09-19",
+          "value": 3.75
+        },
+        {
+          "date": "2026-09-20",
           "value": 3.75
         }
       ],
@@ -2519,16 +2519,6 @@
   ],
   "stockPrices": [
     {
-      "id": "samsung",
-      "symbol": "005930",
-      "market": "domestic",
-      "name": "삼성전자",
-      "enName": "Samsung Electronics",
-      "price": 260000,
-      "changePercent": "+2.97",
-      "trend": "up"
-    },
-    {
       "id": "hynix",
       "symbol": "000660",
       "market": "domestic",
@@ -2682,5 +2672,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 54
   },
-  "lastUpdate": "2026. 9. 20. AM 11:57:38"
+  "lastUpdate": "2026. 9. 20. PM 12:03:05"
 }
