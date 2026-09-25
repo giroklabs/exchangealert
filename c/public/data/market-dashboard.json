@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.155",
-      "diff": -0.14,
-      "diffPercent": -0.14,
+      "value": "101.162",
+      "diff": -0.13,
+      "diffPercent": -0.13,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,883.75",
-      "diff": 117,
-      "diffPercent": 0.38,
+      "value": "30,881",
+      "diff": 114.25,
+      "diffPercent": 0.37,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 30883.75
+          "value": 30881
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,775.5",
-      "diff": 8.5,
-      "diffPercent": 0.11,
+      "value": "7,775",
+      "diff": 8,
+      "diffPercent": 0.1,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 7775.5
+          "value": 7775
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "93.06",
-      "diff": -1.55,
-      "diffPercent": -1.64,
+      "value": "93.04",
+      "diff": -1.57,
+      "diffPercent": -1.66,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 93.06
+          "value": 93.04
         }
       ]
     },
@@ -2609,10 +2609,10 @@
     },
     "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
     "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1790318389232,
+    "lastAiUpdate": 1790318563087,
     "score": {
-      "upScore": 52.64083023322035,
-      "downScore": 57.52169937973678,
+      "upScore": 52.64032249027423,
+      "downScore": 57.51963511051862,
       "kospiUpScore": 14.172454095284284,
       "kospiDownScore": 24.076184534564792
     }
@@ -2694,5 +2694,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 58
   },
-  "lastUpdate": "2026. 9. 25. AM 6:39:49"
+  "lastUpdate": "2026. 9. 25. AM 6:42:43"
 }
