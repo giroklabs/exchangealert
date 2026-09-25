@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.162",
-      "diff": -0.13,
-      "diffPercent": -0.13,
+      "value": "101.177",
+      "diff": -0.11,
+      "diffPercent": -0.11,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 101.16
+          "value": 101.18
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,881",
-      "diff": 114.25,
+      "value": "30,881.5",
+      "diff": 114.75,
       "diffPercent": 0.37,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 30881
+          "value": 30881.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,775",
-      "diff": 8,
-      "diffPercent": 0.1,
+      "value": "7,776",
+      "diff": 9,
+      "diffPercent": 0.12,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 7775
+          "value": 7776
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "93.04",
-      "diff": -1.57,
-      "diffPercent": -1.66,
+      "value": "92.93",
+      "diff": -1.68,
+      "diffPercent": -1.78,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 93.04
+          "value": 92.93
         }
       ]
     },
@@ -2607,12 +2607,12 @@
         "basis": "ECOS+경상·외환중심"
       }
     },
-    "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "detailedAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "lastAiUpdate": 1790318563087,
+    "aiAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년 9월 25일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1358.17원을 기록하며 전일 대비 하락 마감하였으나, 향후 1~5거래일 내 환율 상승 확률은 정량예측모델에서 48%로 제시되어 보합권 내 등락을 예상합니다. 단기적으로는 1350.36원 부근의 지지선에서 반등을 시도할 가능성이 있으며, 상승 시 1366.18원(MA5) 및 1387.72원(볼린저밴드 상단)까지의 저항을 테스트할 것으로 보입니다. 시장의 핵심 동인인 한미 2년물 금리차이가 1.18%p로 확대된 가운데 [CAPITAL_OUTFLOW] 복합 위험 신호가 발생하여 중장기적으로는 원화 약세 압력이 강화될 수 있습니다. 이에 따라 단기 하락 조정 시 매수 관점으로 접근하여 1370원대 후반까지의 반등을 노려볼 수 있으며, 핵심 지지선은 1330.92원(볼린저밴드 하단)으로 설정합니다. ① 한미 2년물 금리차 확대와 자본 유출 위험 신호로 인한 원화 약세 압력 ② 달러인덱스(DXY)의 단기 상승 모멘텀(0.96%) 지속 ③ MACD 히스토그램이 상승 전환을 시사하며 하락 압력이 완화될 가능성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,080.92pt로 마감하며 최근의 강한 상승세를 이어갔으나, 향후 1~5거래일 내 지수 상승 확률은 정량예측모델에서 37%로 낮게 제시되어 상승 여력은 제한적일 수 있습니다. 단기적으로는 7,166.76pt(볼린저밴드 상단) 부근이 강력한 저항선으로 작용할 것으로 보이며, 지지선으로는 6,943.24pt(MA5)를 기준으로 대응하는 것이 적절합니다. 반도체(SOX) 지수의 강한 5일 모멘텀(7.70%)과 나스닥 선물 흐름(4.28%)은 긍정적이나, [CAPITAL_OUTFLOW] 복합 위험 신호는 외국인 매도세로 이어져 지수 상승에 부담을 줄 수 있습니다. 현재 RSI(14일)가 67.4로 과열권에 진입하고 있으며, 지수가 볼린저밴드 상단에 근접해 단기 조정 가능성도 염두에 두어야 합니다. 따라서 추가 상승 여력은 크지 않다고 판단하며, 현 수준에서는 비중을 조절하고 관망하는 전략이 유효합니다. ① 반도체(SOX) 지수 및 나스닥 선물의 강한 상승 모멘텀 지속 ② 코스피가 MA5(6943.24pt)를 상회하며 강한 단기 상승 추세 유지 ③ 높은 RSI(67.4)와 볼린저밴드 상단(7166.76pt) 근접으로 인한 단기 과열 및 정량예측모델의 낮은 상승 확률.\n\n실전 투자 대응\n환율: 원/달러 환율은 1358.17원 지지 시 1370원대 회복을 시도하며 매수 관점 유효.\n코스피: 코스피 7080.92pt는 7160pt대 저항을 확인 후 6940pt 지지선에서 비중 조절.",
+    "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년 9월 25일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1358.17원을 기록하며 전일 대비 하락 마감하였으나, 향후 1~5거래일 내 환율 상승 확률은 정량예측모델에서 48%로 제시되어 보합권 내 등락을 예상합니다. 단기적으로는 1350.36원 부근의 지지선에서 반등을 시도할 가능성이 있으며, 상승 시 1366.18원(MA5) 및 1387.72원(볼린저밴드 상단)까지의 저항을 테스트할 것으로 보입니다. 시장의 핵심 동인인 한미 2년물 금리차이가 1.18%p로 확대된 가운데 [CAPITAL_OUTFLOW] 복합 위험 신호가 발생하여 중장기적으로는 원화 약세 압력이 강화될 수 있습니다. 이에 따라 단기 하락 조정 시 매수 관점으로 접근하여 1370원대 후반까지의 반등을 노려볼 수 있으며, 핵심 지지선은 1330.92원(볼린저밴드 하단)으로 설정합니다. ① 한미 2년물 금리차 확대와 자본 유출 위험 신호로 인한 원화 약세 압력 ② 달러인덱스(DXY)의 단기 상승 모멘텀(0.96%) 지속 ③ MACD 히스토그램이 상승 전환을 시사하며 하락 압력이 완화될 가능성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,080.92pt로 마감하며 최근의 강한 상승세를 이어갔으나, 향후 1~5거래일 내 지수 상승 확률은 정량예측모델에서 37%로 낮게 제시되어 상승 여력은 제한적일 수 있습니다. 단기적으로는 7,166.76pt(볼린저밴드 상단) 부근이 강력한 저항선으로 작용할 것으로 보이며, 지지선으로는 6,943.24pt(MA5)를 기준으로 대응하는 것이 적절합니다. 반도체(SOX) 지수의 강한 5일 모멘텀(7.70%)과 나스닥 선물 흐름(4.28%)은 긍정적이나, [CAPITAL_OUTFLOW] 복합 위험 신호는 외국인 매도세로 이어져 지수 상승에 부담을 줄 수 있습니다. 현재 RSI(14일)가 67.4로 과열권에 진입하고 있으며, 지수가 볼린저밴드 상단에 근접해 단기 조정 가능성도 염두에 두어야 합니다. 따라서 추가 상승 여력은 크지 않다고 판단하며, 현 수준에서는 비중을 조절하고 관망하는 전략이 유효합니다. ① 반도체(SOX) 지수 및 나스닥 선물의 강한 상승 모멘텀 지속 ② 코스피가 MA5(6943.24pt)를 상회하며 강한 단기 상승 추세 유지 ③ 높은 RSI(67.4)와 볼린저밴드 상단(7166.76pt) 근접으로 인한 단기 과열 및 정량예측모델의 낮은 상승 확률.\n\n실전 투자 대응\n환율: 원/달러 환율은 1358.17원 지지 시 1370원대 회복을 시도하며 매수 관점 유효.\n코스피: 코스피 7080.92pt는 7160pt대 저항을 확인 후 6940pt 지지선에서 비중 조절.",
+    "lastAiUpdate": 1790318885046,
     "score": {
-      "upScore": 52.64032249027423,
-      "downScore": 57.51963511051862,
+      "upScore": 52.637529453620765,
+      "downScore": 57.51644987717994,
       "kospiUpScore": 14.172454095284284,
       "kospiDownScore": 24.076184534564792
     }
@@ -2694,5 +2694,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 58
   },
-  "lastUpdate": "2026. 9. 25. AM 6:42:43"
+  "lastUpdate": "2026. 9. 25. AM 6:48:05"
 }
