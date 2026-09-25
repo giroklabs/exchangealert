@@ -67,11 +67,11 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.283",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "up",
-      "realizedImpact": "up",
+      "value": "101.268",
+      "diff": -0.01,
+      "diffPercent": -0.01,
+      "trend": "down",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-09-14",
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 101.28
+          "value": 101.27
         }
       ]
     },
@@ -767,11 +767,11 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,691.75",
-      "diff": -1.75,
-      "diffPercent": -0.01,
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "30,695",
+      "diff": 1.5,
+      "diffPercent": 0,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-09-14",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-25",
-          "value": 30691.75
+          "value": 30695
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,750.5",
-      "diff": -1.75,
-      "diffPercent": -0.02,
+      "value": "7,751.25",
+      "diff": -15.75,
+      "diffPercent": -0.2,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -866,11 +866,11 @@
         },
         {
           "date": "2026-09-24",
-          "value": 7752.25
+          "value": 7767
         },
         {
           "date": "2026-09-25",
-          "value": 7750.5
+          "value": 7751.25
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "93.72",
-      "diff": -0.23,
-      "diffPercent": -0.24,
+      "value": "93.65",
+      "diff": -0.96,
+      "diffPercent": -1.01,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -924,11 +924,11 @@
         },
         {
           "date": "2026-09-24",
-          "value": 93.95
+          "value": 94.61
         },
         {
           "date": "2026-09-25",
-          "value": 93.72
+          "value": 93.65
         }
       ]
     },
@@ -2586,24 +2586,24 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "코스피 하락 우세",
-    "upProb": 53,
-    "downProb": 47,
-    "kospiUpProb": 26,
-    "kospiDownProb": 74,
+    "upProb": 49,
+    "downProb": 51,
+    "kospiUpProb": 37,
+    "kospiDownProb": 63,
     "timeframes": {
       "d1": {
-        "upProb": 83,
-        "downProb": 17,
+        "upProb": 82,
+        "downProb": 18,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 60,
-        "downProb": 40,
+        "upProb": 58,
+        "downProb": 42,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 50,
-        "downProb": 50,
+        "upProb": 49,
+        "downProb": 51,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2611,10 +2611,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 25일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1367.53원을 기록하고 있으며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 51%로 제시하며 약한 상승 압력을 시사합니다. 기술적 지표로는 RSI가 56.5로 중립을 나타내고 있으나, MACD 지표의 상승 전환 신호와 스토캐스틱 %K 값이 67.8%로 상승 모멘텀이 강화되고 있음을 보여줍니다. 환율의 핵심 지지선은 이동평균 20일선이자 볼린저밴드 중단인 1360.82원 수준이며, 단기 저항선은 1372원(이동평균 5일선)과 볼린저밴드 상단인 1391.07원으로 예상됩니다. 이러한 상황을 종합할 때, 환율은 단기적으로 1370원 중반대에서 1380원 초반대까지 상승할 가능성이 있으며, 1390원대 상단 돌파 시도도 배제할 수 없습니다. 따라서 현재 환율 수준에서는 매수 관점을 유지하되, 1360.82원 지지선을 하회할 경우 보수적 접근이 필요합니다. ① 한미 2년물 금리차 1.18% 확대 및 미 10년물 국채금리 5.162% 상승 등 달러 강세 요인 강화 ② DXY 단기 5일 모멘텀 1.07% 상승과 MACD의 상방 전환 등 기술적 지표의 상승 신호 ③ 정량예측모델의 51% 상승 확률 제시.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 7,080.92pt를 기록하며 최근 강한 상승세를 이어가고 있습니다. 그러나 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 26%로 매우 낮게 제시하며 단기적인 조정 가능성을 경고합니다. 기술적 지표상 RSI는 67.4로 과매수 구간에 근접하고 있으며, 지수는 볼린저밴드 상단인 7166.76pt에 근접해 추가 상승 여력은 제한적일 수 있습니다. 핵심 지지선은 이동평균 5일선인 6943.24pt이며, 그 아래로는 이동평균 20일선인 6843.88pt가 지지 역할을 할 것으로 보입니다. 단기 저항선은 볼린저밴드 상단인 7166.76pt로, 이 수준을 돌파하기는 쉽지 않을 전망입니다. 비록 반도체(SOX) 단기 5일 모멘텀 7.70%와 나스닥 선물 단기 흐름 3.69% 등 긍정적인 외부 요인이 있으나, 코스피 지수 자체의 모멘텀(5일 5.4%, 20일 4.01%)이 과열 양상을 보이는 점과 환율 상승 압력으로 인한 외국인 자본 유출 위험은 부담 요인입니다. 따라서 단기적인 추가 상승 시도(7100~7150pt)는 가능하나, 정량예측모델의 낮은 상승 확률과 기술적 과열 신호를 고려하여 이익 실현 후 관망하거나 보수적인 접근이 바람직합니다. ① 정량예측모델의 낮은 26% 상승 확률로 단기 조정 가능성 시사 ② RSI 67.4 등 기술적 과열 신호 및 볼린저밴드 상단 7166.76pt 근접 ③ 한미 금리차 확대 및 자본유출 위험에 따른 외국인 매도 압력 가능성.\n\n실전 투자 대응\n환율: 1360원대 초반 지지 확인 시 1370원 중반대 목표로 매수 관점 유지.\n코스피: 7100pt 이상에서 이익 실현 후 관망하며 6943.24pt 지지 확인 시 재진입 고려.",
     "lastAiUpdate": 1790296982941,
     "score": {
-      "upScore": 60.74058536438557,
-      "downScore": 52.736318314776526,
-      "kospiUpScore": 8.788898309344876,
-      "kospiDownScore": 25.62123215911686
+      "upScore": 54.5646178841543,
+      "downScore": 56.536341182461314,
+      "kospiUpScore": 14.172454095284284,
+      "kospiDownScore": 24.076184534564792
     }
   },
   "technicals": {
@@ -2646,13 +2646,6 @@
       "k": 67.8
     },
     "compoundSignals": [
-      {
-        "type": "DOLLAR_PANIC",
-        "up": 2.5,
-        "down": 0,
-        "block": "risk",
-        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
-      },
       {
         "type": "CAPITAL_OUTFLOW",
         "up": 2,
@@ -2701,5 +2694,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 58
   },
-  "lastUpdate": "2026. 9. 25. AM 1:03:27"
+  "lastUpdate": "2026. 9. 25. AM 1:07:42"
 }
