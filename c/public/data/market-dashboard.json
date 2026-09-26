@@ -1067,10 +1067,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-09-16",
-          "value": 3.75
-        },
-        {
           "date": "2026-09-17",
           "value": 4
         },
@@ -1104,6 +1100,10 @@
         },
         {
           "date": "2026-09-25",
+          "value": 4
+        },
+        {
+          "date": "2026-09-26",
           "value": 4
         }
       ],
@@ -1126,10 +1126,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-09-16",
-          "value": 3.5
-        },
-        {
           "date": "2026-09-17",
           "value": 3.75
         },
@@ -1163,6 +1159,10 @@
         },
         {
           "date": "2026-09-25",
+          "value": 3.75
+        },
+        {
+          "date": "2026-09-26",
           "value": 3.75
         }
       ],
@@ -2425,19 +2425,19 @@
       "history": [
         {
           "date": "2026-09-11",
-          "value": -0.725
+          "value": -0.475
         },
         {
           "date": "2026-09-14",
-          "value": -0.745
+          "value": -0.495
         },
         {
           "date": "2026-09-15",
-          "value": -0.765
+          "value": -0.515
         },
         {
           "date": "2026-09-16",
-          "value": -0.825
+          "value": -0.575
         },
         {
           "date": "2026-09-17",
@@ -2538,6 +2538,16 @@
       "enName": "Hyundai Motor",
       "price": 357000,
       "changePercent": "-0.97",
+      "trend": "down"
+    },
+    {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 116200,
+      "changePercent": "-1.94",
       "trend": "down"
     },
     {
@@ -2664,5 +2674,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 59
   },
-  "lastUpdate": "2026. 9. 26. AM 11:57:43"
+  "lastUpdate": "2026. 9. 26. PM 12:02:54"
 }
