@@ -1233,54 +1233,24 @@
       "unit": "억원",
       "block": "assets",
       "impact": "down",
-      "source": "금융투자협회 실시간",
+      "source": "금융투자협회/Yahoo",
       "description": "증시 대기 자금, 투자 심리 지표",
       "transform": "wonToEok",
-      "value": "1,009,826",
-      "diff": 28440,
-      "diffPercent": 2.9,
+      "value": "555786",
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-09-09",
-          "value": 1028462
+          "date": "202501",
+          "value": 555786
         },
         {
-          "date": "2026-09-10",
-          "value": 1076573
+          "date": "202502",
+          "value": 560529
         },
         {
-          "date": "2026-09-11",
-          "value": 1070560
-        },
-        {
-          "date": "2026-09-14",
-          "value": 1068179
-        },
-        {
-          "date": "2026-09-15",
-          "value": 1053275
-        },
-        {
-          "date": "2026-09-16",
-          "value": 995749
-        },
-        {
-          "date": "2026-09-17",
-          "value": 974911
-        },
-        {
-          "date": "2026-09-18",
-          "value": 983346
-        },
-        {
-          "date": "2026-09-21",
-          "value": 981386
-        },
-        {
-          "date": "2026-09-22",
-          "value": 1009826
+          "date": "202503",
+          "value": 584743
         }
       ]
     },
@@ -2600,7 +2570,7 @@
     "lastAiUpdate": 1790348300411,
     "score": {
       "upScore": 40.26739762675754,
-      "downScore": 60.14507129614745,
+      "downScore": 59.659039440613356,
       "kospiUpScore": 21.499385592685343,
       "kospiDownScore": 19.771773669827983
     }
@@ -2674,5 +2644,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 59
   },
-  "lastUpdate": "2026. 9. 26. AM 8:42:28"
+  "lastUpdate": "2026. 9. 26. AM 8:47:57"
 }
