@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.487",
+      "value": "101.489",
       "diff": 0.29,
       "diffPercent": 0.29,
       "trend": "up",
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "5.259",
+      "value": "5.264",
       "diff": 0.02,
       "diffPercent": 0.38,
       "trend": "up",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "16.01",
-      "diff": -0.06,
-      "diffPercent": -0.37,
+      "value": "16.03",
+      "diff": -0.04,
+      "diffPercent": -0.25,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 16.01
+          "value": 16.03
         }
       ]
     },
@@ -532,46 +532,46 @@
       "fredId": null,
       "isRealtime": true,
       "value": "184,535",
-      "diff": 0,
-      "diffPercent": 0,
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "diff": 1531.03,
+      "diffPercent": 0.84,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-09-14",
-          "value": 172260.23
+          "value": 170831.04
         },
         {
           "date": "2026-09-15",
-          "value": 168202.38
+          "value": 166806.86
         },
         {
           "date": "2026-09-16",
-          "value": 174765.8
+          "value": 173315.82
         },
         {
           "date": "2026-09-17",
-          "value": 174613.94
+          "value": 173165.23
         },
         {
           "date": "2026-09-18",
-          "value": 184357.84
+          "value": 182828.28
         },
         {
           "date": "2026-09-21",
-          "value": 192448.22
+          "value": 190851.54
         },
         {
           "date": "2026-09-22",
-          "value": 193021.89
+          "value": 191420.45
         },
         {
           "date": "2026-09-23",
-          "value": 197366.57
+          "value": 195729.08
         },
         {
           "date": "2026-09-28",
-          "value": 184535
+          "value": 183003.97
         },
         {
           "date": "2026-09-29",
@@ -590,9 +590,9 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,800.22",
-      "diff": -20.16,
-      "diffPercent": -0.08,
+      "value": "26,791.977",
+      "diff": -28.4,
+      "diffPercent": -0.11,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 26800.22
+          "value": 26791.98
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,663.82",
-      "diff": -19.87,
-      "diffPercent": -0.26,
+      "value": "7,661.65",
+      "diff": -22.04,
+      "diffPercent": -0.29,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 7663.82
+          "value": 7661.65
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "12,688.859",
-      "diff": 223.62,
-      "diffPercent": 1.79,
+      "value": "12,684.193",
+      "diff": 218.95,
+      "diffPercent": 1.76,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 12688.86
+          "value": 12684.19
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,614.25",
-      "diff": 48,
-      "diffPercent": 0.16,
+      "value": "30,605.75",
+      "diff": 39.5,
+      "diffPercent": 0.13,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 30614.25
+          "value": 30605.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,729.5",
-      "diff": -17.25,
-      "diffPercent": -0.22,
+      "value": "7,727",
+      "diff": -19.75,
+      "diffPercent": -0.25,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 7729.5
+          "value": 7727
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "91.68",
-      "diff": -0.92,
-      "diffPercent": -0.99,
+      "value": "91.61",
+      "diff": -0.99,
+      "diffPercent": -1.07,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 91.68
+          "value": 91.61
         }
       ]
     },
@@ -2261,7 +2261,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.78",
+      "value": "0.79",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,356.60",
-      "change": "+0.10",
-      "changePercent": "+0.01",
+      "value": "1,357.00",
+      "change": "+0.50",
+      "changePercent": "+0.04",
       "trend": "up"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "860.73",
-      "change": "-0.57",
-      "changePercent": "-0.07",
+      "value": "860.99",
+      "change": "-0.31",
+      "changePercent": "-0.04",
       "trend": "down"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,537.71",
-      "change": "-0.49",
-      "changePercent": "-0.03",
+      "value": "1,538.09",
+      "change": "-0.11",
+      "changePercent": "-0.01",
       "trend": "down"
     },
     {
@@ -2511,10 +2511,10 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "202.20",
-      "change": "-0.02",
-      "changePercent": "-0.01",
-      "trend": "down"
+      "value": "202.26",
+      "change": "+0.04",
+      "changePercent": "+0.02",
+      "trend": "up"
     }
   ],
   "stockPrices": [
@@ -2582,24 +2582,24 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 53,
-    "downProb": 47,
+    "upProb": 52,
+    "downProb": 48,
     "kospiUpProb": 45,
     "kospiDownProb": 55,
     "timeframes": {
       "d1": {
-        "upProb": 77,
-        "downProb": 23,
+        "upProb": 76,
+        "downProb": 24,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 59,
-        "downProb": 41,
+        "upProb": 58,
+        "downProb": 42,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 51,
-        "downProb": 49,
+        "upProb": 50,
+        "downProb": 50,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2607,9 +2607,9 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 29일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1355.08원이며, 정량예측모델은 향후 1~5거래일 내 51%의 상승 확률을 제시하며 상방 압력이 우세함을 시사합니다. 한미 2년물 금리차가 1.09%p로 확대된 가운데, 복합 위험 신호인 자본유출(금리차 확대 및 외인 매도 동시)까지 발생하여 원화 약세 압력이 강화될 것으로 예상됩니다. 기술적으로 환율은 단기 이동평균선인 5일선(1358.7원)과 20일선(1358.19원) 아래에 있으나, MACD 히스토그램이 양전하며 잠재적 상승 모멘텀을 형성하고 있어 1358원 부근의 저항선 돌파를 시도할 가능성이 높습니다. 이 저항선을 성공적으로 돌파할 경우, 볼린저밴드 상단인 1385.49원까지 추가 상승을 기대할 수 있으며, 단기 지지선은 볼린저밴드 하단인 1330.89원과 60일 지지선 1333.25원 수준입니다. 따라서 투자자들은 1358원 저항선 돌파 여부를 주시하며 돌파 시 추격 매수를 고려하거나, 단기 조정 시 1330원대 후반 지지 여부를 확인하며 매수 전략을 세울 수 있습니다. ① 한미 2년물 및 10년물 금리차 확대와 자본유출 복합 위험 신호 발생 ② 정량예측모델의 51% 상승 확률 우위 ③ MACD 히스토그램 양전으로 상승 모멘텀 형성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,870.81포인트로, 정량예측모델은 향후 1~5거래일 내 45%의 상승 확률을 제시하며 하방 압력이 우세할 가능성을 시사합니다. 미 10년물 국채금리(5.243%) 상승 추세와 나스닥 선물(-1.08%)의 부진한 흐름은 국내 증시에 부정적인 영향을 미칠 수 있으며, 특히 한미 금리차 확대에 따른 자본유출 복합 위험 신호는 외국인 매도 압력으로 작용하여 코스피 하락의 핵심 동인이 될 것으로 보입니다. 기술적으로 코스피는 5일 이동평균선(6973.42pt) 아래에서 단기 하락 압력을 받고 있으나, 20일선(6846.85pt)과 60일선(6808.11pt) 위에서 지지를 받고 있습니다. 이에 따라 단기적으로 6973pt 부근이 저항선으로 작용하고, 6808pt ~ 6846pt 구간에서 지지선 테스트가 예상됩니다. 만약 이 핵심 지지선 구간이 붕괴될 경우, 볼린저밴드 하단인 6525.54pt까지 추가 하락할 가능성도 있습니다. 투자자들은 자본유출 위험과 단기 하락 모멘텀을 고려하여 관망하거나, 지지선 이탈 시 매도 포지션을 검토하는 보수적인 대응이 필요합니다. ① 한미 금리차 확대 및 자본유출 복합 위험 신호 발생 ② 정량예측모델의 45% 상승 확률로 하방 압력 시사 ③ 나스닥 선물 부진과 코스피 단기 하락 모멘텀 지속.\n\n실전 투자 대응\n환율: 한미 금리차 및 자본유출로 1358원 저항 돌파 시도, 1370원대 중반까지 상승 가능성.\n코스피: 자본유출 압력으로 6808~6846pt 지지선 테스트 예상, 이탈 시 추가 하락 유의.",
     "lastAiUpdate": 1790692993630,
     "score": {
-      "upScore": 59.72649195491538,
-      "downScore": 53.18638127246432,
-      "kospiUpScore": 19.50759947638573,
+      "upScore": 59.712208839726706,
+      "downScore": 54.714602395455614,
+      "kospiUpScore": 19.499563553693793,
       "kospiDownScore": 23.57695550511339
     }
   },
@@ -2690,5 +2690,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 62
   },
-  "lastUpdate": "2026. 9. 29. PM 3:20:01"
+  "lastUpdate": "2026. 9. 29. PM 3:22:40"
 }
