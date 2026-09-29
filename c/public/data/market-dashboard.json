@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.426",
-      "diff": 0.23,
-      "diffPercent": 0.23,
+      "value": "101.445",
+      "diff": 0.24,
+      "diffPercent": 0.24,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 101.43
+          "value": 101.44
         }
       ]
     },
@@ -126,9 +126,9 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "5.251",
-      "diff": 0.01,
-      "diffPercent": 0.19,
+      "value": "5.264",
+      "diff": 0.02,
+      "diffPercent": 0.38,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -170,7 +170,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 5.25
+          "value": 5.26
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "15.86",
-      "diff": -0.21,
-      "diffPercent": -1.31,
+      "value": "15.82",
+      "diff": -0.25,
+      "diffPercent": -1.56,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 15.86
+          "value": 15.82
         }
       ]
     },
@@ -590,11 +590,11 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,824.354",
-      "diff": 3.97,
-      "diffPercent": 0.01,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "26,804.15",
+      "diff": -16.23,
+      "diffPercent": -0.06,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-09-16",
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 26824.35
+          "value": 26804.15
         }
       ]
     },
@@ -649,9 +649,9 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,672.44",
-      "diff": -11.25,
-      "diffPercent": -0.15,
+      "value": "7,666.81",
+      "diff": -16.88,
+      "diffPercent": -0.22,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 7672.44
+          "value": 7666.81
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "12,729.726",
-      "diff": 264.49,
-      "diffPercent": 2.12,
+      "value": "12,703.393",
+      "diff": 238.15,
+      "diffPercent": 1.91,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 12729.73
+          "value": 12703.39
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "30,692.25",
-      "diff": 126,
-      "diffPercent": 0.41,
+      "value": "30,641.75",
+      "diff": 75.5,
+      "diffPercent": 0.25,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 30692.25
+          "value": 30641.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,742.5",
-      "diff": -4.25,
-      "diffPercent": -0.05,
+      "value": "7,733.5",
+      "diff": -13.25,
+      "diffPercent": -0.17,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 7742.5
+          "value": 7733.5
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "91.31",
-      "diff": -1.29,
-      "diffPercent": -1.39,
+      "value": "91.52",
+      "diff": -1.08,
+      "diffPercent": -1.17,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 91.31
+          "value": 91.52
         }
       ]
     },
@@ -2261,7 +2261,7 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "0.78",
+      "value": "0.79",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -2303,7 +2303,7 @@
         },
         {
           "date": "2026-09-29",
-          "value": 0.77
+          "value": 0.78
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,356.60",
-      "change": "+0.10",
-      "changePercent": "+0.01",
+      "value": "1,357.20",
+      "change": "+0.70",
+      "changePercent": "+0.05",
       "trend": "up"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "860.98",
-      "change": "-0.32",
-      "changePercent": "-0.04",
+      "value": "861.03",
+      "change": "-0.27",
+      "changePercent": "-0.03",
       "trend": "down"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "202.23",
-      "change": "+0.01",
-      "changePercent": "+0.00",
+      "value": "202.28",
+      "change": "+0.06",
+      "changePercent": "+0.03",
       "trend": "up"
     }
   ],
@@ -2559,16 +2559,6 @@
       "trend": "down"
     },
     {
-      "id": "naver",
-      "symbol": "035420",
-      "market": "domestic",
-      "name": "네이버",
-      "enName": "NAVER",
-      "price": 194900,
-      "changePercent": "-1.42",
-      "trend": "down"
-    },
-    {
       "id": "kakao",
       "symbol": "035720",
       "market": "domestic",
@@ -2582,8 +2572,8 @@
   "forecast": {
     "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 52,
-    "downProb": 48,
+    "upProb": 53,
+    "downProb": 47,
     "kospiUpProb": 45,
     "kospiDownProb": 55,
     "timeframes": {
@@ -2607,10 +2597,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 9월 29일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1355.08원이며, 정량예측모델은 향후 1~5거래일 내 51%의 상승 확률을 제시하며 상방 압력이 우세함을 시사합니다. 한미 2년물 금리차가 1.09%p로 확대된 가운데, 복합 위험 신호인 자본유출(금리차 확대 및 외인 매도 동시)까지 발생하여 원화 약세 압력이 강화될 것으로 예상됩니다. 기술적으로 환율은 단기 이동평균선인 5일선(1358.7원)과 20일선(1358.19원) 아래에 있으나, MACD 히스토그램이 양전하며 잠재적 상승 모멘텀을 형성하고 있어 1358원 부근의 저항선 돌파를 시도할 가능성이 높습니다. 이 저항선을 성공적으로 돌파할 경우, 볼린저밴드 상단인 1385.49원까지 추가 상승을 기대할 수 있으며, 단기 지지선은 볼린저밴드 하단인 1330.89원과 60일 지지선 1333.25원 수준입니다. 따라서 투자자들은 1358원 저항선 돌파 여부를 주시하며 돌파 시 추격 매수를 고려하거나, 단기 조정 시 1330원대 후반 지지 여부를 확인하며 매수 전략을 세울 수 있습니다. ① 한미 2년물 및 10년물 금리차 확대와 자본유출 복합 위험 신호 발생 ② 정량예측모델의 51% 상승 확률 우위 ③ MACD 히스토그램 양전으로 상승 모멘텀 형성.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 6,870.81포인트로, 정량예측모델은 향후 1~5거래일 내 45%의 상승 확률을 제시하며 하방 압력이 우세할 가능성을 시사합니다. 미 10년물 국채금리(5.243%) 상승 추세와 나스닥 선물(-1.08%)의 부진한 흐름은 국내 증시에 부정적인 영향을 미칠 수 있으며, 특히 한미 금리차 확대에 따른 자본유출 복합 위험 신호는 외국인 매도 압력으로 작용하여 코스피 하락의 핵심 동인이 될 것으로 보입니다. 기술적으로 코스피는 5일 이동평균선(6973.42pt) 아래에서 단기 하락 압력을 받고 있으나, 20일선(6846.85pt)과 60일선(6808.11pt) 위에서 지지를 받고 있습니다. 이에 따라 단기적으로 6973pt 부근이 저항선으로 작용하고, 6808pt ~ 6846pt 구간에서 지지선 테스트가 예상됩니다. 만약 이 핵심 지지선 구간이 붕괴될 경우, 볼린저밴드 하단인 6525.54pt까지 추가 하락할 가능성도 있습니다. 투자자들은 자본유출 위험과 단기 하락 모멘텀을 고려하여 관망하거나, 지지선 이탈 시 매도 포지션을 검토하는 보수적인 대응이 필요합니다. ① 한미 금리차 확대 및 자본유출 복합 위험 신호 발생 ② 정량예측모델의 45% 상승 확률로 하방 압력 시사 ③ 나스닥 선물 부진과 코스피 단기 하락 모멘텀 지속.\n\n실전 투자 대응\n환율: 한미 금리차 및 자본유출로 1358원 저항 돌파 시도, 1370원대 중반까지 상승 가능성.\n코스피: 자본유출 압력으로 6808~6846pt 지지선 테스트 예상, 이탈 시 추가 하락 유의.",
     "lastAiUpdate": 1790692993630,
     "score": {
-      "upScore": 57.9684880915981,
-      "downScore": 54.200835211664746,
-      "kospiUpScore": 19.57255567835398,
-      "kospiDownScore": 23.57208006125508
+      "upScore": 59.757263007019596,
+      "downScore": 53.24265677374922,
+      "kospiUpScore": 19.558246953167547,
+      "kospiDownScore": 23.57695550511339
     }
   },
   "technicals": {
@@ -2690,5 +2680,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 62
   },
-  "lastUpdate": "2026. 9. 29. PM 3:07:47"
+  "lastUpdate": "2026. 9. 29. PM 3:13:00"
 }
