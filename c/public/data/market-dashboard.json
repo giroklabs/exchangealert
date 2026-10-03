@@ -1295,16 +1295,12 @@
       "source": "한국은행",
       "description": "한국 물가 지표, 금리 정책 영향",
       "cycle": "M",
-      "value": "120.05",
-      "diff": 0.28,
-      "diffPercent": 0.23,
+      "value": "120.43",
+      "diff": 0.38,
+      "diffPercent": 0.32,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-11",
-          "value": 117.2
-        },
         {
           "date": "2025-12",
           "value": 117.57
@@ -1340,6 +1336,10 @@
         {
           "date": "2026-08",
           "value": 120.05
+        },
+        {
+          "date": "2026-09",
+          "value": 120.43
         }
       ]
     },
@@ -2600,7 +2600,7 @@
     "lastAiUpdate": 1790951617075,
     "score": {
       "upScore": 45.33023921945236,
-      "downScore": 61.00602465614637,
+      "downScore": 61.09005983012668,
       "kospiUpScore": 31.290920695061395,
       "kospiDownScore": 23.589903354962477
     }
@@ -2674,5 +2674,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 66
   },
-  "lastUpdate": "2026. 10. 3. PM 11:03:06"
+  "lastUpdate": "2026. 10. 3. PM 11:07:28"
 }
