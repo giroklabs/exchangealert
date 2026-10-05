@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "102.12",
+      "value": "102.125",
       "diff": 0.19,
       "diffPercent": 0.19,
       "trend": "up",
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-10-05",
-          "value": 102.12
+          "value": 102.13
         }
       ]
     },
@@ -2555,6 +2555,16 @@
       "trend": "neutral"
     },
     {
+      "id": "naver",
+      "symbol": "035420",
+      "market": "domestic",
+      "name": "네이버",
+      "enName": "NAVER",
+      "price": 192200,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
       "id": "kakao",
       "symbol": "035720",
       "market": "domestic",
@@ -2676,5 +2686,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 67
   },
-  "lastUpdate": "2026. 10. 5. PM 9:27:43"
+  "lastUpdate": "2026. 10. 5. PM 9:33:05"
 }
