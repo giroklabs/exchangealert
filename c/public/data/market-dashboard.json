@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.855",
-      "diff": -0.31,
-      "diffPercent": -0.3,
+      "value": "101.854",
+      "diff": -0.32,
+      "diffPercent": -0.31,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-10-06",
-          "value": 101.86
+          "value": 101.85
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "31,493",
-      "diff": 175.25,
+      "value": "31,493.25",
+      "diff": 175.5,
       "diffPercent": 0.56,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-10-06",
-          "value": 31493
+          "value": 31493.25
         }
       ]
     },
@@ -826,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,877",
-      "diff": 50.75,
+      "value": "7,876.75",
+      "diff": 50.5,
       "diffPercent": 0.65,
       "trend": "up",
       "realizedImpact": "down",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-10-06",
-          "value": 7877
+          "value": 7876.75
         }
       ]
     },
@@ -2563,16 +2563,6 @@
       "price": 191100,
       "changePercent": "+0.00",
       "trend": "neutral"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 33500,
-      "changePercent": "+0.00",
-      "trend": "neutral"
     }
   ],
   "forecast": {
@@ -2604,7 +2594,7 @@
     "lastAiUpdate": 1791304674230,
     "score": {
       "upScore": 52.59376182138237,
-      "downScore": 56.38095155346662,
+      "downScore": 56.38077142214589,
       "kospiUpScore": 22.832450129108146,
       "kospiDownScore": 20.155122514771524
     }
@@ -2678,5 +2668,5 @@
     "kospiRecentHitRate": 40,
     "kospiTotal": 68
   },
-  "lastUpdate": "2026. 10. 6. PM 8:42:55"
+  "lastUpdate": "2026. 10. 6. PM 8:48:05"
 }
