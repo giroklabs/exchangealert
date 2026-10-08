@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "102.11",
-      "diff": -0.13,
-      "diffPercent": -0.13,
+      "value": "102.101",
+      "diff": -0.14,
+      "diffPercent": -0.14,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-10-08",
-          "value": 102.11
+          "value": 102.1
         }
       ]
     },
@@ -2545,6 +2545,16 @@
       "trend": "down"
     },
     {
+      "id": "kia",
+      "symbol": "000270",
+      "market": "domestic",
+      "name": "기아",
+      "enName": "Kia",
+      "price": 107000,
+      "changePercent": "-2.37",
+      "trend": "down"
+    },
+    {
       "id": "naver",
       "symbol": "035420",
       "market": "domestic",
@@ -2668,5 +2678,5 @@
     "kospiRecentHitRate": 60,
     "kospiTotal": 70
   },
-  "lastUpdate": "2026. 10. 8. PM 9:42:40"
+  "lastUpdate": "2026. 10. 8. PM 9:47:57"
 }
