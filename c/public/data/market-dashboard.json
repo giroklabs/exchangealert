@@ -2576,8 +2576,8 @@
     "kospiDownProb": 51,
     "timeframes": {
       "d1": {
-        "upProb": 39,
-        "downProb": 61,
+        "upProb": 42,
+        "downProb": 58,
         "basis": "Regime Switch 가동(매크로 0%+오버나잇 집중)"
       },
       "d5": {
@@ -2662,13 +2662,13 @@
   },
   "kospiSentiment": "보합",
   "backtest": {
-    "total": 80,
-    "hitRate": 44,
-    "recentHitRate": 60,
-    "streak": "연속 1회 적중",
-    "kospiHitRate": 58,
+    "total": 81,
+    "hitRate": 43,
+    "recentHitRate": 40,
+    "streak": "연속 1회 미적중",
+    "kospiHitRate": 59,
     "kospiRecentHitRate": 100,
-    "kospiTotal": 77
+    "kospiTotal": 78
   },
-  "lastUpdate": "2026. 10. 17. PM 3:03:10"
+  "lastUpdate": "2026. 10. 17. PM 3:07:37"
 }
