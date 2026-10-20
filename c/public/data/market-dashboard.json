@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,753",
-      "diff": 361.5,
-      "diffPercent": 1.23,
+      "value": "29,755.25",
+      "diff": 363.75,
+      "diffPercent": 1.24,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-10-19",
-          "value": 29753
+          "value": 29755.25
         }
       ]
     },
@@ -826,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,743.5",
-      "diff": 39.25,
+      "value": "7,743.75",
+      "diff": 39.5,
       "diffPercent": 0.51,
       "trend": "up",
       "realizedImpact": "down",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-10-19",
-          "value": 7743.5
+          "value": 7743.75
         }
       ]
     },
@@ -1897,11 +1897,11 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "521",
-      "diff": 1715,
-      "diffPercent": 143.63,
+      "value": "37",
+      "diff": 1231,
+      "diffPercent": 103.1,
       "trend": "up",
-      "realizedImpact": "down",
+      "realizedImpact": "neutral",
       "history": [
         {
           "date": "2026-02-27",
@@ -2005,7 +2005,7 @@
         },
         {
           "date": "2026-10-20",
-          "value": 521
+          "value": 37
         }
       ]
     },
@@ -2018,9 +2018,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "-1,148",
-      "diff": -3104,
-      "diffPercent": -158.69,
+      "value": "-1,668",
+      "diff": -3624,
+      "diffPercent": -185.28,
       "trend": "down",
       "history": [
         {
@@ -2125,7 +2125,7 @@
         },
         {
           "date": "2026-10-20",
-          "value": -1148
+          "value": -1668
         }
       ]
     },
@@ -2138,9 +2138,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "555",
-      "diff": 1512,
-      "diffPercent": 157.99,
+      "value": "1,434",
+      "diff": 2391,
+      "diffPercent": 249.84,
       "trend": "up",
       "history": [
         {
@@ -2245,7 +2245,7 @@
         },
         {
           "date": "2026-10-20",
-          "value": 555
+          "value": 1434
         }
       ]
     },
@@ -2476,9 +2476,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,330.50",
-      "change": "-1.60",
-      "changePercent": "-0.12",
+      "value": "1,327.80",
+      "change": "-4.30",
+      "changePercent": "-0.32",
       "trend": "down"
     },
     {
@@ -2487,9 +2487,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "838.41",
-      "change": "-2.48",
-      "changePercent": "-0.29",
+      "value": "837.39",
+      "change": "-3.50",
+      "changePercent": "-0.42",
       "trend": "down"
     },
     {
@@ -2497,9 +2497,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,490.47",
-      "change": "-3.55",
-      "changePercent": "-0.24",
+      "value": "1,489.19",
+      "change": "-4.83",
+      "changePercent": "-0.32",
       "trend": "down"
     },
     {
@@ -2507,9 +2507,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "198.90",
-      "change": "-0.44",
-      "changePercent": "-0.22",
+      "value": "198.72",
+      "change": "-0.62",
+      "changePercent": "-0.31",
       "trend": "down"
     }
   ],
@@ -2520,8 +2520,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 216000,
-      "changePercent": "-0.92",
+      "price": 213500,
+      "changePercent": "-2.06",
       "trend": "down"
     },
     {
@@ -2530,8 +2530,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1247000,
-      "changePercent": "-2.35",
+      "price": 1226000,
+      "changePercent": "-3.99",
       "trend": "down"
     },
     {
@@ -2540,8 +2540,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 324000,
-      "changePercent": "-0.61",
+      "price": 322000,
+      "changePercent": "-1.23",
       "trend": "down"
     },
     {
@@ -2550,9 +2550,9 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 116100,
-      "changePercent": "+0.09",
-      "trend": "up"
+      "price": 115500,
+      "changePercent": "-0.43",
+      "trend": "down"
     },
     {
       "id": "naver",
@@ -2560,9 +2560,9 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 184300,
-      "changePercent": "+0.77",
-      "trend": "up"
+      "price": 182900,
+      "changePercent": "+0.00",
+      "trend": "neutral"
     },
     {
       "id": "kakao",
@@ -2570,9 +2570,9 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 32350,
-      "changePercent": "+0.78",
-      "trend": "up"
+      "price": 32025,
+      "changePercent": "-0.23",
+      "trend": "down"
     }
   ],
   "forecast": {
@@ -2580,8 +2580,8 @@
     "kospiSentiment": "코스피 하락 우세",
     "upProb": 44,
     "downProb": 56,
-    "kospiUpProb": 43,
-    "kospiDownProb": 57,
+    "kospiUpProb": 39,
+    "kospiDownProb": 61,
     "timeframes": {
       "d1": {
         "upProb": 55,
@@ -2604,8 +2604,8 @@
     "lastAiUpdate": 1792452811876,
     "score": {
       "upScore": 46.87536055325429,
-      "downScore": 60.40149079365669,
-      "kospiUpScore": 18.316414879145203,
+      "downScore": 60.40026788490957,
+      "kospiUpScore": 15.417910576582603,
       "kospiDownScore": 24.004514652746373
     }
   },
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 79
   },
-  "lastUpdate": "2026. 10. 20. AM 12:03:43"
+  "lastUpdate": "2026. 10. 20. AM 12:07:45"
 }
