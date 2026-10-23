@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.73",
-      "diff": 0.12,
-      "diffPercent": 0.12,
+      "value": "101.745",
+      "diff": 0.14,
+      "diffPercent": 0.14,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-10-23",
-          "value": 101.73
+          "value": 101.75
         }
       ]
     },
@@ -767,11 +767,11 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "29,141.5",
-      "diff": -0.5,
-      "diffPercent": 0,
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "29,147.25",
+      "diff": 5.25,
+      "diffPercent": 0.02,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
           "date": "2026-10-12",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-10-23",
-          "value": 29141.5
+          "value": 29147.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,687.5",
-      "diff": -17,
-      "diffPercent": -0.22,
+      "value": "7,689",
+      "diff": -15.5,
+      "diffPercent": -0.2,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-10-23",
-          "value": 7687.5
+          "value": 7689
         }
       ]
     },
@@ -1901,9 +1901,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-9,846",
-      "diff": -8652,
-      "diffPercent": -724.62,
+      "value": "-9,842",
+      "diff": -8648,
+      "diffPercent": -724.29,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2009,7 +2009,7 @@
         },
         {
           "date": "2026-10-23",
-          "value": -9846
+          "value": -9842
         }
       ]
     },
@@ -2142,9 +2142,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "473",
-      "diff": 1430,
-      "diffPercent": 149.43,
+      "value": "470",
+      "diff": 1427,
+      "diffPercent": 149.11,
       "trend": "up",
       "history": [
         {
@@ -2249,7 +2249,7 @@
         },
         {
           "date": "2026-10-23",
-          "value": 473
+          "value": 470
         }
       ]
     },
@@ -2480,8 +2480,8 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,325.70",
-      "change": "-1.50",
+      "value": "1,325.80",
+      "change": "-1.40",
       "changePercent": "-0.11",
       "trend": "down"
     },
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "846.50",
-      "change": "+2.31",
-      "changePercent": "+0.27",
+      "value": "846.32",
+      "change": "+2.13",
+      "changePercent": "+0.25",
       "trend": "up"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,484.72",
-      "change": "-0.88",
-      "changePercent": "-0.06",
+      "value": "1,484.43",
+      "change": "-1.17",
+      "changePercent": "-0.08",
       "trend": "down"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "198.78",
-      "change": "-0.05",
-      "changePercent": "-0.03",
+      "value": "198.79",
+      "change": "-0.04",
+      "changePercent": "-0.02",
       "trend": "down"
     }
   ],
@@ -2524,8 +2524,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 213500,
-      "changePercent": "-0.47",
+      "price": 213000,
+      "changePercent": "-0.70",
       "trend": "down"
     },
     {
@@ -2544,8 +2544,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 292000,
-      "changePercent": "-3.15",
+      "price": 291500,
+      "changePercent": "-3.32",
       "trend": "down"
     },
     {
@@ -2580,10 +2580,10 @@
     }
   ],
   "forecast": {
-    "sentiment": "환율 상승 우세",
+    "sentiment": "보합",
     "kospiSentiment": "보합",
-    "upProb": 56,
-    "downProb": 44,
+    "upProb": 55,
+    "downProb": 45,
     "kospiUpProb": 48,
     "kospiDownProb": 52,
     "timeframes": {
@@ -2607,8 +2607,8 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 10월 23일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1325.36원으로, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 55%로 전망하고 있으며 기술적 강도는 보합(Neutral)을 나타내고 있습니다. 현재 환율은 단기 이동평균선(MA5 1327.55원, MA20 1341.17원)과 볼린저밴드 중단(1341.17원) 아래에 위치하며 단기 하락 모멘텀을 보였으나, RSI 31%와 Stochastic 15.9%는 단기 과매도 구간에 진입했음을 시사하여 반등 가능성이 열려있습니다. 핵심 지지선은 볼린저밴드 하단인 1319.76원과 60일 지지선인 1319.52원 수준이며, 1차 저항선은 MA5인 1327.55원, 2차 저항선은 MA20 및 볼린저밴드 중단인 1341.17원이 될 것으로 예상됩니다. 전반적으로 달러패닉 복합 위험 신호가 발생하며 신흥국 자본 이탈 가속화 가능성이 제기되고, 한미 2년물 금리차가 1.14%로 확대되면서 달러 강세 압력이 강화될 수 있어 환율은 하방 경직성을 보이며 재차 상승 시도를 할 것으로 판단됩니다. 따라서 단기 과매도 구간을 활용한 저점 매수 후 1340원대 이상에서의 매도를 고려하는 전략이 유효해 보입니다. ① 한미 2년물 금리차 1.14% 확대 및 달러패닉 신호 발생으로 달러 강세 압력 강화 ② RSI 31% 및 Stochastic 15.9% 등 단기 과매도 지표에 따른 기술적 반등 가능성 ③ 볼린저밴드 하단 1319.76원 및 60일 지지선 1319.52원에서의 지지력 테스트.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 5,550.3포인트로, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 48%로 낮게 전망하며 기술적 강도는 침체(Bearish) 신호를 보내고 있습니다. 나스닥 선물 단기 흐름(-0.83%)과 반도체(SOX) 단기 5일 모멘텀(-7.33%)의 급락은 국내 증시, 특히 반도체 중심의 대형주에 대한 강한 하방 압력으로 작용할 것으로 예상됩니다. 코스피는 MA5(5628.1pt), MA20(6341.74pt), MA60(6539.75pt) 등 모든 이동평균선 아래에 위치하며 강한 하락 추세 속에 있으며, 최근 추세도 지속적인 하락세를 나타냈습니다. 하지만 RSI 19.3과 볼린저밴드 하단(5141.95pt)에 근접한 현 지수 레벨은 단기적으로 과매도 상태임을 강하게 시사하며 기술적 반등 가능성을 내포하고 있습니다. 핵심 지지선은 5262.77포인트이며, 반등 시 1차 저항선은 MA5인 5628.1포인트, 강력한 저항선은 7216.62포인트입니다. 전반적인 매크로 환경은 주식 시장에 비우호적이나, 단기적인 낙폭 과대에 따른 기술적 반등을 염두에 두고 신중한 관망 전략이 요구됩니다. ① 반도체(SOX) 모멘텀 -7.33% 급락 및 나스닥 선물 하락으로 인한 강한 하방 압력 ② RSI 19.3 및 볼린저밴드 하단 근접 등 극심한 단기 과매도 상태 ③ 5262.77포인트의 핵심 지지선 레벨에서의 지지력 테스트.\n\n실전 투자 대응\n환율: 달러패닉 신호 및 과매도에 기반한 1320원 초반대 저점 매수 후 1340원대 매도 고려.\n코스피: SOX 급락에도 불구, 극심한 과매도로 5262.77pt 지지 확인 후 신중한 관망.",
     "lastAiUpdate": 1792751594885,
     "score": {
-      "upScore": 65.97001966412542,
-      "downScore": 50.828506218337495,
+      "upScore": 65.01681314528969,
+      "downScore": 52.22500398274642,
       "kospiUpScore": 26.73588104999671,
       "kospiDownScore": 28.933285251678267
     }
@@ -2690,5 +2690,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 82
   },
-  "lastUpdate": "2026. 10. 23. AM 10:34:50"
+  "lastUpdate": "2026. 10. 23. AM 10:37:39"
 }
