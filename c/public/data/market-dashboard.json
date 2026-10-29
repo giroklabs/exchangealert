@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.913",
-      "diff": -0.28,
-      "diffPercent": -0.27,
+      "value": "101.915",
+      "diff": -0.27,
+      "diffPercent": -0.26,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-10-29",
-          "value": 101.91
+          "value": 101.92
         }
       ]
     },
@@ -2515,6 +2515,16 @@
   ],
   "stockPrices": [
     {
+      "id": "samsung",
+      "symbol": "005930",
+      "market": "domestic",
+      "name": "삼성전자",
+      "enName": "Samsung Electronics",
+      "price": 232000,
+      "changePercent": "+0.00",
+      "trend": "neutral"
+    },
+    {
       "id": "hynix",
       "symbol": "000660",
       "market": "domestic",
@@ -2668,5 +2678,5 @@
     "kospiRecentHitRate": 20,
     "kospiTotal": 88
   },
-  "lastUpdate": "2026. 10. 29. PM 9:58:02"
+  "lastUpdate": "2026. 10. 29. PM 10:03:25"
 }
