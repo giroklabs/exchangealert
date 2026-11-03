@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.877",
+      "value": "101.882",
       "diff": 0.13,
       "diffPercent": 0.13,
       "trend": "up",
@@ -1295,16 +1295,12 @@
       "source": "한국은행",
       "description": "한국 물가 지표, 금리 정책 영향",
       "cycle": "M",
-      "value": "120.43",
-      "diff": 0.38,
-      "diffPercent": 0.32,
+      "value": "120.73",
+      "diff": 0.3,
+      "diffPercent": 0.25,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-12",
-          "value": 117.57
-        },
         {
           "date": "2026-01",
           "value": 118.03
@@ -1340,6 +1336,10 @@
         {
           "date": "2026-09",
           "value": 120.43
+        },
+        {
+          "date": "2026-10",
+          "value": 120.73
         }
       ]
     },
@@ -2604,7 +2604,7 @@
     "lastAiUpdate": 1793745088328,
     "score": {
       "upScore": 47.39812415139955,
-      "downScore": 54.14106272954032,
+      "downScore": 54.17028446717893,
       "kospiUpScore": 17.88664276321898,
       "kospiDownScore": 22.822145812153586
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 3. PM 11:03:28"
+  "lastUpdate": "2026. 11. 3. PM 11:07:46"
 }
