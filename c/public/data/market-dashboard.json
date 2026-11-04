@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "101.509",
+      "value": "101.514",
       "diff": -0.36,
       "diffPercent": -0.35,
       "trend": "down",
@@ -1473,16 +1473,12 @@
       "source": "한국은행",
       "description": "수지 흑자 시 원화 가치 안정",
       "cycle": "M",
-      "value": "46,113",
-      "diff": 4035,
-      "diffPercent": 9.59,
+      "value": "61,457.5",
+      "diff": 15344.5,
+      "diffPercent": 33.28,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2025-11",
-          "value": 12898
-        },
         {
           "date": "2025-12",
           "value": 18702.6
@@ -1518,6 +1514,10 @@
         {
           "date": "2026-08",
           "value": 46113
+        },
+        {
+          "date": "2026-09",
+          "value": 61457.5
         }
       ]
     },
@@ -2604,7 +2604,7 @@
     "lastAiUpdate": 1793831945551,
     "score": {
       "upScore": 48.35393921753001,
-      "downScore": 58.54751165709834,
+      "downScore": 58.6192814300327,
       "kospiUpScore": 18.865267173659234,
       "kospiDownScore": 16.748439156997986
     }
@@ -2678,5 +2678,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 4. PM 10:57:55"
+  "lastUpdate": "2026. 11. 4. PM 11:02:58"
 }
