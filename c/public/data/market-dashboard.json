@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "102.035",
-      "diff": 0.48,
-      "diffPercent": 0.47,
+      "value": "102.042",
+      "diff": 0.49,
+      "diffPercent": 0.48,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-11-06",
-          "value": 102.03
+          "value": 102.04
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "27.26",
-      "diff": -0.92,
-      "diffPercent": -3.26,
+      "value": "27.36",
+      "diff": -0.82,
+      "diffPercent": -2.91,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-11-06",
-          "value": 27.26
+          "value": 27.36
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,113.25",
-      "diff": 361.25,
-      "diffPercent": 1.35,
+      "value": "27,110.25",
+      "diff": 358.25,
+      "diffPercent": 1.34,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-06",
-          "value": 27113.25
+          "value": 27110.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,390.75",
-      "diff": 7.75,
-      "diffPercent": 0.1,
+      "value": "7,389",
+      "diff": 6,
+      "diffPercent": 0.08,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-06",
-          "value": 7390.75
+          "value": 7389
         }
       ]
     },
@@ -2480,9 +2480,9 @@
       "name": "미국 달러",
       "unit": "원",
       "flag": "🇺🇸",
-      "value": "1,359.50",
-      "change": "+10.30",
-      "changePercent": "+0.76",
+      "value": "1,358.60",
+      "change": "+9.40",
+      "changePercent": "+0.70",
       "trend": "up"
     },
     {
@@ -2491,9 +2491,9 @@
       "unit": "원",
       "flag": "🇯🇵",
       "is100Yen": true,
-      "value": "858.51",
-      "change": "+5.37",
-      "changePercent": "+0.63",
+      "value": "858.11",
+      "change": "+4.97",
+      "changePercent": "+0.58",
       "trend": "up"
     },
     {
@@ -2501,9 +2501,9 @@
       "name": "유럽 유로",
       "unit": "원",
       "flag": "🇪🇺",
-      "value": "1,518.15",
-      "change": "+4.55",
-      "changePercent": "+0.30",
+      "value": "1,517.15",
+      "change": "+3.55",
+      "changePercent": "+0.23",
       "trend": "up"
     },
     {
@@ -2511,9 +2511,9 @@
       "name": "중국 위안",
       "unit": "원",
       "flag": "🇨🇳",
-      "value": "203.80",
-      "change": "+1.38",
-      "changePercent": "+0.68",
+      "value": "203.71",
+      "change": "+1.29",
+      "changePercent": "+0.64",
       "trend": "up"
     }
   ],
@@ -2608,7 +2608,7 @@
     "lastAiUpdate": 1793968395668,
     "score": {
       "upScore": 60.52119017204583,
-      "downScore": 56.18337816385467,
+      "downScore": 56.17997198262022,
       "kospiUpScore": 19.305257636289216,
       "kospiDownScore": 31.809648219555655
     }
@@ -2690,5 +2690,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 6. PM 1:03:35"
+  "lastUpdate": "2026. 11. 6. PM 1:07:59"
 }
