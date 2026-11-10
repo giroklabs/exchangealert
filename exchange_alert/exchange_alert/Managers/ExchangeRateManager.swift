@@ -919,7 +919,18 @@ class ExchangeRateManager: ObservableObject {
         print("   - 알림 타입: \(alertSettings.thresholdType.rawValue)")
         print("   - 알림 활성화: \(alertSettings.isEnabled)")
         print("   - 마지막 알림 시간: \(alertSettings.lastNotificationTime?.description ?? "없음")")
-        
+
+        // 조건을 처음 넘은 순간에만 진행
+        guard AlertTriggerGate.shouldFire(currency: currency, settings: alertSettings, rate: dealBasR) else {
+            return
+        }
+
+        // 같은 변동을 서버 푸시로 이미 받았다면 로컬 알림 생략
+        if AlertTriggerGate.wasServerPushRecentlyReceived(for: currency) {
+            print("⚠️ [중복방지] \(currency.rawValue): 서버 푸시가 이미 도착함 → 로컬 알림 생략")
+            return
+        }
+
         var shouldNotify = false
         var message = ""
         
@@ -1058,7 +1069,7 @@ class ExchangeRateManager: ObservableObject {
                     "thresholdType": settings.thresholdType.rawValue,
                     "isEnabled": settings.isEnabled,
                     "updatedAt": FieldValue.serverTimestamp()
-                ], forDocument: docRef)
+                ], forDocument: docRef, merge: true) // 서버가 관리하는 쿨다운·발송 상태 필드를 보존
             } else {
                 batch.deleteDocument(docRef)
             }
