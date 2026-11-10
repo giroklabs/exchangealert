@@ -2,16 +2,24 @@ import admin from 'firebase-admin';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+    EXPECTED_PROJECT_ID,
+    MAX_RATE_AGE_MINUTES,
+    areRatesFresh,
+    decideAlert,
+    isBadTokenError,
+    isConfigurationError,
+    isWithinCooldown,
+    parseRate,
+} from './fcm-alert-logic.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const SERVICE_ACCOUNT = process.env.FIREBASE_SERVICE_ACCOUNT;
 const RATES_FILE = path.join(__dirname, '..', '..', 'data', 'exchange-rates.json');
-const COOLDOWN_MINUTES = 10;
+const SEND_CHUNK_SIZE = 500;
 
-function getPushWindow(currency) {
-    const now = new Date();
+function getPushWindow(currency, now) {
     const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
     const yyyy = kst.getUTCFullYear();
     const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
@@ -21,142 +29,198 @@ function getPushWindow(currency) {
     return `${currency}_${yyyy}-${mm}-${dd}_${hh}:${min}`;
 }
 
-async function main() {
-    console.log('🚀 [안정화 버전] FCM 알림 스크립트 시작...');
-
-    if (!SERVICE_ACCOUNT) {
-        console.error('❌ FIREBASE_SERVICE_ACCOUNT 환경변수가 설정되지 않았습니다.');
-        return;
-    }
-
-    try {
-        const serviceAccount = JSON.parse(SERVICE_ACCOUNT);
-        if (admin.apps.length === 0) {
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount)
-            });
-        }
-    } catch (e) {
-        console.error('❌ Firebase 초기화 실패:', e.message);
-        return;
-    }
-
-    const db = admin.firestore();
-
-    if (!fs.existsSync(RATES_FILE)) {
-        console.error('❌ 환율 데이터 파일이 없습니다.');
-        return;
-    }
-
-    let rates = JSON.parse(fs.readFileSync(RATES_FILE, 'utf8'));
-
-    console.log('📡 대상 조회 중...');
-    const alertsSnapshot = await db.collection('alerts').where('isEnabled', '==', true).get();
-    
-    if (alertsSnapshot.empty) {
-        console.log('✅ 대기 중인 알림이 없습니다.');
-        return;
-    }
-
-    const tasks = [];
-    const now = new Date();
-
-    for (const doc of alertsSnapshot.docs) {
-        const alert = doc.data();
-        const { token, currency, threshold, thresholdType } = alert;
-
-        if (alert.lastPushedAt) {
-            const lastPushed = alert.lastPushedAt.toDate ? alert.lastPushedAt.toDate() : new Date(alert.lastPushedAt);
-            if ((now - lastPushed) / (1000 * 60) < COOLDOWN_MINUTES) continue;
-        }
-
-        const rateInfo = rates.find(r => r.cur_unit === currency);
-        if (!rateInfo || !rateInfo.deal_bas_r) continue;
-
-        const currentRate = parseFloat(rateInfo.deal_bas_r.replace(/,/g, ''));
-        let shouldNotify = false;
-        let emoji = '🔔';
-        let direction = '';
-
-        switch (thresholdType) {
-            case '상한선': if (currentRate >= threshold) { shouldNotify = true; emoji = '📈'; direction = '상한선 돌파'; } break;
-            case '하한선': if (currentRate <= threshold) { shouldNotify = true; emoji = '📉'; direction = '하한선 돌파'; } break;
-            case '3% 변동':
-                if (currentRate >= threshold * 1.03) { shouldNotify = true; emoji = '🚀'; direction = '3% 상승'; }
-                else if (currentRate <= threshold * 0.97) { shouldNotify = true; emoji = '⬇️'; direction = '3% 하락'; }
-                break;
-            case '5% 변동':
-                if (currentRate >= threshold * 1.05) { shouldNotify = true; emoji = '🔥'; direction = '5% 상승'; }
-                else if (currentRate <= threshold * 0.95) { shouldNotify = true; emoji = '❄️'; direction = '5% 하락'; }
-                break;
-        }
-
-        if (shouldNotify) {
-            tasks.push({
-                ref: doc.ref,
-                message: {
-                    token: token,
-                    notification: {
-                        title: `${emoji} ${currency} 환율 ${direction}!`,
-                        body: `현재 환율이 ${currentRate.toLocaleString()}원입니다.`
-                    },
-                    data: { type: 'threshold_alert', currency, pushWindow: getPushWindow(currency), rate: currentRate.toString(), threshold: threshold.toString() },
-                    apns: { payload: { aps: { alert: { title: `${emoji} ${currency} 환율 ${direction}!`, body: `현재 환율이 ${currentRate.toLocaleString()}원입니다.` }, sound: 'default', badge: 1, 'mutable-content': 1 } } }
-                }
-            });
-        }
-    }
-
-    if (tasks.length > 0) {
-        console.log(`📤 ${tasks.length}개 발송 시도...`);
-        const badTokens = new Set();
-        const successRefs = [];
-
-        for (let i = 0; i < tasks.length; i += 500) {
-            const chunk = tasks.slice(i, i + 500);
-            const messages = chunk.map(t => t.message);
-            
-            try {
-                const response = await admin.messaging().sendEach(messages);
-                response.responses.forEach((resp, idx) => {
-                    if (resp.success) {
-                        successRefs.push(chunk[idx].ref);
-                    } else {
-                        const errorCode = resp.error.code;
-                        if (['messaging/invalid-registration-token', 'messaging/registration-token-not-registered', 'messaging/invalid-argument', 'messaging/third-party-auth-error'].includes(errorCode)) {
-                            badTokens.add(chunk[idx].message.token);
-                        }
-                    }
-                });
-            } catch (e) {
-                console.error('❌ 발송 에러:', e.message);
-            }
-        }
-
-        // 1. 무효 토큰 삭제 (성공한 게 있든 없든 진행)
-        if (badTokens.size > 0) {
-            console.log(`🧹 무효 토큰 ${badTokens.size}개 정리 중...`);
-            for (const token of badTokens) {
-                const snap = await db.collection('alerts').where('token', '==', token).get();
-                const batch = db.batch();
-                snap.forEach(d => batch.delete(d.ref));
-                await batch.commit();
-            }
-        }
-
-        // 2. 발송 성공한 문서만 쿨다운 업데이트 (삭제된 문서는 제외됨)
-        if (successRefs.length > 0) {
-            console.log(`📝 성공한 ${successRefs.length}개 문서 쿨다운 업데이트...`);
-            const batch = db.batch();
-            successRefs.forEach(ref => batch.update(ref, { lastPushedAt: admin.firestore.FieldValue.serverTimestamp() }));
-            await batch.commit();
-        }
-
-        console.log(`📊 결과: 성공 ${successRefs.length}, 정리 ${badTokens.size}개`);
-    } else {
-        console.log('✅ 발송 대상 없음');
-    }
-    console.log('🏁 완료');
+function buildMessage({ token, currency, threshold }, decision, currentRate, now) {
+    const title = `${decision.emoji} ${currency} 환율 ${decision.direction}!`;
+    const body = `현재 환율이 ${currentRate.toLocaleString()}원입니다.`;
+    return {
+        token,
+        notification: { title, body },
+        data: {
+            type: 'threshold_alert',
+            currency,
+            pushWindow: getPushWindow(currency, now),
+            rate: currentRate.toString(),
+            threshold: threshold.toString(),
+        },
+        apns: {
+            payload: {
+                aps: {
+                    alert: { title, body },
+                    sound: 'default',
+                    badge: 1,
+                    'mutable-content': 1,
+                    // 백그라운드 앱도 도착을 기록해 같은 알림을 로컬로 다시 보내지 않게 한다.
+                    'content-available': 1,
+                },
+            },
+        },
+    };
 }
 
-main().catch(console.error);
+/** 문서별로 독립 적용한다. 그 사이 사용자가 지운 문서(NOT_FOUND)는 정상 상황이다. */
+async function applyUpdates(db, updates) {
+    if (updates.length === 0) return 0;
+    const writer = db.bulkWriter();
+    writer.onWriteError(error => error.code !== 5 && error.failedAttempts < 3);
+
+    let failed = 0;
+    for (const { ref, data } of updates) {
+        writer.update(ref, data).catch(error => {
+            if (error.code !== 5) {
+                failed += 1;
+                console.error('❌ 상태 저장 실패:', error.message);
+            }
+        });
+    }
+    await writer.close();
+    return failed;
+}
+
+function collectTasks(docs, rates, now) {
+    const tasks = [];
+    const stateUpdates = [];
+    let skipped = 0;
+
+    for (const doc of docs) {
+        try {
+            const alert = doc.data();
+            const currentRate = parseRate(rates.find(r => r.cur_unit === alert.currency));
+            if (!alert.token || !alert.currency || !Number.isFinite(currentRate)) {
+                skipped += 1;
+                continue;
+            }
+
+            const decision = decideAlert(alert, currentRate);
+            if (decision.invalid) {
+                skipped += 1;
+                continue;
+            }
+
+            if (!decision.notify) {
+                if (decision.update) stateUpdates.push({ ref: doc.ref, data: decision.update });
+                continue;
+            }
+
+            // 쿨다운 중이면 상태를 바꾸지 않아, 끝난 뒤 조건이 유지될 경우 발송된다.
+            if (isWithinCooldown(alert.lastPushedAt, now)) continue;
+
+            tasks.push({
+                ref: doc.ref,
+                update: decision.update,
+                message: buildMessage(alert, decision, currentRate, now),
+            });
+        } catch (e) {
+            // 잘못된 문서 하나가 전체 발송을 막지 않도록 한다.
+            skipped += 1;
+            console.error(`⚠️ 문서 처리 실패 (${doc.id.slice(-8)}):`, e.message);
+        }
+    }
+
+    return { tasks, stateUpdates, skipped };
+}
+
+async function deleteTokens(db, badTokens) {
+    for (const token of badTokens) {
+        const snap = await db.collection('alerts').where('token', '==', token).get();
+        const batch = db.batch();
+        snap.forEach(d => batch.delete(d.ref));
+        await batch.commit();
+    }
+}
+
+/** 작업이 실패로 표시되어야 하는 문제가 있으면 false를 반환한다. */
+export async function run({ firebase, serviceAccountJson, rates, now = new Date() }) {
+    console.log('🚀 FCM 알림 스크립트 시작...');
+
+    if (!serviceAccountJson) {
+        console.error('❌ FIREBASE_SERVICE_ACCOUNT 환경변수가 설정되지 않았습니다.');
+        return false;
+    }
+
+    const serviceAccount = JSON.parse(serviceAccountJson);
+    if (serviceAccount.project_id !== EXPECTED_PROJECT_ID) {
+        console.error(`❌ 서비스 계정 프로젝트가 다릅니다: ${serviceAccount.project_id} (필요: ${EXPECTED_PROJECT_ID})`);
+        return false;
+    }
+
+    if (!areRatesFresh(rates, now)) {
+        console.warn(`::warning::환율 데이터가 ${MAX_RATE_AGE_MINUTES}분보다 오래되었거나 시각 정보가 없어 이번 회차를 건너뜁니다.`);
+        return true;
+    }
+
+    if (firebase.apps.length === 0) {
+        firebase.initializeApp({ credential: firebase.credential.cert(serviceAccount) });
+    }
+    const db = firebase.firestore();
+
+    console.log('📡 대상 조회 중...');
+    const snapshot = await db.collection('alerts').where('isEnabled', '==', true).get();
+    if (snapshot.empty) {
+        console.log('✅ 대기 중인 알림이 없습니다.');
+        return true;
+    }
+
+    const { tasks, stateUpdates, skipped } = collectTasks(snapshot.docs, rates, now);
+    console.log(`🔎 문서 ${snapshot.size}개, 발송 ${tasks.length}개, 상태 갱신 ${stateUpdates.length}개, 건너뜀 ${skipped}개`);
+
+    let healthy = (await applyUpdates(db, stateUpdates)) === 0;
+
+    const badTokens = new Set();
+    const sentUpdates = [];
+    const errorCounts = {};
+
+    for (let i = 0; i < tasks.length; i += SEND_CHUNK_SIZE) {
+        const chunk = tasks.slice(i, i + SEND_CHUNK_SIZE);
+        try {
+            const response = await firebase.messaging().sendEach(chunk.map(t => t.message));
+            response.responses.forEach((resp, idx) => {
+                if (resp.success) {
+                    sentUpdates.push({
+                        ref: chunk[idx].ref,
+                        data: { ...chunk[idx].update, lastPushedAt: firebase.firestore.FieldValue.serverTimestamp() },
+                    });
+                    return;
+                }
+                const code = resp.error.code;
+                errorCounts[code] = (errorCounts[code] || 0) + 1;
+                if (isBadTokenError(code)) badTokens.add(chunk[idx].message.token);
+                if (isConfigurationError(code)) healthy = false;
+            });
+        } catch (e) {
+            healthy = false;
+            console.error('❌ 발송 에러:', e.message);
+        }
+    }
+
+    if (badTokens.size > 0) {
+        console.log(`🧹 무효 토큰 ${badTokens.size}개 정리 중...`);
+        await deleteTokens(db, badTokens);
+    }
+    if ((await applyUpdates(db, sentUpdates)) > 0) healthy = false;
+
+    if (Object.keys(errorCounts).length > 0) console.error('⚠️ 발송 실패 코드:', JSON.stringify(errorCounts));
+    console.log(`📊 결과: 성공 ${sentUpdates.length}, 정리 ${badTokens.size}개`);
+    console.log('🏁 완료');
+    return healthy;
+}
+
+async function main() {
+    if (!fs.existsSync(RATES_FILE)) {
+        console.error('❌ 환율 데이터 파일이 없습니다.');
+        process.exitCode = 1;
+        return;
+    }
+    const healthy = await run({
+        firebase: admin,
+        serviceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT,
+        rates: JSON.parse(fs.readFileSync(RATES_FILE, 'utf8')),
+    });
+    if (!healthy) process.exitCode = 1;
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+    main().catch(error => {
+        console.error('❌ FCM 알림 작업 실패:', error);
+        process.exitCode = 1;
+    });
+}

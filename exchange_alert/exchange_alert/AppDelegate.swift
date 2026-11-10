@@ -164,18 +164,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     /// 해당 통화에 대해 최근 30분 내 서버 푸시가 도착했는지 확인
     private func wasServerPushRecentlyReceived(for currency: CurrencyType) -> Bool {
-        let key = "ServerPush_\(currency.rawValue)"
-        guard let lastPushDate = UserDefaults.standard.object(forKey: key) as? Date else {
-            return false
-        }
-        let elapsed = Date().timeIntervalSince(lastPushDate)
-        let isRecent = elapsed < 1800 // 30분 = 1800초
-        if isRecent {
-            print("📌 [중복방지] \(currency.rawValue): 서버 푸시가 \(Int(elapsed))초 전에 도착함 → 로컬 알림 건너뜀")
-        }
-        return isRecent
+        AlertTriggerGate.wasServerPushRecentlyReceived(for: currency)
     }
-    
+
     @objc private func appDidEnterBackground() {
         print("📱 앱이 백그라운드로 이동 - 백그라운드 fetch 활성화 요청")
         
@@ -259,13 +250,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     // 통화별 임계점 확인 및 알림 발송 (백그라운드용)
     private func checkAndSendAlertForCurrency(currency: CurrencyType, rate: Double) {
-        // [중복 방지 1단계] 서버 푸시가 최근 30분 내 도착했으면 로컬 알림 건너뜀
-        if wasServerPushRecentlyReceived(for: currency) {
-            print("⚠️ [중복방지] \(currency.rawValue): 서버 푸시가 이미 도착함 → 로컬 알림 생략")
-            return
-        }
-        
-        // [중복 방지 2단계] 이벤트ID 기반 체크 (기존 로직 유지)
+        // 이벤트ID 기반 체크 (기존 로직 유지)
         let eventId = eventId(for: currency, eventTime: Date())
         if UserDefaults.standard.bool(forKey: "pushed_event_\(eventId)") {
             print("⚠️ 중복 알림 방지: 이미 알림이 발송된 이벤트ID \(eventId) - 로컬 알림 건너뜀")
@@ -296,7 +281,18 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             print("⚠️ 백그라운드 스팸 방지: \(currency.rawValue) 마지막 알림 후 5분이 지나지 않음")
             return
         }
-        
+
+        // 조건을 처음 넘은 순간에만 진행
+        guard AlertTriggerGate.shouldFire(currency: currency, settings: alertSettings, rate: rate) else {
+            return
+        }
+
+        // 서버 푸시가 최근 30분 내 도착했으면 로컬 알림 생략
+        if wasServerPushRecentlyReceived(for: currency) {
+            print("⚠️ [중복방지] \(currency.rawValue): 서버 푸시가 이미 도착함 → 로컬 알림 생략")
+            return
+        }
+
         // 사용자 설정에 따른 알림 체크
         var shouldNotify = false
         var message = ""
@@ -335,6 +331,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
+            UserDefaults.standard.set(now, forKey: lastNotificationKey)
             sendBackgroundNotification(message: message, eventId: eventId)
             print("✅ 백그라운드 환율 알림 발송 완료")
         }
@@ -468,11 +465,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
+            UserDefaults.standard.set(now, forKey: lastNotificationKey)
             sendBackgroundNotification(message: message, eventId: eventId)
             print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
-    
+
     // 하드코딩된 임계값 사용 (사용자 설정이 없을 때) - 기존 함수 (하위 호환성)
     private func checkWithHardcodedThresholds(rate: Double) {
         // 기본 임계값 사용 (1400/1350) - 하위 호환성

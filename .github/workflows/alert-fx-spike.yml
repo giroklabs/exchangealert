@@ -8,6 +8,11 @@ on:
   repository_dispatch: # 외부 워크플로에서 트리거 가능
     types: [trigger-fx-alert]
 
+# 겹쳐 실행되면 같은 사용자에게 알림이 두 번 나갈 수 있다.
+concurrency:
+  group: fx-spike-alert
+  cancel-in-progress: false
+
 jobs:
   alert:
     runs-on: ubuntu-latest
@@ -45,9 +50,11 @@ jobs:
       - name: Send FCM Push Alerts (개별 사용자 임계값 알림)
         run: node scripts/send-fcm-alerts.js
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MACRO }}
+          # alerts 컬렉션은 환율 앱 프로젝트(exchange-alert-91b92)에 있다. MACRO 키를 쓰면 안 된다.
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       - name: Commit last-alert-rate.json (if updated)
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
