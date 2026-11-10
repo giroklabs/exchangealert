@@ -47,11 +47,28 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MACRO }}
 
+      # 직전 조회 기록. 없거나 복원에 실패하면 조회를 수행하므로 알림이 누락되지는 않는다.
+      - name: Restore FCM scan state
+        uses: actions/cache/restore@v4
+        with:
+          path: .fcm-scan-state.json
+          key: fcm-scan-state-${{ github.run_id }}
+          restore-keys: fcm-scan-state-
+
       - name: Send FCM Push Alerts (개별 사용자 임계값 알림)
+        id: fcm
         run: node scripts/send-fcm-alerts.js
         env:
           # alerts 컬렉션은 환율 앱 프로젝트(exchange-alert-91b92)에 있다. MACRO 키를 쓰면 안 된다.
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FCM_SCAN_STATE_FILE: ${{ github.workspace }}/.fcm-scan-state.json
+
+      - name: Save FCM scan state
+        if: steps.fcm.outputs.scanned == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .fcm-scan-state.json
+          key: fcm-scan-state-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Commit last-alert-rate.json (if updated)
         if: always()

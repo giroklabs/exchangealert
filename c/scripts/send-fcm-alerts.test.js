@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { areRatesFresh, decideAlert, evaluateCondition, isBadTokenError, isWithinCooldown } from './fcm-alert-logic.js';
+import {
+    areRatesFresh,
+    decideAlert,
+    evaluateCondition,
+    isBadTokenError,
+    isWithinCooldown,
+    ratesFingerprint,
+    shouldScan,
+} from './fcm-alert-logic.js';
 import { run } from './send-fcm-alerts.js';
 
 const NOW = new Date('2026-11-10T05:00:00Z');
@@ -110,6 +118,51 @@ test('쿨다운은 60분이다', () => {
     assert.equal(isWithinCooldown(new Date(NOW - 59 * 60000), NOW), true);
     assert.equal(isWithinCooldown(new Date(NOW - 61 * 60000), NOW), false);
     assert.equal(isWithinCooldown(undefined, NOW), false);
+});
+
+const minutesAgo = minutes => new Date(NOW - minutes * 60000).toISOString();
+
+test('지문은 시각이 달라도 같고 환율이 다르면 달라진다', () => {
+    assert.equal(ratesFingerprint(ratesAt('1,400')), ratesFingerprint(ratesAt('1,400', '2026-11-10T13:50:00+0900')));
+    assert.notEqual(ratesFingerprint(ratesAt('1,400')), ratesFingerprint(ratesAt('1,401')));
+});
+
+test('조회 여부는 기록, 최소 간격, 환율 변동, 최대 공백으로 결정된다', () => {
+    assert.equal(shouldScan(null, 'A', NOW), true);
+    assert.equal(shouldScan({ fingerprint: 'A', scannedAt: 'broken' }, 'A', NOW), true);
+    assert.equal(shouldScan({ fingerprint: 'A', scannedAt: minutesAgo(5) }, 'B', NOW), false);
+    assert.equal(shouldScan({ fingerprint: 'A', scannedAt: minutesAgo(10) }, 'B', NOW), true);
+    assert.equal(shouldScan({ fingerprint: 'A', scannedAt: minutesAgo(30) }, 'A', NOW), false);
+    assert.equal(shouldScan({ fingerprint: 'A', scannedAt: minutesAgo(60) }, 'A', NOW), true);
+});
+
+test('환율 변동이 없으면 Firestore를 조회하지 않고 기록도 바꾸지 않는다', async () => {
+    const fake = fakeFirebase([{ ...baseAlert, conditionActive: false }], ok);
+    fake.firebase.firestore = () => assert.fail('조회하면 안 된다');
+    let saved = null;
+    const rates = ratesAt('1,450');
+    const healthy = await run({
+        firebase: fake.firebase,
+        serviceAccountJson: SERVICE_ACCOUNT,
+        rates,
+        now: NOW,
+        lastScan: { fingerprint: ratesFingerprint(rates), scannedAt: minutesAgo(20) },
+        onScanComplete: state => { saved = state; },
+    });
+    assert.equal(healthy, true);
+    assert.equal(saved, null);
+});
+
+test('조회에 성공하면 기록을 남기고, 발송 설정 오류면 다음 회차에 다시 조회하도록 남기지 않는다', async () => {
+    let saved = null;
+    const success = fakeFirebase([{ ...baseAlert, conditionActive: false }], ok);
+    await run({ firebase: success.firebase, serviceAccountJson: SERVICE_ACCOUNT, rates: ratesAt('1,450'), now: NOW, onScanComplete: s => { saved = s; } });
+    assert.equal(saved.scannedAt, NOW.toISOString());
+
+    saved = null;
+    const failure = fakeFirebase([{ ...baseAlert, conditionActive: false }], failWith('messaging/third-party-auth-error'));
+    await run({ firebase: failure.firebase, serviceAccountJson: SERVICE_ACCOUNT, rates: ratesAt('1,450'), now: NOW, onScanComplete: s => { saved = s; } });
+    assert.equal(saved, null);
 });
 
 test('매크로 프로젝트 키이면 발송 없이 실패한다', async () => {

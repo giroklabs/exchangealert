@@ -4,6 +4,10 @@ export const EXPECTED_PROJECT_ID = 'exchange-alert-91b92';
 export const COOLDOWN_MINUTES = 60;
 export const MAX_RATE_AGE_MINUTES = 30;
 
+// 실행 간격(약 5분)의 오차를 감안해 10분, 60분보다 1분 짧게 잡는다.
+export const MIN_SCAN_INTERVAL_MINUTES = 9;
+export const MAX_SCAN_GAP_MINUTES = 59;
+
 // 환율이 기준선 부근에서 흔들릴 때 알림이 반복되지 않도록, 기준선에서 이만큼 되돌아와야 다시 알림 가능 상태가 된다.
 export const REARM_MARGIN = 0.002;
 
@@ -82,6 +86,28 @@ export function ratesFetchedAt(rates) {
 export function areRatesFresh(rates, now) {
     const fetchedAt = ratesFetchedAt(rates);
     return fetchedAt !== null && (now - fetchedAt) / 60000 <= MAX_RATE_AGE_MINUTES;
+}
+
+/** 시각 정보를 뺀 환율 값의 지문. 환율이 실제로 바뀌었는지 비교하는 데 쓴다. */
+export function ratesFingerprint(rates) {
+    return rates
+        .filter(r => r.cur_unit !== 'META')
+        .map(r => `${r.cur_unit}:${r.deal_bas_r}`)
+        .sort()
+        .join('|');
+}
+
+/**
+ * Firestore 전체 조회는 문서 수만큼 읽기 비용이 든다. 조회는 최소 간격을 두고 환율이 바뀐 회차에만 한다.
+ * 환율이 멈춘 주말에도 주기적으로 조회해, 새로 설정된 알림의 기준 상태가 다음 변동 전에 기록되게 한다.
+ */
+export function shouldScan(lastScan, fingerprint, now) {
+    const last = lastScan && lastScan.scannedAt ? new Date(lastScan.scannedAt) : null;
+    if (!last || Number.isNaN(last.getTime())) return true;
+
+    const minutes = (now - last) / 60000;
+    if (minutes < MIN_SCAN_INTERVAL_MINUTES) return false;
+    return lastScan.fingerprint !== fingerprint || minutes >= MAX_SCAN_GAP_MINUTES;
 }
 
 export function parseRate(rateInfo) {
