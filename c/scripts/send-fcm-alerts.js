@@ -11,6 +11,8 @@ import {
     isConfigurationError,
     isWithinCooldown,
     parseRate,
+    ratesFingerprint,
+    shouldScan,
 } from './fcm-alert-logic.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -129,7 +131,7 @@ async function deleteTokens(db, badTokens) {
 }
 
 /** 작업이 실패로 표시되어야 하는 문제가 있으면 false를 반환한다. */
-export async function run({ firebase, serviceAccountJson, rates, now = new Date() }) {
+export async function run({ firebase, serviceAccountJson, rates, now = new Date(), lastScan = null, onScanComplete = () => {} }) {
     console.log('🚀 FCM 알림 스크립트 시작...');
 
     if (!serviceAccountJson) {
@@ -148,6 +150,13 @@ export async function run({ firebase, serviceAccountJson, rates, now = new Date(
         return true;
     }
 
+    const fingerprint = ratesFingerprint(rates);
+    if (!shouldScan(lastScan, fingerprint, now)) {
+        console.log('⏭️ 조회 조건에 해당하지 않아 이번 회차를 건너뜁니다.');
+        return true;
+    }
+    const scanState = { fingerprint, scannedAt: now.toISOString() };
+
     if (firebase.apps.length === 0) {
         firebase.initializeApp({ credential: firebase.credential.cert(serviceAccount) });
     }
@@ -157,6 +166,7 @@ export async function run({ firebase, serviceAccountJson, rates, now = new Date(
     const snapshot = await db.collection('alerts').where('isEnabled', '==', true).get();
     if (snapshot.empty) {
         console.log('✅ 대기 중인 알림이 없습니다.');
+        onScanComplete(scanState);
         return true;
     }
 
@@ -201,7 +211,21 @@ export async function run({ firebase, serviceAccountJson, rates, now = new Date(
     if (Object.keys(errorCounts).length > 0) console.error('⚠️ 발송 실패 코드:', JSON.stringify(errorCounts));
     console.log(`📊 결과: 성공 ${sentUpdates.length}, 정리 ${badTokens.size}개`);
     console.log('🏁 완료');
+    if (healthy) onScanComplete(scanState);
     return healthy;
+}
+
+function readScanState(file) {
+    try {
+        return file ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
+    } catch {
+        return null;
+    }
+}
+
+function saveScanState(file, state) {
+    if (file) fs.writeFileSync(file, JSON.stringify(state));
+    if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, 'scanned=true\n');
 }
 
 async function main() {
@@ -210,10 +234,13 @@ async function main() {
         process.exitCode = 1;
         return;
     }
+    const stateFile = process.env.FCM_SCAN_STATE_FILE;
     const healthy = await run({
         firebase: admin,
         serviceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT,
         rates: JSON.parse(fs.readFileSync(RATES_FILE, 'utf8')),
+        lastScan: readScanState(stateFile),
+        onScanComplete: state => saveScanState(stateFile, state),
     });
     if (!healthy) process.exitCode = 1;
 }
