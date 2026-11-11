@@ -68,7 +68,7 @@ struct ExchangeRateCard: View {
                         let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
                         if let rateValue = Double(cleanedRate) {
                             VStack(spacing: 11) {  // 12 * 0.9 = 10.8 ≈ 11
-                                Text("매매기준율")
+                                Text(CurrencyType(rawValue: rate.curUnit ?? "")?.quoteUnitLabel.map { "매매기준율 (\($0))" } ?? "매매기준율")
                                     .font(AppTheme.captionFont)
                                     .foregroundColor(.secondary)
                                 
@@ -202,6 +202,18 @@ struct AlertSettingsCard: View {
         exchangeManager.currencyAlertSettings.settings[currency] ?? AlertSettings.default
     }
     
+    /// 글자마다 저장하면 입력 중간값(예: 1)이 서버에 기준값으로 올라간다. 입력을 마친 값만 저장한다.
+    private func commitThreshold() {
+        guard let value = parsePositive(thresholdText) else {
+            updateThresholdText()
+            return
+        }
+        guard value != settings.threshold else { return }
+        var updatedSettings = settings
+        updatedSettings.threshold = value
+        exchangeManager.updateAlertSettings(updatedSettings, for: currency)
+    }
+    
     // thresholdText 초기화
     private func updateThresholdText() {
         if settings.threshold == 0 {
@@ -268,24 +280,16 @@ struct AlertSettingsCard: View {
                         
                         // 기준값 설정
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("기준값 (원)")
+                            Text(currency.quoteUnitLabel.map { "기준값 (원, \($0))" } ?? "기준값 (원)")
                                 .font(AppTheme.subheadlineFont)
                             
                             HStack(spacing: 8) {
                                 TextField("예: 1350.50", text: $thresholdText)
                                     .focused($isThresholdFocused)
-                                    .onChange(of: thresholdText) { _, newValue in
-                                        // 빈 문자열이면 0, 아니면 Double 변환
-                                        if newValue.isEmpty {
-                                            var updatedSettings = settings
-                                            updatedSettings.threshold = 0
-                                            exchangeManager.updateAlertSettings(updatedSettings, for: currency)
-                                        } else if let doubleValue = Double(newValue) {
-                                            var updatedSettings = settings
-                                            updatedSettings.threshold = doubleValue
-                                            exchangeManager.updateAlertSettings(updatedSettings, for: currency)
-                                        }
+                                    .onChange(of: isThresholdFocused) { _, focused in
+                                        if !focused { commitThreshold() }
                                     }
+                                    .onSubmit { commitThreshold() }
                                     .onAppear {
                                         updateThresholdText()
                                     }
@@ -534,6 +538,7 @@ struct ExchangeBuySeelView: View {
         if let dealBasR = rate.dealBasR {
             let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
             if let baseRate = Double(cleanedRate) {
+                VStack(spacing: 8) {
                 HStack(spacing: 30) {
                     VStack(spacing: 6) {
                         Text("살때")
@@ -572,6 +577,14 @@ struct ExchangeBuySeelView: View {
                     }
                 }
                 .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
+                
+                // 은행 고시 현찰가가 아니라 매매기준율에 일률적으로 1.8%를 더하고 뺀 값이다.
+                Text("살때·팔때는 매매기준율 ±1.8%로 계산한 참고값이며 실제 은행 환율과 다를 수 있습니다")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                }
             }
         }
     }
@@ -581,8 +594,8 @@ struct ExchangeBuySeelView: View {
             // API에서 제공된 값 사용
             return ttb
         } else {
-            // 기준율에서 계산 (약 0.5% 낮게)
-            return String(format: "%.2f", baseRate * 0.995)
+            // 고객이 살 때는 기준율보다 비싸다 (데이터와 같은 1.8% 가정)
+            return String(format: "%.2f", baseRate * 1.018)
         }
     }
     
@@ -591,8 +604,8 @@ struct ExchangeBuySeelView: View {
             // API에서 제공된 값 사용
             return tts
         } else {
-            // 기준율에서 계산 (약 0.5% 높게)
-            return String(format: "%.2f", baseRate * 1.005)
+            // 고객이 팔 때는 기준율보다 싸다 (데이터와 같은 1.8% 가정)
+            return String(format: "%.2f", baseRate * 0.982)
         }
     }
 }

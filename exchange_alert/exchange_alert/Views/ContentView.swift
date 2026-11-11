@@ -359,7 +359,7 @@ struct LastUpdateView: View {
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
                 
-                Text("데이터 출처: 은행 고시 환율 (실시간)")
+                Text("데이터 출처: \(exchangeManager.currentApiSource)")
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
                 

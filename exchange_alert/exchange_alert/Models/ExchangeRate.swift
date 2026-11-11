@@ -30,6 +30,26 @@ struct ExchangeRate: Codable, Identifiable {
     }
 }
 
+extension ExchangeRate {
+    /// 데이터의 통화 코드를 앱 코드로 맞춰 읽는다. (데이터는 위안화를 CNY로 제공)
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            result: try container.decode(Int.self, forKey: .result),
+            curUnit: try container.decodeIfPresent(String.self, forKey: .curUnit).map(CurrencyType.appCode(forDataCode:)),
+            curNm: try container.decodeIfPresent(String.self, forKey: .curNm),
+            ttb: try container.decodeIfPresent(String.self, forKey: .ttb),
+            tts: try container.decodeIfPresent(String.self, forKey: .tts),
+            dealBasR: try container.decodeIfPresent(String.self, forKey: .dealBasR),
+            bkpr: try container.decodeIfPresent(String.self, forKey: .bkpr),
+            yyEfeeR: try container.decodeIfPresent(String.self, forKey: .yyEfeeR),
+            tenDdEfeeR: try container.decodeIfPresent(String.self, forKey: .tenDdEfeeR),
+            kftcBkpr: try container.decodeIfPresent(String.self, forKey: .kftcBkpr),
+            kftcDealBasR: try container.decodeIfPresent(String.self, forKey: .kftcDealBasR)
+        )
+    }
+}
+
 // MARK: - Alert Settings
 struct AlertSettings: Codable {
     var isEnabled: Bool
@@ -170,6 +190,22 @@ enum CurrencyType: String, CaseIterable, Codable {
         case .SAR: return "﷼"
         // case .INR: return "₹"  // 수출입은행 API 미지원
         // case .PLN: return "zł"  // 수출입은행 API 미지원
+        }
+    }
+}
+
+extension CurrencyType {
+    /// 저장된 사용자 설정과 서버 알림 문서가 CNH를 쓰므로 앱 코드는 유지하고 데이터 코드만 변환한다.
+    static func appCode(forDataCode code: String) -> String {
+        code == "CNY" ? CurrencyType.CNH.rawValue : code
+    }
+
+    /// 환율이 100단위 기준인 통화의 표시 문구 (엔화·루피아)
+    var quoteUnitLabel: String? {
+        switch self {
+        case .JPY: return "100엔당"
+        case .IDR: return "100루피아당"
+        default: return nil
         }
     }
 }

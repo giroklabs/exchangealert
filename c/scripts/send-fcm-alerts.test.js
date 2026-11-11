@@ -4,6 +4,7 @@ import {
     areRatesFresh,
     decideAlert,
     evaluateCondition,
+    findRateInfo,
     isBadTokenError,
     isWithinCooldown,
     ratesFingerprint,
@@ -163,6 +164,13 @@ test('조회에 성공하면 기록을 남기고, 발송 설정 오류면 다음
     const failure = fakeFirebase([{ ...baseAlert, conditionActive: false }], failWith('messaging/third-party-auth-error'));
     await run({ firebase: failure.firebase, serviceAccountJson: SERVICE_ACCOUNT, rates: ratesAt('1,450'), now: NOW, onScanComplete: s => { saved = s; } });
     assert.equal(saved, null);
+});
+
+test('위안화 알림(CNH)은 CNY 데이터로 판정한다', () => {
+    const rates = [{ cur_unit: 'CNY', deal_bas_r: '201.5' }, { cur_unit: 'USD', deal_bas_r: '1,400' }];
+    assert.equal(findRateInfo(rates, 'CNH').deal_bas_r, '201.5');
+    assert.equal(findRateInfo(rates, 'USD').deal_bas_r, '1,400');
+    assert.equal(findRateInfo(rates, 'XYZ'), undefined);
 });
 
 test('매크로 프로젝트 키이면 발송 없이 실패한다', async () => {

@@ -10,7 +10,9 @@ class ExchangeRateManager: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var currencyAlertSettings = CurrencyAlertSettings()
-    @Published var currentApiSource: String = "은행 고시 환율 (실시간)"
+    static let liveSourceLabel = "하나은행 매매기준율 (약 5분 간격 갱신)"
+    static let savedSourceLabel = "저장된 데이터 (최신 환율을 불러오지 못함)"
+    @Published var currentApiSource: String = ExchangeRateManager.liveSourceLabel
     @Published var lastUpdateTime: Date?
     @Published var isWeekendMode: Bool = false  // 주말 모드 표시
     
@@ -276,7 +278,7 @@ class ExchangeRateManager: ObservableObject {
         if !forceRefresh {
             guard canMakeAPICall() else {
                 print("🔄 API 호출 제한으로 인해 마지막 저장된 데이터 사용")
-                currentApiSource = "은행 고시 환율 (실시간)"
+                currentApiSource = ExchangeRateManager.liveSourceLabel
                 showLastSavedData()
                 return
             }
@@ -288,7 +290,7 @@ class ExchangeRateManager: ObservableObject {
         DispatchQueue.main.async {
             self.isLoading = true
             self.errorMessage = nil
-            self.currentApiSource = "은행 고시 환율 (실시간)"
+            self.currentApiSource = ExchangeRateManager.liveSourceLabel
         }
 
         // 1순위: GitHub에서 저장된 네이버(하나은행) 실시간 데이터 사용
@@ -539,14 +541,14 @@ class ExchangeRateManager: ObservableObject {
 
                 if let error = error {
                     print("❌ GitHub API 네트워크 오류: \(error.localizedDescription) - 마지막 저장된 데이터 사용")
-                    self.currentApiSource = "은행 고시 환율 (실시간)"
+                    self.currentApiSource = ExchangeRateManager.savedSourceLabel
                     self.showLastSavedData()
                     return
                 }
 
                 guard let data = data else {
                     print("❌ GitHub API 데이터 없음 - 마지막 저장된 데이터 사용")
-                    self.currentApiSource = "은행 고시 환율 (실시간)"
+                    self.currentApiSource = ExchangeRateManager.savedSourceLabel
                     self.showLastSavedData()
                     return
                 }
@@ -748,7 +750,7 @@ class ExchangeRateManager: ObservableObject {
 
             if newRates.isEmpty {
                 print("❌ 환율 정보 없음 - 마지막 저장된 데이터 사용")
-                self.currentApiSource = "은행 고시 환율 (실시간)"
+                self.currentApiSource = ExchangeRateManager.savedSourceLabel
                 self.showLastSavedData()
             } else {
                 print("✅ \(newRates.count)개 통화 환율 로드 완료")
@@ -980,7 +982,7 @@ class ExchangeRateManager: ObservableObject {
             saveSettings()
             
             // 알림 히스토리에 기록 (UI에는 표시)
-            addNotificationHistory(message: message)
+            addNotificationHistory(message: message, currency: currency)
         }
     }
     
@@ -1011,12 +1013,7 @@ class ExchangeRateManager: ObservableObject {
                         print("❌ 환율 알림 전송 실패: \(error.localizedDescription)")
                     } else {
                         print("✅ 환율 알림이 전송되었습니다.")
-                        // 히스토리에 성공 메시지 추가
-                        NotificationManager.shared.addNotificationToHistory(
-                            currency: "EXCHANGE",
-                            message: message,
-                            type: .alert
-                        )
+                        // 내역은 checkAlertThresholds에서 통화와 함께 한 번만 기록한다.
                     }
                 }
             }
@@ -1340,9 +1337,9 @@ class ExchangeRateManager: ObservableObject {
     }
     
     // MARK: - Notification History Helper
-    private func addNotificationHistory(message: String) {
+    private func addNotificationHistory(message: String, currency: CurrencyType) {
         NotificationManager.shared.addNotificationToHistory(
-            currency: selectedCurrency.rawValue,
+            currency: currency.rawValue,
             message: message,
             type: .alert
         )
