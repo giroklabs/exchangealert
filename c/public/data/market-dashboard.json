@@ -67,11 +67,11 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "102.889",
-      "diff": -0.02,
-      "diffPercent": -0.02,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "103.22",
+      "diff": 0.31,
+      "diffPercent": 0.3,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-10-30",
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 102.89
+          "value": 103.22
         }
       ]
     },
@@ -126,16 +126,12 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.998",
-      "diff": 0.02,
-      "diffPercent": 0.4,
+      "value": "5.109",
+      "diff": 0.11,
+      "diffPercent": 2.2,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-10-29",
-          "value": 4.99
-        },
         {
           "date": "2026-10-30",
           "value": 4.93
@@ -171,6 +167,10 @@
         {
           "date": "2026-11-11",
           "value": 5
+        },
+        {
+          "date": "2026-11-12",
+          "value": 5.11
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "18.29",
-      "diff": 0.8,
-      "diffPercent": 4.57,
+      "value": "18.04",
+      "diff": 0.55,
+      "diffPercent": 3.14,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 18.29
+          "value": 18.04
         }
       ]
     },
@@ -241,16 +241,12 @@
       "source": "ICE BofA",
       "description": "글로벌 신용 리스크 온/오프 지표",
       "fredId": "BAMLH0A0HYM2",
-      "value": "3.34",
-      "diff": -0.08,
-      "diffPercent": -2.34,
+      "value": "3.3",
+      "diff": -0.04,
+      "diffPercent": -1.2,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-10-27",
-          "value": 3.18
-        },
         {
           "date": "2026-10-28",
           "value": 3.14
@@ -286,6 +282,10 @@
         {
           "date": "2026-11-09",
           "value": 3.34
+        },
+        {
+          "date": "2026-11-11",
+          "value": 3.3
         }
       ]
     },
@@ -298,16 +298,12 @@
       "source": "NY Fed",
       "description": "금융기관 간 담보부 유동성 지표",
       "fredId": "SOFR",
-      "value": "3.88",
-      "diff": -0.01,
-      "diffPercent": -0.26,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "3.89",
+      "diff": 0.01,
+      "diffPercent": 0.26,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-10-27",
-          "value": 3.95
-        },
         {
           "date": "2026-10-28",
           "value": 3.94
@@ -343,6 +339,10 @@
         {
           "date": "2026-11-09",
           "value": 3.88
+        },
+        {
+          "date": "2026-11-10",
+          "value": 3.89
         }
       ]
     },
@@ -361,10 +361,6 @@
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
-        {
-          "date": "2026-10-27",
-          "value": 3.88
-        },
         {
           "date": "2026-10-28",
           "value": 3.88
@@ -399,6 +395,10 @@
         },
         {
           "date": "2026-11-09",
+          "value": 3.88
+        },
+        {
+          "date": "2026-11-10",
           "value": 3.88
         }
       ]
@@ -590,16 +590,12 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "25,466.19",
-      "diff": 400.32,
-      "diffPercent": 1.6,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "25,377.275",
+      "diff": -88.91,
+      "diffPercent": -0.35,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-10-29",
-          "value": 26184.72
-        },
         {
           "date": "2026-10-30",
           "value": 25437
@@ -635,6 +631,10 @@
         {
           "date": "2026-11-11",
           "value": 25466.19
+        },
+        {
+          "date": "2026-11-12",
+          "value": 25377.28
         }
       ]
     },
@@ -649,16 +649,12 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,619.38",
-      "diff": 98.45,
-      "diffPercent": 1.31,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "7,603.87",
+      "diff": -15.51,
+      "diffPercent": -0.2,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-10-29",
-          "value": 7720.39
-        },
         {
           "date": "2026-10-30",
           "value": 7580.07
@@ -694,6 +690,10 @@
         {
           "date": "2026-11-11",
           "value": 7619.38
+        },
+        {
+          "date": "2026-11-12",
+          "value": 7603.87
         }
       ]
     },
@@ -708,16 +708,12 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "10,564.111",
-      "diff": 565.78,
-      "diffPercent": 5.66,
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "10,476.63",
+      "diff": -87.48,
+      "diffPercent": -0.83,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-10-29",
-          "value": 11518.2
-        },
         {
           "date": "2026-10-30",
           "value": 10688.8
@@ -753,6 +749,10 @@
         {
           "date": "2026-11-11",
           "value": 10564.11
+        },
+        {
+          "date": "2026-11-12",
+          "value": 10476.63
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "28,241.75",
-      "diff": -231.5,
-      "diffPercent": -0.81,
+      "value": "28,406.75",
+      "diff": -66.5,
+      "diffPercent": -0.23,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 28241.75
+          "value": 28406.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,610.75",
-      "diff": -29.75,
-      "diffPercent": -0.39,
+      "value": "7,633.25",
+      "diff": -7.25,
+      "diffPercent": -0.09,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 7610.75
+          "value": 7633.25
         }
       ]
     },
@@ -884,11 +884,11 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "85.95",
-      "diff": -0.58,
-      "diffPercent": -0.67,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "88.3",
+      "diff": 1.77,
+      "diffPercent": 2.05,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-10-30",
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-11-12",
-          "value": 85.95
+          "value": 88.3
         }
       ]
     },
@@ -1067,10 +1067,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-11-02",
-          "value": 4
-        },
-        {
           "date": "2026-11-03",
           "value": 4
         },
@@ -1104,6 +1100,10 @@
         },
         {
           "date": "2026-11-11",
+          "value": 4
+        },
+        {
+          "date": "2026-11-12",
           "value": 4
         }
       ],
@@ -1126,10 +1126,6 @@
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2026-11-02",
-          "value": 3.75
-        },
-        {
           "date": "2026-11-03",
           "value": 3.75
         },
@@ -1164,6 +1160,10 @@
         {
           "date": "2026-11-11",
           "value": 3.75
+        },
+        {
+          "date": "2026-11-12",
+          "value": 3.75
         }
       ],
       "isInternal": true
@@ -1179,17 +1179,51 @@
       "source": "한국은행",
       "description": "한국 기준금리, 한미 금리차 결정",
       "cycle": "D",
-      "value": "3.50",
+      "value": "3",
+      "diff": 0,
+      "diffPercent": 0,
       "trend": "neutral",
       "realizedImpact": "neutral",
       "history": [
         {
-          "date": "2025-12-01",
-          "value": 3.5
+          "date": "2026-11-01",
+          "value": 3
         },
         {
-          "date": "2026-01-01",
-          "value": 3.5
+          "date": "2026-11-02",
+          "value": 3
+        },
+        {
+          "date": "2026-11-03",
+          "value": 3
+        },
+        {
+          "date": "2026-11-04",
+          "value": 3
+        },
+        {
+          "date": "2026-11-05",
+          "value": 3
+        },
+        {
+          "date": "2026-11-06",
+          "value": 3
+        },
+        {
+          "date": "2026-11-07",
+          "value": 3
+        },
+        {
+          "date": "2026-11-08",
+          "value": 3
+        },
+        {
+          "date": "2026-11-09",
+          "value": 3
+        },
+        {
+          "date": "2026-11-10",
+          "value": 3
         }
       ]
     },
@@ -1261,25 +1295,51 @@
       "source": "한국은행",
       "description": "한국 물가 지표, 금리 정책 영향",
       "cycle": "M",
-      "value": "2.8",
-      "trend": "down",
-      "realizedImpact": "up",
+      "value": "120.73",
+      "diff": 0.3,
+      "diffPercent": 0.25,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
-          "date": "2025-12",
-          "value": 3.2
-        },
-        {
           "date": "2026-01",
-          "value": 3.1
+          "value": 118.03
         },
         {
           "date": "2026-02",
-          "value": 2.9
+          "value": 118.4
         },
         {
           "date": "2026-03",
-          "value": 2.8
+          "value": 118.8
+        },
+        {
+          "date": "2026-04",
+          "value": 119.37
+        },
+        {
+          "date": "2026-05",
+          "value": 119.92
+        },
+        {
+          "date": "2026-06",
+          "value": 119.99
+        },
+        {
+          "date": "2026-07",
+          "value": 119.77
+        },
+        {
+          "date": "2026-08",
+          "value": 120.05
+        },
+        {
+          "date": "2026-09",
+          "value": 120.43
+        },
+        {
+          "date": "2026-10",
+          "value": 120.73
         }
       ]
     },
@@ -1294,21 +1354,51 @@
       "source": "한국은행",
       "description": "한국 국고채 금리, 한미 금리차용",
       "cycle": "D",
-      "value": "3.45",
-      "trend": "up",
-      "realizedImpact": "down",
+      "value": "3.937",
+      "diff": -0.01,
+      "diffPercent": -0.25,
+      "trend": "down",
+      "realizedImpact": "up",
       "history": [
         {
-          "date": "2026-03-01",
-          "value": 3.3
+          "date": "2026-10-30",
+          "value": 4.008
         },
         {
-          "date": "2026-03-05",
-          "value": 3.4
+          "date": "2026-11-02",
+          "value": 4.034
         },
         {
-          "date": "2026-03-10",
-          "value": 3.45
+          "date": "2026-11-03",
+          "value": 4.001
+        },
+        {
+          "date": "2026-11-04",
+          "value": 3.968
+        },
+        {
+          "date": "2026-11-05",
+          "value": 3.887
+        },
+        {
+          "date": "2026-11-06",
+          "value": 3.853
+        },
+        {
+          "date": "2026-11-09",
+          "value": 3.863
+        },
+        {
+          "date": "2026-11-10",
+          "value": 3.85
+        },
+        {
+          "date": "2026-11-11",
+          "value": 3.95
+        },
+        {
+          "date": "2026-11-12",
+          "value": 3.937
         }
       ]
     },
@@ -1324,21 +1414,51 @@
       "description": "한미 2년물 금리차 계산용",
       "cycle": "D",
       "hidden": true,
-      "value": "3.35",
+      "value": "3.619",
+      "diff": 0.01,
+      "diffPercent": 0.28,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
-          "date": "2026-03-01",
-          "value": 3.2
+          "date": "2026-10-30",
+          "value": 3.588
         },
         {
-          "date": "2026-03-05",
-          "value": 3.3
+          "date": "2026-11-02",
+          "value": 3.589
         },
         {
-          "date": "2026-03-10",
-          "value": 3.35
+          "date": "2026-11-03",
+          "value": 3.584
+        },
+        {
+          "date": "2026-11-04",
+          "value": 3.578
+        },
+        {
+          "date": "2026-11-05",
+          "value": 3.567
+        },
+        {
+          "date": "2026-11-06",
+          "value": 3.551
+        },
+        {
+          "date": "2026-11-09",
+          "value": 3.568
+        },
+        {
+          "date": "2026-11-10",
+          "value": 3.57
+        },
+        {
+          "date": "2026-11-11",
+          "value": 3.613
+        },
+        {
+          "date": "2026-11-12",
+          "value": 3.619
         }
       ]
     },
@@ -1353,21 +1473,51 @@
       "source": "한국은행",
       "description": "수지 흑자 시 원화 가치 안정",
       "cycle": "M",
-      "value": "15200",
+      "value": "61,457.5",
+      "diff": 15344.5,
+      "diffPercent": 33.28,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2025-12",
-          "value": 11800
+          "value": 18702.6
         },
         {
           "date": "2026-01",
-          "value": 13500
+          "value": 13259.1
         },
         {
           "date": "2026-02",
-          "value": 15200
+          "value": 23192.7
+        },
+        {
+          "date": "2026-03",
+          "value": 37928.4
+        },
+        {
+          "date": "2026-04",
+          "value": 28292.3
+        },
+        {
+          "date": "2026-05",
+          "value": 38607.4
+        },
+        {
+          "date": "2026-06",
+          "value": 49730.4
+        },
+        {
+          "date": "2026-07",
+          "value": 42078
+        },
+        {
+          "date": "2026-08",
+          "value": 46113
+        },
+        {
+          "date": "2026-09",
+          "value": 61457.5
         }
       ]
     },
@@ -1383,21 +1533,51 @@
       "description": "외환 방어 및 원화 안정화 능력",
       "cycle": "M",
       "transform": "thousandUsdToEokUsd",
-      "value": "4097",
-      "trend": "neutral",
-      "realizedImpact": "neutral",
+      "value": "4,432",
+      "diff": 26,
+      "diffPercent": 0.59,
+      "trend": "up",
+      "realizedImpact": "down",
       "history": [
         {
-          "date": "202501",
-          "value": 4110
+          "date": "2026-01",
+          "value": 4259
         },
         {
-          "date": "202502",
-          "value": 4092
+          "date": "2026-02",
+          "value": 4276
         },
         {
-          "date": "202503",
-          "value": 4097
+          "date": "2026-03",
+          "value": 4237
+        },
+        {
+          "date": "2026-04",
+          "value": 4279
+        },
+        {
+          "date": "2026-05",
+          "value": 4270
+        },
+        {
+          "date": "2026-06",
+          "value": 4274
+        },
+        {
+          "date": "2026-07",
+          "value": 4279
+        },
+        {
+          "date": "2026-08",
+          "value": 4423
+        },
+        {
+          "date": "2026-09",
+          "value": 4406
+        },
+        {
+          "date": "2026-10",
+          "value": 4432
         }
       ]
     },
@@ -1413,10 +1593,32 @@
       "description": "대외채무 건전성 및 상환 능력",
       "cycle": "Q",
       "customFetch": "shortDebtRatio",
-      "value": "23.3",
+      "value": "24.4",
+      "diff": 0.7,
+      "diffPercent": 2.95,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
+        {
+          "date": "2024Q1",
+          "value": 20.9
+        },
+        {
+          "date": "2024Q2",
+          "value": 21.2
+        },
+        {
+          "date": "2024Q3",
+          "value": 22.4
+        },
+        {
+          "date": "2024Q4",
+          "value": 21.7
+        },
+        {
+          "date": "2025Q1",
+          "value": 21.8
+        },
         {
           "date": "2025Q2",
           "value": 22.7
@@ -1428,6 +1630,14 @@
         {
           "date": "2025Q4",
           "value": 23.3
+        },
+        {
+          "date": "2026Q1",
+          "value": 23.7
+        },
+        {
+          "date": "2026Q2",
+          "value": 24.4
         }
       ]
     },
@@ -1444,10 +1654,6 @@
       "diffPercent": -2.34,
       "trend": "down",
       "history": [
-        {
-          "date": "2026-08-14",
-          "value": 308675
-        },
         {
           "date": "2026-08-18",
           "value": 311045
@@ -1798,7 +2004,7 @@
           "value": -1194
         },
         {
-          "date": "2026-11-12",
+          "date": "2026-11-13",
           "value": 4122
         }
       ]
@@ -1918,7 +2124,7 @@
           "value": 1956
         },
         {
-          "date": "2026-11-12",
+          "date": "2026-11-13",
           "value": -6526
         }
       ]
@@ -2038,7 +2244,7 @@
           "value": -957
         },
         {
-          "date": "2026-11-12",
+          "date": "2026-11-13",
           "value": -2785
         }
       ]
@@ -2051,49 +2257,49 @@
       "impact": "up",
       "source": "계산치",
       "description": "금리차 확대 시 자본 유출 압력 가중 (환율 상승 요인)",
-      "value": "1.55",
+      "value": "1.17",
       "trend": "up",
       "realizedImpact": "up",
       "history": [
         {
-          "date": "2026-10-29",
-          "value": 1.54
-        },
-        {
           "date": "2026-10-30",
-          "value": 1.48
+          "value": 0.92
         },
         {
           "date": "2026-11-02",
-          "value": 1.44
+          "value": 0.86
         },
         {
           "date": "2026-11-03",
-          "value": 1.5
+          "value": 0.95
         },
         {
           "date": "2026-11-04",
-          "value": 1.44
+          "value": 0.92
         },
         {
           "date": "2026-11-05",
-          "value": 1.39
+          "value": 0.95
         },
         {
           "date": "2026-11-06",
-          "value": 1.41
+          "value": 1.01
         },
         {
           "date": "2026-11-09",
-          "value": 1.41
+          "value": 1
         },
         {
           "date": "2026-11-10",
-          "value": 1.53
+          "value": 1.13
         },
         {
           "date": "2026-11-11",
-          "value": 1.55
+          "value": 1.05
+        },
+        {
+          "date": "2026-11-12",
+          "value": 1.17
         }
       ]
     },
@@ -2105,16 +2311,12 @@
       "impact": "up",
       "source": "계산치",
       "description": "은행간 신용 위험 (상승 시 달러 조달 경색)",
-      "value": "-0.180",
-      "diff": -0.06,
-      "diffPercent": 50,
+      "value": "-0.170",
+      "diff": -0.04,
+      "diffPercent": 30.77,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
-        {
-          "date": "2026-10-27",
-          "value": -0.1
-        },
         {
           "date": "2026-10-28",
           "value": -0.07
@@ -2150,6 +2352,10 @@
         {
           "date": "2026-11-09",
           "value": -0.18
+        },
+        {
+          "date": "2026-11-10",
+          "value": -0.17
         }
       ]
     },
@@ -2161,16 +2367,12 @@
       "impact": "up",
       "source": "계산치",
       "description": "금융시장 유동성 리스크 (상승 시 위험회피 강화)",
-      "value": "0.000",
-      "diff": -0.01,
-      "diffPercent": -100,
-      "trend": "down",
-      "realizedImpact": "down",
+      "value": "0.010",
+      "diff": 0.01,
+      "diffPercent": 0,
+      "trend": "up",
+      "realizedImpact": "up",
       "history": [
-        {
-          "date": "2026-10-27",
-          "value": 0.07
-        },
         {
           "date": "2026-10-28",
           "value": 0.06
@@ -2206,6 +2408,10 @@
         {
           "date": "2026-11-09",
           "value": 0
+        },
+        {
+          "date": "2026-11-10",
+          "value": 0.01
         }
       ]
     },
@@ -2271,9 +2477,9 @@
       "unit": "원",
       "flag": "🇺🇸",
       "value": "1,332.80",
-      "change": "-4.70",
-      "changePercent": "-0.35",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     },
     {
       "id": "jpy-krw",
@@ -2282,9 +2488,9 @@
       "flag": "🇯🇵",
       "is100Yen": true,
       "value": "833.65",
-      "change": "-3.62",
-      "changePercent": "-0.43",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     },
     {
       "id": "eur-krw",
@@ -2292,9 +2498,9 @@
       "unit": "원",
       "flag": "🇪🇺",
       "value": "1,475.81",
-      "change": "-6.54",
-      "changePercent": "-0.44",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     },
     {
       "id": "cny-krw",
@@ -2302,9 +2508,9 @@
       "unit": "원",
       "flag": "🇨🇳",
       "value": "199.89",
-      "change": "-0.57",
-      "changePercent": "-0.28",
-      "trend": "down"
+      "change": "0.00",
+      "changePercent": "0.00",
+      "trend": "neutral"
     }
   ],
   "stockPrices": [
@@ -2370,26 +2576,26 @@
     }
   ],
   "forecast": {
-    "sentiment": "보합",
-    "kospiSentiment": "보합",
-    "upProb": 49,
-    "downProb": 51,
-    "kospiUpProb": 51,
-    "kospiDownProb": 49,
+    "sentiment": "환율 상승 우세",
+    "kospiSentiment": "코스피 하락 우세",
+    "upProb": 56,
+    "downProb": 44,
+    "kospiUpProb": 38,
+    "kospiDownProb": 62,
     "timeframes": {
       "d1": {
-        "upProb": 67,
-        "downProb": 33,
+        "upProb": 69,
+        "downProb": 31,
         "basis": "초단기 기술적지표(MACD/Stoch)+실시간거시강조"
       },
       "d5": {
-        "upProb": 53,
-        "downProb": 47,
+        "upProb": 57,
+        "downProb": 43,
         "basis": "모멘텀+수급·달러사이클중심"
       },
       "d20": {
-        "upProb": 50,
-        "downProb": 50,
+        "upProb": 47,
+        "downProb": 53,
         "basis": "ECOS+경상·외환중심"
       }
     },
@@ -2397,10 +2603,10 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 11월 12일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1332.77원으로 마감되었으며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 49%로 제시하며 하방 압력이 우세할 것으로 전망됩니다. 단기적으로 달러화 약세와 기술적 지표들이 하락세를 지지하며, 환율은 볼린저밴드 하단인 1314.01원과 60일 지지선인 1319.52원 부근을 테스트할 가능성이 있습니다. 상방으로는 이동평균선(MA20, 볼린저밴드 중단)인 1335.89원과 MA5인 1346.57원이 저항선으로 작용하며, 이 구간을 넘어서기는 어려울 것으로 보입니다. 따라서 단기적인 매도 또는 관망 후 하단 지지 확인 매수 전략이 유효하며, 1315원~1340원 범위 내에서 움직일 것으로 예상됩니다. ① 달러(DXY)의 단기 5일 모멘텀이 -15.32%로 강한 하락세를 나타내고 있습니다. ② 환율의 1일(-1.03%), 5일(-0.89%), 20일(-0.84%) 단기 모멘텀이 모두 음수를 기록하며 하락세가 지속되고 있습니다. ③ 현재 환율이 모든 주요 이동평균선(MA5=1346.57원, MA20=1335.89원, MA60=1350.98원) 및 볼린저밴드 중단(1335.89원) 아래에 위치하고 있습니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 5,342.73포인트로 마감되었으며, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 51%로 제시하며 소폭의 상승 가능성을 시사하고 있습니다. 강력한 해외 기술주 모멘텀이 코스피에 긍정적인 영향을 미칠 것으로 보이나, 국내 지수 자체의 단기 모멘텀은 약세를 보이고 있어 제한적인 상승 흐름이 예상됩니다. 하방 지지선으로는 MA5인 5207.15포인트와 볼린저밴드 하단인 5041.08포인트가 있으며, 상방 저항선으로는 직전 고점인 5375.36포인트와 MA20인 5560.42포인트가 중요하게 작용할 것입니다. 따라서 지수가 단기 저항선을 돌파하는지 확인하며 매수 또는 관망하는 전략이 바람직하며, 5200포인트~5500포인트 범위 내에서 등락할 것으로 전망됩니다. ① 나스닥 선물 단기 흐름이 5.57%, 반도체(SOX) 단기 5일 모멘텀이 2.88%로 강력한 상승세를 보이며 코스피에 긍정적 영향을 미치고 있습니다. ② 정량예측모델이 51%의 상승 확률을 제시하며 긍정적 신호를 보이고 있습니다. ③ 현재 지수가 단기 이동평균선(MA5: 5207.15pt) 위에 위치하며 단기적 반등 모멘텀을 형성하고 있습니다.\n\n실전 투자 대응\n환율: DXY 약세와 기술적 하락세로 1315원 지지 확인 후 매수, 1335원 이상 매도 대응.\n코스피: 해외 기술주 강세로 5207pt 지지 시 매수, 5560pt 목표로 상승 추세 관찰.",
     "lastAiUpdate": 1794484228132,
     "score": {
-      "upScore": 50.05576790259049,
-      "downScore": 51.22314412762816,
-      "kospiUpScore": 21.57227513505046,
-      "kospiDownScore": 20.38741429056244
+      "upScore": 64.09538975178108,
+      "downScore": 49.773217631677966,
+      "kospiUpScore": 15.39688812366254,
+      "kospiDownScore": 24.932624649048176
     }
   },
   "technicals": {
@@ -2431,7 +2637,15 @@
     "stochastic": {
       "k": 17.9
     },
-    "compoundSignals": []
+    "compoundSignals": [
+      {
+        "type": "DOLLAR_PANIC",
+        "up": 2.5,
+        "down": 0,
+        "block": "risk",
+        "desc": "달러패닉 (DXY↑+VIX↑): 신흥국 자본 이탈 극가속"
+      }
+    ]
   },
   "kospiTechnicals": {
     "rsi14": 45.6,
@@ -2462,7 +2676,7 @@
       "k": 36.3
     }
   },
-  "kospiSentiment": "보합",
+  "kospiSentiment": "코스피 하락 우세",
   "backtest": {
     "total": 89,
     "hitRate": 54,
@@ -2472,5 +2686,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 12. AM 11:50:28"
+  "lastUpdate": "2026. 11. 12. PM 7:04:48"
 }
