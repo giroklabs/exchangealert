@@ -84,13 +84,6 @@ struct ContentView: View {
                                     .padding(.horizontal, 16)
                                     .opacity(exchangeManager.isLoading ? 0.6 : 1.0)
                                 
-                                // 마지막 업데이트 시간
-                                if exchangeManager.currentRate != nil {
-                                    LastUpdateView()
-                                        .padding(.horizontal, 16)
-                                        .padding(.top, -11)
-                                }
-
                                 // 환율 추이 차트
                                 RateChartCard(currency: exchangeManager.selectedCurrency)
                                     .padding(.horizontal, 16)
@@ -328,49 +321,32 @@ struct LastUpdateView: View {
             if weekday == 7 || weekday == 1 {
                 let daysToSubtract = weekday == 7 ? 1 : 2 // 토요일은 1일, 일요일은 2일 빼기
                 let friday = calendar.date(byAdding: .day, value: -daysToSubtract, to: today) ?? today
-                formatter.dateFormat = "yyyy.M.d.(E)"
+                formatter.dateFormat = "M.d.(E)"
                 return formatter.string(from: friday)
             }
         }
         
         // 평일이거나 주말 모드가 아닌 경우 현재 시간 표시
         if let lastUpdate = exchangeManager.lastUpdateTime {
-            formatter.dateFormat = "yyyy.M.d.(E) HH:mm"
+            formatter.dateFormat = "M.d.(E) HH:mm"
             return formatter.string(from: lastUpdate)
         }
         
         // 기본값
-        formatter.dateFormat = "yyyy.M.d.(E) HH:mm"
+        formatter.dateFormat = "M.d.(E) HH:mm"
         return formatter.string(from: Date())
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack {
-                Image(systemName: "clock")
-                    .font(AppTheme.captionFont)
-                    .foregroundColor(.secondary)
-                
-                Text("마지막 업데이트: \(formatLastUpdateTime())")
-                    .font(AppTheme.captionFont)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-            }
-            
-            HStack {
-                Image(systemName: "server.rack")
-                    .font(AppTheme.captionFont)
-                    .foregroundColor(.secondary)
-                
-                Text("데이터 출처: \(exchangeManager.currentApiSource)")
-                    .font(AppTheme.captionFont)
-                    .foregroundColor(.secondary)
-                
-                Spacer()
-            }
-            
+        HStack(spacing: 4) {
+            Image(systemName: "clock")
+            Text(formatLastUpdateTime())
+                .monospacedDigit()
         }
+        .font(AppTheme.captionFont)
+        .foregroundColor(.secondary)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("마지막 업데이트 \(formatLastUpdateTime())")
     }
 }
 
