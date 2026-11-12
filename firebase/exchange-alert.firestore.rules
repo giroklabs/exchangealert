@@ -1,0 +1,49 @@
+// 환율알라미 (exchange-alert-91b92) Firestore 보안 규칙 — 3단계용 초안, 아직 배포하지 않음
+//
+// 배포 시점: 익명 로그인이 들어간 앱(1.7.1 이상)을 대부분의 사용자가 쓰게 된 뒤.
+// 서버 발송 스크립트(c/scripts/send-fcm-alerts.js)는 관리자 권한이라 이 규칙의 영향을 받지 않는다.
+//
+// 전환 기간 규칙: uid가 없는 기존 문서(구버전 앱이 만든 것)는 로그인한 사용자가 갱신·삭제하며 uid를 채울 수 있다.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /alerts/{docId} {
+      function signedIn() {
+        return request.auth != null;
+      }
+
+      function ownsExisting() {
+        return !('uid' in resource.data) || resource.data.uid == request.auth.uid;
+      }
+
+      // 앱이 쓰는 필드의 형식 검사. 문서 ID는 "{FCM 토큰}_{통화}" 형식이다.
+      function validAlert() {
+        let d = request.resource.data;
+        return d.uid == request.auth.uid
+          && d.token is string && d.token.size() > 0
+          && d.currency is string && d.currency.size() <= 5
+          && docId == d.token + '_' + d.currency
+          && d.threshold is number && d.threshold > 0
+          && d.thresholdType in ['상한선', '하한선', '3% 변동', '5% 변동']
+          && d.isEnabled is bool;
+      }
+
+      // 서버가 관리하는 발송 상태 필드(lastPushedAt, conditionActive, armSignature)는 앱이 바꿀 수 없다.
+      function onlyClientFields() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['token', 'currency', 'threshold', 'thresholdType', 'isEnabled', 'updatedAt', 'uid']);
+      }
+
+      allow read: if false;  // 앱은 이 컬렉션을 읽지 않는다
+      allow create: if signedIn() && validAlert();
+      allow update: if signedIn() && ownsExisting() && validAlert() && onlyClientFields();
+      // 동기화 시 없는 문서도 함께 삭제하므로, 존재하지 않는 문서의 삭제는 허용해야 배치 전체가 거부되지 않는다.
+      allow delete: if signedIn() && (resource == null || ownsExisting());
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

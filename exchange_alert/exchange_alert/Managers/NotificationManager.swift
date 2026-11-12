@@ -247,7 +247,7 @@ class NotificationManager {
                 } else {
                     print("✅ 테스트 알림 발송 성공")
                     self.addNotificationToHistory(
-                        currency: "USD",
+                        currency: "SYSTEM",
                         message: "테스트 알림이 발송되었습니다",
                         type: .update
                     )

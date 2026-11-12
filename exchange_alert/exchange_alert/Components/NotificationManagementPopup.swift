@@ -21,7 +21,7 @@ struct NotificationManagementPopup: View {
                     Button("닫기") {
                         isPresented = false
                     }
-                    .foregroundColor(AppTheme.primary)
+                    .foregroundColor(AppTheme.accentText)
                     .font(AppTheme.bodyFont)
                 }
                 .padding(.horizontal, 16)
@@ -244,11 +244,11 @@ struct NotificationActionBar: View {
             Button(action: onSelectAll) {
                 HStack(spacing: 8) {
                     Image(systemName: selectedCount == totalCount ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(AppTheme.primary)
+                        .foregroundColor(AppTheme.accentText)
                     
                     Text(selectedCount == totalCount ? "전체 해제" : "전체 선택")
                         .font(AppTheme.captionFont)
-                        .foregroundColor(AppTheme.primary)
+                        .foregroundColor(AppTheme.accentText)
                 }
             }
             
@@ -287,8 +287,11 @@ struct NotificationItemView: View {
     let onSelect: (UUID) -> Void
     
     private var timeAgo: String {
+        // 기기 언어가 영어여도 "in 0s" 대신 한국어로 표시하고, 1분 이내는 "방금 전"으로 보여준다.
+        if abs(notification.date.timeIntervalSinceNow) < 60 { return "방금 전" }
         let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.unitsStyle = .short
         return formatter.localizedString(for: notification.date, relativeTo: Date())
     }
     
@@ -381,12 +384,12 @@ struct NotificationPopupFooter: View {
                         Text("알림 설정")
                     }
                     .font(AppTheme.bodyFont)
-                    .foregroundColor(AppTheme.primary)
+                    .foregroundColor(AppTheme.accentText)
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(AppTheme.primary.opacity(0.1))
+                            .fill(AppTheme.primary.opacity(0.15))
                     )
                 }
                 
@@ -405,7 +408,7 @@ struct NotificationPopupFooter: View {
                         Text("테스트 알림")
                     }
                     .font(AppTheme.bodyFont)
-                    .foregroundColor(.white)
+                    .foregroundColor(AppTheme.onPrimary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
                     .background(AppTheme.primaryGradient)

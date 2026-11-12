@@ -7,6 +7,7 @@ import {
     MAX_RATE_AGE_MINUTES,
     areRatesFresh,
     decideAlert,
+    findRateInfo,
     isBadTokenError,
     isConfigurationError,
     isWithinCooldown,
@@ -86,7 +87,7 @@ function collectTasks(docs, rates, now) {
     for (const doc of docs) {
         try {
             const alert = doc.data();
-            const currentRate = parseRate(rates.find(r => r.cur_unit === alert.currency));
+            const currentRate = parseRate(findRateInfo(rates, alert.currency));
             if (!alert.token || !alert.currency || !Number.isFinite(currentRate)) {
                 skipped += 1;
                 continue;

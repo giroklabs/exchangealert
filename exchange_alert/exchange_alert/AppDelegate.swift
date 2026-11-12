@@ -21,8 +21,10 @@ import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Firebase 초기화
+        // Firebase 초기화 (App Check는 configure 전에 설정해야 한다)
+        CloudIdentity.configureAppCheck()
         FirebaseApp.configure()
+        CloudIdentity.signInIfNeeded()
         
         // 원격 알림 대리자 설정
         UNUserNotificationCenter.current().delegate = self
@@ -132,6 +134,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         // [중복 알림 방지] 푸시 알림 도착 시 해당 이벤트ID 기록
         let userInfo = response.notification.request.content.userInfo
+        // 앱이 종료된 상태에서 받은 서버 푸시는 탭했을 때 처음 알게 되므로 여기서도 기록한다.
+        recordServerPushArrival(userInfo: userInfo)
         if let currency = userInfo["currency"] as? String,
            let eventTimeInterval = userInfo["eventTime"] as? TimeInterval {
             let eventId = "\(currency)_\(Int(eventTimeInterval))"
@@ -150,6 +154,22 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // threshold_alert 타입만 기록 (급변동 알림 등 다른 타입은 무시)
         guard let type = userInfo["type"] as? String, type == "threshold_alert" else { return }
         guard let currency = userInfo["currency"] as? String else { return }
+        
+        // 같은 푸시가 포그라운드·백그라운드·탭 경로로 여러 번 들어와도 내역에는 한 번만 남긴다.
+        let pushWindow = userInfo["pushWindow"] as? String
+        let previousWindow = UserDefaults.standard.string(forKey: "ServerPushWindow_\(currency)")
+        if pushWindow == nil || pushWindow != previousWindow {
+            let alert = (userInfo["aps"] as? [String: Any])?["alert"] as? [String: Any]
+            let text = [alert?["title"] as? String, alert?["body"] as? String]
+                .compactMap { $0 }
+                .filter { !$0.isEmpty }
+                .joined(separator: " ")
+            NotificationManager.shared.addNotificationToHistory(
+                currency: currency,
+                message: text.isEmpty ? "\(currency) 목표 환율 알림" : text,
+                type: .alert
+            )
+        }
         
         let key = "ServerPush_\(currency)"
         UserDefaults.standard.set(Date(), forKey: key)
@@ -332,7 +352,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         if shouldNotify {
             UserDefaults.standard.set(now, forKey: lastNotificationKey)
-            sendBackgroundNotification(message: message, eventId: eventId)
+            sendBackgroundNotification(message: message, eventId: eventId, currency: currency.rawValue)
             print("✅ 백그라운드 환율 알림 발송 완료")
         }
     }
@@ -410,7 +430,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            sendBackgroundNotification(message: message, eventId: eventId)
+            sendBackgroundNotification(message: message, eventId: eventId, currency: "USD")
             print("✅ 백그라운드 USD 알림 발송 완료")
         }
     }
@@ -466,7 +486,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         if shouldNotify {
             UserDefaults.standard.set(now, forKey: lastNotificationKey)
-            sendBackgroundNotification(message: message, eventId: eventId)
+            sendBackgroundNotification(message: message, eventId: eventId, currency: currency.rawValue)
             print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
@@ -505,13 +525,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         if shouldNotify {
-            sendBackgroundNotification(message: message, eventId: eventId)
+            sendBackgroundNotification(message: message, eventId: eventId, currency: "USD")
             print("✅ 백그라운드 기본 알림 발송 완료")
         }
     }
     
     // 백그라운드 알림 발송 (최적화된 버전) - eventId 파라미터 추가, 푸시 이벤트ID 기록
-    private func sendBackgroundNotification(message: String, eventId: String) {
+    private func sendBackgroundNotification(message: String, eventId: String, currency: String) {
         print("📱 백그라운드 알림 발송 시도: \(message)")
         
         // 즉시 알림 발송 (권한 체크는 앱 시작 시 이미 완료됨)
@@ -540,7 +560,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             } else {
                 print("✅ 백그라운드 알림 발송 성공: \(message)")
                 // 알림 발송 기록 및 앱 내 내역 추가
-                self.recordNotification(message: message)
+                self.recordNotification(message: message, currency: currency)
                 
                 // [중복 알림 방지] 로컬 알림 발송 후에도 해당 이벤트ID 기록하여 중복 방지
                 UserDefaults.standard.set(true, forKey: "pushed_event_\(eventId)")
@@ -562,7 +582,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
     
     // 알림 발송 기록
-    private func recordNotification(message: String = "") {
+    private func recordNotification(message: String = "", currency: String) {
         let currentCount = UserDefaults.standard.integer(forKey: "total_notifications")
         UserDefaults.standard.set(currentCount + 1, forKey: "total_notifications")
         
@@ -576,7 +596,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         // 앱 내 알림 센터 내역에 추가
         if !message.isEmpty {
-            NotificationManager.shared.addNotificationToHistory(message: message)
+            NotificationManager.shared.addNotificationToHistory(currency: currency, message: message, type: .alert)
         }
         
         print("📱 알림 발송 기록: \(currentCount + 1)번째 알림, \(timestamp)")

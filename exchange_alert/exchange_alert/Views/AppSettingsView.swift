@@ -22,7 +22,7 @@ struct AppSettingsView: View {
                     Button("닫기") {
                         dismiss()
                     }
-                    .foregroundColor(AppTheme.primary)
+                    .foregroundColor(AppTheme.accentText)
                     .font(AppTheme.bodyFont)
                 }
                 .padding(.horizontal, 16)

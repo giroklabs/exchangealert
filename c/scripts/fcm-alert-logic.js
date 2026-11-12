@@ -110,6 +110,14 @@ export function shouldScan(lastScan, fingerprint, now) {
     return lastScan.fingerprint !== fingerprint || minutes >= MAX_SCAN_GAP_MINUTES;
 }
 
+// 앱은 위안화를 CNH로 저장하지만 환율 데이터는 CNY로 제공된다.
+const DATA_CODE_ALIASES = { CNH: 'CNY' };
+
+export function findRateInfo(rates, currency) {
+    const dataCode = DATA_CODE_ALIASES[currency] || currency;
+    return rates.find(r => r.cur_unit === dataCode);
+}
+
 export function parseRate(rateInfo) {
     if (!rateInfo || rateInfo.deal_bas_r === undefined || rateInfo.deal_bas_r === null) return NaN;
     return parseFloat(String(rateInfo.deal_bas_r).replace(/,/g, ''));
