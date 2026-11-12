@@ -59,12 +59,12 @@ struct ExchangeRateCard: View {
                 }
                 
                 // 환율 데이터를 세로로 정렬하여 아름다운 레이아웃 구성
-                VStack(spacing: 18) {  // 20 * 0.9 = 18
+                VStack(spacing: 12) {
                     // 매매기준율 (메인) - 완전 중앙 배치
                     if let dealBasR = rate.dealBasR {
                         let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
                         if let rateValue = Double(cleanedRate) {
-                            VStack(spacing: 11) {  // 12 * 0.9 = 10.8 ≈ 11
+                            VStack(spacing: 2) {
                                 Text(CurrencyType(rawValue: rate.curUnit ?? "")?.quoteUnitLabel.map { "매매기준율 (\($0))" } ?? "매매기준율")
                                     .font(AppTheme.captionFont)
                                     .foregroundColor(.secondary)
@@ -93,39 +93,30 @@ struct ExchangeRateCard: View {
                         }
                     }
                     
-                    // TTB/TTS 상세 정보 (서브) - 중앙 정렬
-                    ExchangeBuySeelView(rate: rate)
-                    
-                    // 일일 변동 정보 - 하단에 배치
-                    VStack(spacing: 7) {  // 8 * 0.9 = 7.2 ≈ 7
-                        Text("일일 변동")
-                            .font(AppTheme.captionFont)
-                            .foregroundColor(.secondary)
-                        
+                    // 전일 대비 변동 (한 줄)
+                    Group {
                         if exchangeManager.isDailyChangeLoading {
-                            // 로딩 중
-                            Text("데이터 로드중")
-                                .font(AppTheme.subheadlineFont)
+                            Text("전일 대비 불러오는 중")
                                 .foregroundColor(.secondary)
                         } else if let dailyChange = exchangeManager.dailyChanges[selectedCurrency] {
-                            // 데이터 로드 완료
-                            VStack(spacing: 4) {
-                                Text(dailyChange.changeValueString)
-                                    .font(AppTheme.headlineFont)
+                            HStack(spacing: 6) {
+                                Text("전일 대비")
+                                    .foregroundColor(.secondary)
+                                Text("\(dailyChange.changeValueString) \(dailyChange.changePercentString)")
                                     .fontWeight(.semibold)
-                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
-                                
-                                Text(dailyChange.changePercentString)
-                                    .font(AppTheme.subheadlineFont)
-                                    .foregroundColor(dailyChange.isPositive ? .red : .blue)
+                                    .monospacedDigit()
+                                    .foregroundColor(dailyChange.isPositive ? AppTheme.rising : AppTheme.falling)
                             }
                         } else {
-                            // 데이터 로드 실패
-                            Text("데이터 없음")
-                                .font(AppTheme.subheadlineFont)
+                            Text("전일 대비 데이터 없음")
                                 .foregroundColor(.secondary)
                         }
                     }
+                    .font(AppTheme.subheadlineFont)
+                    .padding(.top, -6)
+
+                    // TTB/TTS 상세 정보 (서브) - 중앙 정렬
+                    ExchangeBuySeelView(rate: rate)
                     .frame(maxWidth: .infinity)
                 }
             }
@@ -575,7 +566,7 @@ struct ExchangeBuySeelView: View {
             if let baseRate = Double(cleanedRate) {
                 VStack(spacing: 8) {
                 HStack(spacing: 30) {
-                    VStack(spacing: 6) {
+                    VStack(spacing: 2) {
                         Text("살때")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
@@ -591,10 +582,10 @@ struct ExchangeBuySeelView: View {
                     }
                     
                     Divider()
-                        .frame(height: 40)
+                        .frame(height: 32)
                         .background(Color(.systemGray4))
                     
-                    VStack(spacing: 6) {
+                    VStack(spacing: 2) {
                         Text("팔때")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
