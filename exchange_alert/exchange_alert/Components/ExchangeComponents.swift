@@ -10,7 +10,7 @@ struct ExchangeRateCard: View {
     
     var body: some View {
         CardView(cornerRadius: 16, shadowRadius: 8) {
-            VStack(spacing: 14) {  // 16 * 0.9 = 14.4 ≈ 14
+            VStack(spacing: 18) {
                 // 헤더
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -59,12 +59,12 @@ struct ExchangeRateCard: View {
                 }
                 
                 // 환율 데이터를 세로로 정렬하여 아름다운 레이아웃 구성
-                VStack(spacing: 12) {
+                VStack(spacing: 22) {
                     // 매매기준율 (메인) - 완전 중앙 배치
                     if let dealBasR = rate.dealBasR {
                         let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
                         if let rateValue = Double(cleanedRate) {
-                            VStack(spacing: 2) {
+                            VStack(spacing: 8) {
                                 Text(CurrencyType(rawValue: rate.curUnit ?? "")?.quoteUnitLabel.map { "매매기준율 (\($0))" } ?? "매매기준율")
                                     .font(AppTheme.captionFont)
                                     .foregroundColor(.secondary)
@@ -113,7 +113,7 @@ struct ExchangeRateCard: View {
                         }
                     }
                     .font(AppTheme.subheadlineFont)
-                    .padding(.top, -6)
+                    .padding(.top, -8)
 
                     // TTB/TTS 상세 정보 (서브) - 중앙 정렬
                     ExchangeBuySeelView(rate: rate)
@@ -566,7 +566,7 @@ struct ExchangeBuySeelView: View {
             if let baseRate = Double(cleanedRate) {
                 VStack(spacing: 8) {
                 HStack(spacing: 30) {
-                    VStack(spacing: 2) {
+                    VStack(spacing: 6) {
                         Text("살때")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
@@ -585,7 +585,7 @@ struct ExchangeBuySeelView: View {
                         .frame(height: 32)
                         .background(Color(.systemGray4))
                     
-                    VStack(spacing: 2) {
+                    VStack(spacing: 6) {
                         Text("팔때")
                             .font(AppTheme.captionFont)
                             .foregroundColor(.secondary)
