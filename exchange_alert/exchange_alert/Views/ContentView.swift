@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
+    @ObservedObject private var proStore = ProStore.shared
     @State private var showingSettings = false
     @State private var showingCalculator = false
     @State private var showingNotifications = false
@@ -85,7 +86,7 @@ struct ContentView: View {
                                     .opacity(exchangeManager.isLoading ? 0.6 : 1.0)
                                 
                                 // 환율 추이 차트
-                                RateChartCard(currency: exchangeManager.selectedCurrency)
+                                RateChartCard(currency: exchangeManager.selectedCurrency, alertSettings: exchangeManager.currentAlertSettings)
                                     .padding(.horizontal, 16)
                             }
                             .padding(.top, 8)
@@ -104,22 +105,24 @@ struct ContentView: View {
                         await refreshData()
                     }
                 }
-                .padding(.bottom, 50) // 하단 배너 공간 확보
+                .padding(.bottom, proStore.isPro ? 0 : 50) // 하단 배너 공간 확보 (프로는 광고 없음)
             }
             .onTapGesture {
                 // 배경 탭 시 키보드 내리기
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
             
-            // 2. 하단 배너 뷰 (키보드를 무시하고 항상 맨 아래 고정)
-            VStack {
-                Spacer()
-                AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/9991728010")
-                    .frame(height: 50)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.clear)
+            // 2. 하단 배너 뷰 (키보드를 무시하고 항상 맨 아래 고정). 프로는 광고를 아예 불러오지 않는다.
+            if !proStore.isPro {
+                VStack {
+                    Spacer()
+                    AdMobBannerView(adUnitID: "ca-app-pub-4376736198197573/9991728010")
+                        .frame(height: 50)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.clear)
+                }
+                .ignoresSafeArea(.keyboard, edges: .bottom) // 키보드가 올라올 때 밀려 올라가지 않음
             }
-            .ignoresSafeArea(.keyboard, edges: .bottom) // 키보드가 올라올 때 밀려 올라가지 않음
         }
 
         .sheet(isPresented: $showingSettings) {

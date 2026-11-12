@@ -120,9 +120,15 @@ enum ChartPeriod: String, CaseIterable, Identifiable {
 
 struct RateChartCard: View {
     let currency: CurrencyType
+    /// 켜져 있는 알림의 목표가 (프로에서 차트에 선으로 표시)
+    var alertSettings: AlertSettings? = nil
     @ObservedObject private var store = RateHistoryStore.shared
+    @ObservedObject private var proStore = ProStore.shared
     @AppStorage("chartPeriod") private var periodRaw = ChartPeriod.month3.rawValue
+    /// 환차익 계산기 기록 (계산기에서 바뀌면 바로 반영된다)
+    @AppStorage("fx-investments") private var investmentsData = Data()
     @State private var selectedDate: Date?
+    @State private var showingPro = false
 
     private var period: ChartPeriod { ChartPeriod(rawValue: periodRaw) ?? .month3 }
 
@@ -144,8 +150,11 @@ struct RateChartCard: View {
 
                 content
                     .frame(height: 150)
+
+                referenceFooter
             }
         }
+        .sheet(isPresented: $showingPro) { ProView() }
         .onAppear { store.refreshIfNeeded() }
         .onChange(of: currency) { _, _ in selectedDate = nil }
         .onChange(of: periodRaw) { _, _ in selectedDate = nil }
@@ -164,6 +173,18 @@ struct RateChartCard: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
+                if !proStore.isPro {
+                    Button { showingPro = true } label: {
+                        HStack(spacing: 4) {
+                            ProBadge()
+                            Text("평단·목표가 선")
+                                .font(AppTheme.captionFont)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("프로: 차트에 평단과 목표가 선 표시")
+                }
             }
 
             if let selected = selectedPoint {
@@ -217,8 +238,65 @@ struct RateChartCard: View {
         return .secondary
     }
 
+    // MARK: 평단·목표가 선 (프로)
+
+    private struct ReferenceLine: Identifiable {
+        let label: String
+        let value: Double
+        let color: Color
+        var id: String { label }
+    }
+
+    /// 보유 중인 달러의 평균 매수가. 계산기는 달러만 다룬다.
+    private var averageBuyRate: Double? {
+        guard currency == .USD,
+              let list = try? JSONDecoder().decode([FXInvestment].self, from: investmentsData) else { return nil }
+        let holdings = list.filter { $0.status == .holding && $0.usdAmount > 0 && $0.buyRate > 0 }
+        let usd = holdings.reduce(0) { $0 + $1.usdAmount }
+        guard usd > 0 else { return nil }
+        return holdings.reduce(0) { $0 + $1.usdAmount * $1.buyRate } / usd
+    }
+
+    private var targetLine: ReferenceLine? {
+        guard let settings = alertSettings, settings.isEnabled, settings.threshold > 0 else { return nil }
+        switch settings.thresholdType {
+        case .upper, .lower:
+            return ReferenceLine(label: "목표", value: settings.threshold, color: AppTheme.warning)
+        case .both, .both3:
+            return ReferenceLine(label: "기준", value: settings.threshold, color: AppTheme.warning)
+        }
+    }
+
+    /// 선이 하나라도 그려질 수 있을 때만 의미가 있다.
+    private var availableLines: [ReferenceLine] {
+        var lines: [ReferenceLine] = []
+        if let avg = averageBuyRate { lines.append(ReferenceLine(label: "평단", value: avg, color: .purple)) }
+        if let target = targetLine { lines.append(target) }
+        return lines
+    }
+
+    private var visibleLines: [ReferenceLine] { proStore.isPro ? availableLines : [] }
+
+    /// 프로 사용자에게 선의 의미와 값을 알려준다.
+    @ViewBuilder
+    private var referenceFooter: some View {
+        if !visibleLines.isEmpty {
+            HStack(spacing: 14) {
+                ForEach(visibleLines) { line in
+                    HStack(spacing: 4) {
+                        Capsule().fill(line.color).frame(width: 14, height: 3)
+                        Text("\(line.label) \(Self.rateText(line.value))원")
+                    }
+                }
+                Spacer()
+            }
+            .font(AppTheme.captionFont.monospacedDigit())
+            .foregroundColor(.secondary)
+        }
+    }
+
     private var yDomain: ClosedRange<Double> {
-        let rates = points.map(\.rate)
+        let rates = points.map(\.rate) + visibleLines.map(\.value)
         guard let low = rates.min(), let high = rates.max() else { return 0...1 }
         let pad = max((high - low) * 0.12, high * 0.002)
         return (low - pad)...(high + pad)
@@ -247,6 +325,12 @@ struct RateChartCard: View {
                     .foregroundStyle(color)
                     .lineStyle(StrokeStyle(lineWidth: 2))
                     .interpolationMethod(.monotone)
+            }
+
+            ForEach(visibleLines) { line in
+                RuleMark(y: .value(line.label, line.value))
+                    .foregroundStyle(line.color.opacity(0.8))
+                    .lineStyle(StrokeStyle(lineWidth: 1.2, dash: [5, 4]))
             }
 
             if let selected = selectedPoint {

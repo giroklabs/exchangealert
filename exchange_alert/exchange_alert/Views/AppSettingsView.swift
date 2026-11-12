@@ -3,6 +3,8 @@ import SwiftUI
 // MARK: - App Settings View
 struct AppSettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var proStore = ProStore.shared
+    @State private var showingPro = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -19,7 +21,11 @@ struct AppSettingsView: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         Spacer().frame(height: 20)
-                        
+
+                        proRow
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 20)
+
                         // 설정 메뉴 섹션
                         settingsMenuSection
                         
@@ -30,6 +36,35 @@ struct AppSettingsView: View {
         }
     }
     
+    // MARK: - Pro
+
+    private var proRow: some View {
+        Button { showingPro = true } label: {
+            HStack(spacing: 14) {
+                Image("AppLogo")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("환율알라미 프로")
+                        .font(AppTheme.headlineFont)
+                        .foregroundColor(.primary)
+                    Text(proStore.isPro ? "사용 중 · 감사합니다" : "광고 제거 · 위젯 · 차트 평단선")
+                        .font(AppTheme.subheadlineFont)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                Image(systemName: proStore.isPro ? "checkmark.seal.fill" : "chevron.right")
+                    .foregroundColor(proStore.isPro ? AppTheme.accentText : .secondary)
+            }
+            .padding(16)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(14)
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showingPro) { ProView() }
+    }
+
     // MARK: - Settings Menu Section
     
     private var settingsMenuSection: some View {
