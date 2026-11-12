@@ -90,6 +90,10 @@ struct ContentView: View {
                                         .padding(.horizontal, 16)
                                         .padding(.top, -11)
                                 }
+
+                                // 환율 추이 차트
+                                RateChartCard(currency: exchangeManager.selectedCurrency)
+                                    .padding(.horizontal, 16)
                             }
                             .padding(.top, 8)
                             .padding(.bottom, 20)
