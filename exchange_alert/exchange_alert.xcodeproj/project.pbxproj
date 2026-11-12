@@ -10,6 +10,7 @@
 		201E01CA6BDE343C953181F6 /* Pods_exchange_alert.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4A61F7AC0FE87F57ED13B6D /* Pods_exchange_alert.framework */; };
 		4A65C9A82F9493C400F9BD12 /* exchange_alert_watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4A65C9882F9493C300F9BD12 /* exchange_alert_watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4AF79E1E2F8CA12C0011189E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4AF79E1D2F8CA12C0011189E /* GoogleService-Info.plist */; };
+		4B1D0000000000000000000B /* ExchangeRateWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4B1D00000000000000000002 /* ExchangeRateWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,13 @@
 			remoteGlobalIDString = 4ACDCDC42E7D27C2005BC16F;
 			remoteInfo = exchange_alert;
 		};
+		4B1D0000000000000000000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4ACDCDBD2E7D27C2005BC16F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4B1D00000000000000000001;
+			remoteInfo = ExchangeRateWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,6 +70,17 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4B1D0000000000000000000C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4B1D0000000000000000000B /* ExchangeRateWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +91,7 @@
 		4ACDCDD42E7D27C4005BC16F /* exchange_alertTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exchange_alertTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ACDCDDE2E7D27C4005BC16F /* exchange_alertUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exchange_alertUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF79E1D2F8CA12C0011189E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4B1D00000000000000000002 /* ExchangeRateWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ExchangeRateWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F7DCFC42016F87B74667724 /* Pods-exchange_alert.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exchange_alert.debug.xcconfig"; path = "Target Support Files/Pods-exchange_alert/Pods-exchange_alert.debug.xcconfig"; sourceTree = "<group>"; };
 		B10019034C76F4480682EEC3 /* Pods-exchange_alert.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-exchange_alert.release.xcconfig"; path = "Target Support Files/Pods-exchange_alert/Pods-exchange_alert.release.xcconfig"; sourceTree = "<group>"; };
 		B4A61F7AC0FE87F57ED13B6D /* Pods_exchange_alert.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_exchange_alert.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,27 +105,28 @@
 			);
 			target = 4ACDCDC42E7D27C2005BC16F /* exchange_alert */;
 		};
+		4B1D00000000000000000004 /* Exceptions for "ExchangeRateWidget" folder in "ExchangeRateWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4B1D00000000000000000001 /* ExchangeRateWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4A65C9892F9493C300F9BD12 /* exchange_alert_watch Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "exchange_alert_watch Watch App";
 			sourceTree = "<group>";
 		};
 		4A65C9972F9493C400F9BD12 /* exchange_alert_watch Watch AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "exchange_alert_watch Watch AppTests";
 			sourceTree = "<group>";
 		};
 		4A65C9A12F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "exchange_alert_watch Watch AppUITests";
 			sourceTree = "<group>";
 		};
@@ -119,16 +140,20 @@
 		};
 		4ACDCDD72E7D27C4005BC16F /* exchange_alertTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = exchange_alertTests;
 			sourceTree = "<group>";
 		};
 		4ACDCDE12E7D27C4005BC16F /* exchange_alertUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = exchange_alertUITests;
+			sourceTree = "<group>";
+		};
+		4B1D00000000000000000003 /* ExchangeRateWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4B1D00000000000000000004 /* Exceptions for "ExchangeRateWidget" folder in "ExchangeRateWidgetExtension" target */,
+			);
+			path = ExchangeRateWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -177,6 +202,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4B1D00000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -186,6 +218,7 @@
 				4ACDCDC72E7D27C2005BC16F /* exchange_alert */,
 				4ACDCDD72E7D27C4005BC16F /* exchange_alertTests */,
 				4ACDCDE12E7D27C4005BC16F /* exchange_alertUITests */,
+				4B1D00000000000000000003 /* ExchangeRateWidget */,
 				4A65C9892F9493C300F9BD12 /* exchange_alert_watch Watch App */,
 				4A65C9972F9493C400F9BD12 /* exchange_alert_watch Watch AppTests */,
 				4A65C9A12F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests */,
@@ -203,6 +236,7 @@
 				4ACDCDD42E7D27C4005BC16F /* exchange_alertTests.xctest */,
 				4ACDCDDE2E7D27C4005BC16F /* exchange_alertUITests.xctest */,
 				4A65C9882F9493C300F9BD12 /* exchange_alert_watch Watch App.app */,
+				4B1D00000000000000000002 /* ExchangeRateWidgetExtension.appex */,
 				4A65C9942F9493C400F9BD12 /* exchange_alert_watch Watch AppTests.xctest */,
 				4A65C99E2F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests.xctest */,
 			);
@@ -303,11 +337,13 @@
 				20F282284092BEF4B86A4180 /* [CP] Copy Pods Resources */,
 				707E583A4FF66A00F90F2279 /* [CP] Embed Pods Frameworks */,
 				4A65C9A92F9493C400F9BD12 /* Embed Watch Content */,
+				4B1D0000000000000000000C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				4A65C9A72F9493C400F9BD12 /* PBXTargetDependency */,
+				4B1D0000000000000000000E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4ACDCDC72E7D27C2005BC16F /* exchange_alert */,
@@ -359,6 +395,26 @@
 			productReference = 4ACDCDDE2E7D27C4005BC16F /* exchange_alertUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		4B1D00000000000000000001 /* ExchangeRateWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B1D00000000000000000008 /* Build configuration list for PBXNativeTarget "ExchangeRateWidgetExtension" */;
+			buildPhases = (
+				4B1D00000000000000000005 /* Sources */,
+				4B1D00000000000000000006 /* Frameworks */,
+				4B1D00000000000000000007 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4B1D00000000000000000003 /* ExchangeRateWidget */,
+			);
+			name = ExchangeRateWidgetExtension;
+			productName = ExchangeRateWidgetExtension;
+			productReference = 4B1D00000000000000000002 /* ExchangeRateWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -392,6 +448,9 @@
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = 4ACDCDC42E7D27C2005BC16F;
 					};
+					4B1D00000000000000000001 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 				};
 			};
 			buildConfigurationList = 4ACDCDC02E7D27C2005BC16F /* Build configuration list for PBXProject "exchange_alert" */;
@@ -414,6 +473,7 @@
 				4A65C9872F9493C300F9BD12 /* exchange_alert_watch Watch App */,
 				4A65C9932F9493C400F9BD12 /* exchange_alert_watch Watch AppTests */,
 				4A65C99D2F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests */,
+				4B1D00000000000000000001 /* ExchangeRateWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -462,6 +522,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4B1D00000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -473,9 +540,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -512,9 +583,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -566,6 +641,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4B1D00000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -594,6 +676,11 @@
 			target = 4ACDCDC42E7D27C2005BC16F /* exchange_alert */;
 			targetProxy = 4ACDCDDF2E7D27C4005BC16F /* PBXContainerItemProxy */;
 		};
+		4B1D0000000000000000000E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4B1D00000000000000000001 /* ExchangeRateWidgetExtension */;
+			targetProxy = 4B1D0000000000000000000D /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -605,7 +692,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "exchange_alert_watch Watch App/exchange_alert_watch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = R5N9ZMU6G7;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -617,7 +704,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.greego86.exchange-alert.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -643,7 +730,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "exchange_alert_watch Watch App/exchange_alert_watch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = R5N9ZMU6G7;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -655,7 +742,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.greego86.exchange-alert.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -898,7 +985,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = exchange_alert/exchange_alert.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = R5N9ZMU6G7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -914,7 +1001,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.greego86.exchange-alert";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -936,7 +1023,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = exchange_alert/exchange_alert.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = R5N9ZMU6G7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -952,7 +1039,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = 1.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.greego86.exchange-alert";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1041,6 +1128,62 @@
 			};
 			name = Release;
 		};
+		4B1D00000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ExchangeRateWidget/ExchangeRateWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = R5N9ZMU6G7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExchangeRateWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "환율알라미";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.greego86.exchange-alert.widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		4B1D0000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ExchangeRateWidget/ExchangeRateWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20;
+				DEVELOPMENT_TEAM = R5N9ZMU6G7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExchangeRateWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "환율알라미";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.greego86.exchange-alert.widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1103,6 +1246,15 @@
 			buildConfigurations = (
 				4ACDCDEF2E7D27C4005BC16F /* Debug */,
 				4ACDCDF02E7D27C4005BC16F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B1D00000000000000000008 /* Build configuration list for PBXNativeTarget "ExchangeRateWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B1D00000000000000000009 /* Debug */,
+				4B1D0000000000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
