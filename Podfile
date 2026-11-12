@@ -10,6 +10,9 @@ target 'exchange_alert' do
   pod 'FirebaseMessaging'
   pod 'FirebaseFirestore'
   pod 'FirebaseAnalytics'
+  # 익명 로그인과 App Check: Firestore 보안 규칙 강화를 위한 준비
+  pod 'FirebaseAuth'
+  pod 'FirebaseAppCheck'
 
 end
 

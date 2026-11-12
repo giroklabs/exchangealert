@@ -54,6 +54,8 @@ class ExchangeRateManager: ObservableObject {
         
         // 토큰이 업데이트되었을 때 알려달라고 설정
         NotificationCenter.default.addObserver(self, selector: #selector(tokenDidUpdate), name: Notification.Name("FCMTokenUpdated"), object: nil)
+        // 익명 로그인이 끝나면 알림 문서에 uid를 채우기 위해 다시 동기화
+        NotificationCenter.default.addObserver(self, selector: #selector(tokenDidUpdate), name: CloudIdentity.readyNotification, object: nil)
         
         // 앱 시작 시 전일 데이터 초기화 (GitHub에서 정확한 데이터 로드하기 위해)
         previousDayData = [:]
@@ -1059,14 +1061,19 @@ class ExchangeRateManager: ObservableObject {
             let docRef = db.collection("alerts").document(docId)
             
             if settings.isEnabled {
-                batch.setData([
+                var data: [String: Any] = [
                     "token": fcmToken,
                     "currency": currency.rawValue,
                     "threshold": settings.threshold,
                     "thresholdType": settings.thresholdType.rawValue,
                     "isEnabled": settings.isEnabled,
                     "updatedAt": FieldValue.serverTimestamp()
-                ], forDocument: docRef, merge: true) // 서버가 관리하는 쿨다운·발송 상태 필드를 보존
+                ]
+                // 보안 규칙 강화(본인 문서만 쓰기)에 쓰일 소유자 표시. 로그인 전이면 생략한다.
+                if let uid = CloudIdentity.uid {
+                    data["uid"] = uid
+                }
+                batch.setData(data, forDocument: docRef, merge: true) // 서버가 관리하는 쿨다운·발송 상태 필드를 보존
             } else {
                 batch.deleteDocument(docRef)
             }

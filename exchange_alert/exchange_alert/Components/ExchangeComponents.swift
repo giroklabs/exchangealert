@@ -28,7 +28,7 @@ struct ExchangeRateCard: View {
                                         Spacer()
                                         if selectedCurrency == currency {
                                             Image(systemName: "checkmark")
-                                                .foregroundColor(AppTheme.primary)
+                                                .foregroundColor(AppTheme.accentText)
                                         }
                                     }
                                     .padding(.vertical, 4)
@@ -36,11 +36,7 @@ struct ExchangeRateCard: View {
                             }
                         } label: {
                             HStack(spacing: 4) {
-                                Text(rate.curUnit ?? "USD")
-                                    .font(AppTheme.titleFont)
-                                    .foregroundColor(.primary)
-                                
-                                Text("/KRW")
+                                Text("\(rate.curUnit ?? "USD")/KRW")
                                     .font(AppTheme.titleFont)
                                     .foregroundColor(.primary)
                                 
@@ -75,7 +71,7 @@ struct ExchangeRateCard: View {
                                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                                     // 현재 환율 - 폰트 크기 더 키움
                                     Text("\(String(format: "%.2f", rateValue))")
-                                        .font(.custom("MaruBuri-Bold", size: 42)) // MaruBuri-Bold 폰트 사용
+                                        .font(AppTheme.rateFont)
                                         .foregroundColor(ExchangeColorHelper.colorForRate(
                                             rateValue,
                                             threshold: alertSettings.threshold,
@@ -83,7 +79,7 @@ struct ExchangeRateCard: View {
                                         ))
                                     
                                     Text("원")
-                                        .font(.custom("MaruBuri-Bold", size: 21)) // 42의 50% = 21
+                                        .font(AppTheme.rateUnitFont)
                                         .foregroundColor(ExchangeColorHelper.colorForRate(
                                             rateValue,
                                             threshold: alertSettings.threshold,
@@ -245,6 +241,12 @@ struct AlertSettingsCard: View {
                         set: { newValue in
                             var updatedSettings = settings
                             updatedSettings.isEnabled = newValue
+                            let isFirstSetup = exchangeManager.currencyAlertSettings.settings[currency] == nil
+                            if newValue && isFirstSetup,
+                               let rateText = exchangeManager.exchangeRates[currency]?.dealBasR,
+                               let currentRate = parsePositive(rateText) {
+                                updatedSettings.threshold = currentRate.rounded()
+                            }
                             exchangeManager.updateAlertSettings(updatedSettings, for: currency)
                         }
                     ))
@@ -307,7 +309,7 @@ struct AlertSettingsCard: View {
                                         Text("완료")
                                             .font(AppTheme.subheadlineFont)
                                             .fontWeight(.semibold)
-                                            .foregroundColor(.white)
+                                            .foregroundColor(AppTheme.onPrimary)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 8)
                                             .background(AppTheme.primary)
@@ -418,7 +420,7 @@ struct GradientButton: View {
                 Text(title)
                     .font(AppTheme.headlineFont)
             }
-            .foregroundColor(.white)
+            .foregroundColor(AppTheme.onPrimary)
             .frame(maxWidth: .infinity)
             .frame(height: 56)
             .background(gradient)
@@ -478,7 +480,7 @@ struct AppTitleView: View {
             
             GradientText(
                 text: title,
-                font: .custom("MaruBuri-Bold", size: baseSize),
+                font: .system(size: baseSize, weight: .heavy),
                 gradient: AppTheme.exchangeGradient
             )
         }
@@ -550,9 +552,8 @@ struct ExchangeBuySeelView: View {
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary) // 검정색으로 변경
                             Text("원")
-                                .font(.custom("MaruBuri-Light", size: 9)) // 18의 50% = 9
-                                .foregroundColor(.primary)
-                                .baselineOffset(4) // 텍스트 베이스라인을 위로 이동
+                                .font(AppTheme.footnoteFont)
+                                .foregroundColor(.secondary)
                         }
                     }
                     
@@ -570,17 +571,16 @@ struct ExchangeBuySeelView: View {
                                 .fontWeight(.medium)
                                 .foregroundColor(.primary) // 검정색으로 변경
                             Text("원")
-                                .font(.custom("MaruBuri-Light", size: 9)) // 18의 50% = 9
-                                .foregroundColor(.primary)
-                                .baselineOffset(4) // 텍스트 베이스라인을 위로 이동
+                                .font(AppTheme.footnoteFont)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
                 .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
                 
                 // 은행 고시 현찰가가 아니라 매매기준율에 일률적으로 1.8%를 더하고 뺀 값이다.
-                Text("살때·팔때는 매매기준율 ±1.8%로 계산한 참고값이며 실제 은행 환율과 다를 수 있습니다")
-                    .font(.caption2)
+                Text("살때·팔때는 매매기준율 ±1.8% 참고값입니다")
+                    .font(AppTheme.footnoteFont)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)

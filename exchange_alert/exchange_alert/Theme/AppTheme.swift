@@ -14,7 +14,8 @@ struct AppTheme {
     // 환율 상태별 컬러
     static let rising = Color.red
     static let falling = Color.blue
-    static let stable = Color.gray
+    // 기준선에 닿지 않은 평상시 환율. 회색은 비활성처럼 보여 기본 글자색을 쓴다.
+    static let stable = Color.primary
     
     // 성공/경고 컬러
     static let success = Color.green
@@ -57,16 +58,31 @@ struct AppTheme {
     static let smallPadding: CGFloat = 12
     static let largePadding: CGFloat = 24
     
-    // 폰트 크기
-    static let titleFont = Font.custom("MaruBuri-Bold", size: 24)
-    static let headlineFont = Font.custom("MaruBuri-Light", size: 18)
-    static let bodyFont = Font.custom("MaruBuri-Light", size: 16)
-    static let captionFont = Font.custom("MaruBuri-Light", size: 12)
+    // 밝은 배경 위 글자·버튼용 강조색. 노란색(primary)은 흰 배경에서 대비가 부족해 어두운 호박색을 쓴다.
+    static let accentText = Color(UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.systemYellow
+            : UIColor(red: 0.69, green: 0.45, blue: 0.0, alpha: 1)
+    })
+    // 노란 배경 위 글자색
+    static let onPrimary = Color.black
+    
+    // 폰트: iOS 기본 글꼴(San Francisco + Apple SD 산돌고딕 Neo).
+    // 한글·숫자 가독성이 가장 좋고, 사용자가 설정한 글자 크기(Dynamic Type)를 그대로 따른다.
+    static let titleFont = Font.title2.weight(.bold)
+    static let headlineFont = Font.headline
+    static let bodyFont = Font.body
+    static let captionFont = Font.caption
     
     // 추가 폰트 스타일
-    static let largeTitleFont = Font.custom("MaruBuri-Bold", size: 36)
-    static let subheadlineFont = Font.custom("MaruBuri-Light", size: 14)
-    static let footnoteFont = Font.custom("MaruBuri-Light", size: 10)
+    static let largeTitleFont = Font.largeTitle.weight(.bold)
+    static let sectionTitleFont = Font.title3.weight(.bold)
+    static let subheadlineFont = Font.subheadline
+    static let footnoteFont = Font.caption2
+    
+    // 환율 숫자: 자릿수 폭을 고정해 값이 바뀌어도 숫자가 좌우로 흔들리지 않게 한다.
+    static let rateFont = Font.system(size: 44, weight: .bold).monospacedDigit()
+    static let rateUnitFont = Font.system(size: 20, weight: .semibold)
 }
 
 // MARK: - Exchange Trend Enum

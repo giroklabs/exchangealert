@@ -81,6 +81,7 @@ struct ContentView: View {
                                 
                                 // 알림 설정 카드
                                 AlertSettingsCard(currency: exchangeManager.selectedCurrency)
+                                    .padding(.horizontal, 16)
                                     .opacity(exchangeManager.isLoading ? 0.6 : 1.0)
                                 
                                 // 마지막 업데이트 시간
@@ -220,7 +221,7 @@ struct DefaultExchangeCard: View {
                         
                         Image(systemName: "dollarsign.circle.fill")
                             .font(.title2)
-                            .foregroundColor(AppTheme.primary)
+                            .foregroundColor(AppTheme.accentText)
                     }
                 }
                 
@@ -285,8 +286,7 @@ struct ErrorStateView: View {
                 .foregroundColor(AppTheme.error)
             
             Text("오류 발생")
-                .font(.title2)
-                .fontWeight(.semibold)
+                .font(AppTheme.sectionTitleFont)
                 .foregroundColor(.primary)
             
             Text(message)

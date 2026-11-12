@@ -21,8 +21,10 @@ import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Firebase 초기화
+        // Firebase 초기화 (App Check는 configure 전에 설정해야 한다)
+        CloudIdentity.configureAppCheck()
         FirebaseApp.configure()
+        CloudIdentity.signInIfNeeded()
         
         // 원격 알림 대리자 설정
         UNUserNotificationCenter.current().delegate = self

@@ -90,16 +90,22 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4A65C9892F9493C300F9BD12 /* exchange_alert_watch Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "exchange_alert_watch Watch App";
 			sourceTree = "<group>";
 		};
 		4A65C9972F9493C400F9BD12 /* exchange_alert_watch Watch AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "exchange_alert_watch Watch AppTests";
 			sourceTree = "<group>";
 		};
 		4A65C9A12F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "exchange_alert_watch Watch AppUITests";
 			sourceTree = "<group>";
 		};
@@ -113,11 +119,15 @@
 		};
 		4ACDCDD72E7D27C4005BC16F /* exchange_alertTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = exchange_alertTests;
 			sourceTree = "<group>";
 		};
 		4ACDCDE12E7D27C4005BC16F /* exchange_alertUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = exchange_alertUITests;
 			sourceTree = "<group>";
 		};
@@ -236,8 +246,6 @@
 				4A65C9892F9493C300F9BD12 /* exchange_alert_watch Watch App */,
 			);
 			name = "exchange_alert_watch Watch App";
-			packageProductDependencies = (
-			);
 			productName = "exchange_alert_watch Watch App";
 			productReference = 4A65C9882F9493C300F9BD12 /* exchange_alert_watch Watch App.app */;
 			productType = "com.apple.product-type.application";
@@ -259,8 +267,6 @@
 				4A65C9972F9493C400F9BD12 /* exchange_alert_watch Watch AppTests */,
 			);
 			name = "exchange_alert_watch Watch AppTests";
-			packageProductDependencies = (
-			);
 			productName = "exchange_alert_watch Watch AppTests";
 			productReference = 4A65C9942F9493C400F9BD12 /* exchange_alert_watch Watch AppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -282,8 +288,6 @@
 				4A65C9A12F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests */,
 			);
 			name = "exchange_alert_watch Watch AppUITests";
-			packageProductDependencies = (
-			);
 			productName = "exchange_alert_watch Watch AppUITests";
 			productReference = 4A65C99E2F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -469,13 +473,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -512,13 +512,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-exchange_alert/Pods-exchange_alert-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

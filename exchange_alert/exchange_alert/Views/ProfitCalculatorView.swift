@@ -44,7 +44,7 @@ struct ProfitCalculatorView: View {
                     Button("닫기") {
                         dismiss()
                     }
-                    .foregroundColor(AppTheme.primary)
+                    .foregroundColor(AppTheme.accentText)
                     .font(AppTheme.bodyFont)
                 }
                 .padding(.horizontal, 20)
@@ -178,6 +178,11 @@ struct ProfitCalculatorView: View {
     }
 }
 
+/// 달러 금액은 센트까지 보여준다. (정수로 자르면 $150.75가 $150으로 보임)
+func usdText(_ amount: Double) -> String {
+    "$" + amount.formatted(.number.precision(.fractionLength(0...2)))
+}
+
 /// 천 단위 쉼표와 공백을 허용하고, 0 이하나 숫자가 아닌 값은 거부한다.
 func parsePositive(_ text: String) -> Double? {
     let cleaned = text.replacingOccurrences(of: ",", with: "").trimmingCharacters(in: .whitespaces)
@@ -194,7 +199,7 @@ struct SummarySection: View {
     var body: some View {
         VStack(spacing: 12) {
             HStack(spacing: 12) {
-                SummaryCard(title: "보유 달러", value: "$\(Int(stats.totalHoldingUsd).formatted())", subValue: "원금 \(Int(stats.totalHoldingBuyKrw).formatted())원", color: .blue)
+                SummaryCard(title: "보유 달러", value: usdText(stats.totalHoldingUsd), subValue: "원금 \(Int(stats.totalHoldingBuyKrw).formatted())원", color: .blue)
                 if currentRate > 0 {
                     SummaryCard(title: "미실현 손익", value: "\(Int(stats.unrealizedProfit).formatted())원", subValue: "수익률 \(String(format: "%.2f", stats.totalHoldingBuyKrw > 0 ? (stats.unrealizedProfit / stats.totalHoldingBuyKrw * 100) : 0))%", color: stats.unrealizedProfit >= 0 ? .red : .blue)
                 } else {
@@ -282,7 +287,7 @@ struct AddInvestmentForm: View {
                             buyRate = String(format: "%.1f", currentRate)
                         }
                         .font(AppTheme.captionFont)
-                        .foregroundColor(AppTheme.primary)
+                        .foregroundColor(AppTheme.accentText)
                     }
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
@@ -353,7 +358,7 @@ struct InvestmentRow: View {
                                 .cornerRadius(4)
                         }
                     }
-                    Text("$\(Int(inv.usdAmount).formatted())")
+                    Text(usdText(inv.usdAmount))
                         .font(AppTheme.headlineFont)
                 }
                 
@@ -452,7 +457,7 @@ struct PartialSellView: View {
                     HStack {
                         Text("보유 금액")
                         Spacer()
-                        Text("$\(Int(investment?.usdAmount ?? 0).formatted())")
+                        Text(usdText(investment?.usdAmount ?? 0))
                     }
                     HStack {
                         Text("매수 환율")
