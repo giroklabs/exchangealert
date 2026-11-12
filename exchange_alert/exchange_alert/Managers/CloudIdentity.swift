@@ -25,16 +25,19 @@ enum CloudIdentity {
 
     /// 이미 로그인돼 있으면 아무것도 하지 않는다. 익명 계정은 앱 삭제 전까지 기기에 유지된다.
     static func signInIfNeeded() {
-        guard Auth.auth().currentUser == nil else { return }
+        if let user = Auth.auth().currentUser {
+            NSLog("✅ [Auth] 기존 익명 로그인 유지 (\(user.uid.prefix(6))…)")
+            return
+        }
         Auth.auth().signInAnonymously { _, error in
             if let error {
                 // Firebase 콘솔에서 익명 로그인이 꺼져 있으면 여기로 온다. uid 없이 기존 방식대로 동기화된다.
                 let nsError = error as NSError
                 let detail = (nsError.userInfo[NSUnderlyingErrorKey] as? NSError)?.userInfo ?? nsError.userInfo
-                print("⚠️ [Auth] 익명 로그인 실패 (\(nsError.code)): \(detail)")
+                NSLog("⚠️ [Auth] 익명 로그인 실패 (\(nsError.code)): \(detail)")
                 return
             }
-            print("✅ [Auth] 익명 로그인 완료")
+            NSLog("✅ [Auth] 익명 로그인 완료")
             // 기존 알림 문서에 uid를 채우기 위해 한 번 다시 동기화한다.
             NotificationCenter.default.post(name: readyNotification, object: nil)
         }

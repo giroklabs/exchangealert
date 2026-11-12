@@ -143,7 +143,7 @@ struct RateChartCard: View {
                 .pickerStyle(.segmented)
 
                 content
-                    .frame(height: 200)
+                    .frame(height: 150)
             }
         }
         .onAppear { store.refreshIfNeeded() }
