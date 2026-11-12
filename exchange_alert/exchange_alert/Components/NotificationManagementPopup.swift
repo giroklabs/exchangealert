@@ -5,57 +5,44 @@ struct NotificationManagementPopup: View {
     @EnvironmentObject var exchangeManager: ExchangeRateManager
     @Binding var isPresented: Bool
     @State private var notifications: [NotificationHistory] = []
-    @State private var isLoading = true
-    
+    @State private var showingClearAlert = false
+
     var body: some View {
         ZStack(alignment: .top) {
             AppTheme.backgroundGradient.ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
-                // 커스텀 헤더
-                HStack {
-                    AppTitleView(title: "알림 센터", baseSize: 26)
-                    
-                    Spacer()
-                    
-                    Button("닫기") {
-                        isPresented = false
+                SheetHeader(title: "알림 센터", onClose: { isPresented = false }) {
+                    if !notifications.isEmpty {
+                        Button("전체 삭제") { showingClearAlert = true }
+                            .font(AppTheme.bodyFont)
+                            .foregroundColor(.secondary)
                     }
-                    .foregroundColor(AppTheme.accentText)
-                    .font(AppTheme.bodyFont)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                
-                TopSeparator()
-                
-                if isLoading {
-                    NotificationLoadingView()
-                } else if notifications.isEmpty {
-                    NotificationEmptyView(isPresented: $isPresented)
+
+                if notifications.isEmpty {
+                    NotificationEmptyView()
                 } else {
                     NotificationListView(notifications: $notifications)
                 }
-                
-                // 푸터
-                NotificationPopupFooter(
-                    isPresented: $isPresented,
-                    onRefreshNotifications: loadNotificationHistory
-                )
+
+                NotificationPopupFooter(onRefreshNotifications: loadNotificationHistory)
             }
         }
-        .onAppear {
-            loadNotificationHistory()
+        .onAppear(perform: loadNotificationHistory)
+        .alert("알림 내역 전체 삭제", isPresented: $showingClearAlert) {
+            Button("취소", role: .cancel) { }
+            Button("삭제", role: .destructive) {
+                withAnimation { notifications.removeAll() }
+                NotificationHistory.saveToUserDefaults(notifications)
+            }
+        } message: {
+            Text("되돌릴 수 없습니다.")
         }
     }
-    
+
     private func loadNotificationHistory() {
-        isLoading = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            let loadedNotifications = NotificationHistory.loadFromUserDefaults()
-            notifications = loadedNotifications
-            isLoading = false
-        }
+        notifications = NotificationHistory.loadFromUserDefaults()
     }
 }
 
@@ -112,180 +99,50 @@ struct NotificationHistory: Codable, Identifiable {
     }
 }
 
-// Popup Header는 더 이상 사용하지 않음 (표준 헤더로 대체)
-
-// MARK: - Loading View
-struct NotificationLoadingView: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            ProgressView()
-                .scaleEffect(1.2)
-                .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.primary))
-            
-            Text("알림 내역을 불러오는 중...")
-                .font(.body)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
 // MARK: - Empty View
 struct NotificationEmptyView: View {
-    @Binding var isPresented: Bool
-    
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "bell.slash.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.secondary.opacity(0.4))
-            
-            VStack(spacing: 12) {
-                Text("알림 내역이 없습니다")
-                    .font(AppTheme.titleFont)
-                    .foregroundColor(.primary)
-                
-                Text("환율 변동 알림을 설정하면\n여기에 알림 내역이 표시됩니다")
-                    .font(AppTheme.bodyFont)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
+        VStack(spacing: 12) {
+            Image(systemName: "bell.slash")
+                .font(.system(size: 36))
+                .foregroundColor(.secondary.opacity(0.5))
+            Text("받은 알림이 없습니다")
+                .font(AppTheme.headlineFont)
+            Text("목표 환율 알림을 켜면 여기에 기록됩니다")
+                .font(AppTheme.subheadlineFont)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.vertical, 40)
+        .padding(32)
     }
 }
 
-// MARK: - Notification List View
+// MARK: - Notification List View (밀어서 삭제)
 struct NotificationListView: View {
     @Binding var notifications: [NotificationHistory]
-    @State private var selectedNotifications: Set<UUID> = []
-    @State private var showingClearAlert = false
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            // 액션 바
-            NotificationActionBar(
-                selectedCount: selectedNotifications.count,
-                totalCount: notifications.count,
-                onSelectAll: selectAllNotifications,
-                onClearSelected: clearSelectedNotifications,
-                onClearAll: { showingClearAlert = true }
-            )
-            
-            // 알림 리스트
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(notifications) { notification in
-                        NotificationItemView(
-                            notification: notification,
-                            isSelected: selectedNotifications.contains(notification.id),
-                            onSelect: toggleSelection
-                        )
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 16)
-            }
-        }
-        .alert("모든 알림 삭제", isPresented: $showingClearAlert) {
-            Button("취소", role: .cancel) { }
-            Button("삭제", role: .destructive) {
-                clearAllNotifications()
-            }
-        } message: {
-            Text("모든 알림 내역을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")
-        }
-    }
-    
-    private func selectAllNotifications() {
-        if selectedNotifications.count == notifications.count {
-            selectedNotifications.removeAll()
-        } else {
-            selectedNotifications = Set(notifications.map { $0.id })
-        }
-    }
-    
-    private func toggleSelection(_ id: UUID) {
-        if selectedNotifications.contains(id) {
-            selectedNotifications.remove(id)
-        } else {
-            selectedNotifications.insert(id)
-        }
-    }
-    
-    private func clearSelectedNotifications() {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            notifications.removeAll { selectedNotifications.contains($0.id) }
-        }
-        NotificationHistory.saveToUserDefaults(notifications)
-        selectedNotifications.removeAll()
-    }
-    
-    private func clearAllNotifications() {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            notifications.removeAll()
-        }
-        NotificationHistory.saveToUserDefaults(notifications)
-        selectedNotifications.removeAll()
-    }
-}
 
-// MARK: - Action Bar
-struct NotificationActionBar: View {
-    let selectedCount: Int
-    let totalCount: Int
-    let onSelectAll: () -> Void
-    let onClearSelected: () -> Void
-    let onClearAll: () -> Void
-    
     var body: some View {
-        HStack {
-            Button(action: onSelectAll) {
-                HStack(spacing: 8) {
-                    Image(systemName: selectedCount == totalCount ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(AppTheme.accentText)
-                    
-                    Text(selectedCount == totalCount ? "전체 해제" : "전체 선택")
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(AppTheme.accentText)
-                }
+        List {
+            ForEach(notifications) { notification in
+                NotificationItemView(notification: notification)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
             }
-            
-            Spacer()
-            
-            if selectedCount > 0 {
-                Button(action: onClearSelected) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "trash")
-                        Text("선택 삭제 (\(selectedCount))")
-                    }
-                    .font(AppTheme.captionFont)
-                    .foregroundColor(.red)
-                }
-            }
-            
-            Button(action: onClearAll) {
-                HStack(spacing: 4) {
-                    Image(systemName: "trash.fill")
-                    Text("전체 삭제")
-                }
-                .font(AppTheme.captionFont)
-                .foregroundColor(.red)
+            .onDelete { offsets in
+                notifications.remove(atOffsets: offsets)
+                NotificationHistory.saveToUserDefaults(notifications)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(Color(.secondarySystemBackground).opacity(0.5))
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
     }
 }
 
 // MARK: - Notification Item View
 struct NotificationItemView: View {
     let notification: NotificationHistory
-    let isSelected: Bool
-    let onSelect: (UUID) -> Void
-    
+
     private var timeAgo: String {
         // 기기 언어가 영어여도 "in 0s" 대신 한국어로 표시하고, 1분 이내는 "방금 전"으로 보여준다.
         if abs(notification.date.timeIntervalSinceNow) < 60 { return "방금 전" }
@@ -294,184 +151,72 @@ struct NotificationItemView: View {
         formatter.unitsStyle = .short
         return formatter.localizedString(for: notification.date, relativeTo: Date())
     }
-    
+
+    private var currencyLabel: String {
+        notification.currency == "SYSTEM" ? "테스트" : notification.currency
+    }
+
     var body: some View {
-        HStack(spacing: 12) {
-            // 선택 체크박스
-            Button(action: {
-                onSelect(notification.id)
-            }) {
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
-                    .foregroundColor(isSelected ? AppTheme.primary : .secondary)
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(currencyLabel)
+                    .font(AppTheme.captionFont.weight(.semibold))
+                    .foregroundColor(AppTheme.accentText)
+                Spacer()
+                Text(timeAgo)
+                    .font(AppTheme.captionFont)
+                    .foregroundColor(.secondary)
             }
-            
-            // 알림 타입 아이콘
-            ZStack {
-                Circle()
-                    .fill(notification.type.color.opacity(0.1))
-                    .frame(width: 40, height: 40)
-                
-                Image(systemName: notification.type.icon)
-                    .font(.title3)
-                    .foregroundColor(notification.type.color)
-            }
-            
-            // 알림 내용
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text(notification.type.displayName)
-                        .font(AppTheme.captionFont)
-                        .fontWeight(.medium)
-                        .foregroundColor(notification.type.color)
-                    
-                    Text("•")
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(.secondary)
-                    
-                    Text(notification.currency)
-                        .font(AppTheme.captionFont)
-                        .fontWeight(.medium)
-                        .foregroundColor(.primary)
-                    
-                    Spacer()
-                    
-                    Text(timeAgo)
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(.secondary)
-                }
-                
-                Text(notification.message)
-                    .font(AppTheme.bodyFont)
-                    .foregroundColor(.primary)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
-            Spacer()
+            Text(notification.message)
+                .font(AppTheme.bodyFont)
+                .foregroundColor(.primary)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isSelected ? AppTheme.primary.opacity(0.05) : Color(.systemBackground))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(isSelected ? AppTheme.primary.opacity(0.3) : Color.clear, lineWidth: 1)
-                )
-        )
+        .accessibilityElement(children: .combine)
     }
 }
 
 // MARK: - Popup Footer
 struct NotificationPopupFooter: View {
-    @Binding var isPresented: Bool
     let onRefreshNotifications: () -> Void
-    
+
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 0) {
             Divider()
-            
-            HStack(spacing: 16) {
-                Button(action: {
-                    // iOS 설정 앱으로 바로 이동
-                    openAppSettings()
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "gearshape.fill")
-                        Text("알림 설정")
-                    }
-                    .font(AppTheme.bodyFont)
-                    .foregroundColor(AppTheme.accentText)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(AppTheme.primary.opacity(0.15))
-                    )
+            HStack(spacing: 12) {
+                Button(action: openAppSettings) {
+                    Text("알림 권한 설정")
+                        .font(AppTheme.subheadlineFont.weight(.semibold))
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 44)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(12)
                 }
-                
+
                 Button(action: {
-                    // 백그라운드 fetch 강제 실행 (메뉴 활성화를 위해)
-                    triggerBackgroundFetch()
-                    
                     NotificationManager.shared.sendTestNotification()
-                    // 테스트 알림 발송 후 히스토리 새로고침
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         onRefreshNotifications()
                     }
                 }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "bell.badge.fill")
-                        Text("테스트 알림")
-                    }
-                    .font(AppTheme.bodyFont)
-                    .foregroundColor(AppTheme.onPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .background(AppTheme.primaryGradient)
-                    .cornerRadius(12)
+                    Text("테스트 알림")
+                        .font(AppTheme.subheadlineFont.weight(.semibold))
+                        .foregroundColor(AppTheme.onPrimary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 44)
+                        .background(AppTheme.primary)
+                        .cornerRadius(12)
                 }
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+            .padding(.vertical, 12)
         }
     }
-    
-    private func triggerBackgroundFetch() {
-        // iOS 버전별 백그라운드 fetch 설정
-        if #available(iOS 13.0, *) {
-            // iOS 13+에서는 BackgroundTasks 프레임워크 사용
-            print("🔄 iOS 13+ BackgroundTasks 프레임워크 사용")
-        } else {
-            // iOS 12 이하에서만 setMinimumBackgroundFetchInterval 사용
-            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-            print("🔄 iOS 12 이하 백그라운드 fetch 간격을 최소로 설정")
-        }
-        
-        // 백그라운드 앱 새로고침 상태 확인
-        let backgroundRefreshStatus = UIApplication.shared.backgroundRefreshStatus
-        print("📱 현재 백그라운드 앱 새로고침 상태: \(backgroundRefreshStatus.rawValue)")
-        
-        switch backgroundRefreshStatus {
-        case .available:
-            print("✅ 백그라운드 앱 새로고침 사용 가능 - iOS가 자동으로 백그라운드에서 실행할 예정")
-        case .denied:
-            print("❌ 백그라운드 앱 새로고침 거부됨 - 설정에서 활성화 필요")
-        case .restricted:
-            print("⚠️ 백그라운드 앱 새로고침 제한됨")
-        @unknown default:
-            print("❓ 알 수 없는 백그라운드 새로고침 상태")
-        }
-    }
-    
+
     private func openAppSettings() {
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(settingsURL)
-            print("📱 iOS 설정 앱으로 이동")
-        }
-    }
-    
-    private func showBackgroundRefreshAlert() {
-        let alert = UIAlertController(
-            title: "백그라운드 앱 새로고침 설정",
-            message: "환율 알림을 받으려면 백그라운드 앱 새로고침을 활성화해야 합니다.\n\n설정 > 일반 > 백그라운드 앱 새로고침 > 환율알라미를 켜주세요.",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "설정으로 이동", style: .default) { _ in
-            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(settingsURL)
-            }
-        })
-        
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            window.rootViewController?.present(alert, animated: true)
         }
     }
 }

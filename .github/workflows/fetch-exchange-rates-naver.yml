@@ -75,6 +75,7 @@ jobs:
         
         # Scripts
         node c/scripts/consolidate-exchange-rates.cjs || echo "Consolidate failed"
+        node c/scripts/build-chart-history.cjs || echo "Chart history failed"
         node c/scripts/generate-intraday.cjs || echo "Intraday failed"
         node c/scripts/fetch-news.js || echo "News failed"
         

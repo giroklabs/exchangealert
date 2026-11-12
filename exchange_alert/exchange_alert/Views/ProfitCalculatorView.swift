@@ -33,68 +33,41 @@ struct ProfitCalculatorView: View {
     var body: some View {
         ZStack(alignment: .top) {
             AppTheme.backgroundGradient.ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
-                // 커스텀 헤더
-                HStack {
-                    AppTitleView(title: "환차익 계산기", baseSize: 26)
-                    
-                    Spacer()
-                    
-                    Button("닫기") {
-                        dismiss()
-                    }
-                    .foregroundColor(AppTheme.accentText)
-                    .font(AppTheme.bodyFont)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
-                
-                TopSeparator()
-                
+                SheetHeader(title: "환차익 계산기", onClose: { dismiss() })
+
                 ScrollView {
-                    VStack(spacing: 20) {
-                        // 요약 정보 섹션
+                    VStack(spacing: 16) {
                         SummarySection(stats: stats, currentRate: currentRate)
-                            .padding(.horizontal)
-                        
-                        // 추가 버튼 및 입력 폼
-                        VStack(spacing: 12) {
-                            Button(action: { withAnimation { isAdding.toggle() } }) {
-                                HStack {
-                                    Image(systemName: isAdding ? "minus.circle.fill" : "plus.circle.fill")
-                                    Text(isAdding ? "닫기" : "새 투자 기록 추가")
-                                }
+
+                        Button(action: { withAnimation { isAdding.toggle() } }) {
+                            Label(isAdding ? "입력 닫기" : "매수 기록 추가", systemImage: isAdding ? "xmark" : "plus")
                                 .font(AppTheme.headlineFont)
-                                .foregroundColor(.black)
+                                .foregroundColor(AppTheme.onPrimary)
                                 .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.yellow)
+                                .padding(.vertical, 14)
+                                .background(AppTheme.primary)
                                 .cornerRadius(12)
-                            }
-                            
-                            if isAdding {
-                                AddInvestmentForm(
-                                    date: $date,
-                                    usdAmount: $usdAmount,
-                                    buyRate: $buyRate,
-                                    memo: $memo,
-                                    currentRate: currentRate,
-                                    onSave: {
-                                        saveNewInvestment()
-                                    }
-                                )
-                                .transition(.move(edge: .top).combined(with: .opacity))
-                            }
                         }
-                        .padding(.horizontal)
-                        
-                        // 투자 내역 리스트
-                        VStack(alignment: .leading, spacing: 12) {
+
+                        if isAdding {
+                            AddInvestmentForm(
+                                date: $date,
+                                usdAmount: $usdAmount,
+                                buyRate: $buyRate,
+                                memo: $memo,
+                                currentRate: currentRate,
+                                onSave: { saveNewInvestment() }
+                            )
+                            .transition(.move(edge: .top).combined(with: .opacity))
+                        }
+
+                        VStack(alignment: .leading, spacing: 10) {
                             Text("투자 내역")
-                                .font(AppTheme.titleFont)
-                                .padding(.horizontal)
-                            
+                                .font(AppTheme.headlineFont)
+                                .padding(.top, 8)
+
                             if investmentManager.investments.isEmpty {
                                 EmptyStateView()
                             } else {
@@ -113,19 +86,15 @@ struct ProfitCalculatorView: View {
                                             partialSellAmount = ""
                                             showingPartialSellSheet = true
                                         },
-                                        onDelete: {
-                                            investmentManager.deleteInvestment(id: inv.id)
-                                        },
-                                        onRevert: {
-                                            investmentManager.revertToHolding(id: inv.id)
-                                        }
+                                        onDelete: { investmentManager.deleteInvestment(id: inv.id) },
+                                        onRevert: { investmentManager.revertToHolding(id: inv.id) }
                                     )
                                 }
-                                .padding(.horizontal)
                             }
                         }
                     }
-                    .padding(.vertical)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 16)
                 }
             }
         }
@@ -195,55 +164,80 @@ func parsePositive(_ text: String) -> Double? {
 struct SummarySection: View {
     let stats: InvestmentStats
     let currentRate: Double
-    
+
+    private var roi: Double {
+        stats.totalHoldingBuyKrw > 0 ? stats.unrealizedProfit / stats.totalHoldingBuyKrw * 100 : 0
+    }
+
+    private func won(_ value: Double) -> String { "\(Int(value.rounded()).formatted())원" }
+
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 12) {
-                SummaryCard(title: "보유 달러", value: usdText(stats.totalHoldingUsd), subValue: "원금 \(Int(stats.totalHoldingBuyKrw).formatted())원", color: .blue)
-                if currentRate > 0 {
-                    SummaryCard(title: "미실현 손익", value: "\(Int(stats.unrealizedProfit).formatted())원", subValue: "수익률 \(String(format: "%.2f", stats.totalHoldingBuyKrw > 0 ? (stats.unrealizedProfit / stats.totalHoldingBuyKrw * 100) : 0))%", color: stats.unrealizedProfit >= 0 ? .red : .blue)
-                } else {
-                    SummaryCard(title: "미실현 손익", value: "--", subValue: "환율 불러오는 중", color: .gray)
+        CardView(cornerRadius: 16, shadowRadius: 8) {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("미실현 손익")
+                        .font(AppTheme.captionFont)
+                        .foregroundColor(.secondary)
+                    if currentRate > 0 {
+                        Text("\(stats.unrealizedProfit > 0 ? "+" : "")\(won(stats.unrealizedProfit))")
+                            .font(.title.weight(.bold).monospacedDigit())
+                            .foregroundColor(profitColor(stats.unrealizedProfit))
+                        Text("수익률 \(String(format: "%+.2f", roi))%")
+                            .font(AppTheme.subheadlineFont.monospacedDigit())
+                            .foregroundColor(profitColor(stats.unrealizedProfit))
+                    } else {
+                        Text("--")
+                            .font(.title.weight(.bold))
+                            .foregroundColor(.secondary)
+                    }
                 }
+
+                Divider()
+
+                VStack(spacing: 10) {
+                    SummaryRow(label: "보유 달러", value: usdText(stats.totalHoldingUsd), detail: "원금 \(won(stats.totalHoldingBuyKrw))")
+                    SummaryRow(label: "평균 매수가", value: stats.avgBuyRate > 0 ? "\(String(format: "%.1f", stats.avgBuyRate))원" : "--")
+                    SummaryRow(label: "오늘 실현 손익", value: won(stats.realizedToday))
+                    SummaryRow(label: "이번 달 실현 손익", value: won(stats.realizedMonth))
+                }
+
+                Text(currentRate > 0 ? "USD 매매기준율 \(String(format: "%.2f", currentRate))원 기준" : "환율 불러오는 중")
+                    .font(AppTheme.footnoteFont)
+                    .foregroundColor(.secondary)
             }
-            HStack(spacing: 12) {
-                SummaryCard(title: "오늘 실현 손익", value: "\(Int(stats.realizedToday).formatted())원", subValue: "이번 달: \(Int(stats.realizedMonth).formatted())원", color: .orange)
-                SummaryCard(title: "평균 매수 단가", value: "\(String(format: "%.1f", stats.avgBuyRate))원", subValue: currentRate > 0 ? "현재 환율 대비 \(String(format: "%+.1f", currentRate - stats.avgBuyRate))원" : "환율 불러오는 중", color: .purple)
-            }
-            Text(currentRate > 0 ? "평가 기준: USD 매매기준율 \(String(format: "%.2f", currentRate))원" : "평가 기준: USD 매매기준율")
-                .font(AppTheme.footnoteFont)
-                .foregroundColor(.secondary)
-                .frame(maxWidth: .infinity, alignment: .trailing)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
 
-struct SummaryCard: View {
-    let title: String
+/// 한국 관례대로 이익은 빨강, 손실은 파랑.
+func profitColor(_ value: Double) -> Color {
+    if value > 0 { return AppTheme.rising }
+    if value < 0 { return AppTheme.falling }
+    return .secondary
+}
+
+struct SummaryRow: View {
+    let label: String
     let value: String
-    let subValue: String
-    let color: Color
-    
+    var detail: String? = nil
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(AppTheme.captionFont)
+        HStack(alignment: .firstTextBaseline) {
+            Text(label)
+                .font(AppTheme.subheadlineFont)
                 .foregroundColor(.secondary)
-            Text(value)
-                .font(AppTheme.headlineFont)
-                .fontWeight(.bold)
-            Text(subValue)
-                .font(AppTheme.footnoteFont)
-                .foregroundColor(.secondary)
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(value)
+                    .font(AppTheme.subheadlineFont.weight(.semibold).monospacedDigit())
+                if let detail {
+                    Text(detail)
+                        .font(AppTheme.footnoteFont.monospacedDigit())
+                        .foregroundColor(.secondary)
+                }
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(UIColor.secondarySystemBackground).opacity(0.8))
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(color.opacity(0.3), lineWidth: 1)
-        )
     }
 }
 
@@ -254,80 +248,67 @@ struct AddInvestmentForm: View {
     @Binding var memo: String
     let currentRate: Double
     let onSave: () -> Void
-    
+
+    private var canSave: Bool { parsePositive(usdAmount) != nil && parsePositive(buyRate) != nil }
+
     var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Text("매수 정보 입력")
-                    .font(AppTheme.headlineFont)
-                Spacer()
-                DatePicker("", selection: $date, displayedComponents: .date)
-                    .labelsHidden()
-                    .environment(\.locale, Locale(identifier: "ko_KR"))
-            }
-            
-            VStack(spacing: 12) {
-                // 매수 금액
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("매수 금액 (USD)")
-                        .font(AppTheme.captionFont)
+        CardView(cornerRadius: 16, shadowRadius: 8) {
+            VStack(spacing: 14) {
+                HStack {
+                    Text("매수일")
+                        .font(AppTheme.subheadlineFont)
                         .foregroundColor(.secondary)
-                    TextField("0", text: $usdAmount)
-                        .keyboardType(.decimalPad)
-                        .textFieldStyle(CustomTextFieldStyle())
-                        .font(AppTheme.bodyFont)
+                    Spacer()
+                    DatePicker("", selection: $date, displayedComponents: .date)
+                        .labelsHidden()
+                        .environment(\.locale, Locale(identifier: "ko_KR"))
                 }
-                
-                // 매수 환율
+
+                field("매수 금액 (USD)", placeholder: "0", text: $usdAmount, keyboard: .decimalPad)
+
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text("매수 환율 (KRW)")
+                        Text("매수 환율 (원)")
                         Spacer()
-                        Button("현재가 적용") {
-                            buyRate = String(format: "%.1f", currentRate)
+                        if currentRate > 0 {
+                            Button("현재 환율 넣기") { buyRate = String(format: "%.1f", currentRate) }
+                                .foregroundColor(AppTheme.accentText)
                         }
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(AppTheme.accentText)
                     }
                     .font(AppTheme.captionFont)
                     .foregroundColor(.secondary)
-                    
                     TextField("0.0", text: $buyRate)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(CustomTextFieldStyle())
                         .font(AppTheme.bodyFont)
                 }
-                
-                // 메모
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("메모 (선택)")
-                        .font(AppTheme.captionFont)
-                        .foregroundColor(.secondary)
-                    TextField("간략한 메모", text: $memo)
-                        .textFieldStyle(CustomTextFieldStyle())
-                        .font(AppTheme.bodyFont)
+
+                field("메모 (선택)", placeholder: "간단한 메모", text: $memo, keyboard: .default)
+
+                Button(action: onSave) {
+                    Text("저장")
+                        .font(AppTheme.headlineFont)
+                        .foregroundColor(AppTheme.onPrimary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(AppTheme.primary.opacity(canSave ? 1 : 0.4))
+                        .cornerRadius(12)
                 }
+                .disabled(!canSave)
             }
-            
-            Button(action: onSave) {
-                Text("투자 기록 저장")
-                    .font(AppTheme.headlineFont)
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.yellow)
-                    .cornerRadius(12)
-            }
-            .padding(.top, 8)
         }
-        .padding(20)
-        .background(Color(UIColor.secondarySystemBackground).opacity(0.8))
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+
+    private func field(_ label: String, placeholder: String, text: Binding<String>, keyboard: UIKeyboardType) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(label)
+                .font(AppTheme.captionFont)
+                .foregroundColor(.secondary)
+            TextField(placeholder, text: text)
+                .keyboardType(keyboard)
+                .textFieldStyle(CustomTextFieldStyle())
+                .font(AppTheme.bodyFont)
+        }
     }
 }
 
@@ -338,104 +319,91 @@ struct InvestmentRow: View {
     let onPartialSell: () -> Void
     let onDelete: () -> Void
     let onRevert: () -> Void
-    
+
+    private var targetRate: Double { inv.status == .holding ? currentRate : (inv.sellRate ?? 0) }
+
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text(inv.date)
-                            .font(AppTheme.captionFont)
-                            .foregroundColor(.secondary)
-                        if inv.status == .sold {
-                            Text("매도완료")
-                                .font(AppTheme.footnoteFont)
-                                .fontWeight(.bold)
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(Color.green.opacity(0.2))
-                                .foregroundColor(.green)
-                                .cornerRadius(4)
-                        }
-                    }
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
                     Text(usdText(inv.usdAmount))
-                        .font(AppTheme.headlineFont)
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .trailing, spacing: 4) {
-                    let targetRate = inv.status == .holding ? currentRate : (inv.sellRate ?? 0)
-                    if targetRate > 0 && inv.buyRate > 0 {
-                        let profit = inv.usdAmount * (targetRate - inv.buyRate)
-                        let roi = (targetRate / inv.buyRate - 1) * 100
-                        
-                        Text("\(String(format: "%.1f", targetRate))원")
-                            .font(.subheadline)
-                        Text("\(profit >= 0 ? "+" : "")\(Int(profit).formatted())원 (\(String(format: "%.2f", roi))%)")
-                            .font(.caption)
-                            .foregroundColor(profit >= 0 ? .red : .blue)
-                    } else {
-                        Text("--")
-                            .font(.subheadline)
+                        .font(AppTheme.headlineFont.monospacedDigit())
+                    if inv.status == .sold {
+                        Text("매도완료")
+                            .font(AppTheme.footnoteFont.weight(.semibold))
                             .foregroundColor(.secondary)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.secondary.opacity(0.12))
+                            .cornerRadius(4)
                     }
                 }
-            }
-            .padding()
-            
-            if !inv.memo.isEmpty {
-                Text(inv.memo)
-                    .font(.system(size: 11))
+                Text(subtitle)
+                    .font(AppTheme.captionFont.monospacedDigit())
                     .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                    .padding(.bottom, 8)
+                if !inv.memo.isEmpty {
+                    Text(inv.memo)
+                        .font(AppTheme.captionFont)
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                }
             }
-            
-            Divider()
-            
-            HStack {
+
+            Spacer(minLength: 8)
+
+            if targetRate > 0 && inv.buyRate > 0 {
+                let profit = inv.usdAmount * (targetRate - inv.buyRate)
+                let roi = (targetRate / inv.buyRate - 1) * 100
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("\(profit > 0 ? "+" : "")\(Int(profit.rounded()).formatted())원")
+                        .font(AppTheme.subheadlineFont.weight(.semibold).monospacedDigit())
+                    Text(String(format: "%+.2f%%", roi))
+                        .font(AppTheme.captionFont.monospacedDigit())
+                }
+                .foregroundColor(profitColor(profit))
+            } else {
+                Text("--").foregroundColor(.secondary)
+            }
+
+            Menu {
                 if inv.status == .holding {
-                    Button(action: onSell) {
-                        Label("전체매도", systemImage: "dollarsign.circle")
-                    }
-                    Spacer()
-                    Button(action: onPartialSell) {
-                        Label("분할매도", systemImage: "scissors")
-                    }
+                    Button(action: onSell) { Label("전체 매도", systemImage: "dollarsign.circle") }
+                    Button(action: onPartialSell) { Label("분할 매도", systemImage: "scissors") }
                 } else {
-                    Button(action: onRevert) {
-                        Label("보유전환", systemImage: "arrow.uturn.backward")
-                    }
+                    Button(action: onRevert) { Label("보유로 되돌리기", systemImage: "arrow.uturn.backward") }
                 }
-                Spacer()
-                Button(role: .destructive, action: onDelete) {
-                    Label("삭제", systemImage: "trash")
-                }
+                Button(role: .destructive, action: onDelete) { Label("삭제", systemImage: "trash") }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(.secondary)
+                    .frame(width: 28, height: 28)
+                    .contentShape(Rectangle())
             }
-            .font(.caption2)
-            .padding(.horizontal)
-            .padding(.vertical, 8)
+            .accessibilityLabel("기록 관리")
         }
-        .background(Color(UIColor.secondarySystemBackground).opacity(0.5))
+        .padding(14)
+        .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(12)
+    }
+
+    private var subtitle: String {
+        let buy = "매수 \(String(format: "%.1f", inv.buyRate))원"
+        if inv.status == .sold, let sell = inv.sellRate {
+            return "\(inv.date)\n\(buy) → 매도 \(String(format: "%.1f", sell))원"
+        }
+        return "\(inv.date)\n\(buy)"
     }
 }
 
 struct EmptyStateView: View {
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "tray")
-                .font(.system(size: 40))
-                .foregroundColor(.secondary)
-            Text("기록된 투자 내역이 없습니다.\n새로운 매수 기록을 추가해보세요.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 40)
+        Text("아직 기록이 없습니다.\n달러를 샀다면 매수 기록을 추가해 보세요.")
+            .font(AppTheme.subheadlineFont)
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 32)
     }
 }
 
@@ -486,10 +454,10 @@ struct PartialSellView: View {
                 Button(action: onConfirm) {
                     Text("매도 확정")
                         .font(AppTheme.headlineFont)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppTheme.onPrimary)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(AppTheme.primary)
                         .cornerRadius(12)
                 }
                 .disabled(parsePositive(amount) == nil || parsePositive(sellRate) == nil)

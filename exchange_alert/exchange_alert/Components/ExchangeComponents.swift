@@ -473,17 +473,49 @@ struct AppTitleView: View {
     var baseSize: CGFloat = 20
     
     var body: some View {
-        HStack(spacing: 2) {
-            Text("💱")
-                .font(.system(size: baseSize, weight: .semibold))
+        HStack(spacing: 8) {
+            Image("AppLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: baseSize * 1.15, height: baseSize * 1.15)
+                .clipShape(RoundedRectangle(cornerRadius: baseSize * 0.27, style: .continuous))
                 .accessibilityHidden(true)
-            
-            GradientText(
-                text: title,
-                font: .system(size: baseSize, weight: .heavy),
-                gradient: AppTheme.exchangeGradient
-            )
+
+            Text(title)
+                .font(.system(size: baseSize, weight: .heavy))
+                .foregroundColor(AppTheme.primary)
         }
+    }
+}
+
+// MARK: - Sheet Header (계산기·알림 센터·설정 공용)
+struct SheetHeader<Trailing: View>: View {
+    let title: String
+    let onClose: () -> Void
+    @ViewBuilder var trailing: () -> Trailing
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 16) {
+                Text(title)
+                    .font(.title3.weight(.bold))
+                    .foregroundColor(.primary)
+                Spacer()
+                trailing()
+                Button("닫기", action: onClose)
+                    .font(AppTheme.bodyFont)
+                    .foregroundColor(AppTheme.accentText)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
+            TopSeparator()
+        }
+    }
+}
+
+extension SheetHeader where Trailing == EmptyView {
+    init(title: String, onClose: @escaping () -> Void) {
+        self.init(title: title, onClose: onClose) { EmptyView() }
     }
 }
 

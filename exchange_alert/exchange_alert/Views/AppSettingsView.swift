@@ -14,22 +14,8 @@ struct AppSettingsView: View {
             
             VStack(spacing: 0) {
                 // 커스텀 헤더 (내비게이션 바 대체)
-                HStack {
-                    AppTitleView(title: "설정", baseSize: 26)
-                    
-                    Spacer()
-                    
-                    Button("닫기") {
-                        dismiss()
-                    }
-                    .foregroundColor(AppTheme.accentText)
-                    .font(AppTheme.bodyFont)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                
-                TopSeparator()
-                
+                SheetHeader(title: "설정", onClose: { dismiss() })
+
                 ScrollView {
                     VStack(spacing: 0) {
                         Spacer().frame(height: 20)
