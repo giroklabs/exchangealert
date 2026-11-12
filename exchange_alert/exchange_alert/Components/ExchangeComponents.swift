@@ -12,7 +12,7 @@ struct ExchangeRateCard: View {
         CardView(cornerRadius: 16, shadowRadius: 8) {
             VStack(spacing: 14) {  // 16 * 0.9 = 14.4 ≈ 14
                 // 헤더
-                HStack {
+                HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
                         // 통화 선택 드롭다운
                         Menu {
@@ -52,9 +52,10 @@ struct ExchangeRateCard: View {
                     }
                     
                     Spacer()
-                    
-                    // 환율 상태 아이콘
-                    // ExchangeStatusIcon(rate: rate, alertSettings: alertSettings)
+
+                    // 마지막 업데이트 시각
+                    LastUpdateView()
+                        .padding(.top, 6)
                 }
                 
                 // 환율 데이터를 세로로 정렬하여 아름다운 레이아웃 구성
