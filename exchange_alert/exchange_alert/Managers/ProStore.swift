@@ -10,6 +10,9 @@ final class ProStore: ObservableObject {
 
     /// App Store Connect에 같은 ID로 비소모성 상품을 만들어야 한다.
     static let productID = "com.greego86.exchangealert.pro.lifetime"
+    /// 프로 출시 전까지 false. false면 프로 화면·버튼이 숨고, 구매 확인도 하지 않으며 모두 무료 사용자로 동작한다.
+    /// 다시 켤 때는 이 값과 함께 위젯 확장의 앱 임베드(project.pbxproj)도 되돌린다.
+    static let isFeatureEnabled = false
     /// 위젯이 프로 여부를 읽을 수 있도록 App Group에 함께 저장한다.
     static let appGroupID = "group.com.giroklabs.exchangealert"
     static let defaultsKey = "isProUnlocked"
@@ -22,6 +25,10 @@ final class ProStore: ObservableObject {
     private var updatesTask: Task<Void, Never>?
 
     private init() {
+        guard Self.isFeatureEnabled else {
+            isPro = false
+            return
+        }
         // 마지막으로 확인한 상태로 먼저 그려서 광고가 잠깐 보였다 사라지지 않게 한다.
         isPro = UserDefaults(suiteName: Self.appGroupID)?.bool(forKey: Self.defaultsKey) ?? false
         updatesTask = Task { [weak self] in
