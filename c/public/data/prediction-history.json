@@ -1516,19 +1516,19 @@
     {
       "date": "2026-11-13",
       "predicted": {
-        "d1_up": 69,
+        "d1_up": 70,
         "d5_up": 57,
         "d20_up": 47,
-        "overall_up": 56
+        "overall_up": 54
       },
       "actual_next_close": null,
       "hit_d1": null,
       "rateAtPrediction": null,
-      "kospi_predicted_up": 38,
+      "kospi_predicted_up": 39,
       "kospi_actual_next_close": null,
       "kospi_hit_d1": null,
       "kospiAtPrediction": 5342.73,
-      "aiAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 11월 12일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1332.77원으로 마감되었으며, 정량예측모델은 향후 1~5거래일 내 환율 상승 확률을 49%로 제시하며 하방 압력이 우세할 것으로 전망됩니다. 단기적으로 달러화 약세와 기술적 지표들이 하락세를 지지하며, 환율은 볼린저밴드 하단인 1314.01원과 60일 지지선인 1319.52원 부근을 테스트할 가능성이 있습니다. 상방으로는 이동평균선(MA20, 볼린저밴드 중단)인 1335.89원과 MA5인 1346.57원이 저항선으로 작용하며, 이 구간을 넘어서기는 어려울 것으로 보입니다. 따라서 단기적인 매도 또는 관망 후 하단 지지 확인 매수 전략이 유효하며, 1315원~1340원 범위 내에서 움직일 것으로 예상됩니다. ① 달러(DXY)의 단기 5일 모멘텀이 -15.32%로 강한 하락세를 나타내고 있습니다. ② 환율의 1일(-1.03%), 5일(-0.89%), 20일(-0.84%) 단기 모멘텀이 모두 음수를 기록하며 하락세가 지속되고 있습니다. ③ 현재 환율이 모든 주요 이동평균선(MA5=1346.57원, MA20=1335.89원, MA60=1350.98원) 및 볼린저밴드 중단(1335.89원) 아래에 위치하고 있습니다.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 5,342.73포인트로 마감되었으며, 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 51%로 제시하며 소폭의 상승 가능성을 시사하고 있습니다. 강력한 해외 기술주 모멘텀이 코스피에 긍정적인 영향을 미칠 것으로 보이나, 국내 지수 자체의 단기 모멘텀은 약세를 보이고 있어 제한적인 상승 흐름이 예상됩니다. 하방 지지선으로는 MA5인 5207.15포인트와 볼린저밴드 하단인 5041.08포인트가 있으며, 상방 저항선으로는 직전 고점인 5375.36포인트와 MA20인 5560.42포인트가 중요하게 작용할 것입니다. 따라서 지수가 단기 저항선을 돌파하는지 확인하며 매수 또는 관망하는 전략이 바람직하며, 5200포인트~5500포인트 범위 내에서 등락할 것으로 전망됩니다. ① 나스닥 선물 단기 흐름이 5.57%, 반도체(SOX) 단기 5일 모멘텀이 2.88%로 강력한 상승세를 보이며 코스피에 긍정적 영향을 미치고 있습니다. ② 정량예측모델이 51%의 상승 확률을 제시하며 긍정적 신호를 보이고 있습니다. ③ 현재 지수가 단기 이동평균선(MA5: 5207.15pt) 위에 위치하며 단기적 반등 모멘텀을 형성하고 있습니다.\n\n실전 투자 대응\n환율: DXY 약세와 기술적 하락세로 1315원 지지 확인 후 매수, 1335원 이상 매도 대응.\n코스피: 해외 기술주 강세로 5207pt 지지 시 매수, 5560pt 목표로 상승 추세 관찰."
+      "aiAnalysis": "AI 분석 요청 실패 내역:\n[gemini-2.5-flash] Status 503: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\n[gemini-2.0-flash-exp] Status 404: models/gemini-2.0-flash-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.\n[gemini-2.0-flash] Status 404: This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).\n[gemini-1.5-flash] Status 404: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
     }
   ]
 }
