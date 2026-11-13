@@ -69,6 +69,7 @@ private struct RateItem: Decodable {
     let cur_unit: String?
     let deal_bas_r: String?
     let fetched_at: String?
+    let rate_date: String?
 }
 
 private struct HistoryFile: Decodable {
@@ -85,7 +86,10 @@ enum RateLoader {
         var updatedAt: Date?
         if let data = await ratesData, let items = try? JSONDecoder().decode([RateItem].self, from: data) {
             for item in items {
-                if item.cur_unit == "META", let text = item.fetched_at { updatedAt = parseDate(text) }
+                if item.cur_unit == "META" {
+                    // 수출입은행 고시일이 있으면 그 날짜, 없으면 수집 시각
+                    updatedAt = item.rate_date.flatMap(parseDay) ?? item.fetched_at.flatMap(parseDate)
+                }
                 if let code = item.cur_unit, currency.dataCodes.contains(code),
                    let value = Double((item.deal_bas_r ?? "").replacingOccurrences(of: ",", with: "")), value > 0 {
                     rate = value
@@ -110,6 +114,14 @@ enum RateLoader {
         return data
     }
 
+    private static func parseDay(_ text: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.date(from: text)
+    }
+
     private static func parseDate(_ text: String) -> Date? {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -127,8 +139,8 @@ struct RateProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: SelectCurrencyIntent, in context: Context) async -> Timeline<RateEntry> {
         let entry = await makeEntry(configuration.currency)
-        // 서버는 약 5분마다 갱신하지만 위젯 새로고침 횟수는 iOS가 제한하므로 15분 간격을 요청한다.
-        return Timeline(entries: [entry], policy: .after(.now.addingTimeInterval(15 * 60)))
+        // 환율은 영업일 하루 1회 고시된다. 고시 직후를 놓치지 않도록 1시간 간격으로 새로 읽는다.
+        return Timeline(entries: [entry], policy: .after(.now.addingTimeInterval(60 * 60)))
     }
 
     private func makeEntry(_ currency: WidgetCurrency) async -> RateEntry {
@@ -224,7 +236,7 @@ struct ExchangeRateWidgetView: View {
     }
 
     private var updatedText: some View {
-        Text(entry.updatedAt.map { $0.formatted(.dateTime.hour().minute()) + " 기준" } ?? "")
+        Text(entry.updatedAt.map { $0.formatted(.dateTime.month(.defaultDigits).day()) + " 고시" } ?? "")
             .font(.caption2)
             .foregroundStyle(.secondary)
     }

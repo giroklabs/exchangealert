@@ -10,10 +10,12 @@ class ExchangeRateManager: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var currencyAlertSettings = CurrencyAlertSettings()
-    static let liveSourceLabel = "하나은행 매매기준율 (약 5분 간격 갱신)"
+    static let liveSourceLabel = "한국수출입은행 고시 환율 (영업일 1회)"
     static let savedSourceLabel = "저장된 데이터 (최신 환율을 불러오지 못함)"
     @Published var currentApiSource: String = ExchangeRateManager.liveSourceLabel
     @Published var lastUpdateTime: Date?
+    /// 환율 파일의 고시일 (수출입은행 데이터). 있으면 화면에 "M.d.(E) 고시"로 보여준다.
+    @Published var rateNoticeDate: Date?
     @Published var isWeekendMode: Bool = false  // 주말 모드 표시
     
     // 일일 변동 데이터 저장
@@ -295,8 +297,8 @@ class ExchangeRateManager: ObservableObject {
             self.currentApiSource = ExchangeRateManager.liveSourceLabel
         }
 
-        // 1순위: GitHub에서 저장된 네이버(하나은행) 실시간 데이터 사용
-        print("🌐 GitHub에서 네이버 은행 고시 환율 데이터 조회")
+        // 1순위: GitHub에 저장된 한국수출입은행 고시 환율 (2026-11-13부터, 영업일 1회)
+        print("🌐 GitHub에서 수출입은행 고시 환율 데이터 조회")
         recordAPICall() // API 호출 기록
         fetchFromGitHubAPI()
         
@@ -673,11 +675,26 @@ class ExchangeRateManager: ObservableObject {
     }
     
     // MARK: - 공통 데이터 파싱 함수
+    /// META 항목의 rate_date(yyyy-MM-dd)를 읽는다. 예전 형식 파일에는 없다.
+    static func noticeDate(from data: Data) -> Date? {
+        guard let items = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]],
+              let meta = items.first(where: { $0["cur_unit"] as? String == "META" }),
+              let text = meta["rate_date"] as? String else { return nil }
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.date(from: text)
+    }
+
     private func parseExchangeRates(_ data: Data) {
         // 응답 데이터 로깅
         if let jsonString = String(data: data, encoding: .utf8) {
             print("📦 API 응답: \(jsonString.prefix(500))")
         }
+
+        let noticeDate = Self.noticeDate(from: data)
+        DispatchQueue.main.async { [weak self] in self?.rateNoticeDate = noticeDate }
 
         do {
             let rates = try JSONDecoder().decode([ExchangeRate].self, from: data)

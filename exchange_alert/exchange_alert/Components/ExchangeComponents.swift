@@ -603,7 +603,7 @@ struct ExchangeBuySeelView: View {
                 .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
                 
                 // 은행 고시 현찰가가 아니라 매매기준율에 일률적으로 1.8%를 더하고 뺀 값이다.
-                Text("살때·팔때는 매매기준율 ±1.8% 참고값입니다")
+                Text("자료: 한국수출입은행 · 살때·팔때는 ±1.8% 참고값")
                     .font(AppTheme.footnoteFont)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
