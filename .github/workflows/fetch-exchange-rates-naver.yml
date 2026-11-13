@@ -31,6 +31,11 @@ jobs:
     - name: Fetch and Process
       run: |
         echo "=== Naver API Fetch Start ==="
+        # 진단: 네이버 응답 상태와 앞부분을 남긴다 (2026-11-12부터 JSON이 아닌 응답이 옴)
+        PROBE_URL="https://m.search.naver.com/p/csearch/content/qapirender.nhn?key=calculator&pkid=141&q=환율&where=m&u1=keb&u6=standardUnit&u7=0&u3=USD&u4=KRW&u8=down&u2=1"
+        curl -s -o /tmp/naver_probe.txt -D /tmp/naver_headers.txt -w "probe http=%{http_code} type=%{content_type} size=%{size_download} ip=%{remote_ip}\n" "$PROBE_URL" || echo "probe curl exit $?"
+        echo "--- probe headers ---"; head -n 15 /tmp/naver_headers.txt || true
+        echo "--- probe body (first 300 bytes) ---"; head -c 300 /tmp/naver_probe.txt | tr -d '\r' || true; echo
         CURRENT_TIME=$(date '+%Y-%m-%dT%H:%M:%S%z')
         SEARCH_DATE=$(date '+%Y-%m-%d')
         echo "$CURRENT_TIME" > data/last-update.txt
