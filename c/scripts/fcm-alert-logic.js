@@ -83,7 +83,20 @@ export function ratesFetchedAt(rates) {
     return Number.isNaN(date.getTime()) ? null : date;
 }
 
+// 한국수출입은행 고시 환율은 영업일 하루 1회라, 고시일 기준으로 본다. (연휴를 감안해 4일)
+export const MAX_RATE_DATE_AGE_DAYS = 4;
+
+function kstDate(date) {
+    return new Date(date.getTime() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
 export function areRatesFresh(rates, now) {
+    const meta = Array.isArray(rates) ? rates.find(r => r.cur_unit === 'META') : null;
+    if (meta && meta.source === 'koreaexim') {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(String(meta.rate_date || ''))) return false;
+        const oldest = kstDate(new Date(now.getTime() - MAX_RATE_DATE_AGE_DAYS * 86400000));
+        return meta.rate_date >= oldest && meta.rate_date <= kstDate(now);
+    }
     const fetchedAt = ratesFetchedAt(rates);
     return fetchedAt !== null && (now - fetchedAt) / 60000 <= MAX_RATE_AGE_MINUTES;
 }
