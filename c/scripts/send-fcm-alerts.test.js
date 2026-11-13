@@ -109,6 +109,18 @@ test('+0900 형식의 시각으로 신선도를 판단한다', () => {
     assert.equal(areRatesFresh([{ cur_unit: 'USD' }], NOW), false);
 });
 
+test('수출입은행 데이터는 고시일 기준으로 신선도를 판단한다', () => {
+    const exim = (rateDate) => [
+        { cur_unit: 'META', fetched_at: '2026-11-08T09:00:00+0900', source: 'koreaexim', rate_date: rateDate },
+        { cur_unit: 'USD', deal_bas_r: '1,400' },
+    ];
+    const kstToday = new Date(NOW.getTime() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+    assert.equal(areRatesFresh(exim(kstToday), NOW), true);
+    assert.equal(areRatesFresh(exim('2020-01-01'), NOW), false);
+    assert.equal(areRatesFresh(exim('2999-01-01'), NOW), false);
+    assert.equal(areRatesFresh(exim(undefined), NOW), false);
+});
+
 test('토큰 무효 오류만 삭제 대상이다', () => {
     assert.equal(isBadTokenError('messaging/registration-token-not-registered'), true);
     assert.equal(isBadTokenError('messaging/third-party-auth-error'), false);
