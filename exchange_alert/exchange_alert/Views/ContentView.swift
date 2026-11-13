@@ -313,7 +313,14 @@ struct LastUpdateView: View {
         let calendar = Calendar.current
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
-        
+
+        // 수출입은행 고시 환율은 영업일 하루 1회라 고시일을 보여준다. (주말·휴일에도 마지막 고시일)
+        if let notice = exchangeManager.rateNoticeDate {
+            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+            formatter.dateFormat = "M.d.(E) 고시"
+            return formatter.string(from: notice)
+        }
+
         // 주말인 경우 마지막 평일 데이터 기준일 표시
         if exchangeManager.isWeekendMode {
             // 주말에는 항상 마지막 금요일 날짜 표시
@@ -349,7 +356,7 @@ struct LastUpdateView: View {
         .font(AppTheme.captionFont)
         .foregroundColor(.secondary)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("마지막 업데이트 \(formatLastUpdateTime())")
+        .accessibilityLabel("환율 기준 \(formatLastUpdateTime())")
     }
 }
 
