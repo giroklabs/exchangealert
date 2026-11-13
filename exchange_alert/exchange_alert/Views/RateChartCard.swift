@@ -173,7 +173,7 @@ struct RateChartCard: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
-                if !proStore.isPro {
+                if ProStore.isFeatureEnabled && !proStore.isPro {
                     Button { showingPro = true } label: {
                         HStack(spacing: 4) {
                             ProBadge()

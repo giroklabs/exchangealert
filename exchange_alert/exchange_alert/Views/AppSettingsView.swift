@@ -22,9 +22,11 @@ struct AppSettingsView: View {
                     VStack(spacing: 0) {
                         Spacer().frame(height: 20)
 
-                        proRow
-                            .padding(.horizontal, 16)
-                            .padding(.bottom, 20)
+                        if ProStore.isFeatureEnabled {
+                            proRow
+                                .padding(.horizontal, 16)
+                                .padding(.bottom, 20)
+                        }
 
                         // 설정 메뉴 섹션
                         settingsMenuSection
