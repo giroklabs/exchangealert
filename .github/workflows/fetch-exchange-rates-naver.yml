@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '시험 실행 (커밋·푸시·알림 트리거 안 함)'
+        type: boolean
+        default: false
   repository_dispatch:
     types: [trigger-fetch-naver]
 
@@ -30,7 +35,7 @@ jobs:
       
     - name: Fetch and Process
       env:
-        KOREAEXIM_API_KEY: ${{ secrets.KOREAEXIM_API_KEY }}
+        KOREAEXIM_API_KEY: ${{ secrets.KOREA_EXIM_API_KEY }}
       run: |
         # 2026-11-12부터 네이버 내부 주소가 GitHub 서버 요청을 거부해 한국수출입은행 공식 API로 옮겼다.
         # 영업일 하루 1회 고시. 이미 받은 날은 API를 부르지 않고 파일도 바꾸지 않는다.
@@ -48,7 +53,16 @@ jobs:
         node c/scripts/generate-intraday.cjs || echo "Intraday failed"
         node c/scripts/fetch-news.js || echo "News failed"
         
+    - name: Dry run summary
+      if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+      run: |
+        echo "=== 시험 실행: 커밋하지 않음 ==="
+        jq -c '.[0]' data/exchange-rates.json
+        jq -r '.[1:][] | "\(.cur_unit) \(.deal_bas_r)"' data/exchange-rates.json | head -25
+        git status --short data | head -20
+
     - name: Commit and Push
+      if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"

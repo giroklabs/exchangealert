@@ -102,7 +102,7 @@ function setOutput(updated) {
 async function main() {
     const authkey = process.env.KOREAEXIM_API_KEY;
     if (!authkey) {
-        console.error('❌ KOREAEXIM_API_KEY 시크릿이 없습니다.');
+        console.error('❌ KOREA_EXIM_API_KEY 시크릿이 없습니다.');
         process.exitCode = 1;
         return;
     }
