@@ -62,6 +62,12 @@ jobs:
         jq -r '.[1:][] | "\(.cur_unit) \(.deal_bas_r)"' data/exchange-rates.json | head -25
         git status --short data | head -20
 
+    - name: UniRateAPI probe (dry run only)
+      if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+      env:
+        UNIRATE_API_KEY: ${{ secrets.UNIRATE_API_KEY }}
+      run: node c/scripts/probe-unirate.cjs
+
     - name: Commit and Push
       if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
       run: |
