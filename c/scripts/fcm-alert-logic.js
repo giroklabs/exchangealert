@@ -1,4 +1,5 @@
 // send-fcm-alerts.js의 판정 로직. Firebase 없이 테스트할 수 있도록 분리했다.
+import { isMarketSnapshotUsable } from './market-rates.js';
 
 export const EXPECTED_PROJECT_ID = 'exchange-alert-91b92';
 export const COOLDOWN_MINUTES = 60;
@@ -92,6 +93,10 @@ function kstDate(date) {
 
 export function areRatesFresh(rates, now) {
     const meta = Array.isArray(rates) ? rates.find(r => r.cur_unit === 'META') : null;
+    if (meta && meta.source === 'unirate') {
+        const usd = rates.find(r => r.cur_unit === 'USD');
+        return isMarketSnapshotUsable({ fetchedAt: meta.fetched_at, rates: { USD: usd && usd.deal_bas_r } }, now);
+    }
     if (meta && meta.source === 'koreaexim') {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(String(meta.rate_date || ''))) return false;
         const oldest = kstDate(new Date(now.getTime() - MAX_RATE_DATE_AGE_DAYS * 86400000));

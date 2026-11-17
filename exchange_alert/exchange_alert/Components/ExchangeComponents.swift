@@ -65,7 +65,8 @@ struct ExchangeRateCard: View {
                         let cleanedRate = dealBasR.replacingOccurrences(of: ",", with: "")
                         if let rateValue = Double(cleanedRate) {
                             VStack(spacing: 8) {
-                                Text(CurrencyType(rawValue: rate.curUnit ?? "")?.quoteUnitLabel.map { "매매기준율 (\($0))" } ?? "매매기준율")
+                                let rateTitle = exchangeManager.isShowingMarketRate ? "시장 환율" : "매매기준율"
+                                Text(CurrencyType(rawValue: rate.curUnit ?? "")?.quoteUnitLabel.map { "\(rateTitle) (\($0))" } ?? rateTitle)
                                     .font(AppTheme.captionFont)
                                     .foregroundColor(.secondary)
                                 
@@ -559,6 +560,7 @@ struct AdBannerPlaceholder: View {
 // MARK: - Exchange Buy/Sell View
 struct ExchangeBuySeelView: View {
     let rate: ExchangeRate
+    @EnvironmentObject var exchangeManager: ExchangeRateManager
     
     var body: some View {
         if let dealBasR = rate.dealBasR {
@@ -602,12 +604,33 @@ struct ExchangeBuySeelView: View {
                 }
                 .frame(maxWidth: .infinity) // 중앙 정렬을 위해 전체 너비 사용
                 
-                // 은행 고시 현찰가가 아니라 매매기준율에 일률적으로 1.8%를 더하고 뺀 값이다.
-                Text("자료: 한국수출입은행 · 살때·팔때는 ±1.8% 참고값")
+                // 은행 고시 현찰가가 아니라 기준 환율에 일률적으로 1.8%를 더하고 뺀 값이다.
+                if exchangeManager.isShowingMarketRate {
+                    VStack(spacing: 2) {
+                        if let currency = CurrencyType(rawValue: rate.curUnit ?? ""),
+                           let notice = exchangeManager.noticeValue(for: currency) {
+                            Text("오늘 고시 \(String(format: "%.2f", notice))원 (한국수출입은행)")
+                                .monospacedDigit()
+                        }
+                        // 시장 환율 제공처 표기 (이용 약관상 필수)
+                        HStack(spacing: 4) {
+                            Link(MarketSnapshot.attribution, destination: MarketSnapshot.attributionURL)
+                                .underline()
+                            Text("· 살때·팔때 ±1.8% 참고값")
+                        }
+                    }
                     .font(AppTheme.footnoteFont)
                     .foregroundColor(.secondary)
+                    .tint(.secondary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
+                } else {
+                    Text("자료: 한국수출입은행 · 살때·팔때는 ±1.8% 참고값")
+                        .font(AppTheme.footnoteFont)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                }
                 }
             }
         }

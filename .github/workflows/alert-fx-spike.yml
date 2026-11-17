@@ -61,6 +61,9 @@ jobs:
         env:
           # alerts 컬렉션은 환율 앱 프로젝트(exchange-alert-91b92)에 있다. MACRO 키를 쓰면 안 된다.
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # 시장 환율(UniRateAPI). 장중 15분마다 받아 Firestore rates/live에 두고 그 값으로 판정한다.
+          # 없거나 실패하면 수출입은행 고시로 판정한다. 약관상 공개 파일에는 쓰지 않는다.
+          UNIRATE_API_KEY: ${{ secrets.UNIRATE_API_KEY }}
           FCM_SCAN_STATE_FILE: ${{ github.workspace }}/.fcm-scan-state.json
 
       - name: Save FCM scan state
