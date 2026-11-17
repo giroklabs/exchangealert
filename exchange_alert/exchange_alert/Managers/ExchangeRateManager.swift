@@ -17,6 +17,18 @@ class ExchangeRateManager: ObservableObject {
     /// 환율 파일의 고시일 (수출입은행 데이터). 있으면 화면에 "M.d.(E) 고시"로 보여준다.
     @Published var rateNoticeDate: Date?
     @Published var isWeekendMode: Bool = false  // 주말 모드 표시
+
+    // 시장 환율(15분 갱신). 쓸 수 있으면 화면 숫자는 시장 환율, 고시 환율은 보조로 보여준다.
+    static let marketSourceLabel = "시장 환율 (15분 갱신) · 고시 한국수출입은행"
+    /// 화면에 시장 환율을 보여주고 있으면 그 기준 시각, 고시 환율이면 nil
+    @Published var marketUpdatedAt: Date?
+    /// 수출입은행 고시 환율 원본 (시장 환율을 덮기 전)
+    @Published private(set) var noticeRates: [CurrencyType: ExchangeRate] = [:]
+    private var marketSnapshot: MarketSnapshot?
+    private var lastMarketFetch: Date?
+    private let marketFetchInterval: TimeInterval = 5 * 60
+
+    var isShowingMarketRate: Bool { marketUpdatedAt != nil }
     
     // 일일 변동 데이터 저장
     @Published var dailyChanges: [CurrencyType: DailyChange] = [:]
@@ -566,6 +578,9 @@ class ExchangeRateManager: ObservableObject {
                 
                 // GitHub에서 실제 데이터 기준 시간 로드
                 self.fetchGitHubLastUpdateTime()
+
+                // 시장 환율을 덮어 보여준다. 실패하면 고시 환율 그대로.
+                self.refreshMarketRates()
             }
         }.resume()
     }
@@ -646,6 +661,10 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
             
+            // 저장본은 고시 환율이다. 시장 환율이 있으면 그 위에 덮는다.
+            let noticeRates = lastRates
+            let lastRates = self.applyingMarket(to: noticeRates)
+
             // 현재 데이터로 변동 계산 (메인 큐 밖에서 수행)
             let calculatedChanges = self.calculateDailyChangesSync(newRates: lastRates)
             
@@ -653,6 +672,7 @@ class ExchangeRateManager: ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 self?.dailyChanges = calculatedChanges
                 self?.isDailyChangeLoading = false  // 로딩 완료
+                self?.noticeRates = noticeRates
                 self?.exchangeRates = lastRates
                 self?.lastUpdateTime = UserDefaults.standard.object(forKey: "LastUpdateTime") as? Date ?? Date()
                 self?.currentApiSource = "로컬 저장된 데이터 (오프라인)"
@@ -720,6 +740,10 @@ class ExchangeRateManager: ObservableObject {
                 }
             }
 
+            // 고시 환율 원본은 따로 두고, 화면·알림에는 시장 환율을 덮은 값을 쓴다.
+            let noticeRates = newRates
+            newRates = self.applyingMarket(to: noticeRates)
+
             // 메인 큐에서 UI 업데이트 수행 (동시성 안전성 보장)
             self.uiUpdateQueue.async { [weak self] in
                 guard let self = self else { return }
@@ -744,8 +768,8 @@ class ExchangeRateManager: ObservableObject {
                 let today = Date()
                 if let lastUpdate = self.lastUpdateTime {
                     if !calendar.isDate(lastUpdate, inSameDayAs: today) {
-                        // 날짜가 바뀌었을 때만 이전 데이터로 설정
-                        self.previousDayData = self.exchangeRates
+                        // 날짜가 바뀌었을 때만 이전 데이터로 설정 (전일 대비는 고시 환율 기준)
+                        self.previousDayData = self.noticeRates.isEmpty ? self.exchangeRates : self.noticeRates
                         self.savePreviousDayData()
                         print("📅 날짜 변경 감지 - previousDayData 업데이트")
                     } else {
@@ -753,13 +777,14 @@ class ExchangeRateManager: ObservableObject {
                     }
                 }
                 
+                self.noticeRates = noticeRates
                 self.exchangeRates = newRates
                 // lastUpdateTime은 GitHub에서 별도로 로드됨
             }
             
             // 성공적으로 데이터를 가져왔을 때 로컬에 저장 (오프라인 백업용)
-            if !newRates.isEmpty {
-                self.saveExchangeRatesToLocal(newRates)
+            if !noticeRates.isEmpty {
+                self.saveExchangeRatesToLocal(noticeRates)
             }
 
             // 현재 선택된 통화의 환율이 있으면 알림 체크 (매매기준율 기준)
@@ -781,6 +806,49 @@ class ExchangeRateManager: ObservableObject {
                 self.isDailyChangeLoading = false  // 파싱 오류 시에도 로딩 중단
             }
         }
+    }
+
+    // MARK: - 시장 환율 (Firestore rates/live)
+
+    private func applyingMarket(to notice: [CurrencyType: ExchangeRate]) -> [CurrencyType: ExchangeRate] {
+        guard let snapshot = marketSnapshot, snapshot.isUsable() else { return notice }
+        return snapshot.applied(to: notice)
+    }
+
+    private func refreshMarketRates() {
+        if let last = lastMarketFetch, Date().timeIntervalSince(last) < marketFetchInterval {
+            applyMarketToScreen()
+            return
+        }
+        lastMarketFetch = Date()
+        MarketSnapshot.fetch { [weak self] snapshot in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                if let snapshot { self.marketSnapshot = snapshot }
+                self.applyMarketToScreen()
+            }
+        }
+    }
+
+    /// 고시 환율 원본 위에 시장 환율을 다시 덮고, 전일 대비·알림을 갱신한다.
+    private func applyMarketToScreen() {
+        guard !noticeRates.isEmpty else { return }
+        let usable = marketSnapshot.map { $0.isUsable() } ?? false
+        exchangeRates = applyingMarket(to: noticeRates)
+        marketUpdatedAt = usable ? marketSnapshot?.fetchedAt : nil
+        currentApiSource = usable ? Self.marketSourceLabel : Self.liveSourceLabel
+        if !previousDayData.isEmpty {
+            dailyChanges = calculateDailyChangesSync(newRates: exchangeRates)
+        }
+        if usable, let rate = exchangeRates[selectedCurrency] {
+            checkAlertThresholds(rate: rate)
+        }
+    }
+
+    /// 화면이 시장 환율일 때 함께 보여줄 오늘 고시 환율
+    func noticeValue(for currency: CurrencyType) -> Double? {
+        guard let text = noticeRates[currency]?.dealBasR else { return nil }
+        return Double(text.replacingOccurrences(of: ",", with: ""))
     }
 
     // MARK: - Korea Exim Bank API 호출 (사용 안함)

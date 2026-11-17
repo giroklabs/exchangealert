@@ -314,6 +314,13 @@ struct LastUpdateView: View {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
 
+        // 시장 환율을 보여주는 중이면 그 기준 시각 (오늘이면 시각만)
+        if let market = exchangeManager.marketUpdatedAt {
+            formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+            formatter.dateFormat = calendar.isDateInToday(market) ? "HH:mm 기준" : "M.d.(E) HH:mm 기준"
+            return formatter.string(from: market)
+        }
+
         // 수출입은행 고시 환율은 영업일 하루 1회라 고시일을 보여준다. (주말·휴일에도 마지막 고시일)
         if let notice = exchangeManager.rateNoticeDate {
             formatter.timeZone = TimeZone(identifier: "Asia/Seoul")

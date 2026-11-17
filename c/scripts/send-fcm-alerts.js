@@ -15,6 +15,7 @@ import {
     ratesFingerprint,
     shouldScan,
 } from './fcm-alert-logic.js';
+import { refreshMarketRates, toRatesArray } from './market-rates.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,9 +33,10 @@ function getPushWindow(currency, now) {
     return `${currency}_${yyyy}-${mm}-${dd}_${hh}:${min}`;
 }
 
-function buildMessage({ token, currency, threshold }, decision, currentRate, now) {
+function buildMessage({ token, currency, threshold }, decision, currentRate, now, isMarket = false) {
     const title = `${decision.emoji} ${currency} 환율 ${decision.direction}!`;
-    const body = `현재 환율이 ${currentRate.toLocaleString()}원입니다.`;
+    // 시장 환율로 판정했으면 앱의 고시 환율과 몇 원 다를 수 있어 출처를 밝힌다.
+    const body = `현재 ${isMarket ? '시장 ' : ''}환율이 ${currentRate.toLocaleString()}원입니다.`;
     return {
         token,
         notification: { title, body },
@@ -43,6 +45,7 @@ function buildMessage({ token, currency, threshold }, decision, currentRate, now
             currency,
             pushWindow: getPushWindow(currency, now),
             rate: currentRate.toString(),
+            source: isMarket ? 'market' : 'notice',
             threshold: threshold.toString(),
         },
         apns: {
@@ -79,7 +82,7 @@ async function applyUpdates(db, updates) {
     return failed;
 }
 
-function collectTasks(docs, rates, now) {
+function collectTasks(docs, rates, now, isMarket = false) {
     const tasks = [];
     const stateUpdates = [];
     let skipped = 0;
@@ -110,7 +113,7 @@ function collectTasks(docs, rates, now) {
             tasks.push({
                 ref: doc.ref,
                 update: decision.update,
-                message: buildMessage(alert, decision, currentRate, now),
+                message: buildMessage(alert, decision, currentRate, now, isMarket),
             });
         } catch (e) {
             // 잘못된 문서 하나가 전체 발송을 막지 않도록 한다.
@@ -132,7 +135,7 @@ async function deleteTokens(db, badTokens) {
 }
 
 /** 작업이 실패로 표시되어야 하는 문제가 있으면 false를 반환한다. */
-export async function run({ firebase, serviceAccountJson, rates, now = new Date(), lastScan = null, onScanComplete = () => {} }) {
+export async function run({ firebase, serviceAccountJson, rates: noticeRates, getMarketRates = null, now = new Date(), lastScan = null, onScanComplete = () => {} }) {
     console.log('🚀 FCM 알림 스크립트 시작...');
 
     if (!serviceAccountJson) {
@@ -144,6 +147,23 @@ export async function run({ firebase, serviceAccountJson, rates, now = new Date(
     if (serviceAccount.project_id !== EXPECTED_PROJECT_ID) {
         console.error(`❌ 서비스 계정 프로젝트가 다릅니다: ${serviceAccount.project_id} (필요: ${EXPECTED_PROJECT_ID})`);
         return false;
+    }
+
+    // 시장 환율(15분 갱신)이 있으면 그것으로, 없으면 수출입은행 고시로 판정한다.
+    let rates = noticeRates;
+    let isMarket = false;
+    if (getMarketRates) {
+        if (firebase.apps.length === 0) {
+            firebase.initializeApp({ credential: firebase.credential.cert(serviceAccount) });
+        }
+        const market = await getMarketRates(firebase.firestore(), firebase.firestore);
+        if (market) {
+            rates = toRatesArray(market);
+            isMarket = true;
+            console.log(`💱 시장 환율로 판정 (USD ${market.rates.USD}원)`);
+        } else {
+            console.log('ℹ️ 쓸 수 있는 시장 환율이 없어 수출입은행 고시로 판정합니다.');
+        }
     }
 
     if (!areRatesFresh(rates, now)) {
@@ -171,7 +191,7 @@ export async function run({ firebase, serviceAccountJson, rates, now = new Date(
         return true;
     }
 
-    const { tasks, stateUpdates, skipped } = collectTasks(snapshot.docs, rates, now);
+    const { tasks, stateUpdates, skipped } = collectTasks(snapshot.docs, rates, now, isMarket);
     console.log(`🔎 문서 ${snapshot.size}개, 발송 ${tasks.length}개, 상태 갱신 ${stateUpdates.length}개, 건너뜀 ${skipped}개`);
 
     let healthy = (await applyUpdates(db, stateUpdates)) === 0;
@@ -240,6 +260,7 @@ async function main() {
         firebase: admin,
         serviceAccountJson: process.env.FIREBASE_SERVICE_ACCOUNT,
         rates: JSON.parse(fs.readFileSync(RATES_FILE, 'utf8')),
+        getMarketRates: (db, firestore) => refreshMarketRates({ db, firestore, apiKey: process.env.UNIRATE_API_KEY }),
         lastScan: readScanState(stateFile),
         onScanComplete: state => saveScanState(stateFile, state),
     });
