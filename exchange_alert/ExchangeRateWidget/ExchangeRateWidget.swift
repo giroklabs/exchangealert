@@ -266,7 +266,11 @@ struct ExchangeRateWidgetView: View {
     private var updatedLabel: String {
         guard let date = entry.updatedAt else { return "" }
         if entry.isMarket {
-            let time = date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits))
+            // 24시간제로 표시한다 (앱 화면과 같게). 12시간제로 두면 오후 1시가 "01:06"이 된다.
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = "HH:mm"
+            let time = formatter.string(from: date)
             return Calendar.current.isDateInToday(date)
                 ? "\(time) 기준"
                 : date.formatted(.dateTime.month(.defaultDigits).day()) + " \(time) 기준"
