@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "103.661",
-      "diff": 0.17,
-      "diffPercent": 0.16,
+      "value": "103.665",
+      "diff": 0.18,
+      "diffPercent": 0.17,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-11-18",
-          "value": 103.66
+          "value": 103.67
         }
       ]
     },
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "5,048.62",
-      "diff": 80.14,
-      "diffPercent": 1.61,
+      "value": "5,061.52",
+      "diff": 93.04,
+      "diffPercent": 1.87,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-11-18",
-          "value": 5048.62
+          "value": 5061.52
         }
       ]
     },
@@ -532,46 +532,46 @@
       "fredId": null,
       "isRealtime": true,
       "value": "91,125",
-      "diff": 3242.43,
-      "diffPercent": 3.69,
+      "diff": 3935.44,
+      "diffPercent": 4.51,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2026-11-05",
-          "value": 105273.8
+          "value": 104443.65
         },
         {
           "date": "2026-11-06",
-          "value": 91731.38
+          "value": 91008.02
         },
         {
           "date": "2026-11-09",
-          "value": 90392.29
+          "value": 89679.5
         },
         {
           "date": "2026-11-10",
-          "value": 98426.79
+          "value": 97650.64
         },
         {
           "date": "2026-11-11",
-          "value": 104423.19
+          "value": 103599.75
         },
         {
           "date": "2026-11-12",
-          "value": 103673.64
+          "value": 102856.11
         },
         {
           "date": "2026-11-13",
-          "value": 100936.52
+          "value": 100140.58
         },
         {
           "date": "2026-11-16",
-          "value": 92699.9
+          "value": 91968.9
         },
         {
           "date": "2026-11-17",
-          "value": 87882.57
+          "value": 87189.56
         },
         {
           "date": "2026-11-18",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,184.25",
-      "diff": 108.75,
-      "diffPercent": 0.4,
+      "value": "27,187.25",
+      "diff": 111.75,
+      "diffPercent": 0.41,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-18",
-          "value": 27184.25
+          "value": 27187.25
         }
       ]
     },
@@ -826,8 +826,8 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,372",
-      "diff": 13,
+      "value": "7,372.5",
+      "diff": 13.5,
       "diffPercent": 0.18,
       "trend": "up",
       "realizedImpact": "down",
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-18",
-          "value": 7372
+          "value": 7372.5
         }
       ]
     },
@@ -2612,7 +2612,7 @@
     "lastAiUpdate": 1794979968906,
     "score": {
       "upScore": 60.83543100427585,
-      "downScore": 56.99261336107236,
+      "downScore": 56.97433157420579,
       "kospiUpScore": 17.79577074890716,
       "kospiDownScore": 25.46934203838765
     }
@@ -2663,32 +2663,32 @@
     ]
   },
   "kospiTechnicals": {
-    "rsi14": 28.7,
-    "ma5": 5150.17,
-    "ma20": 5444.6,
-    "ma60": 6243.04,
+    "rsi14": 29.2,
+    "ma5": 5152.75,
+    "ma20": 5445.25,
+    "ma60": 6243.26,
     "bb": {
-      "upper": 6059.67,
-      "mid": 5444.6,
-      "lower": 4829.53,
-      "bandwidth": 22.59
+      "upper": 6058.68,
+      "mid": 5445.25,
+      "lower": 4831.82,
+      "bandwidth": 22.53
     },
     "momentum": {
-      "d1": 1.61,
-      "d5": -6.08,
-      "d20": -11.98
+      "d1": 1.87,
+      "d5": -5.84,
+      "d20": -11.75
     },
     "keyLevels": {
       "support": 4911.28,
       "resistance": 7171.52
     },
     "macd": {
-      "macd": -291.52,
-      "signal": -284.21,
-      "hist": -7.31
+      "macd": -290.49,
+      "signal": -284.01,
+      "hist": -6.48
     },
     "stochastic": {
-      "k": 13.7
+      "k": 15
     }
   },
   "kospiSentiment": "코스피 하락 우세",
@@ -2701,5 +2701,5 @@
     "kospiRecentHitRate": 80,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 18. AM 6:22:24"
+  "lastUpdate": "2026. 11. 18. AM 6:27:43"
 }
