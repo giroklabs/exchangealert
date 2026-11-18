@@ -11,8 +11,9 @@ struct ContentView: View {
         ZStack {
             // 1. 메인 콘텐츠 뷰 (키보드 나타날 때 정상적으로 줄어듦)
             ZStack(alignment: .top) {
-                // 배경 그라데이션
-                AppTheme.backgroundGradient
+                // 배경: 한 가지 색. 그라데이션은 아래로 갈수록 하얘져서,
+                // 광고가 없는 프로 화면에서는 내용 아래 빈 곳이 따로 떨어진 띠처럼 보였다.
+                Color(.systemGroupedBackground)
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
