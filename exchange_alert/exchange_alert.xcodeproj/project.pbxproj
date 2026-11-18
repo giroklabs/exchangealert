@@ -84,6 +84,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B1D00000000000000000020 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcode.storekit; path = Products.storekit; sourceTree = "<group>"; };
 		4A65C9882F9493C300F9BD12 /* exchange_alert_watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "exchange_alert_watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A65C9942F9493C400F9BD12 /* exchange_alert_watch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "exchange_alert_watch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A65C99E2F9493C400F9BD12 /* exchange_alert_watch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "exchange_alert_watch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -226,6 +227,7 @@
 				4C73A949BC8CF9AB6ED0939C /* Pods */,
 				F90F2312AFCCE73F9B375E7E /* Frameworks */,
 				4AF79E1D2F8CA12C0011189E /* GoogleService-Info.plist */,
+				4B1D00000000000000000020 /* Products.storekit */,
 			);
 			sourceTree = "<group>";
 		};
