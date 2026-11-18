@@ -3,7 +3,8 @@ import SwiftUI
 import WidgetKit
 
 // 환율알라미 프로 전용 홈·잠금화면 위젯.
-// 데이터는 앱과 같은 GitHub 파일을 직접 읽고, 프로 여부는 App Group에 앱이 저장한 값을 본다.
+// 숫자는 앱처럼 시장 환율(Firestore rates/live)을 먼저 쓰고, 없거나 오래되면 GitHub 공개 파일의 고시 환율을 쓴다.
+// 프로 여부는 App Group에 앱이 저장한 값을 본다.
 
 private let appGroupID = "group.com.giroklabs.exchangealert"
 private let ratesURL = URL(string: "https://raw.githubusercontent.com/giroklabs/exchangealert/main/data/exchange-rates.json")!
@@ -49,6 +50,8 @@ struct RateEntry: TimelineEntry {
     let date: Date
     let currency: WidgetCurrency
     let isPro: Bool
+    /// true면 시장 환율(UniRateAPI), false면 수출입은행 고시
+    var isMarket: Bool = false
     let rate: Double?
     let change: Double?
     let history: [Double]
@@ -60,7 +63,7 @@ struct RateEntry: TimelineEntry {
     }
 
     static func placeholder(_ currency: WidgetCurrency = .USD) -> RateEntry {
-        RateEntry(date: .now, currency: currency, isPro: true, rate: 1334.70, change: -2.8,
+        RateEntry(date: .now, currency: currency, isPro: true, isMarket: true, rate: 1334.70, change: -2.8,
                   history: [1352, 1348, 1340, 1338, 1345, 1350, 1342, 1336, 1334.7], updatedAt: .now)
     }
 }
@@ -78,7 +81,7 @@ private struct HistoryFile: Decodable {
 }
 
 enum RateLoader {
-    static func load(_ currency: WidgetCurrency) async -> (rate: Double?, updatedAt: Date?, history: [Double]) {
+    static func load(_ currency: WidgetCurrency) async -> (rate: Double?, updatedAt: Date?, history: [Double], historyDates: [String]) {
         async let ratesData = fetch(ratesURL)
         async let historyData = fetch(historyURL)
 
@@ -98,11 +101,14 @@ enum RateLoader {
         }
 
         var history: [Double] = []
+        var historyDates: [String] = []
         if let data = await historyData, let file = try? JSONDecoder().decode(HistoryFile.self, from: data) {
             let series = currency.dataCodes.lazy.compactMap { file.rates[$0] }.first ?? []
-            history = Array(series.compactMap { $0 }.suffix(30))
+            let pairs = zip(file.dates, series).compactMap { date, value in value.map { (date, $0) } }.suffix(30)
+            history = pairs.map(\.1)
+            historyDates = pairs.map(\.0)
         }
-        return (rate, updatedAt, history)
+        return (rate, updatedAt, history, historyDates)
     }
 
     private static func fetch(_ url: URL) async -> Data? {
@@ -139,8 +145,9 @@ struct RateProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: SelectCurrencyIntent, in context: Context) async -> Timeline<RateEntry> {
         let entry = await makeEntry(configuration.currency)
-        // 환율은 영업일 하루 1회 고시된다. 고시 직후를 놓치지 않도록 1시간 간격으로 새로 읽는다.
-        return Timeline(entries: [entry], policy: .after(.now.addingTimeInterval(60 * 60)))
+        // 장중에는 시장 환율이 15분마다 바뀐다. 위젯 갱신 한도를 감안해 30분, 주말에는 2시간 간격으로 읽는다.
+        let interval: TimeInterval = WidgetMarketSnapshot.isFxMarketOpen(.now) ? 30 * 60 : 2 * 60 * 60
+        return Timeline(entries: [entry], policy: .after(.now.addingTimeInterval(interval)))
     }
 
     private func makeEntry(_ currency: WidgetCurrency) async -> RateEntry {
@@ -148,8 +155,21 @@ struct RateProvider: AppIntentTimelineProvider {
         guard isPro else {
             return RateEntry(date: .now, currency: currency, isPro: false, rate: nil, change: nil, history: [], updatedAt: nil)
         }
+        async let marketTask = WidgetMarketLoader.load()
         let loaded = await RateLoader.load(currency)
-        // 전일 대비: 일별 기록의 직전 값과 비교한다. (기록의 마지막 값이 오늘이면 그 앞 값)
+        let market = await marketTask
+
+        if let market, market.isUsable(),
+           let value = currency.dataCodes.lazy.compactMap({ market.rates[$0] }).first, value > 0 {
+            // 전일 대비: 앱과 같이 어제(한국 시각)까지의 마지막 고시와 비교한다.
+            let today = Self.todayKST()
+            let past = zip(loaded.historyDates, loaded.history).filter { $0.0 < today }.map(\.1)
+            let change = past.last.map { value - $0 }
+            return RateEntry(date: .now, currency: currency, isPro: true, isMarket: true, rate: value,
+                             change: change, history: Array((past + [value]).suffix(30)), updatedAt: market.fetchedAt)
+        }
+
+        // 고시 환율: 일별 기록의 직전 값과 비교한다. (기록의 마지막 값이 오늘이면 그 앞 값)
         var change: Double?
         if let rate = loaded.rate, loaded.history.count >= 2 {
             let last = loaded.history[loaded.history.count - 1]
@@ -158,6 +178,14 @@ struct RateProvider: AppIntentTimelineProvider {
         }
         return RateEntry(date: .now, currency: currency, isPro: true, rate: loaded.rate,
                          change: change, history: loaded.history, updatedAt: loaded.updatedAt)
+    }
+
+    private static func todayKST() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: .now)
     }
 }
 
@@ -235,10 +263,29 @@ struct ExchangeRateWidgetView: View {
             .lineLimit(1)
     }
 
+    private var updatedLabel: String {
+        guard let date = entry.updatedAt else { return "" }
+        if entry.isMarket {
+            let time = date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits))
+            return Calendar.current.isDateInToday(date)
+                ? "\(time) 기준"
+                : date.formatted(.dateTime.month(.defaultDigits).day()) + " \(time) 기준"
+        }
+        return date.formatted(.dateTime.month(.defaultDigits).day()) + " 고시"
+    }
+
     private var updatedText: some View {
-        Text(entry.updatedAt.map { $0.formatted(.dateTime.month(.defaultDigits).day()) + " 고시" } ?? "")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 0) {
+            Text(updatedLabel)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            if entry.isMarket {
+                // UniRateAPI 이용 조건: 출처 표기
+                Text("By UniRateAPI")
+                    .font(.system(size: 8))
+                    .foregroundStyle(.tertiary)
+            }
+        }
     }
 
     private var smallView: some View {
@@ -319,7 +366,7 @@ struct ExchangeRateWidget: Widget {
             ExchangeRateWidgetView(entry: entry)
         }
         .configurationDisplayName("환율")
-        .description("선택한 통화의 매매기준율과 전일 대비 변동을 보여줍니다. (프로)")
+        .description("선택한 통화의 시장 환율과 전일 대비 변동을 보여줍니다. (프로) · Exchange Rates By UniRateAPI")
         .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular, .accessoryCircular, .accessoryInline])
     }
 }
