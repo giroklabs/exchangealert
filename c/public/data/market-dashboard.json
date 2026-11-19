@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "103.701",
-      "diff": -0.16,
-      "diffPercent": -0.15,
+      "value": "103.679",
+      "diff": -0.18,
+      "diffPercent": -0.17,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 103.7
+          "value": 103.68
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "22.15",
-      "diff": -2.41,
-      "diffPercent": -9.81,
+      "value": "22.23",
+      "diff": -2.33,
+      "diffPercent": -9.49,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 22.15
+          "value": 22.23
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,702",
-      "diff": 515.25,
-      "diffPercent": 1.9,
+      "value": "27,747",
+      "diff": 560.25,
+      "diffPercent": 2.06,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 27702
+          "value": 27747
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,417",
-      "diff": 76.5,
-      "diffPercent": 1.04,
+      "value": "7,426.75",
+      "diff": 86.25,
+      "diffPercent": 1.17,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 7417
+          "value": 7426.75
         }
       ]
     },
@@ -884,9 +884,9 @@
       "description": "유가 상승 시 인플레 및 달러 수요",
       "realtimeSymbol": "CL=F",
       "isRealtime": true,
-      "value": "82.87",
-      "diff": -0.39,
-      "diffPercent": -0.47,
+      "value": "82.73",
+      "diff": -0.53,
+      "diffPercent": -0.64,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -928,7 +928,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 82.87
+          "value": 82.73
         }
       ]
     },
@@ -1905,9 +1905,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-4,042",
-      "diff": -2848,
-      "diffPercent": -238.53,
+      "value": "-4,022",
+      "diff": -2828,
+      "diffPercent": -236.85,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2013,7 +2013,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": -4042
+          "value": -4022
         }
       ]
     },
@@ -2146,9 +2146,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-657",
-      "diff": 300,
-      "diffPercent": 31.35,
+      "value": "-668",
+      "diff": 289,
+      "diffPercent": 30.2,
       "trend": "up",
       "history": [
         {
@@ -2253,7 +2253,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": -657
+          "value": -668
         }
       ]
     },
@@ -2528,8 +2528,18 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 197000,
-      "changePercent": "+1.18",
+      "price": 197400,
+      "changePercent": "+1.39",
+      "trend": "up"
+    },
+    {
+      "id": "hynix",
+      "symbol": "000660",
+      "market": "domestic",
+      "name": "SK하이닉스",
+      "enName": "SK Hynix",
+      "price": 1190000,
+      "changePercent": "+4.02",
       "trend": "up"
     },
     {
@@ -2538,9 +2548,9 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 267000,
-      "changePercent": "+0.00",
-      "trend": "neutral"
+      "price": 267500,
+      "changePercent": "+0.19",
+      "trend": "up"
     },
     {
       "id": "kia",
@@ -2548,8 +2558,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 91500,
-      "changePercent": "-0.76",
+      "price": 91700,
+      "changePercent": "-0.54",
       "trend": "down"
     },
     {
@@ -2558,8 +2568,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 169100,
-      "changePercent": "-0.70",
+      "price": 169200,
+      "changePercent": "-0.65",
       "trend": "down"
     },
     {
@@ -2601,9 +2611,9 @@
     "detailedAnalysis": "🤖 달러 인베스트 AI 분석\n\n**2026년년 11월 19일 한국 외환 및 증시 분석 보고서**\n\n파트A: 원/달러 환율 분석\n현재 원/달러 환율은 1328.98원입니다. 정량예측모델은 향후 1~5거래일 내 환율 상승(달러 강세) 확률을 43%로 제시하며 원화 강세 가능성에 무게를 싣고 있습니다. 이는 달러인덱스(DXY)의 단기 5일 모멘텀이 -15.38%로 크게 약세를 보이는 점과 미국 10년물 국채금리(5.066%), 2년물 국채금리(4.8%) 등 주요 미 국채금리가 하락 추세인 점과 일치합니다. 기술적 지표 상 원/달러 환율은 MA5(1333.16원), MA20(1336.89원)을 하회하며 단기 하락 모멘텀을 유지하고 있으며, RSI(14일) 45.9로 중립적인 수준이지만 스토캐스틱 %K가 9.1%로 단기 과매도 구간에 진입하여 추가적인 급락은 제한될 수 있습니다. 한편, 한미 2년물 금리차가 1.16%로 확대되고 있는 상황에서 자본유출 복합 위험 신호가 감지되고 있어 하락 압력 속에서도 잠재적인 상승 반전 가능성을 내포하고 있습니다. 따라서 향후 1~5거래일 동안 원/달러 환율은 하방으로는 60일 지지선인 1319.52원과 볼린저밴드 하단 1316.63원 부근에서 지지를 테스트할 것으로 예상되며, 상방으로는 MA5인 1333.16원과 MA20인 1336.89원을 단기 저항선으로 두고 등락할 것으로 보입니다. 전반적인 달러 약세 흐름 속에서 단기 변동성과 리스크 요인을 감안하여 관망 또는 매도 포지션에 대한 주의 깊은 접근이 필요합니다. ① DXY의 강한 하락 모멘텀(-15.38%) 및 미 국채금리 하락 추세 ② 스토캐스틱 %K(9.1%)에 따른 단기 과매도 구간 진입 ③ 한미 2년물 금리차 확대(1.16%)에 따른 자본유출 복합 위험 신호.\n\n파트B: 코스피 지수 분석\n현재 코스피 지수는 5,137.89pt입니다. 정량예측모델은 향후 1~5거래일 내 지수 상승 확률을 49%로 제시하며 하락 우위에 대한 전망을 나타내고 있습니다. 반도체(SOX) 단기 5일 모멘텀이 -8.63%를 기록하며 반도체 업종에 대한 강한 하방 압력을 시사하고 있고, 나스닥 선물 단기 흐름 또한 -2.40%를 나타내며 글로벌 기술주 약세가 국내 증시에 부정적인 영향을 미칠 것으로 예상됩니다. 코스피는 최근 1일 모멘텀이 1.39%로 소폭 반등했지만, 여전히 MA20(5425.75pt)과 MA60(6213.77pt)을 크게 하회하며 중장기적인 하락 추세가 이어지고 있습니다. 시장의 불안감을 나타내는 VIX 지수는 22.15로 높은 수준을 유지하고 있어 투자 심리가 위축되어 있음을 보여줍니다. 또한, 한미 금리차 확대에 따른 자본유출 복합 위험 신호는 외국인 매도세로 이어져 코스피 지수에 추가적인 하방 압력을 가할 수 있습니다. RSI(14일)는 35로 과매도 구간인 30에 근접하고 있으나 아직 진입하지 않아 추가 하락 가능성도 배제할 수 없습니다. 따라서 코스피는 핵심 지지선인 4911.28pt와 볼린저밴드 하단인 4800.29pt까지 추가 하락을 시도할 수 있으며, 단기 저항선은 MA20인 5425.75pt 수준으로 예상됩니다. 이러한 복합적인 하방 압력을 고려할 때, 적극적인 매수보다는 보수적인 관망 또는 매도 포지션 유지가 현명해 보입니다. ① 반도체(SOX) (-8.63%) 및 나스닥 선물(-2.40%) 지수의 강한 하방 모멘텀 ② VIX 지수(22.15)를 통한 시장 불안감 고조 ③ 한미 금리차 확대에 따른 자본유출 위험 및 외국인 매도 가능성.\n\n실전 투자 대응\n환율: DXY 약세와 단기 하락 모멘텀으로 1319.52원 지지 확인 후 1333.16원 저항선 부근에서 매도 관망이 유효.\n코스피: SOX 및 나스닥 선물 약세로 4911.28pt 지지선 테스트 예상, 5425.75pt 저항선 돌파 실패 시 매도 유지.",
     "lastAiUpdate": 1795083786040,
     "score": {
-      "upScore": 46.44365401334938,
-      "downScore": 60.67325341350902,
-      "kospiUpScore": 20.026145666961916,
+      "upScore": 46.44790563252242,
+      "downScore": 60.72034113242983,
+      "kospiUpScore": 20.040898212550633,
       "kospiDownScore": 20.782973276365823
     }
   },
@@ -2684,5 +2694,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 19. AM 10:23:06"
+  "lastUpdate": "2026. 11. 19. AM 10:27:32"
 }
