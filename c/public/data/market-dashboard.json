@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "103.838",
-      "diff": -0.02,
-      "diffPercent": -0.02,
+      "value": "103.803",
+      "diff": -0.06,
+      "diffPercent": -0.06,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 103.84
+          "value": 103.8
         }
       ]
     },
@@ -471,9 +471,9 @@
       "realtimeSymbol": "^KS11",
       "fredId": null,
       "isRealtime": true,
-      "value": "5,111.83",
-      "diff": 44.39,
-      "diffPercent": 0.88,
+      "value": "5,115.61",
+      "diff": 48.17,
+      "diffPercent": 0.95,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -515,7 +515,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 5111.83
+          "value": 5115.61
         }
       ]
     },
@@ -532,46 +532,46 @@
       "fredId": null,
       "isRealtime": true,
       "value": "93,245",
-      "diff": 1946.8,
-      "diffPercent": 2.13,
+      "diff": 2078.07,
+      "diffPercent": 2.28,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
         {
           "date": "2026-11-06",
-          "value": 91398.9
+          "value": 91267.48
         },
         {
           "date": "2026-11-09",
-          "value": 90064.67
+          "value": 89935.17
         },
         {
           "date": "2026-11-10",
-          "value": 98070.04
+          "value": 97929.04
         },
         {
           "date": "2026-11-11",
-          "value": 104044.7
+          "value": 103895.11
         },
         {
           "date": "2026-11-12",
-          "value": 103297.87
+          "value": 103149.35
         },
         {
           "date": "2026-11-13",
-          "value": 100570.67
+          "value": 100426.07
         },
         {
           "date": "2026-11-16",
-          "value": 92363.91
+          "value": 92231.1
         },
         {
           "date": "2026-11-17",
-          "value": 87564.04
+          "value": 87438.14
         },
         {
           "date": "2026-11-18",
-          "value": 91298.2
+          "value": 91166.93
         },
         {
           "date": "2026-11-19",
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "27,668.75",
-      "diff": 482,
-      "diffPercent": 1.77,
+      "value": "27,676.5",
+      "diff": 489.75,
+      "diffPercent": 1.8,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 27668.75
+          "value": 27676.5
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,416.5",
-      "diff": 76,
-      "diffPercent": 1.04,
+      "value": "7,419.75",
+      "diff": 79.25,
+      "diffPercent": 1.08,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-19",
-          "value": 7416.5
+          "value": 7419.75
         }
       ]
     },
@@ -2612,7 +2612,7 @@
     "lastAiUpdate": 1795072989887,
     "score": {
       "upScore": 45.78823287809419,
-      "downScore": 61.52719935564267,
+      "downScore": 61.53285157366078,
       "kospiUpScore": 20.46730537832653,
       "kospiDownScore": 21.89315987789007
     }
@@ -2656,32 +2656,32 @@
     ]
   },
   "kospiTechnicals": {
-    "rsi14": 34.1,
-    "ma5": 5107.8,
-    "ma20": 5424.46,
-    "ma60": 6213.34,
+    "rsi14": 34.2,
+    "ma5": 5108.51,
+    "ma20": 5424.64,
+    "ma60": 6213.4,
     "bb": {
-      "upper": 6052.4,
-      "mid": 5424.46,
-      "lower": 4796.52,
-      "bandwidth": 23.15
+      "upper": 6052.22,
+      "mid": 5424.64,
+      "lower": 4797.06,
+      "bandwidth": 23.14
     },
     "momentum": {
-      "d1": 0.88,
-      "d5": -4.32,
-      "d20": -7.62
+      "d1": 0.95,
+      "d5": -4.25,
+      "d20": -7.56
     },
     "keyLevels": {
       "support": 4911.28,
       "resistance": 7171.52
     },
     "macd": {
-      "macd": -281.56,
-      "signal": -283.44,
-      "hist": 1.88
+      "macd": -281.28,
+      "signal": -283.38,
+      "hist": 2.1
     },
     "stochastic": {
-      "k": 20.1
+      "k": 20.4
     }
   },
   "kospiSentiment": "보합",
@@ -2694,5 +2694,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 19. AM 7:23:09"
+  "lastUpdate": "2026. 11. 19. AM 7:27:48"
 }
