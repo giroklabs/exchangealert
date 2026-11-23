@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "103.934",
+      "value": "103.932",
       "diff": 0.12,
       "diffPercent": 0.12,
       "trend": "up",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "29.96",
-      "diff": -5.93,
-      "diffPercent": -16.52,
+      "value": "29.95",
+      "diff": -5.94,
+      "diffPercent": -16.55,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 29.96
+          "value": 29.95
         }
       ]
     },
@@ -767,8 +767,8 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,022.5",
-      "diff": 896,
+      "value": "26,024.25",
+      "diff": 897.75,
       "diffPercent": 3.57,
       "trend": "up",
       "realizedImpact": "down",
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 26022.5
+          "value": 26024.25
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,136.25",
-      "diff": 201.25,
-      "diffPercent": 2.9,
+      "value": "7,134",
+      "diff": 199,
+      "diffPercent": 2.87,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 7136.25
+          "value": 7134
         }
       ]
     },
@@ -2571,16 +2571,6 @@
       "price": 150800,
       "changePercent": "-6.68",
       "trend": "down"
-    },
-    {
-      "id": "kakao",
-      "symbol": "035720",
-      "market": "domestic",
-      "name": "카카오",
-      "enName": "Kakao",
-      "price": 29100,
-      "changePercent": "-6.13",
-      "trend": "down"
     }
   ],
   "forecast": {
@@ -2612,7 +2602,7 @@
     "lastAiUpdate": 1795433582188,
     "score": {
       "upScore": 59.99326373932923,
-      "downScore": 55.48233756855717,
+      "downScore": 55.48670030802404,
       "kospiUpScore": 16.869132064248465,
       "kospiDownScore": 32.36780450304978
     }
@@ -2694,5 +2684,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 23. AM 11:57:32"
+  "lastUpdate": "2026. 11. 23. PM 12:03:10"
 }
