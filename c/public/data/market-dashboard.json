@@ -67,7 +67,7 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "104.524",
+      "value": "104.517",
       "diff": 0.71,
       "diffPercent": 0.68,
       "trend": "up",
@@ -126,7 +126,7 @@
       "realtimeSymbol": "^TNX",
       "fredId": "GS10",
       "isRealtime": true,
-      "value": "4.938",
+      "value": "4.936",
       "diff": 0.03,
       "diffPercent": 0.61,
       "trend": "up",
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "28.27",
-      "diff": -7.62,
-      "diffPercent": -21.23,
+      "value": "27.89",
+      "diff": -8,
+      "diffPercent": -22.29,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 28.27
+          "value": 27.89
         }
       ]
     },
@@ -590,8 +590,8 @@
       "realtimeSymbol": "^IXIC",
       "fredId": null,
       "isRealtime": true,
-      "value": "24,139.662",
-      "diff": 1521.93,
+      "value": "24,139.807",
+      "diff": 1522.08,
       "diffPercent": 6.73,
       "trend": "up",
       "realizedImpact": "down",
@@ -634,7 +634,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 24139.66
+          "value": 24139.81
         }
       ]
     },
@@ -649,8 +649,8 @@
       "realtimeSymbol": "^GSPC",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,246.72",
-      "diff": 336.33,
+      "value": "7,247.02",
+      "diff": 336.63,
       "diffPercent": 4.87,
       "trend": "up",
       "realizedImpact": "down",
@@ -693,7 +693,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 7246.72
+          "value": 7247.02
         }
       ]
     },
@@ -708,9 +708,9 @@
       "realtimeSymbol": "^SOX",
       "fredId": null,
       "isRealtime": true,
-      "value": "9,558.24",
-      "diff": 1149.65,
-      "diffPercent": 13.67,
+      "value": "9,550.303",
+      "diff": 1141.71,
+      "diffPercent": 13.58,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -752,7 +752,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 9558.24
+          "value": 9550.3
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,765.5",
-      "diff": 1639,
-      "diffPercent": 6.52,
+      "value": "26,794.75",
+      "diff": 1668.25,
+      "diffPercent": 6.64,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 26765.5
+          "value": 26794.75
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,243",
-      "diff": 308,
-      "diffPercent": 4.44,
+      "value": "7,249.75",
+      "diff": 314.75,
+      "diffPercent": 4.54,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 7243
+          "value": 7249.75
         }
       ]
     },
@@ -2608,8 +2608,8 @@
     "lastAiUpdate": 1795451613262,
     "score": {
       "upScore": 50.07970259723706,
-      "downScore": 55.04960368324753,
-      "kospiUpScore": 25.682442639882435,
+      "downScore": 55.029295126640676,
+      "kospiUpScore": 25.685913557778328,
       "kospiDownScore": 29.780435340324036
     }
   },
@@ -2690,5 +2690,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 23. PM 6:03:00"
+  "lastUpdate": "2026. 11. 23. PM 6:08:01"
 }
