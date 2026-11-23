@@ -1901,9 +1901,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "522",
-      "diff": 1716,
-      "diffPercent": 143.72,
+      "value": "222",
+      "diff": 1416,
+      "diffPercent": 118.59,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -2009,7 +2009,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 522
+          "value": 222
         }
       ]
     },
@@ -2022,9 +2022,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "1,579",
-      "diff": -377,
-      "diffPercent": -19.27,
+      "value": "1,625",
+      "diff": -331,
+      "diffPercent": -16.92,
       "trend": "down",
       "history": [
         {
@@ -2129,7 +2129,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 1579
+          "value": 1625
         }
       ]
     },
@@ -2142,9 +2142,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-2,393",
-      "diff": -1436,
-      "diffPercent": -150.05,
+      "value": "-2,170",
+      "diff": -1213,
+      "diffPercent": -126.75,
       "trend": "down",
       "history": [
         {
@@ -2249,7 +2249,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": -2393
+          "value": -2170
         }
       ]
     },
@@ -2524,8 +2524,8 @@
       "market": "domestic",
       "name": "삼성전자",
       "enName": "Samsung Electronics",
-      "price": 176800,
-      "changePercent": "-3.44",
+      "price": 175000,
+      "changePercent": "-4.42",
       "trend": "down"
     },
     {
@@ -2534,8 +2534,8 @@
       "market": "domestic",
       "name": "SK하이닉스",
       "enName": "SK Hynix",
-      "price": 1088000,
-      "changePercent": "-2.25",
+      "price": 1074000,
+      "changePercent": "-3.50",
       "trend": "down"
     },
     {
@@ -2544,8 +2544,8 @@
       "market": "domestic",
       "name": "현대차",
       "enName": "Hyundai Motor",
-      "price": 247000,
-      "changePercent": "-3.14",
+      "price": 246500,
+      "changePercent": "-3.33",
       "trend": "down"
     },
     {
@@ -2554,8 +2554,8 @@
       "market": "domestic",
       "name": "기아",
       "enName": "Kia",
-      "price": 85600,
-      "changePercent": "-2.95",
+      "price": 85500,
+      "changePercent": "-3.06",
       "trend": "down"
     },
     {
@@ -2564,8 +2564,8 @@
       "market": "domestic",
       "name": "네이버",
       "enName": "NAVER",
-      "price": 150850,
-      "changePercent": "-6.65",
+      "price": 150000,
+      "changePercent": "-7.18",
       "trend": "down"
     },
     {
@@ -2574,8 +2574,8 @@
       "market": "domestic",
       "name": "카카오",
       "enName": "Kakao",
-      "price": 29550,
-      "changePercent": "-4.68",
+      "price": 29450,
+      "changePercent": "-5.00",
       "trend": "down"
     }
   ],
@@ -2584,8 +2584,8 @@
     "kospiSentiment": "코스피 하락 우세",
     "upProb": 55,
     "downProb": 45,
-    "kospiUpProb": 34,
-    "kospiDownProb": 66,
+    "kospiUpProb": 29,
+    "kospiDownProb": 71,
     "timeframes": {
       "d1": {
         "upProb": 73,
@@ -2609,7 +2609,7 @@
     "score": {
       "upScore": 62.71656391708707,
       "downScore": 51.17053182015998,
-      "kospiUpScore": 16.984837942973385,
+      "kospiUpScore": 13.427298229237609,
       "kospiDownScore": 32.550426315975855
     }
   },
@@ -2690,5 +2690,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 23. AM 12:33:05"
+  "lastUpdate": "2026. 11. 23. AM 12:37:45"
 }
