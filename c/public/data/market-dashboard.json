@@ -67,9 +67,9 @@
       "realtimeSymbol": "DX-Y.NYB",
       "fredId": "DTWEXBGS",
       "isRealtime": true,
-      "value": "103.847",
-      "diff": 0.04,
-      "diffPercent": 0.04,
+      "value": "103.873",
+      "diff": 0.06,
+      "diffPercent": 0.06,
       "trend": "up",
       "realizedImpact": "up",
       "history": [
@@ -111,7 +111,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 103.85
+          "value": 103.87
         }
       ]
     },
@@ -184,9 +184,9 @@
       "description": "시장 불안정성 및 공포 심리 지표",
       "realtimeSymbol": "^VIX",
       "isRealtime": true,
-      "value": "29.92",
-      "diff": -5.97,
-      "diffPercent": -16.63,
+      "value": "29.77",
+      "diff": -6.12,
+      "diffPercent": -17.05,
       "trend": "down",
       "realizedImpact": "down",
       "history": [
@@ -228,7 +228,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 29.92
+          "value": 29.77
         }
       ]
     },
@@ -767,9 +767,9 @@
       "realtimeSymbol": "NQ=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "26,030.25",
-      "diff": 903.75,
-      "diffPercent": 3.6,
+      "value": "26,033",
+      "diff": 906.5,
+      "diffPercent": 3.61,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -811,7 +811,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 26030.25
+          "value": 26033
         }
       ]
     },
@@ -826,9 +826,9 @@
       "realtimeSymbol": "ES=F",
       "fredId": null,
       "isRealtime": true,
-      "value": "7,132",
-      "diff": 197,
-      "diffPercent": 2.84,
+      "value": "7,135",
+      "diff": 200,
+      "diffPercent": 2.88,
       "trend": "up",
       "realizedImpact": "down",
       "history": [
@@ -870,7 +870,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 7132
+          "value": 7135
         }
       ]
     },
@@ -1905,9 +1905,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-2,460",
-      "diff": -1266,
-      "diffPercent": -106.03,
+      "value": "-2,464",
+      "diff": -1270,
+      "diffPercent": -106.37,
       "trend": "down",
       "realizedImpact": "up",
       "history": [
@@ -2013,7 +2013,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": -2460
+          "value": -2464
         }
       ]
     },
@@ -2026,9 +2026,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "1,758",
-      "diff": -198,
-      "diffPercent": -10.12,
+      "value": "1,762",
+      "diff": -194,
+      "diffPercent": -9.92,
       "trend": "down",
       "history": [
         {
@@ -2133,7 +2133,7 @@
         },
         {
           "date": "2026-11-23",
-          "value": 1758
+          "value": 1762
         }
       ]
     },
@@ -2612,7 +2612,7 @@
     "lastAiUpdate": 1795429977002,
     "score": {
       "upScore": 59.9910533021976,
-      "downScore": 55.477853072806205,
+      "downScore": 55.47003555496194,
       "kospiUpScore": 16.869132064248465,
       "kospiDownScore": 32.36780450304978
     }
@@ -2694,5 +2694,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 23. AM 11:03:30"
+  "lastUpdate": "2026. 11. 23. AM 11:07:24"
 }
