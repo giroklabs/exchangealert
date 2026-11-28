@@ -1620,11 +1620,11 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 외국인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "11,674",
-      "diff": 12868,
-      "diffPercent": 1077.72,
+      "value": "-1,194",
+      "diff": 174,
+      "diffPercent": 12.72,
       "trend": "up",
-      "realizedImpact": "down",
+      "realizedImpact": "up",
       "history": [
         {
           "date": "2026-02-27",
@@ -1725,10 +1725,6 @@
         {
           "date": "2026-04-03",
           "value": -1194
-        },
-        {
-          "date": "2026-11-28",
-          "value": 11674
         }
       ]
     },
@@ -1741,9 +1737,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 기관 실시간 누적 순매수 대금",
-      "value": "2,190",
-      "diff": 234,
-      "diffPercent": 11.96,
+      "value": "1,956",
+      "diff": 16473,
+      "diffPercent": 113.47,
       "trend": "up",
       "history": [
         {
@@ -1845,10 +1841,6 @@
         {
           "date": "2026-04-03",
           "value": 1956
-        },
-        {
-          "date": "2026-11-28",
-          "value": 2190
         }
       ]
     },
@@ -1861,9 +1853,9 @@
       "source": "삼성증권 실시간",
       "status": "Confirmed",
       "description": "KOSPI 시장 전체 개인 실시간 누적 순매수 대금 (단위: 억원)",
-      "value": "-17,915",
-      "diff": -16958,
-      "diffPercent": -1772,
+      "value": "-957",
+      "diff": -13054,
+      "diffPercent": -107.91,
       "trend": "down",
       "history": [
         {
@@ -1965,10 +1957,6 @@
         {
           "date": "2026-04-03",
           "value": -957
-        },
-        {
-          "date": "2026-11-28",
-          "value": -17915
         }
       ]
     },
@@ -2303,8 +2291,8 @@
     "kospiSentiment": "보합",
     "upProb": 37,
     "downProb": 63,
-    "kospiUpProb": 49,
-    "kospiDownProb": 51,
+    "kospiUpProb": 45,
+    "kospiDownProb": 55,
     "timeframes": {
       "d1": {
         "upProb": 57,
@@ -2327,9 +2315,9 @@
     "lastAiUpdate": 1795790002532,
     "score": {
       "upScore": 34.90900853664678,
-      "downScore": 60.09937994467778,
-      "kospiUpScore": 20.396923461871072,
-      "kospiDownScore": 21.006932272626596
+      "downScore": 60.115754380306285,
+      "kospiUpScore": 18.260838101213565,
+      "kospiDownScore": 22.578904122788128
     }
   },
   "technicals": {
@@ -2401,5 +2389,5 @@
     "kospiRecentHitRate": 100,
     "kospiTotal": 89
   },
-  "lastUpdate": "2026. 11. 27. PM 11:57:44"
+  "lastUpdate": "2026. 11. 28. AM 12:03:32"
 }
